@@ -41,12 +41,5 @@
     "styles.css": "8605464daacae6576c95d4f2f0c39a164a19cf61764a1e13c15503175a1e685c",
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e"
   },
-  "buildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6",
-  "releaseStatus": "working-preview-not-accepted",
-  "evidenceDirectory": "evidence/M01/current",
-  "acceptedMilestones": [],
-  "blockedGates": [
-    "M00 required Windows/Linux real-GPU lane",
-    "M01 remaining CAD scope and prerequisite acceptance"
-  ]
+  "buildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6"
 }

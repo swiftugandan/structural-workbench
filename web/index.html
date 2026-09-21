@@ -91,6 +91,7 @@
           <span class="card-link">Explore examples →</span>
         </button>
       </section>
+      <button id="new-portal" class="primary">＋ New planar portal</button>
       <section class="recent-section">
         <div class="section-heading">
           <h2>Recent projects</h2>
@@ -158,6 +159,9 @@
               <button id="view-elevation" class="active">Elevation</button
               ><button id="view-3d">3D</button>
             </div>
+            <button id="draw-toggle" aria-pressed="false">
+              ＋ Draw member
+            </button>
             <button id="fit">⊡ Fit</button
             ><button
               id="reset-viewport"
@@ -173,6 +177,27 @@
                 <option value="moment">Moment My</option>
               </select></label
             >
+          </div>
+          <div id="drawing-panel" hidden>
+            <form id="draw-member">
+              <label
+                >Start X<input aria-label="Start X" value="0" required
+              /></label>
+              <label
+                >Start Z<input aria-label="Start Z" value="0" required
+              /></label>
+              <label
+                >End X<input aria-label="End X" value="4" required
+              /></label>
+              <label
+                >End Z<input aria-label="End Z" value="3" required
+              /></label>
+              <label>Material<select id="draw-material"></select></label>
+              <label>Section<select id="draw-section"></select></label>
+              <button type="submit" class="primary">Add member</button
+              ><button type="button" id="cancel-drawing">Cancel drawing</button>
+            </form>
+            <p id="draw-status" role="status"></p>
           </div>
           <div class="canvas-wrap">
             <canvas

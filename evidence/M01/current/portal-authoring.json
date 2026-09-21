@@ -1,0 +1,45 @@
+{
+  "taskId": "M01-A",
+  "status": "PASS",
+  "scope": "Bounded portal authoring slice, not acceptance of parent M01",
+  "sourceHash": "b70fe170e6db0bbb9d4ec2c1e24f3355ac73c69bdbe7a8c997771cd829d74224",
+  "buildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6",
+  "observedAt": "2026-09-21T16:25:25.440091+00:00",
+  "testIds": [
+    "portal-setup",
+    "24-displayed-dofs-vs-OpenSees",
+    "unit-coordinate-edit",
+    "atomic-brace-creation",
+    "zero-length-rejection",
+    "undo-redo",
+    "IndexedDB-reopen",
+    "portable-project-and-report",
+    "unrestrained-instability-undo-repair",
+    "Escape-no-mutation",
+    "390px-overflow",
+    "drawing-axe-scan"
+  ],
+  "browserSuite": "browser-suite.json",
+  "independentOracle": "portal-opensees.json",
+  "artifacts": [
+    "portal-unbraced.json",
+    "portal-project.json",
+    "portal-report.html",
+    "portal.png",
+    "portal-mobile.png"
+  ],
+  "manualBrowser": {
+    "adapterLabel": "WEBGPU \u00b7 amd",
+    "observations": [
+      "Created 4m by 3m XZ portal with 10kN roof force",
+      "Unbraced roof n3 ux displayed 8.701003 mm",
+      "Clicked n1 and n3 then pressed Enter: 4 nodes, 4 members, stale results",
+      "Reloaded final build and reopened saved braced portal",
+      "Braced roof n3 ux displayed 0.04727 mm; current results"
+    ]
+  },
+  "limitations": [
+    "Parent M01 incomplete: local axes, connect/split/merge, wider CAD interactions and performance remain",
+    "M00 required Windows/Linux GPU lane remains blocked"
+  ]
+}

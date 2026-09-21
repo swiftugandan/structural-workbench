@@ -58,3 +58,110 @@ fn engineering_units_are_parsed_in_rust_and_fail_atomically() {
     assert_eq!(bad["status"], "error");
     assert_eq!(bad["revision"], 1);
 }
+
+#[test]
+fn snapping_is_authoritative_and_does_not_change_topology() {
+    let mut k = Kernel::new();
+    let p: Value =
+        serde_json::from_str(&std::fs::read_to_string("../../fixtures/models/B02.json").unwrap())
+            .unwrap();
+    let initial = request(&mut k, "createProject", Value::Null, json!({"project":p}));
+    let snapped = request(
+        &mut k,
+        "queryGeometry",
+        json!(0),
+        json!({"kind":"snap","query":{"position":["2999 mm",0,0],"tolerance":0.01,"features":true,"grid":0.5},"viewRevision":7}),
+    );
+    assert_eq!(snapped["payload"]["entityId"], "n2");
+    assert_eq!(snapped["payload"]["position"], json!([3., 0., 0.]));
+    assert_eq!(snapped["payload"]["viewRevision"], 7);
+    assert_eq!(snapped["modelHash"], initial["modelHash"]);
+    let mid = request(
+        &mut k,
+        "queryGeometry",
+        json!(0),
+        json!({"kind":"snap","query":{"position":[1.5,0,0],"tolerance":0.01,"features":true,"grid":0.5},"viewRevision":8}),
+    );
+    assert_eq!(mid["payload"]["kind"], "midpoint");
+    assert_eq!(mid["payload"]["entityId"], Value::Null);
+    let bad = request(
+        &mut k,
+        "queryGeometry",
+        json!(0),
+        json!({"kind":"snap","query":{"position":["3 kN",0,0]}}),
+    );
+    assert_eq!(bad["status"], "error");
+    assert_eq!(bad["modelHash"], initial["modelHash"]);
+}
+
+#[test]
+fn member_creation_batch_is_one_atomic_history_step() {
+    let mut k = Kernel::new();
+    let p: Value =
+        serde_json::from_str(&std::fs::read_to_string("../../fixtures/models/B02.json").unwrap())
+            .unwrap();
+    let initial = request(&mut k, "createProject", Value::Null, json!({"project":p}));
+    let mut m = p["members"][0].clone();
+    m["id"] = json!("m2");
+    m["start"] = json!("n2");
+    m["end"] = json!("n3");
+    let batch = |position: Value| json!({"command":{"type":"Batch","args":{"commands":[{"type":"AddNode","args":{"id":"n3","position":position}},{"type":"AddMember","args":m}]}}});
+    let bad = request(&mut k, "applyCommand", json!(0), batch(json!([3, 0, 0])));
+    assert_eq!(bad["diagnostics"][0]["code"], "ZERO_LENGTH_MEMBER");
+    assert_eq!(bad["modelHash"], initial["modelHash"]);
+    let good = request(
+        &mut k,
+        "applyCommand",
+        json!(0),
+        batch(json!([3, 0, "3000 mm"])),
+    );
+    assert_eq!(good["status"], "ok");
+    assert_eq!(
+        good["payload"]["project"]["nodes"]
+            .as_array()
+            .unwrap()
+            .len(),
+        3
+    );
+    let undo = request(&mut k, "undo", json!(1), json!({}));
+    assert_eq!(undo["modelHash"], initial["modelHash"]);
+    let redo = request(&mut k, "redo", json!(2), json!({}));
+    assert_eq!(redo["modelHash"], good["modelHash"]);
+}
+
+#[test]
+fn crossing_snap_does_not_split_or_connect_members() {
+    let mut p: Value =
+        serde_json::from_str(&std::fs::read_to_string("../../fixtures/models/B02.json").unwrap())
+            .unwrap();
+    p["nodes"].as_array_mut().unwrap().extend([
+        json!({"id":"n3","position":[1.5,0,-1]}),
+        json!({"id":"n4","position":[1.5,0,1]}),
+    ]);
+    let mut m = p["members"][0].clone();
+    m["id"] = json!("m2");
+    m["start"] = json!("n3");
+    m["end"] = json!("n4");
+    p["members"].as_array_mut().unwrap().push(m);
+    let mut k = Kernel::new();
+    let original = request(&mut k, "createProject", Value::Null, json!({"project":p}));
+    assert_eq!(original["status"], "ok");
+    let hit = request(
+        &mut k,
+        "queryGeometry",
+        json!(0),
+        json!({"kind":"snap","query":{"position":[1.5,0,0],"features":true,"tolerance":0.01,"grid":0.5},"viewRevision":1}),
+    );
+    assert_eq!(hit["payload"]["kind"], "intersection");
+    assert_eq!(hit["payload"]["entityId"], Value::Null);
+    let after = request(&mut k, "getSnapshot", json!(0), json!({}));
+    assert_eq!(after["modelHash"], original["modelHash"]);
+    assert_eq!(
+        after["payload"]["project"]["nodes"],
+        original["payload"]["project"]["nodes"]
+    );
+    assert_eq!(
+        after["payload"]["project"]["members"],
+        original["payload"]["project"]["members"]
+    );
+}

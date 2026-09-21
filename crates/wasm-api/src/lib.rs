@@ -1,3 +1,4 @@
+mod snap;
 use serde_json::{Value, json};
 use wasm_bindgen::prelude::*;
 use workbench_model::{Project, Result, err};
@@ -137,6 +138,11 @@ impl Kernel {
             }
             "queryGeometry" => {
                 let p = self.project.as_ref().unwrap();
+                if payload["kind"] == "snap" {
+                    let mut answer = snap::snap(p, &payload["query"])?;
+                    answer["viewRevision"] = payload["viewRevision"].clone();
+                    return Ok(answer);
+                }
                 if payload["kind"] != "ray" {
                     return Err(err(
                         "UNSUPPORTED_FEATURE",

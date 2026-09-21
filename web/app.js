@@ -1,3 +1,4 @@
+import { modeling } from "./modeling.js";
 import { Gateway } from "./state/transport.js";
 import { save, recent } from "./state/storage.js";
 import { Viewport } from "./render/viewport.js";
@@ -40,6 +41,16 @@ const viewport = new Viewport($("#viewport"), async (query) => {
   } catch (e) {
     message(e.message);
   }
+});
+const modelTools = modeling({
+  getProject: () => project,
+  open,
+  command,
+  gateway,
+  viewport,
+  modal,
+  message,
+  canEdit: () => !!project && !busy && !readOnly,
 });
 function message(text) {
   $("#message").textContent = text;
@@ -125,6 +136,7 @@ async function persist() {
   }
 }
 async function open(p) {
+  modelTools.cancel();
   try {
     setBusy(true);
     const s = await gateway.send("importProject", {
@@ -211,6 +223,7 @@ $("#import-file").onchange = async (e) => {
 };
 $("#home").onclick = () => {
   if (busy) return;
+  modelTools.cancel();
   $("#workspace").hidden = true;
   $("#landing").hidden = false;
   $("#top-context").textContent = "Your engineering workspace";
@@ -223,12 +236,16 @@ function setBusy(value) {
     "undo",
     "redo",
     "new-project",
+    "new-portal",
+    "draw-toggle",
     "open-project",
     "worked-examples",
     "analysis-mode",
   ])
     $("#" + id).disabled =
-      value || (readOnly && ["undo", "redo", "analysis-mode"].includes(id));
+      value ||
+      (readOnly &&
+        ["undo", "redo", "analysis-mode", "draw-toggle"].includes(id));
   if (project) {
     $("#undo").disabled = value || readOnly || !project.canUndo;
     $("#redo").disabled = value || readOnly || !project.canRedo;
@@ -699,6 +716,7 @@ $("#reset-viewport").onclick = () => {
 };
 for (const mode of ["elevation", "3d"])
   $("#view-" + mode).onclick = () => {
+    modelTools.cancel();
     viewport.mode = mode;
     $("#view-subtitle").textContent =
       mode === "3d"
@@ -770,12 +788,32 @@ function editEntity(key, old) {
     },
   };
   const entity = structuredClone(old || defaults[key]);
+  const arrayLabels = {
+    position: ["X (m or mm)", "Y (m or mm)", "Z (m or mm)"],
+    fixed: [
+      "Restrain X",
+      "Restrain Y",
+      "Restrain Z",
+      "Restrain Rx",
+      "Restrain Ry",
+      "Restrain Rz",
+    ],
+    values: [
+      "Fx (N or kN)",
+      "Fy (N or kN)",
+      "Fz (N or kN)",
+      "Mx (Nm or kNm)",
+      "My (Nm or kNm)",
+      "Mz (Nm or kNm)",
+    ],
+  };
   $("#modal-title").textContent = (old ? "Edit " : "Add ") + key;
   $("#modal-content").innerHTML =
     `<form id="entity-form" class="entity-form">${Object.entries(entity)
-      .map(
-        ([k, v]) =>
-          `<label class="${typeof v === "object" ? "full" : ""}">${esc(k)}${typeof v === "object" ? `<textarea name="${esc(k)}" required>${esc(JSON.stringify(v))}</textarea>` : `<input name="${esc(k)}" value="${esc(v)}" ${typeof v === "number" ? 'type="number" step="any"' : 'type="text"'} ${k === "id" && old ? "readonly" : ""} required>`}</label>`,
+      .map(([k, v]) =>
+        arrayLabels[k] && Array.isArray(v)
+          ? `<fieldset class="full"><legend>${esc(k)}</legend><div class="entity-form">${v.map((item, i) => `<label>${esc(arrayLabels[k][i])}<input name="${k}-${i}" ${typeof item === "boolean" ? `type="checkbox" ${item ? "checked" : ""}` : `value="${esc(item)}" required`}></label>`).join("")}</div></fieldset>`
+          : `<label class="${typeof v === "object" ? "full" : ""}">${esc(k)}${typeof v === "object" ? `<textarea name="${esc(k)}" required>${esc(JSON.stringify(v))}</textarea>` : `<input name="${esc(k)}" value="${esc(v)}" ${typeof v === "number" ? 'type="number" step="any"' : 'type="text"'} ${k === "id" && old ? "readonly" : ""} required>`}</label>`,
       )
       .join(
         "",
@@ -787,11 +825,17 @@ function editEntity(key, old) {
       const value = Object.fromEntries(
         Object.entries(entity).map(([k, v]) => [
           k,
-          typeof v === "object"
-            ? JSON.parse(data.get(k))
-            : typeof v === "number"
-              ? Number(data.get(k))
-              : data.get(k),
+          arrayLabels[k] && Array.isArray(v)
+            ? v.map((item, i) =>
+                typeof item === "boolean"
+                  ? data.has(`${k}-${i}`)
+                  : data.get(`${k}-${i}`),
+              )
+            : typeof v === "object"
+              ? JSON.parse(data.get(k))
+              : typeof v === "number"
+                ? Number(data.get(k))
+                : data.get(k),
         ]),
       );
       const type = {

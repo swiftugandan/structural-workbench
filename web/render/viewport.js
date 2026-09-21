@@ -29,6 +29,20 @@ export class Viewport {
     );
     let drag;
     canvas.addEventListener("pointerdown", (e) => {
+      if (this.drawing && e.button === 0 && !e.altKey) {
+        const rect = canvas.getBoundingClientRect();
+        this.onDrawPoint?.([
+          this.origin[0] +
+            (e.clientX - rect.left - this.width / 2 - this.pan[0]) /
+              this.factor,
+          0,
+          this.origin[2] -
+            (e.clientY - rect.top - this.height * 0.53 - this.pan[1]) /
+              this.factor,
+        ]);
+        canvas.focus();
+        return;
+      }
       drag = {
         x: e.clientX,
         y: e.clientY,
@@ -388,6 +402,12 @@ export class Viewport {
       );
     }
     entityIndex = 0;
+    if (this.preview) {
+      const [a, b] = this.preview.map((p) => this.projectPoint(p));
+      line(a, b, 3, orange);
+      dot(a, 5, orange);
+      dot(b, 5, orange);
+    }
     for (const s of this.project.supports) {
       const p = points.get(s.node);
       line([p[0], p[1] - 17, 0.45], [p[0], p[1] + 17, 0.45], 3, ink);

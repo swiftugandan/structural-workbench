@@ -1,0 +1,228 @@
+{
+  "analysisMode": "planarXZ",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "pd055414ebbc1",
+  "loadCases": [
+    {
+      "category": "other",
+      "id": "LC1",
+      "name": "Lateral roof force"
+    }
+  ],
+  "loads": [
+    {
+      "case": "LC1",
+      "id": "l1",
+      "node": "n3",
+      "type": "nodal",
+      "values": [
+        10000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "E": 200000000000,
+      "density": 7850,
+      "id": "mat1",
+      "name": "Synthetic isotropic material",
+      "nu": 0.25
+    }
+  ],
+  "members": [
+    {
+      "end": "n2",
+      "id": "m1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n1"
+    },
+    {
+      "end": "n3",
+      "id": "m2",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n2"
+    },
+    {
+      "end": "n3",
+      "id": "m3",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n4"
+    },
+    {
+      "end": "n3",
+      "id": "mfc53a3379e59",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n1"
+    }
+  ],
+  "metadata": {
+    "createdBy": "Structural Workbench",
+    "description": "User-created XZ portal; synthetic editable section"
+  },
+  "name": "Planar portal",
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        0,
+        0,
+        3
+      ]
+    },
+    {
+      "id": "n3",
+      "position": [
+        4,
+        0,
+        3
+      ]
+    },
+    {
+      "id": "n4",
+      "position": [
+        4,
+        0,
+        0
+      ]
+    }
+  ],
+  "revision": 3,
+  "schemaVersion": "1.0.0",
+  "sections": [
+    {
+      "A": 0.01,
+      "Iy": 0.00001,
+      "Iz": 0.00002,
+      "J": 0.00002,
+      "cy": 0.1,
+      "cz": 0.2,
+      "id": "sec1",
+      "name": "Synthetic principal section",
+      "provenance": "Original analytical fixture, not a catalogue section"
+    }
+  ],
+  "supports": [
+    {
+      "fixed": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "id": "s1",
+      "node": "n1",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "id": "s2",
+      "node": "n4",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

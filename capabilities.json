@@ -33,6 +33,22 @@
       ]
     },
     {
+      "capabilityId": "planar-portal-authoring",
+      "scopeKey": "M01-A / XZ / local browser",
+      "implementationStatus": "implemented-preview",
+      "verificationStatus": "native-browser-and-independent-portal-oracle",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [],
+      "limitations": [
+        "Full M01 CAD scope remains open: local axes, explicit connect/split/merge, broader working planes and capacity validation",
+        "Snap intersection search not validated at maximum model size"
+      ],
+      "evidenceReferences": [
+        "evidence/M01/current/portal-authoring.json",
+        "evidence/M01/current/browser-suite.json"
+      ]
+    },
+    {
       "capabilityId": "webgpu",
       "scopeKey": "WebGPU / orthographic 3D / GPU ID and Rust ray picking",
       "implementationStatus": "implemented-preview",

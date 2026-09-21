@@ -16,10 +16,16 @@ loads, self weight, imposed support motion and explicit linear combinations.
 Worked examples B01–B11 exercise those calculations. The engineering model is
 owned by Rust; UI drafts, camera and display preferences are separate.
 
+The planar portal journey now includes guided span/height/base/load setup, XZ
+member drawing with Rust snapping, numeric endpoints with unit suffixes, individual
+coordinate/restraint/nodal-load fields, atomic member creation, undo/redo and
+save/reopen/report. Crossings do not silently join members.
+
 ## Evidence and limits
 
 The final observed command outcomes and exact source/build hashes are recorded in
-`evidence/M00/current` and `delivery/state.json`. Native/WASM agreement, analytical
+`evidence/M00/current` (previous baseline), `evidence/M01/current` (this slice)
+and `delivery/state.json`. Native/WASM agreement, analytical
 benchmarks and OpenSees comparisons are separate evidence categories. WebGPU
 was observed on the local macOS AMD adapter through browser use; automated tests
 use Chromium/SwiftShader and do not represent hardware performance evidence.
@@ -33,7 +39,7 @@ working preview does not equal the complete 24-milestone project.
 | Milestone | Implemented pieces | Still required |
 | --- | --- | --- |
 | M00 | Cantilever user journey, sparse WASM/native kernel, units, selection, save/reopen/report, instability/no-adapter paths | Complete required platform evidence and release-grade acceptance audit |
-| M01 | General entity editors, planar constraints, portal oracle, transactional commands/history | Drawing/snapping command state machine, local-axis overlay, connect/merge tools and full portal authoring tour |
+| M01 | Guided portal setup, XZ drawing and Rust snapping, numeric entity fields, planar constraints, portal oracle, transactional commands/history, authoring tour | Local-axis overlay, connect/split/merge tools, broader working planes, complete camera/selection rules, size/performance validation and parent acceptance |
 | M02 | Uniform loads, self weight, prescribed motion, cases/combinations, sampled diagrams | Releases, analytical splitting for interior point actions, exact extrema/discontinuities and envelope provenance |
 | M03 | 3D orbit, worker termination cancellation, spatial oracle | Separate model/analysis Workers, copy/move/multiselect, physical/analytical hierarchy, full 30,000-DOF capacity/performance |
 | M04 | IndexedDB snapshots, single-writer lock, exports, escaped reports, stale controls | Offline cache/update lifecycle, historical-revision recovery UI, migrations and full crash/recovery matrix |
@@ -62,6 +68,6 @@ into external-resource blockers.
 
 ## Next concrete work
 
-Complete the required hardware acceptance lane for M00 and begin M01's drawing,
-snapping and complete keyboard/table portal-authoring workflow. Reuse the original
+Complete the required hardware acceptance lane for M00. Continue M01 with local-axis
+overlays and explicit connect/split/merge tools with atomic topology validation. Reuse the original
 20-case OpenSees corpus for numerical regression. Retain all original fixture values.

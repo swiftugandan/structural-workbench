@@ -1,0 +1,29 @@
+
+> structural-workbench@0.1.0 test:contracts
+> node --test tests/contracts.test.mjs
+
+TAP version 13
+# Subtest: B01–B11 conform to Draft 2020-12 contract
+ok 1 - B01–B11 conform to Draft 2020-12 contract
+  ---
+  duration_ms: 16.952458
+  ...
+# Subtest: unknown fields and unknown schema rejected
+ok 2 - unknown fields and unknown schema rejected
+  ---
+  duration_ms: 7.582185
+  ...
+# Subtest: actual WASM request/response envelopes conform to Draft 2020-12
+ok 3 - actual WASM request/response envelopes conform to Draft 2020-12
+  ---
+  duration_ms: 121.920163
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 451.322585

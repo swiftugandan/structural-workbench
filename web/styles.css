@@ -1189,3 +1189,66 @@ textarea,
     max-width: 165px;
   }
 }
+
+#drawing-panel {
+  padding: 12px;
+  background: #f2f6fb;
+  border-bottom: 1px solid #d8e1eb;
+}
+#draw-member {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+}
+#draw-member label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  flex: 1 1 75px;
+  min-width: 0;
+}
+#draw-member input,
+#draw-member select {
+  width: 100%;
+  min-width: 0;
+  padding: 6px;
+}
+#draw-status {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+#draw-toggle[aria-pressed="true"] {
+  background: #e1ebff;
+  color: #174d9c;
+}
+.viewport-toolbar {
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 51px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  flex-shrink: 0;
+}
+.entity-form fieldset {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.entity-form input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 560px) {
+  .canvas-panel {
+    height: auto;
+  }
+  .canvas-wrap {
+    height: 340px;
+    flex: none;
+  }
+  #draw-member label {
+    flex-basis: 40%;
+  }
+}
