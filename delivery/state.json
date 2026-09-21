@@ -699,7 +699,7 @@
       "id": "M01-UX",
       "useCase": "Improve the existing portal modelling, results and save/export experience",
       "dependencies": [],
-      "status": "READY",
+      "status": "IMPLEMENTING",
       "ownedPaths": [
         "web",
         "tests",
@@ -725,12 +725,22 @@
         "npm run test:graphics",
         "npm run test:wasm"
       ],
-      "outcomes": [],
+      "outcomes": [
+        {
+          "check": "design-artifact",
+          "status": "CREATED",
+          "note": "Source-based audit and interactive design created. Browser inspection denied by policy-check service; visual verification pending."
+        }
+      ],
       "evidencePaths": [],
       "sourceRevision": null,
       "buildHash": null,
       "attempts": 0,
-      "nextAction": "Audit the current UI and create viewable M01-UX designs per agent-tasks/M01-UX.md, then implement and verify before resuming final M01 acceptance."
+      "nextAction": "Implement ribbon/icons and contextual command routing from docs/design/M01-UX/AUDIT.md; preserve existing validated handlers. Browser verification remains blocked by unavailable policy check.",
+      "designPaths": [
+        "docs/design/M01-UX/workspace.html",
+        "docs/design/M01-UX/AUDIT.md"
+      ]
     }
   },
   "blockers": [
@@ -766,7 +776,7 @@
   ],
   "lastVerifiedSourceRevision": "dd67da63e5c44f0f15f0d88b2e892b06a63a3edb",
   "lastVerifiedBuildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0",
-  "nextAction": "Audit the current UI and create viewable M01-UX designs per agent-tasks/M01-UX.md, then implement and verify before resuming final M01 acceptance.",
+  "nextAction": "Implement ribbon/icons and contextual command routing from docs/design/M01-UX/AUDIT.md; preserve existing validated handlers. Browser verification remains blocked by unavailable policy check.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487"
 }

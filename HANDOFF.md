@@ -37,7 +37,7 @@ Startup and compressed payload limits passed. See raw samples in the evidence.
 
 ## Next priority: M01-UX
 
-The user requested UI/UX improvement first. [M01-UX](agent-tasks/M01-UX.md) is now the active READY sub-milestone: audit, create a viewable design, implement, and verify the existing workflows. Complete this work before resuming final M01 acceptance or starting M02. Existing test results describe the earlier candidate; UI changes require refreshed same-build evidence.
+The user requested UI/UX improvement first. [M01-UX](agent-tasks/M01-UX.md) is now the active IMPLEMENTING sub-milestone: audit, create a viewable design, implement, and verify the existing workflows. The source-based audit and interactive design are in docs/design/M01-UX/. Continue with the implementation sequence in AUDIT.md; live browser access still fails its policy check. Complete this work before resuming final M01 acceptance or starting M02. Existing test results describe the earlier candidate; UI changes require refreshed same-build evidence.
 
 ## Parent acceptance after M01-UX
 

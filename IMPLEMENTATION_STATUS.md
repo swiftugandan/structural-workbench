@@ -83,7 +83,7 @@ into external-resource blockers.
 
 ## Next concrete work
 
-First complete [M01-UX](agent-tasks/M01-UX.md), the user-requested UI/UX sub-milestone. It is READY, with design, implementation and verification pending. Prioritize workspace hierarchy, modelling flow, results readability, responsive access and accessibility. Then refresh the changed-build evidence and resume parent acceptance below.
+First complete [M01-UX](agent-tasks/M01-UX.md), the user-requested UI/UX sub-milestone. Its interactive design and source-based audit are in docs/design/M01-UX/; production implementation and browser verification remain pending. Prioritize workspace hierarchy, modelling flow, results readability, responsive access and accessibility. Then refresh the changed-build evidence and resume parent acceptance below.
 
 Run the M01 candidate on the required Windows/Linux real-GPU runner and complete
 computer-use verification after the tool policy check becomes available. Use
