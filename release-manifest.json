@@ -48,5 +48,6 @@
   "blockedGates": [
     "M00 required Windows/Linux real-GPU lane",
     "M01 remaining CAD scope and prerequisite acceptance"
-  ]
+  ],
+  "sourceRevision": "0beb6dac13e7e60ee8e9f403ed8d7341d86b6708"
 }

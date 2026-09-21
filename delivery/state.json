@@ -339,7 +339,8 @@
       "nextAction": "Continue independent M01 topology and axis-overlay work; obtain M00 hardware evidence when runner available.",
       "acceptanceMeaning": "Bounded local portal creation/edit/drawing/analysis/save/reopen slice only. Parent M01 remains unaccepted.",
       "sourceHash": "b70fe170e6db0bbb9d4ec2c1e24f3355ac73c69bdbe7a8c997771cd829d74224",
-      "buildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6"
+      "buildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6",
+      "sourceRevision": "0beb6dac13e7e60ee8e9f403ed8d7341d86b6708"
     },
     "M01-B": {
       "id": "M01-B",
@@ -388,7 +389,7 @@
       ]
     }
   ],
-  "lastVerifiedSourceRevision": "8538154cc2ee5c6f040bc7af8f725a017063114a",
+  "lastVerifiedSourceRevision": "0beb6dac13e7e60ee8e9f403ed8d7341d86b6708",
   "lastVerifiedBuildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6",
   "nextAction": "Implement Rust-authoritative local-axis overlay and explicit topology previews; retain original member loads on split and reject invalid merges atomically."
 }

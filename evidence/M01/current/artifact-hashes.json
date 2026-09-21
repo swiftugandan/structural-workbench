@@ -32,6 +32,7 @@
     "regression-native.log": "75dd02da7105ab0992f46624e03b44fa54d7a78c6b08bf63af9713c44effc42a",
     "accessibility.json": "dd4a9fdb38ddab74a7124aba46fe3c53d1b203a3133e11df54ea1a41722e9d06",
     "build.json": "9a2f462ff6e10215aaa135bcffbbfc5db3cce46369c15e9157a941982ad5212f",
-    "regression-security.log": "838d2ed0ce5d14d86174f93aa34cf1cde0db8d8b688bef5d8a9a8d43cd9f0f0e"
+    "regression-security.log": "838d2ed0ce5d14d86174f93aa34cf1cde0db8d8b688bef5d8a9a8d43cd9f0f0e",
+    "README.md": "4af192300dc081c833f5e03bb1132b6538b7c451a41e3bc88f594e3e1f143dc7"
   }
 }
