@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M01",
-  "activeTask": "M01-B",
+  "activeTask": "M01-C",
   "acceptedMilestones": [],
   "tasks": {
     "M00-A": {
@@ -348,12 +348,17 @@
       "dependencies": [
         "M01-A"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
-        "crates/geometry",
+        "crates/model",
         "crates/wasm-api",
-        "web/modeling.js",
-        "web/render/viewport.js"
+        "contracts",
+        "web/topology.js",
+        "web/app.js",
+        "web/render/viewport.js",
+        "web/index.html",
+        "web/styles.css",
+        "tests/e2e/topology.spec.js"
       ],
       "acceptanceIds": [
         "M01-local-axes",
@@ -362,14 +367,112 @@
       "requiredCommands": [
         "cargo test --workspace --locked",
         "npm run build",
+        "npm run test:contracts",
+        "npm run test:numerical",
         "npm run test:wasm",
         "npm run test:oracle",
+        "npm run test:security",
+        "npm run test:browser",
+        "npm run verify:milestone -- M01"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS",
+          "testCount": 23,
+          "evidencePath": "evidence/M01/topology/regression/native.json"
+        },
+        {
+          "check": "contracts",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/topology/regression/contracts.json"
+        },
+        {
+          "check": "numerical",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M01/topology/regression/numerical.json"
+        },
+        {
+          "check": "wasm",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M01/topology/regression/wasm.json"
+        },
+        {
+          "check": "oracle",
+          "status": "PASS",
+          "testCount": 1440,
+          "evidencePath": "evidence/M01/topology/regression/oracle.json"
+        },
+        {
+          "check": "security",
+          "status": "PASS",
+          "testCount": 2,
+          "evidencePath": "evidence/M01/topology/regression/security.json"
+        },
+        {
+          "check": "browser-suite",
+          "status": "PASS",
+          "testCount": 18,
+          "evidencePath": "evidence/M01/topology/regression/browser-suite.json"
+        },
+        {
+          "check": "verify:M01",
+          "status": "BLOCKED",
+          "exitCode": 1,
+          "evidencePath": "evidence/M01/topology/regression/gate-M01.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M01/topology"
+      ],
+      "attempts": [
+        {
+          "issue": "Preview scroll region lacked keyboard access",
+          "resolution": "Added focusable labelled region; accessibility scan passed on rerun."
+        },
+        {
+          "issue": "Split browser test expected five nodes for two cuts of a two-node member",
+          "resolution": "Corrected expected count to four; no engineering expectation changed."
+        },
+        {
+          "issue": "Regression exposed viewport picking before projection initialization",
+          "resolution": "Guarded pointer/pick handling until projection exists; final 18-test browser regression passed."
+        }
+      ],
+      "nextAction": "Continue M01 disconnected-crossing visual distinction and precise snap/grid feedback; retain broader working-plane, camera/selection and capacity gates.",
+      "sourceHash": "aca660155a88c2ffe5424b757c3de3e1816b045b8aa739421df70453ff569085",
+      "buildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
+      "acceptanceMeaning": "Bounded local axes and explicit topology preview/commit slice; parent M01 remains unaccepted."
+    },
+    "M01-C": {
+      "id": "M01-C",
+      "useCase": "Distinguish disconnected crossings and align visible grid/snap feedback with model geometry",
+      "dependencies": [
+        "M01-B"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "crates/wasm-api",
+        "web/modeling.js",
+        "web/render/viewport.js",
+        "tests/e2e"
+      ],
+      "acceptanceIds": [
+        "M01-disconnected-crossing-visuals",
+        "M01-snap-feedback"
+      ],
+      "requiredCommands": [
+        "cargo test --workspace --locked",
+        "npm run build",
         "npm run test:browser"
       ],
       "outcomes": [],
       "evidencePaths": [],
       "attempts": [],
-      "nextAction": "Implement Rust-authoritative local-axis overlay and explicit topology previews; retain original member loads on split and reject invalid merges atomically."
+      "nextAction": "Continue M01 disconnected-crossing visual distinction and precise snap/grid feedback; retain broader working-plane, camera/selection and capacity gates."
     }
   },
   "blockers": [
@@ -389,8 +492,8 @@
       ]
     }
   ],
-  "lastVerifiedSourceRevision": "0beb6dac13e7e60ee8e9f403ed8d7341d86b6708",
-  "lastVerifiedBuildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6",
-  "nextAction": "Implement Rust-authoritative local-axis overlay and explicit topology previews; retain original member loads on split and reject invalid merges atomically.",
+  "lastVerifiedSourceRevision": null,
+  "lastVerifiedBuildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
+  "nextAction": "Continue M01 disconnected-crossing visual distinction and precise snap/grid feedback; retain broader working-plane, camera/selection and capacity gates.",
   "handoffPath": "HANDOFF.md"
 }

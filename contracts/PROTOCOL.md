@@ -55,3 +55,33 @@ Schema-level failures may use INVALID_SCHEMA and include a semantic subcode from
 A check is {checkId, profileId, profileVersion, status, applicability, demand, resistance, utilisation, units, clause, formulaId, intermediateValues, governingActionRef, warnings, childChecks}. Numerical fields may be null only for unsupported/indeterminate checks and must never be serialised as 0 to imply safety. applicability records the tested predicate and required inputs. governingActionRef contains modelHash, resultId, memberId, station, side and one real case/combination ID.
 
 Overall status is fail if any applicable mandatory check fails; otherwise unsupported if any mandatory check is unsupported; otherwise indeterminate if a required input/convergence/result is missing; otherwise pass. Preserve the most severe warnings. The report must display both failure and unsupported checks if both occur. No average utilisation is used to hide a governing failure.
+
+## 6 Bounded M01 topology and axes queries
+
+`queryGeometry` additionally accepts `axes` with `{}` and `topologyPreview` with
+`{command: CommandV1}`. Axes returns members with ID, f64 midpoint `origin`, length
+and the three right-handed unit vectors used by the Rust frame formulation.
+Topology preview applies the exact command to a disposable candidate and validates
+it, returning `{project, viewRevision}` without changing revision/hash/history.
+Commit uses the same command ID/arguments and the preview's model revision. Editing
+inputs or changing the model invalidates the UI preview.
+
+`ConnectIntersections({memberIds})` explicitly connects nonparallel intersections
+among 2–200 selected Planar XZ members. It groups intersections within the model's
+1e-6 m merge tolerance, reuses participating endpoint nodes, and splits interiors
+at a shared node. It does not process collinear overlaps. `SplitMember` stations
+are distinct interior fractions; it creates separate nodes and never silently
+connects other geometry. `MergeNodes` requires sources within 1e-6 m of the target.
+Multiple supports or nodal loads from different merged nodes in the same case are
+rejected for explicit resolution. Full candidate validation rejects collapsed
+members atomically.
+
+Split children carry optional paired `parentMemberId` and `stationRange` fields.
+Unsplit 1.0.0 projects remain readable unchanged; projects exporting these fields
+require this extended reader (older strict readers reject them). The root physical
+ID is retained as provenance even after the original member is replaced. Repeated
+splits compose parent station intervals. Child and cloned uniform-load IDs are
+stable from command-ID digest and ordinal; uniform densities and local axes stay
+unchanged and explicit self-weight selections expand to all children. Unsupported
+point loads/releases remain rejected. These fields record lineage; they do not
+claim the later physical/analytical hierarchy UI or automatic remeshing.

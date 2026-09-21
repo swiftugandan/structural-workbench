@@ -42,6 +42,5 @@
     "topology.js": "0052645eb538756583048fbad64af11011ef098f02893c33743c60c141edd15c",
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e"
   },
-  "buildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
-  "releaseStatus": "working-preview-not-accepted"
+  "buildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc"
 }

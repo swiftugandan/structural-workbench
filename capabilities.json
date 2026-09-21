@@ -40,7 +40,7 @@
       "comparisonStatus": "UNKNOWN_PROKON",
       "resourceBlockers": [],
       "limitations": [
-        "Full M01 CAD scope remains open: local axes, explicit connect/split/merge, broader working planes and capacity validation",
+        "Full M01 CAD scope remains open: broader working planes, full camera/selection and capacity validation",
         "Snap intersection search not validated at maximum model size"
       ],
       "evidenceReferences": [
@@ -113,6 +113,26 @@
         "See original roadmap and resource register"
       ],
       "evidenceReferences": []
+    },
+    {
+      "capabilityId": "local-axes-topology",
+      "scopeKey": "M01-B / Rust f64 axes / split and merge / 2\u2013200 selected XZ nonparallel intersections",
+      "implementationStatus": "implemented-preview",
+      "verificationStatus": "native-and-automated-browser-with-split-beam-opensees",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [
+        "required-platform-runner"
+      ],
+      "limitations": [
+        "Collinear overlaps excluded; spatial Connect unavailable",
+        "Full M01 working-plane, camera/selection, visual-crossing distinction and capacity gates remain open",
+        "Manual computer-use access policy could not be verified in this session"
+      ],
+      "evidenceReferences": [
+        "evidence/M01/topology/topology-authoring.json",
+        "evidence/M01/topology/regression/native.json",
+        "evidence/M01/topology/regression/browser-suite.json"
+      ]
     }
   ]
 }

@@ -1,0 +1,94 @@
+{
+  "taskId": "M01-B",
+  "milestone": "M01",
+  "sourceHash": "aca660155a88c2ffe5424b757c3de3e1816b045b8aa739421df70453ff569085",
+  "buildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-21T16:46:09.579Z",
+  "status": "PASS",
+  "command": [
+    "npx",
+    "playwright",
+    "test"
+  ],
+  "stats": {
+    "startTime": "2026-09-21T16:44:45.455Z",
+    "duration": 84081.31400000001,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "testIds": [
+    "M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen",
+    "M01 topology: crossing stays disconnected, connect and merge are previewed and atomic"
+  ],
+  "testCount": 2,
+  "numericalComparison": {
+    "independentOracle": "OpenSees",
+    "input": "split-project.json",
+    "output": "split-opensees.json",
+    "comparedDofs": 24,
+    "comparison": "Displayed translations (mm) and rotations (rad), absolute tolerance 0.00000051"
+  },
+  "manualComputerUse": {
+    "status": "BLOCKED",
+    "reason": "Browser tool could not verify admin-enforced access policy; no manual browser interactions completed."
+  },
+  "limitations": [
+    "Automated Chromium SwiftShader only for this build; required Windows/Linux real-GPU lane unavailable.",
+    "Bounded topology slice only; parent M01 remains unaccepted."
+  ],
+  "artifacts": {
+    "split-preview.png": "1e5b76cbbf80d8aa1f919f29d27791f98ce2743a6d2022577a373137fe071316",
+    "split-project.json": "7fa72c7c93d0caee72b00af5b9e5ee53946ad81c5f540365c0df823de3322ef9",
+    "native-output.txt": "c012c1855a80c07a1648f620149802e1d4fd60e33c72dd5dcacfe2ae0b6dc184",
+    "split-report.html": "db19af5cdf200413c8958d92074543a7566a9889a024d749abaa8cf97b400848",
+    "merge-mobile.png": "db0c354530ce0bf17a510bb28711328cb33b3b65f0451319ce904ed92df17d38",
+    "axes.png": "271ce7dd07d84741e4cbbcf9bf2dbc83ef9e27b18e559db245441cdc611c1891",
+    "build.json": "29615341b19bbe74ced062863a5aa5b6bf929d22024e4fa93035c6e775d34cc1",
+    "split-opensees.json": "4d01c79bea27ac588e14754451d9ec4a9d4abf4fdc68f807692db6c59c31de8b",
+    "connected-project.json": "e2ea00996bcfe316988ba38e63c02127756cbf36be554931c8dd3d2263bd5a16",
+    "traces/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen.zip": "917c3928e913c70f416c1d23a5ecb7d2ff1addbcc203ef3d1cfecc2feb648269",
+    "traces/e2e-topology-M01-topology--2ceef-ge-are-previewed-and-atomic.zip": "dceec594d7ba6066f042e6d73cf29ae5e815185be6696cb7a2a16092c7cecb2b",
+    "regression/exported-project.json": "d0af705507a512890bb496e705fa1da0617d4d3cd2f5cdc9a19b21e185bf359d",
+    "regression/numerical.json": "3dbd46eb62735817a02fc4a1596fef59145766ed12ca869e161949144adfb8a7",
+    "regression/security.log": "fdb1f4f61c2ac191d48761581c4ee9dc21dbe3ba5881aed97d1eb0bff8d6aed9",
+    "regression/contracts.log": "3b63b03354f88bf456a2aed7afa4e10b866aa5258f1f1be190d54bfe61cbb4fe",
+    "regression/wasm.json": "df23d5c250f1f1d7be61939d561970352282d00f27a62e482dc8a3a700ed54f6",
+    "regression/robustness.json": "d2664195bdff96019da8651259c7b70cad6445fd6083402fefa2858e7da015f5",
+    "regression/clean-build.txt": "f2221cdff422e355929fc4ea3fc18e4e3deb13f255d7362901ee0cdcef404541",
+    "regression/security.json": "1d4e1f6288a720b43635ec53a20128c1c03c17aa2cdbc29c3fce1cf59758c392",
+    "regression/browser-suite.json": "25e9034cdbb2aa2a8b6338d94c5f2febfa6cf1b2c27a50c4ed4c0a2ca36a932a",
+    "regression/graphics.json": "0267d8d95a46dd2ee882ff4b64a01d979a85762a04e3210338d246cda1ec1a16",
+    "regression/playwright-results.json": "6df63a48b775cf0d60a723605c181b640a424c86cd28edf9e35ae427223faa2e",
+    "regression/e2e-tour.json": "93ddab451002df1dbc62e166b8061702e4588d0fd46ff0e611ba777ee54a6181",
+    "regression/oracle.json": "c5211809b9c0ce55d0704374050101653390369f90e04a7e5a227aee90b50a85",
+    "regression/cancellation-trace.zip": "f12263c0ed5e70d11f21c9aa363c746311ffda072672d768b7811ba7771d3966",
+    "regression/native.json": "2cf54907915ef2239117da03bc68df6d9d57700c9ca39cebbdeab9cb582d68ae",
+    "regression/cantilever-tour-trace.zip": "e7edf7eb56b7fd261efda5bcaa1a4ca3906b43cd1ab889c4f6b677cc349e0358",
+    "regression/native-output.txt": "c012c1855a80c07a1648f620149802e1d4fd60e33c72dd5dcacfe2ae0b6dc184",
+    "regression/performance.json": "3fed6ca869be59d7dd2cb3da8bb708cc9e6f538db4e5d5daff122b095b830d9d",
+    "regression/contracts.json": "c64b88d02c18b2ef2b6a5e21f5fd04fd61998281bb1852863dbfc514ae40223b",
+    "regression/native.log": "d941368d8208ffae1e7a2fea8d22a91e68663d1feac47e0be82333bf56743b98",
+    "regression/artifacts.sha256.json": "a4ea0c77b3596a5696e78feb7f67ed120ba8099cb967f5b6eec8c97ba7786616",
+    "regression/workspace.png": "a4d14b42036f4a85a0f41051e7f41789b2ff8483ab58b774b6aa4f53b85d8398",
+    "regression/mobile.png": "3cf303ab19e884deb7f17313b99eba17dfd99b760ea6b58395ba070850771d99",
+    "regression/calculation-report.html": "2328aec3e5fa845fb11234cdf03c811d678842f78358998d34c066b345d8411b",
+    "regression/gate-M01.json": "19705345263ee19727d39b7a4b8d8959b688a6a31a4932a9119aab0c99aab251",
+    "regression/accessibility.json": "ce7c06a374e9acfd2ca6bf26f713434d54766b0057a0e23798d358a064950e11",
+    "regression/graphics-trace.zip": "cfc335b0a7f5251d79e518f09bdf473c1bd9f02b228f6cc4fae7711905bb4bfc"
+  }
+}

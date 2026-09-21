@@ -1,0 +1,28 @@
+{
+  "milestone": "M01",
+  "status": "BLOCKED",
+  "sourceHash": "aca660155a88c2ffe5424b757c3de3e1816b045b8aa739421df70453ff569085",
+  "buildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
+  "required": [
+    "native",
+    "contracts",
+    "numerical",
+    "wasm",
+    "oracle",
+    "e2e-tour",
+    "browser-suite",
+    "accessibility",
+    "security",
+    "performance",
+    "graphics",
+    "robustness",
+    "hardware-windows-linux"
+  ],
+  "issues": [
+    "hardware-windows-linux: BLOCKED",
+    "hardware-windows-linux: stale build evidence",
+    "hardware-windows-linux: no executed test IDs/count",
+    "M01: downstream milestones have not met their acceptance gates"
+  ],
+  "observedAt": "2026-09-21T16:46:22.635Z"
+}

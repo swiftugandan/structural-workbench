@@ -1252,3 +1252,24 @@ textarea,
     flex-basis: 40%;
   }
 }
+
+#topology-preview pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.75rem;
+}
+#topology-preview {
+  max-height: 45vh;
+  overflow: auto;
+}
+.axis-summary {
+  max-width: calc(100% - 28px);
+  white-space: normal;
+  background: #fff;
+  color: #243448;
+}
+.axis-label {
+  color: #243448;
+  font-weight: 700;
+  background: #fff;
+}

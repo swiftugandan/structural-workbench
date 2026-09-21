@@ -318,6 +318,20 @@
             "mz"
           ],
           "additionalProperties": false
+        },
+        "parentMemberId": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "stationRange": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
         }
       },
       "required": [

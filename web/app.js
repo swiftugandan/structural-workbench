@@ -1,3 +1,4 @@
+import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
 import { Gateway } from "./state/transport.js";
 import { save, recent } from "./state/storage.js";
@@ -56,6 +57,15 @@ function message(text) {
   $("#message").textContent = text;
   $("#message").hidden = !text;
 }
+const topologyTools = topology({
+  getProject: () => project,
+  command,
+  gateway,
+  viewport,
+  modal,
+  message,
+  canEdit: () => !!project && !busy && !readOnly,
+});
 function modal(title, html) {
   $("#modal-title").textContent = title;
   $("#modal-content").innerHTML = html;
@@ -288,13 +298,14 @@ function refresh(snapshot) {
   renderInspector();
   renderResults();
   viewport.update(project, result, selected);
+  topologyTools.refresh();
   setBusy(busy);
 }
 function portable() {
   const { canUndo, canRedo, ...p } = project;
   return p;
 }
-async function command(type, args) {
+async function command(type, args, commandId) {
   if (readOnly)
     throw Error("Read-only: this project is being edited in another tab");
   setBusy(true);
@@ -303,7 +314,7 @@ async function command(type, args) {
       units = project.displayUnits;
     const s = await gateway.send("applyCommand", {
       command: {
-        id: "c" + crypto.randomUUID().replaceAll("-", ""),
+        id: commandId || "c" + crypto.randomUUID().replaceAll("-", ""),
         type,
         args,
       },

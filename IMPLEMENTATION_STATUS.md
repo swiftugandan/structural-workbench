@@ -21,10 +21,16 @@ member drawing with Rust snapping, numeric endpoints with unit suffixes, individ
 coordinate/restraint/nodal-load fields, atomic member creation, undo/redo and
 save/reopen/report. Crossings do not silently join members.
 
+Local axes can now be inspected for the selected member. Topology provides explicit
+Rust-validated split/connect/merge previews with one-step undo, member-load
+preservation and parent station lineage. Connect handles nonparallel XZ intersections
+among up to 200 selected members; collinear overlaps are excluded.
+
 ## Evidence and limits
 
 The final observed command outcomes and exact source/build hashes are recorded in
-`evidence/M00/current` (previous baseline), `evidence/M01/current` (this slice)
+`evidence/M00/current` (cantilever baseline), `evidence/M01/current` (portal baseline),
+`evidence/M01/topology` (axes/topology slice)
 and `delivery/state.json`. Native/WASM agreement, analytical
 benchmarks and OpenSees comparisons are separate evidence categories. WebGPU
 was observed on the local macOS AMD adapter through browser use; automated tests
@@ -39,7 +45,7 @@ working preview does not equal the complete 24-milestone project.
 | Milestone | Implemented pieces | Still required |
 | --- | --- | --- |
 | M00 | Cantilever user journey, sparse WASM/native kernel, units, selection, save/reopen/report, instability/no-adapter paths | Complete required platform evidence and release-grade acceptance audit |
-| M01 | Guided portal setup, XZ drawing and Rust snapping, numeric entity fields, planar constraints, portal oracle, transactional commands/history, authoring tour | Local-axis overlay, connect/split/merge tools, broader working planes, complete camera/selection rules, size/performance validation and parent acceptance |
+| M01 | Guided portal setup, XZ drawing and Rust snapping, numeric entity fields, planar constraints, portal oracle, transactional commands/history, local axes, explicit connect/split/merge with previews and parent lineage | Broader working planes, complete camera/selection rules, size/performance validation and parent acceptance |
 | M02 | Uniform loads, self weight, prescribed motion, cases/combinations, sampled diagrams | Releases, analytical splitting for interior point actions, exact extrema/discontinuities and envelope provenance |
 | M03 | 3D orbit, worker termination cancellation, spatial oracle | Separate model/analysis Workers, copy/move/multiselect, physical/analytical hierarchy, full 30,000-DOF capacity/performance |
 | M04 | IndexedDB snapshots, single-writer lock, exports, escaped reports, stale controls | Offline cache/update lifecycle, historical-revision recovery UI, migrations and full crash/recovery matrix |
@@ -68,6 +74,6 @@ into external-resource blockers.
 
 ## Next concrete work
 
-Complete the required hardware acceptance lane for M00. Continue M01 with local-axis
-overlays and explicit connect/split/merge tools with atomic topology validation. Reuse the original
+Complete the required hardware acceptance lane for M00. Continue M01 with disconnected-crossing visual distinction, working-plane/camera/selection
+completion and topology indexing/capacity validation. Reuse the original
 20-case OpenSees corpus for numerical regression. Retain all original fixture values.

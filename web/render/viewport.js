@@ -29,6 +29,7 @@ export class Viewport {
     );
     let drag;
     canvas.addEventListener("pointerdown", (e) => {
+      if (!this.origin || !Number.isFinite(this.factor)) return;
       if (this.drawing && e.button === 0 && !e.altKey) {
         const rect = canvas.getBoundingClientRect();
         this.onDrawPoint?.([
@@ -216,7 +217,7 @@ export class Viewport {
     ];
   }
   async pick(x, y) {
-    if (!this.project) return;
+    if (!this.project || !this.origin || !Number.isFinite(this.factor)) return;
     const b = this.basis(),
       dx = (x - this.width / 2 - this.pan[0]) / this.factor,
       dy = -(y - this.height * 0.53 - this.pan[1]) / this.factor;
@@ -438,6 +439,66 @@ export class Viewport {
         [(a[0] + b[0]) / 2 - 15, (a[1] + b[1]) / 2 - 35],
         "member-label",
       );
+    }
+    if (this.showAxes && this.localAxes) {
+      const frame = this.localAxes.find((m) => m.id === this.selected);
+      if (frame) {
+        const colors = [
+          [0.75, 0.12, 0.12, 1],
+          [0.08, 0.45, 0.2, 1],
+          [0.1, 0.3, 0.85, 1],
+        ];
+        const names = ["x", "y", "z"];
+        const origin = this.projectPoint(frame.origin);
+        origin[2] = 0.12;
+        frame.axes.forEach((axis, i) => {
+          const tip = this.projectPoint(
+            frame.origin.map(
+              (v, j) =>
+                v + axis[j] * Math.min(frame.length * 0.3, 52 / this.factor),
+            ),
+          );
+          tip[2] = 0.12;
+          const dx = tip[0] - origin[0],
+            dy = tip[1] - origin[1],
+            length = Math.hypot(dx, dy);
+          if (length < 2) {
+            dot(origin, 5, colors[i]);
+            label(
+              names[i] + " (normal to view)",
+              [origin[0], origin[1] + i * 16],
+              "axis-label",
+            );
+          } else {
+            line(origin, tip, 2, colors[i]);
+            const ux = dx / length,
+              uy = dy / length;
+            for (const sign of [-1, 1])
+              line(
+                tip,
+                [
+                  tip[0] - ux * 8 + sign * uy * 4,
+                  tip[1] - uy * 8 - sign * ux * 4,
+                  0.12,
+                ],
+                2,
+                colors[i],
+              );
+            label(names[i], [tip[0] - 5, tip[1] - 18], "axis-label");
+          }
+        });
+        label(
+          `${frame.id} local axes · ` +
+            frame.axes
+              .map(
+                (a, i) =>
+                  `${names[i]} [${a.map((v) => Number(v.toPrecision(5))).join(", ")}]`,
+              )
+              .join(" · "),
+          [4, 4],
+          "axis-summary",
+        );
+      }
     }
     for (const l of this.project.loads) {
       if (l.type !== "nodal" || !points.has(l.node)) continue;

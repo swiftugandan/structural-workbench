@@ -55,16 +55,22 @@ pub struct Section {
     pub provenance: String,
 }
 record!(Release { my: bool, mz: bool });
-record!(Member {
-    id: String,
-    start: String,
-    end: String,
-    material: String,
-    section: String,
-    local_y: [f64; 3],
-    release_start: Release,
-    release_end: Release
-});
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct Member {
+    pub id: String,
+    pub start: String,
+    pub end: String,
+    pub material: String,
+    pub section: String,
+    pub local_y: [f64; 3],
+    pub release_start: Release,
+    pub release_end: Release,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent_member_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub station_range: Option<[f64; 2]>,
+}
 record!(Support {
     id: String,
     node: String,
@@ -355,6 +361,20 @@ impl Project {
             }
         }
         for m in &self.members {
+            match (&m.parent_member_id, m.station_range) {
+                (Some(parent), Some([a, b]))
+                    if a.is_finite() && b.is_finite() && a >= 0. && b <= 1. && a < b =>
+                {
+                    check_id(parent)?;
+                }
+                (None, None) => {}
+                _ => {
+                    return Err(err(
+                        "INVALID_SCHEMA",
+                        "Member provenance needs parent ID and increasing station range within [0,1]",
+                    ));
+                }
+            }
             let a = self
                 .nodes
                 .iter()

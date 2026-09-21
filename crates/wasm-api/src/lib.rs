@@ -1,4 +1,5 @@
 mod snap;
+mod topology;
 use serde_json::{Value, json};
 use wasm_bindgen::prelude::*;
 use workbench_model::{Project, Result, err};
@@ -138,6 +139,21 @@ impl Kernel {
             }
             "queryGeometry" => {
                 let p = self.project.as_ref().unwrap();
+                if payload["kind"] == "axes" {
+                    let members: Vec<Value> = p.members.iter().map(|m| {
+                        let a = p.nodes.iter().find(|n| n.id == m.start).unwrap().position;
+                        let b = p.nodes.iter().find(|n| n.id == m.end).unwrap().position;
+                        let (length, axes) = workbench_geometry::axes(a, b, m.local_y);
+                        json!({"id":m.id,"origin":std::array::from_fn::<_,3,_>(|i| (a[i]+b[i])*0.5),"length":length,"axes":axes})
+                    }).collect();
+                    return Ok(json!({"members":members,"viewRevision":payload["viewRevision"]}));
+                }
+                if payload["kind"] == "topologyPreview" {
+                    let mut v = serde_json::to_value(p).unwrap();
+                    topology::apply(&mut v, &payload["query"]["command"])?;
+                    let candidate = Project::parse(&v.to_string())?;
+                    return Ok(json!({"project":candidate,"viewRevision":payload["viewRevision"]}));
+                }
                 if payload["kind"] == "snap" {
                     let mut answer = snap::snap(p, &payload["query"])?;
                     answer["viewRevision"] = payload["viewRevision"].clone();
@@ -200,6 +216,9 @@ impl Kernel {
 }
 fn apply(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     let kind = c["type"].as_str().unwrap_or("");
+    if ["SplitMember", "MergeNodes", "ConnectIntersections"].contains(&kind) {
+        return topology::apply(v, c);
+    }
     let mut normalised = c["args"].clone();
     normalise_units(kind, &mut normalised)?;
     let a = &normalised;
