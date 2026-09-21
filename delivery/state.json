@@ -729,53 +729,48 @@
         {
           "check": "browser-suite",
           "status": "PASS",
-          "testCount": 34,
-          "evidencePath": "evidence/M01/canvas-first/browser-suite.json"
-        },
-        {
-          "check": "native",
-          "status": "PASS",
-          "testCount": 30,
-          "evidencePath": "evidence/M01/canvas-first/native.json"
+          "testCount": 35,
+          "evidencePath": "evidence/M01/support-symbols/browser-suite.json"
         },
         {
           "check": "wasm",
           "status": "PASS",
           "testCount": 33,
-          "evidencePath": "evidence/M01/canvas-first/wasm.json"
+          "evidencePath": "evidence/M01/support-symbols/wasm.json"
         },
         {
           "check": "contracts",
           "status": "PASS",
           "testCount": 3,
-          "evidencePath": "evidence/M01/canvas-first/contracts.json"
+          "evidencePath": "evidence/M01/support-symbols/contracts.json"
         },
         {
-          "check": "milestone-gates",
+          "check": "support-symbols",
           "status": "PASS",
           "testCount": 4,
-          "evidencePath": "evidence/M01/canvas-first/milestone-gates.json"
+          "evidencePath": "evidence/M01/support-symbols/support-symbols.json"
         },
         {
           "check": "M01-UX acceptance",
           "status": "BLOCKED_RESOURCE",
-          "evidencePath": "evidence/M01/canvas-first/gate-M01-UX.json",
-          "note": "Live computer-use and UX-01 through UX-08 acceptance remain pending."
+          "evidencePath": "evidence/M01/support-symbols/gate-M01-UX.json",
+          "note": "Live review blocked by unavailable admin-enforced browser policy verification."
         }
       ],
       "evidencePaths": [
+        "evidence/M01/support-symbols",
         "evidence/M01/canvas-first"
       ],
-      "sourceRevision": "b2eee20415c7ad9167d6218d50c5e0870cef7431",
-      "buildHash": "75aae0b6359a589b9e1720a751302ca0a492db66f4136a47d79f571d18c8b36d",
-      "attempts": 3,
-      "nextAction": "Complete live canvas-first and readable-label UX review when the CUA policy service is available; retain parent real-GPU platform gate.",
+      "sourceRevision": "41f4096120252017be81d82cb139dae706f49fc3",
+      "buildHash": "d5b1acc64cda8695fdeb41ea5ab891af5d0909e873f5e362a3412f76f38e77c1",
+      "attempts": 4,
+      "nextAction": "Perform live support-symbol and canvas-first visual acceptance when browser policy verification is available. Parent real-GPU acceptance remains outstanding.",
       "designPaths": [
         "docs/design/M01-UX/workspace.html",
         "docs/design/M01-UX/AUDIT.md",
         "docs/design/M01-UX/CANVAS_INTERACTIONS.md"
       ],
-      "sourceHash": "5c86e8f331a3da2ff2722419bca3fa739e0739afcac99e61e92bb554ce4fa202"
+      "sourceHash": "3edffd11501bfa06387af99e3a28c0b8d6e1c927b0cf0d31b798f83b82fd1d9d"
     }
   },
   "blockers": [
@@ -809,9 +804,9 @@
       "independentTasks": []
     }
   ],
-  "lastVerifiedSourceRevision": "b2eee20415c7ad9167d6218d50c5e0870cef7431",
-  "lastVerifiedBuildHash": "75aae0b6359a589b9e1720a751302ca0a492db66f4136a47d79f571d18c8b36d",
-  "nextAction": "Complete live canvas-first and readable-label UX review when the CUA policy service is available; retain parent real-GPU platform gate.",
+  "lastVerifiedSourceRevision": "41f4096120252017be81d82cb139dae706f49fc3",
+  "lastVerifiedBuildHash": "d5b1acc64cda8695fdeb41ea5ab891af5d0909e873f5e362a3412f76f38e77c1",
+  "nextAction": "Perform live support-symbol and canvas-first visual acceptance when browser policy verification is available. Parent real-GPU acceptance remains outstanding.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "5c86e8f331a3da2ff2722419bca3fa739e0739afcac99e61e92bb554ce4fa202"
+  "lastVerifiedSourceHash": "3edffd11501bfa06387af99e3a28c0b8d6e1c927b0cf0d31b798f83b82fd1d9d"
 }

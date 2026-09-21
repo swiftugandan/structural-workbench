@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: Support classification uses active planar restraints, not any rotational lock
+ok 1 - Support classification uses active planar restraints, not any rotational lock
+  ---
+  duration_ms: 1.835868
+  ...
+# Subtest: Fixed ground faces away from horizontal, vertical and inclined member ends
+ok 2 - Fixed ground faces away from horizontal, vertical and inclined member ends
+  ---
+  duration_ms: 0.639168
+  ...
+# Subtest: Roller ground is normal to the restrained axis and follows camera projection
+ok 3 - Roller ground is normal to the restrained axis and follows camera projection
+  ---
+  duration_ms: 0.321763
+  ...
+# Subtest: Spatial partial and end-on constraints are explicit; imposed motion keeps restraint type
+ok 4 - Spatial partial and end-on constraints are explicit; imposed motion keeps restraint type
+  ---
+  duration_ms: 0.462973
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 98.481364

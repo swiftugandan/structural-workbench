@@ -91,3 +91,5 @@ computer-use verification after the tool policy check becomes available. Use
 milestones unaccepted until their required gates pass. Retain original fixtures.
 
 Current canvas-first/readable-label candidate: 34 browser tests, 30 native tests, 33 native/WASM numerical comparisons, 3 contract tests and 4 verifier tests pass. Stable short labels are separate from hidden IDs; no migrations. See evidence/M01/canvas-first. Live UX and required parent real-GPU acceptance remain blocked.
+
+Support-symbol refinement: fixed, pinned and roller glyphs follow active restraints and model/view orientation; custom/end-on constraints are explicit. 35 browser and 4 focused symbol checks pass, with 33 numerical comparisons and 3 contracts passing. Evidence: evidence/M01/support-symbols. Truss-joint/end-release symbols and corresponding solver support are not implemented.

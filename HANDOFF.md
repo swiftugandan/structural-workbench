@@ -23,3 +23,5 @@ Use WORKBENCH_EVIDENCE_DIR=evidence/M01/canvas-first, WORKBENCH_TASK_ID=M01-UX a
 Preview: http://127.0.0.1:4173 (npm run preview if needed). No push or remote configuration was requested.
 
 Latest user direction: hidden unique internal IDs with short visible labels; no migrations during active development. Implemented `metadata.entityLabels` in Rust canonicalisation and shared `web/entity-labels.js` presentation lookup. Label persistence/copy/deletion/undo/reopen covered by native and browser regressions. No migration layer.
+
+Latest refinement: constraint-aware, camera-aligned fixed/pinned/roller support glyphs and explicit custom/end-on markers. Current evidence is evidence/M01/support-symbols (35 browser, 4 glyph tests, 33 numerical comparisons, 3 contracts pass). Live CUA retry was blocked by unavailable policy verification. Truss joint/hinge symbols are not implemented; the kernel rejects member-end releases.
