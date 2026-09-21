@@ -1,0 +1,23 @@
+{
+  "milestone": "M01-UX",
+  "status": "BLOCKED",
+  "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36",
+  "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "required": [
+    "build",
+    "contracts",
+    "wasm",
+    "browser-suite",
+    "accessibility",
+    "graphics",
+    "ux-acceptance",
+    "computer-use"
+  ],
+  "issues": [
+    "ux-acceptance: missing or unreadable evidence (ENOENT)",
+    "computer-use: BLOCKED_RESOURCE",
+    "computer-use: no executed tests",
+    "computer-use: computer-use evidence missing"
+  ],
+  "observedAt": "2026-09-21T18:12:16.933Z"
+}

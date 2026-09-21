@@ -1,0 +1,67 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36",
+  "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-21T18:07:57.885Z",
+  "status": "PASS",
+  "testCount": 5,
+  "testIds": [
+    "locked-native-build",
+    "locked-wasm-build",
+    "wasm-bindgen",
+    "draft2020-schema-compilation",
+    "unchanged-source-snapshot"
+  ],
+  "command": [
+    "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+    "/Users/p.munaawa/Documents/projects/labs/prokon/tools/build.mjs"
+  ],
+  "outputFiles": {
+    "app.js": "d0b7d9422db1decbf729f89bb4dac5e324148156ff72420b6e831455c5c378f4",
+    "cad.js": "7ef8557ebfc6ea922bbff7780dd4d7c666b058bf8a283ffc1ff5f4d6cfc5d08b",
+    "examples/B01.json": "a33daa5c89ff6759d57360a7650bb20c277d201ccc5aef1bd8ba73fd07f7d9c6",
+    "examples/B02.json": "ccec7baf9a2c883b222e92e32ae74c7cadea4697a4163fd49a8e78fb259dc099",
+    "examples/B03.json": "eb830e2d86e8baaeb20a44de6bb6f0df9265038445ec4b966491e7367cb3b56e",
+    "examples/B04.json": "aac6bd1c02946a8fb79c55596f804c850dc476516174493179c05cb39dfd0990",
+    "examples/B05.json": "98cdb370e2d087a2a05b74025e183c27b5b325b7540e9bd7b33f362a34d87a4c",
+    "examples/B06.json": "61f28fe606feab83fb81c4998f6c5f52d426bff3a13d7559c83b4f31d2d910f0",
+    "examples/B07.json": "e1dd49739139820fbb164a37130b85cafc477bfb216598295f4b89a376a085e7",
+    "examples/B08.json": "6aadc9556ada13137e8ea341eed43dc4106e4d17aec42b21ae007a7c7dae1b83",
+    "examples/B09.json": "89aea658d2320d356d0f71164505e89f81304a911ce4dd24c874fd67c81b519c",
+    "examples/B10.json": "2a906fb5cf9a45aa047141dadcfba1dc45e2e52d5c67b7a1360022936394473d",
+    "examples/B11.json": "87d327f940bf7c86b65c1d04a2f959bea3c5596c8220328c986fbde014fabdc0",
+    "index.html": "d14cfc01f6c170e072d80fa1918109ec7039cf7f25eae6be9c37eafd7942d820",
+    "modeling.js": "11439488ad4c70115c44b5c1a4d469311d6333cf4a986d82c4b0cec642999f1d",
+    "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
+    "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
+    "pkg/workbench_wasm_api_bg.wasm": "372676680ce2694365f2074a71d7b30f168d30e81214355e43f4dd6ca24d4942",
+    "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
+    "render/interactions.js": "fc4f48e4f34ebd68b0428ddd113936aa24af87c6815a118718790e42b781a9bc",
+    "render/viewport.js": "b4e67c0171ce77c378013b717dde01a133d4dfb690fe5d2d045012bcc0ebe87c",
+    "reports/report.js": "2acd3e86ce4f59f1013c3ca421091b98344c6664e93a0c571ea023ed5f904856",
+    "request-validator.js": "39a17bc5e641c4091093de21e402cdec4f4ab7c189909e7dd8c8bab3a1edb29a",
+    "response-validator.js": "5300ce321ee880e5a8206772d229bbcd4684ffbba7db936c3ffe5d94ce80abf0",
+    "schema-validator.js": "ffbcea5c2acd6644416ad5cbb8199b0ad7b4f41e746cd06114426d726d971dc7",
+    "state/storage.js": "7910d1d3f8d487440b65533d1c860adeeab0f888d051a1cfd5337353bd380ffe",
+    "state/transport.js": "08a7c5d82d66084e4396a88bb8fe7dfd3d6342586d207fe7a2f94117de082067",
+    "styles.css": "5b5a82c07964ab5bd9a3a6e40b151a67c98684349b62d455c275adfdb23ad314",
+    "topology.js": "87cd18204dbdecbb2c367beb4108d24f783f9929dc17e7a84b701c9ba8e77cf0",
+    "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e",
+    "workspace-ui.js": "d2852b49d4342a84888f38090da197434515e811c41785c7e7d9305b9bccaa4b"
+  }
+}

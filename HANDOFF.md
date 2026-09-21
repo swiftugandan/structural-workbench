@@ -37,7 +37,7 @@ Startup and compressed payload limits passed. See raw samples in the evidence.
 
 ## Next priority: M01-UX
 
-The user requested UI/UX improvement first. [M01-UX](agent-tasks/M01-UX.md) is now the active IMPLEMENTING sub-milestone: audit, create a viewable design, implement, and verify the existing workflows. The source-based audit and interactive design are in docs/design/M01-UX/. The ribbon, context menus, inspector states and responsive panels are now implemented; see docs/design/M01-UX/IMPLEMENTATION.md. Finish verification and live visual review; browser access still fails its policy check. Complete this work before resuming final M01 acceptance or starting M02. Existing test results describe the earlier candidate; UI changes require refreshed same-build evidence.
+The user requested UI/UX improvement first. [M01-UX](agent-tasks/M01-UX.md) is now the active BLOCKED_RESOURCE sub-milestone: audit, create a viewable design, implement, and verify the existing workflows. The source-based audit and interactive design are in docs/design/M01-UX/. The ribbon, context menus, inspector states and responsive panels are now implemented; see docs/design/M01-UX/IMPLEMENTATION.md. The final 29 browser, 33 numerical, three contract and four verifier checks pass on source 06ac482. Finish live visual review and UX acceptance; browser access still fails its policy check. Complete this work before resuming final M01 acceptance or starting M02. Existing test results describe the earlier candidate; UI changes require refreshed same-build evidence.
 
 ## Parent acceptance after M01-UX
 

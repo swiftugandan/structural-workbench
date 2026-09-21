@@ -1,0 +1,39 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36",
+  "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "milestone-gates.log": "79812656a10ad70c657b368704d550bbeffd9f44d219d0c146fe1fe0697554d3"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-21T18:09:06.491Z",
+  "status": "PASS",
+  "testCount": 4,
+  "testIds": [
+    "M01 gate rejects stale, failed, empty and missing test families",
+    "M01 gate cannot substitute software GPU or macOS for required hardware",
+    "M01 gate rejects incomplete browser coverage, capacity and computer use",
+    "M01-UX gate requires all eight UX acceptance IDs and fresh successful evidence"
+  ],
+  "command": [
+    "node",
+    "--test",
+    "tests/milestone-gates.test.mjs"
+  ],
+  "artifacts": [
+    "milestone-gates.log"
+  ]
+}

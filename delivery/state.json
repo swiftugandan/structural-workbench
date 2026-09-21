@@ -699,7 +699,7 @@
       "id": "M01-UX",
       "useCase": "Improve the existing portal modelling, results and save/export experience",
       "dependencies": [],
-      "status": "IMPLEMENTING",
+      "status": "BLOCKED_RESOURCE",
       "ownedPaths": [
         "web",
         "tests",
@@ -727,20 +727,48 @@
       ],
       "outcomes": [
         {
-          "check": "design-artifact",
-          "status": "CREATED",
-          "note": "Source-based audit and interactive design created. Browser inspection denied by policy-check service; visual verification pending."
+          "check": "browser-suite",
+          "status": "PASS",
+          "testCount": 29,
+          "evidencePath": "evidence/M01/ux/browser-suite.json"
+        },
+        {
+          "check": "wasm",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M01/ux/wasm.json"
+        },
+        {
+          "check": "contracts",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/ux/contracts.json"
+        },
+        {
+          "check": "milestone-gates",
+          "status": "PASS",
+          "testCount": 4,
+          "evidencePath": "evidence/M01/ux/milestone-gates.json"
+        },
+        {
+          "check": "M01-UX acceptance",
+          "status": "BLOCKED_RESOURCE",
+          "evidencePath": "evidence/M01/ux/gate-M01-UX.json",
+          "note": "Live visual/computer-use review cannot run because browser admin policy check is unavailable. UX acceptance record remains absent until review."
         }
       ],
-      "evidencePaths": [],
-      "sourceRevision": null,
-      "buildHash": null,
-      "attempts": 0,
-      "nextAction": "Implement ribbon/icons and contextual command routing from docs/design/M01-UX/AUDIT.md; preserve existing validated handlers. Browser verification remains blocked by unavailable policy check.",
+      "evidencePaths": [
+        "evidence/M01/ux"
+      ],
+      "sourceRevision": "06ac4825bbfc6e620746f7ff8ff4b2fd679df644",
+      "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+      "attempts": 2,
+      "nextAction": "When browser policy verification is available, review the implemented M01-UX candidate through live computer use, complete UX-01\u2013UX-08 acceptance evidence, fix any observed usability issues and refresh affected same-build checks. Then resume parent hardware/platform acceptance.",
       "designPaths": [
         "docs/design/M01-UX/workspace.html",
         "docs/design/M01-UX/AUDIT.md"
-      ]
+      ],
+      "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36"
     }
   },
   "blockers": [
@@ -774,9 +802,9 @@
       "independentTasks": []
     }
   ],
-  "lastVerifiedSourceRevision": "dd67da63e5c44f0f15f0d88b2e892b06a63a3edb",
-  "lastVerifiedBuildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0",
-  "nextAction": "Implement ribbon/icons and contextual command routing from docs/design/M01-UX/AUDIT.md; preserve existing validated handlers. Browser verification remains blocked by unavailable policy check.",
+  "lastVerifiedSourceRevision": "06ac4825bbfc6e620746f7ff8ff4b2fd679df644",
+  "lastVerifiedBuildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "nextAction": "When browser policy verification is available, review the implemented M01-UX candidate through live computer use, complete UX-01\u2013UX-08 acceptance evidence, fix any observed usability issues and refresh affected same-build checks. Then resume parent hardware/platform acceptance.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487"
 }

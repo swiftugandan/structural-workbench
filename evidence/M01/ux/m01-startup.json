@@ -1,0 +1,46 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36",
+  "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-21T18:11:48.774Z",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "M01-cached-startup",
+    "M01-cold-network-startup",
+    "M01-compressed-core"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/startup.spec.js"
+  ],
+  "samples": {
+    "warm": [
+      758.6999999992549,
+      520.2000000029802,
+      979.5999999977648,
+      974.5999999977648,
+      918.1999999992549
+    ]
+  },
+  "coldMs": 1477.5999999977648,
+  "compressedBytes": 337706,
+  "browser": "153.0.8010.12"
+}
