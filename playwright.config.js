@@ -11,7 +11,10 @@ export default defineConfig({
     trace: "on",
     screenshot: "only-on-failure",
     launchOptions: {
-      args: ["--enable-unsafe-webgpu", "--use-angle=swiftshader"],
+      args:
+        process.env.WORKBENCH_REAL_GPU === "1"
+          ? []
+          : ["--enable-unsafe-webgpu", "--use-angle=swiftshader"],
     },
   },
   webServer: {
@@ -21,6 +24,11 @@ export default defineConfig({
   },
   reporter: [
     ["list"],
-    ["json", { outputFile: "evidence/M00/current/playwright-results.json" }],
+    [
+      "json",
+      {
+        outputFile: `${process.env.WORKBENCH_EVIDENCE_DIR || "evidence/M00/current"}/playwright-results.json`,
+      },
+    ],
   ],
 });

@@ -1,8 +1,10 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import os from "node:os";
+export const evidenceDir = (fallback = "evidence/M00/current") =>
+  process.env.WORKBENCH_EVIDENCE_DIR || fallback;
 export async function record(name, data) {
-  await mkdir("evidence/M00/current", { recursive: true });
+  await mkdir(evidenceDir(), { recursive: true });
   const build = JSON.parse(await readFile("dist/build.json"));
   const lockHashes = {};
   for (const file of [
@@ -14,15 +16,23 @@ export async function record(name, data) {
     lockHashes[file] = createHash("sha256")
       .update(await readFile(file))
       .digest("hex");
+  const artifactHashes = {};
+  for (const artifact of data.artifacts || []) {
+    if (typeof artifact !== "string") continue;
+    artifactHashes[artifact] = createHash("sha256")
+      .update(await readFile(`${evidenceDir()}/${artifact}`))
+      .digest("hex");
+  }
   await writeFile(
-    `evidence/M00/current/${name}.json`,
+    `${evidenceDir()}/${name}.json`,
     JSON.stringify(
       {
-        taskId: "M00-A",
-        milestone: "M00",
+        taskId: process.env.WORKBENCH_TASK_ID || "M00-A",
+        milestone: process.env.WORKBENCH_MILESTONE || "M00",
         sourceHash: build.sourceHash,
         buildHash: build.buildHash,
         lockHashes,
+        artifactHashes,
         runner: {
           platform: os.platform(),
           arch: os.arch(),

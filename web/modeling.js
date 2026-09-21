@@ -2,13 +2,13 @@ import { escape as esc } from "./reports/report.js";
 const $ = (s) => document.querySelector(s);
 const uid = (prefix) =>
   prefix + crypto.randomUUID().replaceAll("-", "").slice(0, 12);
-const member = (id, start, end, material, section) => ({
+const member = (id, start, end, material, section, localY = [0, 1, 0]) => ({
   id,
   start,
   end,
   material,
   section,
-  localY: [0, 1, 0],
+  localY,
   releaseStart: { my: false, mz: false },
   releaseEnd: { my: false, mz: false },
 });
@@ -26,6 +26,8 @@ export function modeling({
   let drawing = false,
     nextPoint = 0,
     epoch = 0;
+  let pendingPoint = Promise.resolve(),
+    submitting = false;
   const inputs = () => [...document.querySelectorAll("#draw-member input")];
   const cancel = () => {
     drawing = false;
@@ -33,6 +35,7 @@ export function modeling({
     nextPoint = 0;
     viewport.drawing = false;
     viewport.preview = null;
+    viewport.snapPreview = null;
     viewport.draw();
     $("#drawing-panel").hidden = true;
     $("#draw-toggle").setAttribute("aria-pressed", "false");
@@ -114,14 +117,9 @@ export function modeling({
     }
     if (!canEdit()) return;
     const p = getProject();
-    if (p.analysisMode !== "planarXZ") {
-      message("Choose Planar XZ before drawing members.");
-      return;
-    }
     drawing = true;
     viewport.drawing = true;
-    viewport.mode = "elevation";
-    viewport.fit();
+    viewport.mode = { XZ: "elevation", XY: "plan", YZ: "side" }[viewport.plane];
     $("#drawing-panel").hidden = false;
     $("#draw-toggle").setAttribute("aria-pressed", "true");
     for (const [id, items] of [
@@ -136,6 +134,7 @@ export function modeling({
     }
     $("#draw-status").textContent =
       "Click a start and end point, then Add member or Enter. Escape cancels. You can also type coordinates with m or mm.";
+    viewport.fit();
   };
   $("#cancel-drawing").onclick = cancel;
   const snap = (position, features = false) =>
@@ -145,42 +144,60 @@ export function modeling({
         position,
         tolerance: features ? 8 / viewport.factor : 1e-6,
         features,
-        grid: 0.5,
+        grid: viewport.gridSpacing,
+        plane: viewport.plane,
       },
       viewRevision: viewport.viewRevision,
     });
-  viewport.onDrawPoint = async (point) => {
-    if (!drawing || !canEdit()) return;
+  viewport.onDrawPoint = (point) => {
+    if (submitting) return;
     const token = epoch;
-    try {
-      const answer = await snap(point, true);
-      if (!drawing || token !== epoch) return;
-      const fields = inputs();
-      fields[nextPoint * 2].value = answer.position[0];
-      fields[nextPoint * 2 + 1].value = answer.position[2];
-      if (nextPoint === 0) {
-        viewport.preview = [answer.position, answer.position];
-        nextPoint = 1;
-      } else {
-        viewport.preview[1] = answer.position;
-        nextPoint = 0;
+    pendingPoint = pendingPoint.then(async () => {
+      if (!drawing || !canEdit() || token !== epoch) return;
+      try {
+        const answer = await snap(point, true);
+        if (!drawing || token !== epoch) return;
+        const fields = inputs();
+        const axes = viewport.planeAxes();
+        fields[nextPoint * 2].value = answer.position[axes[0]];
+        fields[nextPoint * 2 + 1].value = answer.position[axes[1]];
+        if (nextPoint === 0) {
+          viewport.preview = [answer.position, answer.position];
+          nextPoint = 1;
+        } else {
+          viewport.preview[1] = answer.position;
+          nextPoint = 0;
+        }
+        viewport.draw();
+        $("#draw-status").textContent =
+          `${answer.kind}${answer.entityId || answer.featureId ? " " + (answer.entityId || answer.featureId) : ""} · X ${answer.position[0].toPrecision(7)} m, Z ${answer.position[2].toPrecision(7)} m. Add member to commit. Crossings stay disconnected.`;
+      } catch (e) {
+        message(e.message);
       }
-      viewport.draw();
-      $("#draw-status").textContent =
-        `${answer.kind}${answer.entityId ? " " + answer.entityId : ""} · X ${answer.position[0].toPrecision(7)} m, Z ${answer.position[2].toPrecision(7)} m. Add member to commit. Crossings stay disconnected.`;
-    } catch (e) {
-      message(e.message);
-    }
+    });
+    return pendingPoint;
   };
   $("#draw-member").onsubmit = async (e) => {
     e.preventDefault();
-    if (!drawing || !canEdit()) return;
+    if (!drawing || !canEdit() || submitting) return;
     const token = epoch;
+    submitting = true;
+    const points = pendingPoint;
     try {
+      await points;
+      if (!drawing || token !== epoch) return;
       const f = inputs().map((x) => x.value),
         p = getProject();
-      const start = await snap([f[0], 0, f[1]]),
-        end = await snap([f[2], 0, f[3]]);
+      const point = (u, v) => {
+        const p = [0, 0, 0],
+          axes = viewport.planeAxes();
+        p[axes[0]] = u;
+        p[axes[1]] = v;
+        p[3 - axes[0] - axes[1]] = viewport.planeOffset;
+        return p;
+      };
+      const start = await snap(point(f[0], f[1])),
+        end = await snap(point(f[2], f[3]));
       if (!drawing || token !== epoch) return;
       const nodes = [start, end].map((x) => ({
         id: x.entityId || uid("n"),
@@ -200,17 +217,26 @@ export function modeling({
               nodes[1].id,
               $("#draw-material").value,
               $("#draw-section").value,
+              [0, 1, 2].map((i) =>
+                i === 3 - viewport.planeAxes()[0] - viewport.planeAxes()[1]
+                  ? 1
+                  : 0,
+              ),
             ),
           },
         ],
       });
+      epoch++;
       viewport.preview = null;
+      viewport.snapPreview = null;
       viewport.draw();
       nextPoint = 0;
       $("#draw-status").textContent =
         "Member added with one undo step. Click or type the next pair of points.";
     } catch (e) {
       $("#draw-status").textContent = e.message;
+    } finally {
+      submitting = false;
     }
   };
   window.addEventListener("keydown", (e) => {
@@ -223,5 +249,70 @@ export function modeling({
       $("#draw-member").requestSubmit();
     }
   });
+  let hovering = false,
+    latestHover;
+  viewport.onDrawHover = async (point) => {
+    latestHover = point;
+    if (hovering) return;
+    hovering = true;
+    try {
+      while (latestHover && drawing) {
+        const at = latestHover;
+        latestHover = null;
+        const token = epoch;
+        const answer = await snap(at, true);
+        if (!drawing || token !== epoch) continue;
+        viewport.snapPreview = answer;
+        if (nextPoint === 1 && viewport.preview)
+          viewport.preview[1] = answer.position;
+        viewport.draw();
+        $("#draw-status").textContent =
+          `${answer.kind}${answer.entityId || answer.featureId ? " " + (answer.entityId || answer.featureId) : ""} · [${answer.position.map((n) => Number(n.toPrecision(8))).join(", ")}] m. Click to place. Enter commits; Escape cancels. Crossings stay disconnected.`;
+      }
+    } catch (e) {
+      if (drawing) $("#draw-status").textContent = e.message;
+    } finally {
+      hovering = false;
+    }
+  };
+  const planeChanged = () => {
+    const plane = $("#working-plane").value,
+      offset = Number($("#plane-offset").value),
+      grid = Number($("#grid-spacing").value);
+    if (
+      !Number.isFinite(offset) ||
+      Math.abs(offset) > 1e7 ||
+      !Number.isFinite(grid) ||
+      grid <= 0
+    ) {
+      $("#draw-status").textContent =
+        "Enter a finite plane offset and positive grid spacing.";
+      return;
+    }
+    epoch++;
+    nextPoint = 0;
+    viewport.preview = null;
+    viewport.snapPreview = null;
+    viewport.plane = plane;
+    viewport.planeOffset = offset;
+    viewport.gridSpacing = grid;
+    viewport.mode = { XZ: "elevation", XY: "plan", YZ: "side" }[plane];
+    const axes = viewport.planeAxes().map((i) => ["X", "Y", "Z"][i]);
+    inputs().forEach((field, i) => {
+      const label = (i < 2 ? "Start " : "End ") + axes[i % 2];
+      field.setAttribute("aria-label", label);
+      field.parentElement.firstChild.textContent = label;
+    });
+    $("#view-subtitle").textContent =
+      `Working plane ${plane} · offset ${offset} m · snap grid ${grid} m`;
+    $("#draw-status").textContent =
+      getProject()?.analysisMode === "planarXZ" && plane !== "XZ"
+        ? "Planar XZ analysis restrains global Y translation and X/Z rotations. Choose Spatial analysis for frames needing those freedoms."
+        : "Working plane changed; draft cleared.";
+    viewport.fit();
+  };
+  for (const id of ["working-plane", "plane-offset", "grid-spacing"])
+    $("#" + id).onchange = planeChanged;
+  viewport.onCancel = cancel;
   return { cancel };
 }

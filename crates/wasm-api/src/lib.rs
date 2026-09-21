@@ -1,5 +1,7 @@
+mod cad;
 mod snap;
 mod topology;
+mod view;
 use serde_json::{Value, json};
 use wasm_bindgen::prelude::*;
 use workbench_model::{Project, Result, err};
@@ -8,6 +10,7 @@ pub struct Kernel {
     project: Option<Project>,
     undo: Vec<Project>,
     redo: Vec<Project>,
+    view_index: Option<view::Index>,
 }
 #[wasm_bindgen]
 impl Kernel {
@@ -17,6 +20,7 @@ impl Kernel {
             project: None,
             undo: vec![],
             redo: vec![],
+            view_index: None,
         }
     }
     pub fn request(&mut self, input: &str) -> String {
@@ -139,14 +143,69 @@ impl Kernel {
             }
             "queryGeometry" => {
                 let p = self.project.as_ref().unwrap();
+                if ["screenPick", "boxSelect", "viewGeometry"]
+                    .iter()
+                    .any(|kind| payload["kind"] == *kind)
+                {
+                    let q = &payload["query"];
+                    let key = format!("{}:{}", p.revision, q["camera"]);
+                    if self.view_index.as_ref().is_none_or(|v| v.key != key) {
+                        self.view_index = Some(view::Index::new(p, &q["camera"], key)?);
+                    }
+                    let index = self.view_index.as_mut().unwrap();
+                    let mut value = match payload["kind"].as_str().unwrap() {
+                        "screenPick" => index.pick(q)?,
+                        "boxSelect" => index.select(q)?,
+                        _ => index.crossings(),
+                    };
+                    value["viewRevision"] = payload["viewRevision"].clone();
+                    return Ok(value);
+                }
+                if payload["kind"] == "measure" {
+                    return cad::measure(p, &payload["query"]);
+                }
+                if payload["kind"] == "commandPreview" {
+                    let mut v = serde_json::to_value(p).unwrap();
+                    apply(&mut v, &payload["query"]["command"], false)?;
+                    let mut candidate = Project::parse(&v.to_string())?;
+                    candidate.canonicalise();
+                    return Ok(json!({"project":candidate,"viewRevision":payload["viewRevision"]}));
+                }
                 if payload["kind"] == "axes" {
+                    let positions: std::collections::BTreeMap<_, _> = p
+                        .nodes
+                        .iter()
+                        .map(|n| (n.id.as_str(), n.position))
+                        .collect();
                     let members: Vec<Value> = p.members.iter().map(|m| {
-                        let a = p.nodes.iter().find(|n| n.id == m.start).unwrap().position;
-                        let b = p.nodes.iter().find(|n| n.id == m.end).unwrap().position;
+                        let a = positions[m.start.as_str()];
+                        let b = positions[m.end.as_str()];
                         let (length, axes) = workbench_geometry::axes(a, b, m.local_y);
                         json!({"id":m.id,"origin":std::array::from_fn::<_,3,_>(|i| (a[i]+b[i])*0.5),"length":length,"axes":axes})
                     }).collect();
-                    return Ok(json!({"members":members,"viewRevision":payload["viewRevision"]}));
+                    let mut nodes: Vec<_> = p.nodes.iter().collect();
+                    nodes.sort_by(|a, b| a.position[0].total_cmp(&b.position[0]));
+                    let mut near = vec![];
+                    'outer: for (i, a) in nodes.iter().enumerate() {
+                        for b in nodes.iter().skip(i + 1) {
+                            if b.position[0] - a.position[0] > 1e-6 {
+                                break;
+                            }
+                            let distance = (0..3)
+                                .map(|i| (a.position[i] - b.position[i]).powi(2))
+                                .sum::<f64>()
+                                .sqrt();
+                            if distance <= 1e-6 {
+                                near.push(json!({"nodeIds":[a.id,b.id],"distance":distance}));
+                                if near.len() == 100 {
+                                    break 'outer;
+                                }
+                            }
+                        }
+                    }
+                    return Ok(
+                        json!({"members":members,"nearCoincidentNodes":near,"viewRevision":payload["viewRevision"]}),
+                    );
                 }
                 if payload["kind"] == "topologyPreview" {
                     let mut v = serde_json::to_value(p).unwrap();
@@ -216,6 +275,9 @@ impl Kernel {
 }
 fn apply(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     let kind = c["type"].as_str().unwrap_or("");
+    if ["MoveNodes", "CopySelection", "DeleteGeometry"].contains(&kind) {
+        return cad::apply(v, c);
+    }
     if ["SplitMember", "MergeNodes", "ConnectIntersections"].contains(&kind) {
         return topology::apply(v, c);
     }
@@ -342,8 +404,30 @@ fn normalise_units(kind: &str, a: &mut Value) -> Result<()> {
                 quantity(&mut a[k], "length")?
             }
         }
+        "AddMember" => {
+            if let Some(values) = a["localY"].as_array_mut() {
+                for v in values {
+                    quantity(v, "dimensionless")?;
+                }
+            }
+        }
+        "SetSupport" => {
+            if let Some(values) = a["prescribed"].as_array_mut() {
+                for (i, v) in values.iter_mut().enumerate() {
+                    quantity(v, if i < 3 { "length" } else { "rotation" })?;
+                }
+            }
+        }
         "SetLoad" => {
-            if let Some(values) = a["values"].as_array_mut() {
+            if let Some(values) = a.get_mut("forcePerLength").and_then(Value::as_array_mut) {
+                for v in values {
+                    quantity(v, "forcePerLength")?;
+                }
+            }
+            if a.get("factor").is_some() {
+                quantity(&mut a["factor"], "dimensionless")?;
+            }
+            if let Some(values) = a.get_mut("values").and_then(Value::as_array_mut) {
                 for (i, v) in values.iter_mut().enumerate() {
                     quantity(v, if i < 3 { "force" } else { "moment" })?
                 }

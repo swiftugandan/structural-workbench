@@ -1,8 +1,9 @@
+import { evidenceDir } from "../../tools/evidence.mjs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
-const folder = "evidence/M01/topology";
+const folder = evidenceDir("evidence/M01/topology");
 async function exported(page) {
   const pending = page.waitForEvent("download");
   await page.locator("#export-project").click();

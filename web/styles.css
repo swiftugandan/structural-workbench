@@ -1215,6 +1215,8 @@ textarea,
   padding: 6px;
 }
 #draw-status {
+  height: 39px;
+  overflow: auto;
   margin: 8px 0 0;
   font-size: 13px;
   line-height: 1.5;
@@ -1272,4 +1274,55 @@ textarea,
   color: #243448;
   font-weight: 700;
   background: #fff;
+}
+.plane-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 8px 0;
+}
+.plane-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.plane-controls input {
+  width: 130px;
+}
+#selection-box {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid #245aca;
+  background: #245aca22;
+  z-index: 3;
+}
+#geometry-status {
+  color: #86501d;
+  font-size: 11px;
+}
+.snap-label {
+  color: #734116;
+  background: #fff;
+}
+.cad-selection {
+  max-height: 30vh;
+  overflow: auto;
+}
+.cad-selection label {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+}
+.cad-selection input {
+  width: auto;
+}
+
+.geometry-warning {
+  margin: 0;
+  padding: 0 12px;
+  color: #86501d;
+  font-size: 12px;
+}
+.geometry-warning:empty {
+  display: none;
 }

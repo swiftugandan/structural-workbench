@@ -129,3 +129,113 @@ fn load_scale_and_superposition() {
         assert!((x * (-2.5) - y).abs() < 1e-10)
     }
 }
+
+#[test]
+fn m01_global_rotation_relabelling_reordering_and_endpoint_reversal() {
+    // Rodrigues rotation about unit [1,2,3], independent of production local axes.
+    let axis = [1. / 14f64.sqrt(), 2. / 14f64.sqrt(), 3. / 14f64.sqrt()];
+    let angle = 0.731_f64;
+    let rotate = |v: [f64; 3]| {
+        let dot = (0..3).map(|i| axis[i] * v[i]).sum::<f64>();
+        let cross = [
+            axis[1] * v[2] - axis[2] * v[1],
+            axis[2] * v[0] - axis[0] * v[2],
+            axis[0] * v[1] - axis[1] * v[0],
+        ];
+        std::array::from_fn::<_, 3, _>(|i| {
+            v[i] * angle.cos() + cross[i] * angle.sin() + axis[i] * dot * (1. - angle.cos())
+        })
+    };
+    let p = fixture("B02");
+    let expected = analyse(&p, "LC1").unwrap();
+    let mut rotated = p.clone();
+    for n in &mut rotated.nodes {
+        n.position = rotate(n.position);
+    }
+    for m in &mut rotated.members {
+        m.local_y = rotate(m.local_y);
+    }
+    for l in &mut rotated.loads {
+        if let workbench_model::Load::Nodal { values, .. } = l {
+            let f = rotate(values[..3].try_into().unwrap());
+            let m = rotate(values[3..].try_into().unwrap());
+            values[..3].copy_from_slice(&f);
+            values[3..].copy_from_slice(&m);
+        }
+    }
+    let actual = analyse(&rotated, "LC1").unwrap();
+    for i in 0..p.nodes.len() {
+        for offset in [0, 3] {
+            let want = rotate(
+                expected.node_displacements[i * 6 + offset..i * 6 + offset + 3]
+                    .try_into()
+                    .unwrap(),
+            );
+            for j in 0..3 {
+                assert!((want[j] - actual.node_displacements[i * 6 + offset + j]).abs() < 1e-10);
+            }
+        }
+    }
+    for m in &mut rotated.members {
+        std::mem::swap(&mut m.start, &mut m.end);
+    }
+    let reversed = analyse(&rotated, "LC1").unwrap();
+    for (a, b) in actual
+        .node_displacements
+        .iter()
+        .zip(reversed.node_displacements)
+    {
+        assert!((a - b).abs() < 1e-10);
+    }
+    let hash = rotated.hash();
+    rotated.nodes.reverse();
+    rotated.members.reverse();
+    rotated.supports.reverse();
+    assert_eq!(hash, rotated.hash());
+    for n in &mut rotated.nodes {
+        let old = n.id.clone();
+        n.id = format!("renamed_{}", old);
+        for m in &mut rotated.members {
+            if m.start == old {
+                m.start = n.id.clone();
+            }
+            if m.end == old {
+                m.end = n.id.clone();
+            }
+        }
+        for s in &mut rotated.supports {
+            if s.node == old {
+                s.node = n.id.clone();
+            }
+        }
+        for l in &mut rotated.loads {
+            if let workbench_model::Load::Nodal { node, .. } = l {
+                if *node == old {
+                    *node = n.id.clone();
+                }
+            }
+        }
+    }
+    rotated.canonicalise();
+    let renamed = analyse(&rotated, "LC1").unwrap();
+    for (a, b) in actual
+        .node_displacements
+        .iter()
+        .zip(renamed.node_displacements)
+    {
+        assert!((a - b).abs() < 1e-10);
+    }
+    let mut udl = fixture("B07");
+    let expected = analyse(&udl, "LC1").unwrap();
+    for m in &mut udl.members {
+        std::mem::swap(&mut m.start, &mut m.end);
+    }
+    let reversed = analyse(&udl, "LC1").unwrap();
+    for (a, b) in expected
+        .node_displacements
+        .iter()
+        .zip(reversed.node_displacements)
+    {
+        assert!((a - b).abs() < 1e-10);
+    }
+}

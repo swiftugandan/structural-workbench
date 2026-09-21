@@ -1,3 +1,4 @@
+import { cad } from "./cad.js";
 import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
 import { Gateway } from "./state/transport.js";
@@ -17,28 +18,22 @@ let project,
   leaseRelease,
   leaseId,
   readOnly = false,
-  saveQueue = Promise.resolve(),
-  selectionToken = 0;
+  saveQueue = Promise.resolve();
 const viewport = new Viewport($("#viewport"), async (query) => {
-  const token = ++selectionToken;
   try {
+    const cameraKey = JSON.stringify(query.camera),
+      revision = project.revision;
     const v = await gateway.send("queryGeometry", {
-      kind: "ray",
-      query,
+      kind: "screenPick",
+      query: { camera: query.camera, point: query.point },
       viewRevision: query.viewRevision,
     });
     $("#viewport").dataset.lastCpuPick = v.entityId || "";
-    const picked = query.gpuEntityId || v.entityId;
     if (
-      token === selectionToken &&
-      v.viewRevision === viewport.viewRevision &&
-      picked
-    ) {
-      selected = picked;
-      renderInspector();
-      renderNav();
-      viewport.update(project, result, selected);
-    }
+      project.revision === revision &&
+      JSON.stringify(viewport.camera()) === cameraKey
+    )
+      selectEntities(v.entityId ? [v.entityId] : [], query.toggle);
   } catch (e) {
     message(e.message);
   }
@@ -66,6 +61,34 @@ const topologyTools = topology({
   message,
   canEdit: () => !!project && !busy && !readOnly,
 });
+function selectEntities(ids, toggle = false) {
+  const available = new Set(
+    [...project.nodes, ...project.members].map((x) => x.id),
+  );
+  if (!toggle) viewport.selection.clear();
+  for (const id of ids)
+    if (available.has(id)) {
+      if (toggle && viewport.selection.has(id)) viewport.selection.delete(id);
+      else viewport.selection.add(id);
+    }
+  selected = [...viewport.selection].at(-1) || project.members[0].id;
+  renderInspector();
+  renderNav();
+  viewport.update(project, result, selected);
+  $("#selected-status").textContent = viewport.selection.size
+    ? `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).join(", ")}`
+    : "No entities selected";
+}
+cad({
+  getProject: () => project,
+  command,
+  gateway,
+  viewport,
+  modal,
+  message,
+  canEdit: () => !!project && !busy && !readOnly,
+  selectEntities,
+});
 function modal(title, html) {
   $("#modal-title").textContent = title;
   $("#modal-content").innerHTML = html;
@@ -78,7 +101,7 @@ $("#modal").addEventListener("click", (e) => {
 const scope = () =>
   modal(
     "Capabilities & assumptions",
-    `<p>This is an early structural mechanics workbench, with an actual Rust/WebAssembly solver. It is not an accepted analysis MVP or a code-design product.</p><ul class="scope-list"><li>Linear, small-displacement 3D Euler–Bernoulli frames.</li><li>Nodal actions, uniform member loads, self weight and explicit linear combinations.</li><li>Prescribed supports and planar XZ constraints.</li><li>SI engineering data; display values in engineering metric or SI.</li><li>End releases and interior point actions are currently rejected.</li><li>Conservative memory guard may refuse large models; full size/performance targets are unverified.</li><li>No buckling, nonlinear, shell, seismic, steel-code or concrete-code checks.</li><li>Numerical equivalence to PROKON is unknown.</li></ul><p>Viewport: click to select, drag to pan, wheel to zoom. In 3D, Alt-drag or right-drag to orbit. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p><p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`,
+    `<p>This is an early structural mechanics workbench, with an actual Rust/WebAssembly solver. It is not an accepted analysis MVP or a code-design product.</p><ul class="scope-list"><li>Linear, small-displacement 3D Euler–Bernoulli frames.</li><li>Nodal actions, uniform member loads, self weight and explicit linear combinations.</li><li>Prescribed supports and planar XZ constraints.</li><li>SI engineering data; display values in engineering metric or SI.</li><li>End releases and interior point actions are currently rejected.</li><li>Conservative memory guard may refuse large models; full size/performance targets are unverified.</li><li>No buckling, nonlinear, shell, seismic, steel-code or concrete-code checks.</li><li>Numerical equivalence to PROKON is unknown.</li></ul><p>Viewport: click to select, Shift-click to toggle, drag blank space to box-select, middle-drag or Space to pan, wheel to zoom towards the pointer. In 3D, Alt-drag or right-drag to orbit. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p><p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`,
   );
 $("#help").onclick = scope;
 $("#scope").onclick = scope;
@@ -298,6 +321,13 @@ function refresh(snapshot) {
   renderInspector();
   renderResults();
   viewport.update(project, result, selected);
+  viewport.selection = new Set(
+    [...viewport.selection].filter(
+      (id) =>
+        project.nodes.some((n) => n.id === id) ||
+        project.members.some((m) => m.id === id),
+    ),
+  );
   topologyTools.refresh();
   setBusy(busy);
 }
@@ -390,16 +420,21 @@ function renderNav() {
   $("#model-nav").innerHTML = groups
     .map(
       ([key, label, icon]) =>
-        `<button data-group="${key}"${key === "members" ? ' class="active"' : ""}><span>${icon}　${label}</span><span class="count">${project[key].length}</span></button>${key === "members" ? project.members.map((m) => `<button class="entity ${selected === m.id ? "active" : ""}" data-member="${esc(m.id)}">${esc(m.id)} <small>${esc(m.start)} → ${esc(m.end)}</small></button>`).join("") : ""}`,
+        `<button data-group="${key}"${key === "members" ? ' class="active"' : ""}><span>${icon}　${label}</span><span class="count">${project[key].length}</span></button>${
+          key === "members"
+            ? project.members
+                .filter((m, i) => i < 100 || m.id === selected)
+                .map(
+                  (m) =>
+                    `<button class="entity ${selected === m.id ? "active" : ""}" data-member="${esc(m.id)}">${esc(m.id)} <small>${esc(m.start)} → ${esc(m.end)}</small></button>`,
+                )
+                .join("")
+            : ""
+        }`,
     )
     .join("");
   for (const b of document.querySelectorAll("[data-member]"))
-    b.onclick = () => {
-      selected = b.dataset.member;
-      renderNav();
-      renderInspector();
-      viewport.update(project, result, selected);
-    };
+    b.onclick = (e) => selectEntities([b.dataset.member], e.shiftKey);
   for (const b of document.querySelectorAll("[data-group]"))
     b.onclick = () => entityList(b.dataset.group);
 }
@@ -407,6 +442,18 @@ const input = (id, label, value, attrs = "") =>
   `<label>${label}<input id="${id}" name="${id}" type="text" inputmode="decimal" value="${value}" ${attrs}></label>`;
 function renderInspector() {
   formDirty = false;
+  const node = project.nodes.find((n) => n.id === selected);
+  if (node) {
+    $("#selection-tag").textContent = node.id;
+    $("#selected-status").textContent = `Node ${node.id} selected`;
+    $("#inspector-content").innerHTML =
+      `<div class="inspector-heading"><strong>Node ${esc(node.id)}</strong></div><p>Position [${node.position.join(", ")}] m</p><button id="edit-selected-node">Edit node coordinates</button>`;
+    $("#edit-selected-node").onclick = () => {
+      modal("Edit node", "");
+      editEntity("nodes", node);
+    };
+    return;
+  }
   const m =
     project.members.find((m) => m.id === selected) || project.members[0];
   selected = m.id;
@@ -725,17 +772,30 @@ $("#reset-viewport").onclick = () => {
     viewport.device.destroy();
   } else viewport.init();
 };
-for (const mode of ["elevation", "3d"])
+for (const mode of ["plan", "elevation", "3d"])
   $("#view-" + mode).onclick = () => {
     modelTools.cancel();
     viewport.mode = mode;
     $("#view-subtitle").textContent =
       mode === "3d"
-        ? "Perspective axes · Alt-drag to orbit"
-        : "Global XZ · metres";
+        ? "3D orthographic · right-drag or Alt-drag to orbit"
+        : mode === "plan"
+          ? "Global XY · metres"
+          : "Global XZ · metres";
+    $("#view-plan").classList.toggle("active", mode === "plan");
     $("#view-elevation").classList.toggle("active", mode === "elevation");
     $("#view-3d").classList.toggle("active", mode === "3d");
     viewport.fit();
+  };
+for (const [id, key] of [
+  ["add-node-tool", "nodes"],
+  ["add-support-tool", "supports"],
+  ["add-load-tool", "loads"],
+])
+  $("#" + id).onclick = () => {
+    if (!project || busy || readOnly) return;
+    modal("Add " + key, "");
+    editEntity(key, null);
   };
 function entityList(key) {
   const title = {
@@ -779,7 +839,8 @@ function editEntity(key, old) {
     sections: { ...project.sections[0], id, name: "Custom section" },
     supports: {
       id,
-      node: project.nodes[0].id,
+      node:
+        project.nodes.find((n) => n.id === selected)?.id || project.nodes[0].id,
       fixed: [true, true, true, true, true, true],
       prescribed: [0, 0, 0, 0, 0, 0],
     },
@@ -788,7 +849,9 @@ function editEntity(key, old) {
       id,
       case: project.loadCases[0].id,
       type: "nodal",
-      node: project.nodes.at(-1).id,
+      node:
+        project.nodes.find((n) => n.id === selected)?.id ||
+        project.nodes.at(-1).id,
       values: [0, 0, -10000, 0, 0, 0],
     },
     combinations: {
@@ -801,6 +864,24 @@ function editEntity(key, old) {
   const entity = structuredClone(old || defaults[key]);
   const arrayLabels = {
     position: ["X (m or mm)", "Y (m or mm)", "Z (m or mm)"],
+    localY: [
+      "Local Y direction X",
+      "Local Y direction Y",
+      "Local Y direction Z",
+    ],
+    prescribed: [
+      "Prescribed X (m or mm)",
+      "Prescribed Y (m or mm)",
+      "Prescribed Z (m or mm)",
+      "Prescribed Rx (rad or deg)",
+      "Prescribed Ry (rad or deg)",
+      "Prescribed Rz (rad or deg)",
+    ],
+    forcePerLength: [
+      "Density X (N/m or kN/m)",
+      "Density Y (N/m or kN/m)",
+      "Density Z (N/m or kN/m)",
+    ],
     fixed: [
       "Restrain X",
       "Restrain Y",
@@ -824,13 +905,16 @@ function editEntity(key, old) {
       .map(([k, v]) =>
         arrayLabels[k] && Array.isArray(v)
           ? `<fieldset class="full"><legend>${esc(k)}</legend><div class="entity-form">${v.map((item, i) => `<label>${esc(arrayLabels[k][i])}<input name="${k}-${i}" ${typeof item === "boolean" ? `type="checkbox" ${item ? "checked" : ""}` : `value="${esc(item)}" required`}></label>`).join("")}</div></fieldset>`
-          : `<label class="${typeof v === "object" ? "full" : ""}">${esc(k)}${typeof v === "object" ? `<textarea name="${esc(k)}" required>${esc(JSON.stringify(v))}</textarea>` : `<input name="${esc(k)}" value="${esc(v)}" ${typeof v === "number" ? 'type="number" step="any"' : 'type="text"'} ${k === "id" && old ? "readonly" : ""} required>`}</label>`,
+          : `<label class="${typeof v === "object" ? "full" : ""}">${esc(k)}${typeof v === "object" ? `<textarea name="${esc(k)}" required>${esc(JSON.stringify(v))}</textarea>` : `<input name="${esc(k)}" value="${esc(v)}" ${typeof v === "number" ? 'type="text" inputmode="decimal"' : 'type="text"'} ${k === "id" && old ? "readonly" : ""} required>`}</label>`,
       )
       .join(
         "",
       )}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`;
   $("#entity-form").onsubmit = async (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    if (form.dataset.saving) return;
+    form.dataset.saving = "true";
     try {
       const data = new FormData(e.target);
       const value = Object.fromEntries(
@@ -844,9 +928,7 @@ function editEntity(key, old) {
               )
             : typeof v === "object"
               ? JSON.parse(data.get(k))
-              : typeof v === "number"
-                ? Number(data.get(k))
-                : data.get(k),
+              : data.get(k),
         ]),
       );
       const type = {
@@ -873,23 +955,35 @@ function editEntity(key, old) {
             ? value
             : { ...value, existence: old ? "update" : "create" },
         );
-      entityList(key);
+      if (form.isConnected && $("#modal").open) entityList(key);
     } catch (e) {
-      $("#entity-error").textContent = e.message;
+      if (form.isConnected && $("#modal").open)
+        $("#entity-error").textContent = e.message;
+      else message(e.message);
+    } finally {
+      delete form.dataset.saving;
     }
   };
   if (old)
     $("#delete-entity").onclick = async () => {
+      const form = $("#entity-form");
+      if (form.dataset.saving) return;
+      form.dataset.saving = "true";
       try {
         await command("DeleteEntities", { ids: [old.id], cascade: false });
-        entityList(key);
+        if (form.isConnected && $("#modal").open) entityList(key);
       } catch (e) {
-        $("#entity-error").textContent = e.message;
+        if (form.isConnected && $("#modal").open)
+          $("#entity-error").textContent = e.message;
+        else message(e.message);
+      } finally {
+        delete form.dataset.saving;
       }
     };
 }
 window.addEventListener("keydown", (e) => {
   if (
+    e.defaultPrevented ||
     !project ||
     $("#workspace").hidden ||
     $("#modal").open ||

@@ -156,12 +156,21 @@
         <section class="canvas-panel" aria-label="Structural viewport">
           <div class="viewport-toolbar">
             <div class="segmented">
-              <button id="view-elevation" class="active">Elevation</button
+              <button id="view-plan">Plan</button
+              ><button id="view-elevation" class="active">Elevation</button
               ><button id="view-3d">3D</button>
             </div>
             <button id="draw-toggle" aria-pressed="false">
               ＋ Draw member
             </button>
+            <button id="select-tool" aria-pressed="true">Select</button
+            ><button id="pan-tool" aria-pressed="false">Pan</button
+            ><button id="orbit-tool" aria-pressed="false">Orbit</button
+            ><button id="add-node-tool">Node</button
+            ><button id="add-support-tool">Support</button
+            ><button id="add-load-tool">Load</button
+            ><button id="cad-tools">Edit selection</button
+            ><button id="measure-tool">Measure</button>
             <button id="axes-toggle" aria-pressed="false">Local axes</button>
             <button id="topology">Topology</button>
             <button id="fit">⊡ Fit</button
@@ -181,6 +190,28 @@
             >
           </div>
           <div id="drawing-panel" hidden>
+            <div class="plane-controls">
+              <label
+                >Working plane<select id="working-plane">
+                  <option>XZ</option>
+                  <option>XY</option>
+                  <option>YZ</option>
+                </select></label
+              ><label
+                >Plane offset (m)<input
+                  id="plane-offset"
+                  type="number"
+                  step="any"
+                  value="0" /></label
+              ><label
+                >Grid (m)<input
+                  id="grid-spacing"
+                  type="number"
+                  step="any"
+                  min="0.000001"
+                  value="0.5"
+              /></label>
+            </div>
             <form id="draw-member">
               <label
                 >Start X<input aria-label="Start X" value="0" required
@@ -204,9 +235,10 @@
           <div class="canvas-wrap">
             <canvas
               id="viewport"
-              aria-label="Frame model. Click a member to select. Drag to pan; wheel to zoom."
+              aria-label="Frame model. Click to select, Shift toggles. Drag a selection box; middle drag or Space pans. Wheel zooms at the cursor."
               tabindex="0"
             ></canvas>
+            <div id="selection-box" hidden></div>
             <div id="gpu-notice" hidden></div>
             <div class="view-caption">
               <span class="eyebrow">STRUCTURAL MODEL</span
@@ -232,8 +264,10 @@
             </div>
             <span id="gpu-status">Initialising WebGPU…</span>
           </div>
+          <p id="near-node-status" class="geometry-warning" role="status"></p>
           <div class="viewport-status">
-            <span id="selected-status">Select a member to inspect</span
+            <span id="geometry-status" role="status"></span
+            ><span id="selected-status">Select a member to inspect</span
             ><span id="hash-status">SI geometry · f64 precision</span>
           </div>
         </section>

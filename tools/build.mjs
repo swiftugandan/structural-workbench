@@ -136,5 +136,21 @@ if (process.argv[1]?.endsWith("/build.mjs")) {
       2,
     ),
   );
+  if ((await sourceHash()) !== hash)
+    throw Error("Source changed during build; rebuild the complete snapshot.");
+  const { record } = await import("./evidence.mjs");
+  await record("build", {
+    status: "PASS",
+    testCount: 5,
+    testIds: [
+      "locked-native-build",
+      "locked-wasm-build",
+      "wasm-bindgen",
+      "draft2020-schema-compilation",
+      "unchanged-source-snapshot",
+    ],
+    command: process.argv,
+    outputFiles: manifest.files,
+  });
   console.log("Built static app", manifest.buildHash);
 }

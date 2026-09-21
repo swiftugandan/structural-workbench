@@ -165,3 +165,51 @@ fn crossing_snap_does_not_split_or_connect_members() {
         original["payload"]["project"]["members"]
     );
 }
+
+#[test]
+fn load_variant_unit_conversion_preserves_exact_schema() {
+    for (load, field, expected) in [
+        (
+            json!({"id":"newload","case":"LC1","type":"nodal","node":"n2","values":[0,0,"-12 kN",0,0,"2 kN m"]}),
+            "values",
+            json!([0., 0., -12000., 0., 0., 2000.]),
+        ),
+        (
+            json!({"id":"newload","case":"LC1","type":"uniform","member":"m1","axes":"global","forcePerLength":[0,0,"-2 kN/m"]}),
+            "forcePerLength",
+            json!([0., 0., -2000.]),
+        ),
+        (
+            json!({"id":"newload","case":"LC1","type":"selfWeight","members":["m1"],"factor":"1.2"}),
+            "factor",
+            json!(1.2),
+        ),
+    ] {
+        let mut k = Kernel::new();
+        let p: Value = serde_json::from_str(
+            &std::fs::read_to_string("../../fixtures/models/B02.json").unwrap(),
+        )
+        .unwrap();
+        request(&mut k, "createProject", Value::Null, json!({"project":p}));
+        let mut args = load.clone();
+        args["existence"] = json!("create");
+        let out = request(
+            &mut k,
+            "applyCommand",
+            json!(0),
+            json!({"command":{"type":"SetLoad","args":args}}),
+        );
+        assert_eq!(out["status"], "ok", "{out}");
+        let result = out["payload"]["project"]["loads"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|l| l["id"] == "newload")
+            .unwrap();
+        assert_eq!(result[field], expected);
+        assert_eq!(
+            result.as_object().unwrap().len(),
+            load.as_object().unwrap().len()
+        );
+    }
+}

@@ -1,3 +1,4 @@
+import { evidenceDir } from "../../tools/evidence.mjs";
 import { execFileSync } from "node:child_process";
 import AxeBuilder from "@axe-core/playwright";
 import { test, expect } from "@playwright/test";
@@ -25,20 +26,23 @@ test("M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and re
     hash = await page.locator("#hash-status").textContent();
   expect(initial.analysisMode).toBe("planarXZ");
   expect(initial.loads[0].values[0]).toBe(10000);
-  await mkdir("evidence/M01/current", { recursive: true });
+  await mkdir(evidenceDir("evidence/M01/current"), { recursive: true });
   await writeFile(
-    "evidence/M01/current/portal-unbraced.json",
+    `${evidenceDir("evidence/M01/current")}/portal-unbraced.json`,
     JSON.stringify(initial, null, 2),
   );
   const oracle = JSON.parse(
     execFileSync(
       "tools/oracle-env/bin/python",
-      ["tools/oracle.py", "evidence/M01/current/portal-unbraced.json"],
+      [
+        "tools/oracle.py",
+        `${evidenceDir("evidence/M01/current")}/portal-unbraced.json`,
+      ],
       { encoding: "utf8" },
     ),
   );
   await writeFile(
-    "evidence/M01/current/portal-opensees.json",
+    `${evidenceDir("evidence/M01/current")}/portal-opensees.json`,
     JSON.stringify(oracle, null, 2),
   );
   await page.locator("#analyse").click();
@@ -96,13 +100,13 @@ test("M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and re
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
   await page.locator("#display-result").selectOption("deformed");
-  await mkdir("evidence/M01/current", { recursive: true });
+  await mkdir(evidenceDir("evidence/M01/current"), { recursive: true });
   await writeFile(
-    "evidence/M01/current/portal-project.json",
+    `${evidenceDir("evidence/M01/current")}/portal-project.json`,
     JSON.stringify(braced, null, 2),
   );
   await page.screenshot({
-    path: "evidence/M01/current/portal.png",
+    path: `${evidenceDir("evidence/M01/current")}/portal.png`,
     fullPage: true,
   });
   await expect(page.locator("#save-status")).toHaveText("Saved locally");
@@ -117,7 +121,7 @@ test("M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and re
   const reportDownload = page.waitForEvent("download");
   await page.locator("#export-report").click();
   await writeFile(
-    "evidence/M01/current/portal-report.html",
+    `${evidenceDir("evidence/M01/current")}/portal-report.html`,
     await readFile(await (await reportDownload).path()),
   );
   for (const id of ["s1", "s2"]) {
@@ -159,7 +163,7 @@ test("M01 drawing Escape does not mutate and compact controls do not overflow", 
     ),
   ).toBe(true);
   await page.screenshot({
-    path: "evidence/M01/current/portal-mobile.png",
+    path: `${evidenceDir("evidence/M01/current")}/portal-mobile.png`,
     fullPage: true,
   });
 });

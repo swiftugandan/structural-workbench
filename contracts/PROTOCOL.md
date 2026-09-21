@@ -85,3 +85,34 @@ stable from command-ID digest and ordinal; uniform densities and local axes stay
 unchanged and explicit self-weight selections expand to all children. Unsupported
 point loads/releases remain rejected. These fields record lineage; they do not
 claim the later physical/analytical hierarchy UI or automatic remeshing.
+
+## 7 M01 selection, working planes and edit previews
+
+`queryGeometry` accepts `screenPick({camera,point})`, `boxSelect({camera,rect})`
+and `viewGeometry({camera})`. Camera contains f64 `origin`, orthonormal `basis`,
+positive pixels-per-metre `factor`, and CSS-pixel `center`. Queries carry the
+caller view revision; the UI discards results after camera/model changes. The
+kernel caches the projected spatial index by model revision and camera. Node
+selection takes priority within eight CSS pixels, then depth/distance/stable ID.
+Box selection includes nodes and members wholly inside the rectangle.
+`viewGeometry` reports unconnected, nonparallel projected crossings and depth
+separation; these are display markers, never a topology command.
+
+`snap` accepts XZ, XY or YZ `plane`, length-valued `position`, model-space
+`tolerance`, `features` and positive `grid`. Only candidates on the working plane
+are eligible. The UI converts eight CSS pixels to model units for pointer entry;
+numeric entry uses the separate 1e-6 m geometry tolerance. The result distinguishes
+node `entityId` from midpoint/intersection `featureId`. New crossings remain
+separate unless the user explicitly connects them.
+
+`commandPreview({command})` applies the same validation as commit to a disposable
+candidate. `MoveNodes({ids,delta})` includes selected member endpoints;
+`CopySelection({ids,delta,connectToExisting:false})` creates geometry with stable
+command-derived IDs, without copying restraints or loads. `DeleteGeometry({ids,
+cascade:true})` removes selected geometry and its dependent members/restraints/
+loads; the UI presents the full dependency preview first. It does not change the
+existing `DeleteEntities` non-cascading contract. All candidates satisfy the
+current project schema, which requires at least one node and member. Failed
+commands preserve the model and history. `measure({start,end})` takes node IDs and
+returns f64 distance and global delta in metres. `axes` also returns up to 100
+near-coincident node-pair warnings, without changing connectivity.

@@ -1,3 +1,4 @@
+import { interactions } from "./interactions.js";
 const shader = `struct Out{@builtin(position) position:vec4f,@location(0) color:vec4f,@location(1) @interpolate(flat) id:u32};struct Fragment{@location(0)color:vec4f,@location(1)id:u32};@vertex fn vs(@location(0) p:vec3f,@location(1)c:vec4f,@location(2)id:f32)->Out{var o:Out;o.position=vec4f(p,1);o.color=c;o.id=u32(id);return o;}@fragment fn fs(in:Out)->Fragment{var o:Fragment;o.color=in.color;o.id=in.id;return o;}`;
 export class Viewport {
   constructor(canvas, onSelect) {
@@ -15,75 +16,12 @@ export class Viewport {
     this.ready = false;
     this.resize = new ResizeObserver(() => this.draw());
     this.resize.observe(canvas);
-    canvas.addEventListener(
-      "wheel",
-      (e) => {
-        e.preventDefault();
-        this.zoom = Math.max(
-          0.05,
-          Math.min(30, this.zoom * Math.exp(-e.deltaY * 0.001)),
-        );
-        this.draw();
-      },
-      { passive: false },
-    );
-    let drag;
-    canvas.addEventListener("pointerdown", (e) => {
-      if (!this.origin || !Number.isFinite(this.factor)) return;
-      if (this.drawing && e.button === 0 && !e.altKey) {
-        const rect = canvas.getBoundingClientRect();
-        this.onDrawPoint?.([
-          this.origin[0] +
-            (e.clientX - rect.left - this.width / 2 - this.pan[0]) /
-              this.factor,
-          0,
-          this.origin[2] -
-            (e.clientY - rect.top - this.height * 0.53 - this.pan[1]) /
-              this.factor,
-        ]);
-        canvas.focus();
-        return;
-      }
-      drag = {
-        x: e.clientX,
-        y: e.clientY,
-        px: e.clientX,
-        py: e.clientY,
-        move: 0,
-        orbit: e.altKey || e.button === 2,
-      };
-      canvas.setPointerCapture(e.pointerId);
-    });
-    canvas.addEventListener("pointermove", (e) => {
-      if (!drag) return;
-      const dx = e.clientX - drag.px,
-        dy = e.clientY - drag.py;
-      drag.move += Math.abs(dx) + Math.abs(dy);
-      if (this.mode === "3d" && drag.orbit) {
-        this.yaw += dx * 0.008;
-        this.pitch = Math.max(-1.4, Math.min(1.4, this.pitch + dy * 0.008));
-      } else {
-        this.pan[0] += dx;
-        this.pan[1] += dy;
-      }
-      drag.px = e.clientX;
-      drag.py = e.clientY;
-      this.draw();
-    });
-    canvas.addEventListener("pointerup", (e) => {
-      if (drag?.move < 5) {
-        const rect = canvas.getBoundingClientRect();
-        this.pick(e.clientX - rect.left, e.clientY - rect.top);
-      }
-      drag = null;
-    });
-    canvas.addEventListener("contextmenu", (e) => e.preventDefault());
-    canvas.addEventListener("keydown", (e) => {
-      if (e.key === "Home") {
-        e.preventDefault();
-        this.fit();
-      }
-    });
+    this.plane = "XZ";
+    this.planeOffset = 0;
+    this.gridSpacing = 0.5;
+    this.tool = "select";
+    this.selection = new Set(["m1"]);
+    interactions(this);
     this.init();
   }
   async init(retry = false) {
@@ -189,7 +127,41 @@ export class Viewport {
     this.selected = selected;
     this.draw();
   }
+  camera() {
+    return {
+      origin: this.origin,
+      basis: this.basis(),
+      factor: this.factor,
+      center: [this.width / 2 + this.pan[0], this.height * 0.53 + this.pan[1]],
+    };
+  }
+  planeAxes() {
+    return { XZ: [0, 2], XY: [0, 1], YZ: [1, 2] }[this.plane];
+  }
+  pointAt(x, y) {
+    const axes = this.planeAxes(),
+      p = [0, 0, 0];
+    p[3 - axes[0] - axes[1]] = this.planeOffset;
+    p[axes[0]] =
+      this.origin[axes[0]] + (x - this.width / 2 - this.pan[0]) / this.factor;
+    p[axes[1]] =
+      this.origin[axes[1]] -
+      (y - this.height * 0.53 - this.pan[1]) / this.factor;
+    return p;
+  }
   basis() {
+    if (this.mode === "plan")
+      return [
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1],
+      ];
+    if (this.mode === "side")
+      return [
+        [0, 1, 0],
+        [0, 0, 1],
+        [1, 0, 0],
+      ];
     if (this.mode === "elevation")
       return [
         [1, 0, 0],
@@ -216,7 +188,7 @@ export class Viewport {
       0.5 + (dot(b[2]) / this.extent) * 0.1,
     ];
   }
-  async pick(x, y) {
+  async pick(x, y, toggle = false) {
     if (!this.project || !this.origin || !Number.isFinite(this.factor)) return;
     const b = this.basis(),
       dx = (x - this.width / 2 - this.pan[0]) / this.factor,
@@ -225,6 +197,18 @@ export class Viewport {
       (v, i) => v + dx * b[0][i] + dy * b[1][i] - this.extent * b[2][i],
     );
     const viewRevision = this.viewRevision;
+    const camera = this.camera(),
+      cameraKey = JSON.stringify(camera),
+      project = this.project;
+    this.onSelect({
+      origin,
+      direction: b[2],
+      tolerance: 10 / this.factor,
+      viewRevision,
+      point: [x, y],
+      camera,
+      toggle,
+    });
     let gpuEntityId = null;
     if (this.ready && this.idTexture) {
       const read = this.device.createBuffer({
@@ -259,21 +243,18 @@ export class Viewport {
         this.device.queue.submit([encoder.finish()]);
         await read.mapAsync(GPUMapMode.READ);
         const id = new Uint32Array(read.getMappedRange())[0];
-        gpuEntityId = this.project.members[id - 1]?.id || null;
+        gpuEntityId =
+          this.project.members[id - 1]?.id ||
+          this.project.nodes[id - this.project.members.length - 1]?.id ||
+          null;
         read.unmap();
       } finally {
         read.destroy();
       }
     }
-    if (viewRevision !== this.viewRevision) return;
+    if (project !== this.project || cameraKey !== JSON.stringify(this.camera()))
+      return;
     this.canvas.dataset.lastGpuPick = gpuEntityId || "";
-    this.onSelect({
-      origin,
-      direction: b[2],
-      tolerance: 10 / this.factor,
-      viewRevision,
-      gpuEntityId,
-    });
   }
   draw() {
     if (!this.project || !this.ready || this.canvas.clientWidth === 0) return;
@@ -387,20 +368,32 @@ export class Viewport {
       ink = [0.22, 0.31, 0.41, 1],
       blue = [0.16, 0.4, 0.8, 1],
       orange = [0.78, 0.35, 0.19, 1];
-    for (let x = (w / 2 + this.pan[0]) % 28; x < w; x += 28)
-      line([x, 0, 0.99], [x, h, 0.99], 0.5, grid);
-    for (let y = (h / 2 + this.pan[1]) % 28; y < h; y += 28)
-      line([0, y, 0.99], [w, y, 0.99], 0.5, grid);
+    if (this.mode !== "3d") {
+      const axes =
+        this.mode === "plan" ? [0, 1] : this.mode === "side" ? [1, 2] : [0, 2];
+      const step = this.gridSpacing * this.factor;
+      // Thin grid lines follow the actual 0.5 m snap grid; zoomed-out views
+      // show a whole-number multiple to bound rendering cost, never a fake grid.
+      const multiple = Math.max(1, Math.ceil(14 / step));
+      const spacing = step * multiple;
+      const x0 = w / 2 + this.pan[0] - this.origin[axes[0]] * this.factor;
+      const y0 = h * 0.53 + this.pan[1] + this.origin[axes[1]] * this.factor;
+      for (let x = ((x0 % spacing) + spacing) % spacing; x < w; x += spacing)
+        line([x, 0, 0.99], [x, h, 0.99], 0.5, grid);
+      for (let y = ((y0 % spacing) + spacing) % spacing; y < h; y += spacing)
+        line([0, y, 0.99], [w, y, 0.99], 0.5, grid);
+      this.canvas.dataset.gridSpacing = String(this.gridSpacing * multiple);
+    }
     for (const [i, m] of this.project.members.entries()) {
       entityIndex = i + 1;
       const a = points.get(m.start),
         b = points.get(m.end);
-      line(
-        a,
-        b,
-        m.id === this.selected ? 6 : 4,
-        m.id === this.selected ? blue : ink,
-      );
+      line(a, b, 4, ink);
+      if (this.hovered === m.id) line(a, b, 8, [0.9, 0.42, 0.08, 0.7]);
+      if (this.selection.has(m.id)) {
+        line(a, b, 12, [0.16, 0.4, 0.8, 0.22]);
+        line(a, b, 4, blue);
+      }
     }
     entityIndex = 0;
     if (this.preview) {
@@ -417,21 +410,41 @@ export class Viewport {
     }
     const labels = document.querySelector("#viewport-labels");
     labels.replaceChildren();
+    let labelBudget = 200;
     const label = (text, p, cls = "") => {
+      if (
+        !["axis-summary", "axis-label", "snap-label"].includes(cls) &&
+        labelBudget-- <= 0
+      )
+        return;
       const el = document.createElement("span");
       el.className = "node-label " + cls;
-      el.textContent = text;
+      el.textContent =
+        text.length > 24 && (cls === "" || cls === "member-label")
+          ? `${text.slice(0, 6)}…${text.slice(-5)}`
+          : text;
+      el.title = text;
+      el.dataset.entityId = text;
       el.style.left = p[0] + 9 + "px";
       el.style.top = p[1] + 10 + "px";
       labels.append(el);
     };
-    for (const n of nodes) {
+    for (const [i, n] of nodes.entries()) {
       const p = points.get(n.id);
-      dot(p, 4.5, ink);
+      entityIndex = this.project.members.length + i + 1;
+      if (this.hovered === n.id) dot(p, 8, orange);
+      dot(
+        p,
+        this.selection.has(n.id) ? 6 : 4.5,
+        this.selection.has(n.id) ? blue : ink,
+      );
       dot(p, 2.3, [1, 1, 1, 1]);
-      label(n.id, p);
+      if (nodes.length <= 100 || this.selection.has(n.id)) label(n.id, p);
     }
+    entityIndex = 0;
     for (const m of this.project.members) {
+      if (this.project.members.length > 100 && !this.selection.has(m.id))
+        continue;
       const a = points.get(m.start),
         b = points.get(m.end);
       label(
@@ -495,7 +508,7 @@ export class Viewport {
                   `${names[i]} [${a.map((v) => Number(v.toPrecision(5))).join(", ")}]`,
               )
               .join(" · "),
-          [4, 4],
+          [4, 76],
           "axis-summary",
         );
       }
@@ -574,6 +587,34 @@ export class Viewport {
         }
       }
     }
+    if (this.snapPreview) {
+      const p = this.projectPoint(this.snapPreview.position);
+      p[2] = 0.05;
+      dot(p, 7, orange);
+      dot(p, 4, [1, 1, 1, 1]);
+      label(
+        this.snapPreview.kind +
+          (this.snapPreview.entityId ? " " + this.snapPreview.entityId : ""),
+        [p[0] + 5, p[1] - 30],
+        "snap-label",
+      );
+    }
+    if (this.crossingData) {
+      for (const crossing of this.crossingData.crossings) {
+        const [x, y] = crossing.point;
+        if (x < 0 || x > w || y < 0 || y > h) continue;
+        const p = [x, y, 0.08];
+        dot(p, 5, [1, 1, 1, 1]);
+        line([x - 5, y, 0.07], [x, y - 5, 0.07], 1.5, orange);
+        line([x, y - 5, 0.07], [x + 5, y, 0.07], 1.5, orange);
+        line([x + 5, y, 0.07], [x, y + 5, 0.07], 1.5, orange);
+        line([x, y + 5, 0.07], [x - 5, y, 0.07], 1.5, orange);
+      }
+      this.canvas.dataset.disconnectedCrossings = String(
+        this.crossingData.crossings.length,
+      );
+    }
+    this.onViewChanged?.();
     const data = new Float32Array(vertices);
     this.buffer?.destroy();
     this.buffer = this.device.createBuffer({

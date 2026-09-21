@@ -182,6 +182,13 @@ export function topology({
         });
         if (getProject() !== p) return;
         viewport.localAxes = data.members;
+        const near = data.nearCoincidentNodes || [];
+        $("#near-node-status").textContent = near.length
+          ? `Warning: ${near.length}${near.length === 100 ? "+" : ""} near-coincident node pairs. Connectivity is unchanged. ${near
+              .slice(0, 4)
+              .map((n) => n.nodeIds.join(" / "))
+              .join("; ")}. Review Merge nodes explicitly.`
+          : "";
         viewport.draw();
       } catch (e) {
         if (getProject() === p) message(e.message);

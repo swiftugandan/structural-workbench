@@ -24,12 +24,24 @@ pub fn snap(p: &Project, q: &Value) -> Result<Value> {
             "Invalid snap coordinates or aperture",
         ));
     }
+    let axes: [usize; 2] = match q["plane"].as_str().unwrap_or("XZ") {
+        "XZ" => [0, 2],
+        "XY" => [0, 1],
+        "YZ" => [1, 2],
+        _ => return Err(err("INVALID_SCHEMA", "Working plane must be XZ, XY or YZ")),
+    };
+    let normal = 3 - axes[0] - axes[1];
+    let positions: std::collections::BTreeMap<_, _> = p
+        .nodes
+        .iter()
+        .map(|n| (n.id.as_str(), n.position))
+        .collect();
     let mut candidates: Vec<(u8, f64, String, [f64; 3], &'static str)> = vec![];
     let mut add = |priority, id: String, at: [f64; 3], kind| {
-        let distance = (0..3)
-            .map(|i| (at[i] - point[i]).powi(2))
-            .sum::<f64>()
-            .sqrt();
+        if (at[normal] - point[normal]).abs() > 1e-6 {
+            return;
+        }
+        let distance = (at[axes[0]] - point[axes[0]]).hypot(at[axes[1]] - point[axes[1]]);
         if distance <= tolerance {
             candidates.push((priority, distance, id, at, kind));
         }
@@ -38,54 +50,45 @@ pub fn snap(p: &Project, q: &Value) -> Result<Value> {
         add(0, node.id.clone(), node.position, "node");
     }
     if q["features"].as_bool().unwrap_or(false) {
+        let mut nearby = vec![];
         for m in &p.members {
-            let a = p.nodes.iter().find(|n| n.id == m.start).unwrap().position;
-            let b = p.nodes.iter().find(|n| n.id == m.end).unwrap().position;
+            let a = positions[m.start.as_str()];
+            let b = positions[m.end.as_str()];
             add(
                 2,
                 m.id.clone(),
-                std::array::from_fn(|i| (a[i] + b[i]) / 2.),
+                std::array::from_fn(|i| (a[i] + b[i]) * 0.5),
                 "midpoint",
             );
+            if (a[normal] - point[normal]).abs() > 1e-6 || (b[normal] - point[normal]).abs() > 1e-6
+            {
+                continue;
+            }
+            if axes.iter().all(|i| {
+                point[*i] >= a[*i].min(b[*i]) - tolerance
+                    && point[*i] <= a[*i].max(b[*i]) + tolerance
+            }) {
+                nearby.push((m, a, b));
+            }
         }
-        // Crossing geometry offers a location, never an implicit topological join.
-        for (i, m) in p.members.iter().enumerate() {
-            let a = p.nodes.iter().find(|n| n.id == m.start).unwrap().position;
-            let b = p.nodes.iter().find(|n| n.id == m.end).unwrap().position;
-            for n in p.members.iter().skip(i + 1) {
-                let c = p
-                    .nodes
-                    .iter()
-                    .find(|node| node.id == n.start)
-                    .unwrap()
-                    .position;
-                let d = p
-                    .nodes
-                    .iter()
-                    .find(|node| node.id == n.end)
-                    .unwrap()
-                    .position;
-                if [a[1], b[1], c[1], d[1]]
-                    .iter()
-                    .any(|y| (*y - point[1]).abs() > 1e-6)
-                {
-                    continue;
-                }
-                let u = [b[0] - a[0], b[2] - a[2]];
-                let v = [d[0] - c[0], d[2] - c[2]];
+        // Broad-phase rejects distant segments before any pair intersections.
+        for (i, (m, a, b)) in nearby.iter().enumerate() {
+            for (n, c, d) in nearby.iter().skip(i + 1) {
+                let u = axes.map(|i| b[i] - a[i]);
+                let v = axes.map(|i| d[i] - c[i]);
+                let w = axes.map(|i| c[i] - a[i]);
                 let cross = |x: [f64; 2], y: [f64; 2]| x[0] * y[1] - x[1] * y[0];
                 let den = cross(u, v);
                 if den.abs() < 1e-15 {
                     continue;
                 }
-                let w = [c[0] - a[0], c[2] - a[2]];
                 let t = cross(w, v) / den;
                 let s = cross(w, u) / den;
                 if (0. ..=1.).contains(&t) && (0. ..=1.).contains(&s) {
                     add(
                         1,
                         format!("{}:{}", m.id, n.id),
-                        [a[0] + t * u[0], point[1], a[2] + t * u[1]],
+                        std::array::from_fn(|i| a[i] + t * (b[i] - a[i])),
                         "intersection",
                     );
                 }
@@ -95,16 +98,11 @@ pub fn snap(p: &Project, q: &Value) -> Result<Value> {
             if !grid.is_finite() || grid <= 0. {
                 return Err(err("INVALID_SCHEMA", "Positive grid spacing required"));
             }
-            add(
-                3,
-                String::new(),
-                [
-                    (point[0] / grid).round() * grid,
-                    point[1],
-                    (point[2] / grid).round() * grid,
-                ],
-                "grid",
-            );
+            let mut at = point;
+            for i in axes {
+                at[i] = (point[i] / grid).round() * grid;
+            }
+            add(3, String::new(), at, "grid");
         }
     }
     candidates.sort_by(|a, b| {
@@ -114,7 +112,7 @@ pub fn snap(p: &Project, q: &Value) -> Result<Value> {
     });
     Ok(match candidates.first() {
         Some((_, distance, id, position, kind)) => {
-            json!({"position":position,"kind":kind,"entityId":if *kind=="node" {Some(id)} else {None},"distance":distance})
+            json!({"position":position,"kind":kind,"entityId":if *kind=="node" {Some(id)} else {None},"featureId":id,"distance":distance})
         }
         None => json!({"position":point,"kind":"free","entityId":null,"distance":0}),
     })

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { record } from "../../tools/evidence.mjs";
+import { record, evidenceDir } from "../../tools/evidence.mjs";
 async function start(page) {
   await page.goto("/");
   await page.locator("#new-project").click();
@@ -58,9 +58,9 @@ test("M00-tour: edit, solve, stale, select, export, reopen, instability", async 
   expect(project.sections[0].Iy).toBe(0.00002);
   expect(project.loads[0].values[2]).toBe(-13000);
   expect(project).not.toHaveProperty("canUndo");
-  await mkdir("evidence/M00/current", { recursive: true });
+  await mkdir(evidenceDir("evidence/M00/current"), { recursive: true });
   await writeFile(
-    "evidence/M00/current/exported-project.json",
+    `${evidenceDir("evidence/M00/current")}/exported-project.json`,
     JSON.stringify(project, null, 2),
   );
   const reportPromise = page.waitForEvent("download");
@@ -69,9 +69,12 @@ test("M00-tour: edit, solve, stale, select, export, reopen, instability", async 
   const html = await readFile(await report.path(), "utf8");
   expect(html).toContain("calculation record");
   expect(html).toContain("-0.0292500000");
-  await writeFile("evidence/M00/current/calculation-report.html", html);
+  await writeFile(
+    `${evidenceDir("evidence/M00/current")}/calculation-report.html`,
+    html,
+  );
   await page.screenshot({
-    path: "evidence/M00/current/workspace.png",
+    path: `${evidenceDir("evidence/M00/current")}/workspace.png`,
     fullPage: true,
   });
   await page.reload();
@@ -166,7 +169,7 @@ test("narrow screen retains tables and portable export", async ({ page }) => {
   );
   expect(overflow).toBe(false);
   await page.screenshot({
-    path: "evidence/M00/current/mobile.png",
+    path: `${evidenceDir("evidence/M00/current")}/mobile.png`,
     fullPage: true,
   });
 });
