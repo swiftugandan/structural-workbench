@@ -1,3 +1,4 @@
+import { entityLabel } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
 const $ = (s) => document.querySelector(s);
 const uid = (prefix) =>
@@ -133,7 +134,7 @@ export function modeling({
         .join("");
     }
     $("#draw-status").textContent =
-      "Click a start and end point, then Add member or Enter. Escape cancels. You can also type coordinates with m or mm.";
+      "Click the first endpoint, then the second to create a member. Escape cancels. Numeric entry remains available below.";
     viewport.fit();
   };
   $("#cancel-drawing").onclick = cancel;
@@ -167,10 +168,13 @@ export function modeling({
         } else {
           viewport.preview[1] = answer.position;
           nextPoint = 0;
+          queueMicrotask(() => {
+            if (drawing && token === epoch) $("#draw-member").requestSubmit();
+          });
         }
         viewport.draw();
         $("#draw-status").textContent =
-          `${answer.kind}${answer.entityId || answer.featureId ? " " + (answer.entityId || answer.featureId) : ""} · X ${answer.position[0].toPrecision(7)} m, Z ${answer.position[2].toPrecision(7)} m. Add member to commit. Crossings stay disconnected.`;
+          `${answer.kind}${answer.entityId || answer.featureId ? " " + entityLabel(getProject(), answer.entityId || answer.featureId) : ""} · X ${answer.position[0].toPrecision(7)} m, Z ${answer.position[2].toPrecision(7)} m. Second endpoint commits. Crossings stay disconnected.`;
       } catch (e) {
         message(e.message);
       }
@@ -267,7 +271,7 @@ export function modeling({
           viewport.preview[1] = answer.position;
         viewport.draw();
         $("#draw-status").textContent =
-          `${answer.kind}${answer.entityId || answer.featureId ? " " + (answer.entityId || answer.featureId) : ""} · [${answer.position.map((n) => Number(n.toPrecision(8))).join(", ")}] m. Click to place. Enter commits; Escape cancels. Crossings stay disconnected.`;
+          `${answer.kind}${answer.entityId || answer.featureId ? " " + entityLabel(getProject(), answer.entityId || answer.featureId) : ""} · [${answer.position.map((n) => Number(n.toPrecision(8))).join(", ")}] m. Click to place. Enter commits; Escape cancels. Crossings stay disconnected.`;
       }
     } catch (e) {
       if (drawing) $("#draw-status").textContent = e.message;

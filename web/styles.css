@@ -1599,3 +1599,118 @@ textarea,
     grid-template-rows: minmax(350px, 1fr) 48px;
   }
 }
+/* Canvas-first tools keep modelling on the work surface. */
+#canvas-tool-options {
+  min-height: 96px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  background: #edf3ff;
+  border-bottom: 1px solid #cbdcf5;
+}
+#canvas-tool-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  margin: 0;
+}
+#canvas-tool-options input {
+  width: 80px;
+}
+#canvas-tool-options select {
+  max-width: 180px;
+}
+#placement-help {
+  flex: 1 1 230px;
+  line-height: 1.5;
+}
+.assignment-label {
+  pointer-events: auto;
+  font: 12px system-ui;
+  min-height: 24px;
+  padding: 3px 6px;
+  border: 1px solid #c8d5e5;
+  background: #fff;
+  color: #694124;
+  cursor: pointer;
+}
+.assignment-label.selected {
+  outline: 2px solid #225dc7;
+  background: #eaf1ff;
+}
+#direct-properties fieldset {
+  border: 0;
+  padding: 0;
+  margin: 18px 0;
+}
+#direct-properties legend {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+#direct-properties input[type="checkbox"] {
+  width: auto;
+  display: block;
+}
+#modal.command-dock {
+  position: fixed;
+  left: auto;
+  right: 0;
+  bottom: 32px;
+  margin: 0;
+  width: 340px;
+  max-width: 100%;
+  max-height: none;
+  height: auto;
+  border: 0;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: -5px 0 20px #142b4415;
+  padding: 0;
+  overflow: auto;
+}
+.command-dock .dialog-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+.command-dock #modal-content {
+  padding: 16px;
+}
+.command-dock .entity-form {
+  grid-template-columns: minmax(0, 1fr);
+}
+.command-dock .entity-form .full {
+  grid-column: 1;
+}
+.command-dock input,
+.command-dock select,
+.command-dock textarea {
+  max-width: 100%;
+}
+@media (min-width: 901px) {
+  .command-dock-open .work-grid {
+    grid-template-columns: 200px minmax(0, 1fr) 340px;
+  }
+  .command-dock-open .inspector {
+    visibility: hidden;
+  }
+}
+@media (max-width: 900px) {
+  #modal.command-dock {
+    top: auto !important;
+    height: 52dvh;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* Placement gestures reach the canvas even underneath assignment badges. */
+#workspace:has(#draw-toggle[aria-pressed="true"]) .assignment-label,
+#workspace:has([data-canvas-tool][aria-pressed="true"]) .assignment-label {
+  pointer-events: none;
+}

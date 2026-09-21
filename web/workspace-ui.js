@@ -1,3 +1,4 @@
+import { entityLabel } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
 const $ = (s) => document.querySelector(s);
 const paths = {
@@ -30,6 +31,7 @@ export function workspaceUI({
   canAct,
   editSelection,
   hasDraft,
+  finishTools,
   message,
 }) {
   const ribbon = document.createElement("section");
@@ -192,11 +194,12 @@ export function workspaceUI({
   $(".viewport-status").prepend(status);
   function toolStatus() {
     const b =
-      $("#draw-toggle").getAttribute("aria-pressed") === "true"
+      document.querySelector('[data-canvas-tool][aria-pressed="true"]') ||
+      ($("#draw-toggle").getAttribute("aria-pressed") === "true"
         ? $("#draw-toggle")
         : ["select-tool", "pan-tool", "orbit-tool"]
             .map((id) => $("#" + id))
-            .find((b) => b.getAttribute("aria-pressed") === "true");
+            .find((b) => b.getAttribute("aria-pressed") === "true"));
     status.textContent =
       (b?.textContent.trim() || "Select") +
       " · Plane " +
@@ -230,7 +233,10 @@ export function workspaceUI({
     const heading = document.createElement("div");
     heading.className = "context-heading";
     heading.textContent = selection
-      ? `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).join(", ")}`
+      ? `${viewport.selection.size} selected · ${[...viewport.selection]
+          .slice(0, 3)
+          .map((id) => entityLabel(getProject(), id))
+          .join(", ")}`
       : "Canvas actions";
     menu.append(heading);
     const entries = selection
@@ -239,6 +245,8 @@ export function workspaceUI({
             "Properties",
             "settings",
             () => {
+              if ($("#modal").classList.contains("command-dock"))
+                $("#modal").close();
               panel("properties");
               $("#inspector-content").tabIndex = -1;
               $("#inspector-content").focus();
@@ -254,7 +262,16 @@ export function workspaceUI({
           ["Add node", "node", () => $("#add-node-tool").click()],
           ["Fit model", "fit", () => $("#fit").click()],
         ];
-    for (const [label, img, action] of entries) {
+    const assignmentsOnly =
+      selection &&
+      [...viewport.selection].every(
+        (id) =>
+          getProject().supports.some((s) => s.id === id) ||
+          getProject().loads.some((l) => l.id === id),
+      );
+    for (const [label, img, action] of assignmentsOnly
+      ? entries.slice(0, 1)
+      : entries) {
       const b = document.createElement("button");
       b.type = "button";
       b.setAttribute("role", "menuitem");
@@ -262,6 +279,7 @@ export function workspaceUI({
       b.innerHTML = icon(img) + esc(label);
       b.onclick = () => {
         close();
+        finishTools?.();
         action();
       };
       menu.append(b);

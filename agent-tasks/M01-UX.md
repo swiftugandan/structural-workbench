@@ -1,6 +1,6 @@
 # M01-UX — Improve the modelling workspace UI and UX
 
-Status: BLOCKED_RESOURCE (production UI implemented and local automated checks pass; live visual/browser acceptance pending). Parent: M01. Priority: next, before the final M01 acceptance run and M02 feature work. Requested by the user on 21 September 2026.
+Status: BLOCKED_RESOURCE (canvas-first implementation and automated regression pass; live visual/browser acceptance pending). Parent: M01. Priority: next, before the final M01 acceptance run and M02 feature work. Requested by the user on 21 September 2026.
 
 ## Outcome
 
@@ -16,6 +16,10 @@ This is a sub-milestone within the existing M01 candidate, so work may start whi
 4. **Results and recovery.** Give users a clear route from analysis to diagram/table inspection and export. Keep units, load case/combination and result freshness visible. Clearly distinguish no result, solving, current, stale and failed states; explain unavailable actions. Preserve model recovery and export when graphics or storage fail.
 5. **Visual system and responsive access.** Apply consistent typography, spacing, control sizes, panel geometry, focus and status treatment across existing screens. Use tabular numerals and display formatting without rounding stored values. Desktop CAD targets 1280×720 and larger; below that, use mutually exclusive tree/inspector overlays and retain forms, tables, save and export.
 6. **Verify and hand back to M01.** Exercise actual controls with the real WASM kernel, capture screenshots and saved project/report artifacts, and refresh affected evidence for the changed build before final parent acceptance.
+
+## Canvas-first correction
+
+The canvas is the primary interaction surface. The user explicitly clarified that Support and Load were examples, not the full scope. Assess and implement the broader workflow in docs/design/M01-UX/CANVAS_INTERACTIONS.md: direct geometry/assignment placement, point-to-point transforms, topology, measurement, inline dependency deletion, result inspection and nonblocking property/precision editing. Routine placement must work with visible defaults without requiring a form first. UX-02–UX-08 apply to these workflows as well as the workspace layout.
 
 ## Required interaction components
 
@@ -53,3 +57,5 @@ Before accepting this sub-milestone, register UX-01–UX-08 with the evidence ve
 Keep plain HTML/JavaScript/CSS, WebGPU and Rust/WASM authority. Do not add M02 engineering features, future-module placeholder workflows or framework migrations. Preserve numerical precision and existing files. Existing real-GPU and computer-use blockers remain recorded; they do not prevent design and implementation work.
 
 Deliver the implemented UI, design artifacts, acceptance evidence and explicit remaining limitations. Then resume the required real-GPU/platform and computer-use acceptance on the new build. Creating this task is planning completion only; its implementation and acceptance remain pending.
+
+Current refinement evidence lives in `evidence/M01/canvas-first/`. The candidate also separates hidden internal IDs from persistent short visible labels. Native coverage checks copy/delete/undo/reopen stability; browser coverage checks copied-member canvas and inspector labels after reopen. Live UX acceptance remains required.

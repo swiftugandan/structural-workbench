@@ -1,3 +1,4 @@
+import { entityLabel, entityId } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
 const $ = (s) => document.querySelector(s);
 export function cad({
@@ -116,16 +117,16 @@ export function cad({
       "Edit selection",
       `<p>Select nodes and members by ID. Moving a member also moves its endpoints and attached geometry. Copy makes separate geometry with no copied supports or loads. Delete previews dependent members, supports and loads.</p>
       <form id="cad-form" class="entity-form">
-      <label class="full">Selected IDs (comma separated)<input id="cad-ids" value="${esc([...viewport.selection].join(", "))}" required></label>
+      <label class="full">Selected labels (comma separated)<input id="cad-ids" value="${esc([...viewport.selection].map((id) => entityLabel(p, id)).join(", "))}" required></label>
       <div class="full"><button type="button" id="cad-all">Select all geometry</button> <button type="button" id="cad-clear">Clear selection</button></div>
       <details class="full"><summary>Choose from the entity table</summary><div class="cad-selection" tabindex="0" role="region" aria-label="Entity selection">${[
         ...p.nodes.map((n) => ({
           id: n.id,
-          label: `Node ${n.id} [${n.position.join(", ")}] m`,
+          label: `Node ${entityLabel(getProject(), n.id)} [${n.position.join(", ")}] m`,
         })),
         ...p.members.map((m) => ({
           id: m.id,
-          label: `Member ${m.id} ${m.start} → ${m.end}`,
+          label: `Member ${entityLabel(getProject(), m.id)} ${entityLabel(getProject(), m.start)} → ${entityLabel(getProject(), m.end)}`,
         })),
       ]
         .slice(0, 200)
@@ -153,7 +154,8 @@ export function cad({
       $("#cad-ids")
         .value.split(",")
         .map((x) => x.trim())
-        .filter(Boolean);
+        .filter(Boolean)
+        .map((value) => entityId(p, value));
     $("#cad-form").oninput = invalidate;
     $("#cad-kind").onchange = invalidate;
     for (const box of document.querySelectorAll("[data-cad-id]"))
@@ -162,13 +164,15 @@ export function cad({
         box.checked
           ? ids.add(box.dataset.cadId)
           : ids.delete(box.dataset.cadId);
-        $("#cad-ids").value = [...ids].join(", ");
+        $("#cad-ids").value = [...ids]
+          .map((id) => entityLabel(p, id))
+          .join(", ");
         selectEntities([...ids]);
         invalidate();
       };
     $("#cad-all").onclick = () => {
       $("#cad-ids").value = [...p.nodes, ...p.members]
-        .map((x) => x.id)
+        .map((x) => entityLabel(p, x.id))
         .join(", ");
       selectEntities(selected());
       invalidate();
@@ -221,7 +225,7 @@ export function cad({
               .slice(0, 100)
               .map(
                 (id) =>
-                  `<li>${esc(id)} · ${!after.has(id) ? "remove" : !before.has(id) ? "add" : "update"}${after.get(id)?.position ? ` · [${after.get(id).position.join(", ")}] m` : ""}</li>`,
+                  `<li>${esc(entityLabel(result.project, id))} · ${!after.has(id) ? "remove" : !before.has(id) ? "add" : "update"}${after.get(id)?.position ? ` · [${after.get(id).position.join(", ")}] m` : ""}</li>`,
               )
               .join(
                 "",
@@ -260,7 +264,10 @@ export function cad({
     const p = getProject();
     if (!p) return;
     const options = p.nodes
-      .map((n) => `<option value="${esc(n.id)}">${esc(n.id)}</option>`)
+      .map(
+        (n) =>
+          `<option value="${esc(n.id)}">${esc(entityLabel(getProject(), n.id))}</option>`,
+      )
       .join("");
     modal(
       "Measure",

@@ -151,10 +151,14 @@ pub struct Settings {
     pub timeout_ms: u32,
     pub memory_limit_mi_b: u32,
 }
-record!(Metadata {
-    description: String,
-    created_by: String
-});
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct Metadata {
+    pub description: String,
+    pub created_by: String,
+    #[serde(default)]
+    pub entity_labels: std::collections::BTreeMap<String, String>,
+}
 record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata});
 impl Project {
     pub fn parse(s: &str) -> Result<Self> {
@@ -186,6 +190,47 @@ impl Project {
         Ok(p)
     }
     pub fn canonicalise(&mut self) {
+        // Labels are presentation metadata. Internal IDs and references never change.
+        let groups: Vec<(&str, Vec<String>)> = vec![
+            ("n", self.nodes.iter().map(|x| x.id.clone()).collect()),
+            ("m", self.members.iter().map(|x| x.id.clone()).collect()),
+            ("s", self.supports.iter().map(|x| x.id.clone()).collect()),
+            ("l", self.loads.iter().map(|x| x.id().to_string()).collect()),
+            ("mat", self.materials.iter().map(|x| x.id.clone()).collect()),
+            ("sec", self.sections.iter().map(|x| x.id.clone()).collect()),
+            ("lc", self.load_cases.iter().map(|x| x.id.clone()).collect()),
+            (
+                "c",
+                self.combinations.iter().map(|x| x.id.clone()).collect(),
+            ),
+        ];
+        let mut used = BTreeSet::new();
+        for (prefix, ids) in groups {
+            let mut next = self
+                .metadata
+                .entity_labels
+                .values()
+                .filter_map(|v| v.strip_prefix(prefix)?.parse::<u32>().ok().map(u64::from))
+                .max()
+                .unwrap_or(0)
+                .saturating_add(1);
+            for id in ids {
+                let valid = self.metadata.entity_labels.get(&id).is_some_and(|label| {
+                    label
+                        .strip_prefix(prefix)
+                        .and_then(|n| n.parse::<u32>().ok().map(u64::from))
+                        .is_some_and(|n| n > 0 && label == &format!("{prefix}{n}"))
+                        && used.insert(label.clone())
+                });
+                if !valid {
+                    let label = format!("{prefix}{next}");
+                    next += 1;
+                    used.insert(label.clone());
+                    self.metadata.entity_labels.insert(id, label);
+                }
+            }
+        }
+
         self.nodes.sort_by(|a, b| a.id.cmp(&b.id));
         self.members.sort_by(|a, b| a.id.cmp(&b.id));
         self.materials.sort_by(|a, b| a.id.cmp(&b.id));

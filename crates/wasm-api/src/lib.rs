@@ -210,7 +210,8 @@ impl Kernel {
                 if payload["kind"] == "topologyPreview" {
                     let mut v = serde_json::to_value(p).unwrap();
                     topology::apply(&mut v, &payload["query"]["command"])?;
-                    let candidate = Project::parse(&v.to_string())?;
+                    let mut candidate = Project::parse(&v.to_string())?;
+                    candidate.canonicalise();
                     return Ok(json!({"project":candidate,"viewRevision":payload["viewRevision"]}));
                 }
                 if payload["kind"] == "snap" {

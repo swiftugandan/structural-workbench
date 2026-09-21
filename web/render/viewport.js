@@ -1,3 +1,4 @@
+import { entityLabel } from "../entity-labels.js";
 import { interactions } from "./interactions.js";
 const shader = `struct Out{@builtin(position) position:vec4f,@location(0) color:vec4f,@location(1) @interpolate(flat) id:u32};struct Fragment{@location(0)color:vec4f,@location(1)id:u32};@vertex fn vs(@location(0) p:vec3f,@location(1)c:vec4f,@location(2)id:f32)->Out{var o:Out;o.position=vec4f(p,1);o.color=c;o.id=u32(id);return o;}@fragment fn fs(in:Out)->Fragment{var o:Fragment;o.color=in.color;o.id=in.id;return o;}`;
 export class Viewport {
@@ -411,14 +412,25 @@ export class Viewport {
     const labels = document.querySelector("#viewport-labels");
     labels.replaceChildren();
     let labelBudget = 200;
-    const label = (text, p, cls = "") => {
+    const label = (text, p, cls = "", assignment = null) => {
       if (
         !["axis-summary", "axis-label", "snap-label"].includes(cls) &&
         labelBudget-- <= 0
       )
         return;
-      const el = document.createElement("span");
-      el.className = "node-label " + cls;
+      const el = document.createElement(assignment ? "button" : "span");
+      if (assignment) {
+        el.type = "button";
+        el.dataset.assignment = assignment;
+        el.setAttribute("aria-label", `Properties for ${assignment}: ${text}`);
+      }
+      el.className =
+        "node-label " +
+        cls +
+        (assignment
+          ? " assignment-label" +
+            (this.selected === assignment ? " selected" : "")
+          : "");
       el.textContent =
         text.length > 24 && (cls === "" || cls === "member-label")
           ? `${text.slice(0, 6)}…${text.slice(-5)}`
@@ -439,7 +451,8 @@ export class Viewport {
         this.selection.has(n.id) ? blue : ink,
       );
       dot(p, 2.3, [1, 1, 1, 1]);
-      if (nodes.length <= 100 || this.selection.has(n.id)) label(n.id, p);
+      if (nodes.length <= 100 || this.selection.has(n.id))
+        label(entityLabel(this.project, n.id), p);
     }
     entityIndex = 0;
     for (const m of this.project.members) {
@@ -448,7 +461,7 @@ export class Viewport {
       const a = points.get(m.start),
         b = points.get(m.end);
       label(
-        m.id,
+        entityLabel(this.project, m.id),
         [(a[0] + b[0]) / 2 - 15, (a[1] + b[1]) / 2 - 35],
         "member-label",
       );
@@ -501,7 +514,7 @@ export class Viewport {
           }
         });
         label(
-          `${frame.id} local axes · ` +
+          `${entityLabel(this.project, frame.id)} local axes · ` +
             frame.axes
               .map(
                 (a, i) =>
@@ -513,41 +526,130 @@ export class Viewport {
         );
       }
     }
-    for (const l of this.project.loads) {
-      if (l.type !== "nodal" || !points.has(l.node)) continue;
-      const p = points.get(l.node);
-      const mag = Math.hypot(...l.values.slice(0, 3));
-      if (!mag) continue;
-      const tip = this.projectPoint(
-        nodes
-          .find((n) => n.id === l.node)
-          .position.map((v, i) => v - (l.values[i] / mag) * 0.5),
-      );
+    for (const support of this.project.supports) {
+      const p = points.get(support.node);
+      if (p)
+        label(
+          entityLabel(this.project, support.id) +
+            " · " +
+            (support.fixed.slice(3).some(Boolean)
+              ? "Fixed"
+              : support.fixed.filter(Boolean).length === 1
+                ? "Roller"
+                : "Pinned"),
+          [p[0] - 65, p[1] + 15],
+          "support-label",
+          support.id,
+        );
+    }
+    const arrow = (origin, vector, color = orange) => {
+      const mag = Math.hypot(...vector);
+      if (!mag) return this.projectPoint(origin);
+      const p = this.projectPoint(origin),
+        tip = this.projectPoint(
+          origin.map((v, i) => v - (vector[i] / mag) * 0.5),
+        );
       const dx = tip[0] - p[0],
         dy = tip[1] - p[1],
+        length = Math.hypot(dx, dy);
+      if (length < 0.001) {
+        dot(p, 5, color);
+        return [p[0], p[1] - 25, 0.3];
+      }
+      const ux = dx / length,
+        uy = dy / length,
+        start = [p[0] + ux * 60, p[1] + uy * 60, 0.3],
+        end = [p[0] + ux * 10, p[1] + uy * 10, 0.3];
+      line(start, end, 2, color);
+      for (const sign of [-1, 1])
+        line(
+          end,
+          [
+            end[0] + ux * 10 + sign * uy * 5,
+            end[1] + uy * 10 - sign * ux * 5,
+            0.3,
+          ],
+          2,
+          color,
+        );
+      return start;
+    };
+    for (const load of this.project.loads) {
+      if (load.type === "nodal") {
+        const node = nodes.find((n) => n.id === load.node);
+        if (!node) continue;
+        const vector = load.values.slice(0, 3),
+          magnitude = Math.hypot(...vector);
+        const at = magnitude
+          ? arrow(node.position, vector)
+          : this.projectPoint(node.position);
+        label(
+          entityLabel(this.project, load.id) +
+            " · " +
+            (magnitude
+              ? (magnitude / 1000).toLocaleString() + " kN"
+              : "Applied moment"),
+          [at[0], at[1] - 48],
+          "load-label",
+          load.id,
+        );
+      } else if (load.type === "uniform") {
+        const member = this.project.members.find((m) => m.id === load.member);
+        if (!member) continue;
+        const a = nodes.find((n) => n.id === member.start)?.position,
+          b = nodes.find((n) => n.id === member.end)?.position;
+        if (!a || !b) continue;
+        const axes = this.localAxes?.find((m) => m.id === member.id)?.axes;
+        const vector =
+          load.axes === "global"
+            ? load.forcePerLength
+            : axes
+              ? [0, 1, 2].map((i) =>
+                  axes.reduce(
+                    (sum, axis, j) => sum + axis[i] * load.forcePerLength[j],
+                    0,
+                  ),
+                )
+              : null;
+        let at = this.projectPoint(a.map((v, i) => (v + b[i]) / 2));
+        if (vector)
+          for (const station of [0.15, 0.325, 0.5, 0.675, 0.85]) {
+            const q = arrow(
+              a.map((v, i) => v + (b[i] - v) * station),
+              vector,
+            );
+            if (station === 0.5) at = q;
+          }
+        label(
+          entityLabel(this.project, load.id) +
+            " · " +
+            (Math.hypot(...load.forcePerLength) / 1000).toLocaleString() +
+            " kN/m · " +
+            load.axes,
+          [at[0] - 35, at[1] - 48],
+          "load-label",
+          load.id,
+        );
+      }
+    }
+    if (this.loadDraft) {
+      const a = [...this.loadDraft.start, 0.1],
+        b = [...this.loadDraft.end, 0.1];
+      line(a, b, 3, orange);
+      const dx = b[0] - a[0],
+        dy = b[1] - a[1],
         len = Math.hypot(dx, dy) || 1;
-      const start = [p[0] + (dx / len) * 65, p[1] + (dy / len) * 65, 0.3],
-        end = [p[0] + (dx / len) * 10, p[1] + (dy / len) * 10, 0.3];
-      line(start, end, 2, orange);
-      const ux = dx / len,
-        uy = dy / len;
-      line(
-        end,
-        [end[0] + ux * 10 - uy * 5, end[1] + uy * 10 + ux * 5, 0.3],
-        2,
-        orange,
-      );
-      line(
-        end,
-        [end[0] + ux * 10 + uy * 5, end[1] + uy * 10 - ux * 5, 0.3],
-        2,
-        orange,
-      );
-      label(
-        (mag / 1000).toLocaleString() + " kN",
-        [start[0], start[1] - 30],
-        "load-label",
-      );
+      for (const sign of [-1, 1])
+        line(
+          b,
+          [
+            b[0] - (dx / len) * 12 + ((sign * dy) / len) * 5,
+            b[1] - (dy / len) * 12 - ((sign * dx) / len) * 5,
+            0.1,
+          ],
+          2,
+          orange,
+        );
     }
     if (this.result && this.resultView !== "model") {
       for (const member of this.result.members) {

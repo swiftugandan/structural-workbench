@@ -135,13 +135,12 @@ test("M01 CAD multi-selection, move copy delete previews, measure and scoped sho
   await page.locator("#undo").click();
   expect((await exported(page)).supports).toEqual(initial.supports);
   await page.locator("#measure-tool").click();
-  await page.locator("#measure-start").selectOption("n2");
-  await page.locator("#measure-end").selectOption("n3");
-  await page
-    .getByRole("button", { name: "Measure distance", exact: true })
-    .click();
-  await expect(page.locator("#measure-result")).toContainText("4.000000000 m");
-  await page.locator("#close-modal").click();
+  for (const id of ["n2", "n3"]) {
+    const p = await point(page, id);
+    await page.mouse.click(p.x, p.y);
+  }
+  await expect(page.locator("#placement-help")).toContainText("4 m");
+  await page.locator("#placement-cancel").click();
   await page.locator("#cad-tools").click();
   await page.locator("#cad-ids").fill("m1");
   await page.locator("#cad-X").fill("7 m");

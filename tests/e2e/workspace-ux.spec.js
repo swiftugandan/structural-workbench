@@ -30,8 +30,9 @@ test("UX ribbon, keyboard context menu and property drafts preserve model state"
   await expect(page.locator("#viewport")).toBeFocused();
   await page.locator("#selection-actions").click();
   await page.getByRole("menuitem", { name: "Copy…" }).click();
-  await expect(page.locator("#cad-kind")).toHaveValue("CopySelection");
-  await page.locator("#close-modal").click();
+  await expect(page.locator("#canvas-tool-name")).toHaveText("Copy");
+  await expect(page.locator("#modal")).not.toBeVisible();
+  await page.locator("#placement-cancel").click();
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toContainText("Current");
 });

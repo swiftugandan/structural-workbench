@@ -153,3 +153,47 @@ fn near_coincident_nodes_warn_without_mutation() {
     );
     assert_eq!(out["modelHash"], original["modelHash"]);
 }
+
+#[test]
+fn visible_labels_survive_copy_delete_undo_and_reopen() {
+    let (mut k, original) = open(fixture());
+    let labels = &original["payload"]["project"]["metadata"]["entityLabels"];
+    assert_eq!(labels["n1"], "n1");
+    let copy = json!({"id":"opaque-copy-command","type":"CopySelection","args":{"ids":["m1"],"delta":[4,0,0],"connectToExisting":false}});
+    let copied = req(&mut k, "applyCommand", 0, json!({"command":copy}));
+    assert_eq!(copied["status"], "ok");
+    let p = &copied["payload"]["project"];
+    let new_member = p["members"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|m| m["id"] != "m1")
+        .unwrap()["id"]
+        .as_str()
+        .unwrap();
+    assert_ne!(new_member, "m2");
+    assert_eq!(p["metadata"]["entityLabels"][new_member], "m2");
+    assert_eq!(p["metadata"]["entityLabels"]["n1"], "n1");
+    let deleted = req(
+        &mut k,
+        "applyCommand",
+        1,
+        json!({"command":{"type":"DeleteGeometry","args":{"ids":["m1"],"cascade":true}}}),
+    );
+    assert_eq!(deleted["status"], "ok");
+    assert_eq!(
+        deleted["payload"]["project"]["metadata"]["entityLabels"][new_member],
+        "m2"
+    );
+    let undo = req(&mut k, "undo", 2, json!({}));
+    assert_eq!(
+        undo["payload"]["project"]["metadata"]["entityLabels"],
+        p["metadata"]["entityLabels"]
+    );
+    let (_, reopened) = open(p.clone());
+    assert_eq!(
+        reopened["payload"]["project"]["metadata"]["entityLabels"],
+        p["metadata"]["entityLabels"]
+    );
+    assert_eq!(reopened["modelHash"], copied["modelHash"]);
+}

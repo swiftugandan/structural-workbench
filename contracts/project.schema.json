@@ -113,6 +113,13 @@
         "createdBy": {
           "type": "string",
           "maxLength": 256
+        },
+        "entityLabels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^(n|m|s|l|mat|sec|lc|c)[1-9][0-9]*$"
+          }
         }
       },
       "required": [

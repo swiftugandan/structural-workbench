@@ -46,6 +46,11 @@ export const requiredIds = {
     "UX-08",
   ],
   "browser-suite": [
+    "Canvas first: place support, draw force, edit assignments and undo without dialogs",
+    "Canvas first: two-click members, distributed loads, measure and nonmodal precision panel",
+    "Canvas first: point-to-point copy and dependency delete stay on canvas",
+    "Canvas first: node placement, split, move and Escape preserve atomic history",
+    "Readable labels hide internal IDs and persist after copy and reopen",
     "M01 keyboard-only portal creation, numeric drawing, table editing and solve",
     "M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen",
     "M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect",

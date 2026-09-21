@@ -1,3 +1,4 @@
+import { entityLabel, entityId } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
 const $ = (s) => document.querySelector(s);
 export function topology({
@@ -9,22 +10,22 @@ export function topology({
   message,
   canEdit,
 }) {
-  const describe = (key, x) => {
+  const describe = (key, x, project) => {
     if (key === "nodes") return `Position [${x.position.join(", ")}] m`;
     if (key === "members")
       return (
-        `${x.start} → ${x.end}; material ${x.material}; section ${x.section}` +
+        `${entityLabel(project, x.start)} → ${entityLabel(project, x.end)}; material ${entityLabel(project, x.material)}; section ${entityLabel(project, x.section)}` +
         (x.parentMemberId
-          ? `; parent ${x.parentMemberId}, stations ${x.stationRange.join("–")}`
+          ? `; parent ${entityLabel(project, x.parentMemberId)}, stations ${x.stationRange.join("–")}`
           : "")
       );
     if (key === "supports")
-      return `Node ${x.node}; restrained ${["X", "Y", "Z", "Rx", "Ry", "Rz"].filter((_, i) => x.fixed[i]).join(", ")}; prescribed [${x.prescribed.join(", ")}] (m, rad)`;
+      return `Node ${entityLabel(project, x.node)}; restrained ${["X", "Y", "Z", "Rx", "Ry", "Rz"].filter((_, i) => x.fixed[i]).join(", ")}; prescribed [${x.prescribed.join(", ")}] (m, rad)`;
     if (x.type === "nodal")
-      return `Case ${x.case}; node ${x.node}; force/moment [${x.values.join(", ")}] (N, N·m)`;
+      return `Case ${entityLabel(project, x.case)}; node ${entityLabel(project, x.node)}; force/moment [${x.values.join(", ")}] (N, N·m)`;
     if (x.type === "uniform")
-      return `Case ${x.case}; member ${x.member}; ${x.axes} density [${x.forcePerLength.join(", ")}] N/m`;
-    return `Case ${x.case}; self weight × ${x.factor}; members ${x.members.join(", ")}`;
+      return `Case ${entityLabel(project, x.case)}; member ${entityLabel(project, x.member)}; ${x.axes} density [${x.forcePerLength.join(", ")}] N/m`;
+    return `Case ${entityLabel(project, x.case)}; self weight × ${x.factor}; members ${x.members.map((id) => entityLabel(project, id)).join(", ")}`;
   };
   let preview = null,
     generation = 0;
@@ -48,7 +49,10 @@ export function topology({
     );
     const options = (items) =>
       items
-        .map((x) => `<option value="${esc(x.id)}">${esc(x.id)}</option>`)
+        .map(
+          (x) =>
+            `<option value="${esc(x.id)}">${esc(entityLabel(getProject(), x.id))}</option>`,
+        )
         .join("");
     const fields = () => {
       clear();
@@ -58,13 +62,28 @@ export function topology({
         $("#topology-kind").value === "SplitMember"
           ? `<label>Member to split<select id="split-member">${options(p.members)}</select></label><label>Split fractions (comma separated)<input id="split-stations" value="0.5" required></label>`
           : $("#topology-kind").value === "MergeNodes"
-            ? `<label>Target node<select id="merge-target">${options(p.nodes)}</select></label><label>Source node IDs (comma separated)<input id="merge-sources" required></label>`
-            : `<label>Member IDs to connect (comma separated)<input id="connect-members" value="${esc(
+            ? `<label>Target node<select id="merge-target">${options(p.nodes)}</select></label><label>Source node labels (comma separated)<input id="merge-sources" required></label>`
+            : `<label>Member labels to connect (comma separated)<input id="connect-members" value="${esc(
                 p.members
                   .slice(0, 200)
-                  .map((m) => m.id)
+                  .map((m) => entityLabel(p, m.id))
                   .join(", "),
               )}" required></label>`;
+      const chosenNodes = p.nodes.filter((n) => viewport.selection.has(n.id));
+      const chosenMembers = p.members.filter((m) =>
+        viewport.selection.has(m.id),
+      );
+      if ($("#connect-members") && chosenMembers.length >= 2)
+        $("#connect-members").value = chosenMembers
+          .map((m) => entityLabel(p, m.id))
+          .join(", ");
+      if ($("#merge-target") && chosenNodes.length >= 2) {
+        $("#merge-target").value = chosenNodes[0].id;
+        $("#merge-sources").value = chosenNodes
+          .slice(1)
+          .map((n) => entityLabel(p, n.id))
+          .join(", ");
+      }
       if (
         $("#split-member") &&
         p.members.some((m) => m.id === viewport.selected)
@@ -88,7 +107,8 @@ export function topology({
         $(id)
           .value.split(",")
           .map((x) => x.trim())
-          .filter(Boolean);
+          .filter(Boolean)
+          .map((label) => entityId(p, label));
       const type = $("#topology-kind").value;
       const args =
         type === "SplitMember"
@@ -132,7 +152,7 @@ export function topology({
                 JSON.stringify(before.get(id)) !==
                 JSON.stringify(after.get(id)),
             );
-            return `<h3>${esc(key)} · ${p[key].length} → ${result.project[key].length}</h3>${ids.length ? `<ul>${ids.map((id) => `<li><strong>${esc(id)}</strong> · ${!before.has(id) ? "add" : !after.has(id) ? "remove" : "update"}<pre>${esc(describe(key, after.get(id) || before.get(id)))}</pre></li>`).join("")}</ul>` : "<p>Unchanged</p>"}`;
+            return `<h3>${esc(key)} · ${p[key].length} → ${result.project[key].length}</h3>${ids.length ? `<ul>${ids.map((id) => `<li><strong>${esc(entityLabel(result.project, id))}</strong> · ${!before.has(id) ? "add" : !after.has(id) ? "remove" : "update"}<pre>${esc(describe(key, after.get(id) || before.get(id), result.project))}</pre></li>`).join("")}</ul>` : "<p>Unchanged</p>"}`;
           },
         );
         $("#topology-preview").innerHTML =

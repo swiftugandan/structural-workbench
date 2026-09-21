@@ -1,3 +1,5 @@
+import { entityLabel, entityId } from "./entity-labels.js";
+import { canvasTools } from "./canvas-tools.js";
 import { workspaceUI } from "./workspace-ui.js";
 import { cad } from "./cad.js";
 import { topology } from "./topology.js";
@@ -6,6 +8,7 @@ import { Gateway } from "./state/transport.js";
 import { save, recent } from "./state/storage.js";
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
+const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
 let project,
@@ -68,7 +71,12 @@ function selectEntities(ids, toggle = false) {
     return;
   }
   const available = new Set(
-    [...project.nodes, ...project.members].map((x) => x.id),
+    [
+      ...project.nodes,
+      ...project.members,
+      ...project.supports,
+      ...project.loads,
+    ].map((x) => x.id),
   );
   if (!toggle) viewport.selection.clear();
   for (const id of ids)
@@ -81,7 +89,7 @@ function selectEntities(ids, toggle = false) {
   renderNav();
   viewport.update(project, result, selected);
   $("#selected-status").textContent = viewport.selection.size
-    ? `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).join(", ")}`
+    ? `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).map(label).join(", ")}`
     : "No entities selected";
 }
 const cadTools = cad({
@@ -97,9 +105,40 @@ const cadTools = cad({
 function modal(title, html) {
   $("#modal-title").textContent = title;
   $("#modal-content").innerHTML = html;
-  $("#modal").showModal();
+  const blocking = [
+    "Create a planar portal",
+    "Worked examples",
+    "Capabilities & assumptions",
+    "Unable to open project",
+    "Invalid project",
+    "Project too large",
+    "Kernel unavailable",
+  ].includes(title);
+  const dialog = $("#modal");
+  if (dialog.open) dialog.close();
+  dialog.classList.toggle("command-dock", !blocking);
+  document.body.classList.toggle("command-dock-open", !blocking);
+  if (blocking) dialog.showModal();
+  else {
+    dialog.style.top =
+      Math.max(0, $(".work-grid").getBoundingClientRect().top) + "px";
+    dialog.show();
+  }
 }
 $("#close-modal").onclick = () => $("#modal").close();
+window.addEventListener("keydown", (e) => {
+  if (
+    e.key === "Escape" &&
+    $("#modal").open &&
+    $("#modal").classList.contains("command-dock")
+  ) {
+    e.preventDefault();
+    $("#modal").close();
+  }
+});
+$("#modal").addEventListener("close", () => {
+  if (!$("#modal").open) document.body.classList.remove("command-dock-open");
+});
 $("#modal").addEventListener("click", (e) => {
   if (e.target === $("#modal")) $("#modal").close();
 });
@@ -294,7 +333,7 @@ function setBusy(value) {
     $("#redo").disabled = value || readOnly || formDirty || !project.canRedo;
   }
   for (const b of document.querySelectorAll(
-    "#inspector-content input,#inspector-content button,#modal-content form button",
+    "#inspector-content input,#inspector-content select,#inspector-content textarea,#inspector-content button,#modal-content form button",
   ))
     b.disabled = value || readOnly;
   $("#analysis-mode").disabled = value || formDirty || readOnly;
@@ -316,7 +355,7 @@ function refresh(snapshot) {
     ...[...project.loadCases, ...project.combinations].map((c) => {
       const o = document.createElement("option");
       o.value = c.id;
-      o.textContent = c.id + " · " + c.name;
+      o.textContent = label(c.id) + " · " + c.name;
       return o;
     }),
   );
@@ -334,7 +373,9 @@ function refresh(snapshot) {
     [...viewport.selection].filter(
       (id) =>
         project.nodes.some((n) => n.id === id) ||
-        project.members.some((m) => m.id === id),
+        project.members.some((m) => m.id === id) ||
+        project.supports.some((s) => s.id === id) ||
+        project.loads.some((l) => l.id === id),
     ),
   );
   if (selected && !viewport.selection.has(selected))
@@ -434,14 +475,14 @@ function renderNav() {
   ];
   $("#model-nav").innerHTML = groups
     .map(
-      ([key, label, icon]) =>
-        `<button data-group="${key}"${key === "members" ? ' class="active"' : ""}><span>${icon}　${label}</span><span class="count">${project[key].length}</span></button>${
+      ([key, groupLabel, icon]) =>
+        `<button data-group="${key}"${key === "members" ? ' class="active"' : ""}><span>${icon}　${groupLabel}</span><span class="count">${project[key].length}</span></button>${
           key === "members"
             ? project.members
                 .filter((m, i) => i < 100 || m.id === selected)
                 .map(
                   (m) =>
-                    `<button class="entity ${selected === m.id ? "active" : ""}" data-member="${esc(m.id)}">${esc(m.id)} <small>${esc(m.start)} → ${esc(m.end)}</small></button>`,
+                    `<button class="entity ${selected === m.id ? "active" : ""}" data-member="${esc(m.id)}">${esc(label(m.id))} <small>${esc(label(m.start))} → ${esc(label(m.end))}</small></button>`,
                 )
                 .join("")
             : ""
@@ -463,27 +504,100 @@ function renderNav() {
 }
 const input = (id, label, value, attrs = "") =>
   `<label>${label}<input id="${id}" name="${id}" type="text" inputmode="decimal" value="${value}" ${attrs}></label>`;
+function renderDirectProperties(key, entity) {
+  $("#selection-tag").textContent = label(entity.id);
+  $("#selected-status").textContent =
+    `${key === "supports" ? "Support" : key === "loads" ? "Load" : "Node"} ${label(entity.id)} selected`;
+  const labels = {
+    position: ["X (m)", "Y (m)", "Z (m)"],
+    fixed: [
+      "Restrain X",
+      "Restrain Y",
+      "Restrain Z",
+      "Restrain Rx",
+      "Restrain Ry",
+      "Restrain Rz",
+    ],
+    prescribed: ["X (m)", "Y (m)", "Z (m)", "Rx (rad)", "Ry (rad)", "Rz (rad)"],
+    values: ["Fx (N)", "Fy (N)", "Fz (N)", "Mx (Nm)", "My (Nm)", "Mz (Nm)"],
+    forcePerLength: ["X (N/m)", "Y (N/m)", "Z (N/m)"],
+  };
+  const fields = Object.keys(labels).filter((k) => Array.isArray(entity[k]));
+  $("#inspector-content").innerHTML =
+    `<h3>${key === "loads" ? esc(entity.type) + " load" : key === "supports" ? "Support" : "Node"}</h3><p>${esc(label(entity.node || entity.member || entity.id))}</p><form id="direct-properties">${entity.case ? `<label>Load case<select name="case">${project.loadCases.map((c) => `<option value="${esc(c.id)}" ${entity.case === c.id ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select></label>` : ""}${entity.axes ? `<label>Axes<select name="axes"><option ${entity.axes === "global" ? "selected" : ""}>global</option><option ${entity.axes === "local" ? "selected" : ""}>local</option></select></label>` : ""}${fields.map((k) => `<fieldset><legend>${esc(k)}</legend><div class="fields">${entity[k].map((v, i) => `<label>${labels[k][i]}<input name="${k}-${i}" ${typeof v === "boolean" ? `type="checkbox" ${v ? "checked" : ""}` : `value="${esc(v)}" required inputmode="decimal"`}></label>`).join("")}</div></fieldset>`).join("")}<p class="form-help">Unit suffixes are accepted. Changes apply as one undo step.</p><p id="direct-error" class="error-text" role="alert"></p><div class="property-actions"><button class="primary">Apply changes</button><button type="button" id="cancel-direct">Cancel changes</button>${key !== "nodes" ? '<button type="button" id="delete-assignment">Delete</button>' : ""}</div></form>`;
+  $("#direct-properties").oninput = () => {
+    formDirty = true;
+    setBusy(busy);
+    $("#export-report").disabled = true;
+    $("#export-csv").disabled = true;
+    $("#result-status").textContent = "Unapplied changes";
+  };
+  $("#cancel-direct").onclick = () => {
+    message("");
+    renderInspector();
+    setBusy(busy);
+    renderResults();
+  };
+  $("#direct-properties").onsubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const value = { ...entity };
+    for (const k of fields)
+      value[k] = entity[k].map((v, i) =>
+        typeof v === "boolean" ? data.has(`${k}-${i}`) : data.get(`${k}-${i}`),
+      );
+    if (entity.case) value.case = data.get("case");
+    if (entity.axes) value.axes = data.get("axes");
+    try {
+      await command(
+        key === "nodes"
+          ? "SetNodePosition"
+          : key === "supports"
+            ? "SetSupport"
+            : "SetLoad",
+        { ...value, ...(key === "nodes" ? {} : { existence: "update" }) },
+      );
+    } catch (error) {
+      $("#direct-error").textContent = error.message;
+    }
+  };
+  if ($("#delete-assignment"))
+    $("#delete-assignment").onclick = async () => {
+      if (formDirty) {
+        message("Apply or cancel changes before deleting.");
+        return;
+      }
+      try {
+        await command("DeleteEntities", { ids: [entity.id], cascade: false });
+      } catch (e) {
+        message(e.message);
+      }
+    };
+  setBusy(busy);
+}
 function renderInspector() {
   formDirty = false;
   if (!selected || viewport.selection.size > 1) {
     const count = viewport.selection.size;
     $("#selection-tag").textContent = count ? `${count} selected` : "None";
     $("#inspector-content").innerHTML = count
-      ? `<h3>Multiple selection</h3><p>${count} entities selected. Properties may differ.</p><p>${esc([...viewport.selection].slice(0, 20).join(", "))}</p><button id="edit-multiple">Edit selection</button><p class="form-help">Move, copy or delete through a dependency preview. Individual properties are edited one entity at a time.</p>`
+      ? `<h3>Multiple selection</h3><p>${count} entities selected. Properties may differ.</p><p>${esc([...viewport.selection].slice(0, 20).map(label).join(", "))}</p><button id="edit-multiple">Edit selection</button><p class="form-help">Move, copy or delete through a dependency preview. Individual properties are edited one entity at a time.</p>`
       : "<h3>No selection</h3><p>Select a node or member in the canvas or model explorer to inspect its properties.</p>";
     if (count) $("#edit-multiple").onclick = () => cadTools.open();
     return;
   }
+  const selectedSupport = project.supports.find((s) => s.id === selected);
+  const assignment = project.loads.find((l) => l.id === selected);
+  if (selectedSupport || assignment) {
+    renderDirectProperties(
+      selectedSupport ? "supports" : "loads",
+      selectedSupport || assignment,
+    );
+    return;
+  }
   const node = project.nodes.find((n) => n.id === selected);
   if (node) {
-    $("#selection-tag").textContent = node.id;
-    $("#selected-status").textContent = `Node ${node.id} selected`;
-    $("#inspector-content").innerHTML =
-      `<div class="inspector-heading"><strong>Node ${esc(node.id)}</strong></div><p>Position [${node.position.join(", ")}] m</p><button id="edit-selected-node">Edit node coordinates</button>`;
-    $("#edit-selected-node").onclick = () => {
-      modal("Edit node", "");
-      editEntity("nodes", node);
-    };
+    renderDirectProperties("nodes", node);
     return;
   }
   const m = project.members.find((m) => m.id === selected);
@@ -503,11 +617,11 @@ function renderInspector() {
     start.position.every((x) => x === 0) &&
     end.position[1] === 0 &&
     end.position[2] === 0;
-  $("#selection-tag").textContent = m.id;
+  $("#selection-tag").textContent = label(m.id);
   $("#selected-status").textContent =
-    `Member ${m.id} selected · ${m.start} → ${m.end}`;
+    `Member ${label(m.id)} selected · ${label(m.start)} → ${label(m.end)}`;
   $("#inspector-content").innerHTML =
-    `<div class="inspector-heading"><span class="symbol">╱</span><div><strong>Member ${esc(m.id)}</strong><small>${esc(m.start)} → ${esc(m.end)} · Custom section</small></div></div><form id="member-form"><div class="form-section"><h3>Geometry</h3><div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(mat.id)}</h3><div class="fields">${input("elasticity", "E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(sec.id)}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(m.start)}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Tip Fz [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(m.id)} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples.at(-1)?.displacement[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : ""}`;
+    `<div class="inspector-heading"><span class="symbol">╱</span><div><strong>Member ${esc(label(m.id))}</strong><small>${esc(label(m.start))} → ${esc(label(m.end))} · Custom section</small></div></div><form id="member-form"><div class="form-section"><h3>Geometry</h3><div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(label(mat.id))}</h3><div class="fields">${input("elasticity", "E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(label(sec.id))}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(label(m.start))}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Tip Fz [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(label(m.id))} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples.at(-1)?.displacement[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : ""}`;
   $("#discard-properties").onclick = () => {
     message("");
     renderInspector();
@@ -636,7 +750,7 @@ function renderResults() {
       "rz [rad]",
     ];
     rows = result.nodeIds.map((id, i) => [
-      id,
+      label(id),
       ...Array.from(result.nodeDisplacements.slice(i * 6, i * 6 + 6), (v, j) =>
         format(v * (j < 3 ? u : 1)),
       ),
@@ -649,7 +763,7 @@ function renderResults() {
       ...["Mx", "My", "Mz"].map((k) => `${k} [${eng ? "kN m" : "N m"}]`),
     ];
     rows = result.reactionSupportIds.map((id, i) => [
-      id,
+      label(id),
       ...Array.from(result.reactions.slice(i * 6, i * 6 + 6), (v) =>
         format(v * f),
       ),
@@ -665,7 +779,7 @@ function renderResults() {
     ];
     rows = result.members.flatMap((m) =>
       [0, 1].map((i) => [
-        m.id,
+        label(m.id),
         i ? "j" : "i",
         ...m.endActions.slice(i * 6, i * 6 + 6).map((v) => format(v * f)),
       ]),
@@ -785,7 +899,7 @@ $("#export-report").onclick = () => {
 };
 $("#export-csv").onclick = () => {
   if (result && result.modelHash === modelHash && !failed)
-    download(project.id + "-results.csv", csv(result), "text/csv");
+    download(project.id + "-results.csv", csv(result, project), "text/csv");
 };
 $("#result-case").onchange = () => {
   result = null;
@@ -819,7 +933,7 @@ for (const mode of ["plan", "elevation", "3d"])
     viewport.mode = mode;
     $("#view-subtitle").textContent =
       mode === "3d"
-        ? "3D orthographic · right-drag or Alt-drag to orbit"
+        ? "3D orthographic · Orbit tool or Alt-drag"
         : mode === "plan"
           ? "Global XY · metres"
           : "Global XZ · metres";
@@ -851,7 +965,7 @@ function entityList(key) {
   }[key];
   modal(
     title,
-    `<p>Edit authoritative model data. Coordinates and all advanced fields are in SI units.</p><div class="entity-table-wrap"><table><thead><tr><th>ID</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[key].map((v) => `<tr><th>${esc(v.id)}</th><td>${esc(v.name || v.node || v.type || (v.start ? `${v.start} → ${v.end}` : v.position?.join(", ") || ""))}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(v.id)}</button></td></tr>`).join("")}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${title.toLowerCase()}</button>`,
+    `<p>Edit authoritative model data. Coordinates and all advanced fields are in SI units.</p><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[key].map((v) => `<tr><th>${esc(label(v.id))}</th><td>${esc(v.name || label(v.node) || v.type || (v.start ? `${label(v.start)} → ${label(v.end)}` : v.position?.join(", ") || ""))}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`).join("")}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${title.toLowerCase()}</button>`,
   );
   for (const b of document.querySelectorAll("[data-edit]"))
     b.onclick = () =>
@@ -944,9 +1058,21 @@ function editEntity(key, old) {
   $("#modal-content").innerHTML =
     `<form id="entity-form" class="entity-form">${Object.entries(entity)
       .map(([k, v]) =>
-        arrayLabels[k] && Array.isArray(v)
-          ? `<fieldset class="full"><legend>${esc(k)}</legend><div class="entity-form">${v.map((item, i) => `<label>${esc(arrayLabels[k][i])}<input name="${k}-${i}" ${typeof item === "boolean" ? `type="checkbox" ${item ? "checked" : ""}` : `value="${esc(item)}" required`}></label>`).join("")}</div></fieldset>`
-          : `<label class="${typeof v === "object" ? "full" : ""}">${esc(k)}${typeof v === "object" ? `<textarea name="${esc(k)}" required>${esc(JSON.stringify(v))}</textarea>` : `<input name="${esc(k)}" value="${esc(v)}" ${typeof v === "number" ? 'type="text" inputmode="decimal"' : 'type="text"'} ${k === "id" && old ? "readonly" : ""} required>`}</label>`,
+        k === "id"
+          ? `<input type="hidden" name="id" value="${esc(v)}"><p class="full">${old ? esc(label(v)) : "Label assigned when saved"}</p>`
+          : [
+                "node",
+                "member",
+                "start",
+                "end",
+                "material",
+                "section",
+                "case",
+              ].includes(k)
+            ? `<label>${esc(k)}<input name="${esc(k)}" value="${esc(label(v))}" required></label>`
+            : arrayLabels[k] && Array.isArray(v)
+              ? `<fieldset class="full"><legend>${esc(k)}</legend><div class="entity-form">${v.map((item, i) => `<label>${esc(arrayLabels[k][i])}<input name="${k}-${i}" ${typeof item === "boolean" ? `type="checkbox" ${item ? "checked" : ""}` : `value="${esc(item)}" required`}></label>`).join("")}</div></fieldset>`
+              : `<label class="${typeof v === "object" ? "full" : ""}">${esc(k)}${typeof v === "object" ? `<textarea name="${esc(k)}" required>${esc(JSON.stringify(v))}</textarea>` : `<input name="${esc(k)}" value="${esc(v)}" ${typeof v === "number" ? 'type="text" inputmode="decimal"' : 'type="text"'} ${k === "id" && old ? "readonly" : ""} required>`}</label>`,
       )
       .join(
         "",
@@ -969,7 +1095,17 @@ function editEntity(key, old) {
               )
             : typeof v === "object"
               ? JSON.parse(data.get(k))
-              : data.get(k),
+              : [
+                    "node",
+                    "member",
+                    "start",
+                    "end",
+                    "material",
+                    "section",
+                    "case",
+                  ].includes(k)
+                ? entityId(project, data.get(k))
+                : data.get(k),
         ]),
       );
       const type = {
@@ -1036,15 +1172,47 @@ window.addEventListener("keydown", (e) => {
     $(e.shiftKey ? "#redo" : "#undo").click();
   }
 });
-workspaceUI({
+let directTools;
+const workspace = workspaceUI({
   viewport,
   gateway,
   getProject: () => project,
   selectEntities,
   canAct: () => !busy && !readOnly,
-  editSelection: (type) => cadTools.open(type),
+  editSelection: (type) =>
+    directTools.activate(
+      { MoveNodes: "move", CopySelection: "copy", DeleteGeometry: "delete" }[
+        type
+      ],
+    ),
   hasDraft: () => formDirty,
+  finishTools: () => {
+    modelTools.cancel();
+    directTools?.finish();
+  },
   message,
+});
+directTools = canvasTools({
+  viewport,
+  gateway,
+  getProject: () => project,
+  command,
+  selectEntities,
+  cancelDrawing: () => modelTools.cancel(),
+  canEdit: () => !!project && !busy && !readOnly && !formDirty,
+  message,
+  inspect: () => {
+    $("#modal").close();
+    workspace.panel("properties");
+  },
+  deleteAssignment: async (id) => {
+    if (!busy && !readOnly && !formDirty)
+      try {
+        await command("DeleteEntities", { ids: [id], cascade: false });
+      } catch (e) {
+        message(e.message);
+      }
+  },
 });
 showRecent();
 gateway.ready.catch((e) =>

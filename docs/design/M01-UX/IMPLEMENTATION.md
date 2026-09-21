@@ -4,12 +4,31 @@ The working application now reuses its existing commands through a grouped SVG-i
 
 Right-click uses the Rust screen-picking query. An unselected entity becomes the selection; an entity already selected preserves the group. Blank-canvas actions do not delete the current selection. Shift+F10 and the Actions button expose the same menu. Arrow keys, Home/End and Escape navigate and dismiss it. Move, Copy, Topology and Delete still use existing validation/dependency previews. Right-drag orbit is replaced by the Orbit tool or Alt-drag so context actions do not compete with camera motion.
 
-The inspector now shows explicit empty/multiple-selection states. Multiple selection exposes supported edit operations rather than misleading single-member properties. Member forms include Cancel changes and a shared-material/section notice. Unapplied property changes prevent selection changes and conflicting editing; cancel restores committed values. Node coordinates retain their existing editing dialog.
+The inspector now shows explicit empty/multiple-selection states. Multiple selection exposes supported edit operations rather than misleading single-member properties. Member forms include Cancel changes and a shared-material/section notice. Unapplied property changes prevent selection changes and conflicting editing; cancel restores committed values. Node coordinates and support/load fields are editable directly in Properties.
 
 The results drawer can collapse. At widths below 900px, Canvas, Model tree, Properties and Results switch mutually exclusive panels without recreating their content. Tables scroll inside the results region. Model units and existing project export controls remain available.
 
 ## Verification boundary
 
-Use evidence/M01/ux for the current candidate. The original M01/full evidence describes the earlier build. The verifier now recognizes M01-UX and requires UX-01 through UX-08 plus computer-use evidence; M01 also requires the UX acceptance record. Missing evidence fails closed.
+Use evidence/M01/canvas-first for the current candidate; evidence/M01/ux preserves the preceding workspace candidate. The original M01/full evidence describes the earlier build. The verifier now recognizes M01-UX and requires UX-01 through UX-08 plus computer-use evidence; M01 also requires the UX acceptance record. Missing evidence fails closed.
 
 Live computer-use verification is blocked by the browser service's unavailable admin policy check. Source inspection and automated regression checks do not replace the live design review. The prototype in workspace.html is illustrative and is not the production application's engineering result output.
+
+## Canvas-first revision
+
+The user's correction broadens this milestone beyond workspace chrome. See CANVAS_INTERACTIONS.md for the interaction inventory and rationale.
+
+- Member placement commits on the second canvas endpoint; numeric entry remains available.
+- Node placement snaps to the active working plane. Support placement uses visible fixed, pinned or global-Z roller presets and refuses to silently replace an existing support.
+- Load placement chooses nodal force or global uniform member load from the clicked entity. A click uses global downward force; dragging draws the force direction in the view basis. Magnitude and real load case are inline settings. Existing loads/supports have clickable/right-clickable canvas labels and in-panel editable properties.
+- Move and Copy use a base and destination on the working plane. Split uses a picked member station. Both retain Rust validation and atomic undo. Copy remains disconnected geometry and does not duplicate supports/loads.
+- Measure uses two canvas nodes. Delete presents affected entity counts inline and requires confirmation; it retains an undo step.
+- Topology previews and detailed entity tables/forms now occupy a nonblocking right-hand command panel on desktop. They no longer make the canvas inert. Connect/Merge seed fields from a suitable current selection. Small screens use a bottom panel.
+- Tool events are queued so a second point is not dropped while the first pick resolves. Escape clears uncommitted tool state. Space/middle-button navigation remains available. Tool status includes the active canvas operation.
+- Results collapse during direct modelling and reopen for analysis. The existing results, export, recovery and keyboard/table alternatives remain part of regression coverage.
+
+Current revision evidence is recorded separately in evidence/M01/canvas-first. Earlier evidence/M01/ux describes the preceding toolbar-oriented candidate and must not be used as acceptance of this revision. Live computer-use review remains required.
+
+### Stable readable labels
+
+Engineering entity IDs remain internal references. Rust assigns and persists short sequential labels in `metadata.entityLabels`: n (nodes), m (members), s (supports), l (loads), mat, sec, lc and c. Labels are shared by canvas, selection, inspector, model tables, reference fields, results, CSV and calculation tables. Copy/split get fresh labels; deletion does not renumber survivors or reuse deleted labels. Undo/redo and save/reopen preserve the map. Presentation metadata remains outside the engineering hash. No migration or compatibility layer was introduced. Machine-readable project exports retain internal IDs and their label mapping.
