@@ -1,3 +1,4 @@
+import { orientationSvg, referenceGrid } from "./orientation.js";
 import {
   actionComponents,
   diagramPeak,
@@ -17,8 +18,8 @@ export class Viewport {
     this.showDimensions = true;
     this.zoom = 1;
     this.pan = [0, 0];
-    this.yaw = 0.65;
-    this.pitch = 0.35;
+    this.yaw = Math.PI / 4;
+    this.pitch = Math.atan(1 / Math.sqrt(2));
     this.scale = 10;
     this.resultView = "model";
     this.viewRevision = 0;
@@ -318,6 +319,7 @@ export class Viewport {
     this.origin = min.map((v, i) => (v + max[i]) / 2);
     this.extent = Math.max(...max.map((v, i) => v - min[i]), 1);
     const basis = this.basis();
+    document.querySelector(".axis-widget").innerHTML = orientationSvg(basis);
     const spans = basis.slice(0, 2).map((axis) => {
       const values = nodes.map((n) =>
         n.position.reduce((s, x, i) => s + (x - this.origin[i]) * axis[i], 0),
@@ -394,6 +396,52 @@ export class Viewport {
         line([0, y, 0.99], [w, y, 0.99], 0.5, grid);
       this.canvas.dataset.gridSpacing = String(this.gridSpacing * multiple);
     }
+    if (this.mode === "3d") {
+      const lattice = referenceGrid(this.origin, this.extent, this.gridSpacing);
+      const { cx, cy, radius, step } = lattice;
+      const z = min[2];
+      const onGrid = (p) => {
+        const q = this.projectPoint(p);
+        q[2] = 0.995;
+        return q;
+      };
+      for (let i = -6; i <= 6; i++) {
+        line(
+          onGrid([cx + i * step, cy - radius, z]),
+          onGrid([cx + i * step, cy + radius, z]),
+          0.8,
+          [0.77, 0.83, 0.85, 1],
+        );
+        line(
+          onGrid([cx - radius, cy + i * step, z]),
+          onGrid([cx + radius, cy + i * step, z]),
+          0.8,
+          [0.77, 0.83, 0.85, 1],
+        );
+      }
+      // Colored reference directions are drawn behind the structural geometry.
+      line(
+        onGrid([cx - radius, cy, z]),
+        onGrid([cx + radius, cy, z]),
+        1.5,
+        [0.7, 0.24, 0.21, 1],
+      );
+      line(
+        onGrid([cx, cy - radius, z]),
+        onGrid([cx, cy + radius, z]),
+        1.8,
+        [0.09, 0.45, 0.28, 1],
+      );
+      this.canvas.dataset.referencePlane = "XY";
+      this.canvas.dataset.referenceGridZ = String(z);
+      this.canvas.dataset.gridSpacing = String(step);
+      document.querySelector("#reference-plane").textContent =
+        `XY reference grid · Z = ${Number(z.toPrecision(8))} m`;
+    } else {
+      delete this.canvas.dataset.referencePlane;
+      delete this.canvas.dataset.referenceGridZ;
+    }
+    document.querySelector("#reference-plane").hidden = this.mode !== "3d";
     for (const [i, m] of this.project.members.entries()) {
       entityIndex = i + 1;
       const a = points.get(m.start),

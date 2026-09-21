@@ -549,23 +549,29 @@ small {
 }
 .axis-widget {
   position: absolute;
-  bottom: 34px;
-  left: 25px;
-  width: 52px;
-  height: 48px;
-  font-size: 11px;
-}
-.axis-z {
-  color: #2e7b65;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-.axis-x {
-  color: #b45646;
-  position: absolute;
+  bottom: 40px;
   left: 12px;
-  bottom: 3px;
+  width: 120px;
+  height: 110px;
+  background: #fafcfed9;
+  border-radius: 8px;
+  pointer-events: none;
+}
+.axis-widget svg {
+  width: 100%;
+  height: 100%;
+}
+.reference-plane {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  max-width: 45%;
+  padding: 4px 7px;
+  background: #fafcfed9;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #35644b;
+  pointer-events: none;
 }
 #gpu-status {
   position: absolute;
