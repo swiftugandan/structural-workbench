@@ -622,7 +622,7 @@
       "id": "M01-UX",
       "parentMilestone": "M01",
       "name": "Improve the modelling workspace UI and UX",
-      "state": "planned",
+      "state": "verifying",
       "priority": "next",
       "dependsOn": [],
       "prerequisite": "Existing M01 implementation candidate; parent acceptance is not a prerequisite for this refinement",

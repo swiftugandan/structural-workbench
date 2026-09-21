@@ -60,3 +60,24 @@ test("M01 gate rejects incomplete browser coverage, capacity and computer use", 
   assert.ok(recordIssues("m01-capacity", record("m01-capacity"), build).length);
   assert.ok(recordIssues("computer-use", record("computer-use"), build).length);
 });
+
+test("M01-UX gate requires all eight UX acceptance IDs and fresh successful evidence", () => {
+  const valid = record("ux-acceptance");
+  assert.deepEqual(
+    recordIssues("ux-acceptance", valid, build, { milestone: "M01-UX" }),
+    [],
+  );
+  for (const patch of [
+    { testIds: ["UX-01"] },
+    { status: "FAIL" },
+    { sourceHash: "old" },
+    { buildHash: "old" },
+    { testIds: [] },
+    { testCount: 0 },
+  ])
+    assert.ok(
+      recordIssues("ux-acceptance", { ...valid, ...patch }, build, {
+        milestone: "M01-UX",
+      }).length,
+    );
+});

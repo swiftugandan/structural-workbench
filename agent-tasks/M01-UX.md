@@ -1,6 +1,6 @@
 # M01-UX — Improve the modelling workspace UI and UX
 
-Status: IMPLEMENTING (design artifact created; production implementation pending). Parent: M01. Priority: next, before the final M01 acceptance run and M02 feature work. Requested by the user on 21 September 2026.
+Status: VERIFYING (production UI implemented; live visual/browser acceptance pending). Parent: M01. Priority: next, before the final M01 acceptance run and M02 feature work. Requested by the user on 21 September 2026.
 
 ## Outcome
 

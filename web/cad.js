@@ -285,4 +285,5 @@ export function cad({
       }
     };
   };
+  return { open };
 }

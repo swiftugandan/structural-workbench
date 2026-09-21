@@ -1,3 +1,4 @@
+import { workspaceUI } from "./workspace-ui.js";
 import { cad } from "./cad.js";
 import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
@@ -46,7 +47,7 @@ const modelTools = modeling({
   viewport,
   modal,
   message,
-  canEdit: () => !!project && !busy && !readOnly,
+  canEdit: () => !!project && !busy && !readOnly && !formDirty,
 });
 function message(text) {
   $("#message").textContent = text;
@@ -59,9 +60,13 @@ const topologyTools = topology({
   viewport,
   modal,
   message,
-  canEdit: () => !!project && !busy && !readOnly,
+  canEdit: () => !!project && !busy && !readOnly && !formDirty,
 });
 function selectEntities(ids, toggle = false) {
+  if (formDirty) {
+    message("Apply or cancel property changes before changing selection.");
+    return;
+  }
   const available = new Set(
     [...project.nodes, ...project.members].map((x) => x.id),
   );
@@ -71,7 +76,7 @@ function selectEntities(ids, toggle = false) {
       if (toggle && viewport.selection.has(id)) viewport.selection.delete(id);
       else viewport.selection.add(id);
     }
-  selected = [...viewport.selection].at(-1) || project.members[0].id;
+  selected = [...viewport.selection].at(-1) || null;
   renderInspector();
   renderNav();
   viewport.update(project, result, selected);
@@ -79,14 +84,14 @@ function selectEntities(ids, toggle = false) {
     ? `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).join(", ")}`
     : "No entities selected";
 }
-cad({
+const cadTools = cad({
   getProject: () => project,
   command,
   gateway,
   viewport,
   modal,
   message,
-  canEdit: () => !!project && !busy && !readOnly,
+  canEdit: () => !!project && !busy && !readOnly && !formDirty,
   selectEntities,
 });
 function modal(title, html) {
@@ -101,7 +106,7 @@ $("#modal").addEventListener("click", (e) => {
 const scope = () =>
   modal(
     "Capabilities & assumptions",
-    `<p>This is an early structural mechanics workbench, with an actual Rust/WebAssembly solver. It is not an accepted analysis MVP or a code-design product.</p><ul class="scope-list"><li>Linear, small-displacement 3D Euler–Bernoulli frames.</li><li>Nodal actions, uniform member loads, self weight and explicit linear combinations.</li><li>Prescribed supports and planar XZ constraints.</li><li>SI engineering data; display values in engineering metric or SI.</li><li>End releases and interior point actions are currently rejected.</li><li>Conservative memory guard may refuse large models; full size/performance targets are unverified.</li><li>No buckling, nonlinear, shell, seismic, steel-code or concrete-code checks.</li><li>Numerical equivalence to PROKON is unknown.</li></ul><p>Viewport: click to select, Shift-click to toggle, drag blank space to box-select, middle-drag or Space to pan, wheel to zoom towards the pointer. In 3D, Alt-drag or right-drag to orbit. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p><p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`,
+    `<p>This is an early structural mechanics workbench, with an actual Rust/WebAssembly solver. It is not an accepted analysis MVP or a code-design product.</p><ul class="scope-list"><li>Linear, small-displacement 3D Euler–Bernoulli frames.</li><li>Nodal actions, uniform member loads, self weight and explicit linear combinations.</li><li>Prescribed supports and planar XZ constraints.</li><li>SI engineering data; display values in engineering metric or SI.</li><li>End releases and interior point actions are currently rejected.</li><li>Conservative memory guard may refuse large models; full size/performance targets are unverified.</li><li>No buckling, nonlinear, shell, seismic, steel-code or concrete-code checks.</li><li>Numerical equivalence to PROKON is unknown.</li></ul><p>Viewport: click to select, Shift-click to toggle, drag blank space to box-select, middle-drag or Space to pan, wheel to zoom towards the pointer. In 3D, Alt-drag or the Orbit tool to orbit. Right-click for context actions. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p><p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`,
   );
 $("#help").onclick = scope;
 $("#scope").onclick = scope;
@@ -183,7 +188,8 @@ async function open(p) {
     modelHash = s.modelHash;
     result = null;
     failed = false;
-    selected = project.members[0].id;
+    selected = project.members[0]?.id || null;
+    viewport.selection = new Set(selected ? [selected] : []);
     $("#modal").close();
     $("#landing").hidden = true;
     $("#workspace").hidden = false;
@@ -256,6 +262,10 @@ $("#import-file").onchange = async (e) => {
 };
 $("#home").onclick = () => {
   if (busy) return;
+  if (formDirty) {
+    message("Apply or cancel property changes before leaving the model.");
+    return;
+  }
   modelTools.cancel();
   $("#workspace").hidden = true;
   $("#landing").hidden = false;
@@ -280,13 +290,16 @@ function setBusy(value) {
       (readOnly &&
         ["undo", "redo", "analysis-mode", "draw-toggle"].includes(id));
   if (project) {
-    $("#undo").disabled = value || readOnly || !project.canUndo;
-    $("#redo").disabled = value || readOnly || !project.canRedo;
+    $("#undo").disabled = value || readOnly || formDirty || !project.canUndo;
+    $("#redo").disabled = value || readOnly || formDirty || !project.canRedo;
   }
   for (const b of document.querySelectorAll(
     "#inspector-content input,#inspector-content button,#modal-content form button",
   ))
     b.disabled = value || readOnly;
+  $("#analysis-mode").disabled = value || formDirty || readOnly;
+  $("#units").disabled = value || formDirty;
+  $("#result-case").disabled = value || formDirty;
   $("#analyse").disabled = value || formDirty;
   $("#cancel").hidden = !value;
 }
@@ -317,10 +330,6 @@ function refresh(snapshot) {
   $("#view-title").textContent = project.name;
   $("#hash-status").textContent = modelHash.slice(0, 12) + " · f64";
   $("#kernel-status").textContent = "● Rust / WASM ready";
-  renderNav();
-  renderInspector();
-  renderResults();
-  viewport.update(project, result, selected);
   viewport.selection = new Set(
     [...viewport.selection].filter(
       (id) =>
@@ -328,6 +337,12 @@ function refresh(snapshot) {
         project.members.some((m) => m.id === id),
     ),
   );
+  if (selected && !viewport.selection.has(selected))
+    selected = [...viewport.selection].at(-1) || null;
+  renderNav();
+  renderInspector();
+  renderResults();
+  viewport.update(project, result, selected);
   topologyTools.refresh();
   setBusy(busy);
 }
@@ -436,12 +451,29 @@ function renderNav() {
   for (const b of document.querySelectorAll("[data-member]"))
     b.onclick = (e) => selectEntities([b.dataset.member], e.shiftKey);
   for (const b of document.querySelectorAll("[data-group]"))
-    b.onclick = () => entityList(b.dataset.group);
+    b.onclick = () => {
+      if (formDirty) {
+        message(
+          "Apply or cancel property changes before editing other entities.",
+        );
+        return;
+      }
+      entityList(b.dataset.group);
+    };
 }
 const input = (id, label, value, attrs = "") =>
   `<label>${label}<input id="${id}" name="${id}" type="text" inputmode="decimal" value="${value}" ${attrs}></label>`;
 function renderInspector() {
   formDirty = false;
+  if (!selected || viewport.selection.size > 1) {
+    const count = viewport.selection.size;
+    $("#selection-tag").textContent = count ? `${count} selected` : "None";
+    $("#inspector-content").innerHTML = count
+      ? `<h3>Multiple selection</h3><p>${count} entities selected. Properties may differ.</p><p>${esc([...viewport.selection].slice(0, 20).join(", "))}</p><button id="edit-multiple">Edit selection</button><p class="form-help">Move, copy or delete through a dependency preview. Individual properties are edited one entity at a time.</p>`
+      : "<h3>No selection</h3><p>Select a node or member in the canvas or model explorer to inspect its properties.</p>";
+    if (count) $("#edit-multiple").onclick = () => cadTools.open();
+    return;
+  }
   const node = project.nodes.find((n) => n.id === selected);
   if (node) {
     $("#selection-tag").textContent = node.id;
@@ -454,9 +486,12 @@ function renderInspector() {
     };
     return;
   }
-  const m =
-    project.members.find((m) => m.id === selected) || project.members[0];
-  selected = m.id;
+  const m = project.members.find((m) => m.id === selected);
+  if (!m) {
+    selected = null;
+    renderInspector();
+    return;
+  }
   const sec = project.sections.find((s) => s.id === m.section),
     mat = project.materials.find((x) => x.id === m.material),
     start = project.nodes.find((n) => n.id === m.start),
@@ -472,7 +507,12 @@ function renderInspector() {
   $("#selected-status").textContent =
     `Member ${m.id} selected · ${m.start} → ${m.end}`;
   $("#inspector-content").innerHTML =
-    `<div class="inspector-heading"><span class="symbol">╱</span><div><strong>Member ${esc(m.id)}</strong><small>${esc(m.start)} → ${esc(m.end)} · Custom section</small></div></div><form id="member-form"><div class="form-section"><h3>Geometry</h3><div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(mat.id)}</h3><div class="fields">${input("elasticity", "E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(sec.id)}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(m.start)}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Tip Fz [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><button class="primary" type="submit">Apply changes</button></form>${result ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(m.id)} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples.at(-1)?.displacement[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : ""}`;
+    `<div class="inspector-heading"><span class="symbol">╱</span><div><strong>Member ${esc(m.id)}</strong><small>${esc(m.start)} → ${esc(m.end)} · Custom section</small></div></div><form id="member-form"><div class="form-section"><h3>Geometry</h3><div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(mat.id)}</h3><div class="fields">${input("elasticity", "E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(sec.id)}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(m.start)}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Tip Fz [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(m.id)} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples.at(-1)?.displacement[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : ""}`;
+  $("#discard-properties").onclick = () => {
+    message("");
+    renderInspector();
+    setBusy(busy);
+  };
   $("#member-form").oninput = () => {
     formDirty = true;
     $("#analyse").disabled = true;
@@ -480,6 +520,7 @@ function renderInspector() {
     $("#export-csv").disabled = true;
     $("#result-status").textContent = "Unapplied changes";
     $("#result-status").className = "badge stale";
+    setBusy(busy);
   };
   $("#member-form").onsubmit = async (e) => {
     e.preventDefault();
@@ -562,7 +603,7 @@ function format(n) {
     : "—";
 }
 function renderResults() {
-  const current = result && result.modelHash === modelHash;
+  const current = result && result.modelHash === modelHash && !formDirty;
   $("#result-status").textContent = failed
     ? "Analysis failed"
     : result
@@ -994,6 +1035,16 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
     $(e.shiftKey ? "#redo" : "#undo").click();
   }
+});
+workspaceUI({
+  viewport,
+  gateway,
+  getProject: () => project,
+  selectEntities,
+  canAct: () => !busy && !readOnly,
+  editSelection: (type) => cadTools.open(type),
+  hasDraft: () => formDirty,
+  message,
 });
 showRecent();
 gateway.ready.catch((e) =>

@@ -30,6 +30,7 @@ export function interactions(view) {
     if (!view.origin || !Number.isFinite(view.factor)) return;
     canvas.focus();
     const p = location(e);
+    if (e.button === 2) return;
     if (
       view.drawing &&
       e.button === 0 &&
@@ -40,9 +41,7 @@ export function interactions(view) {
       view.onDrawPoint?.(view.pointAt(...p));
       return;
     }
-    const orbit =
-      view.mode === "3d" &&
-      (e.button === 2 || e.altKey || view.tool === "orbit");
+    const orbit = view.mode === "3d" && (e.altKey || view.tool === "orbit");
     const pan = e.button === 1 || space || view.tool === "pan";
     drag = {
       start: p,

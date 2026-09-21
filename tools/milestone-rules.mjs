@@ -22,8 +22,29 @@ export const m01 = [
   "m01-startup",
   "computer-use",
   "milestone-gates",
+  "ux-acceptance",
+];
+export const m01ux = [
+  "build",
+  "contracts",
+  "wasm",
+  "browser-suite",
+  "accessibility",
+  "graphics",
+  "ux-acceptance",
+  "computer-use",
 ];
 export const requiredIds = {
+  "ux-acceptance": [
+    "UX-01",
+    "UX-02",
+    "UX-03",
+    "UX-04",
+    "UX-05",
+    "UX-06",
+    "UX-07",
+    "UX-08",
+  ],
   "browser-suite": [
     "M01 keyboard-only portal creation, numeric drawing, table editing and solve",
     "M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen",
@@ -67,7 +88,9 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
   if (!e.runner?.platform) errors.push(`${name}: runner identity missing`);
   if (!Object.keys(e.lockHashes || {}).length)
     errors.push(`${name}: input locks missing`);
-  for (const id of milestone === "M01" ? requiredIds[name] || [] : [])
+  for (const id of ["M01", "M01-UX"].includes(milestone)
+    ? requiredIds[name] || []
+    : [])
     if (!e.testIds?.includes(id))
       errors.push(`${name}: missing required test ${id}`);
   if (
