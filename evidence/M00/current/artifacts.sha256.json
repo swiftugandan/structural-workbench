@@ -5,6 +5,7 @@
   "contracts.log": "3b63b03354f88bf456a2aed7afa4e10b866aa5258f1f1be190d54bfe61cbb4fe",
   "wasm.json": "ceda2bbc7548dcc945a42211fa3d17593522c0964cd3762b50cb93a5128f3565",
   "robustness.json": "08879741a80c1f42c5605ed28f0c93056a8f8fcfbd9ea1f635eacd5235f90632",
+  "clean-build.txt": "f2221cdff422e355929fc4ea3fc18e4e3deb13f255d7362901ee0cdcef404541",
   "security.json": "b9d1e024be484f570ac5ee734716f891f088d1a219ef40ab7eef213095fd95e7",
   "browser-suite.json": "b9bbde35cb10ecfc5c3fca0d3b4d559c948a2bb06309bb0b33487c45f94d6980",
   "graphics.json": "e81d521eaeff9660aced9504c5c8d5584fcce50dd2ba3d4acc5de2a5fdb191dc",
