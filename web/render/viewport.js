@@ -1,3 +1,4 @@
+import { supportSymbol } from "./support-symbols.js";
 import { entityLabel } from "../entity-labels.js";
 import { interactions } from "./interactions.js";
 const shader = `struct Out{@builtin(position) position:vec4f,@location(0) color:vec4f,@location(1) @interpolate(flat) id:u32};struct Fragment{@location(0)color:vec4f,@location(1)id:u32};@vertex fn vs(@location(0) p:vec3f,@location(1)c:vec4f,@location(2)id:f32)->Out{var o:Out;o.position=vec4f(p,1);o.color=c;o.id=u32(id);return o;}@fragment fn fs(in:Out)->Fragment{var o:Fragment;o.color=in.color;o.id=in.id;return o;}`;
@@ -403,11 +404,28 @@ export class Viewport {
       dot(a, 5, orange);
       dot(b, 5, orange);
     }
-    for (const s of this.project.supports) {
-      const p = points.get(s.node);
-      line([p[0], p[1] - 17, 0.45], [p[0], p[1] + 17, 0.45], 3, ink);
-      for (let y = -16; y <= 16; y += 8)
-        line([p[0] - 9, p[1] + y + 7, 0.45], [p[0], p[1] + y, 0.45], 1, ink);
+    const supportSymbols = this.project.supports
+      .map((support) => ({
+        support,
+        symbol: supportSymbol(this.project, support, (p) =>
+          this.projectPoint(p),
+        ),
+      }))
+      .filter((x) => x.symbol);
+    for (const { support, symbol } of supportSymbols) {
+      const color = this.selection.has(support.id) ? blue : ink;
+      for (const [a, b] of symbol.segments)
+        line(symbol.transform(a), symbol.transform(b), 1.8, color);
+      for (const [x, y, radius] of symbol.circles) {
+        for (let i = 0; i < 24; i++) {
+          const at = (step) =>
+            symbol.transform([
+              x + radius * Math.cos((step * Math.PI) / 12),
+              y + radius * Math.sin((step * Math.PI) / 12),
+            ]);
+          line(at(i), at(i + 1), 1.6, color);
+        }
+      }
     }
     const labels = document.querySelector("#viewport-labels");
     labels.replaceChildren();
@@ -440,6 +458,7 @@ export class Viewport {
       el.style.left = p[0] + 9 + "px";
       el.style.top = p[1] + 10 + "px";
       labels.append(el);
+      return el;
     };
     for (const [i, n] of nodes.entries()) {
       const p = points.get(n.id);
@@ -526,21 +545,24 @@ export class Viewport {
         );
       }
     }
-    for (const support of this.project.supports) {
-      const p = points.get(support.node);
-      if (p)
-        label(
-          entityLabel(this.project, support.id) +
-            " · " +
-            (support.fixed.slice(3).some(Boolean)
-              ? "Fixed"
-              : support.fixed.filter(Boolean).length === 1
-                ? "Roller"
-                : "Pinned"),
-          [p[0] - 65, p[1] + 15],
-          "support-label",
-          support.id,
+    for (const { support, symbol } of supportSymbols) {
+      const name = entityLabel(this.project, support.id);
+      const badge = label(
+        `${name} · ${symbol.kind === "custom" ? "Custom " + symbol.constraints : symbol.kind[0].toUpperCase() + symbol.kind.slice(1)}${symbol.endOn ? " (end-on)" : ""}`,
+        symbol.labelPoint,
+        "support-label",
+        support.id,
+      );
+      if (badge) {
+        badge.title = symbol.title;
+        badge.dataset.supportKind = symbol.kind;
+        badge.dataset.supportDirection = symbol.direction.join(",");
+        badge.dataset.supportEndOn = String(symbol.endOn);
+        badge.setAttribute(
+          "aria-label",
+          `Properties for ${name}: ${symbol.title}`,
         );
+      }
     }
     const arrow = (origin, vector, color = orange) => {
       const mag = Math.hypot(...vector);
