@@ -445,7 +445,8 @@
       "nextAction": "Continue M01 disconnected-crossing visual distinction and precise snap/grid feedback; retain broader working-plane, camera/selection and capacity gates.",
       "sourceHash": "aca660155a88c2ffe5424b757c3de3e1816b045b8aa739421df70453ff569085",
       "buildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
-      "acceptanceMeaning": "Bounded local axes and explicit topology preview/commit slice; parent M01 remains unaccepted."
+      "acceptanceMeaning": "Bounded local axes and explicit topology preview/commit slice; parent M01 remains unaccepted.",
+      "sourceRevision": "246927f14901809a87921393149e0d2f44ed37b8"
     },
     "M01-C": {
       "id": "M01-C",
@@ -492,7 +493,7 @@
       ]
     }
   ],
-  "lastVerifiedSourceRevision": null,
+  "lastVerifiedSourceRevision": "246927f14901809a87921393149e0d2f44ed37b8",
   "lastVerifiedBuildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
   "nextAction": "Continue M01 disconnected-crossing visual distinction and precise snap/grid feedback; retain broader working-plane, camera/selection and capacity gates.",
   "handoffPath": "HANDOFF.md"

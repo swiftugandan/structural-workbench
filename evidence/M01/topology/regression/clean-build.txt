@@ -1,7 +1,0 @@
-
-> structural-workbench@0.1.0 build
-> node tools/build.mjs
-
-    Finished `release` profile [optimized] target(s) in 0.12s
-    Finished `release` profile [optimized] target(s) in 0.11s
-Built static app 6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3

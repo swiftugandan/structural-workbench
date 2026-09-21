@@ -9,7 +9,7 @@ without mutation.
 
 Source hash: `aca660155a88c2ffe5424b757c3de3e1816b045b8aa739421df70453ff569085`.
 Build hash: `a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc`.
-The final source revision is recorded in delivery/state.json after the source commit.
+Verified source commit: `246927f14901809a87921393149e0d2f44ed37b8`. A following evidence-only commit links this revision and refreshes retained regression traces.
 
 ## Observed outcomes
 
