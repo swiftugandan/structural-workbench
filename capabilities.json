@@ -34,34 +34,44 @@
     },
     {
       "capabilityId": "planar-portal-authoring",
-      "scopeKey": "M01-A / XZ / local browser",
+      "scopeKey": "M01 / XZ analytical portal / XZ XY YZ CAD working planes",
       "implementationStatus": "implemented-preview",
-      "verificationStatus": "native-browser-and-independent-portal-oracle",
+      "verificationStatus": "same-build-local-automated-checks-pass-external-gates-blocked",
       "comparisonStatus": "UNKNOWN_PROKON",
-      "resourceBlockers": [],
+      "resourceBlockers": [
+        "required-platform-runner",
+        "computer-use-policy-unavailable"
+      ],
       "limitations": [
-        "Full M01 CAD scope remains open: broader working planes, full camera/selection and capacity validation",
-        "Snap intersection search not validated at maximum model size"
+        "Formal M01 acceptance requires current Windows/Linux real-GPU and computer-use verification",
+        "Connect intersections remains restricted to 2-200 nonparallel XZ members; copies are geometry-only",
+        "Schema requires at least one node and member; full 30000-DOF solve capacity belongs to M03"
       ],
       "evidenceReferences": [
-        "evidence/M01/current/portal-authoring.json",
-        "evidence/M01/current/browser-suite.json"
+        "evidence/M01/full/browser-suite.json",
+        "evidence/M01/full/native.json",
+        "evidence/M01/full/m01-cad.json",
+        "evidence/M01/full/m01-capacity.json",
+        "evidence/M01/full/gate-M01.json"
       ]
     },
     {
       "capabilityId": "webgpu",
-      "scopeKey": "WebGPU / orthographic 3D / GPU ID and Rust ray picking",
+      "scopeKey": "WebGPU / orthographic 3D / GPU ID and Rust screen picking",
       "implementationStatus": "implemented-preview",
-      "verificationStatus": "local-mac-observed-software-gpu-tested",
+      "verificationStatus": "same-build-local-automated-checks-pass-external-gates-blocked",
       "comparisonStatus": "UNKNOWN_PROKON",
       "resourceBlockers": [
-        "required-platform-runner"
+        "required-platform-runner",
+        "computer-use-policy-unavailable"
       ],
       "limitations": [
         "Full graphics/platform matrix unverified"
       ],
       "evidenceReferences": [
-        "evidence/M00/current/graphics.json"
+        "evidence/M01/full/graphics.json",
+        "evidence/M01/full/m01-graphics.json",
+        "evidence/M01/full/m01-capacity.json"
       ]
     },
     {
@@ -116,7 +126,7 @@
     },
     {
       "capabilityId": "local-axes-topology",
-      "scopeKey": "M01-B / Rust f64 axes / split and merge / 2\u2013200 selected XZ nonparallel intersections",
+      "scopeKey": "M01-B / Rust f64 axes / split and merge / 2–200 selected XZ nonparallel intersections",
       "implementationStatus": "implemented-preview",
       "verificationStatus": "native-and-automated-browser-with-split-beam-opensees",
       "comparisonStatus": "UNKNOWN_PROKON",
@@ -125,13 +135,14 @@
       ],
       "limitations": [
         "Collinear overlaps excluded; spatial Connect unavailable",
-        "Full M01 working-plane, camera/selection, visual-crossing distinction and capacity gates remain open",
-        "Manual computer-use access policy could not be verified in this session"
+        "Current hardware and computer-use gates remain blocked"
       ],
       "evidenceReferences": [
         "evidence/M01/topology/topology-authoring.json",
         "evidence/M01/topology/regression/native.json",
-        "evidence/M01/topology/regression/browser-suite.json"
+        "evidence/M01/topology/regression/browser-suite.json",
+        "evidence/M01/full/browser-suite.json",
+        "evidence/M01/full/native.json"
       ]
     }
   ]

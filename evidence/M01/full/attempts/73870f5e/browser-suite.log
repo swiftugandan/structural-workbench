@@ -1,0 +1,252 @@
+
+Running 27 tests using 1 worker
+
+  ✓   1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (5.1s)
+  ✓   2 tests/e2e/cad.spec.js:40:1 › M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect (9.5s)
+  ✓   3 tests/e2e/cad.spec.js:86:1 › M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts (15.1s)
+  ✓   4 tests/e2e/cad.spec.js:152:1 › M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance (7.2s)
+  ✘   5 tests/e2e/keyboard.spec.js:20:1 › M01 keyboard-only portal creation, numeric drawing, table editing and solve (9.5s)
+  ✓   6 tests/e2e/portal.spec.js:19:1 › M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen (18.9s)
+  ✓   7 tests/e2e/portal.spec.js:144:1 › M01 drawing Escape does not mutate and compact controls do not overflow (4.0s)
+  ✓   8 tests/e2e/robustness.spec.js:4:1 › storage quota failure is explicit and downloads survive (1.6s)
+  ✓   9 tests/e2e/robustness.spec.js:26:1 › single writer lock protects the second tab (2.2s)
+  ✓  10 tests/e2e/robustness.spec.js:45:1 › GPU device destruction recovers model and current result (1.9s)
+  ✓  11 tests/e2e/robustness.spec.js:76:1 › unknown engineering fields rejected atomically (1.4s)
+  ✓  12 tests/e2e/robustness.spec.js:89:1 › cancel terminates a blocked Worker and restores the model (3.6s)
+  ✓  13 tests/e2e/topology.spec.js:30:1 › M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen (13.3s)
+  ✓  14 tests/e2e/topology.spec.js:130:1 › M01 topology: crossing stays disconnected, connect and merge are previewed and atomic (8.6s)
+  ✘  15 tests/e2e/workbench.spec.js:13:1 › M00-tour: edit, solve, stale, select, export, reopen, instability (6.8s)
+  ✓  16 tests/e2e/workbench.spec.js:117:1 › GPU unavailable retains analysis and exports (2.6s)
+  ✓  17 tests/e2e/workbench.spec.js:128:1 › invalid import preserves current model and results (3.2s)
+  ✘  18 tests/e2e/workbench.spec.js:147:1 › undo restores model hash and redo re-applies edit (45.3s)
+  ✓  19 tests/e2e/workbench.spec.js:161:1 › narrow screen retains tables and portable export (2.1s)
+  ✘  20 tests/e2e/workbench.spec.js:177:1 › unit-suffixed inputs are converted by Rust; incompatible units preserve model (6.3s)
+  ✓  21 tests/performance-cad.spec.js:7:1 › M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export (1.3m)
+  ✓  22 tests/performance.spec.js:3:1 › local warm startup and repeated cantilever solve baseline (6.2s)
+  ✘  23 tests/startup.spec.js:5:1 › M01 startup: cached controls and viewport, cold network and compressed payload (10.8s)
+  ✓  24 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (3.4s)
+  ✓  25 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (2.9s)
+  ✓  26 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (3.8s)
+  ✓  27 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (2.0s)
+
+
+  1) tests/e2e/keyboard.spec.js:20:1 › M01 keyboard-only portal creation, numeric drawing, table editing and solve 
+
+    Error: Control is not reachable with Tab: locator('#analyse')
+
+       7 |     await page.keyboard.press("Tab");
+       8 |   }
+    >  9 |   throw Error("Control is not reachable with Tab: " + target);
+         |         ^
+      10 | }
+      11 | async function activate(page, target) {
+      12 |   await reach(page, target);
+        at reach (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:9:9)
+        at activate (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:12:3)
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:60:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/workbench.spec.js:13:1 › M00-tour: edit, solve, stale, select, export, reopen, instability 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('#result-status')
+    Expected substring: "Stale"
+    Received string:    "Unapplied changes"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('#result-status') with timeout 5000ms
+      - waiting for locator('#result-status')
+        14 × locator resolved to <span id="result-status" class="badge stale">Unapplied changes</span>
+           - unexpected value "Unapplied changes"
+
+
+      27 |     .getByRole("button", { name: "Apply changes", exact: true })
+      28 |     .click();
+    > 29 |   await expect(page.locator("#result-status")).toContainText("Stale");
+         |                                                ^
+      30 |   await expect(page.locator("#export-report")).toBeDisabled();
+      31 |   await solve(page);
+      32 |   await page
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:29:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/e2e/workbench.spec.js:147:1 › undo restores model hash and redo re-applies edit ─────────
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('#undo')
+        - locator resolved to <button disabled id="undo" title="Undo engineering edit">↶ Undo</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        84 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      153 |     .click();
+      154 |   await expect(page.locator("#span")).toHaveValue("4.25");
+    > 155 |   await page.locator("#undo").click();
+          |                               ^
+      156 |   await expect(page.locator("#span")).toHaveValue("3");
+      157 |   await expect(page.locator("#hash-status")).toHaveText(hash);
+      158 |   await page.locator("#redo").click();
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:155:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/e2e/workbench.spec.js:177:1 › unit-suffixed inputs are converted by Rust; incompatible units preserve model 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  locator('#span')
+    Expected: "4"
+    Received: "4000 mm"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" locator('#span') with timeout 5000ms
+      - waiting for locator('#span')
+        2 × locator resolved to <input disabled id="span" value="3" name="span" type="text" required="" min="0.000001" inputmode="decimal"/>
+          - unexpected value "4000 mm"
+        11 × locator resolved to <input id="span" value="3" name="span" type="text" required="" min="0.000001" inputmode="decimal"/>
+           - unexpected value "4000 mm"
+
+
+      185 |     .getByRole("button", { name: "Apply changes", exact: true })
+      186 |     .click();
+    > 187 |   await expect(page.locator("#span")).toHaveValue("4");
+          |                                       ^
+      188 |   await expect(page.locator("#elasticity")).toHaveValue("210");
+      189 |   await expect(page.locator("#tip-load")).toHaveValue("-12");
+      190 |   await solve(page);
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:187:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/startup.spec.js:5:1 › M01 startup: cached controls and viewport, cold network and compressed payload 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 2000
+    Received:    2003
+
+      68 |     browser: browser.version(),
+      69 |   });
+    > 70 |   expect(Math.max(...warm)).toBeLessThanOrEqual(2000);
+         |                             ^
+      71 |   expect(coldMs).toBeLessThanOrEqual(5000);
+      72 |   expect(compressedBytes).toBeLessThanOrEqual(8 * 1024 * 1024);
+      73 |   await context.close();
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/startup.spec.js:70:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    tests/e2e/keyboard.spec.js:20:1 › M01 keyboard-only portal creation, numeric drawing, table editing and solve 
+    tests/e2e/workbench.spec.js:13:1 › M00-tour: edit, solve, stale, select, export, reopen, instability 
+    tests/e2e/workbench.spec.js:147:1 › undo restores model hash and redo re-applies edit ──────────
+    tests/e2e/workbench.spec.js:177:1 › unit-suffixed inputs are converted by Rust; incompatible units preserve model 
+    tests/startup.spec.js:5:1 › M01 startup: cached controls and viewport, cold network and compressed payload 
+  22 passed (4.7m)
+(node:61218) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61218) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61930) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61930) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:62676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:62676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63266) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63266) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63391) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63391) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:64511) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:64511) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

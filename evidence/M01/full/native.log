@@ -1,0 +1,192 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 5 tests
+test load_scale_and_superposition ... ok
+test edits_scaling_and_instability ... ok
+test translation_and_storage_order_invariance ... ok
+test m01_global_rotation_relabelling_reordering_and_endpoint_reversal ... ok
+test analytical_b01_to_b11 ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test six_rigid_body_modes_and_symmetry ... ok
+test axial_strain_energy_and_rotated_symmetry ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test rejects_unknown_and_negative_fields ... ok
+test geometry_diagnostics ... ok
+test labels_units_revision_do_not_change_hash ... ok
+test negative_seed_diagnostics ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test units ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test near_coincident_nodes_warn_without_mutation ... ok
+test projected_crossing_index_selection_depth_and_measurement ... ok
+test three_working_planes_snap_midpoint_grid_and_units ... ok
+test move_copy_delete_previews_and_undo_are_atomic ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 6 tests
+test engineering_units_are_parsed_in_rust_and_fail_atomically ... ok
+test crossing_snap_does_not_split_or_connect_members ... ok
+test atomic_undo_revision_conflict ... ok
+test snapping_is_authoritative_and_does_not_change_topology ... ok
+test load_variant_unit_conversion_preserves_exact_schema ... ok
+test member_creation_batch_is_one_atomic_history_step ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 7 tests
+test local_axes_reversal_vertical_and_skew_are_right_handed ... ok
+test connect_crossing_is_explicit_and_reuses_one_shared_node ... ok
+test merge_repeated_loads_and_stale_preview_cannot_mutate ... ok
+test connect_t_junction_reuses_endpoint_and_three_way_crossing_is_single_joint ... ok
+test merge_moves_references_rejects_conflicts_distance_and_zero_length ... ok
+test split_self_weight_and_bad_stations_are_atomic ... ok
+test split_uniform_load_preserves_response_provenance_and_exact_undo ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.40s
+     Running unittests src/lib.rs (target/debug/deps/workbench_assembly-81cd25464be33af2)
+     Running tests/analytical.rs (target/debug/deps/analytical-1644d477af80bc87)
+     Running unittests src/main.rs (target/debug/deps/workbench_cli-a5e1657798293aed)
+     Running unittests src/lib.rs (target/debug/deps/workbench_design-87d7bd5d18d7c65a)
+     Running unittests src/lib.rs (target/debug/deps/workbench_exchange-59c35d58e0683eac)
+     Running unittests src/lib.rs (target/debug/deps/workbench_frame-98575114077e4e77)
+     Running tests/element.rs (target/debug/deps/element-41a71953fb7c96c8)
+     Running unittests src/lib.rs (target/debug/deps/workbench_geometry-b01dad022604d8da)
+     Running unittests src/lib.rs (target/debug/deps/workbench_model-37ac63cffcecc03e)
+     Running tests/validation.rs (target/debug/deps/validation-c0191aaa1c73065c)
+     Running unittests src/lib.rs (target/debug/deps/workbench_results-ac522bd418542cf0)
+     Running unittests src/lib.rs (target/debug/deps/workbench_solver-0f629ec36abd834e)
+     Running unittests src/lib.rs (target/debug/deps/workbench_units-b70ceb18dab5df68)
+     Running unittests src/lib.rs (target/debug/deps/workbench_wasm_api-ccf40874d2c5536d)
+     Running tests/cad.rs (target/debug/deps/cad-f087c5f471ea6f88)
+     Running tests/commands.rs (target/debug/deps/commands-973329f7bd33dc70)
+     Running tests/topology.rs (target/debug/deps/topology-1737729ecc3abed2)
+   Doc-tests workbench_assembly
+   Doc-tests workbench_design
+   Doc-tests workbench_exchange
+   Doc-tests workbench_frame
+   Doc-tests workbench_geometry
+   Doc-tests workbench_model
+   Doc-tests workbench_results
+   Doc-tests workbench_solver
+   Doc-tests workbench_units
+   Doc-tests workbench_wasm_api

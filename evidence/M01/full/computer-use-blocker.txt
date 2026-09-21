@@ -1,0 +1,10 @@
+Requested action: open http://127.0.0.1:4173 using mcp__cua_repl.
+Observed tool failure during this task, including after explicit user authorization:
+Browser Use could not complete this action because a browser security check was unavailable.
+The admin-enforced policy could not be verified; access was not granted.
+The tool explicitly forbade bypassing this failure or using an indirect workaround.
+No application page was opened by computer use; no manual UI observations are claimed.
+The selected browser remained Codex In-app Browser, ID 1. Restored documentation and
+browser-troubleshooting guidance supplied no applicable recovery for this policy-service failure.
+Repository Playwright tests are separate automated development evidence, not a substitute for this requested check.
+Resume when the computer-use service can verify policy for the same URL.

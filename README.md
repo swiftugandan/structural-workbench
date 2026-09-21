@@ -2,7 +2,25 @@
 
 Build an independent PROKON inspired browser workbench with a Rust/WASM engineering kernel, WebGPU CAD viewport and plain HTML/JavaScript/CSS. Start with a complete frame-analysis MVP, then expand through material design and a versioned parity roadmap.
 
-This package is a researched specification and acceptance seed corpus. It contains no application implementation and no claimed PROKON numerical validation.
+This repository now includes a working implementation alongside the original
+specification and acceptance fixtures. See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md)
+for implemented scope and remaining gates. No commercial PROKON equivalence or
+code-design compliance is claimed.
+
+## Run the preview
+
+Use the pinned Node and Rust toolchains, then run `npm ci`, `npm run setup`,
+`npm run build` and `npm run preview`. Open http://127.0.0.1:4173 and choose
+**New planar portal**. Draw members or type coordinates, edit nodes/supports/loads,
+preview topology or selection edits, analyse, undo, save and export.
+
+The full M01 candidate and its regression evidence are described in
+[evidence/M01/full/README.md](evidence/M01/full/README.md). Formal M01 acceptance
+remains blocked until the required real-GPU platform and computer-use checks pass.
+For repeatable verification, set `WORKBENCH_EVIDENCE_DIR=evidence/M01/full`,
+`WORKBENCH_TASK_ID=M01-FULL` and `WORKBENCH_MILESTONE=M01` before running the
+commands in [the runner guide](docs/M01_HARDWARE_RUNNER.md). The original fixture
+values remain unchanged.
 
 ## Read in this order
 

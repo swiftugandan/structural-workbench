@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M01",
-  "activeTask": "M01-C",
+  "activeTask": "M01-FULL",
   "acceptedMilestones": [],
   "tasks": {
     "M00-A": {
@@ -454,7 +454,7 @@
       "dependencies": [
         "M01-B"
       ],
-      "status": "READY",
+      "status": "BLOCKED_RESOURCE",
       "ownedPaths": [
         "crates/wasm-api",
         "web/modeling.js",
@@ -471,9 +471,229 @@
         "npm run test:browser"
       ],
       "outcomes": [],
-      "evidencePaths": [],
+      "evidencePaths": [
+        "evidence/M01/full/m01-cad.json"
+      ],
       "attempts": [],
-      "nextAction": "Continue M01 disconnected-crossing visual distinction and precise snap/grid feedback; retain broader working-plane, camera/selection and capacity gates."
+      "nextAction": "Software covered by M01-FULL; formal parent acceptance awaits its external gates.",
+      "implementationStatus": "implemented-in-M01-FULL"
+    },
+    "M01-FULL": {
+      "id": "M01-FULL",
+      "useCase": "Complete the full M01 CAD authoring milestone and acceptance evidence",
+      "dependencies": [
+        "M01-A",
+        "M01-B"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "ownedPaths": [
+        "crates",
+        "web",
+        "tests",
+        "tools",
+        "contracts",
+        "docs",
+        "delivery",
+        "evidence/M01"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M01",
+        "VALIDATION-platform-matrix",
+        "M01-CAD-interactions",
+        "M01-invariants",
+        "M01-capacity",
+        "M01-computer-use"
+      ],
+      "requiredCommands": [
+        "cargo test --workspace --locked",
+        "npm run build",
+        "npm run test:contracts",
+        "npm run test:numerical",
+        "npm run test:wasm",
+        "npm run test:oracle",
+        "npm run test:browser",
+        "npm run verify:milestone -- M01"
+      ],
+      "outcomes": [
+        {
+          "command": [
+            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/build.mjs"
+          ],
+          "status": "PASS",
+          "testCount": 5,
+          "evidencePath": "evidence/M01/full/build.json"
+        },
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--workspace",
+            "--locked"
+          ],
+          "status": "PASS",
+          "testCount": 29,
+          "evidencePath": "evidence/M01/full/native.json"
+        },
+        {
+          "command": [
+            "npm",
+            "run",
+            "test:contracts"
+          ],
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/full/contracts.json"
+        },
+        {
+          "command": [
+            "npm",
+            "run",
+            "test:security"
+          ],
+          "status": "PASS",
+          "testCount": 2,
+          "evidencePath": "evidence/M01/full/security.json"
+        },
+        {
+          "command": [
+            "node",
+            "--test",
+            "tests/milestone-gates.test.mjs"
+          ],
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/full/milestone-gates.json"
+        },
+        {
+          "command": [
+            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs"
+          ],
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M01/full/numerical.json"
+        },
+        {
+          "command": [
+            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs",
+            "--wasm"
+          ],
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M01/full/wasm.json"
+        },
+        {
+          "command": [
+            "npm",
+            "run",
+            "test:oracle"
+          ],
+          "status": "PASS",
+          "testCount": 1440,
+          "evidencePath": "evidence/M01/full/oracle.json"
+        },
+        {
+          "command": [
+            "npx",
+            "playwright",
+            "test"
+          ],
+          "status": "PASS",
+          "testCount": 27,
+          "evidencePath": "evidence/M01/full/browser-suite.json"
+        },
+        {
+          "command": [
+            "npx",
+            "playwright",
+            "test",
+            "tests/e2e/cad.spec.js"
+          ],
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/full/m01-cad.json"
+        },
+        {
+          "command": [
+            "npx",
+            "playwright",
+            "test",
+            "tests/visual/m01-graphics.spec.js"
+          ],
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/full/m01-graphics.json"
+        },
+        {
+          "command": [
+            "npx",
+            "playwright",
+            "test",
+            "tests/performance-cad.spec.js"
+          ],
+          "status": "PASS",
+          "testCount": 5,
+          "evidencePath": "evidence/M01/full/m01-capacity.json"
+        },
+        {
+          "command": [
+            "npx",
+            "playwright",
+            "test",
+            "tests/startup.spec.js"
+          ],
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/full/m01-startup.json"
+        },
+        {
+          "command": [
+            "npm",
+            "run",
+            "build"
+          ],
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M01/full/reproducibility.json"
+        },
+        {
+          "command": [
+            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/run-hardware.mjs"
+          ],
+          "status": "BLOCKED",
+          "testCount": 0,
+          "evidencePath": "evidence/M01/full/hardware-windows-linux.json"
+        },
+        {
+          "command": [
+            "cua.createBrowserTab",
+            "1",
+            "http://127.0.0.1:4173"
+          ],
+          "status": "BLOCKED",
+          "testCount": 0,
+          "evidencePath": "evidence/M01/full/computer-use.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M01/full/README.md",
+        "evidence/M01/full/gate-M01.json"
+      ],
+      "attempts": [
+        {
+          "outcome": "Repaired drawing and selection races, missing near-node warning, entity-dialog reopening and load-variant unit conversion; final 27-browser/29-native regression passes",
+          "evidencePath": "evidence/M01/full/implementation-findings.md"
+        }
+      ],
+      "nextAction": "Provide the required Windows/Linux real-GPU runner and restore the computer-use policy service; execute docs/M01_HARDWARE_RUNNER.md against source dd67da63e5c44f0f15f0d88b2e892b06a63a3edb, complete current CUA portal authoring checks, then rerun the M01 verifier. Do not waive these gates or advance dependent milestones as accepted.",
+      "implementationStatus": "implemented",
+      "verificationStatus": "all-local-automated-checks-pass-external-gates-blocked",
+      "sourceRevision": "dd67da63e5c44f0f15f0d88b2e892b06a63a3edb",
+      "sourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487",
+      "buildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0"
     }
   },
   "blockers": [
@@ -481,20 +701,35 @@
       "id": "required-platform-runner",
       "requirements": [
         "VALIDATION.md section 7",
-        "M00 release acceptance"
+        "M00/M01 release acceptance",
+        "M01 real-GPU orbit performance"
       ],
-      "observedEnvironment": "macOS local, AMD WebGPU observed; automated Chromium SwiftShader lane passed",
-      "missingResource": "Windows/Linux real-GPU runner",
-      "resumeCondition": "Run identical locked source/build corpus on required real-GPU platform",
-      "independentTasks": [
-        "M01 drawing/snapping state machine and full portal authoring",
-        "M02 release and point-action formulations",
-        "M04 offline/history recovery implementation"
-      ]
+      "observedEnvironment": "macOS x64; Chromium 153 SwiftShader automated correctness",
+      "missingResource": "Authorized Windows/Linux real-GPU runner",
+      "resumeCondition": "Execute same-source/build corpus and real-GPU thresholds using docs/M01_HARDWARE_RUNNER.md",
+      "evidencePaths": [
+        "evidence/M01/full/hardware-windows-linux.json"
+      ],
+      "independentTasks": []
+    },
+    {
+      "id": "computer-use-policy-unavailable",
+      "requirements": [
+        "User-requested computer-use verification"
+      ],
+      "observedEnvironment": "User authorization already given; CUA admin-enforced policy verification unavailable",
+      "missingResource": "Functioning computer-use policy service for http://127.0.0.1:4173",
+      "resumeCondition": "CUA can open the preview through its normal authorized API and complete the portal/drawing/topology journey",
+      "evidencePaths": [
+        "evidence/M01/full/computer-use.json",
+        "evidence/M01/full/computer-use-blocker.txt"
+      ],
+      "independentTasks": []
     }
   ],
-  "lastVerifiedSourceRevision": "246927f14901809a87921393149e0d2f44ed37b8",
-  "lastVerifiedBuildHash": "a20a6f51cfd129d7823dcd9e27fdc4e5ea3f3756104c787476017e0307927fdc",
-  "nextAction": "Continue M01 disconnected-crossing visual distinction and precise snap/grid feedback; retain broader working-plane, camera/selection and capacity gates.",
-  "handoffPath": "HANDOFF.md"
+  "lastVerifiedSourceRevision": "dd67da63e5c44f0f15f0d88b2e892b06a63a3edb",
+  "lastVerifiedBuildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0",
+  "nextAction": "Provide the required Windows/Linux real-GPU runner and restore the computer-use policy service; execute docs/M01_HARDWARE_RUNNER.md against source dd67da63e5c44f0f15f0d88b2e892b06a63a3edb, complete current CUA portal authoring checks, then rerun the M01 verifier. Do not waive these gates or advance dependent milestones as accepted.",
+  "handoffPath": "HANDOFF.md",
+  "lastVerifiedSourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487"
 }

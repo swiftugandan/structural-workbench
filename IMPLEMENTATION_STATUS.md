@@ -26,15 +26,24 @@ Rust-validated split/connect/merge previews with one-step undo, member-load
 preservation and parent station lineage. Connect handles nonparallel XZ intersections
 among up to 200 selected members; collinear overlaps are excluded.
 
+M01 CAD authoring now includes XZ/XY/YZ working planes and offsets, a world-aligned
+snap grid, node/midpoint/intersection feedback, disconnected-crossing diamonds,
+near-coincident warnings, click/Shift/box selection, cursor-centred zoom,
+pan/orbit/fit, numeric move/copy, dependency-preview deletion and distance measurement.
+Commands use Rust validation and exact snapshot undo; geometry copies do not copy
+supports or loads. Keyboard and accessible table paths accompany pointer editing.
+
 ## Evidence and limits
 
 The final observed command outcomes and exact source/build hashes are recorded in
 `evidence/M00/current` (cantilever baseline), `evidence/M01/current` (portal baseline),
-`evidence/M01/topology` (axes/topology slice)
+`evidence/M01/topology` (axes/topology slice), `evidence/M01/full` (full M01 candidate)
 and `delivery/state.json`. Native/WASM agreement, analytical
-benchmarks and OpenSees comparisons are separate evidence categories. WebGPU
-was observed on the local macOS AMD adapter through browser use; automated tests
-use Chromium/SwiftShader and do not represent hardware performance evidence.
+benchmarks and OpenSees comparisons are separate evidence categories. Historical WebGPU
+observations used the local macOS AMD adapter. The current candidate uses automated
+Chromium/SwiftShader checks; computer-use access is blocked by an unavailable tool
+policy check. Neither historical observations nor software timings establish current
+hardware performance.
 
 Formal milestone/release verification is intentionally not green while required
 platform evidence is missing. No milestone is self-declared accepted. The current
@@ -45,9 +54,9 @@ working preview does not equal the complete 24-milestone project.
 | Milestone | Implemented pieces | Still required |
 | --- | --- | --- |
 | M00 | Cantilever user journey, sparse WASM/native kernel, units, selection, save/reopen/report, instability/no-adapter paths | Complete required platform evidence and release-grade acceptance audit |
-| M01 | Guided portal setup, XZ drawing and Rust snapping, numeric entity fields, planar constraints, portal oracle, transactional commands/history, local axes, explicit connect/split/merge with previews and parent lineage | Broader working planes, complete camera/selection rules, size/performance validation and parent acceptance |
+| M01 | Portal authoring, three working planes, snapping/feedback, camera/selection gestures, move/copy/delete/measure, numeric fields, local axes, topology previews, invariance and portal oracle, autosave/history, CAD capacity/startup tests, evidence verifier | Current computer-use verification, Windows/Linux real-GPU performance and platform acceptance |
 | M02 | Uniform loads, self weight, prescribed motion, cases/combinations, sampled diagrams | Releases, analytical splitting for interior point actions, exact extrema/discontinuities and envelope provenance |
-| M03 | 3D orbit, worker termination cancellation, spatial oracle | Separate model/analysis Workers, copy/move/multiselect, physical/analytical hierarchy, full 30,000-DOF capacity/performance |
+| M03 | 3D orbit, worker termination cancellation, spatial oracle | Separate model/analysis Workers, physical/analytical hierarchy, full 30,000-DOF capacity/performance |
 | M04 | IndexedDB snapshots, single-writer lock, exports, escaped reports, stale controls | Offline cache/update lifecycle, historical-revision recovery UI, migrations and full crash/recovery matrix |
 | M05 | Editable synthetic sections and examples | Parametric templates, section calculator, project variants and side-by-side comparison |
 | M06 | Unexposed elastic stress helper | Verified mechanics UI, accumulated regression, performance and clean release gates |
@@ -74,6 +83,7 @@ into external-resource blockers.
 
 ## Next concrete work
 
-Complete the required hardware acceptance lane for M00. Continue M01 with disconnected-crossing visual distinction, working-plane/camera/selection
-completion and topology indexing/capacity validation. Reuse the original
-20-case OpenSees corpus for numerical regression. Retain all original fixture values.
+Run the M01 candidate on the required Windows/Linux real-GPU runner and complete
+computer-use verification after the tool policy check becomes available. Use
+`docs/M01_HARDWARE_RUNNER.md` and the same-build verifier. Keep both parent
+milestones unaccepted until their required gates pass. Retain original fixtures.

@@ -1,0 +1,24 @@
+
+> structural-workbench@0.1.0 test:security
+> node --test tests/security/*.test.mjs
+
+TAP version 13
+# Subtest: HTML labels escaped
+ok 1 - HTML labels escaped
+  ---
+  duration_ms: 0.957052
+  ...
+# Subtest: CSV formula labels neutralised
+ok 2 - CSV formula labels neutralised
+  ---
+  duration_ms: 0.484227
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 99.344448
