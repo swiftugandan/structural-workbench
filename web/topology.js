@@ -187,6 +187,14 @@ export function topology({
     $("#axes-toggle").setAttribute("aria-pressed", String(viewport.showAxes));
     viewport.draw();
   };
+  $("#dimensions-toggle").onclick = () => {
+    viewport.showDimensions = !viewport.showDimensions;
+    $("#dimensions-toggle").setAttribute(
+      "aria-pressed",
+      String(viewport.showDimensions),
+    );
+    viewport.draw();
+  };
   let axesRevision;
   return {
     refresh: async () => {
@@ -202,6 +210,7 @@ export function topology({
         });
         if (getProject() !== p) return;
         viewport.localAxes = data.members;
+        viewport.axesProject = p;
         const near = data.nearCoincidentNodes || [];
         $("#near-node-status").textContent = near.length
           ? `Warning: ${near.length}${near.length === 100 ? "+" : ""} near-coincident node pairs. Connectivity is unchanged. ${near

@@ -1,3 +1,4 @@
+import { dimensionLayout, dimensionText } from "./dimensions.js";
 import { supportSymbol } from "./support-symbols.js";
 import { entityLabel } from "../entity-labels.js";
 import { interactions } from "./interactions.js";
@@ -7,6 +8,7 @@ export class Viewport {
     this.canvas = canvas;
     this.onSelect = onSelect;
     this.mode = "elevation";
+    this.showDimensions = true;
     this.zoom = 1;
     this.pan = [0, 0];
     this.yaw = 0.65;
@@ -432,7 +434,12 @@ export class Viewport {
     let labelBudget = 200;
     const label = (text, p, cls = "", assignment = null) => {
       if (
-        !["axis-summary", "axis-label", "snap-label"].includes(cls) &&
+        ![
+          "axis-summary",
+          "axis-label",
+          "snap-label",
+          "dimension-label",
+        ].includes(cls) &&
         labelBudget-- <= 0
       )
         return;
@@ -484,6 +491,42 @@ export class Viewport {
         [(a[0] + b[0]) / 2 - 15, (a[1] + b[1]) / 2 - 35],
         "member-label",
       );
+    }
+    if (
+      this.showDimensions &&
+      this.axesProject === this.project &&
+      this.localAxes
+    ) {
+      const lengths = new Map(
+        this.localAxes.map((frame) => [frame.id, frame.length]),
+      );
+      const center = this.projectPoint(this.origin);
+      const dimensionColor = [0.35, 0.43, 0.52, 1];
+      let count = 0;
+      for (const member of this.project.members) {
+        if (this.project.members.length > 100 && !this.selection.has(member.id))
+          continue;
+        if (count++ >= 100) break;
+        const layout = dimensionLayout(
+          points.get(member.start),
+          points.get(member.end),
+          center,
+          38,
+          [w, h],
+        );
+        const text = dimensionText(lengths.get(member.id));
+        if (!layout || !text) continue;
+        for (const [a, b] of layout.segments) line(a, b, 1, dimensionColor);
+        const el = label(text, layout.mid, "dimension-label");
+        if (el) {
+          el.dataset.dimensionMember = member.id;
+          el.style.left = layout.mid[0] + "px";
+          el.style.top = layout.mid[1] + "px";
+          el.style.transform = `translate(-50%, -50%) rotate(${layout.angle}deg)`;
+          el.title = `${entityLabel(this.project, member.id)} · True member length ${text}`;
+          el.setAttribute("aria-label", el.title);
+        }
+      }
     }
     if (this.showAxes && this.localAxes) {
       const frame = this.localAxes.find((m) => m.id === this.selected);

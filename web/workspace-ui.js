@@ -68,6 +68,7 @@ export function workspaceUI({
         ["pan-tool", "move", "Pan"],
         ["orbit-tool", "view", "Orbit"],
         ["axes-toggle", "view", "Local axes"],
+        ["dimensions-toggle", "measure", "Dimensions"],
         ["fit", "fit", "Fit"],
       ],
     ],

@@ -1714,3 +1714,16 @@ textarea,
 #workspace:has([data-canvas-tool][aria-pressed="true"]) .assignment-label {
   pointer-events: none;
 }
+
+.dimension-label {
+  color: #44576c;
+  background: #fafcfe;
+  border-radius: 2px;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  transform-origin: center;
+}
