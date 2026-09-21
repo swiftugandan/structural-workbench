@@ -391,5 +391,6 @@
   ],
   "lastVerifiedSourceRevision": "0beb6dac13e7e60ee8e9f403ed8d7341d86b6708",
   "lastVerifiedBuildHash": "1ac52da7735441dd95283fa46a0fb36d89fc6245466fdb547e6e0a98e2a8b2d6",
-  "nextAction": "Implement Rust-authoritative local-axis overlay and explicit topology previews; retain original member loads on split and reject invalid merges atomically."
+  "nextAction": "Implement Rust-authoritative local-axis overlay and explicit topology previews; retain original member loads on split and reject invalid merges atomically.",
+  "handoffPath": "HANDOFF.md"
 }
