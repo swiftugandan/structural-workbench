@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: Dimension lines offset outward, remain upright and avoid viewport edges
+ok 1 - Dimension lines offset outward, remain upright and avoid viewport edges
+  ---
+  duration_ms: 1.169426
+  ...
+# Subtest: Dimension formatting retains small and non-rounded engineering lengths
+ok 2 - Dimension formatting retains small and non-rounded engineering lengths
+  ---
+  duration_ms: 20.705724
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 112.154159

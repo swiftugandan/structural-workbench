@@ -1,0 +1,23 @@
+
+Running 14 tests using 1 worker
+
+(node:38901) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:38901) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (4.4s)
+  ✓   2 tests/e2e/canvas-first.spec.js:34:1 › Canvas first: place support, draw force, edit assignments and undo without dialogs (7.6s)
+  ✓   3 tests/e2e/canvas-first.spec.js:94:1 › Canvas first: two-click members, distributed loads, measure and nonmodal precision panel (5.9s)
+  ✓   4 tests/e2e/canvas-first.spec.js:134:1 › Canvas first: point-to-point copy and dependency delete stay on canvas (5.2s)
+  ✓   5 tests/e2e/canvas-first.spec.js:159:1 › Canvas first: node placement, split, move and Escape preserve atomic history (7.2s)
+  ✓   6 tests/e2e/canvas-first.spec.js:200:1 › Readable labels hide internal IDs and persist after copy and reopen (4.6s)
+  ✓   7 tests/e2e/dimensions.spec.js:2:1 › Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation (3.0s)
+  ✓   8 tests/e2e/support-symbols.spec.js:3:1 › Support symbols track restraints, orientation, property edits and undo (4.6s)
+  ✓   9 tests/e2e/workspace-ux.spec.js:3:1 › UX ribbon, keyboard context menu and property drafts preserve model state (3.0s)
+  ✓  10 tests/e2e/workspace-ux.spec.js:40:1 › UX responsive panel navigation retains editable properties and results (2.0s)
+  ✓  11 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (2.4s)
+  ✓  12 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (2.5s)
+  ✓  13 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (4.1s)
+  ✓  14 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (2.2s)
+
+  14 passed (1.0m)

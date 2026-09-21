@@ -1,0 +1,703 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/e2e/dimensions.spec.js",
+      "tests/e2e/canvas-first.spec.js",
+      "tests/e2e/workspace-ux.spec.js",
+      "tests/e2e/support-symbols.spec.js",
+      "tests/visual",
+      "tests/accessibility"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/M01/dimensions/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "accessibility/a11y.spec.js",
+      "file": "accessibility/a11y.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "landing and solved workspace accessibility",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4389,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:15.612Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1c2357ba4171646c54ab-f4b5e68bcd440c0e2c90",
+          "file": "accessibility/a11y.spec.js",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/canvas-first.spec.js",
+      "file": "e2e/canvas-first.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas first: place support, draw force, edit assignments and undo without dialogs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7633,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:20.593Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-d07ca-ts-and-undo-without-dialogs/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-055bf972a48002c0cb04",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: two-click members, distributed loads, measure and nonmodal precision panel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5921,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:28.351Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-a5a08-nd-nonmodal-precision-panel/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-858dff4e570d3d4d02f0",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 94,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: point-to-point copy and dependency delete stay on canvas",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5185,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:34.365Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-d2d963df1c4d0369371a",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 134,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: node placement, split, move and Escape preserve atomic history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7239,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:39.625Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-4ade85ca546fbe223ecc",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 159,
+          "column": 1
+        },
+        {
+          "title": "Readable labels hide internal IDs and persist after copy and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4626,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:46.970Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-de89dcd8e924d6f4333b",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 200,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/dimensions.spec.js",
+      "file": "e2e/dimensions.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3034,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:51.677Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-dimensions-Canvas-dime-8a7d7-and-toggle-without-mutation/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b59962eb4c8ce9dd2375-350531f86bab2027b8e8",
+          "file": "e2e/dimensions.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/support-symbols.spec.js",
+      "file": "e2e/support-symbols.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Support symbols track restraints, orientation, property edits and undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4633,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:54.782Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-support-symbols-Suppor-482f7-ion-property-edits-and-undo/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-50bb9196b001f540d601",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/workspace-ux.spec.js",
+      "file": "e2e/workspace-ux.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "UX ribbon, keyboard context menu and property drafts preserve model state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2950,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:15:59.502Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-83e65a7ad3f2b6c886e2",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "UX responsive panel navigation retains editable properties and results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1992,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:16:02.532Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-e44db34fb2e098f39f25",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 40,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "visual/graphics.spec.js",
+      "file": "visual/graphics.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2390,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:16:04.604Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e5e117cc67153d047ad8-6c782177619b7436369d",
+          "file": "visual/graphics.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "visual/m01-graphics.spec.js",
+      "file": "visual/m01-graphics.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2474,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:16:07.070Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "472221e2415d7a30649b-bdaff5c7cdfd94292a12",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4108,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:16:09.609Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "472221e2415d7a30649b-ec00560d8221aca9b0fb",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "M01 graphics: depth occlusion and changing camera during asynchronous selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2199,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T19:16:13.787Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "472221e2415d7a30649b-cc9f6d92a3ce18b4d125",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 63,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-21T19:15:14.393Z",
+    "duration": 61792.663,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
