@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "B02",
+  "name": "B02",
+  "revision": 0,
+  "displayUnits": "engineeringMetric",
+  "analysisMode": "spatial",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "materials": [
+    {
+      "id": "mat1",
+      "name": "Synthetic isotropic material",
+      "E": 200000000000.0,
+      "nu": 0.25,
+      "density": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "sec1",
+      "name": "Synthetic principal section",
+      "A": 0.01,
+      "Iy": 1e-05,
+      "Iz": 2e-05,
+      "J": 2e-05,
+      "cy": 0.1,
+      "cz": 0.2,
+      "provenance": "Original analytical fixture, not a catalogue section"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        3,
+        0,
+        0
+      ]
+    }
+  ],
+  "members": [
+    {
+      "id": "m1",
+      "start": "n1",
+      "end": "n2",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    }
+  ],
+  "supports": [
+    {
+      "id": "s1",
+      "node": "n1",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "loadCases": [
+    {
+      "id": "LC1",
+      "name": "Reference load",
+      "category": "other"
+    }
+  ],
+  "loads": [
+    {
+      "id": "l1",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n2",
+      "values": [
+        0,
+        0,
+        -10000,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "combinations": [],
+  "analysisSettings": {
+    "type": "linearStatic",
+    "formulation": "eulerBernoulli3D",
+    "mergeTolerance": 1e-06,
+    "timeoutMs": 30000,
+    "memoryLimitMiB": 512
+  },
+  "metadata": {
+    "description": "Analytical verification only",
+    "createdBy": "Specification package"
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "version": "1.0.0",
+  "notice": "Required external bundles; no document hashes or rights are invented. Agents populate an acquired resources.lock.json only after retrieval and verification.",
+  "resources": [
+    {
+      "id": "R-CODE-CONCRETE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M08"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-CODE-STEEL",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M07"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-COLUMN-EXAMPLES",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M12"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-COMPOSITE-CODE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M17"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-CONCRETE-EXAMPLES",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M08",
+        "M16"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-CONNECTION-CODE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M13"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-CONNECTION-EXAMPLES",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M13"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-DETAILING",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M08",
+        "M16"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-DYNAMIC-ORACLE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M14",
+        "M15"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-EXCHANGE-CORPUS",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M21"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-FOUNDATION-EXAMPLES",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M11"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-FULL-INVENTORY",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M23"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-GEOTECH-BENCHMARKS",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M20"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-GEOTECH-INVENTORY",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M20"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-MASONRY-CODE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M19"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-MASONRY-INVENTORY",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M19"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-PRESTRESS-CODE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M18"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-PROKON-LICENSED-CORPUS",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M23"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-SEISMIC-CODE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M15"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-SHELL-BENCHMARKS",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M10"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-STABILITY-ORACLE",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M09"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-STEEL-EXAMPLES",
+      "status": "not_acquired",
+      "requiredBy": [
+        "M07"
+      ],
+      "definition": "SOURCES.md section 3",
+      "sourceEdition": null,
+      "sourceHash": null,
+      "rightsStatus": "unverified",
+      "localPath": null,
+      "validationEvidence": []
+    }
+  ]
+}

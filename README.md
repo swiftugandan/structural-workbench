@@ -1,0 +1,32 @@
+# Browser structural engineering implementation handoff
+
+Build an independent PROKON inspired browser workbench with a Rust/WASM engineering kernel, WebGPU CAD viewport and plain HTML/JavaScript/CSS. Start with a complete frame-analysis MVP, then expand through material design and a versioned parity roadmap.
+
+This package is a researched specification and acceptance seed corpus. It contains no application implementation and no claimed PROKON numerical validation.
+
+## Read in this order
+
+Start with [Agent.md](Agent.md), the delivery instruction entry point. [AGENTS.md](AGENTS.md) is included as a loader for compatible repository agents. Preserve existing repository instructions when installing it.
+
+1. [SPECIFICATION.md](SPECIFICATION.md) — product decisions, architecture, numerical conventions and 24 vertical-slice milestones.
+2. [AGENT_RUNBOOK.md](AGENT_RUNBOOK.md) — autonomous execution, failure handling, resource blockers and evidence policy.
+3. [VALIDATION.md](VALIDATION.md) — numerical tolerances, benchmark definitions, browser journeys and release gates.
+4. [contracts/PROTOCOL.md](contracts/PROTOCOL.md) and contracts/*.schema.json — model, worker and result contracts.
+5. [fixtures/README.md](fixtures/README.md) and [fixtures/benchmarks.json](fixtures/benchmarks.json) — analytical truth and complete input models.
+6. [agent-tasks/M00.md](agent-tasks/M00.md) — first implementation assignment.
+7. [PARITY_ROADMAP.md](PARITY_ROADMAP.md), [roadmap.json](roadmap.json) and [SOURCES.md](SOURCES.md) — scope matrix, dependencies and resource provenance.
+8. [DESIGN_SCREENS.md](DESIGN_SCREENS.md) — high-fidelity projects, modelling, results and steel-design screens.
+
+## First instruction for an implementation agent
+
+Read this package, implement M00 end to end in an authorised repository, run its objective gate and continue DAG-ready milestones. Preserve all earlier workflows. Do not substitute a framework, server solver or fake results. Missing code-standard resources block only their dependent capabilities; they never justify invented compliance claims.
+
+## Package self-check
+
+Run python3 tools/check_package.py from this directory with Python 3. It checks project fixtures against the generated schema keyword subset, analytical arithmetic, reference integrity and milestone dependencies. It does not run or validate a future solver. PACKAGE_VALIDATION.json records the check performed while preparing this package. MANIFEST.sha256 lists delivered file hashes.
+
+## Scope checkpoints
+
+M00–M06: analysis MVP. M07: separately gated steel design MVP. M08: concrete-beam design and schedules. M09–M22: advanced usable products. M23: finite, evidence-backed suite-parity programme. Exact code resources, licensed commercial comparison outputs and additional advanced benchmarks remain explicit external dependencies.
+
+resources.required.json lists every missing external resource gate and its dependent milestones in machine-readable form.

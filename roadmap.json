@@ -1,0 +1,620 @@
+{
+  "version": "1.0.0",
+  "baselineDate": "2026-09-19",
+  "analysisMvpMilestones": [
+    "M00",
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06"
+  ],
+  "milestones": [
+    {
+      "id": "M00",
+      "name": "Solve and save a cantilever",
+      "state": "planned",
+      "dependsOn": [],
+      "release": "analysis-mvp",
+      "resourceGates": [],
+      "seedBenchmarks": [
+        "B01",
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "contractSection": "SPECIFICATION.md#m00-solve-and-save-a-cantilever",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M01",
+      "name": "Draw and analyse a planar portal",
+      "state": "planned",
+      "dependsOn": [
+        "M00"
+      ],
+      "release": "analysis-mvp",
+      "resourceGates": [],
+      "seedBenchmarks": [
+        "B05",
+        "B06"
+      ],
+      "contractSection": "SPECIFICATION.md#m01-draw-and-analyse-a-planar-portal",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M02",
+      "name": "Compare service and strength load scenarios",
+      "state": "planned",
+      "dependsOn": [
+        "M01"
+      ],
+      "release": "analysis-mvp",
+      "resourceGates": [],
+      "seedBenchmarks": [
+        "B07",
+        "B08",
+        "B09",
+        "B10",
+        "B11"
+      ],
+      "contractSection": "SPECIFICATION.md#m02-compare-service-and-strength-load-scenarios",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M03",
+      "name": "Model a spatial building frame",
+      "state": "planned",
+      "dependsOn": [
+        "M02"
+      ],
+      "release": "analysis-mvp",
+      "resourceGates": [],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m03-model-a-spatial-building-frame",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M04",
+      "name": "Recover work and issue a calculation record",
+      "state": "planned",
+      "dependsOn": [
+        "M03"
+      ],
+      "release": "analysis-mvp",
+      "resourceGates": [],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m04-recover-work-and-issue-a-calculation-record",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M05",
+      "name": "Reuse geometry and compare sections",
+      "state": "planned",
+      "dependsOn": [
+        "M04"
+      ],
+      "release": "analysis-mvp",
+      "resourceGates": [],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m05-reuse-geometry-and-compare-sections",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M06",
+      "name": "Deliver the analysis MVP with elastic stress screening",
+      "state": "planned",
+      "dependsOn": [
+        "M05"
+      ],
+      "release": "analysis-mvp",
+      "resourceGates": [],
+      "seedBenchmarks": [
+        "B12"
+      ],
+      "contractSection": "SPECIFICATION.md#m06-deliver-the-analysis-mvp-with-elastic-stress-screening",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M07",
+      "name": "Check a steel member under one pinned code profile",
+      "state": "planned",
+      "dependsOn": [
+        "M06"
+      ],
+      "release": "material-design",
+      "resourceGates": [
+        "R-CODE-STEEL",
+        "R-STEEL-EXAMPLES"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m07-check-a-steel-member-under-one-pinned-code-profile",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M08",
+      "name": "Design and schedule a concrete beam",
+      "state": "planned",
+      "dependsOn": [
+        "M06"
+      ],
+      "release": "material-design",
+      "resourceGates": [
+        "R-CODE-CONCRETE",
+        "R-CONCRETE-EXAMPLES",
+        "R-DETAILING"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m08-design-and-schedule-a-concrete-beam",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M09",
+      "name": "Evaluate frame stability and second order sway",
+      "state": "planned",
+      "dependsOn": [
+        "M06"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-STABILITY-ORACLE"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m09-evaluate-frame-stability-and-second-order-sway",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M10",
+      "name": "Analyse and design a slab panel",
+      "state": "planned",
+      "dependsOn": [
+        "M06",
+        "M08"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-SHELL-BENCHMARKS"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m10-analyse-and-design-a-slab-panel",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M11",
+      "name": "Size a pad footing from column reactions",
+      "state": "planned",
+      "dependsOn": [
+        "M08"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-FOUNDATION-EXAMPLES"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m11-size-a-pad-footing-from-column-reactions",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M12",
+      "name": "Design a column family",
+      "state": "planned",
+      "dependsOn": [
+        "M08",
+        "M09"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-COLUMN-EXAMPLES"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m12-design-a-column-family",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M13",
+      "name": "Detail a steel connection",
+      "state": "planned",
+      "dependsOn": [
+        "M07"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-CONNECTION-CODE",
+        "R-CONNECTION-EXAMPLES"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m13-detail-a-steel-connection",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M14",
+      "name": "Assess building vibration",
+      "state": "planned",
+      "dependsOn": [
+        "M06"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-DYNAMIC-ORACLE"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m14-assess-building-vibration",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M15",
+      "name": "Assess seismic and harmonic response",
+      "state": "planned",
+      "dependsOn": [
+        "M14"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-SEISMIC-CODE",
+        "R-DYNAMIC-ORACLE"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m15-assess-seismic-and-harmonic-response",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M16",
+      "name": "Reinforce a complete concrete assembly",
+      "state": "planned",
+      "dependsOn": [
+        "M08",
+        "M10",
+        "M11",
+        "M12"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-DETAILING",
+        "R-CONCRETE-EXAMPLES"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m16-reinforce-a-complete-concrete-assembly",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M17",
+      "name": "Model construction stage composite members",
+      "state": "planned",
+      "dependsOn": [
+        "M07",
+        "M08",
+        "M09"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-COMPOSITE-CODE"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m17-model-construction-stage-composite-members",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M18",
+      "name": "Design a prestressed member",
+      "state": "planned",
+      "dependsOn": [
+        "M08"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-PRESTRESS-CODE"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m18-design-a-prestressed-member",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M19",
+      "name": "Design a masonry element",
+      "state": "planned",
+      "dependsOn": [
+        "M06"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-MASONRY-INVENTORY",
+        "R-MASONRY-CODE"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m19-design-a-masonry-element",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M20",
+      "name": "Assess a geotechnical scenario",
+      "state": "planned",
+      "dependsOn": [
+        "M06"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-GEOTECH-INVENTORY",
+        "R-GEOTECH-BENCHMARKS"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m20-assess-a-geotechnical-scenario",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M21",
+      "name": "Exchange a structural model with BIM and CAD",
+      "state": "planned",
+      "dependsOn": [
+        "M04"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-EXCHANGE-CORPUS"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m21-exchange-a-structural-model-with-bim-and-cad",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M22",
+      "name": "Automate a repeatable engineering study",
+      "state": "planned",
+      "dependsOn": [
+        "M06"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m22-automate-a-repeatable-engineering-study",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    },
+    {
+      "id": "M23",
+      "name": "Close the suite parity backlog",
+      "state": "planned",
+      "dependsOn": [
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M15",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20",
+        "M21",
+        "M22"
+      ],
+      "release": "parity-roadmap",
+      "resourceGates": [
+        "R-PROKON-LICENSED-CORPUS",
+        "R-FULL-INVENTORY"
+      ],
+      "seedBenchmarks": [],
+      "contractSection": "SPECIFICATION.md#m23-close-the-suite-parity-backlog",
+      "requiredEvidence": [
+        "ui_journey",
+        "kernel_validation",
+        "failure_path",
+        "save_and_reopen",
+        "exported_outcome",
+        "regression_results",
+        "capability_ledger"
+      ],
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+    }
+  ]
+}

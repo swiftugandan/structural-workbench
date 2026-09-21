@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "const": 1
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+    },
+    "operation": {
+      "enum": [
+        "capabilities",
+        "createProject",
+        "importProject",
+        "applyCommand",
+        "undo",
+        "redo",
+        "validateModel",
+        "analyse",
+        "cancelAnalysis",
+        "getSnapshot",
+        "queryGeometry",
+        "getResults",
+        "exportProject",
+        "evaluateDesign"
+      ]
+    },
+    "expectedRevision": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "requestId",
+    "operation",
+    "expectedRevision",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Worker request envelope",
+  "description": "Operation payload semantics are normative in PROTOCOL.md; this schema validates the envelope only."
+}

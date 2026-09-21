@@ -1,0 +1,113 @@
+{
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "const": 1
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+    },
+    "operation": {
+      "enum": [
+        "capabilities",
+        "createProject",
+        "importProject",
+        "applyCommand",
+        "undo",
+        "redo",
+        "validateModel",
+        "analyse",
+        "cancelAnalysis",
+        "getSnapshot",
+        "queryGeometry",
+        "getResults",
+        "exportProject",
+        "evaluateDesign"
+      ]
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "error",
+        "cancelled"
+      ]
+    },
+    "revision": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "modelHash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "payload": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "severity": {
+            "enum": [
+              "info",
+              "warning",
+              "error"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "minItems": 0
+          },
+          "details": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "message",
+          "entityIds",
+          "details"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "requestId",
+    "operation",
+    "status",
+    "revision",
+    "modelHash",
+    "payload",
+    "diagnostics"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Worker response envelope"
+}

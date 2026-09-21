@@ -1,0 +1,82 @@
+{
+  "baseline": "models/B02.json",
+  "cases": [
+    {
+      "id": "N01",
+      "name": "duplicate_node",
+      "expectedDiagnostic": "DUPLICATE_ID",
+      "mutation": "Append a second node with id n1",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N02",
+      "name": "zero_length",
+      "expectedDiagnostic": "ZERO_LENGTH_MEMBER",
+      "mutation": "Set n2.position equal to n1.position",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N03",
+      "name": "missing_section",
+      "expectedDiagnostic": "DANGLING_REFERENCE",
+      "mutation": "Set m1.section to missing",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N04",
+      "name": "negative_area",
+      "expectedDiagnostic": "INVALID_SECTION",
+      "mutation": "Set sec1.A to -0.01",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N05",
+      "name": "axis_parallel",
+      "expectedDiagnostic": "INVALID_LOCAL_AXIS",
+      "mutation": "Set m1.localY to [1,0,0]",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N06",
+      "name": "free_cantilever",
+      "expectedDiagnostic": "UNSTABLE_MODEL",
+      "mutation": "Remove s1",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N07",
+      "name": "prescribed_free",
+      "expectedDiagnostic": "INVALID_RESTRAINT",
+      "mutation": "Set s1.fixed[0] false and s1.prescribed[0] to 0.001",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N08",
+      "name": "point_station",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Add a point load at station 1.1",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N09",
+      "name": "torsion_release",
+      "expectedDiagnostic": "UNSUPPORTED_FEATURE",
+      "mutation": "Import an explicit torsional release extension",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N10",
+      "name": "duplicate_self_weight",
+      "expectedDiagnostic": "DUPLICATE_SELF_WEIGHT",
+      "mutation": "Add two selfWeight loads for m1 in LC1",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N11",
+      "name": "future_schema",
+      "expectedDiagnostic": "UNSUPPORTED_SCHEMA",
+      "mutation": "Set schemaVersion to 9.0.0",
+      "expectedMutationEffect": "none"
+    }
+  ]
+}

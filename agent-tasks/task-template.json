@@ -1,0 +1,38 @@
+{
+  "id": "M00-A",
+  "milestone": "M00",
+  "state": "READY",
+  "useCase": "Edit a cantilever and export its engineering model",
+  "dependencies": [],
+  "contractInputs": [
+    "SPECIFICATION.md",
+    "contracts/project.schema.json"
+  ],
+  "ownedPaths": [
+    "crates/model",
+    "crates/units",
+    "web/ui",
+    "web/worker.js"
+  ],
+  "requiredFixtures": [
+    "B01",
+    "B02"
+  ],
+  "acceptance": [
+    "SI conversion is correct",
+    "UI export validates against project schema",
+    "Invalid dimensions fail atomically",
+    "No result is fabricated before a solve"
+  ],
+  "requiredCommands": [
+    "npm run test:contracts",
+    "npm run test:e2e"
+  ],
+  "deliverables": [
+    "working form",
+    "Rust command path",
+    "exported project",
+    "evidence manifest"
+  ],
+  "blockedResources": []
+}

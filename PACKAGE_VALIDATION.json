@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "scope": "Specification integrity, generated-schema keyword subset, and analytical arithmetic only; no application solver executed",
+  "counts": {
+    "schemas": 3,
+    "models": 11,
+    "analytical_assertions": 37,
+    "milestones": 24,
+    "local_references": 17
+  },
+  "failures": []
+}
