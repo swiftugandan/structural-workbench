@@ -2,6 +2,10 @@
 
 This is the proposed target ledger, not a statement of delivered functionality. Every implementation status starts PLANNED, every measured numerical comparison starts NOT_RUN and PROKON numerical equivalence starts UNKNOWN. Baseline is the official product information inspected on 19 September 2026. Each row must acquire versioned evidence before it changes status.
 
+## Immediate delivery priority
+
+[M01-UX](agent-tasks/M01-UX.md) is the next sub-milestone within M01: improve and verify the existing UI/UX before final M01 acceptance and M02 implementation. It is planned, not accepted. Existing engineering scope and parent acceptance gates remain in force. Machine-readable scheduling is recorded in roadmap.json under subMilestones and delivery/state.json.
+
 ## 1 Acceptance levels
 
 L0 catalogued: authoritative scope identified. L1 usable: end-to-end workflow implemented with export/reopen. L2 verified: independent numerical, domain and failure-path gates pass. L3 compared: settings-matched PROKON comparisons pass or differences are explained and bounded. L4 parity for a named scope: L1–L3 plus code/exchange/platform coverage and limitations match the explicit baseline row. No row reaches L4 merely because its UI exists.

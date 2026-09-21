@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M01",
-  "activeTask": "M01-FULL",
+  "activeTask": "M01-UX",
   "acceptedMilestones": [],
   "tasks": {
     "M00-A": {
@@ -694,6 +694,43 @@
       "sourceRevision": "dd67da63e5c44f0f15f0d88b2e892b06a63a3edb",
       "sourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487",
       "buildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0"
+    },
+    "M01-UX": {
+      "id": "M01-UX",
+      "useCase": "Improve the existing portal modelling, results and save/export experience",
+      "dependencies": [],
+      "status": "READY",
+      "ownedPaths": [
+        "web",
+        "tests",
+        "tools/milestone-rules.mjs",
+        "docs/design/M01-UX",
+        "evidence/M01/ux"
+      ],
+      "acceptanceIds": [
+        "UX-01",
+        "UX-02",
+        "UX-03",
+        "UX-04",
+        "UX-05",
+        "UX-06",
+        "UX-07",
+        "UX-08"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "npm run test:contracts",
+        "npm run test:e2e",
+        "npm run test:a11y",
+        "npm run test:graphics",
+        "npm run test:wasm"
+      ],
+      "outcomes": [],
+      "evidencePaths": [],
+      "sourceRevision": null,
+      "buildHash": null,
+      "attempts": 0,
+      "nextAction": "Audit the current UI and create viewable M01-UX designs per agent-tasks/M01-UX.md, then implement and verify before resuming final M01 acceptance."
     }
   },
   "blockers": [
@@ -729,7 +766,7 @@
   ],
   "lastVerifiedSourceRevision": "dd67da63e5c44f0f15f0d88b2e892b06a63a3edb",
   "lastVerifiedBuildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0",
-  "nextAction": "Provide the required Windows/Linux real-GPU runner and restore the computer-use policy service; execute docs/M01_HARDWARE_RUNNER.md against source dd67da63e5c44f0f15f0d88b2e892b06a63a3edb, complete current CUA portal authoring checks, then rerun the M01 verifier. Do not waive these gates or advance dependent milestones as accepted.",
+  "nextAction": "Audit the current UI and create viewable M01-UX designs per agent-tasks/M01-UX.md, then implement and verify before resuming final M01 acceptance.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487"
 }

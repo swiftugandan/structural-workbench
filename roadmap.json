@@ -616,5 +616,31 @@
       ],
       "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
     }
+  ],
+  "subMilestones": [
+    {
+      "id": "M01-UX",
+      "parentMilestone": "M01",
+      "name": "Improve the modelling workspace UI and UX",
+      "state": "planned",
+      "priority": "next",
+      "dependsOn": [],
+      "prerequisite": "Existing M01 implementation candidate; parent acceptance is not a prerequisite for this refinement",
+      "requiredBefore": [
+        "M01 acceptance",
+        "M02 implementation"
+      ],
+      "contractSection": "agent-tasks/M01-UX.md",
+      "acceptanceIds": [
+        "UX-01",
+        "UX-02",
+        "UX-03",
+        "UX-04",
+        "UX-05",
+        "UX-06",
+        "UX-07",
+        "UX-08"
+      ]
+    }
   ]
 }

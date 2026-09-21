@@ -35,7 +35,11 @@ picking/snapping and 1,000-member edit latency. Software-GPU orbit measured abov
 the hardware target and is explicitly not accepted as hardware performance.
 Startup and compressed payload limits passed. See raw samples in the evidence.
 
-## Exact next action
+## Next priority: M01-UX
+
+The user requested UI/UX improvement first. [M01-UX](agent-tasks/M01-UX.md) is now the active READY sub-milestone: audit, create a viewable design, implement, and verify the existing workflows. Complete this work before resuming final M01 acceptance or starting M02. Existing test results describe the earlier candidate; UI changes require refreshed same-build evidence.
+
+## Parent acceptance after M01-UX
 
 Wait for the external resources, then follow `docs/M01_HARDWARE_RUNNER.md` on the
 authorized real-GPU runner and perform the actual CUA portal authoring journey.
