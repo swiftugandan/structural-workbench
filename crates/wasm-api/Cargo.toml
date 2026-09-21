@@ -1,0 +1,15 @@
+[package]
+name = "workbench-wasm-api"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+workbench-model = { path = "../model" }
+workbench-assembly = { path = "../assembly" }
+workbench-geometry = { path = "../geometry" }
+workbench-exchange = { path = "../exchange" }
+serde_json.workspace = true
+wasm-bindgen.workspace = true
+workbench-units = { path = "../units" }

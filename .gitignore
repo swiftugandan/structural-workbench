@@ -1,0 +1,9 @@
+/target/
+/node_modules/
+/dist/
+/test-results/
+/playwright-report/
+/tools/bin/
+*.log
+/tools/oracle-env/
+/dist-previous/

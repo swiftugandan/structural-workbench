@@ -1,0 +1,9 @@
+[package]
+name = "workbench-solver"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[dependencies]
+sprs.workspace = true
+sprs-ldl.workspace = true
+workbench-model = { path = "../model" }

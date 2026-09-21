@@ -1,0 +1,2 @@
+openseespy==3.7.1.2
+openseespymac==3.4.0.2

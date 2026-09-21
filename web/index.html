@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#142b44" />
+    <title>Structural Workbench</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="appbar">
+      <button id="home" class="brand" aria-label="Projects home">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M3 27V5h26v22M3 5l26 22M3 27L29 5M3 16h26" /></svg
+        ><span>STRUCTURAL <b>WORKBENCH</b></span>
+      </button>
+      <div class="bar-divider"></div>
+      <span id="top-context">Your engineering workspace</span>
+      <div class="spacer"></div>
+      <span class="local-badge">◉ Local workspace</span
+      ><button id="help" class="dark-button">Help & scope</button>
+    </header>
+    <main id="landing">
+      <div class="landing-top">
+        <div>
+          <p class="eyebrow">STRUCTURAL ANALYSIS · MECHANICS PREVIEW</p>
+          <h1>A clear view of your structure.</h1>
+          <p class="intro">
+            Model, analyse and understand your frames.<br />From the first
+            member to a reproducible calculation record.
+          </p>
+        </div>
+        <div class="landing-graphic" aria-hidden="true">
+          <svg viewBox="0 0 420 210">
+            <defs>
+              <pattern
+                id="grid"
+                width="25"
+                height="25"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M25 0H0V25"
+                  fill="none"
+                  stroke="#dce4ec"
+                  stroke-width=".7"
+                />
+              </pattern>
+            </defs>
+            <rect width="420" height="210" fill="url(#grid)" />
+            <path
+              d="M70 170V60H195V170M195 60H325V170"
+              fill="none"
+              stroke="#183851"
+              stroke-width="5"
+            />
+            <path
+              d="M70 170Q72 109 83 60Q142 77 207 60Q263 77 338 60Q329 120 325 170"
+              fill="none"
+              stroke="#387afa"
+              stroke-width="2.5"
+            />
+            <path
+              d="M65 174h20m99 0h23m108 0h21M115 20v30m-5-7 5 7 5-7m127-23v30m-5-7 5 7 5-7"
+              fill="none"
+              stroke="#b76c2f"
+              stroke-width="2"
+            /></svg
+          ><span>One model. A traceable result.</span>
+        </div>
+      </div>
+      <section class="start-grid" aria-label="Start a project">
+        <button class="start-card" id="new-project">
+          <span class="card-icon">＋</span>
+          <h2>New frame</h2>
+          <p>Start with an editable cantilever<br />and make it your own.</p>
+          <span class="card-link">Create a project →</span></button
+        ><button class="start-card" id="open-project">
+          <span class="card-icon">↥</span>
+          <h2>Open project</h2>
+          <p>
+            Pick up where you left off.<br />Import a portable project file.
+          </p>
+          <span class="card-link">Choose JSON file →</span></button
+        ><button class="start-card" id="worked-examples">
+          <span class="card-icon">▱</span>
+          <h2>Worked examples</h2>
+          <p>
+            Explore axial, bending, torsion<br />and distributed-load cases.
+          </p>
+          <span class="card-link">Explore examples →</span>
+        </button>
+      </section>
+      <section class="recent-section">
+        <div class="section-heading">
+          <h2>Recent projects</h2>
+          <span>Saved on this device</span>
+        </div>
+        <div id="recent-projects" class="recent-list">
+          <p>No projects yet. Start a frame or open a worked example.</p>
+        </div>
+      </section>
+      <footer class="landing-footer">
+        <span>Rust / WebAssembly engineering kernel</span
+        ><span>WebGPU viewport</span
+        ><span>Private by default · No account required</span>
+      </footer>
+    </main>
+    <main id="workspace" hidden>
+      <div class="projectbar">
+        <div>
+          <input
+            id="project-name"
+            aria-label="Project name"
+            maxlength="256"
+          /><span id="save-status">Not saved</span>
+        </div>
+        <div class="project-actions">
+          <button id="undo" title="Undo engineering edit">↶ Undo</button
+          ><button id="redo" title="Redo engineering edit">↷ Redo</button
+          ><button id="export-project">↓ Project</button
+          ><button id="export-report">↓ Report</button
+          ><select id="result-case" aria-label="Analysis case"></select
+          ><button id="analyse" class="primary">▶ Analyse</button
+          ><button id="cancel" hidden>Cancel analysis</button>
+        </div>
+      </div>
+      <div id="message" role="status" aria-live="polite" hidden></div>
+      <div class="work-grid">
+        <aside class="model-panel">
+          <div class="panel-title">
+            Model explorer <span id="revision">r0</span>
+          </div>
+          <div class="project-summary">
+            <span class="project-symbol">▱</span>
+            <div>
+              <strong>Frame model</strong><small id="model-count"></small>
+            </div>
+          </div>
+          <nav id="model-nav" aria-label="Model entities"></nav>
+          <div class="model-bottom">
+            <p class="eyebrow">ANALYSIS MODEL</p>
+            <label
+              >Mode<select id="analysis-mode">
+                <option value="spatial">Spatial frame</option>
+                <option value="planarXZ">Planar XZ</option>
+              </select></label
+            >
+            <p>
+              Linear elastic · Euler–Bernoulli<br />Custom synthetic sections
+            </p>
+            <button id="scope" class="text-button">View capabilities ↗</button>
+          </div>
+        </aside>
+        <section class="canvas-panel" aria-label="Structural viewport">
+          <div class="viewport-toolbar">
+            <div class="segmented">
+              <button id="view-elevation" class="active">Elevation</button
+              ><button id="view-3d">3D</button>
+            </div>
+            <button id="fit">⊡ Fit</button
+            ><button
+              id="reset-viewport"
+              title="Recreate GPU viewport resources"
+            >
+              ↻ GPU
+            </button>
+            <div class="spacer"></div>
+            <label class="inline-label"
+              >View<select id="display-result">
+                <option value="model">Model</option>
+                <option value="deformed">Deformation</option>
+                <option value="moment">Moment My</option>
+              </select></label
+            >
+          </div>
+          <div class="canvas-wrap">
+            <canvas
+              id="viewport"
+              aria-label="Frame model. Click a member to select. Drag to pan; wheel to zoom."
+              tabindex="0"
+            ></canvas>
+            <div id="gpu-notice" hidden></div>
+            <div class="view-caption">
+              <span class="eyebrow">STRUCTURAL MODEL</span
+              ><strong id="view-title">Cantilever</strong
+              ><span id="view-subtitle">Global XZ · metres</span>
+            </div>
+            <div id="viewport-labels" aria-hidden="true"></div>
+            <div class="view-legend">
+              <span><i class="legend-line"></i>Undeformed</span
+              ><span id="deformation-legend" hidden
+                ><i class="legend-line blue"></i>Deformed ×
+                <input
+                  id="deformation-scale"
+                  aria-label="Deformation scale"
+                  type="number"
+                  min="0"
+                  max="10000"
+                  value="10"
+              /></span>
+            </div>
+            <div class="axis-widget" aria-hidden="true">
+              <span class="axis-z">↑ Z</span><span class="axis-x">X →</span>
+            </div>
+            <span id="gpu-status">Initialising WebGPU…</span>
+          </div>
+          <div class="viewport-status">
+            <span id="selected-status">Select a member to inspect</span
+            ><span id="hash-status">SI geometry · f64 precision</span>
+          </div>
+        </section>
+        <aside class="inspector">
+          <div class="panel-title">
+            Properties <span id="selection-tag">m1</span>
+          </div>
+          <div id="inspector-content"></div>
+        </aside>
+        <section class="results-panel">
+          <div class="results-tabs">
+            <button data-tab="displacements" class="active">
+              Displacements</button
+            ><button data-tab="reactions">Reactions</button
+            ><button data-tab="forces">Member actions</button
+            ><button data-tab="equilibrium">Equilibrium</button>
+            <div class="spacer"></div>
+            <span id="result-status" class="badge">Not analysed</span
+            ><button id="export-csv">↓ CSV</button>
+          </div>
+          <div id="results-content">
+            <div class="empty-results">
+              <span>⌁</span><strong>Your results start here</strong>
+              <p>Review your model, then run an analysis.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer class="statusbar">
+        <span
+          >Units:
+          <select id="units" aria-label="Display units">
+            <option value="engineeringMetric">m · kN · mm</option>
+            <option value="SI">m · N · m</option>
+          </select></span
+        ><span id="kernel-status">Kernel starting…</span
+        ><span class="spacer"></span
+        ><span>Mechanics preview · No code-design claim</span>
+      </footer>
+    </main>
+    <input
+      type="file"
+      id="import-file"
+      accept=".json,application/json"
+      hidden
+    />
+    <dialog id="modal">
+      <div class="dialog-header">
+        <h2 id="modal-title"></h2>
+        <button id="close-modal" aria-label="Close dialog">×</button>
+      </div>
+      <div id="modal-content"></div>
+    </dialog>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

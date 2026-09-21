@@ -1,0 +1,34 @@
+{
+  "name": "structural-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.14.0"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "preview": "node tools/serve.mjs",
+    "test:wasm": "node tools/numerical.mjs --wasm",
+    "test:contracts": "node --test tests/contracts.test.mjs",
+    "test:numerical": "node tools/numerical.mjs",
+    "test:oracle": "node tools/oracle.mjs",
+    "test:e2e": "playwright test tests/e2e",
+    "test:a11y": "playwright test tests/accessibility",
+    "test:security": "node --test tests/security/*.test.mjs",
+    "test:performance": "playwright test tests/performance.spec.js",
+    "verify:milestone": "node tools/verify.mjs",
+    "verify:release": "node tools/verify.mjs release",
+    "setup": "node tools/bootstrap.mjs",
+    "test:graphics": "playwright test tests/visual",
+    "format": "cargo fmt --all && prettier --write web tools/*.mjs tests playwright.config.js",
+    "test:browser": "node tools/run-browser.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "ajv": "8.20.0",
+    "esbuild": "0.28.2",
+    "prettier": "3.6.2"
+  }
+}

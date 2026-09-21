@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "releaseStatus": "working-preview-not-accepted",
+  "capabilities": [
+    {
+      "capabilityId": "linear-frame",
+      "scopeKey": "eulerBernoulli3D / isotropic / prismatic / SI",
+      "implementationStatus": "implemented-preview",
+      "verificationStatus": "analytical-native-wasm-and-oracle",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [],
+      "limitations": [
+        "No end releases or interior member point actions; full capacity unverified"
+      ],
+      "evidenceReferences": [
+        "evidence/M00/current/numerical.json",
+        "evidence/M00/current/wasm.json",
+        "evidence/M00/current/oracle.json"
+      ]
+    },
+    {
+      "capabilityId": "cantilever-workflow",
+      "scopeKey": "M00 / local Chromium",
+      "implementationStatus": "implemented-preview",
+      "verificationStatus": "browser-tested",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [],
+      "limitations": [
+        "Formal platform acceptance remains open"
+      ],
+      "evidenceReferences": [
+        "evidence/M00/current/e2e-tour.json"
+      ]
+    },
+    {
+      "capabilityId": "webgpu",
+      "scopeKey": "WebGPU / orthographic 3D / GPU ID and Rust ray picking",
+      "implementationStatus": "implemented-preview",
+      "verificationStatus": "local-mac-observed-software-gpu-tested",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [
+        "required-platform-runner"
+      ],
+      "limitations": [
+        "Full graphics/platform matrix unverified"
+      ],
+      "evidenceReferences": [
+        "evidence/M00/current/graphics.json"
+      ]
+    },
+    {
+      "capabilityId": "persistence-report",
+      "scopeKey": "IndexedDB / JSON / CSV / standalone HTML",
+      "implementationStatus": "implemented-preview",
+      "verificationStatus": "browser-tested",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [],
+      "limitations": [
+        "Offline cache, migrations, history recovery UI not implemented"
+      ],
+      "evidenceReferences": [
+        "evidence/M00/current/browser-suite.json"
+      ]
+    },
+    {
+      "capabilityId": "steel-code",
+      "scopeKey": "AISC 360-22 LRFD proposed",
+      "implementationStatus": "not-implemented",
+      "verificationStatus": "not-verified",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [],
+      "limitations": [
+        "Standards, examples and complete checks not acquired"
+      ],
+      "evidenceReferences": []
+    },
+    {
+      "capabilityId": "concrete-code",
+      "scopeKey": "ACI 318-19 proposed",
+      "implementationStatus": "not-implemented",
+      "verificationStatus": "not-verified",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [],
+      "limitations": [
+        "Standards, examples and detailing not acquired"
+      ],
+      "evidenceReferences": []
+    },
+    {
+      "capabilityId": "advanced-suite",
+      "scopeKey": "M09-M23",
+      "implementationStatus": "not-implemented",
+      "verificationStatus": "not-verified",
+      "comparisonStatus": "UNKNOWN_PROKON",
+      "resourceBlockers": [],
+      "limitations": [
+        "See original roadmap and resource register"
+      ],
+      "evidenceReferences": []
+    }
+  ]
+}

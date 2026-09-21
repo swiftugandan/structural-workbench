@@ -1,0 +1,9 @@
+[package]
+name = "workbench-cli"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[dependencies]
+workbench-model = { path = "../model" }
+workbench-assembly = { path = "../assembly" }
+serde_json.workspace = true

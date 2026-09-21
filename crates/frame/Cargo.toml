@@ -1,0 +1,8 @@
+[package]
+name = "workbench-frame"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[dependencies]
+workbench-model = { path = "../model" }
+workbench-geometry = { path = "../geometry" }

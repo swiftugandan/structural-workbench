@@ -1,0 +1,13 @@
+[package]
+name = "workbench-assembly"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[dependencies]
+workbench-model = { path = "../model" }
+workbench-geometry = { path = "../geometry" }
+workbench-frame = { path = "../frame" }
+workbench-solver = { path = "../solver" }
+workbench-results = { path = "../results" }
+serde_json.workspace = true
+sprs.workspace = true
