@@ -727,38 +727,39 @@
       ],
       "outcomes": [
         {
-          "check": "shear-browser",
+          "check": "orientation-browser",
           "status": "PASS",
-          "testCount": 15,
-          "evidencePath": "evidence/M01/shear-diagrams/shear-browser.json"
+          "testCount": 14,
+          "evidencePath": "evidence/M01/orientation/orientation-browser.json"
         },
         {
-          "check": "action-diagrams",
+          "check": "orientation-layout",
           "status": "PASS",
-          "testCount": 3,
-          "evidencePath": "evidence/M01/shear-diagrams/action-diagrams.json"
+          "testCount": 2,
+          "evidencePath": "evidence/M01/orientation/orientation-layout.json"
         },
         {
           "check": "Live UX acceptance",
           "status": "BLOCKED_RESOURCE",
-          "note": "Live visual review remains pending; no complete milestone acceptance claimed."
+          "note": "Browser policy verification remains unavailable; live visual review and full milestone evidence remain pending."
         }
       ],
       "evidencePaths": [
+        "evidence/M01/orientation",
         "evidence/M01/shear-diagrams",
         "evidence/M01/dimensions",
         "evidence/M01/support-symbols"
       ],
-      "sourceRevision": "dab0126edc22404906d0f7cc5d54ec2d9c0e2b09",
-      "buildHash": "9ae9c11c189dbdc241f3ef5afb244d74fdb5a2cefd64bd100199cec07f99b9a5",
+      "sourceRevision": "a9ee71e72ea3c55752dde8c35af1e0d194591a99",
+      "buildHash": "640e141ed0a81f2c5ca39aed22aeee89870c7a4ea98ff7fe4b2676f498c26020",
       "attempts": 4,
-      "nextAction": "Complete live visual review of shear diagrams and the modelling workspace when browser policy verification is available; refresh full required evidence before milestone acceptance.",
+      "nextAction": "Complete live visual review of 3D orientation and modelling when browser policy verification is available; refresh full required evidence before milestone acceptance.",
       "designPaths": [
         "docs/design/M01-UX/workspace.html",
         "docs/design/M01-UX/AUDIT.md",
         "docs/design/M01-UX/CANVAS_INTERACTIONS.md"
       ],
-      "sourceHash": "657fefa89bf24bb0cb3cd82bcd4e891941d78f8842909837639bf7a2ae5e752f"
+      "sourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195"
     }
   },
   "blockers": [
@@ -792,9 +793,9 @@
       "independentTasks": []
     }
   ],
-  "lastVerifiedSourceRevision": "dab0126edc22404906d0f7cc5d54ec2d9c0e2b09",
-  "lastVerifiedBuildHash": "9ae9c11c189dbdc241f3ef5afb244d74fdb5a2cefd64bd100199cec07f99b9a5",
-  "nextAction": "Complete live visual review of shear diagrams and the modelling workspace when browser policy verification is available; refresh full required evidence before milestone acceptance.",
+  "lastVerifiedSourceRevision": "a9ee71e72ea3c55752dde8c35af1e0d194591a99",
+  "lastVerifiedBuildHash": "640e141ed0a81f2c5ca39aed22aeee89870c7a4ea98ff7fe4b2676f498c26020",
+  "nextAction": "Complete live visual review of 3D orientation and modelling when browser policy verification is available; refresh full required evidence before milestone acceptance.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "657fefa89bf24bb0cb3cd82bcd4e891941d78f8842909837639bf7a2ae5e752f"
+  "lastVerifiedSourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195"
 }

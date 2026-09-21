@@ -1,0 +1,23 @@
+
+Running 14 tests using 1 worker
+
+(node:53320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:53320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (4.9s)
+  ✓   2 tests/e2e/cad.spec.js:40:1 › M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect (6.6s)
+  ✓   3 tests/e2e/cad.spec.js:86:1 › M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts (8.6s)
+  ✓   4 tests/e2e/cad.spec.js:151:1 › M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance (8.4s)
+  ✓   5 tests/e2e/dimensions.spec.js:2:1 › Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation (3.3s)
+  ✓   6 tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes (2.8s)
+  ✓   7 tests/e2e/shear-diagrams.spec.js:20:1 › Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving (3.2s)
+  ✓   8 tests/e2e/shear-diagrams.spec.js:59:1 › Uniform-load shear shows both signs and the unused component reports zero (2.0s)
+  ✓   9 tests/e2e/workspace-ux.spec.js:3:1 › UX ribbon, keyboard context menu and property drafts preserve model state (3.0s)
+  ✓  10 tests/e2e/workspace-ux.spec.js:40:1 › UX responsive panel navigation retains editable properties and results (2.4s)
+  ✓  11 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (2.5s)
+  ✓  12 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (2.8s)
+  ✓  13 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (4.1s)
+  ✓  14 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (2.0s)
+
+  14 passed (1.0m)

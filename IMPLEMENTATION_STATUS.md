@@ -97,3 +97,5 @@ Support-symbol refinement: fixed, pinned and roller glyphs follow active restrai
 Canvas dimensions are implemented and pass 14 targeted browser plus 2 layout checks. True Rust lengths, display-only toggle and edit/undo refresh are verified. Evidence: evidence/M01/dimensions; no new full milestone or live-visual acceptance claimed.
 
 Latest refinement: canvas Shear Vy/Vz with signed annotations, unit-aware common scale, explicit zero values and stale-result suppression. Selection persists on reanalysis. Evidence: evidence/M01/shear-diagrams (15 targeted browser + 3 diagram tests). No solver/schema change; live review and full milestone acceptance remain pending.
+
+Latest refinement: camera-aligned XYZ compass with green Y, balanced isometric default and bounded XY reference grid at model minimum Z. Evidence: evidence/M01/orientation (14 targeted browser + 2 orientation checks pass). Camera movement preserves the engineering hash. Live visual review and full milestone acceptance remain pending.

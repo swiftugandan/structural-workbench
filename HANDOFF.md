@@ -29,3 +29,5 @@ Latest refinement: constraint-aware, camera-aligned fixed/pinned/roller support 
 Latest change: canvas dimensions enabled by default with View ribbon toggle, true Rust lengths, edit/undo refresh, extension lines and arrowheads. Current focused evidence: evidence/M01/dimensions (14 browser + 2 layout checks). Prior full-suite evidence is build-specific; refresh complete required evidence before accepting M01-UX.
 
 Latest refinement: canvas Shear Vy/Vz with signed annotations, unit-aware common scale, explicit zero values and stale-result suppression. Selection persists on reanalysis. Evidence: evidence/M01/shear-diagrams (15 targeted browser + 3 diagram tests). No solver/schema change; live review and full milestone acceptance remain pending.
+
+Latest refinement: camera-aligned XYZ compass with green Y, balanced isometric default and bounded XY reference grid at model minimum Z. Evidence: evidence/M01/orientation (14 targeted browser + 2 orientation checks pass). Camera movement preserves the engineering hash. Live visual review and full milestone acceptance remain pending.

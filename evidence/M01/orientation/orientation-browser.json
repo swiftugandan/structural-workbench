@@ -1,0 +1,66 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195",
+  "buildHash": "640e141ed0a81f2c5ca39aed22aeee89870c7a4ea98ff7fe4b2676f498c26020",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "browser.log": "87ee493d1c2829bc0700f7ae4ac04d9acbc13ccdeb67b49603a8e28fdce692ff",
+    "playwright-results.json": "e6e6769446c4559105ee8ec73bd4f3ee3b28957bdb61fc437a754345bf7fa159"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-21T19:37:38.417Z",
+  "status": "PASS",
+  "testCount": 14,
+  "testIds": [
+    "landing and solved workspace accessibility",
+    "M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect",
+    "M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts",
+    "M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance",
+    "Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation",
+    "3D exposes Y direction and reference grid; orbit updates compass without model changes",
+    "Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving",
+    "Uniform-load shear shows both signs and the unused component reports zero",
+    "UX ribbon, keyboard context menu and property drafts preserve model state",
+    "UX responsive panel navigation retains editable properties and results",
+    "GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash",
+    "M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping",
+    "M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping",
+    "M01 graphics: depth occlusion and changing camera during asynchronous selection"
+  ],
+  "stats": {
+    "startTime": "2026-09-21T19:36:01.003Z",
+    "duration": 60053.199,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/orientation.spec.js",
+    "tests/e2e/cad.spec.js",
+    "tests/e2e/dimensions.spec.js",
+    "tests/e2e/shear-diagrams.spec.js",
+    "tests/e2e/workspace-ux.spec.js",
+    "tests/visual",
+    "tests/accessibility"
+  ],
+  "artifacts": [
+    "browser.log",
+    "playwright-results.json"
+  ]
+}
