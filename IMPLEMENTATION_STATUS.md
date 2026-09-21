@@ -83,9 +83,11 @@ into external-resource blockers.
 
 ## Next concrete work
 
-First complete [M01-UX](agent-tasks/M01-UX.md), the user-requested UI/UX sub-milestone. Its interactive design and source-based audit are in docs/design/M01-UX/; the ribbon, contextual actions, draft/selection handling and responsive panel navigation are implemented. Current candidate evidence is in evidence/M01/ux; live visual/browser acceptance remains pending. Prioritize workspace hierarchy, modelling flow, results readability, responsive access and accessibility. Then refresh the changed-build evidence and resume parent acceptance below.
+First complete [M01-UX](agent-tasks/M01-UX.md), the user-requested UI/UX sub-milestone. Its interactive design and source-based audit are in docs/design/M01-UX/; the canvas-first revision implements direct geometry/assignment placement, point-to-point transforms, splitting, measurement, inline deletion and nonblocking property/precision panels, in addition to the ribbon and responsive workspace. Current candidate evidence is in evidence/M01/canvas-first; live visual/browser acceptance remains pending. Prioritize workspace hierarchy, modelling flow, results readability, responsive access and accessibility. Then refresh the changed-build evidence and resume parent acceptance below.
 
 Run the M01 candidate on the required Windows/Linux real-GPU runner and complete
 computer-use verification after the tool policy check becomes available. Use
 `docs/M01_HARDWARE_RUNNER.md` and the same-build verifier. Keep both parent
 milestones unaccepted until their required gates pass. Retain original fixtures.
+
+Current canvas-first/readable-label candidate: 34 browser tests, 30 native tests, 33 native/WASM numerical comparisons, 3 contract tests and 4 verifier tests pass. Stable short labels are separate from hidden IDs; no migrations. See evidence/M01/canvas-first. Live UX and required parent real-GPU acceptance remain blocked.

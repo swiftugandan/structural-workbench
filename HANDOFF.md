@@ -1,68 +1,25 @@
-# M01 handoff
+# M01-UX canvas-first handoff
 
-Work in `/Users/p.munaawa/Documents/projects/labs/prokon`, on `main`. The ChatGPT
-project mirror's sources are read-only. Do not spawn agents unless newly authorized.
+Work in /Users/p.munaawa/Documents/projects/labs/prokon on main (trunk based development). The ChatGPT project mirror's sources remain read-only. Do not spawn agents unless newly authorized.
 
-The user's full M01 implementation request has been implemented. Formal completion
-is **BLOCKED_RESOURCE**, not accepted. All local automated gates pass. There are
-only two reported M01 gate blockers: the required Windows/Linux real-GPU runner
-and the requested computer-use check (CUA cannot verify its admin-enforced policy).
-The user already explicitly authorized browser use; asking for permission again
-will not fix that service failure. Do not bypass it with another control route.
+The user's latest direction is a canvas-first modelling application. Support and Load were examples, not the complete scope. See docs/design/M01-UX/CANVAS_INTERACTIONS.md for the broad interaction audit and docs/design/M01-UX/IMPLEMENTATION.md for implemented behavior. The old interactive workspace design is illustrative, not the current production interaction model.
 
-Read `delivery/state.json`, `evidence/M01/full/README.md`,
-`docs/M01_HARDWARE_RUNNER.md` and `evidence/M01/full/gate-M01.json` first.
-The implementation source commit is `dd67da6`; full SHA and source/build hashes
-are in delivery/state.json. A later evidence-only commit may follow it.
+## Current candidate
 
-## Implemented and verified locally
+The working app now has two-click member creation; snapped node placement; click-to-place support presets; click/drag point forces and member uniform loads; point-to-point Move/Copy; picked Split; two-node Measure; inline dependency Delete; direct node/support/load properties; and nonblocking precision/topology/entity panels. Context actions finish active placement tools. Routine modelling leaves the canvas available. Existing project-level creation/import/help flows may still use dialogs.
 
-Three working planes/offsets, aligned grid and snap feedback, disconnected-crossing
-markers and near-node warnings; click/Shift/blank-drag selection; cursor zoom,
-pan/orbit/fit; keyboard-only portal creation/numeric drawing/table editing/solve;
-atomic move/copy/dependency-delete/measure; existing axes, split/connect/merge,
-load preservation, lineage, exact undo/redo and autosave/reopen/report.
+The ribbon, keyboard context menu, selection/draft protection, responsive panels and results drawer remain in place. Rust still validates engineering state, units, topology and undo. No new solver domain or compliance scope is claimed.
 
-The final build passed 29 native tests, 27 browser tests, three contract tests,
-two security tests, three verifier tests, 33 native and 33 WASM analytical checks,
-and 20 independent OpenSees models / 1,440 values. Portal and loaded-split browser
-journeys also compare against independent OpenSees. An identical second build
-reproduced every artifact hash. Evidence carries the same source/build identity;
-original fixtures and historical evidence remain intact.
+Read delivery/state.json and evidence/M01/canvas-first/README.md for the exact source/build identity and final checks. evidence/M01/ux describes the earlier toolbar-oriented candidate; evidence/M01/full describes the original M01 candidate. Never use earlier-build evidence to accept the current source.
 
-CAD size checks passed for 5,000 nodes/10,000 members, including import/export,
-picking/snapping and 1,000-member edit latency. Software-GPU orbit measured above
-the hardware target and is explicitly not accepted as hardware performance.
-Startup and compressed payload limits passed. See raw samples in the evidence.
+## Remaining acceptance
 
-## Next priority: M01-UX
+Live computer use is blocked because the browser service cannot verify its admin-enforced policy. The user already authorized browser use; do not ask again or bypass the control. Once available, perform the actual canvas-first journey, visual review and UX-01–UX-08 acceptance. Fix any observed usability problems and refresh same-build evidence before accepting M01-UX.
 
-The user requested UI/UX improvement first. [M01-UX](agent-tasks/M01-UX.md) is now the active BLOCKED_RESOURCE sub-milestone: audit, create a viewable design, implement, and verify the existing workflows. The source-based audit and interactive design are in docs/design/M01-UX/. The ribbon, context menus, inspector states and responsive panels are now implemented; see docs/design/M01-UX/IMPLEMENTATION.md. The final 29 browser, 33 numerical, three contract and four verifier checks pass on source 06ac482. Finish live visual review and UX acceptance; browser access still fails its policy check. Complete this work before resuming final M01 acceptance or starting M02. Existing test results describe the earlier candidate; UI changes require refreshed same-build evidence.
+The required Windows/Linux real-GPU platform evidence also remains outstanding for parent M00/M01. Follow docs/M01_HARDWARE_RUNNER.md for that gate. Do not advance M02 by treating software-GPU tests as real hardware acceptance.
 
-## Parent acceptance after M01-UX
+Use WORKBENCH_EVIDENCE_DIR=evidence/M01/canvas-first, WORKBENCH_TASK_ID=M01-UX and WORKBENCH_MILESTONE=M01 for the current candidate. Build before tests; never replace dist during a run. npm run verify:milestone -- M01-UX intentionally remains blocked until live review and its acceptance record exist.
 
-Wait for the external resources, then follow `docs/M01_HARDWARE_RUNNER.md` on the
-authorized real-GPU runner and perform the actual CUA portal authoring journey.
-Finally, with the evidence environment set:
+Preview: http://127.0.0.1:4173 (npm run preview if needed). No push or remote configuration was requested.
 
-```sh
-export WORKBENCH_EVIDENCE_DIR=evidence/M01/full
-export WORKBENCH_TASK_ID=M01-FULL
-export WORKBENCH_MILESTONE=M01
-npm run verify:milestone -- M01
-```
-
-The verifier must fail until those checks pass. Do not mark M00/M01 accepted or
-advance dependent milestones by treating software-GPU evidence as the missing
-hardware gate. A resource question about an authorized runner is already pending.
-
-Preview is http://127.0.0.1:4173; run `npm run preview` if needed. Source changes
-require a new build and affected same-build evidence. The full browser run takes
-about four minutes including a 60-second orbit measurement. Build must finish
-before browser tests; do not replace dist during a test run.
-
-`implementation-findings.md` records fixed async drawing, selection and dialog
-races plus load-variant normalization. The test harness now honors
-WORKBENCH_EVIDENCE_DIR instead of overwriting M00 evidence. Logs referenced by
-artifact hashes are intentionally committed despite the general *.log ignore.
-No push or remote configuration was requested or performed.
+Latest user direction: hidden unique internal IDs with short visible labels; no migrations during active development. Implemented `metadata.entityLabels` in Rust canonicalisation and shared `web/entity-labels.js` presentation lookup. Label persistence/copy/deletion/undo/reopen covered by native and browser regressions. No migration layer.

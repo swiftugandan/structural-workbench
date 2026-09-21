@@ -1,0 +1,328 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Planar portal — calculation record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f8;padding:20px;font-size:12px}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}svg{width:100%;height:220px}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / CALCULATION RECORD</p><h1>Planar portal</h1><p>Linear elastic frame analysis · LC1 · SI units</p><small>Model SHA-256: e70b8b0206e26867ea195b80f575e6062ec34d0e5081b89d86bb0fb465434a5f<br>Solver source: 5c86e8f331a3da2ff2722419bca3fa739e0739afcac99e61e92bb554ce4fa202<br>Settings: 71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da<br>Created 2026-09-21T18:53:11.469Z</small></header><p class="banner">Mechanics preview. Prismatic Euler–Bernoulli members, small displacement, isotropic material, principal axes and Saint Venant torsion. No shear deformation, buckling, material nonlinearity, connection design or building-code compliance. Commercial numerical parity is unknown.</p><h2>Model</h2><p>4 nodes · 4 members · planarXZ. Global Z up; right-hand rotations. Generated constraints fix uy, rx and rz at every node.</p><h2>Global XZ elevation</h2><p>Grey: undeformed. Blue: deformation ×10. Projection may hide out-of-plane members.</p><svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Global XZ elevation with deformation amplified ten times"><polyline points="50,150 50,146.75 50,143.5 50,140.25 50,137 50,133.75 50,130.5 50,127.25 50,124 50,120.75 50,117.5 50,114.25 50,111 50,107.75 50,104.5 50,101.25 50,98 50,94.75 50,91.5 50,88.25 50,85 50,81.74999999999999 50,78.49999999999999 50,75.25 50,72 50,68.75 50,65.49999999999999 50,62.249999999999986 50,59.000000000000014 50,55.75 50,52.5 50,49.249999999999986 50,45.999999999999986 50,42.750000000000014 50,39.5 50,36.25 50,32.999999999999986 50,29.74999999999997 50,26.500000000000014 50,23.25 50,20" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="50,150 50.00002768650054,146.74999976482647 50.00010921803073,143.49999952965297 50.00024230263346,140.24999929447944 50.000424648351604,136.99999905930594 50.000653963228054,133.7499988241324 50.000927955305684,130.4999985889589 50.00124433262737,127.24999835378539 50.00160080323601,123.99999811861186 50.00199507517446,120.74999788343834 50.00242485648562,117.49999764826484 50.00288785521236,114.24999741309131 50.00338177939756,110.9999971779178 50.00390433708411,107.74999694274427 50.00445323631488,104.49999670757077 50.00502618513276,101.24999647239724 50.005620891580634,97.99999623722371 50.00623506370137,94.74999600205021 50.00686640953785,91.4999957668767 50.00751263713296,88.24999553170318 50.00817145452958,84.99999529652966 50.0088405697706,81.74999506135613 50.00951769089888,78.49999482618261 50.010200525957316,75.24999459100911 50.010886782988784,71.9999943558356 50.01157417003616,68.74999412066208 50.012260395142334,65.49999388548855 50.01294316635018,62.249993650315034 50.013620191702586,58.99999341514153 50.014289179242425,55.749993179968016 50.014947837012585,52.4999929447945 50.015593873055934,49.249992709620955 50.01622499541537,45.99999247444744 50.01683891213376,42.749992239273965 50.01743333125398,39.49999200410042 50.01800596081893,36.249991768926904 50.01855450887148,32.99999153375339 50.019076683454514,29.749991298579843 50.01957019261091,26.49999106340637 50.020032744383535,23.249990828232853 50.0204620468153,19.999990593059323" fill="none" stroke="#225dc7" stroke-width="2"/><polyline points="50,20 54.333333333333336,20 58.66666666666667,20 63,20 67.33333333333334,20 71.66666666666667,20 76,20 80.33333333333333,20 84.66666666666667,20 89,20 93.33333333333334,20 97.66666666666667,20 102,20 106.33333333333334,20 110.66666666666666,20 115,20 119.33333333333334,20 123.66666666666667,20 128,20 132.33333333333331,20 136.66666666666669,20 141,20 145.33333333333334,20 149.66666666666669,20 154,20 158.33333333333334,20 162.66666666666669,20 167,20 171.33333333333331,20 175.66666666666669,20 180,20 184.33333333333334,20 188.66666666666669,20 193,20 197.33333333333334,20 201.66666666666669,20 206,20 210.33333333333334,20 214.66666666666666,20 219,20 223.33333333333334,20" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="50.0204620468153,19.999990593059323 54.353795923427356,20.00050874176972 58.687129800039415,20.00096684159726 63.020463676651474,20.001368028188807 67.35379755326353,20.00171543719128 71.68713142987559,20.002012204251542 76.02046530648764,20.00226146501649 80.3537991830997,20.00246635513301 84.68713305971175,20.002630010248026 89.02046693632383,20.002755566008403 93.35380081293587,20.002846158061033 97.68713468954795,20.002904922052835 102.02046856615999,20.002934993630703 106.35380244277205,20.00293950844147 110.68713631938411,20.00292160213209 115.02047019599617,20.002884410349452 119.35380407260823,20.00283106874042 123.68713794922029,20.002764712951887 128.02047182583235,20.002688478630773 132.3538057024444,20.00260550142397 136.68713957905646,20.002518916978318 141.02047345566854,20.00243186094076 145.35380733228058,20.00234746895819 149.68714120889263,20.002268876677476 154.0204750855047,20.002199219745535 158.35380896211677,20.00214163380923 162.6871428387288,20.002099254515457 167.02047671534086,20.002075217511134 171.35381059195294,20.002072658443154 175.68714446856498,20.00209471295838 180.02047834517705,20.002144516703737 184.3538122217891,20.002225205326113 188.68714609840117,20.002339914472373 193.02047997501322,20.00249177978941 197.35381385162526,20.00268393692417 201.68714772823733,20.002919521523467 206.0204816048494,20.003201669234244 210.35381548146145,20.003533515703396 214.6871493580735,20.003918196577814 219.02048323468557,20.004358847504363 223.35381711129762,20.004858604129936" fill="none" stroke="#225dc7" stroke-width="2"/><polyline points="223.33333333333334,150 223.33333333333334,146.75 223.33333333333334,143.5 223.33333333333334,140.25 223.33333333333334,137 223.33333333333334,133.75 223.33333333333334,130.5 223.33333333333334,127.25 223.33333333333334,124 223.33333333333334,120.75 223.33333333333334,117.5 223.33333333333334,114.25 223.33333333333334,111 223.33333333333334,107.75 223.33333333333334,104.5 223.33333333333334,101.25 223.33333333333334,98 223.33333333333334,94.75 223.33333333333334,91.5 223.33333333333334,88.25 223.33333333333334,85 223.33333333333334,81.74999999999999 223.33333333333334,78.49999999999999 223.33333333333334,75.25 223.33333333333334,72 223.33333333333334,68.75 223.33333333333334,65.49999999999999 223.33333333333334,62.249999999999986 223.33333333333334,59.000000000000014 223.33333333333334,55.75 223.33333333333334,52.5 223.33333333333334,49.249999999999986 223.33333333333334,45.999999999999986 223.33333333333334,42.750000000000014 223.33333333333334,39.5 223.33333333333334,36.25 223.33333333333334,32.999999999999986 223.33333333333334,29.74999999999997 223.33333333333334,26.500000000000014 223.33333333333334,23.25 223.33333333333334,20" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="223.33333333333334,150 223.33336140475228,146.75012146510323 223.33344405295188,143.5002429302065 223.33357892884632,140.25036439530976 223.33376368334984,137.000485860413 223.3339959673766,133.75060732551623 223.33427343184084,130.5007287906195 223.33459372765677,127.25085025572275 223.3349545057385,124.00097172082599 223.33535341700033,120.75109318592924 223.3357881123564,117.50121465103248 223.3362562427209,114.25133611613573 223.33675545900812,111.00145758123898 223.33728341213217,107.75157904634223 223.33783775300725,104.50170051144549 223.3384161325476,101.25182197654874 223.33901620166742,98.00194344165197 223.3396356112809,94.75206490675524 223.3402720123022,91.50218637185847 223.34092305564556,88.25230783696173 223.34158639222517,85.00242930206497 223.34225967295527,81.75255076716822 223.34294054875,78.50267223227146 223.34362667052355,75.25279369737473 223.34431568919018,72.00291516247798 223.34500525566406,68.75303662758122 223.34569302085936,65.50315809268446 223.34637663569035,62.25327955778771 223.34705375107117,59.00340102289098 223.34772201791603,55.75352248799422 223.3483790871391,52.503643953097466 223.34902260965467,49.253765418200715 223.34965023637687,46.00388688330395 223.35025961821992,42.754008348407226 223.350848406098,39.50412981351046 223.35141425092533,36.25425127861371 223.3519548036161,33.00437274371696 223.35246771508452,29.75449420882019 223.35295063624477,26.504615673923468 223.35340121801107,23.254737139026716 223.35381711129762,20.004858604129936" fill="none" stroke="#225dc7" stroke-width="2"/><polyline points="50,150 54.333333333333336,146.75 58.66666666666667,143.5 63,140.25 67.33333333333334,137 71.66666666666667,133.75 76,130.5 80.33333333333334,127.25 84.66666666666667,124 89,120.75 93.33333333333334,117.5 97.66666666666667,114.25 102,111 106.33333333333334,107.75 110.66666666666669,104.5 115,101.25 119.33333333333334,98 123.66666666666667,94.75 128,91.5 132.33333333333334,88.25 136.66666666666669,85 141,81.75 145.33333333333334,78.5 149.66666666666669,75.25 154,72 158.33333333333334,68.75 162.66666666666669,65.5 167,62.25 171.33333333333337,58.999999999999986 175.66666666666669,55.75 180,52.5 184.33333333333334,49.25 188.66666666666669,46 193.00000000000003,42.749999999999986 197.33333333333334,39.5 201.66666666666669,36.25 206,33 210.33333333333334,29.75 214.66666666666669,26.499999999999986 219.00000000000003,23.25 223.33333333333334,20" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="50,150 54.33361097095679,146.74980885600237 58.66723812389355,143.49963928797806 63.00088113050346,140.2494908581846 67.3345396624797,136.99936312887957 71.66821339151545,133.74925566232056 76.00190198930392,130.49916802076518 80.33560512753826,127.24909976647096 84.66932247791166,123.9990504616955 89.0030537121173,120.74901966869638 93.33679850184839,117.49900694973115 97.67055651879811,114.24901186705742 102.00432743465961,110.99903398293276 106.33811092112612,107.74907285961474 110.67190664989077,104.49912805936094 115.00571429264677,101.24919914442896 119.33953352108732,97.99928567707634 123.6733640069056,94.7493872195607 128.00720542179477,91.49950333413958 132.341057437448,88.24963358307056 136.6749197255585,84.99977752861125 141.00879195781948,81.7499347330192 145.34267380592408,78.500104758552 149.67656494156552,75.25028716746722 154.01046503643693,72.00048152202244 158.34437376223156,68.75068738447524 162.6782907906425,65.50090431708321 167.01221579336305,62.25113188210392 171.3461484420863,59.00136964179491 175.68008840850553,55.751617158413836 180.01403536431377,52.5018739942182 184.34798898120434,49.252139711465645 188.6819489308704,46.00241387241368 193.0159148850051,42.752696039319915 197.34988651530162,39.50298577444198 201.68386349345315,36.253282640037355 206.0178454911529,33.00358619836369 210.35183218009405,29.753896011678535 214.68582323196978,26.50421164223947 219.01981831847323,23.254532652304093 223.35381711129762,20.004858604129936" fill="none" stroke="#225dc7" stroke-width="2"/></svg><h2>Nodal displacements</h2><table><tr><th>Node</th><th>ux (m)</th><th>uy (m)</th><th>uz (m)</th><th>rx (rad)</th><th>ry (rad)</th><th>rz (rad)</th></tr><tr><th>n1</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr><tr><th>n2</th><td>0.0000472201080</td><td>0.00000000</td><td>2.17083246e-8</td><td>0.00000000</td><td>0.0000126742700</td><td>0.00000000</td></tr><tr><th>n3</th><td>0.0000472702568</td><td>0.00000000</td><td>-0.0000112121634</td><td>0.00000000</td><td>0.0000122389544</td><td>0.00000000</td></tr><tr><th>n4</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr></table><h2>Physical support reactions</h2><table><tr><th>Support</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>s1</th><td>-9974.30060</td><td>0.00000000</td><td>-7474.77558</td><td>0.00000000</td><td>-54.1892585</td><td>0.00000000</td></tr><tr><th>s2</th><td>-25.6994002</td><td>0.00000000</td><td>7474.77558</td><td>0.00000000</td><td>-46.7084033</td><td>0.00000000</td></tr></table><h2>Member end actions</h2><p>Actions applied by nodes to the element, in local axes. These differ from cut-face section actions.</p><h3>m1 · 3 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>-14.4722164</td><td>0.00000000</td><td>25.0744027</td><td>0.00000000</td><td>-46.0611174</td><td>0.00000000</td></tr><tr><th>j</th><td>14.4722164</td><td>0.00000000</td><td>-25.0744027</td><td>0.00000000</td><td>-29.1620907</td><td>0.00000000</td></tr></table><h3>m2 · 4 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>-25.0744027</td><td>0.00000000</td><td>-14.4722164</td><td>0.00000000</td><td>29.1620907</td><td>0.00000000</td></tr><tr><th>j</th><td>25.0744027</td><td>0.00000000</td><td>14.4722164</td><td>0.00000000</td><td>28.7267750</td><td>0.00000000</td></tr></table><h3>m3 · 3 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>7474.77558</td><td>0.00000000</td><td>25.6994002</td><td>0.00000000</td><td>-46.7084033</td><td>0.00000000</td></tr><tr><th>j</th><td>-7474.77558</td><td>0.00000000</td><td>-25.6994002</td><td>0.00000000</td><td>-30.3897974</td><td>0.00000000</td></tr></table><h3>m4 · 5 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>-12435.5630</td><td>0.00000000</td><td>1.29302377</td><td>0.00000000</td><td>-8.12814119</td><td>0.00000000</td></tr><tr><th>j</th><td>12435.5630</td><td>0.00000000</td><td>-1.29302377</td><td>0.00000000</td><td>1.66302234</td><td>0.00000000</td></tr></table><h2>Equilibrium and diagnostics</h2><pre>{
+  &quot;checks&quot;: {
+    &quot;forcePass&quot;: true,
+    &quot;globalBalance&quot;: [
+      -6.259881502046483e-12,
+      0,
+      3.637978807091713e-12,
+      0,
+      -3.2741809263825417e-11,
+      0
+    ],
+    &quot;matrixNnz&quot;: 26,
+    &quot;minScaledPivot&quot;: 0.2973109603290416,
+    &quot;momentPass&quot;: true,
+    &quot;origin&quot;: [
+      0,
+      0,
+      0
+    ],
+    &quot;scaledResidual&quot;: 7.234629031824627e-17
+  },
+  &quot;diagnostics&quot;: [],
+  &quot;generatedConstraints&quot;: [
+    {
+      &quot;dof&quot;: 1,
+      &quot;nodeId&quot;: &quot;n1&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 3,
+      &quot;nodeId&quot;: &quot;n1&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 5,
+      &quot;nodeId&quot;: &quot;n1&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 1,
+      &quot;nodeId&quot;: &quot;n2&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 3,
+      &quot;nodeId&quot;: &quot;n2&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 5,
+      &quot;nodeId&quot;: &quot;n2&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 1,
+      &quot;nodeId&quot;: &quot;n3&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 3,
+      &quot;nodeId&quot;: &quot;n3&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 5,
+      &quot;nodeId&quot;: &quot;n3&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 1,
+      &quot;nodeId&quot;: &quot;n4&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 3,
+      &quot;nodeId&quot;: &quot;n4&quot;,
+      &quot;reaction&quot;: 0
+    },
+    {
+      &quot;dof&quot;: 5,
+      &quot;nodeId&quot;: &quot;n4&quot;,
+      &quot;reaction&quot;: 0
+    }
+  ]
+}</pre><h2>Reproducible project input</h2><pre>{
+  &quot;analysisMode&quot;: &quot;planarXZ&quot;,
+  &quot;analysisSettings&quot;: {
+    &quot;formulation&quot;: &quot;eulerBernoulli3D&quot;,
+    &quot;memoryLimitMiB&quot;: 512,
+    &quot;mergeTolerance&quot;: 0.000001,
+    &quot;timeoutMs&quot;: 30000,
+    &quot;type&quot;: &quot;linearStatic&quot;
+  },
+  &quot;combinations&quot;: [],
+  &quot;displayUnits&quot;: &quot;engineeringMetric&quot;,
+  &quot;gravity&quot;: [
+    0,
+    0,
+    -9.80665
+  ],
+  &quot;id&quot;: &quot;p75e3f982049a&quot;,
+  &quot;loadCases&quot;: [
+    {
+      &quot;category&quot;: &quot;other&quot;,
+      &quot;id&quot;: &quot;LC1&quot;,
+      &quot;name&quot;: &quot;Lateral roof force&quot;
+    }
+  ],
+  &quot;loads&quot;: [
+    {
+      &quot;case&quot;: &quot;LC1&quot;,
+      &quot;id&quot;: &quot;l1&quot;,
+      &quot;node&quot;: &quot;n3&quot;,
+      &quot;type&quot;: &quot;nodal&quot;,
+      &quot;values&quot;: [
+        10000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  &quot;materials&quot;: [
+    {
+      &quot;E&quot;: 200000000000,
+      &quot;density&quot;: 7850,
+      &quot;id&quot;: &quot;mat1&quot;,
+      &quot;name&quot;: &quot;Synthetic isotropic material&quot;,
+      &quot;nu&quot;: 0.25
+    }
+  ],
+  &quot;members&quot;: [
+    {
+      &quot;end&quot;: &quot;n2&quot;,
+      &quot;id&quot;: &quot;m1&quot;,
+      &quot;localY&quot;: [
+        0,
+        1,
+        0
+      ],
+      &quot;material&quot;: &quot;mat1&quot;,
+      &quot;releaseEnd&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;releaseStart&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;section&quot;: &quot;sec1&quot;,
+      &quot;start&quot;: &quot;n1&quot;
+    },
+    {
+      &quot;end&quot;: &quot;n3&quot;,
+      &quot;id&quot;: &quot;m2&quot;,
+      &quot;localY&quot;: [
+        0,
+        1,
+        0
+      ],
+      &quot;material&quot;: &quot;mat1&quot;,
+      &quot;releaseEnd&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;releaseStart&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;section&quot;: &quot;sec1&quot;,
+      &quot;start&quot;: &quot;n2&quot;
+    },
+    {
+      &quot;end&quot;: &quot;n3&quot;,
+      &quot;id&quot;: &quot;m3&quot;,
+      &quot;localY&quot;: [
+        0,
+        1,
+        0
+      ],
+      &quot;material&quot;: &quot;mat1&quot;,
+      &quot;releaseEnd&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;releaseStart&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;section&quot;: &quot;sec1&quot;,
+      &quot;start&quot;: &quot;n4&quot;
+    },
+    {
+      &quot;end&quot;: &quot;n3&quot;,
+      &quot;id&quot;: &quot;m552dbb95b5e7&quot;,
+      &quot;localY&quot;: [
+        0,
+        1,
+        0
+      ],
+      &quot;material&quot;: &quot;mat1&quot;,
+      &quot;releaseEnd&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;releaseStart&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;section&quot;: &quot;sec1&quot;,
+      &quot;start&quot;: &quot;n1&quot;
+    }
+  ],
+  &quot;metadata&quot;: {
+    &quot;createdBy&quot;: &quot;Structural Workbench&quot;,
+    &quot;description&quot;: &quot;User-created XZ portal; synthetic editable section&quot;,
+    &quot;entityLabels&quot;: {
+      &quot;LC1&quot;: &quot;lc1&quot;,
+      &quot;l1&quot;: &quot;l1&quot;,
+      &quot;m1&quot;: &quot;m1&quot;,
+      &quot;m2&quot;: &quot;m2&quot;,
+      &quot;m3&quot;: &quot;m3&quot;,
+      &quot;m552dbb95b5e7&quot;: &quot;m4&quot;,
+      &quot;mat1&quot;: &quot;mat1&quot;,
+      &quot;n1&quot;: &quot;n1&quot;,
+      &quot;n2&quot;: &quot;n2&quot;,
+      &quot;n3&quot;: &quot;n3&quot;,
+      &quot;n4&quot;: &quot;n4&quot;,
+      &quot;s1&quot;: &quot;s1&quot;,
+      &quot;s2&quot;: &quot;s2&quot;,
+      &quot;sec1&quot;: &quot;sec1&quot;
+    }
+  },
+  &quot;name&quot;: &quot;Planar portal&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;n1&quot;,
+      &quot;position&quot;: [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;n2&quot;,
+      &quot;position&quot;: [
+        0,
+        0,
+        3
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;n3&quot;,
+      &quot;position&quot;: [
+        4,
+        0,
+        3
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;n4&quot;,
+      &quot;position&quot;: [
+        4,
+        0,
+        0
+      ]
+    }
+  ],
+  &quot;revision&quot;: 5,
+  &quot;schemaVersion&quot;: &quot;1.0.0&quot;,
+  &quot;sections&quot;: [
+    {
+      &quot;A&quot;: 0.01,
+      &quot;Iy&quot;: 0.00001,
+      &quot;Iz&quot;: 0.00002,
+      &quot;J&quot;: 0.00002,
+      &quot;cy&quot;: 0.1,
+      &quot;cz&quot;: 0.2,
+      &quot;id&quot;: &quot;sec1&quot;,
+      &quot;name&quot;: &quot;Synthetic principal section&quot;,
+      &quot;provenance&quot;: &quot;Original analytical fixture, not a catalogue section&quot;
+    }
+  ],
+  &quot;supports&quot;: [
+    {
+      &quot;fixed&quot;: [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      &quot;id&quot;: &quot;s1&quot;,
+      &quot;node&quot;: &quot;n1&quot;,
+      &quot;prescribed&quot;: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      &quot;fixed&quot;: [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      &quot;id&quot;: &quot;s2&quot;,
+      &quot;node&quot;: &quot;n4&quot;,
+      &quot;prescribed&quot;: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}</pre></html>
