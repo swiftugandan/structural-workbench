@@ -95,3 +95,5 @@ Current canvas-first/readable-label candidate: 34 browser tests, 30 native tests
 Support-symbol refinement: fixed, pinned and roller glyphs follow active restraints and model/view orientation; custom/end-on constraints are explicit. 35 browser and 4 focused symbol checks pass, with 33 numerical comparisons and 3 contracts passing. Evidence: evidence/M01/support-symbols. Truss-joint/end-release symbols and corresponding solver support are not implemented.
 
 Canvas dimensions are implemented and pass 14 targeted browser plus 2 layout checks. True Rust lengths, display-only toggle and edit/undo refresh are verified. Evidence: evidence/M01/dimensions; no new full milestone or live-visual acceptance claimed.
+
+Latest refinement: canvas Shear Vy/Vz with signed annotations, unit-aware common scale, explicit zero values and stale-result suppression. Selection persists on reanalysis. Evidence: evidence/M01/shear-diagrams (15 targeted browser + 3 diagram tests). No solver/schema change; live review and full milestone acceptance remain pending.

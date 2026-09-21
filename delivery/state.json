@@ -727,38 +727,38 @@
       ],
       "outcomes": [
         {
-          "check": "dimension-browser",
+          "check": "shear-browser",
           "status": "PASS",
-          "testCount": 14,
-          "evidencePath": "evidence/M01/dimensions/dimension-browser.json"
+          "testCount": 15,
+          "evidencePath": "evidence/M01/shear-diagrams/shear-browser.json"
         },
         {
-          "check": "dimension-layout",
+          "check": "action-diagrams",
           "status": "PASS",
-          "testCount": 2,
-          "evidencePath": "evidence/M01/dimensions/dimension-layout.json"
+          "testCount": 3,
+          "evidencePath": "evidence/M01/shear-diagrams/action-diagrams.json"
         },
         {
           "check": "Live UX acceptance",
           "status": "BLOCKED_RESOURCE",
-          "note": "Browser policy-verification service remained unavailable on the preceding support-symbol review; no live review or full milestone acceptance claimed for this build."
+          "note": "Live visual review remains pending; no complete milestone acceptance claimed."
         }
       ],
       "evidencePaths": [
+        "evidence/M01/shear-diagrams",
         "evidence/M01/dimensions",
-        "evidence/M01/support-symbols",
-        "evidence/M01/canvas-first"
+        "evidence/M01/support-symbols"
       ],
-      "sourceRevision": "2d2700788384d38739a6300b19c0f89a8497939f",
-      "buildHash": "267d370ed29265d3a08c525d06f07ca683c4773df98f88d0e9f35b101f2f9453",
+      "sourceRevision": "dab0126edc22404906d0f7cc5d54ec2d9c0e2b09",
+      "buildHash": "9ae9c11c189dbdc241f3ef5afb244d74fdb5a2cefd64bd100199cec07f99b9a5",
       "attempts": 4,
-      "nextAction": "Complete live visual review of dimensions and the canvas-first workspace when the CUA policy service is available; refresh full milestone evidence before acceptance.",
+      "nextAction": "Complete live visual review of shear diagrams and the modelling workspace when browser policy verification is available; refresh full required evidence before milestone acceptance.",
       "designPaths": [
         "docs/design/M01-UX/workspace.html",
         "docs/design/M01-UX/AUDIT.md",
         "docs/design/M01-UX/CANVAS_INTERACTIONS.md"
       ],
-      "sourceHash": "486cc66bd3167548ea4a58b1e865d2ff57ac66270645cdc33cdca48cd88563ce"
+      "sourceHash": "657fefa89bf24bb0cb3cd82bcd4e891941d78f8842909837639bf7a2ae5e752f"
     }
   },
   "blockers": [
@@ -792,9 +792,9 @@
       "independentTasks": []
     }
   ],
-  "lastVerifiedSourceRevision": "2d2700788384d38739a6300b19c0f89a8497939f",
-  "lastVerifiedBuildHash": "267d370ed29265d3a08c525d06f07ca683c4773df98f88d0e9f35b101f2f9453",
-  "nextAction": "Complete live visual review of dimensions and the canvas-first workspace when the CUA policy service is available; refresh full milestone evidence before acceptance.",
+  "lastVerifiedSourceRevision": "dab0126edc22404906d0f7cc5d54ec2d9c0e2b09",
+  "lastVerifiedBuildHash": "9ae9c11c189dbdc241f3ef5afb244d74fdb5a2cefd64bd100199cec07f99b9a5",
+  "nextAction": "Complete live visual review of shear diagrams and the modelling workspace when browser policy verification is available; refresh full required evidence before milestone acceptance.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "486cc66bd3167548ea4a58b1e865d2ff57ac66270645cdc33cdca48cd88563ce"
+  "lastVerifiedSourceHash": "657fefa89bf24bb0cb3cd82bcd4e891941d78f8842909837639bf7a2ae5e752f"
 }

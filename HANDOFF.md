@@ -27,3 +27,5 @@ Latest user direction: hidden unique internal IDs with short visible labels; no 
 Latest refinement: constraint-aware, camera-aligned fixed/pinned/roller support glyphs and explicit custom/end-on markers. Current evidence is evidence/M01/support-symbols (35 browser, 4 glyph tests, 33 numerical comparisons, 3 contracts pass). Live CUA retry was blocked by unavailable policy verification. Truss joint/hinge symbols are not implemented; the kernel rejects member-end releases.
 
 Latest change: canvas dimensions enabled by default with View ribbon toggle, true Rust lengths, edit/undo refresh, extension lines and arrowheads. Current focused evidence: evidence/M01/dimensions (14 browser + 2 layout checks). Prior full-suite evidence is build-specific; refresh complete required evidence before accepting M01-UX.
+
+Latest refinement: canvas Shear Vy/Vz with signed annotations, unit-aware common scale, explicit zero values and stale-result suppression. Selection persists on reanalysis. Evidence: evidence/M01/shear-diagrams (15 targeted browser + 3 diagram tests). No solver/schema change; live review and full milestone acceptance remain pending.

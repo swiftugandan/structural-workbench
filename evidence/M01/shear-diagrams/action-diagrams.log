@@ -1,0 +1,25 @@
+TAP version 13
+# Subtest: Each diagram selects its signed Rust component and shares a global absolute scale
+ok 1 - Each diagram selects its signed Rust component and shares a global absolute scale
+  ---
+  duration_ms: 21.165713
+  ...
+# Subtest: Signed diagrams offset perpendicular to horizontal and vertical members
+ok 2 - Signed diagrams offset perpendicular to horizontal and vertical members
+  ---
+  duration_ms: 0.39876
+  ...
+# Subtest: Zero shear stays on baseline without invalid geometry or a fabricated scale
+ok 3 - Zero shear stays on baseline without invalid geometry or a fabricated scale
+  ---
+  duration_ms: 0.357186
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 113.63435

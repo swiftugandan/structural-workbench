@@ -1,0 +1,71 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "657fefa89bf24bb0cb3cd82bcd4e891941d78f8842909837639bf7a2ae5e752f",
+  "buildHash": "9ae9c11c189dbdc241f3ef5afb244d74fdb5a2cefd64bd100199cec07f99b9a5",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-21T19:28:03.262Z",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "gpu-cpu-member-id",
+    "resize-1280",
+    "view-invariance"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/visual"
+  ],
+  "gpu": {
+    "info": {
+      "vendor": "google",
+      "architecture": "swiftshader",
+      "device": "",
+      "description": ""
+    },
+    "features": [
+      "depth32float-stencil8",
+      "rg11b10ufloat-renderable",
+      "bgra8unorm-storage",
+      "texture-compression-bc",
+      "chromium-experimental-sampling-resource-table",
+      "core-features-and-limits",
+      "chromium-experimental-timestamp-query-inside-passes",
+      "float32-filterable",
+      "indirect-first-instance",
+      "texture-compression-astc-sliced-3d",
+      "float32-blendable",
+      "subgroup-size-control",
+      "texture-compression-unaligned",
+      "texture-compression-astc",
+      "texture-compression-etc2",
+      "depth-clip-control",
+      "texture-compression-bc-sliced-3d",
+      "clip-distances",
+      "timestamp-query",
+      "texture-component-swizzle",
+      "subgroups"
+    ],
+    "limits": {
+      "maxTextureDimension2D": 8192
+    },
+    "dpr": 1,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+  },
+  "limitations": "Focused M00 graphics checks; full clipping/occlusion/far-origin performance matrix is not established."
+}

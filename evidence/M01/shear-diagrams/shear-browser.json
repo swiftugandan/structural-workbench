@@ -1,0 +1,65 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "657fefa89bf24bb0cb3cd82bcd4e891941d78f8842909837639bf7a2ae5e752f",
+  "buildHash": "9ae9c11c189dbdc241f3ef5afb244d74fdb5a2cefd64bd100199cec07f99b9a5",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "browser.log": "8fb86fa85e4d808d9f4ab26ae7bae99cdab5a1864fd422e6768bf067f78c0027",
+    "playwright-results.json": "f08841391a3ccaa399a40861a2f74ee5319490911b2bac747df762e4226948ea"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-21T19:28:27.116Z",
+  "status": "PASS",
+  "testCount": 15,
+  "testIds": [
+    "landing and solved workspace accessibility",
+    "Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving",
+    "Uniform-load shear shows both signs and the unused component reports zero",
+    "M00-tour: edit, solve, stale, select, export, reopen, instability",
+    "GPU unavailable retains analysis and exports",
+    "invalid import preserves current model and results",
+    "undo restores model hash and redo re-applies edit",
+    "narrow screen retains tables and portable export",
+    "unit-suffixed inputs are converted by Rust; incompatible units preserve model",
+    "UX ribbon, keyboard context menu and property drafts preserve model state",
+    "UX responsive panel navigation retains editable properties and results",
+    "GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash",
+    "M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping",
+    "M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping",
+    "M01 graphics: depth occlusion and changing camera during asynchronous selection"
+  ],
+  "stats": {
+    "startTime": "2026-09-21T19:27:24.653Z",
+    "duration": 48190.992000000006,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/shear-diagrams.spec.js",
+    "tests/e2e/workbench.spec.js",
+    "tests/e2e/workspace-ux.spec.js",
+    "tests/visual",
+    "tests/accessibility"
+  ],
+  "artifacts": [
+    "browser.log",
+    "playwright-results.json"
+  ]
+}
