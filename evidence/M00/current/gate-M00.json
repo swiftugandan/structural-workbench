@@ -1,0 +1,26 @@
+{
+  "milestone": "M00",
+  "status": "BLOCKED",
+  "sourceHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+  "buildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
+  "required": [
+    "native",
+    "contracts",
+    "numerical",
+    "wasm",
+    "oracle",
+    "e2e-tour",
+    "browser-suite",
+    "accessibility",
+    "security",
+    "performance",
+    "graphics",
+    "robustness",
+    "hardware-windows-linux"
+  ],
+  "issues": [
+    "hardware-windows-linux: BLOCKED",
+    "hardware-windows-linux: no executed test IDs/count"
+  ],
+  "observedAt": "2026-09-21T15:46:42.534Z"
+}

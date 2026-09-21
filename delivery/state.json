@@ -1,0 +1,266 @@
+{
+  "stateVersion": 1,
+  "specVersion": "1.0",
+  "activeMilestone": "M00",
+  "activeTask": "M00-HW",
+  "acceptedMilestones": [],
+  "tasks": {
+    "M00-A": {
+      "id": "M00-A",
+      "useCase": "Edit, solve, inspect, save, reopen and report a cantilever",
+      "dependencies": [],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates",
+        "web",
+        "tools",
+        "tests"
+      ],
+      "acceptanceIds": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "M00-tour"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "cargo test --workspace --locked",
+        "npm run test:wasm",
+        "npm run test:e2e",
+        "npm run verify:milestone -- M00"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS",
+          "testCount": 13,
+          "command": [
+            "cargo",
+            "test",
+            "--workspace",
+            "--locked"
+          ],
+          "evidencePath": "evidence/M00/current/native.json"
+        },
+        {
+          "check": "contracts",
+          "status": "PASS",
+          "testCount": 3,
+          "command": [
+            "npm",
+            "run",
+            "test:contracts"
+          ],
+          "evidencePath": "evidence/M00/current/contracts.json"
+        },
+        {
+          "check": "numerical",
+          "status": "PASS",
+          "testCount": 33,
+          "command": [
+            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs"
+          ],
+          "evidencePath": "evidence/M00/current/numerical.json"
+        },
+        {
+          "check": "wasm",
+          "status": "PASS",
+          "testCount": 33,
+          "command": [
+            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs",
+            "--wasm"
+          ],
+          "evidencePath": "evidence/M00/current/wasm.json"
+        },
+        {
+          "check": "oracle",
+          "status": "PASS",
+          "testCount": 1440,
+          "command": [
+            "npm",
+            "run",
+            "test:oracle"
+          ],
+          "evidencePath": "evidence/M00/current/oracle.json"
+        },
+        {
+          "check": "browser-suite",
+          "status": "PASS",
+          "testCount": 14,
+          "command": [
+            "npx",
+            "playwright",
+            "test"
+          ],
+          "evidencePath": "evidence/M00/current/browser-suite.json"
+        },
+        {
+          "check": "accessibility",
+          "status": "PASS",
+          "testCount": 2,
+          "command": [
+            "npm",
+            "run",
+            "test:a11y"
+          ],
+          "evidencePath": "evidence/M00/current/accessibility.json"
+        },
+        {
+          "check": "security",
+          "status": "PASS",
+          "testCount": 2,
+          "command": [
+            "npm",
+            "run",
+            "test:security"
+          ],
+          "evidencePath": "evidence/M00/current/security.json"
+        },
+        {
+          "check": "performance",
+          "status": "PASS",
+          "testCount": 5,
+          "command": [
+            "npm",
+            "run",
+            "test:performance"
+          ],
+          "evidencePath": "evidence/M00/current/performance.json"
+        },
+        {
+          "check": "graphics",
+          "status": "PASS",
+          "testCount": 3,
+          "command": [
+            "npx",
+            "playwright",
+            "test",
+            "tests/visual"
+          ],
+          "evidencePath": "evidence/M00/current/graphics.json"
+        },
+        {
+          "check": "robustness",
+          "status": "PASS",
+          "testCount": 1,
+          "command": [
+            "npm",
+            "run",
+            "test:e2e"
+          ],
+          "evidencePath": "evidence/M00/current/robustness.json"
+        },
+        {
+          "check": "reproducible-build",
+          "status": "PASS",
+          "testCount": 1,
+          "command": [
+            "npm",
+            "run",
+            "build"
+          ],
+          "evidencePath": "evidence/M00/current/reproducible-build.json"
+        },
+        {
+          "check": "verify:M00",
+          "status": "BLOCKED",
+          "exitCode": 1,
+          "command": [
+            "node",
+            "tools/verify.mjs",
+            "M00"
+          ],
+          "evidencePath": "evidence/M00/current/gate-M00.json"
+        },
+        {
+          "check": "verify:release",
+          "status": "BLOCKED",
+          "exitCode": 1,
+          "command": [
+            "node",
+            "tools/verify.mjs",
+            "release"
+          ],
+          "evidencePath": "evidence/M00/current/gate-release.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M00/current"
+      ],
+      "sourceHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+      "buildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
+      "attempts": [
+        {
+          "issue": "Sparse symmetric check rejected floating-point asymmetry",
+          "resolution": "Assemble transformed upper triangle and mirror; multiply scaling factors symmetrically. Analytical and oracle corpus passed."
+        },
+        {
+          "issue": "Accessibility contrast below AA",
+          "resolution": "Darkened secondary text; final axe scans pass."
+        },
+        {
+          "issue": "Browser tests read initial hidden state before model import completed",
+          "resolution": "Wait for visible workspace and acknowledged engineering hash; final 14 tests pass."
+        }
+      ],
+      "nextAction": "Run the same build on required Windows/Linux real GPU lane.",
+      "sourceRevision": "8538154cc2ee5c6f040bc7af8f725a017063114a",
+      "acceptanceMeaning": "The bounded local cantilever workflow and its analytical tests pass; parent M00 remains unaccepted pending required platform lane."
+    },
+    "M00-HW": {
+      "id": "M00-HW",
+      "useCase": "Verify mandatory hardware/browser lane",
+      "dependencies": [
+        "M00-A"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "ownedPaths": [
+        "evidence/M00"
+      ],
+      "acceptanceIds": [
+        "VALIDATION-platform-matrix"
+      ],
+      "requiredCommands": [
+        "npm run test:browser",
+        "npm run test:performance",
+        "npm run verify:milestone -- M00"
+      ],
+      "outcomes": [
+        {
+          "status": "BLOCKED",
+          "reason": "No connected Windows/Linux hardware-GPU runner"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M00/current/hardware-windows-linux.json"
+      ],
+      "sourceHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+      "buildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
+      "attempts": [],
+      "nextAction": "Supply a Windows/Linux real GPU runner and record adapter/browser/driver, same-build outcomes and hardware timings."
+    }
+  },
+  "blockers": [
+    {
+      "id": "required-platform-runner",
+      "requirements": [
+        "VALIDATION.md section 7",
+        "M00 release acceptance"
+      ],
+      "observedEnvironment": "macOS local, AMD WebGPU observed; automated Chromium SwiftShader lane passed",
+      "missingResource": "Windows/Linux real-GPU runner",
+      "resumeCondition": "Run identical locked source/build corpus on required real-GPU platform",
+      "independentTasks": [
+        "M01 drawing/snapping state machine and full portal authoring",
+        "M02 release and point-action formulations",
+        "M04 offline/history recovery implementation"
+      ]
+    }
+  ],
+  "lastVerifiedSourceRevision": "8538154cc2ee5c6f040bc7af8f725a017063114a",
+  "lastVerifiedBuildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
+  "nextAction": "Run M00-HW on required hardware. Continue M01 drawing/snapping and full portal authoring without claiming its prerequisite platform gate passed."
+}
