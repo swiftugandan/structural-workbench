@@ -1727,3 +1727,24 @@ textarea,
   pointer-events: none;
   transform-origin: center;
 }
+
+.action-legend {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: #fafcfef2;
+  color: #33465a;
+  font-size: 11px;
+  pointer-events: none;
+}
+.result-value-label {
+  font-size: 11px;
+  background: #fff;
+  color: #33465a;
+  border: 1px solid #d9e1ea;
+  pointer-events: none;
+  white-space: nowrap;
+}

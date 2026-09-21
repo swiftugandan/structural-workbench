@@ -1,3 +1,9 @@
+import {
+  actionComponents,
+  diagramPeak,
+  actionText,
+  actionProjection,
+} from "./action-diagrams.js";
 import { dimensionLayout, dimensionText } from "./dimensions.js";
 import { supportSymbol } from "./support-symbols.js";
 import { entityLabel } from "../entity-labels.js";
@@ -716,41 +722,86 @@ export class Viewport {
           orange,
         );
     }
-    if (this.result && this.resultView !== "model") {
+    const component = actionComponents[this.resultView];
+    const actionLegend = document.querySelector("#action-legend");
+    actionLegend.hidden = !component;
+    document.querySelector(".view-legend").hidden = Boolean(component);
+    delete actionLegend.dataset.component;
+    delete actionLegend.dataset.peak;
+    const current =
+      this.result && this.result.modelHash === this.currentModelHash;
+    if (component) {
+      const engineering = this.project.displayUnits === "engineeringMetric";
+      if (!current)
+        actionLegend.textContent = this.result
+          ? `${component.title} · Stale results — analyse again`
+          : `${component.title} · Analyse to display`;
+      else {
+        const peak = diagramPeak(this.result, component);
+        actionLegend.textContent = `${component.title} · Local section actions · ${peak ? "Auto scale: peak " + actionText(peak, component, engineering, false) : "All values zero"} · + blue / − orange · Schematic: + left of start→end`;
+        actionLegend.dataset.component = component.name;
+        actionLegend.dataset.peak = String(peak);
+        for (const member of this.result.members) {
+          const plot = actionProjection(
+            member.samples,
+            (p) => this.projectPoint(p),
+            component,
+            peak,
+          );
+          if (!plot) continue;
+          const values = member.samples.map((s) => s.actions[component.index]);
+          for (let i = 1; i < plot.curve.length; i++) {
+            const sign = (values[i - 1] + values[i]) / 2;
+            line(
+              plot.curve[i - 1],
+              plot.curve[i],
+              2,
+              sign >= 0 ? blue : orange,
+            );
+            if (i % 4 === 0 || i === plot.curve.length - 1)
+              line(plot.base[i], plot.curve[i], 0.7, sign >= 0 ? blue : orange);
+          }
+          line(
+            plot.base[0],
+            plot.curve[0],
+            0.7,
+            values[0] >= 0 ? blue : orange,
+          );
+          if (
+            this.result.members.length <= 20 ||
+            this.selection.has(member.id)
+          ) {
+            for (const index of plot.marks) {
+              const text = `${entityLabel(this.project, member.id)} ${component.name} ${actionText(values[index], component, engineering)}`;
+              const el = label(
+                text,
+                [plot.curve[index][0], plot.curve[index][1] - 28],
+                "result-value-label",
+              );
+              if (el) {
+                el.dataset.resultMember = member.id;
+                el.dataset.resultComponent = component.name;
+                el.dataset.resultValue = String(values[index]);
+                el.title = `${text} · station ${member.samples[index].station} L`;
+              }
+            }
+          }
+        }
+      }
+    } else if (current && this.resultView === "deformed") {
       for (const member of this.result.members) {
         const samples = member.samples;
-        if (this.resultView === "deformed") {
-          for (let i = 1; i < samples.length; i++) {
-            const a = samples[i - 1],
-              b = samples[i];
-            const p = this.projectPoint(
-                a.position.map((v, j) => v + a.displacement[j] * this.scale),
-              ),
-              q = this.projectPoint(
-                b.position.map((v, j) => v + b.displacement[j] * this.scale),
-              );
-            p[2] = q[2] = 0.2;
-            line(p, q, 2.5, blue);
-          }
-        } else {
-          const maxMoment = Math.max(
-            ...this.result.members.flatMap((m) =>
-              m.samples.map((s) => Math.abs(s.actions[4])),
-            ),
-            1,
+        for (let i = 1; i < samples.length; i++) {
+          const a = samples[i - 1],
+            b = samples[i];
+          const p = this.projectPoint(
+            a.position.map((v, j) => v + a.displacement[j] * this.scale),
           );
-          for (let i = 1; i < samples.length; i++) {
-            const a = this.projectPoint(samples[i - 1].position),
-              b = this.projectPoint(samples[i].position),
-              p = [
-                a[0],
-                a[1] - (samples[i - 1].actions[4] / maxMoment) * 65,
-                0.2,
-              ],
-              q = [b[0], b[1] - (samples[i].actions[4] / maxMoment) * 65, 0.2];
-            line(p, q, 2, orange);
-            if (i % 2 === 0) line(b, q, 0.6, [0.78, 0.35, 0.19, 0.4]);
-          }
+          const q = this.projectPoint(
+            b.position.map((v, j) => v + b.displacement[j] * this.scale),
+          );
+          p[2] = q[2] = 0.2;
+          line(p, q, 2.5, blue);
         }
       }
     }

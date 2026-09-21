@@ -42,3 +42,9 @@ Conventions reference: [Types of Supports and Their Characteristics, Alderlieste
 ### Canvas dimensions
 
 Member dimensions are on by default, with offset extension lines, inward arrowheads and aligned metre labels. The View ribbon's Dimensions toggle changes display only. Length values come from the revision-matched Rust axes query, not projected screen distances; edits and undo refresh them. Labels do not intercept pointer input. Up to 100-member models show all readable projected dimensions; larger models show selected members (capped at 100), and end-on/tiny projected spans below 28 px omit the annotation to avoid unreadable overlapping arrows. Dimension offsets flip inward near viewport edges. No engineering state or schema changes.
+
+### Canvas shear diagrams
+
+The View selector exposes Shear Vy and Shear Vz alongside Moment My and deformation. Plots read signed local section actions (indices 1 and 2) directly from Rust result samples. All members use one component-wide absolute peak scale; a legend reports the component, units, peak and sign colours. Diagram offsets are schematic, perpendicular to the projected start-to-end direction, with positive values on the left. Both end values and sampled extrema are annotated for small models; larger models annotate selected members. End-on members cannot form a projected diagram and are omitted. Zero-component results explicitly report all values zero.
+
+Engineering metric uses kN (kN·m for moments); SI uses N (N·m). Component choice is retained on reanalysis. Stale action/deformation plots are suppressed after model changes; action views prompt reanalysis instead of combining old forces with new geometry. The shared moment renderer now uses the same signed, member-normal plotting rules. No solver or schema changes.

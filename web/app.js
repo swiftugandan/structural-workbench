@@ -383,6 +383,7 @@ function refresh(snapshot) {
   renderNav();
   renderInspector();
   renderResults();
+  viewport.currentModelHash = modelHash;
   viewport.update(project, result, selected);
   topologyTools.refresh();
   setBusy(busy);
@@ -460,6 +461,7 @@ $("#units").onchange = () => {
   project.displayUnits = $("#units").value;
   renderResults();
   renderInspector();
+  viewport.draw();
   persist();
 };
 function renderNav() {
@@ -826,9 +828,10 @@ $("#analyse").onclick = async () => {
     });
     result = response;
     failed = false;
-    $("#display-result").value = "deformed";
-    viewport.resultView = "deformed";
-    $("#deformation-legend").hidden = false;
+    if (!["shearY", "shearZ", "moment"].includes(viewport.resultView))
+      viewport.resultView = "deformed";
+    $("#display-result").value = viewport.resultView;
+    $("#deformation-legend").hidden = viewport.resultView !== "deformed";
     message("");
     renderResults();
     renderInspector();
