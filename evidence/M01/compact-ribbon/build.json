@@ -1,18 +1,37 @@
 {
+  "taskId": "M01-UX",
+  "milestone": "M01",
   "sourceHash": "57690d7893e6bc6af6df14e83a32d249ac86d903b9ccf3f2519269c93b09b571",
-  "hashAlgorithmVersion": 1,
-  "exclusions": [
-    "evidence",
-    "delivery",
-    "dist",
-    "target",
-    "node_modules",
-    "tools/bin",
-    "docs",
-    "capabilities.json",
-    "release-manifest.json"
+  "buildHash": "2926be4e49c8ba3c3c5bd8dee635ba82b4f6ba123bc95ceef1d9148ee2c5a2c1",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-22T09:47:53.736Z",
+  "status": "PASS",
+  "testCount": 5,
+  "testIds": [
+    "locked-native-build",
+    "locked-wasm-build",
+    "wasm-bindgen",
+    "draft2020-schema-compilation",
+    "unchanged-source-snapshot"
   ],
-  "files": {
+  "command": [
+    "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+    "/Users/p.munaawa/Documents/projects/labs/prokon/tools/build.mjs"
+  ],
+  "outputFiles": {
     "app.html": "734cfb10359ad4838aafaa9eba0451f362a65c0667e52423ec288519b41a003a",
     "app.js": "b6933f0a335fe97b435272fd84961792a0c8a832354e8bca27a51bd3d247c971",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
@@ -60,7 +79,5 @@
     "topology.js": "6ee06278fcd9301a51c72ef58ba6226a4ea85df4d5b6773d4f7b31cd8f264b29",
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e",
     "workspace-ui.js": "e9e65deb32f40184b6dddfb5c334be7b4bbbc6843ebbfff788698cdad995f702"
-  },
-  "buildHash": "2926be4e49c8ba3c3c5bd8dee635ba82b4f6ba123bc95ceef1d9148ee2c5a2c1",
-  "releaseStatus": "working-preview-not-accepted"
+  }
 }

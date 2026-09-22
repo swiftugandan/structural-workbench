@@ -25,3 +25,4 @@
 {"observedAt":"2026-09-22T08:42:29.719Z","taskId":"M01-UX","event":"member-deformation","sourceRevision":"8fc64c6","evidencePath":"evidence/M01/member-deformation","status":"PASS"}
 {"observedAt":"2026-09-22T08:46:53.583Z","taskId":"M01-UX","event":"canvas-exaggeration-controls","sourceRevision":"3d06236","evidencePath":"evidence/M01/graph-scale","status":"PASS"}
 {"observedAt": "2026-09-22T09:41:45.496972+00:00", "taskId": "M01-UX", "event": "workspace-layout-controls", "evidencePath": "evidence/M01/layout-panels", "status": "PASS", "buildHash": "13ffca2513c997b6cfae5a986eff97f826c0c77568a6743f15dbc2c02632b7aa"}
+{"observedAt": "2026-09-22T09:49:00.773282+00:00", "taskId": "M01-UX", "event": "compact-office-style-ribbon", "status": "PASS", "evidencePath": "evidence/M01/compact-ribbon", "buildHash": "2926be4e49c8ba3c3c5bd8dee635ba82b4f6ba123bc95ceef1d9148ee2c5a2c1"}

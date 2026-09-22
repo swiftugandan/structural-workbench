@@ -851,6 +851,14 @@
         "sourceHash": "20f83cf8315cba0b7a6ac9ed58d03b3338ee91fbba535aa6a291de05ac966bbf",
         "buildHash": "13ffca2513c997b6cfae5a986eff97f826c0c77568a6743f15dbc2c02632b7aa",
         "testCount": 4
+      },
+      "compactRibbon": {
+        "status": "PASS",
+        "scope": "Removed category row; Office-style compact primary and stacked command buttons",
+        "evidencePath": "evidence/M01/compact-ribbon",
+        "buildHash": "2926be4e49c8ba3c3c5bd8dee635ba82b4f6ba123bc95ceef1d9148ee2c5a2c1",
+        "sourceHash": "57690d7893e6bc6af6df14e83a32d249ac86d903b9ccf3f2519269c93b09b571",
+        "testCount": 4
       }
     },
     "M01-INPUTS": {

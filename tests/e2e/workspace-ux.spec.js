@@ -6,10 +6,8 @@ test("UX ribbon, keyboard context menu and property drafts preserve model state"
   await page.goto("/");
   await page.locator("#new-project").click();
   await expect(page.locator("#member-form")).toBeVisible();
-  await page.getByRole("tab", { name: "Modify", exact: true }).click();
   await expect(page.locator("#cad-tools")).toBeVisible();
-  await expect(page.locator("#draw-toggle")).toBeHidden();
-  await page.getByRole("tab", { name: "All tools" }).click();
+  await expect(page.locator("#draw-toggle")).toBeVisible();
   await page.locator("#inertia-y").fill("0.00003");
   await page.locator("[data-member]").first().click();
   await expect(page.locator("#inertia-y")).toHaveValue("0.00003");

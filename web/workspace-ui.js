@@ -44,8 +44,7 @@ export function workspaceUI({
   const ribbon = document.createElement("section");
   ribbon.className = "command-ribbon";
   ribbon.setAttribute("aria-label", "Modelling commands");
-  ribbon.innerHTML =
-    '<div class="ribbon-tabs" role="tablist" aria-label="Command categories"></div><div class="ribbon-content" id="ribbon-content" role="tabpanel" aria-labelledby="ribbon-All"></div>';
+  ribbon.innerHTML = '<div class="ribbon-content" id="ribbon-content"></div>';
   $(".projectbar").after(ribbon);
   const groups = [
     [
@@ -90,6 +89,8 @@ export function workspaceUI({
       const b = $("#" + id);
       b.innerHTML = icon(img) + `<span>${text}</span>`;
       b.title = text;
+      if (["draw-toggle", "select-tool"].includes(id))
+        b.classList.add("ribbon-primary");
       row.append(b);
     }
     group.append(row);
@@ -109,42 +110,6 @@ export function workspaceUI({
     icon("settings") +
     '<span>Actions</span></button></div><span class="ribbon-caption">Inspect</span>';
   $("#ribbon-content").append(resultGroup);
-  function category(name) {
-    document.querySelectorAll("[data-ribbon]").forEach((b) => {
-      const active = b.dataset.ribbon === name;
-      b.setAttribute("aria-selected", String(active));
-      b.tabIndex = active ? 0 : -1;
-    });
-    $("#ribbon-content").setAttribute("aria-labelledby", "ribbon-" + name);
-    document
-      .querySelectorAll(".ribbon-group")
-      .forEach(
-        (g) => (g.hidden = name !== "All" && g.dataset.category !== name),
-      );
-  }
-  for (const name of ["All", "Model", "Modify", "View", "Results"]) {
-    const b = document.createElement("button");
-    b.id = "ribbon-" + name;
-    b.dataset.ribbon = name;
-    b.textContent = name === "All" ? "All tools" : name;
-    b.setAttribute("role", "tab");
-    b.setAttribute("aria-controls", "ribbon-content");
-    b.onclick = () => category(name);
-    b.onkeydown = (e) => {
-      const tabs = [...document.querySelectorAll("[data-ribbon]")];
-      let i = tabs.indexOf(b);
-      if (e.key === "ArrowRight") i = (i + 1) % tabs.length;
-      else if (e.key === "ArrowLeft") i = (i + tabs.length - 1) % tabs.length;
-      else if (e.key === "Home") i = 0;
-      else if (e.key === "End") i = tabs.length - 1;
-      else return;
-      e.preventDefault();
-      tabs[i].click();
-      tabs[i].focus();
-    };
-    $(".ribbon-tabs").append(b);
-  }
-  category("All");
   for (const [id, img, text] of [
     ["undo", "undo", "Undo"],
     ["redo", "redo", "Redo"],
@@ -463,5 +428,5 @@ export function workspaceUI({
     if (!menu.hidden && !menu.contains(e.target)) close(false);
   });
   window.addEventListener("resize", () => close(false));
-  return { panel, category };
+  return { panel };
 }
