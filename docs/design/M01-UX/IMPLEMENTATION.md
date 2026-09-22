@@ -52,3 +52,7 @@ Engineering metric uses kN (kN·m for moments); SI uses N (N·m). Component choi
 ### 3D orientation and Y visibility
 
 Replaced the fixed X/Z corner graphic with a camera-derived global X/Y/Z compass (X red, Y green, Z blue), including explicit end-on axis markers. The initial 3D camera uses an isometric angle with balanced X/Y projection. A bounded XY reference lattice at the model's lowest Z provides depth cues; its elevation is labelled, and X/Y reference directions are coloured. It is a visual reference, not a new modelling constraint. Existing 2D snap grids remain unchanged. The compass and grid do not intercept pointer events or mutate geometry.
+
+### Physical member planes for action diagrams
+
+Supersedes the screen-perpendicular schematic offset: My and Vz are offset along the Rust-provided local z axis, Vy along local y, before camera projection. Positive action is plotted toward the positive local axis; the legend states the plane and sign convention. One model-space amplitude (18% of model extent at peak) is shared across members and stays fixed while orbiting. Foreshortening, depth and edge-on collapse follow the camera naturally. Missing or stale local frames suppress plots until the current geometry query arrives. No engineering values or solver conventions change.

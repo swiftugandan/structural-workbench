@@ -786,15 +786,22 @@ export class Viewport {
           : `${component.title} · Analyse to display`;
       else {
         const peak = diagramPeak(this.result, component);
-        actionLegend.textContent = `${component.title} · Local section actions · ${peak ? "Auto scale: peak " + actionText(peak, component, engineering, false) : "All values zero"} · + blue / − orange · Schematic: + left of start→end`;
+        actionLegend.textContent = `${component.title} · Local section actions · ${peak ? "Auto scale: peak " + actionText(peak, component, engineering, false) : "All values zero"} · + blue / − orange · Local ${component.plane} plane · + toward local ${component.offset} · Edge-on plots may overlap the member`;
         actionLegend.dataset.component = component.name;
         actionLegend.dataset.peak = String(peak);
+        const frames = new Map(
+          (this.axesProject === this.project ? this.localAxes || [] : []).map(
+            (f) => [f.id, f.axes],
+          ),
+        );
         for (const member of this.result.members) {
           const plot = actionProjection(
             member.samples,
             (p) => this.projectPoint(p),
             component,
             peak,
+            frames.get(member.id),
+            this.extent * 0.18,
           );
           if (!plot) continue;
           const values = member.samples.map((s) => s.actions[component.index]);
