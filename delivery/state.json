@@ -859,6 +859,14 @@
         "buildHash": "2926be4e49c8ba3c3c5bd8dee635ba82b4f6ba123bc95ceef1d9148ee2c5a2c1",
         "sourceHash": "57690d7893e6bc6af6df14e83a32d249ac86d903b9ccf3f2519269c93b09b571",
         "testCount": 4
+      },
+      "compactHeader": {
+        "status": "PASS",
+        "scope": "Restored original ribbon buttons; combined project header with original Home/Help handlers",
+        "evidencePath": "evidence/M01/compact-header",
+        "buildHash": "0f1e1624ac34bb1c785f50487eb7c6722d78705e720dd2f8df7edd200c6957fe",
+        "sourceHash": "bdd079ace8f5fd6e5b1ce397e5f517316caa7d2ad1e136b93ee9dfc4163c1a6f",
+        "testCount": 10
       }
     },
     "M01-INPUTS": {

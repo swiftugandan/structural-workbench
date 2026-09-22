@@ -1413,66 +1413,32 @@ textarea,
 
 .ribbon-content {
   display: flex;
-  align-items: stretch;
-  gap: 10px;
+  gap: 16px;
   overflow-x: auto;
-  padding: 6px 12px 4px;
+  padding: 9px 18px;
+  min-height: 91px;
 }
 .ribbon-group {
   flex: none;
-  display: flex;
-  flex-direction: column;
   border-right: 1px solid var(--border);
-  padding-right: 10px;
+  padding-right: 16px;
 }
 .ribbon-group:last-child {
   border: 0;
-  padding-right: 0;
 }
 .ribbon-commands {
-  display: grid;
-  grid-template-rows: repeat(2, 28px);
-  grid-auto-flow: column;
-  grid-auto-columns: max-content;
-  gap: 2px 4px;
+  display: flex;
+  gap: 4px;
 }
 .ribbon-commands button {
-  min-width: 0;
-  min-height: 0;
+  min-width: 60px;
   border: 1px solid transparent;
-  border-radius: 3px;
   display: flex;
-  flex-direction: row;
-  gap: 6px;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 3px 6px;
-  font-size: 14px;
-  line-height: 18px;
-  white-space: nowrap;
-}
-.ribbon-commands button svg {
-  width: 16px;
-  height: 16px;
-  flex: none;
-}
-.ribbon-commands button.ribbon-primary {
-  grid-row: span 2;
-  min-width: 62px;
   flex-direction: column;
-  justify-content: center;
-  gap: 3px;
-  padding: 4px 6px;
-  white-space: nowrap;
-  text-align: center;
-}
-.ribbon-commands button.ribbon-primary svg {
-  width: 26px;
-  height: 26px;
-}
-.ribbon-commands button:hover {
-  background: #f0f4fa;
-  border-color: #d4deec;
+  gap: 5px;
+  align-items: center;
+  padding: 6px 9px;
+  font-size: 14px;
 }
 .ribbon-commands [aria-pressed="true"] {
   background: #eaf1ff;
@@ -1483,14 +1449,8 @@ textarea,
   display: block;
   text-align: center;
   font-size: 12px;
-  line-height: 16px;
   color: #53667c;
-  margin-top: 3px;
-}
-@media (pointer: coarse) {
-  .ribbon-commands {
-    grid-template-rows: repeat(2, 44px);
-  }
+  margin-top: 5px;
 }
 .work-grid {
   height: calc(100dvh - 285px);
@@ -2211,4 +2171,72 @@ textarea,
     height: auto;
     flex-shrink: 0;
   }
+}
+
+/* One compact project header while modelling; keep the landing-page identity. */
+body:has(#workspace:not([hidden])) > .appbar {
+  display: none;
+}
+#workspace:not([hidden]) {
+  height: 100dvh;
+}
+.projectbar {
+  min-height: 48px;
+  height: auto;
+  padding: 5px 12px;
+  gap: 12px;
+}
+.projectbar .project-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.projectbar .project-identity #project-name {
+  width: clamp(130px, 18vw, 250px);
+}
+.workspace-home {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-color: transparent;
+  flex: none;
+}
+.workspace-home svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.projectbar .project-actions {
+  margin-left: auto;
+  align-items: center;
+}
+@media (max-width: 1100px) {
+  .projectbar {
+    flex-wrap: wrap;
+  }
+  .projectbar .project-actions {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 900px) {
+  #workspace:not([hidden]) {
+    height: auto;
+  }
+  .projectbar .project-identity {
+    flex: 1;
+  }
+  .projectbar .project-actions {
+    margin-left: 0;
+  }
+}
+
+.brand.workspace-home {
+  color: var(--navy);
+}
+.brand.workspace-home span {
+  display: none;
 }

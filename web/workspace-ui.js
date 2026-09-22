@@ -41,6 +41,33 @@ export function workspaceUI({
   message,
 }) {
   $(".project-symbol").innerHTML = icon("frame");
+  const projectbar = $(".projectbar");
+  projectbar.firstElementChild.classList.add("project-identity");
+  const home = $("#home"),
+    help = $("#help");
+  const homePosition = document.createComment("Home position");
+  const helpPosition = document.createComment("Help position");
+  home.before(homePosition);
+  help.before(helpPosition);
+  home.title = "Projects home";
+  function syncHeader() {
+    const modelling = !$("#workspace").hidden;
+    home.classList.toggle("workspace-home", modelling);
+    help.classList.toggle("dark-button", !modelling);
+    if (modelling) {
+      projectbar.prepend(home);
+      $(".project-actions").append(help);
+    } else {
+      homePosition.after(home);
+      helpPosition.after(help);
+    }
+  }
+  const headerObserver = new MutationObserver(syncHeader);
+  headerObserver.observe($("#workspace"), {
+    attributes: true,
+    attributeFilter: ["hidden"],
+  });
+  syncHeader();
   const ribbon = document.createElement("section");
   ribbon.className = "command-ribbon";
   ribbon.setAttribute("aria-label", "Modelling commands");
@@ -89,8 +116,6 @@ export function workspaceUI({
       const b = $("#" + id);
       b.innerHTML = icon(img) + `<span>${text}</span>`;
       b.title = text;
-      if (["draw-toggle", "select-tool"].includes(id))
-        b.classList.add("ribbon-primary");
       row.append(b);
     }
     group.append(row);
