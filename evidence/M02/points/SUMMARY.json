@@ -1,0 +1,40 @@
+{
+  "task": "M02-P",
+  "useCase": "Interior point loads via analytical split with force-jump discontinuities",
+  "status": "ACCEPTED",
+  "acceptanceMeaning": "Bounded local point-load slice only; parent M02 unaccepted pending M01 platform/CUA.",
+  "sourceFilesSha256": "8ea402fcf88e060a8daf95455175e266d8c8e4ef6fdd20d6d1ddf398a4a24640",
+  "gitHead": "8dfe6344c46ee462c2673f177f03c0fd56175345",
+  "buildHash": "c0e60343c03494d14427024352a5f9f62d5644fa6f9219c224717a441432b953",
+  "commands": [
+    {
+      "cmd": "cargo test -p workbench-assembly -p workbench-model -p workbench-wasm-api --locked",
+      "result": "PASS"
+    },
+    {
+      "cmd": "npm run build",
+      "result": "PASS",
+      "buildHash": "c0e60343c03494d14427024352a5f9f62d5644fa6f9219c224717a441432b953"
+    },
+    {
+      "cmd": "npm run test:wasm",
+      "result": "PASS",
+      "checks": 33
+    },
+    {
+      "cmd": "./target/release/workbench-cli fixtures/models/P01.json LC1",
+      "result": "PASS"
+    }
+  ],
+  "fixture": "fixtures/models/P01.json",
+  "checks": [
+    "midspan uz = -P L^3/(48 EI) = -0.005625",
+    "midspan My left/right = P L/4 = 30000",
+    "Vz jump = 20000 across station 0.5",
+    "reactions = P/2",
+    "result members/nodes are physical; modelHash matches original project"
+  ],
+  "evidencePaths": [
+    "evidence/M02/points"
+  ]
+}

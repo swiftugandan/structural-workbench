@@ -53,9 +53,23 @@ export const actionComponents = {
 };
 export function diagramPeak(result, component) {
   let max = 0;
-  for (const member of result.members)
-    for (const sample of member.samples)
-      max = Math.max(max, Math.abs(sample.actions[component.index]));
+  const name = component.name;
+  for (const member of result.members) {
+    const keys = member.keyStations;
+    if (keys?.length) {
+      for (const s of keys) {
+        if (
+          s.kind === "end" ||
+          s.kind === "discontinuity" ||
+          (s.kind === "extremum" && s.components?.includes(name))
+        )
+          max = Math.max(max, Math.abs(s.actions[component.index]));
+      }
+    } else {
+      for (const sample of member.samples)
+        max = Math.max(max, Math.abs(sample.actions[component.index]));
+    }
+  }
   return max;
 }
 export function actionText(
@@ -75,6 +89,7 @@ export function actionProjection(
   peak,
   axes,
   amplitude,
+  keyStations,
 ) {
   if (!samples.length || (!component.scalar && !axes) || !(amplitude >= 0))
     return null;
@@ -87,23 +102,62 @@ export function actionProjection(
     const offset = peak ? (s.actions[component.index] / peak) * amplitude : 0;
     return projectPoint(s.position.map((v, j) => v + direction[j] * offset));
   });
-  let lo = 0,
-    hi = 0;
-  samples.forEach((s, i) => {
-    if (s.actions[component.index] < samples[lo].actions[component.index])
-      lo = i;
-    if (s.actions[component.index] > samples[hi].actions[component.index])
-      hi = i;
-  });
-  const marks =
-    Math.abs(
-      samples[hi].actions[component.index] -
-        samples[lo].actions[component.index],
-    ) <=
-    peak * 1e-10
-      ? [Math.floor(samples.length / 2)]
-      : [...new Set([0, samples.length - 1, lo, hi])];
-  return { base, curve, marks };
+  const nearestSample = (station) => {
+    let best = 0,
+      bestD = Infinity;
+    samples.forEach((s, i) => {
+      const d = Math.abs(s.station - station);
+      if (d < bestD) {
+        bestD = d;
+        best = i;
+      }
+    });
+    return best;
+  };
+  const name = component.name;
+  const keyed = (keyStations || []).filter(
+    (k) =>
+      k.kind === "end" ||
+      k.kind === "discontinuity" ||
+      (k.kind === "extremum" && k.components?.includes(name)),
+  );
+  let marks;
+  let markValues;
+  if (keyed.length) {
+    let lo = keyed[0],
+      hi = keyed[0];
+    for (const k of keyed) {
+      if (k.actions[component.index] < lo.actions[component.index]) lo = k;
+      if (k.actions[component.index] > hi.actions[component.index]) hi = k;
+    }
+    const ends = keyed.filter((k) => k.kind === "end");
+    const pick =
+      Math.abs(hi.actions[component.index] - lo.actions[component.index]) <=
+      peak * 1e-10
+        ? [keyed.find((k) => k.kind === "extremum") || keyed[Math.floor(keyed.length / 2)]]
+        : [...new Set([lo, hi, ...ends])];
+    marks = pick.map((k) => nearestSample(k.station));
+    markValues = pick.map((k) => k.actions[component.index]);
+  } else {
+    let lo = 0,
+      hi = 0;
+    samples.forEach((s, i) => {
+      if (s.actions[component.index] < samples[lo].actions[component.index])
+        lo = i;
+      if (s.actions[component.index] > samples[hi].actions[component.index])
+        hi = i;
+    });
+    marks =
+      Math.abs(
+        samples[hi].actions[component.index] -
+          samples[lo].actions[component.index],
+      ) <=
+      peak * 1e-10
+        ? [Math.floor(samples.length / 2)]
+        : [...new Set([0, samples.length - 1, lo, hi])];
+    markValues = marks.map((i) => samples[i].actions[component.index]);
+  }
+  return { base, curve, marks, markValues };
 }
 
 // Displacements are global vectors recovered by Rust; retain all components

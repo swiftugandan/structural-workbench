@@ -55,16 +55,18 @@ working preview does not equal the complete 24-milestone project.
 | --- | --- | --- |
 | M00 | Cantilever user journey, sparse WASM/native kernel, units, selection, save/reopen/report, instability/no-adapter paths | Complete required platform evidence and release-grade acceptance audit |
 | M01 | Portal authoring, three working planes, snapping/feedback, camera/selection gestures, move/copy/delete/measure, numeric fields, local axes, topology previews, invariance and portal oracle, autosave/history, CAD capacity/startup tests, evidence verifier | Current computer-use verification, Windows/Linux real-GPU performance and platform acceptance |
-| M02 | Uniform loads, self weight, prescribed motion, cases/combinations, sampled diagrams | Releases, analytical splitting for interior point actions, exact extrema/discontinuities and envelope provenance |
+| M02 | Uniform loads, self weight, prescribed motion, cases/combinations, sampled diagrams, My/Mz releases, exact My/Mz extrema key stations, interior point loads with analytical split and force-jump discontinuities, multi-case envelopes with governing provenance, expanded INVALID load/release/combination corpus (N08–N22) | Parent platform/CUA acceptance |
 | M03 | 3D orbit, worker termination cancellation, spatial oracle | Separate model/analysis Workers, physical/analytical hierarchy, full 30,000-DOF capacity/performance |
 | M04 | IndexedDB snapshots, single-writer lock, exports, escaped reports, stale controls | Offline cache/update lifecycle, historical-revision recovery UI, migrations and full crash/recovery matrix |
 | M05 | Editable synthetic sections and examples | Parametric templates, section calculator, project variants and side-by-side comparison |
 | M06 | Unexposed elastic stress helper | Verified mechanics UI, accumulated regression, performance and clean release gates |
 | M07–M23 | No implemented product modules | Material-code packages, advanced analysis/design/exchange/automation and finite parity inventory |
 
-End releases and member-interior point actions are rejected instead of approximated.
-The conservative factor-memory guard can reject models below the specification's
-maximum entity counts; those maximums are not advertised as validated capacity.
+My/Mz end releases use static condensation. Interior point actions expand
+deterministically at analyse time (physical model hash preserved). Axial/shear/
+torsion releases remain rejected. The conservative factor-memory guard can reject
+models below the specification's maximum entity counts; those maximums are not
+advertised as validated capacity.
 The report/current-result controls require applied model edits and a successful solve.
 Reports exclude any code-compliance or professional-approval claim.
 

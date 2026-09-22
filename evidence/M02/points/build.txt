@@ -1,0 +1,17 @@
+> node tools/build.mjs
+Built static app c0e60343c03494d14427024352a5f9f62d5644fa6f9219c224717a441432b953
+   Compiling workbench-model v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/model)
+   Compiling workbench-results v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/results)
+   Compiling workbench-frame v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/frame)
+   Compiling workbench-solver v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/solver)
+   Compiling workbench-exchange v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/exchange)
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
+    Finished `release` profile [optimized] target(s) in 24.65s
+   Compiling workbench-model v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/model)
+   Compiling workbench-results v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/results)
+   Compiling workbench-solver v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/solver)
+   Compiling workbench-frame v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/frame)
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
+   Compiling workbench-cli v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/cli)
+    Finished `release` profile [optimized] target(s) in 30.22s

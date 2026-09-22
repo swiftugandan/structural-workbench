@@ -1,0 +1,28 @@
+{
+  "task": "M02-E",
+  "useCase": "Exact section extrema key stations",
+  "sourceRevision": "8dfe6344c46ee462c2673f177f03c0fd56175345",
+  "sourceHash": "33a62f82091585af729dd02c9fe27271a4b129faff29ebd8c75c2693412ed61d",
+  "buildHash": "14e26dcc55df9ee84da2c1c827442ccd4d39f9f1e78f2cf02a57b9b80d75a882",
+  "commands": [
+    {
+      "cmd": "cargo test -p workbench-assembly --locked",
+      "status": "PASS",
+      "tests": 6
+    },
+    {
+      "cmd": "node --test tests/action-diagrams.test.mjs",
+      "status": "PASS",
+      "tests": 7
+    },
+    {
+      "cmd": "npm run test:wasm",
+      "status": "PASS",
+      "checks": 33
+    }
+  ],
+  "notes": "MemberResult.keyStations emit ends + My/Mz extrema where V=0. Discontinuity stations deferred to M02-P. Parent M01/M02 acceptance not claimed.",
+  "limitations": [
+    "Discontinuities for concentrated loads deferred to M02-P"
+  ]
+}

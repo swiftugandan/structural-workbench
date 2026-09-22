@@ -1,0 +1,36 @@
+{
+  "task": "M02-V",
+  "useCase": "Multi-case envelopes with per-scalar governing provenance",
+  "status": "ACCEPTED",
+  "acceptanceMeaning": "Bounded local envelope slice only; parent M02 unaccepted pending M01 platform/CUA.",
+  "sourceFilesSha256": "fb2a21ccefbf0443988aa5493174b115fe5b8fa18502ba27115c078b435cbabe",
+  "gitHead": "8dfe6344c46ee462c2673f177f03c0fd56175345",
+  "buildHash": "12447177bf35fae63f0207895635199bef5239520b3efeb961b478680ac8a8f3",
+  "commands": [
+    {
+      "cmd": "cargo test -p workbench-assembly -p workbench-wasm-api --locked",
+      "result": "PASS"
+    },
+    {
+      "cmd": "npm run build",
+      "result": "PASS",
+      "buildHash": "12447177bf35fae63f0207895635199bef5239520b3efeb961b478680ac8a8f3"
+    },
+    {
+      "cmd": "npm run test:wasm",
+      "result": "PASS",
+      "checks": 33
+    }
+  ],
+  "fixture": "fixtures/models/V01.json",
+  "checks": [
+    "envelope over LC1+LC2+C_uls",
+    "governing My min cites C_uls at station 0.5 with value -99000",
+    "governing uz min cites C_uls with value -0.02109375",
+    "support fz max cites C_uls = 51000",
+    "diagnostic ENVELOPE_NOT_SIMULTANEOUS always present"
+  ],
+  "evidencePaths": [
+    "evidence/M02/envelopes"
+  ]
+}

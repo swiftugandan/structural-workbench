@@ -216,8 +216,14 @@ export function entityFields(key, entity, project, { compact = false } = {}) {
             )
             .join("") +
           help(
-            "Ends transfer bending moments. Hinged member-end releases are not yet supported by the solver. A pinned support is a separate setting.",
-          ),
+            "Optional My/Mz end releases hinge those bending moments (static condensation). A pinned support is a separate restraint setting. Axial, shear and torsion releases are not supported.",
+          ) +
+          `<fieldset class="release-fields"><legend>End releases · bending</legend>
+            <label><input type="checkbox" name="releaseStart-my" ${entity.releaseStart?.my ? "checked" : ""}> Start My</label>
+            <label><input type="checkbox" name="releaseStart-mz" ${entity.releaseStart?.mz ? "checked" : ""}> Start Mz</label>
+            <label><input type="checkbox" name="releaseEnd-my" ${entity.releaseEnd?.my ? "checked" : ""}> End My</label>
+            <label><input type="checkbox" name="releaseEnd-mz" ${entity.releaseEnd?.mz ? "checked" : ""}> End Mz</label>
+          </fieldset>`,
       );
   if (key === "materials")
     content =
@@ -347,10 +353,8 @@ export function entityFields(key, entity, project, { compact = false } = {}) {
         ? select("type", "How does the load act?", entity.type, [
             ["nodal", "At a point · force or moment"],
             ["uniform", "Along a member · evenly distributed"],
+            ["point", "Along a member · concentrated at a station"],
             ["selfWeight", "Self-weight · calculated from density"],
-            ...(entity.type === "point"
-              ? [["point", "Interior point load · unsupported"]]
-              : []),
           ])
         : "");
     if (entity.node) content += ref("node", "Loaded point", "nodes");
@@ -413,7 +417,7 @@ export function entityFields(key, entity, project, { compact = false } = {}) {
           entity.station,
         ) +
         help(
-          "Interior point actions are not supported. Split the member and apply a load at the new point.",
+          "Use a value strictly between 0 and 1. End actions belong on a nodal load at the member end point.",
         );
     content += help(
       "Global −Z acts downward: enter <b>−10</b> in Force along Z for 10 kN downward. For a local load, signs follow the member’s local axes, not the building axes.",
@@ -462,16 +466,14 @@ export function readEntityFields(form, key, entity, project) {
       : raw;
   };
   for (const k of Object.keys(entity)) {
-    if (
-      [
-        "id",
-        "releaseStart",
-        "releaseEnd",
-        "parentMemberId",
-        "stationRange",
-      ].includes(k)
-    )
+    if (["id", "parentMemberId", "stationRange"].includes(k)) continue;
+    if (k === "releaseStart" || k === "releaseEnd") {
+      value[k] = {
+        my: data.has(`${k}-my`),
+        mz: data.has(`${k}-mz`),
+      };
       continue;
+    }
     if (k === "terms") {
       value.terms = project.loadCases
         .filter((c) => data.has(`include-${c.id}`))

@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M01",
-  "activeTask": "M01-UX",
+  "activeMilestone": "M02",
+  "activeTask": "M02-REVIEW-FIX",
   "acceptedMilestones": [],
   "tasks": {
     "M00-A": {
@@ -980,6 +980,215 @@
       "buildHash": "fbdf46a393d490ce5ee5d674ba29dad74447323308bb239a248938eb5b57d9d9",
       "attempts": 1,
       "nextAction": "Refresh preview and open Results table > Member forces. Parent platform gates unchanged."
+    },
+    "M02-E": {
+      "id": "M02-E",
+      "useCase": "Exact section extrema and discontinuities for recovered member actions",
+      "dependencies": [],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/results",
+        "crates/assembly",
+        "docs/formulations/frame.md",
+        "web/force-inspector.js",
+        "web/render/action-diagrams.js",
+        "tests/action-diagrams.test.mjs"
+      ],
+      "acceptanceIds": [
+        "M02-extrema-key-stations"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-assembly --locked",
+        "node --test tests/action-diagrams.test.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "native-assembly",
+          "status": "PASS",
+          "testCount": 7
+        },
+        {
+          "check": "diagram-unit",
+          "status": "PASS",
+          "testCount": 7
+        },
+        {
+          "check": "wasm-regression",
+          "status": "PASS",
+          "testCount": 33
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M02/extrema"
+      ],
+      "attempts": [],
+      "nextAction": "Bounded E slice accepted; see evidence/M02/extrema",
+      "acceptanceMeaning": "Bounded local extrema key-stations slice only; parent M02 unaccepted."
+    },
+    "M02-R": {
+      "id": "M02-R",
+      "useCase": "My/Mz end release condensation under UDL",
+      "dependencies": [
+        "M02-E"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/frame",
+        "crates/assembly",
+        "crates/model",
+        "fixtures/models/R01.json",
+        "web/entity-forms.js"
+      ],
+      "acceptanceIds": [
+        "M02-release-condensation-udl"
+      ],
+      "evidencePaths": [
+        "evidence/M02/releases"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS"
+        },
+        {
+          "check": "wasm-regression",
+          "status": "PASS",
+          "testCount": 33
+        }
+      ],
+      "nextAction": "Bounded R slice accepted; see evidence/M02/releases",
+      "acceptanceMeaning": "Bounded local My/Mz release condensation slice only; parent M02 unaccepted."
+    },
+    "M02-P": {
+      "id": "M02-P",
+      "useCase": "Interior point loads via analytical split with force-jump discontinuities",
+      "dependencies": [
+        "M02-E",
+        "M02-R"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/assembly/src/expand.rs",
+        "crates/assembly/src/lib.rs",
+        "crates/results",
+        "crates/model",
+        "fixtures/models/P01.json",
+        "web/entity-forms.js",
+        "web/app.js",
+        "web/model-templates.js",
+        "docs/formulations/frame.md"
+      ],
+      "acceptanceIds": [
+        "M02-point-analytical-split"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-assembly --locked",
+        "npm run build",
+        "npm run test:wasm"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS"
+        },
+        {
+          "check": "wasm-regression",
+          "status": "PASS",
+          "testCount": 33
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M02/points"
+      ],
+      "attempts": [],
+      "nextAction": "Bounded P slice accepted; see evidence/M02/points",
+      "acceptanceMeaning": "Bounded local point-load slice only; parent M02 unaccepted."
+    },
+    "M02-V": {
+      "id": "M02-V",
+      "useCase": "Multi-case envelopes with per-scalar governing provenance",
+      "dependencies": [
+        "M02-E",
+        "M02-R",
+        "M02-P"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/assembly/src/envelope.rs",
+        "crates/results",
+        "crates/wasm-api",
+        "fixtures/models/V01.json",
+        "web/app.js",
+        "web/force-inspector.js",
+        "web/reports/report.js",
+        "docs/formulations/frame.md"
+      ],
+      "acceptanceIds": [
+        "M02-envelope-provenance"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-assembly --locked",
+        "npm run build",
+        "npm run test:wasm"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS"
+        },
+        {
+          "check": "wasm-regression",
+          "status": "PASS",
+          "testCount": 33
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M02/envelopes"
+      ],
+      "attempts": [],
+      "nextAction": "Bounded V slice accepted; see evidence/M02/envelopes",
+      "acceptanceMeaning": "Bounded local envelope slice only; parent M02 unaccepted."
+    },
+    "M02-INVALID": {
+      "id": "M02-INVALID",
+      "useCase": "Expanded INVALID load/release/combination negative corpus",
+      "dependencies": [
+        "M02-P",
+        "M02-R",
+        "M02-V"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "fixtures/negative-cases.json",
+        "crates/model",
+        "crates/assembly/tests/analytical.rs",
+        "fixtures/README.md"
+      ],
+      "acceptanceIds": [
+        "M02-invalid-load-release-corpus"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-model -p workbench-assembly --locked",
+        "npm run build",
+        "npm run test:wasm"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS"
+        },
+        {
+          "check": "wasm-regression",
+          "status": "PASS",
+          "testCount": 33
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M02/invalid"
+      ],
+      "attempts": [],
+      "nextAction": "Bounded INVALID slice accepted; see evidence/M02/invalid",
+      "acceptanceMeaning": "Bounded negative-path slice only; parent M02 unaccepted."
     }
   },
   "blockers": [
@@ -1015,7 +1224,7 @@
   ],
   "lastVerifiedSourceRevision": "a9ee71e72ea3c55752dde8c35af1e0d194591a99",
   "lastVerifiedBuildHash": "640e141ed0a81f2c5ca39aed22aeee89870c7a4ea98ff7fe4b2676f498c26020",
-  "nextAction": "Complete live visual review of 3D orientation and modelling when browser policy verification is available; refresh full required evidence before milestone acceptance.",
+  "nextAction": "M02 E/R/P/V/INVALID review fixes applied; parent M01/M02 gates remain blocked.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195"
 }

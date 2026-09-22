@@ -195,6 +195,15 @@ export const loadTemplates = [
     values: [0, 0, -10000, 0, 0, 0],
   },
   {
+    key: "memberPoint",
+    title: "Interior point load",
+    description: "10 kN downward at mid-member",
+    type: "point",
+    axes: "global",
+    station: 0.5,
+    values: [0, 0, -10000, 0, 0, 0],
+  },
+  {
     key: "uniform",
     title: "Uniform load",
     description: "1 kN/m downward along a member",
@@ -272,7 +281,9 @@ function loadDiagram(key, mini = false) {
               .join("") +
             caption("+Z · upward")
           : '<path d="M30 83h120" stroke-width="4"/>' +
-            (key === "point" ? down(90) : [45, 90, 135].map(down).join("")) +
+            (key === "point" || key === "memberPoint"
+              ? down(90)
+              : [45, 90, 135].map(down).join("")) +
             caption(
               key === "selfWeight" ? "ρ × area × gravity" : "−Z · downward",
             );
@@ -402,6 +413,13 @@ export function bindTemplates(form, key, entity, project, onApply) {
         member: data.get("member") || project.members[0]?.id,
         axes: "global",
         forcePerLength: [...t.forcePerLength],
+      });
+    if (t.type === "point")
+      Object.assign(next, {
+        member: data.get("member") || project.members[0]?.id,
+        axes: t.axes || "global",
+        station: t.station ?? 0.5,
+        values: [...t.values],
       });
     if (t.type === "selfWeight")
       Object.assign(next, {

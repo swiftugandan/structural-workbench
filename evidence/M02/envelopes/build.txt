@@ -1,0 +1,8 @@
+> node tools/build.mjs
+Built static app 12447177bf35fae63f0207895635199bef5239520b3efeb961b478680ac8a8f3
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
+    Finished `release` profile [optimized] target(s) in 19.83s
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
+   Compiling workbench-cli v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/cli)
+    Finished `release` profile [optimized] target(s) in 25.85s

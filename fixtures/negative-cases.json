@@ -41,7 +41,8 @@
       "name": "free_cantilever",
       "expectedDiagnostic": "UNSTABLE_MODEL",
       "mutation": "Remove s1",
-      "expectedMutationEffect": "none"
+      "expectedMutationEffect": "none",
+      "phase": "analyse"
     },
     {
       "id": "N07",
@@ -52,7 +53,7 @@
     },
     {
       "id": "N08",
-      "name": "point_station",
+      "name": "point_station_out_of_range",
       "expectedDiagnostic": "INVALID_LOAD",
       "mutation": "Add a point load at station 1.1",
       "expectedMutationEffect": "none"
@@ -76,6 +77,91 @@
       "name": "future_schema",
       "expectedDiagnostic": "UNSUPPORTED_SCHEMA",
       "mutation": "Set schemaVersion to 9.0.0",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N12",
+      "name": "point_station_at_start",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Add a point load at station 0",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N13",
+      "name": "point_station_at_end",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Add a point load at station 1",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N14",
+      "name": "point_missing_member",
+      "expectedDiagnostic": "DANGLING_REFERENCE",
+      "mutation": "Add a point load on member missing",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N15",
+      "name": "point_unknown_axes",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Add a point load with axes other",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N16",
+      "name": "duplicate_combination_term",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Add combination C1 with two terms for LC1",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N17",
+      "name": "empty_combination",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Add combination C1 with empty terms",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N18",
+      "name": "combination_unknown_case",
+      "expectedDiagnostic": "DANGLING_REFERENCE",
+      "mutation": "Add combination C1 referencing missing case",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N19",
+      "name": "null_point_force",
+      "expectedDiagnostic": "INVALID_SCHEMA",
+      "mutation": "Add a point load with null force component",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N20",
+      "name": "uniform_unknown_axes",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Add a uniform load with axes other",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N21",
+      "name": "shear_release_extension",
+      "expectedDiagnostic": "UNSUPPORTED_FEATURE",
+      "mutation": "Import an explicit Vy release extension on releaseStart",
+      "expectedMutationEffect": "none"
+    },
+    {
+      "id": "N22",
+      "name": "envelope_single_case",
+      "expectedDiagnostic": "INVALID_LOAD",
+      "mutation": "Request envelope with only LC1",
+      "expectedMutationEffect": "none",
+      "phase": "envelope"
+    },
+    {
+      "id": "N23",
+      "name": "axial_release_extension",
+      "expectedDiagnostic": "UNSUPPORTED_FEATURE",
+      "mutation": "Import an explicit ux release extension on releaseStart",
       "expectedMutationEffect": "none"
     }
   ]

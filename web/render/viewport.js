@@ -786,7 +786,9 @@ export class Viewport {
     delete actionLegend.dataset.component;
     delete actionLegend.dataset.peak;
     const current =
-      this.result && this.result.modelHash === this.currentModelHash;
+      this.result &&
+      this.result.analysisType !== "envelope" &&
+      this.result.modelHash === this.currentModelHash;
     if (component) {
       const engineering = this.project.displayUnits === "engineeringMetric";
       if (!current)
@@ -804,6 +806,7 @@ export class Viewport {
           ),
         );
         for (const member of this.result.members) {
+          if (!member.samples?.length) continue;
           const plot = actionProjection(
             member.samples,
             (p) => this.projectPoint(p),
@@ -811,6 +814,7 @@ export class Viewport {
             peak,
             frames.get(member.id),
             this.extent * 0.18 * this.diagramScale,
+            member.keyStations,
           );
           if (!plot) continue;
           const values = member.samples.map((s) => s.actions[component.index]);
@@ -835,8 +839,10 @@ export class Viewport {
             this.result.members.length <= 20 ||
             this.selection.has(member.id)
           ) {
-            for (const index of plot.marks) {
-              const text = `${entityLabel(this.project, member.id)} ${component.name} ${actionText(values[index], component, engineering)}`;
+            for (let mi = 0; mi < plot.marks.length; mi++) {
+              const index = plot.marks[mi];
+              const value = plot.markValues?.[mi] ?? values[index];
+              const text = `${entityLabel(this.project, member.id)} ${component.name} ${actionText(value, component, engineering)}`;
               const el = label(
                 text,
                 [plot.curve[index][0], plot.curve[index][1] - 28],
@@ -845,7 +851,7 @@ export class Viewport {
               if (el) {
                 el.dataset.resultMember = member.id;
                 el.dataset.resultComponent = component.name;
-                el.dataset.resultValue = String(values[index]);
+                el.dataset.resultValue = String(value);
                 el.title = `${text} · station ${member.samples[index].station} L`;
               }
             }
@@ -854,6 +860,7 @@ export class Viewport {
       }
     } else if (current && this.resultView === "deformed") {
       for (const member of this.result.members) {
+        if (!member.samples?.length) continue;
         const curve = deformationProjection(
           member.samples,
           (p) => this.projectPoint(p),

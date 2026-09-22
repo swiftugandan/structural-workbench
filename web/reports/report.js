@@ -16,6 +16,61 @@ export function download(name, content, type = "application/json") {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 export function csv(result, project) {
+  if (result.analysisType === "envelope") {
+    const rows = [
+      [
+        "Entity",
+        "Component",
+        "Extreme",
+        "Value",
+        "Governing",
+        "Station",
+        "Side",
+        "Node",
+        "Support",
+      ],
+    ];
+    const push = (entity, c) => {
+      for (const [kind, ex] of [
+        ["max", c.max],
+        ["min", c.min],
+      ])
+        rows.push([
+          entity,
+          c.component,
+          kind,
+          ex.value,
+          ex.caseOrCombinationId,
+          ex.station ?? "",
+          ex.side ?? "",
+          ex.nodeId ?? "",
+          ex.supportId ?? "",
+        ]);
+    };
+    for (const m of result.members || []) {
+      for (const a of m.actions || []) push(entityLabel(project, m.id), a);
+      for (const d of m.displacements || []) push(entityLabel(project, m.id), d);
+    }
+    for (const n of result.nodes || [])
+      for (const d of n.displacements || [])
+        push(entityLabel(project, n.id), d);
+    for (const s of result.supports || [])
+      for (const r of s.reactions || []) push(entityLabel(project, s.id), r);
+    return rows
+      .map((row) =>
+        row
+          .map(
+            (v) =>
+              '"' +
+              String(
+                typeof v === "string" && /^[=+@-]/.test(v) ? "'" + v : v,
+              ).replaceAll('"', '""') +
+              '"',
+          )
+          .join(","),
+      )
+      .join("\r\n");
+  }
   const rows = [
     ["Node", "ux [m]", "uy [m]", "uz [m]", "rx [rad]", "ry [rad]", "rz [rad]"],
     ...result.nodeIds.map((id, i) => [
@@ -72,6 +127,29 @@ export function csv(result, project) {
 }
 export function report(project, result) {
   const e = escape;
+  if (result.analysisType === "envelope") {
+    const ids = (result.caseOrCombinationIds || []).join(", ");
+    const rows = [];
+    const push = (entity, c) => {
+      for (const [kind, ex] of [
+        ["max", c.max],
+        ["min", c.min],
+      ])
+        rows.push(
+          `<tr><th scope="row">${e(entity)}</th><td>${e(c.component)}</td><td>${kind}</td><td>${ex.value}</td><td>${e(ex.caseOrCombinationId)}</td><td>${ex.station ?? ""}</td></tr>`,
+        );
+    };
+    for (const m of result.members || []) {
+      for (const a of m.actions || []) push(entityLabel(project, m.id), a);
+      for (const d of m.displacements || []) push(entityLabel(project, m.id), d);
+    }
+    for (const n of result.nodes || [])
+      for (const d of n.displacements || [])
+        push(entityLabel(project, n.id), d);
+    for (const s of result.supports || [])
+      for (const r of s.reactions || []) push(entityLabel(project, s.id), r);
+    return `<!doctype html><html lang="en"><meta charset="utf-8"><title>${e(project.name)} — envelope record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / ENVELOPE RECORD</p><h1>${e(project.name)}</h1><p>Independent scalar extrema · ${e(ids)}</p><small>Model SHA-256: ${e(result.modelHash)}<br>Solver source: ${e(result.solverBuildHash)}<br>Settings: ${e(result.settingsHash)}<br>Created ${e(new Date().toISOString())}</small></header><div class="banner"><strong>Not a simultaneous force set.</strong> ${e((result.diagnostics || []).map((d) => d.message).join(" "))}</div><table><thead><tr><th>Entity</th><th>Component</th><th>Extreme</th><th>Value</th><th>Governing</th><th>Station</th></tr></thead><tbody>${rows.join("")}</tbody></table><p>Design checks must use one real case or combination, not mixed envelope extrema.</p></html>`;
+  }
   const points = result.members.flatMap((m) =>
     m.samples.map((s) => s.position),
   );

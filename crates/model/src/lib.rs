@@ -175,14 +175,16 @@ impl Project {
         }
         if raw["members"].as_array().is_some_and(|members| {
             members.iter().any(|m| {
-                ["releaseStart", "releaseEnd"]
-                    .iter()
-                    .any(|k| m[*k].get("mx").is_some())
+                ["releaseStart", "releaseEnd"].iter().any(|k| {
+                    m[*k].as_object().is_some_and(|obj| {
+                        obj.keys().any(|key| key != "my" && key != "mz")
+                    })
+                })
             })
         }) {
             return Err(err(
                 "UNSUPPORTED_FEATURE",
-                "Torsional releases are unsupported",
+                "Only My/Mz end releases are supported",
             ));
         }
         let p: Self = serde_json::from_str(s).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
@@ -445,12 +447,6 @@ impl Project {
             if !yy.is_finite() || yy <= 0. || (yy - proj * proj).max(0.).sqrt() < 1e-8 * yy.sqrt() {
                 return Err(err("INVALID_LOCAL_AXIS", &m.id));
             }
-            if m.release_start.my || m.release_start.mz || m.release_end.my || m.release_end.mz {
-                return Err(err(
-                    "UNSUPPORTED_FEATURE",
-                    "End releases are not yet verified",
-                ));
-            }
         }
         let mut supported = BTreeSet::new();
         for s in &self.supports {
@@ -501,17 +497,26 @@ impl Project {
                     }
                     finite(force_per_length)?
                 }
-                Load::Point { station, .. } => {
-                    if !station.is_finite() || !(0.0..=1.0).contains(station) {
+                Load::Point {
+                    member,
+                    axes,
+                    station,
+                    values,
+                    ..
+                } => {
+                    if !self.members.iter().any(|m| m.id == *member) {
+                        return Err(err("DANGLING_REFERENCE", member));
+                    }
+                    if !["local", "global"].contains(&axes.as_str()) {
+                        return Err(err("INVALID_LOAD", "Unknown load axes"));
+                    }
+                    if !station.is_finite() || *station <= 0.0 || *station >= 1.0 {
                         return Err(err(
                             "INVALID_LOAD",
-                            "Point station must be between zero and one",
+                            "Interior point station must be strictly between 0 and 1; use a nodal load at an end",
                         ));
                     }
-                    return Err(err(
-                        "UNSUPPORTED_FEATURE",
-                        "Interior point actions require analytical splitting; use a node at the load position",
-                    ));
+                    finite(values)?
                 }
                 Load::SelfWeight {
                     members,

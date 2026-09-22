@@ -1,0 +1,48 @@
+{
+  "task": "M02-INVALID",
+  "useCase": "Expanded INVALID load/release/combination negative corpus",
+  "status": "ACCEPTED",
+  "acceptanceMeaning": "Bounded negative-path slice only; parent M02 unaccepted pending M01 platform/CUA.",
+  "sourceFilesSha256": "78896a689e76d7928b97ac308cf43dd84b95a05f91ca8749bde06f9d4d2e50ef",
+  "gitHead": "8dfe6344c46ee462c2673f177f03c0fd56175345",
+  "buildHash": "3eca8648599021a761054e41c81905d7882486f88638445986193592216b10ef",
+  "commands": [
+    {
+      "cmd": "cargo test -p workbench-model -p workbench-assembly --locked",
+      "result": "PASS"
+    },
+    {
+      "cmd": "npm run build",
+      "result": "PASS",
+      "buildHash": "3eca8648599021a761054e41c81905d7882486f88638445986193592216b10ef"
+    },
+    {
+      "cmd": "npm run test:wasm",
+      "result": "PASS",
+      "checks": 33
+    }
+  ],
+  "corpus": "fixtures/negative-cases.json",
+  "parsePhase": [
+    "N01-N05",
+    "N07-N21"
+  ],
+  "analysePhase": [
+    "N06"
+  ],
+  "envelopePhase": [
+    "N22"
+  ],
+  "checks": [
+    "point station 0/1/1.1 \u2192 INVALID_LOAD",
+    "point missing member \u2192 DANGLING_REFERENCE",
+    "point/uniform unknown axes \u2192 INVALID_LOAD",
+    "duplicate/empty/unknown combination terms \u2192 INVALID_LOAD or DANGLING_REFERENCE",
+    "release keys other than my/mz \u2192 UNSUPPORTED_FEATURE",
+    "envelope with one id \u2192 INVALID_LOAD",
+    "cleared supports \u2192 UNSTABLE_MODEL at analyse"
+  ],
+  "evidencePaths": [
+    "evidence/M02/invalid"
+  ]
+}

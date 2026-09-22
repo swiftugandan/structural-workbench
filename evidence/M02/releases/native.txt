@@ -1,0 +1,47 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running unittests src/lib.rs (target/debug/deps/workbench_assembly-e0f45365098a542c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/analytical.rs (target/debug/deps/analytical-86605e9bb0214005)
+
+running 7 tests
+test b07_key_stations_capture_exact_midspan_moment ... ok
+test load_scale_and_superposition ... ok
+test edits_scaling_and_instability ... ok
+test r01_my_releases_under_udl_match_simply_supported ... ok
+test translation_and_storage_order_invariance ... ok
+test m01_global_rotation_relabelling_reordering_and_endpoint_reversal ... ok
+test analytical_b01_to_b11 ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/debug/deps/workbench_frame-fdf24997d236eba5)
+
+running 1 test
+test tests::condense_udl_both_my_releases_zeros_end_moments_in_fe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/element.rs (target/debug/deps/element-e6c59d9b745a22a1)
+
+running 2 tests
+test six_rigid_body_modes_and_symmetry ... ok
+test axial_strain_energy_and_rotated_symmetry ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests workbench_assembly
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests workbench_frame
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

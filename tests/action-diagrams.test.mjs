@@ -20,11 +20,74 @@ test("Each diagram selects its signed Rust component and shares a global absolut
   assert.equal(actionText(6000, c.shearY), "+6 kN");
   assert.equal(actionText(-10000, c.shearZ, false), "-10,000 N");
 });
+test("diagramPeak prefers Rust keyStations extrema over coarse samples", () => {
+  const r = {
+    members: [
+      {
+        samples: [
+          { actions: [0, 0, 0, 0, 1000, 0] },
+          { actions: [0, 0, 0, 0, 2000, 0] },
+        ],
+        keyStations: [
+          {
+            kind: "end",
+            components: ["My"],
+            actions: [0, 0, 0, 0, 0, 0],
+          },
+          {
+            kind: "extremum",
+            components: ["My"],
+            actions: [0, 0, 0, 0, 45000, 0],
+          },
+        ],
+      },
+    ],
+  };
+  assert.equal(diagramPeak(r, c.moment), 45000);
+});
 const axes = [
   [1, 0, 0],
   [0, 1, 0],
   [0, 0, 1],
 ];
+test("actionProjection marks prefer keyStation values over sample grid", () => {
+  const samples = [
+    { position: [0, 0, 0], station: 0, actions: [0, 0, 0, 0, 1000, 0] },
+    { position: [3, 0, 0], station: 0.5, actions: [0, 0, 0, 0, 2000, 0] },
+    { position: [6, 0, 0], station: 1, actions: [0, 0, 0, 0, 1000, 0] },
+  ];
+  const keyStations = [
+    {
+      station: 0,
+      kind: "end",
+      components: ["My"],
+      actions: [0, 0, 0, 0, 0, 0],
+    },
+    {
+      station: 0.5,
+      kind: "extremum",
+      components: ["My"],
+      actions: [0, 0, 0, 0, 45000, 0],
+    },
+    {
+      station: 1,
+      kind: "end",
+      components: ["My"],
+      actions: [0, 0, 0, 0, 0, 0],
+    },
+  ];
+  const p = actionProjection(
+    samples,
+    (v) => v,
+    c.moment,
+    45000,
+    axes,
+    2,
+    keyStations,
+  );
+  assert.ok(p.markValues.includes(45000));
+  assert.ok(!p.markValues.includes(2000));
+});
 test("My and Vz lie in local xz; Vy lies in local xy", () => {
   for (const component of [c.moment, c.shearZ, c.shearY]) {
     const peak = diagramPeak({ members: [{ samples }] }, component);

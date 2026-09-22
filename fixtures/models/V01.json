@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "V01",
+  "name": "V01 envelope provenance",
+  "revision": 0,
+  "displayUnits": "engineeringMetric",
+  "analysisMode": "planarXZ",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "materials": [
+    {
+      "id": "mat1",
+      "name": "Synthetic isotropic material",
+      "E": 200000000000.0,
+      "nu": 0.25,
+      "density": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "sec1",
+      "name": "Synthetic principal section",
+      "A": 0.01,
+      "Iy": 8e-05,
+      "Iz": 8e-05,
+      "J": 2e-05,
+      "cy": 0.1,
+      "cz": 0.2,
+      "provenance": "Original analytical fixture, not a catalogue section"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [0, 0, 0]
+    },
+    {
+      "id": "n2",
+      "position": [6, 0, 0]
+    }
+  ],
+  "members": [
+    {
+      "id": "m1",
+      "start": "n1",
+      "end": "n2",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [0, 1, 0],
+      "releaseStart": { "my": false, "mz": false },
+      "releaseEnd": { "my": false, "mz": false }
+    }
+  ],
+  "supports": [
+    {
+      "id": "s1",
+      "node": "n1",
+      "fixed": [true, true, true, true, false, true],
+      "prescribed": [0, 0, 0, 0, 0, 0]
+    },
+    {
+      "id": "s2",
+      "node": "n2",
+      "fixed": [false, true, true, true, false, true],
+      "prescribed": [0, 0, 0, 0, 0, 0]
+    }
+  ],
+  "loadCases": [
+    { "id": "LC1", "name": "Dead UDL", "category": "dead" },
+    { "id": "LC2", "name": "Live point", "category": "live" }
+  ],
+  "loads": [
+    {
+      "id": "l1",
+      "case": "LC1",
+      "type": "uniform",
+      "member": "m1",
+      "axes": "global",
+      "forcePerLength": [0, 0, -10000]
+    },
+    {
+      "id": "l2",
+      "case": "LC2",
+      "type": "point",
+      "member": "m1",
+      "axes": "global",
+      "station": 0.5,
+      "values": [0, 0, -20000, 0, 0, 0]
+    }
+  ],
+  "combinations": [
+    {
+      "id": "C_uls",
+      "name": "1.2 dead + 1.5 live",
+      "purpose": "strength",
+      "terms": [
+        { "case": "LC1", "factor": 1.2 },
+        { "case": "LC2", "factor": 1.5 }
+      ]
+    }
+  ],
+  "analysisSettings": {
+    "type": "linearStatic",
+    "formulation": "eulerBernoulli3D",
+    "mergeTolerance": 1e-06,
+    "timeoutMs": 30000,
+    "memoryLimitMiB": 512
+  },
+  "metadata": {
+    "description": "Envelope provenance: governing midspan My and uz must cite C_uls, not mixed extrema",
+    "createdBy": "Specification package"
+  }
+}

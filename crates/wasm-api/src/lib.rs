@@ -44,7 +44,7 @@ impl Kernel {
         }
         if op == "capabilities" {
             return Ok(
-                json!({"protocolVersion":1,"schemaVersions":["1.0.0"],"analysisTypes":["linearStatic"],"designProfiles":[],"limits":{"nodes":5000,"members":10000,"memoryMiB":512},"limitations":["Conservative fill guard may reject large models","End releases and member point actions not yet available","No code compliance or commercial parity claim"]}),
+                json!({"protocolVersion":1,"schemaVersions":["1.0.0"],"analysisTypes":["linearStatic"],"designProfiles":[],"limits":{"nodes":5000,"members":10000,"memoryMiB":512},"limitations":["Conservative fill guard may reject large models","No code compliance or commercial parity claim"]}),
             );
         }
         if let Some(p) = &self.project {
@@ -118,28 +118,35 @@ impl Kernel {
                 Ok(self.snapshot())
             }
             "analyse" => {
-                let count = payload["caseIds"].as_array().map_or(0, |a| a.len())
-                    + payload["combinationIds"].as_array().map_or(0, |a| a.len());
-                if count != 1 {
+                let mut ids = Vec::new();
+                if let Some(a) = payload["caseIds"].as_array() {
+                    for v in a {
+                        if let Some(s) = v.as_str() {
+                            ids.push(s.to_string());
+                        }
+                    }
+                }
+                if let Some(a) = payload["combinationIds"].as_array() {
+                    for v in a {
+                        if let Some(s) = v.as_str() {
+                            ids.push(s.to_string());
+                        }
+                    }
+                }
+                if ids.is_empty() {
                     return Err(err(
-                        "UNSUPPORTED_FEATURE",
-                        "Select exactly one case or combination per analysis",
+                        "INVALID_LOAD",
+                        "Select at least one case or combination",
                     ));
                 }
                 let p = self.project.as_ref().unwrap();
-                let case = payload["caseIds"]
-                    .as_array()
-                    .and_then(|a| a.first())
-                    .and_then(Value::as_str)
-                    .or_else(|| {
-                        payload["combinationIds"]
-                            .as_array()
-                            .and_then(|a| a.first())
-                            .and_then(Value::as_str)
-                    })
-                    .unwrap_or("LC1");
-                let result = workbench_assembly::analyse(p, case)?;
-                Ok(serde_json::to_value(result).unwrap())
+                if ids.len() == 1 {
+                    let result = workbench_assembly::analyse(p, &ids[0])?;
+                    Ok(serde_json::to_value(result).unwrap())
+                } else {
+                    let result = workbench_assembly::envelope(p, &ids)?;
+                    Ok(serde_json::to_value(result).unwrap())
+                }
             }
             "queryGeometry" => {
                 let p = self.project.as_ref().unwrap();

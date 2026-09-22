@@ -1,13 +1,83 @@
+mod expand;
+mod envelope;
+
 use serde_json::json;
 use sprs::TriMat;
 use std::collections::BTreeMap;
-use workbench_frame::{mul, stiffness, transform, uniform};
+use workbench_frame::{condense, mul, recover_released, released_dofs, stiffness, transform, uniform};
 use workbench_geometry::{axes, cross, global, local};
 use workbench_model::{Load, Project, Result, digest, err};
-use workbench_results::{Analysis, MemberResult, Sample};
+use workbench_results::{Analysis, KeyStation, MemberResult, Sample};
 use workbench_solver::{LinearSolver, SparseLdl};
+
+use expand::{expand_point_loads, remap_to_physical};
+
+pub use envelope::envelope;
+
+fn section_actions(end: &[f64], q: [f64; 3], x: f64) -> [f64; 6] {
+    [
+        -end[0] - q[0] * x,
+        -end[1] - q[1] * x,
+        -end[2] - q[2] * x,
+        -end[3],
+        -end[4] - end[2] * x - q[2] * x * x / 2.,
+        -end[5] + end[1] * x + q[1] * x * x / 2.,
+    ]
+}
+
+/// Stations where My or Mz extrema occur under uniform load density on a segment.
+fn moment_extrema_stations(end: &[f64], q: [f64; 3], length: f64) -> Vec<(f64, Vec<&'static str>)> {
+    let mut out = Vec::new();
+    // Mz extremum where Vy = 0 → end[1] + q[1]*x = 0
+    if q[1].abs() > 0. {
+        let x = -end[1] / q[1];
+        if x.is_finite() && x > 0. && x < length {
+            out.push((x / length, vec!["Mz"]));
+        }
+    }
+    // My extremum where Vz = 0 → end[2] + q[2]*x = 0
+    if q[2].abs() > 0. {
+        let x = -end[2] / q[2];
+        if x.is_finite() && x > 0. && x < length {
+            // merge if same station as Mz root
+            if let Some((_, comps)) = out
+                .iter_mut()
+                .find(|(t, _)| (t * length - x).abs() < 1e-12 * length.max(1.))
+            {
+                if !comps.contains(&"My") {
+                    comps.push("My");
+                }
+            } else {
+                out.push((x / length, vec!["My"]));
+            }
+        }
+    }
+    out
+}
+
 pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
     project.validate()?;
+    let mut original = project.clone();
+    original.canonicalise();
+    let model_hash = original.hash();
+    let settings_hash = digest(&serde_json::to_vec(&original.analysis_settings).unwrap());
+    let revision = original.revision;
+    let (expanded, splits) = expand_point_loads(&original)?;
+    if !splits.is_empty() {
+        expanded.validate()?;
+    }
+    let mut analysis = analyse_assembled(&expanded, case)?;
+    if !splits.is_empty() {
+        analysis = remap_to_physical(&original, &splits, analysis)?;
+    }
+    analysis.model_hash = model_hash.clone();
+    analysis.settings_hash = settings_hash;
+    analysis.source_revision = revision;
+    analysis.result_id = format!("{}-{case}", &model_hash[..16]);
+    Ok(analysis)
+}
+
+fn analyse_assembled(project: &Project, case: &str) -> Result<Analysis> {
     let mut p = project.clone();
     p.canonicalise();
     let factors: BTreeMap<String, f64> =
@@ -63,10 +133,6 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
         let (l, r) = axes(a, b, m.local_y);
         let mat = p.materials.iter().find(|v| v.id == m.material).unwrap();
         let sec = p.sections.iter().find(|v| v.id == m.section).unwrap();
-        let k = stiffness(l, mat, sec);
-        let kg = transform(&k, r);
-        let ids: [usize; 12] =
-            std::array::from_fn(|d| if d < 6 { i * 6 + d } else { j * 6 + d - 6 });
         let mut q = [0.; 3];
         for load in &p.loads {
             let factor = *factors.get(load.case()).unwrap_or(&0.);
@@ -96,7 +162,13 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
                 q[d] += add[d] * factor;
             }
         }
-        let fe = uniform(l, q);
+        let k_full = stiffness(l, mat, sec);
+        let fe_full = uniform(l, q);
+        let released = released_dofs(&m.release_start, &m.release_end);
+        let (k, fe) = condense(&k_full, &fe_full, &released)?;
+        let kg = transform(&k, r);
+        let ids: [usize; 12] =
+            std::array::from_fn(|d| if d < 6 { i * 6 + d } else { j * 6 + d - 6 });
         for block in 0..4 {
             let v = global(r, [fe[block * 3], fe[block * 3 + 1], fe[block * 3 + 2]]);
             for d in 0..3 {
@@ -110,7 +182,7 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
                 }
             }
         }
-        elements.push((m, l, r, k, ids, fe, q, mat, sec));
+        elements.push((m, l, r, k_full, fe_full, released, ids, q, mat, sec));
     }
     let free: Vec<_> = (0..nd).filter(|&i| !fixed[i]).collect();
     let mut mapping = vec![usize::MAX; nd];
@@ -174,7 +246,7 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
         ));
     }
     let mut member_results = vec![];
-    for (m, l, r, k, ids, fe, q, mat, sec) in elements {
+    for (m, l, r, k_full, fe_full, released, ids, q, mat, sec) in elements {
         let mut dl = [0.; 12];
         for block in 0..4 {
             let v = local(
@@ -187,8 +259,13 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
             );
             dl[block * 3..block * 3 + 3].copy_from_slice(&v);
         }
-        let kd = mul(&k, &dl);
-        let end: Vec<_> = (0..12).map(|a| kd[a] - fe[a]).collect();
+        // Released local rotations are recovered from condensation, not from global DOFs.
+        for &dof in &released {
+            dl[dof] = 0.;
+        }
+        recover_released(&k_full, &fe_full, &released, &mut dl)?;
+        let kd = mul(&k_full, &dl);
+        let end: Vec<_> = (0..12).map(|a| kd[a] - fe_full[a]).collect();
         let mut samples = vec![];
         for station in 0..=40 {
             let t = station as f64 / 40.;
@@ -211,14 +288,7 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
             let displacement = global(r, disp);
             let start = p.nodes[ids[0] / 6].position;
             let position = std::array::from_fn(|a| start[a] + r[0][a] * x);
-            let actions = [
-                -end[0] - q[0] * x,
-                -end[1] - q[1] * x,
-                -end[2] - q[2] * x,
-                -end[3],
-                -end[4] - end[2] * x - q[2] * x * x / 2.,
-                -end[5] + end[1] * x + q[1] * x * x / 2.,
-            ];
+            let actions = section_actions(&end, q, x);
             samples.push(Sample {
                 station: t,
                 position,
@@ -226,11 +296,52 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
                 actions,
             });
         }
+        let mut key_stations = vec![
+            KeyStation {
+                station: 0.,
+                kind: "end".into(),
+                components: vec![
+                    "N".into(),
+                    "Vy".into(),
+                    "Vz".into(),
+                    "T".into(),
+                    "My".into(),
+                    "Mz".into(),
+                ],
+                actions: section_actions(&end, q, 0.),
+                side: None,
+            },
+            KeyStation {
+                station: 1.,
+                kind: "end".into(),
+                components: vec![
+                    "N".into(),
+                    "Vy".into(),
+                    "Vz".into(),
+                    "T".into(),
+                    "My".into(),
+                    "Mz".into(),
+                ],
+                actions: section_actions(&end, q, l),
+                side: None,
+            },
+        ];
+        for (t, comps) in moment_extrema_stations(&end, q, l) {
+            key_stations.push(KeyStation {
+                station: t,
+                kind: "extremum".into(),
+                components: comps.into_iter().map(str::to_string).collect(),
+                actions: section_actions(&end, q, t * l),
+                side: None,
+            });
+        }
+        key_stations.sort_by(|a, b| a.station.partial_cmp(&b.station).unwrap());
         member_results.push(MemberResult {
             id: m.id.clone(),
             length: l,
             end_actions: end,
             samples,
+            key_stations,
         });
     }
     workbench_model::finite(&u)?;
@@ -240,6 +351,9 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
         workbench_model::finite(&m.end_actions)?;
         for s in &m.samples {
             workbench_model::finite(&s.displacement)?;
+            workbench_model::finite(&s.actions)?;
+        }
+        for s in &m.key_stations {
             workbench_model::finite(&s.actions)?;
         }
     }

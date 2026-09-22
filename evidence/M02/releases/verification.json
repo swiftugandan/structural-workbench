@@ -1,0 +1,26 @@
+{
+  "task": "M02-R",
+  "useCase": "My/Mz end release static condensation under distributed load",
+  "sourceRevision": "8dfe6344c46ee462c2673f177f03c0fd56175345",
+  "sourceHash": "50ea788b03b68ac5028cbf776f8deb1702dbc7ffb65f29b145e0258a629a5d83",
+  "buildHash": "af830a00e80e3ba56ea185e4029266dd545c1d9775024abd5c29a2a31a0dd5a4",
+  "fixture": "fixtures/models/R01.json",
+  "commands": [
+    {
+      "cmd": "cargo test -p workbench-assembly -p workbench-frame --locked",
+      "status": "PASS"
+    },
+    {
+      "cmd": "npm run test:wasm",
+      "status": "PASS",
+      "checks": 33,
+      "note": "regression corpus; R01 covered natively"
+    }
+  ],
+  "acceptance": [
+    "Pin-ended My releases on fixed supports under UDL \u2192 midspan My=qL\u00b2/8, end My\u22480, uz matches SS",
+    "Condenses both K and fe",
+    "UI exposes My/Mz release checkboxes"
+  ],
+  "notes": "Parent M01/M02 acceptance not claimed. INVALID expansion still pending with M02-P."
+}

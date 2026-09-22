@@ -40,6 +40,42 @@ export function renderForceInspector({
       `<p role="status">${result ? "Results are stale. Analyse again." : "Analyse the model to show forces, moments and deformation."}</p>`;
     return;
   }
+  if (result.analysisType === "envelope") {
+    const mEnv = (result.members || []).find((x) => x.id === m.id);
+    if (!mEnv) {
+      host.innerHTML = heading + "<p>No envelope data for this member.</p>";
+      return;
+    }
+    const eng = project.displayUnits === "engineeringMetric";
+    const line = (c) => {
+      const disp = ["ux", "uy", "uz"].includes(c.component);
+      const moment = ["My", "Mz", "T"].includes(c.component);
+      const f = disp ? (eng ? 1000 : 1) : eng ? 0.001 : 1;
+      const unit = disp
+        ? eng
+          ? "mm"
+          : "m"
+        : eng
+          ? moment
+            ? "kN·m"
+            : "kN"
+          : moment
+            ? "N·m"
+            : "N";
+      const fmt = (ex) =>
+        `${Number((ex.value * f).toPrecision(6))} ${unit} · ${esc(ex.caseOrCombinationId)}${ex.station != null ? ` @ x/L=${Number(ex.station.toPrecision(4))}` : ""}`;
+      return `<tr><th scope="row">${esc(c.component)}</th><td>max ${fmt(c.max)}</td><td>min ${fmt(c.min)}</td></tr>`;
+    };
+    host.innerHTML =
+      heading +
+      `<p class="form-help">Envelope extrema are independent scalars — not a simultaneous diagram.</p><table class="force-values"><thead><tr><th>Component</th><th>Max</th><th>Min</th></tr></thead><tbody>${[
+        ...(mEnv.actions || []),
+        ...(mEnv.displacements || []),
+      ]
+        .map(line)
+        .join("")}</tbody></table>`;
+    return;
+  }
   const engineering = project.displayUnits === "engineeringMetric";
   const text = (v, i) =>
     esc(
@@ -84,6 +120,23 @@ export function renderForceInspector({
       24 + s.station * 252,
       115 - (values[i] / peak) * 60,
     ]);
+    let minV = Math.min(...values),
+      maxV = Math.max(...values);
+    if (!deformation && r.keyStations?.length) {
+      const name = c.name;
+      const keyed = r.keyStations
+        .filter(
+          (k) =>
+            k.kind === "end" ||
+            k.kind === "discontinuity" ||
+            (k.kind === "extremum" && k.components?.includes(name)),
+        )
+        .map((k) => k.actions[c.index]);
+      if (keyed.length) {
+        minV = Math.min(...keyed);
+        maxV = Math.max(...keyed);
+      }
+    }
     host.innerHTML =
       heading +
       `<p>${label(m.start)} → ${label(m.end)} · ${Number(length.toPrecision(6))} m · ${deformation ? "Global displacements" : "Local section actions"}</p><label>Component<select id="member-force-component"><optgroup label="Forces & moments">${keys.map((k, i) => `<option value="${k}" ${component === k ? "selected" : ""}>${names[i]}</option>`).join("")}</optgroup><optgroup label="Deformation · global axes">${Object.entries(
@@ -103,7 +156,7 @@ export function renderForceInspector({
         )
         .join(
           "",
-        )}<path d="M${points[index][0]} 30 V180" stroke="#52657b" stroke-dasharray="3 3"/><circle cx="${points[index][0]}" cy="${points[index][1]}" r="4" fill="#225dc7"/></svg><p class="form-help">${deformation ? "Displacement versus distance along the member; signed global components or total magnitude. Auto-scaled ordinate, not a 3D shape." : "Unfolded local diagram, auto-scaled. This detail view is independent of the camera. y/z are the member’s section axes."}</p><label>Station along member<input id="member-force-station" type="range" min="0" max="${r.samples.length - 1}" value="${index}"></label><output id="member-force-readout">x = ${Number((s.station * length).toPrecision(6))} m · ${c.name} ${valueText(values[index])}</output><p>Start ${valueText(values[0])} · End ${valueText(values.at(-1))}</p><p>Min ${valueText(Math.min(...values))} · Max ${valueText(Math.max(...values))}</p><details><summary>All components at this station</summary>${deformation ? `<table class="force-values"><tbody>${[...s.displacement.slice(0, 3), Math.hypot(...s.displacement.slice(0, 3))].map((v, i) => `<tr><th>${["Ux", "Uy", "Uz", "Total"][i]}</th><td>${displacementText(v, engineering)}</td></tr>`).join("")}</tbody></table>` : table(s.actions)}</details><details><summary>Member-end actions</summary><p>Node-on-member actions in local axes; these use a different end-face convention from section diagrams.</p><h4>Start ${label(m.start)}</h4>${table(r.endActions.slice(0, 6))}<h4>End ${label(m.end)}</h4>${table(r.endActions.slice(6, 12))}</details>`;
+        )}<path d="M${points[index][0]} 30 V180" stroke="#52657b" stroke-dasharray="3 3"/><circle cx="${points[index][0]}" cy="${points[index][1]}" r="4" fill="#225dc7"/></svg><p class="form-help">${deformation ? "Displacement versus distance along the member; signed global components or total magnitude. Auto-scaled ordinate, not a 3D shape." : "Unfolded local diagram, auto-scaled. Extrema use Rust key stations, not only sample points."}</p><label>Station along member<input id="member-force-station" type="range" min="0" max="${r.samples.length - 1}" value="${index}"></label><output id="member-force-readout">x = ${Number((s.station * length).toPrecision(6))} m · ${c.name} ${valueText(values[index])}</output><p>Start ${valueText(values[0])} · End ${valueText(values.at(-1))}</p><p>Min ${valueText(minV)} · Max ${valueText(maxV)}</p><details><summary>All components at this station</summary>${deformation ? `<table class="force-values"><tbody>${[...s.displacement.slice(0, 3), Math.hypot(...s.displacement.slice(0, 3))].map((v, i) => `<tr><th>${["Ux", "Uy", "Uz", "Total"][i]}</th><td>${displacementText(v, engineering)}</td></tr>`).join("")}</tbody></table>` : table(s.actions)}</details><details><summary>Member-end actions</summary><p>Node-on-member actions in local axes; these use a different end-face convention from section diagrams.</p><h4>Start ${label(m.start)}</h4>${table(r.endActions.slice(0, 6))}<h4>End ${label(m.end)}</h4>${table(r.endActions.slice(6, 12))}</details>`;
     host.querySelector("#member-force-component").onchange = (e) => {
       component = e.target.value;
       draw();

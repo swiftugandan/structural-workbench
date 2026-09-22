@@ -23,6 +23,9 @@ import { download, report, csv, escape as esc } from "./reports/report.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
+/** Linear-static result for diagrams; envelopes never enter the force pipeline. */
+const diagramResult = () =>
+  result && result.analysisType !== "envelope" ? result : null;
 let project,
   modelHash,
   result,
@@ -99,7 +102,7 @@ function selectEntities(ids, toggle = false) {
   selected = [...viewport.selection].at(-1) || null;
   renderInspector();
   renderNav();
-  viewport.update(project, result, selected);
+  viewport.update(project, diagramResult(), selected);
   $("#selected-status").textContent = viewport.selection.size
     ? `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).map(label).join(", ")}`
     : "No entities selected";
@@ -157,7 +160,7 @@ $("#modal").addEventListener("click", (e) => {
 const scope = () =>
   modal(
     "Capabilities & assumptions",
-    `<p>This is an early structural mechanics workbench, with an actual Rust/WebAssembly solver. It is not an accepted analysis MVP or a code-design product.</p><ul class="scope-list"><li>Linear, small-displacement 3D Euler–Bernoulli frames.</li><li>Nodal actions, uniform member loads, self weight and explicit linear combinations.</li><li>Prescribed supports and planar XZ constraints.</li><li>SI engineering data; display values in engineering metric or SI.</li><li>End releases and interior point actions are currently rejected.</li><li>Conservative memory guard may refuse large models; full size/performance targets are unverified.</li><li>No buckling, nonlinear, shell, seismic, steel-code or concrete-code checks.</li><li>Numerical equivalence to PROKON is unknown.</li></ul><p>Viewport: click to select, Shift-click to toggle, drag blank space to box-select, middle-drag or Space to pan, wheel to zoom towards the pointer. In 3D, Alt-drag or the Orbit tool to orbit. Right-click for context actions. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p><p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`,
+    `<p>This is an early structural mechanics workbench, with an actual Rust/WebAssembly solver. It is not an accepted analysis MVP or a code-design product.</p><ul class="scope-list"><li>Linear, small-displacement 3D Euler–Bernoulli frames.</li><li>Nodal actions, uniform member loads, interior point loads, self weight and explicit linear combinations.</li><li>Prescribed supports and planar XZ constraints.</li><li>SI engineering data; display values in engineering metric or SI.</li><li>End My/Mz releases via static condensation; interior point loads via analytical splitting with force-jump stations.</li><li>Multi-case envelopes with per-scalar governing provenance (not a simultaneous force set).</li><li>Conservative memory guard may refuse large models; full size/performance targets are unverified.</li><li>No buckling, nonlinear, shell, seismic, steel-code or concrete-code checks.</li><li>Numerical equivalence to PROKON is unknown.</li></ul><p>Viewport: click to select, Shift-click to toggle, drag blank space to box-select, middle-drag or Space to pan, wheel to zoom towards the pointer. In 3D, Alt-drag or the Orbit tool to orbit. Right-click for context actions. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p><p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`,
   );
 $("#help").onclick = scope;
 $("#scope").onclick = scope;
@@ -290,6 +293,9 @@ $("#worked-examples").onclick = () => {
     ["B09", "Support movement", "Prescribed axial displacement"],
     ["B10", "Self weight", "Density × area × gravity"],
     ["B11", "Load combination", "1.2 LC1 + 1.5 LC2"],
+    ["V01", "Envelope provenance", "LC1 + LC2 + C_uls · governing My/uz"],
+    ["P01", "Interior point load", "6 m · midspan concentrated action"],
+    ["R01", "My end releases", "Fixed ends · My released · UDL"],
   ];
   modal(
     "Worked examples",
@@ -377,9 +383,16 @@ function refresh(snapshot) {
       return o;
     }),
   );
+  if (project.loadCases.length + project.combinations.length >= 2) {
+    const o = document.createElement("option");
+    o.value = "__envelope__";
+    o.textContent = "Envelope · all cases & combinations";
+    $("#result-case").append(o);
+  }
   $("#result-case").value = [
     ...project.loadCases,
     ...project.combinations,
+    { id: "__envelope__" },
   ].some((c) => c.id === previousCase)
     ? previousCase
     : project.combinations[0]?.id || project.loadCases[0]?.id;
@@ -402,7 +415,7 @@ function refresh(snapshot) {
   renderInspector();
   renderResults();
   viewport.currentModelHash = modelHash;
-  viewport.update(project, result, selected);
+  viewport.update(project, diagramResult(), selected);
   topologyTools.refresh();
   setBusy(busy);
 }
@@ -753,6 +766,85 @@ function renderResults() {
       `<div class="empty-results"><span>${failed ? "!" : "⌁"}</span><strong>${failed ? "No numerical result" : "Your results start here"}</strong><p>${failed ? "Resolve the diagnostic above, then analyse again." : "Review your model, then run an analysis."}</p></div>`;
     return;
   }
+  if (result.analysisType === "envelope") {
+    const eng = project.displayUnits === "engineeringMetric",
+      u = eng ? 1000 : 1,
+      f = eng ? 0.001 : 1;
+    const scale = (component, value) => {
+      if (["ux", "uy", "uz"].includes(component)) return value * u;
+      if (["rx", "ry", "rz"].includes(component)) return value;
+      return value * f;
+    };
+    const unit = (component) => {
+      if (["ux", "uy", "uz"].includes(component)) return eng ? "mm" : "m";
+      if (["rx", "ry", "rz"].includes(component)) return "rad";
+      if (["mx", "my", "mz", "T", "My", "Mz"].includes(component))
+        return eng ? "kN·m" : "N·m";
+      return eng ? "kN" : "N";
+    };
+    const row = (entity, component, extreme, kind) => {
+      const where = extreme.station != null
+        ? ` · x/L=${Number(extreme.station.toPrecision(6))}${extreme.side ? ` ${extreme.side}` : ""}`
+        : extreme.nodeId
+          ? ` · node ${label(extreme.nodeId)}`
+          : extreme.supportId
+            ? ` · support ${label(extreme.supportId)}`
+            : "";
+      return [
+        entity,
+        component,
+        kind,
+        format(scale(component, extreme.value)),
+        unit(component),
+        label(extreme.caseOrCombinationId) + where,
+      ];
+    };
+    const rows = [];
+    for (const m of result.members || []) {
+      for (const a of m.actions || []) {
+        rows.push(row(label(m.id), a.component, a.max, "max"));
+        rows.push(row(label(m.id), a.component, a.min, "min"));
+      }
+      for (const d of m.displacements || []) {
+        rows.push(row(label(m.id), d.component, d.max, "max"));
+        rows.push(row(label(m.id), d.component, d.min, "min"));
+      }
+    }
+    for (const n of result.nodes || []) {
+      for (const d of n.displacements || []) {
+        if (Math.abs(d.max.value) < 1e-15 && Math.abs(d.min.value) < 1e-15)
+          continue;
+        rows.push(row(label(n.id), d.component, d.max, "max"));
+        rows.push(row(label(n.id), d.component, d.min, "min"));
+      }
+    }
+    for (const s of result.supports || []) {
+      for (const r of s.reactions || []) {
+        rows.push(row(label(s.id), r.component, r.max, "max"));
+        rows.push(row(label(s.id), r.component, r.min, "min"));
+      }
+    }
+    const ids = (result.caseOrCombinationIds || []).map(label).join(", ");
+    $("#results-content").innerHTML =
+      `<p class="notice-small">Envelope over ${esc(ids)}. Each row is an independent scalar extreme with governing case/combination — not a simultaneous force set.</p>` +
+      (result.diagnostics || [])
+        .map(
+          (d) =>
+            `<p class="notice-small" role="status">${esc(d.code || "")}: ${esc(d.message || "")}</p>`,
+        )
+        .join("") +
+      `<table><thead><tr>${["Entity", "Component", "Extreme", "Value", "Unit", "Governing"]
+        .map((h) => `<th scope="col">${h}</th>`)
+        .join(
+          "",
+        )}</tr></thead><tbody>${rows
+        .map(
+          (r) =>
+            `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`,
+        )
+        .join("")}</tbody></table>`;
+    return;
+  }
   const eng = project.displayUnits === "engineeringMetric",
     u = eng ? 1000 : 1,
     f = eng ? 0.001 : 1;
@@ -857,22 +949,35 @@ $("#analyse").onclick = async () => {
     setBusy(true);
     message("Analysing the current model…");
     const chosen = $("#result-case").value || project.loadCases[0]?.id;
+    const envelopeAll = chosen === "__envelope__";
     const response = await gateway.send("analyse", {
-      caseIds: project.loadCases.some((c) => c.id === chosen) ? [chosen] : [],
-      combinationIds: project.combinations.some((c) => c.id === chosen)
-        ? [chosen]
-        : [],
+      caseIds: envelopeAll
+        ? project.loadCases.map((c) => c.id)
+        : project.loadCases.some((c) => c.id === chosen)
+          ? [chosen]
+          : [],
+      combinationIds: envelopeAll
+        ? project.combinations.map((c) => c.id)
+        : project.combinations.some((c) => c.id === chosen)
+          ? [chosen]
+          : [],
     });
     result = response;
     failed = false;
-    if (!actionComponents[viewport.resultView])
-      viewport.resultView = "deformed";
-    syncResultPicker(viewport.resultView);
-    $("#deformation-legend").hidden = viewport.resultView !== "deformed";
+    if (result.analysisType === "envelope") {
+      viewport.resultView = "model";
+      syncResultPicker("model");
+      $("#deformation-legend").hidden = true;
+    } else {
+      if (!actionComponents[viewport.resultView])
+        viewport.resultView = "deformed";
+      syncResultPicker(viewport.resultView);
+      $("#deformation-legend").hidden = viewport.resultView !== "deformed";
+    }
     message("");
     renderResults();
     renderInspector();
-    viewport.update(project, result, selected);
+    viewport.update(project, diagramResult(), selected);
   } catch (e) {
     result = null;
     failed = true;
@@ -1143,6 +1248,13 @@ function editEntity(key, old, draft) {
           member: project.members[0]?.id,
           axes: "global",
           forcePerLength: [0, 0, -1000],
+        });
+      if (next.type === "point")
+        Object.assign(next, {
+          member: project.members[0]?.id,
+          axes: "global",
+          station: 0.5,
+          values: [0, 0, -10000, 0, 0, 0],
         });
       if (next.type === "selfWeight")
         Object.assign(next, {

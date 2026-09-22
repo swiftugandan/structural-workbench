@@ -213,3 +213,35 @@ fn load_variant_unit_conversion_preserves_exact_schema() {
         );
     }
 }
+
+#[test]
+fn analyse_multiple_ids_returns_envelope_with_provenance() {
+    let mut k = Kernel::new();
+    let p: Value =
+        serde_json::from_str(&std::fs::read_to_string("../../fixtures/models/V01.json").unwrap())
+            .unwrap();
+    let opened = request(&mut k, "createProject", Value::Null, json!({"project": p}));
+    assert_eq!(opened["status"], "ok", "{opened}");
+    let out = request(
+        &mut k,
+        "analyse",
+        opened["revision"].clone(),
+        json!({"caseIds":["LC1","LC2"],"combinationIds":["C_uls"]}),
+    );
+    assert_eq!(out["status"], "ok", "{out}");
+    let payload = &out["payload"];
+    assert_eq!(payload["analysisType"], "envelope");
+    assert!(payload["diagnostics"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|d| d["code"] == "ENVELOPE_NOT_SIMULTANEOUS"));
+    let my = payload["members"][0]["actions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|a| a["component"] == "My")
+        .unwrap();
+    assert_eq!(my["min"]["caseOrCombinationId"], "C_uls");
+    assert!((my["min"]["value"].as_f64().unwrap() + 99000.).abs() < 1e-1);
+}
