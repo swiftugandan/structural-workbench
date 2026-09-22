@@ -1,0 +1,35 @@
+TAP version 13
+# Subtest: Each diagram selects its signed Rust component and shares a global absolute scale
+ok 1 - Each diagram selects its signed Rust component and shares a global absolute scale
+  ---
+  duration_ms: 69.008919
+  ...
+# Subtest: My and Vz lie in local xz; Vy lies in local xy
+ok 2 - My and Vz lie in local xz; Vy lies in local xy
+  ---
+  duration_ms: 0.50348
+  ...
+# Subtest: Rotated member axes and camera foreshortening preserve the physical plane
+ok 3 - Rotated member axes and camera foreshortening preserve the physical plane
+  ---
+  duration_ms: 0.873175
+  ...
+# Subtest: Zero shear stays on baseline and missing current axes suppress the plot
+ok 4 - Zero shear stays on baseline and missing current axes suppress the plot
+  ---
+  duration_ms: 0.793211
+  ...
+# Subtest: Deformation preserves actual 3D displacement and camera depth
+ok 5 - Deformation preserves actual 3D displacement and camera depth
+  ---
+  duration_ms: 0.57322
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 223.18615

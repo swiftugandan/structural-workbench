@@ -1,0 +1,17 @@
+
+Running 8 tests using 1 worker
+
+(node:18166) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:18166) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/portal.spec.js:19:1 › M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen (24.5s)
+  ✓  2 tests/e2e/portal.spec.js:144:1 › M01 drawing Escape does not mutate and compact controls do not overflow (6.4s)
+  ✓  3 tests/e2e/shear-diagrams.spec.js:20:1 › Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving (5.7s)
+  ✓  4 tests/e2e/shear-diagrams.spec.js:59:1 › Uniform-load shear shows both signs and the unused component reports zero (3.8s)
+  ✓  5 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (3.7s)
+  ✓  6 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (4.7s)
+  ✓  7 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (7.5s)
+  ✓  8 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (3.8s)
+
+  8 passed (1.1m)

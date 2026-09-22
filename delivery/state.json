@@ -769,6 +769,16 @@
         "unitTests": 4,
         "status": "implemented-focused-checks-pass",
         "note": "Live review pending; content snapshot includes concurrent guided-input work."
+      },
+      "effectDirections": {
+        "sourceRevision": "633ee16",
+        "sourceHash": "6bc6d65e163307b6b8b0bba649889af695dd17c700141dd8423d4f9545467ae4",
+        "buildHash": "47a68365a3d9148032afda2783cd5924c44c86ab6ba334a17b9c6dba9dea9014",
+        "evidencePath": "evidence/M01/effect-directions",
+        "unitTests": 5,
+        "browserTests": 8,
+        "status": "implemented-focused-checks-pass",
+        "note": "Full/live acceptance pending; content snapshot includes concurrent work."
       }
     }
   },

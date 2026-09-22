@@ -101,3 +101,5 @@ Latest refinement: canvas Shear Vy/Vz with signed annotations, unit-aware common
 Latest refinement: camera-aligned XYZ compass with green Y, balanced isometric default and bounded XY reference grid at model minimum Z. Evidence: evidence/M01/orientation (14 targeted browser + 2 orientation checks pass). Camera movement preserves the engineering hash. Live visual review and full milestone acceptance remain pending.
 
 Diagram-plane correction: local member-plane projection replaces screen-perpendicular diagrams (My/Vz along z, Vy along y). Four analytical rendering checks pass, including rolled axes, foreshortening, zeros and missing frames. Browser regression evidence is recorded in evidence/M01/diagram-planes; live visual acceptance remains pending.
+
+Effect-direction follow-up: removed deformation's constant-depth overlay while retaining full XYZ displacement. Five focused rendering checks cover action planes, rotated axes, pure-Z and coupled deformation, depth and zero scale. Browser results are recorded in evidence/M01/effect-directions.
