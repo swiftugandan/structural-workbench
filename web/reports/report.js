@@ -47,7 +47,7 @@ export function csv(result, project) {
       "Moment My [N m]",
       "Moment Mz [N m]",
     ],
-    ...result.members.flatMap((m) =>
+    ...(result.members ?? []).flatMap((m) =>
       m.samples.map((sample) => [
         entityLabel(project, m.id),
         sample.station,
