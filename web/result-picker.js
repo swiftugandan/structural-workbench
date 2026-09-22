@@ -4,14 +4,14 @@ export const resultFamilies = {
     ["deformed", "Deformation"],
   ],
   forces: [
-    ["axial", "N · Axial"],
+    ["axial", "N / Fx · Axial along local x"],
     ["shearY", "Vy · Shear y"],
     ["shearZ", "Vz · Shear z"],
   ],
   moments: [
     ["moment", "My · Bending about y"],
     ["momentZ", "Mz · Bending about z"],
-    ["torsion", "T · Torsion about x"],
+    ["torsion", "T / Mx · Torsion about local x"],
   ],
 };
 export function bindResultPicker(onChange) {

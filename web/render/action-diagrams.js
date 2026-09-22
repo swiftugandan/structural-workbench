@@ -1,11 +1,17 @@
 // Rendering consumes the signed local section actions recovered by Rust.
 export const actionComponents = {
-  axial: { scalar: true, index: 0, name: "N", title: "Axial N", unit: "N" },
+  axial: {
+    scalar: true,
+    index: 0,
+    name: "N",
+    title: "Axial N / Fx · along local x",
+    unit: "N",
+  },
   torsion: {
     scalar: true,
     index: 3,
     name: "T",
-    title: "Torsion T",
+    title: "Torsion T / Mx · about local x",
     unit: "N·m",
   },
   momentZ: {
