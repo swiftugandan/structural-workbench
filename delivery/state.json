@@ -829,6 +829,13 @@
         "buildHash": "37b8ab2d747264f5b12c5b24c3baa419c19d37123f4bb05c8348f6b01760951c",
         "evidencePath": "evidence/M01/member-only-inspector",
         "status": "PASS"
+      },
+      "memberDeformation": {
+        "sourceRevision": "8fc64c6",
+        "sourceHash": "3d5748f4bcd3459dd4a4523a5b22592c1b53c7d3ef0dc20010ff56200fe20196",
+        "buildHash": "0587cf1cd11328f4d53089c97eb12ac5ec76bb77ceaf3bb7cbbd6555ab54286b",
+        "evidencePath": "evidence/M01/member-deformation",
+        "status": "PASS"
       }
     },
     "M01-INPUTS": {

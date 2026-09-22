@@ -111,3 +111,5 @@ Grouped result picker: Model/deformation, Member forces (N/Vy/Vz), Member moment
 Selection Forces & moments tab implemented: member component diagrams/station readout/end values and node applied/reaction/member-on-node diagrams with global tables. Units and stale guards verified. Evidence/M01/force-inspector: 4 browser + 1 analytical unit pass. Live visual/full acceptance pending.
 
 User-directed removal: Forces & moments is now member-only; node diagrams/tables and contribution code removed. Member journey and node-empty-state browser check pass. Evidence: evidence/M01/member-only-inspector.
+
+Member results now includes global Ux/Uy/Uz/total displacement diagrams and station/end/extreme readouts in mm or m. Build and cantilever/browser regression pass: evidence/M01/member-deformation.

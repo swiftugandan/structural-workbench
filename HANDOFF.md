@@ -47,3 +47,5 @@ Selection Forces & moments tab implemented: member component diagrams/station re
 Fixed reaction table/SVG NaN coercion from typed-array map (295508e). Numeric values unchanged; expanded supported-node browser test verifies all six reaction rows. Evidence: evidence/M01/force-table-fix.
 
 User-directed removal: Forces & moments is now member-only; node diagrams/tables and contribution code removed. Member journey and node-empty-state browser check pass. Evidence: evidence/M01/member-only-inspector.
+
+Member results now includes global Ux/Uy/Uz/total displacement diagrams and station/end/extreme readouts in mm or m. Build and cantilever/browser regression pass: evidence/M01/member-deformation.
