@@ -822,6 +822,13 @@
         "buildHash": "da74a74663ba8812275b58347323c704e945b75edd651f86629c29e778e69507",
         "evidencePath": "evidence/M01/force-table-fix",
         "status": "PASS"
+      },
+      "memberOnlyInspector": {
+        "sourceRevision": "eb87ee3",
+        "sourceHash": "f8413c844457adf7ea5261bb06f965d1043ac26220927a71e5e7bc9bb0172dfb",
+        "buildHash": "37b8ab2d747264f5b12c5b24c3baa419c19d37123f4bb05c8348f6b01760951c",
+        "evidencePath": "evidence/M01/member-only-inspector",
+        "status": "PASS"
       }
     },
     "M01-INPUTS": {

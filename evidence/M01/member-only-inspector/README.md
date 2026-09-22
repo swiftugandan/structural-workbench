@@ -1,0 +1,1 @@
+Source eb87ee3; source hash f8413c844457adf7ea5261bb06f965d1043ac26220927a71e5e7bc9bb0172dfb; build 37b8ab2d747264f5b12c5b24c3baa419c19d37123f4bb05c8348f6b01760951c. Removed node force/moment inspector per user request. Member diagrams/tables retained. Build and browser journey pass: select node → no diagram or table; member station/units/stale behaviour remains covered.
