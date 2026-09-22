@@ -60,7 +60,7 @@ test("M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and re
   ).toBeGreaterThan(0);
   await page.getByRole("button", { name: /Nodes 4/ }).click();
   await page.getByRole("button", { name: "Edit n3", exact: true }).click();
-  await page.getByLabel("X (m or mm)", { exact: true }).fill("4500 mm");
+  await page.getByLabel("X m", { exact: true }).fill("4500 mm");
   await page.getByRole("button", { name: "Save entity", exact: true }).click();
   await page.locator("#close-modal").click();
   await expect(page.locator("#result-status")).toContainText("Stale");

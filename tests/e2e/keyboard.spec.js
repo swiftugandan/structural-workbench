@@ -51,7 +51,7 @@ test("M01 keyboard-only portal creation, numeric drawing, table editing and solv
     page,
     page.getByRole("button", { name: "Edit n3", exact: true }),
   );
-  await type(page, page.getByLabel("X (m or mm)", { exact: true }), "4.5 m");
+  await type(page, page.getByLabel("X m", { exact: true }), "4.5 m");
   await activate(
     page,
     page.getByRole("button", { name: "Save entity", exact: true }),

@@ -1,28 +1,34 @@
+import { structuralIcon } from "./structural-icons.js";
+import { icon as lucideIcon } from "./icons.js";
 import { entityLabel } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
 const $ = (s) => document.querySelector(s);
-const paths = {
-  select: "m4 3 16 10-8 2-4 7Z",
-  member: "M4 20 20 4M2 18l4 4M18 2l4 4",
-  node: "M12 3v6m0 6v6M3 12h6m6 0h6M9 9h6v6H9Z",
-  support: "m12 5 9 14H3ZM2 22h20",
-  load: "M12 2v17m-6-6 6 6 6-6M3 22h18",
-  move: "M12 2v20M2 12h20m-14-6 4-4 4 4m-10 2-4 4 4 4m12-8 4 4-4 4m-10 2 4 4 4-4",
-  copy: "M8 8h13v13H8ZM3 16V3h13",
-  edit: "m4 16 12-12 4 4L8 20H4Z",
-  split: "M3 21 21 3M7 3l14 14M3 7l14 14",
-  delete: "M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7",
-  view: "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Zm7 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0",
-  fit: "M3 9V3h6m6 0h6v6m0 6v6h-6m-6 0H3v-6",
-  measure: "m3 17 14-14 4 4L7 21Zm5-5 4 4m0-8 4 4",
-  undo: "M9 4 3 10l6 6M3 10h11a6 6 0 0 1 0 12",
-  redo: "m15 4 6 6-6 6m6-6H10a6 6 0 0 0 0 12",
-  save: "M5 3h12l4 4v14H3V3h2m2 0v7h10V3M7 21v-7h10v7",
-  play: "m7 4 14 8-14 8Z",
-  settings: "M3 6h18M3 12h18M3 18h18M7 3v6m10 0v6m-7 0v6",
+const iconNames = {
+  select: "mouse-pointer-2",
+  member: "move-up-right",
+  node: "circle-dot",
+  support: "triangle",
+  load: "arrow-down-to-line",
+  move: "move",
+  copy: "copy",
+  edit: "pencil",
+  split: "git-fork",
+  delete: "trash-2",
+  view: "eye",
+  fit: "scan",
+  measure: "ruler",
+  undo: "undo-2",
+  redo: "redo-2",
+  save: "save",
+  play: "play",
+  settings: "sliders-horizontal",
+  orbit: "orbit",
+  axes: "axis-3d",
 };
 export const icon = (name) =>
-  `<svg class="command-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${paths[name] || paths.settings}"/></svg>`;
+  ["node", "member", "support", "load", "frame"].includes(name)
+    ? structuralIcon(name)
+    : lucideIcon(iconNames[name] || name);
 export function workspaceUI({
   viewport,
   getProject,
@@ -34,6 +40,7 @@ export function workspaceUI({
   finishTools,
   message,
 }) {
+  $(".project-symbol").innerHTML = icon("frame");
   const ribbon = document.createElement("section");
   ribbon.className = "command-ribbon";
   ribbon.setAttribute("aria-label", "Modelling commands");
@@ -66,8 +73,8 @@ export function workspaceUI({
       "Navigate",
       [
         ["pan-tool", "move", "Pan"],
-        ["orbit-tool", "view", "Orbit"],
-        ["axes-toggle", "view", "Local axes"],
+        ["orbit-tool", "orbit", "Orbit"],
+        ["axes-toggle", "axes", "Local axes"],
         ["dimensions-toggle", "measure", "Dimensions"],
         ["fit", "fit", "Fit"],
       ],

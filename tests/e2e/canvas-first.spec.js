@@ -50,6 +50,7 @@ test("Canvas first: place support, draw force, edit assignments and undo without
     .locator(`[data-assignment="${support.id}"]`)
     .click({ button: "right" });
   await expect(page.locator("#direct-properties")).toBeVisible();
+  await page.getByText("Custom movement restraints", { exact: true }).click();
   await page.locator('#direct-properties [name="fixed-4"]').check();
   await page
     .locator("#direct-properties")
@@ -75,6 +76,9 @@ test("Canvas first: place support, draw force, edit assignments and undo without
   await page
     .locator(`[data-assignment="${load.id}"]`)
     .click({ button: "right" });
+  await page
+    .getByText("Force components · custom direction", { exact: true })
+    .click();
   await page.locator('#direct-properties [name="values-0"]').fill("5 kN");
   await page
     .locator("#direct-properties")
@@ -217,13 +221,11 @@ test("Readable labels hide internal IDs and persist after copy and reopen", asyn
   await expect(
     page.locator("#viewport-labels .member-label").filter({ hasText: /^m4$/ }),
   ).toBeVisible();
-  await page
-    .locator("#import-file")
-    .setInputFiles({
-      name: "labels.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(saved)),
-    });
+  await page.locator("#import-file").setInputFiles({
+    name: "labels.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(saved)),
+  });
   await expect(page.locator(`[data-member="${added.id}"]`)).toContainText("m4");
   expect((await model(page)).metadata.entityLabels).toEqual(
     saved.metadata.entityLabels,

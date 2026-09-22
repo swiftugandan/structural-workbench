@@ -1,4 +1,12 @@
-import { entityLabel, entityId } from "./entity-labels.js";
+import { structuralIcon } from "./structural-icons.js";
+import {
+  entityGuides,
+  entityFields,
+  readEntityFields,
+  bindEntityFields,
+  guideDiagram,
+} from "./entity-forms.js";
+import { entityLabel } from "./entity-labels.js";
 import { canvasTools } from "./canvas-tools.js";
 import { workspaceUI } from "./workspace-ui.js";
 import { cad } from "./cad.js";
@@ -364,7 +372,7 @@ function refresh(snapshot) {
     ...project.combinations,
   ].some((c) => c.id === previousCase)
     ? previousCase
-    : project.combinations[0]?.id || project.loadCases[0].id;
+    : project.combinations[0]?.id || project.loadCases[0]?.id;
   $("#units").value = project.displayUnits;
   $("#view-title").textContent = project.name;
   $("#hash-status").textContent = modelHash.slice(0, 12) + " · f64";
@@ -466,25 +474,25 @@ $("#units").onchange = () => {
 };
 function renderNav() {
   const groups = [
-    ["nodes", "Nodes", "◉"],
-    ["members", "Members", "╱"],
-    ["sections", "Sections", "▣"],
-    ["materials", "Materials", "◈"],
-    ["supports", "Supports", "△"],
-    ["loadCases", "Load cases", "↧"],
-    ["loads", "Loads", "↓"],
-    ["combinations", "Combinations", "⊕"],
+    ["nodes", "Nodes", "node"],
+    ["members", "Members", "member"],
+    ["supports", "Supports", "support"],
+    ["sections", "Sections", "section"],
+    ["materials", "Materials", "material"],
+    ["loadCases", "Load cases", "loadCase"],
+    ["loads", "Loads", "load"],
+    ["combinations", "Combinations", "combination"],
   ];
   $("#model-nav").innerHTML = groups
     .map(
       ([key, groupLabel, icon]) =>
-        `<button data-group="${key}"${key === "members" ? ' class="active"' : ""}><span>${icon}　${groupLabel}</span><span class="count">${project[key].length}</span></button>${
+        `${{ nodes: "Structure", sections: "Member properties", loadCases: "Loading" }[key] ? `<h3 class="nav-section-title">${{ nodes: "Structure", sections: "Member properties", loadCases: "Loading" }[key]}</h3>` : ""}<button aria-label="${groupLabel} ${project[key].length}" data-group="${key}"><span class="nav-icon" aria-hidden="true">${structuralIcon(icon)}</span><span class="nav-label">${groupLabel}</span><span class="count">${project[key].length}</span></button>${
           key === "members"
             ? project.members
                 .filter((m, i) => i < 100 || m.id === selected)
                 .map(
                   (m) =>
-                    `<button class="entity ${selected === m.id ? "active" : ""}" data-member="${esc(m.id)}">${esc(label(m.id))} <small>${esc(label(m.start))} → ${esc(label(m.end))}</small></button>`,
+                    `<button class="entity ${selected === m.id ? "active" : ""}" data-member="${esc(m.id)}" ${selected === m.id ? 'aria-current="true"' : ""}><span class="nav-label">${esc(label(m.id))}</span><small>${esc(label(m.start))} → ${esc(label(m.end))}</small></button>`,
                 )
                 .join("")
             : ""
@@ -510,23 +518,9 @@ function renderDirectProperties(key, entity) {
   $("#selection-tag").textContent = label(entity.id);
   $("#selected-status").textContent =
     `${key === "supports" ? "Support" : key === "loads" ? "Load" : "Node"} ${label(entity.id)} selected`;
-  const labels = {
-    position: ["X (m)", "Y (m)", "Z (m)"],
-    fixed: [
-      "Restrain X",
-      "Restrain Y",
-      "Restrain Z",
-      "Restrain Rx",
-      "Restrain Ry",
-      "Restrain Rz",
-    ],
-    prescribed: ["X (m)", "Y (m)", "Z (m)", "Rx (rad)", "Ry (rad)", "Rz (rad)"],
-    values: ["Fx (N)", "Fy (N)", "Fz (N)", "Mx (Nm)", "My (Nm)", "Mz (Nm)"],
-    forcePerLength: ["X (N/m)", "Y (N/m)", "Z (N/m)"],
-  };
-  const fields = Object.keys(labels).filter((k) => Array.isArray(entity[k]));
   $("#inspector-content").innerHTML =
-    `<h3>${key === "loads" ? esc(entity.type) + " load" : key === "supports" ? "Support" : "Node"}</h3><p>${esc(label(entity.node || entity.member || entity.id))}</p><form id="direct-properties">${entity.case ? `<label>Load case<select name="case">${project.loadCases.map((c) => `<option value="${esc(c.id)}" ${entity.case === c.id ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select></label>` : ""}${entity.axes ? `<label>Axes<select name="axes"><option ${entity.axes === "global" ? "selected" : ""}>global</option><option ${entity.axes === "local" ? "selected" : ""}>local</option></select></label>` : ""}${fields.map((k) => `<fieldset><legend>${esc(k)}</legend><div class="fields">${entity[k].map((v, i) => `<label>${labels[k][i]}<input name="${k}-${i}" ${typeof v === "boolean" ? `type="checkbox" ${v ? "checked" : ""}` : `value="${esc(v)}" required inputmode="decimal"`}></label>`).join("")}</div></fieldset>`).join("")}<p class="form-help">Unit suffixes are accepted. Changes apply as one undo step.</p><p id="direct-error" class="error-text" role="alert"></p><div class="property-actions"><button class="primary">Apply changes</button><button type="button" id="cancel-direct">Cancel changes</button>${key !== "nodes" ? '<button type="button" id="delete-assignment">Delete</button>' : ""}</div></form>`;
+    `<h3>${esc(entityGuides[key][0])} · ${esc(label(entity.id))}</h3><form id="direct-properties" class="entity-form">${entityFields(key, entity, project, { compact: true })}<p id="direct-error" class="error-text" role="alert"></p><div class="property-actions full"><button class="primary">Apply changes</button><button type="button" id="cancel-direct">Cancel changes</button>${key !== "nodes" ? '<button type="button" id="delete-assignment">Delete</button>' : ""}</div></form>`;
+  bindEntityFields($("#direct-properties"), key, project);
   $("#direct-properties").oninput = () => {
     formDirty = true;
     setBusy(busy);
@@ -542,15 +536,8 @@ function renderDirectProperties(key, entity) {
   };
   $("#direct-properties").onsubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const value = { ...entity };
-    for (const k of fields)
-      value[k] = entity[k].map((v, i) =>
-        typeof v === "boolean" ? data.has(`${k}-${i}`) : data.get(`${k}-${i}`),
-      );
-    if (entity.case) value.case = data.get("case");
-    if (entity.axes) value.axes = data.get("axes");
     try {
+      const value = readEntityFields(e.currentTarget, key, entity, project);
       await command(
         key === "nodes"
           ? "SetNodePosition"
@@ -623,7 +610,7 @@ function renderInspector() {
   $("#selected-status").textContent =
     `Member ${label(m.id)} selected · ${label(m.start)} → ${label(m.end)}`;
   $("#inspector-content").innerHTML =
-    `<div class="inspector-heading"><span class="symbol">╱</span><div><strong>Member ${esc(label(m.id))}</strong><small>${esc(label(m.start))} → ${esc(label(m.end))} · Custom section</small></div></div><form id="member-form"><div class="form-section"><h3>Geometry</h3><div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(label(mat.id))}</h3><div class="fields">${input("elasticity", "E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(label(sec.id))}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(label(m.start))}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Tip Fz [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(label(m.id))} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples.at(-1)?.displacement[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : ""}`;
+    `<div class="inspector-heading"><span class="symbol">${structuralIcon("member")}</span><div><strong>Member ${esc(label(m.id))}</strong><small>${esc(label(m.start))} → ${esc(label(m.end))} · Custom section</small></div></div><form id="member-form"><div class="form-section"><h3>Geometry</h3>${guideDiagram("members")}<div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(label(mat.id))}</h3><div class="fields">${input("elasticity", "Elastic stiffness E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(label(sec.id))}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "Twisting resistance J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Bending about y · Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Bending about z · Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(label(m.start))}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Vertical tip force [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(label(m.id))} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples.at(-1)?.displacement[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : ""}`;
   $("#discard-properties").onclick = () => {
     message("");
     renderInspector();
@@ -819,7 +806,7 @@ $("#analyse").onclick = async () => {
   try {
     setBusy(true);
     message("Analysing the current model…");
-    const chosen = $("#result-case").value || project.loadCases[0].id;
+    const chosen = $("#result-case").value || project.loadCases[0]?.id;
     const response = await gateway.send("analyse", {
       caseIds: project.loadCases.some((c) => c.id === chosen) ? [chosen] : [],
       combinationIds: project.combinations.some((c) => c.id === chosen)
@@ -968,7 +955,7 @@ function entityList(key) {
   }[key];
   modal(
     title,
-    `<p>Edit authoritative model data. Coordinates and all advanced fields are in SI units.</p><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[key].map((v) => `<tr><th>${esc(label(v.id))}</th><td>${esc(v.name || label(v.node) || v.type || (v.start ? `${label(v.start)} → ${label(v.end)}` : v.position?.join(", ") || ""))}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`).join("")}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${title.toLowerCase()}</button>`,
+    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[key].map((v) => `<tr><th>${esc(label(v.id))}</th><td>${esc(v.name || label(v.node) || v.type || (v.start ? `${label(v.start)} → ${label(v.end)}` : v.position?.join(", ") || ""))}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`).join("")}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${entityGuides[key][0].toLowerCase()}</button>`,
   );
   for (const b of document.querySelectorAll("[data-edit]"))
     b.onclick = () =>
@@ -978,139 +965,138 @@ function entityList(key) {
       );
   $("#add-entity").onclick = () => editEntity(key, null);
 }
-function editEntity(key, old) {
+function editEntity(key, old, draft) {
   const id =
     old?.id || key[0] + crypto.randomUUID().replaceAll("-", "").slice(0, 8);
   const defaults = {
     nodes: { id, position: [0, 0, 0] },
     members: {
       id,
-      start: project.nodes[0].id,
-      end: project.nodes.at(-1).id,
-      material: project.materials[0].id,
-      section: project.sections[0].id,
+      start: project.nodes[0]?.id,
+      end: project.nodes.at(-1)?.id,
+      material: project.materials[0]?.id,
+      section: project.sections[0]?.id,
       localY: [0, 1, 0],
       releaseStart: { my: false, mz: false },
       releaseEnd: { my: false, mz: false },
     },
-    materials: { ...project.materials[0], id, name: "Custom material" },
-    sections: { ...project.sections[0], id, name: "Custom section" },
+    materials: {
+      E: 200e9,
+      nu: 0.3,
+      density: 7850,
+      ...project.materials[0],
+      id,
+      name: "Custom material",
+    },
+    sections: {
+      A: 0.01,
+      Iy: 1e-5,
+      Iz: 2e-5,
+      J: 2e-5,
+      cy: 0.1,
+      cz: 0.2,
+      provenance: "Custom properties — verify before analysis",
+      ...project.sections[0],
+      id,
+      name: "Custom section",
+    },
     supports: {
       id,
       node:
-        project.nodes.find((n) => n.id === selected)?.id || project.nodes[0].id,
+        project.nodes.find((n) => n.id === selected)?.id ||
+        project.nodes[0]?.id,
       fixed: [true, true, true, true, true, true],
       prescribed: [0, 0, 0, 0, 0, 0],
     },
     loadCases: { id, name: "New case", category: "other" },
     loads: {
       id,
-      case: project.loadCases[0].id,
+      case: project.loadCases[0]?.id,
       type: "nodal",
       node:
         project.nodes.find((n) => n.id === selected)?.id ||
-        project.nodes.at(-1).id,
+        project.nodes.at(-1)?.id,
       values: [0, 0, -10000, 0, 0, 0],
     },
     combinations: {
       id,
       name: "New combination",
       purpose: "analysis",
-      terms: [{ case: project.loadCases[0].id, factor: 1 }],
+      terms: [{ case: project.loadCases[0]?.id, factor: 1 }],
     },
   };
-  const entity = structuredClone(old || defaults[key]);
-  const arrayLabels = {
-    position: ["X (m or mm)", "Y (m or mm)", "Z (m or mm)"],
-    localY: [
-      "Local Y direction X",
-      "Local Y direction Y",
-      "Local Y direction Z",
-    ],
-    prescribed: [
-      "Prescribed X (m or mm)",
-      "Prescribed Y (m or mm)",
-      "Prescribed Z (m or mm)",
-      "Prescribed Rx (rad or deg)",
-      "Prescribed Ry (rad or deg)",
-      "Prescribed Rz (rad or deg)",
-    ],
-    forcePerLength: [
-      "Density X (N/m or kN/m)",
-      "Density Y (N/m or kN/m)",
-      "Density Z (N/m or kN/m)",
-    ],
-    fixed: [
-      "Restrain X",
-      "Restrain Y",
-      "Restrain Z",
-      "Restrain Rx",
-      "Restrain Ry",
-      "Restrain Rz",
-    ],
-    values: [
-      "Fx (N or kN)",
-      "Fy (N or kN)",
-      "Fz (N or kN)",
-      "Mx (Nm or kNm)",
-      "My (Nm or kNm)",
-      "Mz (Nm or kNm)",
-    ],
-  };
-  $("#modal-title").textContent = (old ? "Edit " : "Add ") + key;
+  const entity = structuredClone(draft || old || defaults[key]);
+  const needs =
+    key === "members"
+      ? [
+          ["nodes", 2, "two points"],
+          ["materials", 1, "a material"],
+          ["sections", 1, "a section"],
+        ]
+      : key === "loads"
+        ? [
+            ["nodes", 1, "a point"],
+            ["loadCases", 1, "a load case"],
+          ]
+        : key === "supports"
+          ? [["nodes", 1, "a point"]]
+          : key === "combinations"
+            ? [["loadCases", 1, "a load case"]]
+            : [];
+  const missing = needs.filter(
+    ([collection, count]) => project[collection].length < count,
+  );
+  $("#modal-title").textContent =
+    (old ? "Edit " : "Add ") + entityGuides[key][0].toLowerCase();
+  if (missing.length) {
+    $("#modal-content").innerHTML =
+      `<p>First add ${missing.map((x) => x[2]).join(" and ")}. Then return here to add this ${entityGuides[key][0].toLowerCase()}.</p><button id="setup-required" class="primary">Add ${missing[0][2]}</button>`;
+    $("#setup-required").onclick = () => editEntity(missing[0][0], null);
+    return;
+  }
   $("#modal-content").innerHTML =
-    `<form id="entity-form" class="entity-form">${Object.entries(entity)
-      .map(([k, v]) =>
-        k === "id"
-          ? `<input type="hidden" name="id" value="${esc(v)}"><p class="full">${old ? esc(label(v)) : "Label assigned when saved"}</p>`
-          : [
-                "node",
-                "member",
-                "start",
-                "end",
-                "material",
-                "section",
-                "case",
-              ].includes(k)
-            ? `<label>${esc(k)}<input name="${esc(k)}" value="${esc(label(v))}" required></label>`
-            : arrayLabels[k] && Array.isArray(v)
-              ? `<fieldset class="full"><legend>${esc(k)}</legend><div class="entity-form">${v.map((item, i) => `<label>${esc(arrayLabels[k][i])}<input name="${k}-${i}" ${typeof item === "boolean" ? `type="checkbox" ${item ? "checked" : ""}` : `value="${esc(item)}" required`}></label>`).join("")}</div></fieldset>`
-              : `<label class="${typeof v === "object" ? "full" : ""}">${esc(k)}${typeof v === "object" ? `<textarea name="${esc(k)}" required>${esc(JSON.stringify(v))}</textarea>` : `<input name="${esc(k)}" value="${esc(v)}" ${typeof v === "number" ? 'type="text" inputmode="decimal"' : 'type="text"'} ${k === "id" && old ? "readonly" : ""} required>`}</label>`,
-      )
-      .join(
-        "",
-      )}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`;
+    `<form id="entity-form" class="entity-form">${entityFields(key, entity, project)}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`;
+  bindEntityFields($("#entity-form"), key, project);
+  const loadType = $("#entity-form [name=type]");
+  if (key === "loads" && loadType)
+    loadType.onchange = () => {
+      const form = $("#entity-form");
+      const next = {
+        id: entity.id,
+        case: form.elements.namedItem("case").value,
+        type: loadType.value,
+      };
+      if (next.type === "nodal")
+        Object.assign(next, {
+          node: project.nodes.at(-1)?.id,
+          values: [0, 0, -10000, 0, 0, 0],
+        });
+      if (next.type === "uniform")
+        Object.assign(next, {
+          member: project.members[0]?.id,
+          axes: "global",
+          forcePerLength: [0, 0, -1000],
+        });
+      if (next.type === "selfWeight")
+        Object.assign(next, {
+          members: project.members.map((m) => m.id),
+          factor: 1,
+        });
+      if (!project.members.length && next.type !== "nodal") {
+        loadType.value = entity.type;
+        $("#entity-error").textContent =
+          "Add a member before applying a member load.";
+        return;
+      }
+      editEntity(key, old, next);
+    };
   $("#entity-form").onsubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (form.dataset.saving) return;
     form.dataset.saving = "true";
     try {
-      const data = new FormData(e.target);
-      const value = Object.fromEntries(
-        Object.entries(entity).map(([k, v]) => [
-          k,
-          arrayLabels[k] && Array.isArray(v)
-            ? v.map((item, i) =>
-                typeof item === "boolean"
-                  ? data.has(`${k}-${i}`)
-                  : data.get(`${k}-${i}`),
-              )
-            : typeof v === "object"
-              ? JSON.parse(data.get(k))
-              : [
-                    "node",
-                    "member",
-                    "start",
-                    "end",
-                    "material",
-                    "section",
-                    "case",
-                  ].includes(k)
-                ? entityId(project, data.get(k))
-                : data.get(k),
-        ]),
-      );
+      const value = readEntityFields(form, key, entity, project);
       const type = {
         nodes: old ? "SetNodePosition" : "AddNode",
         members: "AddMember",
