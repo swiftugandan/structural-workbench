@@ -1,3 +1,4 @@
+import { templatePicker } from "./model-templates.js";
 import { escape as esc } from "./reports/report.js";
 import { entityLabel } from "./entity-labels.js";
 
@@ -442,7 +443,7 @@ export function entityFields(key, entity, project, { compact = false } = {}) {
       help(
         "Only checked cases are included. Choose factors appropriate to your design basis. The purpose label does not perform a code-compliance check.",
       );
-  return `<div class="entity-guide full">${key === "loads" && (entity.values || entity.forcePerLength) ? "" : guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div>${content}`;
+  return `<div class="entity-guide full">${["sections", "materials", "loads"].includes(key) ? "" : guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div>${compact ? "" : templatePicker(key, entity)}${content}`;
 }
 export function readEntityFields(form, key, entity, project) {
   const data = new FormData(form),
@@ -493,6 +494,17 @@ export function readEntityFields(form, key, entity, project) {
   }
   if (key === "members" && value.start === value.end)
     throw Error("Choose two different points for the start and end.");
+  if (
+    key === "sections" &&
+    ["A", "Iy", "Iz", "J", "cy", "cz"].some(
+      (k) =>
+        form.elements.namedItem(k)?.value.trim() !==
+        form.elements.namedItem(k)?.dataset.initial,
+    ) &&
+    value.provenance === entity.provenance &&
+    !value.provenance.startsWith("Modified from ")
+  )
+    value.provenance = "Modified from " + value.provenance;
   return value;
 }
 export function bindEntityFields(form, key, project) {

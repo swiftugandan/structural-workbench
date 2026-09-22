@@ -7,7 +7,7 @@ const shapes = {
   section:
     '<path d="M5 3h14v4h-5v10h5v4H5v-4h5V7H5Z" fill="currentColor" stroke-width="1"/>',
   material:
-    '<path d="M3 3h18v18H3Z"/><path d="m3 9 6-6M3 16 16 3m5 21 16-16M12 21l9-9M19 21l2-2" stroke-width="1.2"/>',
+    '<path d="M3 3h18v18H3Z"/><path d="m3 9 6-6M3 16 16 3M5 21l16-16M12 21l9-9M19 21l2-2" stroke-width="1.2"/>',
   support:
     '<circle cx="12" cy="5" r="2" fill="white"/><path d="m12 7-7 10h14ZM3 20h18m-16 0-2 3m8-3-2 3m8-3-2 3"/>',
   load: '<path d="M12 2v15m-4-4 4 4 4-4M3 21h18"/><path d="M5 4v7m-2-2 2 2 2-2M19 4v7m-2-2 2 2 2-2" stroke-width="1.3"/>',

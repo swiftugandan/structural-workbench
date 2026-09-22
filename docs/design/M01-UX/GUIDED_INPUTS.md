@@ -11,3 +11,7 @@ Loads have a positive magnitude and a named direction with a live arrow. Custom 
 Support presets set the active degrees of freedom for the current analysis mode and preserve inactive restraints. The form shows the actual restrained directions. Nonzero prescribed displacements open their disclosure automatically. Combinations use checked load cases and factor inputs, and do not claim automatic code factors or code compliance.
 
 Validation covers real-kernel save/export/undo, unchanged numerical properties, unit conversion, support presets, load variants, combination factors, keyboard operation, mobile layout, and accessibility. No numerical kernel or solver formulation has changed. Live computer-use review remains subject to the browser policy service being available.
+
+## Visual template library
+
+Section, load and material editors now offer illustrated template cards. Eight published catalogue sections cover IPE, hot-finished SHS, RHS and CHS, with two sizes in each family. Six loading patterns and three elastic material presets populate editable draft inputs. See [template sources and assumptions](TEMPLATE_SOURCES.md). Matching section/material diagrams are cleared when the inputs are edited; saving a changed section marks its catalogue source as modified. Templates do not commit until Save is pressed.

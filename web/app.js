@@ -1,3 +1,4 @@
+import { bindTemplates } from "./model-templates.js";
 import { structuralIcon } from "./structural-icons.js";
 import {
   entityGuides,
@@ -1057,6 +1058,9 @@ function editEntity(key, old, draft) {
   $("#modal-content").innerHTML =
     `<form id="entity-form" class="entity-form">${entityFields(key, entity, project)}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`;
   bindEntityFields($("#entity-form"), key, project);
+  bindTemplates($("#entity-form"), key, entity, project, (next) =>
+    editEntity(key, old, next),
+  );
   const loadType = $("#entity-form [name=type]");
   if (key === "loads" && loadType)
     loadType.onchange = () => {

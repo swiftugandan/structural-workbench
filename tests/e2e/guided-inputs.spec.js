@@ -151,3 +151,115 @@ test("Guided forms are accessible and fit desktop and phone widths", async ({
     await page.locator("#close-modal").click();
   }
 });
+
+test("Section templates use published properties, preserve identity, and save custom edits honestly", async ({
+  page,
+}) => {
+  await start(page);
+  // Independently transcribed table values: A (m²), Iy/Iz/J (m⁴).
+  const cases = [
+    ["ipe200", null, 0.00285, 0.0000194, 0.00000142, 0.0000000692],
+    ["ipe200", "ipe300", 0.00538, 0.0000836, 0.00000604, 0.000000199],
+    ["shs100x5", null, 0.00187, 0.00000279, 0.00000279, 0.00000439],
+    ["shs100x5", "shs100x63", 0.00232, 0.00000336, 0.00000336, 0.00000534],
+    ["rhs150x5", null, 0.00237, 0.00000739, 0.00000392, 0.00000807],
+    ["rhs150x5", "rhs150x63", 0.00295, 0.00000898, 0.00000474, 0.00000986],
+    ["chs114x5", null, 0.00172, 0.00000257, 0.00000257, 0.00000514],
+    ["chs114x5", "chs114x63", 0.00214, 0.00000313, 0.00000313, 0.00000625],
+  ];
+  for (const [template, size, A, Iy, Iz, J] of cases) {
+    const hash = await page.locator("#hash-status").textContent();
+    await edit(page, "sections", "sec1");
+    await page.locator(`[data-template="${template}"]`).click();
+    if (size) await page.locator("[data-template-size]").selectOption(size);
+    await expect(page.locator(".template-reference svg")).toBeVisible();
+    await expect(page.locator("#hash-status")).toHaveText(hash);
+    await save(page);
+    expect((await model(page)).sections[0]).toMatchObject({
+      id: "sec1",
+      A,
+      Iy,
+      Iz,
+      J,
+    });
+  }
+  await edit(page, "sections", "sec1");
+  await page.locator('[name="A"]').fill("2000");
+  await expect(page.locator(".template-reference")).toHaveCount(0);
+  await save(page);
+  expect((await model(page)).sections[0].provenance).toMatch(/^Modified from /);
+});
+
+test("Material and load templates save editable defaults through the real kernel", async ({
+  page,
+}) => {
+  await start(page);
+  for (const [template, E, nu, density] of [
+    ["steel", 210e9, 0.3, 7850],
+    ["aluminium", 70e9, 0.33, 2700],
+    ["concrete", 31e9, 0.2, 2500],
+  ]) {
+    await edit(page, "materials", "mat1");
+    await page.locator(`[data-template="${template}"]`).click();
+    if (template === "concrete")
+      await expect(page.locator(".template-reference")).toContainText(
+        "Cracking, creep",
+      );
+    await save(page);
+    expect((await model(page)).materials[0]).toMatchObject({
+      id: "mat1",
+      E,
+      nu,
+      density,
+    });
+  }
+  for (const [template, type, values] of [
+    ["point", "nodal", [0, 0, -10000, 0, 0, 0]],
+    ["uniform", "uniform", [0, 0, -1000]],
+    ["lateral", "nodal", [10000, 0, 0, 0, 0, 0]],
+    ["uplift", "uniform", [0, 0, 1000]],
+    ["moment", "nodal", [0, 0, 0, 0, 5000, 0]],
+    ["selfWeight", "selfWeight", null],
+  ]) {
+    await edit(page, "loads", "l1");
+    await page.locator(`[data-template="${template}"]`).click();
+    await save(page);
+    const load = (await model(page)).loads[0];
+    expect(load.type).toBe(type);
+    expect(load.case).toBe("LC1");
+    if (values)
+      expect(load[type === "nodal" ? "values" : "forcePerLength"]).toEqual(
+        values,
+      );
+    else expect(load).toMatchObject({ factor: 1, members: ["m1", "m2", "m3"] });
+    await page.locator("#analyse").click();
+    await expect(page.locator("#result-status")).toContainText("Current");
+  }
+});
+
+test("Template galleries have accessible diagrams and fit a phone editor", async ({
+  page,
+}) => {
+  await start(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.locator('[data-panel="model"]').click();
+  for (const [key, id, template] of [
+    ["sections", "sec1", "rhs150x5"],
+    ["materials", "mat1", "concrete"],
+    ["loads", "l1", "uniform"],
+  ]) {
+    await edit(page, key, id);
+    await page.locator(`[data-template="${template}"]`).click();
+    const scan = await new AxeBuilder({ page }).include("#modal").analyze();
+    expect(scan.violations).toEqual([]);
+    expect(
+      await page
+        .locator("#modal-content")
+        .evaluate((el) => el.scrollWidth <= el.clientWidth + 1),
+    ).toBe(true);
+    await page
+      .locator(".template-library")
+      .screenshot({ path: `${evidence}/${key}-templates.png` });
+    await page.locator("#close-modal").click();
+  }
+});
