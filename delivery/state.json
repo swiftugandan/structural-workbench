@@ -876,6 +876,14 @@
         "buildHash": "ec1b298a2adc69bf6e0f8f032655a7309657a9d615d00a4458fd550e34b95195",
         "testCount": 12,
         "priorRegressionCount": 46
+      },
+      "canvasNavigation": {
+        "status": "PASS",
+        "scope": "Canvas-owned navigation controls and removal of toolbar GPU button; recovery in View menu",
+        "evidencePath": "evidence/M01/canvas-navigation",
+        "sourceHash": "7233edd07d2fd92e2f31aa6bf47d5c0fd6704a572e3b904c8797493054d20570",
+        "buildHash": "dd6545fbec3c68ba978f217fa37ed1497493d81065dc256211b2e872a19f61a0",
+        "testCount": 15
       }
     },
     "M01-INPUTS": {

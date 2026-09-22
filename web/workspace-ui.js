@@ -95,17 +95,6 @@ export function workspaceUI({
         ["measure-tool", "measure", "Measure"],
       ],
     ],
-    [
-      "View",
-      "Navigate",
-      [
-        ["pan-tool", "move", "Pan"],
-        ["orbit-tool", "orbit", "Orbit"],
-        ["axes-toggle", "axes", "Local axes"],
-        ["dimensions-toggle", "measure", "Dimensions"],
-        ["fit", "fit", "Fit"],
-      ],
-    ],
   ];
   for (const [category, label, commands] of groups) {
     const group = document.createElement("div");
@@ -126,6 +115,23 @@ export function workspaceUI({
     group.append(caption);
     $("#ribbon-content").append(group);
   }
+  const navigation = document.createElement("div");
+  navigation.className = "canvas-navigation";
+  navigation.setAttribute("role", "group");
+  navigation.setAttribute("aria-label", "Canvas navigation and overlays");
+  for (const [id, img, text] of [
+    ["pan-tool", "move", "Pan"],
+    ["orbit-tool", "orbit", "Orbit"],
+    ["axes-toggle", "axes", "Local axes"],
+    ["dimensions-toggle", "measure", "Dimensions"],
+    ["fit", "fit", "Fit"],
+  ]) {
+    const button = $("#" + id);
+    button.innerHTML = icon(img) + `<span>${text}</span>`;
+    button.title = text;
+    navigation.append(button);
+  }
+  $(".viewport-toolbar .segmented").after(navigation);
   const resultGroup = document.createElement("div");
   resultGroup.className = "ribbon-group";
   resultGroup.dataset.category = "Results";

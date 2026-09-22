@@ -10,3 +10,5 @@ Menus reuse existing commands and state. Disabled commands reflect solving, read
 Keyboard: roving menu focus; Left/Right between headings, Up/Down and Home/End within menus, Enter/Space activation, Escape restoration, Tab dismissal, outside-click dismissal. F10 enters the menu bar. Shortcuts are platform-labelled, listed beside commands and in Help. Text editing and open dialogs retain their own keys. No shortcuts create an alternate engineering mutation path.
 
 Responsive: header wraps; menus stay within the viewport and scroll vertically. Narrow screens retain exclusive Canvas/Model/Properties/Results navigation through View. Menus remain reachable when ribbon and panels are hidden.
+
+Canvas ownership refinement: Pan, Orbit, Local axes, Dimensions and Fit live beside the canvas's Plan/Elevation/3D controls, not in the application ribbon. The canvas toolbar toggle covers these controls; equivalent View commands and shortcuts remain available. The GPU-labelled reset button is removed from the toolbar, with recovery retained as View > Recreate viewport.

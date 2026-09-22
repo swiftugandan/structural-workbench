@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { record } from "../../tools/evidence.mjs";
@@ -55,7 +56,7 @@ test("GPU device destruction recovers model and current result", async ({
   );
   await expect(page.locator("#hash-status")).toContainText(/^[a-f0-9]{12}/);
   const hash = await page.locator("#hash-status").textContent();
-  await page.locator("#reset-viewport").click();
+  await menuCommand(page, "View", "Recreate viewport");
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-device-generation",
     "2",

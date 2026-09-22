@@ -2385,3 +2385,30 @@ body:has(#workspace:not([hidden])) > .appbar {
     min-width: min(270px, calc(100vw - 8px));
   }
 }
+
+/* Camera and overlay controls belong to the viewport. */
+.canvas-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.canvas-navigation button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+}
+.canvas-navigation .command-icon {
+  width: 16px;
+  height: 16px;
+}
+.canvas-navigation [aria-pressed="true"] {
+  background: #eaf1ff;
+  color: #174e9f;
+  border-color: #afc5e7;
+}
+.viewport-toolbar {
+  height: auto;
+  flex-shrink: 0;
+}

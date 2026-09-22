@@ -36,7 +36,9 @@ async function draw(page, start, end) {
   await page.mouse.move(b.x, b.y);
   await expect(page.locator("#draw-status")).toContainText(`node ${end}`);
   await page.mouse.click(b.x, b.y);
-  await page.locator("#viewport").press("Enter");
+  await expect(page.locator("#draw-status")).toContainText(
+    "Member added with one undo step",
+  );
 }
 test("M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect", async ({
   page,
