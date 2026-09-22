@@ -1,0 +1,59 @@
+
+Running 4 tests using 1 worker
+
+(node:57134) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:57134) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (4.6s)
+  ✘  2 tests/e2e/force-inspector.spec.js:2:1 › Selected member force diagram station, units and stale state (6.9s)
+(node:57280) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:57280) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 tests/e2e/workspace-ux.spec.js:3:1 › UX ribbon, keyboard context menu and property drafts preserve model state (4.8s)
+  ✓  4 tests/e2e/workspace-ux.spec.js:40:1 › UX responsive panel navigation retains editable properties and results (2.0s)
+
+
+  1) tests/e2e/force-inspector.spec.js:2:1 › Selected member force diagram station, units and stale state 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('#member-force-readout')
+    Expected substring: "0 kN"
+    Received string:    "x = 3 m · My -0.0000000000000145519 kN·m"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('#member-force-readout') with timeout 5000ms
+      - waiting for locator('#member-force-readout')
+        14 × locator resolved to <output id="member-force-readout">x = 3 m · My -0.0000000000000145519 kN·m</output>
+           - unexpected value "x = 3 m · My -0.0000000000000145519 kN·m"
+
+
+      16 |   await page.locator("#member-force-station").dispatchEvent("change");
+      17 |   await expect(page.locator("#member-force-readout")).toContainText("x = 3 m");
+    > 18 |   await expect(page.locator("#member-force-readout")).toContainText("0 kN");
+         |                                                       ^
+      19 |   await page.locator("#member-force-component").selectOption("shearZ");
+      20 |   await expect(page.locator("#member-force-readout")).toContainText("-10 kN");
+      21 |   await page.locator("#units").selectOption("SI");
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/force-inspector.spec.js:18:55
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/force-inspector.spec.js:2:1 › Selected member force diagram station, units and stale state 
+  3 passed (21.4s)

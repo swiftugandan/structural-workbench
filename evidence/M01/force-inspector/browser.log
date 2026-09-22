@@ -1,0 +1,13 @@
+
+Running 4 tests using 1 worker
+
+(node:58723) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58723) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (4.4s)
+  ✓  2 tests/e2e/force-inspector.spec.js:2:1 › Selected member force diagram station, units and stale state (4.0s)
+  ✓  3 tests/e2e/workspace-ux.spec.js:3:1 › UX ribbon, keyboard context menu and property drafts preserve model state (3.9s)
+  ✓  4 tests/e2e/workspace-ux.spec.js:40:1 › UX responsive panel navigation retains editable properties and results (2.0s)
+
+  4 passed (16.3s)

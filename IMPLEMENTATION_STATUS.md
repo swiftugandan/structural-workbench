@@ -107,3 +107,5 @@ Effect-direction follow-up: removed deformation's constant-depth overlay while r
 Warehouse W01 added to Worked examples, opens in 3D. Analysed and independently cross-checked: 468 OpenSees and 468 native/WASM values, six equilibrium components and browser journey pass. Peak nodal displacement 8.80 mm; reactions balance 180 kN downward + 45 kN lateral. Synthetic demonstration inputs, not building design validation. Evidence: evidence/M01/warehouse.
 
 Grouped result picker: Model/deformation, Member forces (N/Vy/Vz), Member moments (My/Mz/T), remembered per-family choice and retained action after analysis. Mz follows local xy; N/T use signed on-member colouring. Evidence/M01/result-picker: 6 unit and 7 browser tests pass. Live visual/full milestone acceptance remain pending.
+
+Selection Forces & moments tab implemented: member component diagrams/station readout/end values and node applied/reaction/member-on-node diagrams with global tables. Units and stale guards verified. Evidence/M01/force-inspector: 4 browser + 1 analytical unit pass. Live visual/full acceptance pending.

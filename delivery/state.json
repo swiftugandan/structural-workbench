@@ -806,6 +806,15 @@
         "buildHash": "2173cbb33fb0e5e765b809cf2690f30457454014f27adf2701b110d5c2f060f7",
         "evidencePath": "evidence/M01/x-labels",
         "status": "PASS"
+      },
+      "forceInspector": {
+        "sourceRevision": "c1c1351",
+        "sourceHash": "0ac0f7f52090cc0a5e9d0e844db3405f43c0918b9fac46e048ffa13ce80bbae5",
+        "buildHash": "b6b1116beddc33fe8ad3f49c976fce8f5d059e94d7c775fc9ec9c522a290d608",
+        "evidencePath": "evidence/M01/force-inspector",
+        "status": "implemented-focused-checks-pass",
+        "browserTests": 4,
+        "unitTests": 1
       }
     },
     "M01-INPUTS": {

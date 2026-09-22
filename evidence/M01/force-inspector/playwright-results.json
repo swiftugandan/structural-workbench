@@ -1,0 +1,269 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/e2e/force-inspector.spec.js",
+      "tests/e2e/workspace-ux.spec.js",
+      "tests/accessibility",
+      "--output=/tmp/prokon-force-inspector-tests"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/prokon-force-inspector-tests",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/M01/force-inspector/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "accessibility/a11y.spec.js",
+      "file": "accessibility/a11y.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "landing and solved workspace accessibility",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4421,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T08:22:27.595Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/prokon-force-inspector-tests/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1c2357ba4171646c54ab-f4b5e68bcd440c0e2c90",
+          "file": "accessibility/a11y.spec.js",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/force-inspector.spec.js",
+      "file": "e2e/force-inspector.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Selected member force diagram station, units and stale state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3963,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T08:22:32.568Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4c2e0c8155373d91b60-0e48af1492cc6bb3b5ec",
+          "file": "e2e/force-inspector.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/workspace-ux.spec.js",
+      "file": "e2e/workspace-ux.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "UX ribbon, keyboard context menu and property drafts preserve model state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3894,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T08:22:36.632Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/prokon-force-inspector-tests/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-83e65a7ad3f2b6c886e2",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "UX responsive panel navigation retains editable properties and results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2038,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T08:22:40.598Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/prokon-force-inspector-tests/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-e44db34fb2e098f39f25",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 40,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-22T08:22:26.479Z",
+    "duration": 16302.782,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

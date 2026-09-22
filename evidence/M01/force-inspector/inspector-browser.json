@@ -1,0 +1,47 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "0ac0f7f52090cc0a5e9d0e844db3405f43c0918b9fac46e048ffa13ce80bbae5",
+  "buildHash": "b6b1116beddc33fe8ad3f49c976fce8f5d059e94d7c775fc9ec9c522a290d608",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "browser.log": "f68e6190489c4e8c1d3d972fe124212ad4b1151c64c66ab6cbf4f81b29641625",
+    "playwright-results.json": "201c2d1b2e64aa0b378d88db748ff712c19ce411edec7aadf8c73b298712d633"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-22T08:23:53.436Z",
+  "status": "PASS",
+  "testCount": 4,
+  "stats": {
+    "startTime": "2026-09-22T08:22:26.479Z",
+    "duration": 16302.782,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/force-inspector.spec.js",
+    "tests/e2e/workspace-ux.spec.js",
+    "tests/accessibility",
+    "--output=/tmp/prokon-force-inspector-tests"
+  ],
+  "artifacts": [
+    "browser.log",
+    "playwright-results.json"
+  ]
+}
