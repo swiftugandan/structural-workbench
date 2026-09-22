@@ -44,11 +44,13 @@ jobs:
       - name: Run release smoke tests
         run: |
           cargo test --workspace --locked
-          npm run test:contracts
           npm run test:security
 
       - name: Build the static application
         run: npm run build
+
+      - name: Verify built contracts
+        run: npm run test:contracts
 
       - name: Disable Jekyll processing
         run: touch dist/.nojekyll
