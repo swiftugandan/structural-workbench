@@ -1,18 +1,37 @@
 {
+  "taskId": "M00-A",
+  "milestone": "M00",
   "sourceHash": "6a6d487c37f7789b1879635b8db576f848b84bbee7c4270eef95f040a9195080",
-  "hashAlgorithmVersion": 1,
-  "exclusions": [
-    "evidence",
-    "delivery",
-    "dist",
-    "target",
-    "node_modules",
-    "tools/bin",
-    "docs",
-    "capabilities.json",
-    "release-manifest.json"
+  "buildHash": "fbdf46a393d490ce5ee5d674ba29dad74447323308bb239a248938eb5b57d9d9",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-22T08:08:07.038Z",
+  "status": "PASS",
+  "testCount": 5,
+  "testIds": [
+    "locked-native-build",
+    "locked-wasm-build",
+    "wasm-bindgen",
+    "draft2020-schema-compilation",
+    "unchanged-source-snapshot"
   ],
-  "files": {
+  "command": [
+    "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+    "/Users/p.munaawa/Documents/projects/labs/prokon/tools/build.mjs"
+  ],
+  "outputFiles": {
     "app.js": "69e377ef4dffce52ffaa4de0c0805982e9ccb2b5e867f5d89c08c28dbe72926a",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
     "canvas-tools.js": "d88c75a97440dd265cafbf711ac0075cf46e33bb29f0f57b67efdc12cb5bbdca",
@@ -57,7 +76,5 @@
     "topology.js": "6ee06278fcd9301a51c72ef58ba6226a4ea85df4d5b6773d4f7b31cd8f264b29",
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e",
     "workspace-ui.js": "4c2de8f060e3c9f7999c0148f5e7a57acc8919f08b35f4df38f77cbc34d9314c"
-  },
-  "buildHash": "fbdf46a393d490ce5ee5d674ba29dad74447323308bb239a248938eb5b57d9d9",
-  "releaseStatus": "working-preview-not-accepted"
+  }
 }

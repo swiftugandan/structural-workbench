@@ -767,6 +767,27 @@ function renderResults() {
       ),
     ]);
   }
+  if (tab === "section-forces") {
+    heads = [
+      "Member",
+      "Position [%]",
+      ...[
+        "Axial N",
+        "Shear Vy",
+        "Shear Vz",
+        "Torsion T",
+        "Moment My",
+        "Moment Mz",
+      ].map((name, i) => `${name} [${eng ? "kN" : "N"}${i > 2 ? " m" : ""}]`),
+    ];
+    rows = result.members.flatMap((m) =>
+      m.samples.map((sample) => [
+        label(m.id),
+        format(sample.station * 100),
+        ...sample.actions.map((value) => format(value * f)),
+      ]),
+    );
+  }
   if (tab === "forces") {
     heads = [
       "Member",
@@ -800,7 +821,7 @@ function renderResults() {
     return;
   }
   $("#results-content").innerHTML =
-    `${current ? "" : '<p class="notice-small">Stale results — these values belong to the previous model.</p>'}<table><thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`).join("")}</tbody></table>`;
+    `${tab === "section-forces" ? '<p class="notice-small">Local member axes · signed section forces, matching the diagrams. Position: 0% at start (i), 100% at end (j).</p>' : tab === "forces" ? '<p class="notice-small">Local nodal actions applied to the member ends. Their signs differ from section forces.</p>' : ""}${current ? "" : '<p class="notice-small">Stale results — these values belong to the previous model.</p>'}<table><thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`).join("")}</tbody></table>`;
 }
 for (const b of document.querySelectorAll("[data-tab]"))
   b.onclick = () => {

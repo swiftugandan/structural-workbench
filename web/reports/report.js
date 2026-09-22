@@ -36,6 +36,24 @@ export function csv(result, project) {
       entityLabel(project, id),
       ...result.reactions.slice(i * 6, i * 6 + 6),
     ]),
+    [],
+    [
+      "Member",
+      "Position [fraction]",
+      "Axial N [N]",
+      "Shear Vy [N]",
+      "Shear Vz [N]",
+      "Torsion T [N m]",
+      "Moment My [N m]",
+      "Moment Mz [N m]",
+    ],
+    ...result.members.flatMap((m) =>
+      m.samples.map((sample) => [
+        entityLabel(project, m.id),
+        sample.station,
+        ...sample.actions,
+      ]),
+    ),
   ];
   return rows
     .map((row) =>

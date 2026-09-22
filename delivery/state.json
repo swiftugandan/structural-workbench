@@ -870,6 +870,38 @@
         "evidence/M01/guided-inputs/verified-source-files.json"
       ],
       "nextAction": "Complete live CUA visual review when admin-policy verification is available; preserve parent platform/release blockers."
+    },
+    "M01-SHEAR-TABLE": {
+      "id": "M01-SHEAR-TABLE",
+      "useCase": "Read signed member section forces including both shear components at every solver station and export CSV.",
+      "dependencies": [
+        "M01-INPUTS"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "web/app.js",
+        "web/index.html",
+        "web/reports/report.js",
+        "tests/e2e/shear-diagrams.spec.js"
+      ],
+      "acceptanceIds": [
+        "member-section-forces-table"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "npx playwright test tests/e2e/shear-diagrams.spec.js tests/e2e/result-picker.spec.js"
+      ],
+      "actualCommandOutcomes": [
+        "Build passed",
+        "4 browser tests passed using real WASM and software GPU"
+      ],
+      "evidencePaths": [
+        "evidence/M01/shear-table"
+      ],
+      "sourceHash": "6a6d487c37f7789b1879635b8db576f848b84bbee7c4270eef95f040a9195080",
+      "buildHash": "fbdf46a393d490ce5ee5d674ba29dad74447323308bb239a248938eb5b57d9d9",
+      "attempts": 1,
+      "nextAction": "Refresh preview and open Results table > Member forces. Parent platform gates unchanged."
     }
   },
   "blockers": [

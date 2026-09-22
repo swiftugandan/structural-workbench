@@ -81,3 +81,47 @@ test("Uniform-load shear shows both signs and the unused component reports zero"
     "0 kN",
   );
 });
+test("Member forces table exposes signed shear at every station and exports it", async ({
+  page,
+}) => {
+  await open(page, "B07");
+  await solve(page);
+  await page.locator('[data-tab="section-forces"]').click();
+  const table = page.locator("#results-content table");
+  await expect(
+    table.getByRole("columnheader", { name: "Shear Vy [kN]", exact: true }),
+  ).toBeVisible();
+  await expect(
+    table.getByRole("columnheader", { name: "Shear Vz [kN]", exact: true }),
+  ).toBeVisible();
+  const values = await table
+    .locator("tbody tr")
+    .evaluateAll((rows) =>
+      rows.map((row) =>
+        [...row.cells].map((c) => Number(c.textContent.replaceAll(",", ""))),
+      ),
+    );
+  expect(values.length).toBeGreaterThan(2);
+  expect(values[0][1]).toBe(0);
+  expect(values.at(-1)[1]).toBe(100);
+  expect(values.every((row) => row[3] === 0)).toBe(true);
+  expect(Math.min(...values.map((row) => row[4]))).toBeCloseTo(-30, 5);
+  expect(Math.max(...values.map((row) => row[4]))).toBeCloseTo(30, 5);
+  await page.locator("#units").selectOption("SI");
+  await expect(
+    table.getByRole("columnheader", { name: "Shear Vz [N]", exact: true }),
+  ).toBeVisible();
+  await expect(table.locator("tbody")).toContainText("30,000");
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator("#export-csv").click();
+  const download = await downloadPromise;
+  const csv = await readFile(await download.path(), "utf8");
+  expect(csv).toContain("Shear Vy [N]");
+  expect(csv).toContain("Shear Vz [N]");
+  expect(csv).toContain("30000");
+  await page.screenshot({
+    path: `${process.env.WORKBENCH_EVIDENCE_DIR}/shear-table.png`,
+  });
+  await page.locator('[data-tab="forces"]').click();
+  await expect(page.locator("#results-content")).toContainText("nodal actions");
+});
