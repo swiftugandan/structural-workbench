@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { readFile, mkdir } from "node:fs/promises";
@@ -25,7 +26,7 @@ async function save(page) {
 }
 async function model(page) {
   const pending = page.waitForEvent("download");
-  await page.locator("#export-project").click();
+  await menuCommand(page, "File", "Download project");
   return JSON.parse(await readFile(await (await pending).path(), "utf8"));
 }
 test("Guided inputs preserve exact properties and references, edit units, and undo", async ({
@@ -138,7 +139,7 @@ test("Guided forms are accessible and fit desktop and phone widths", async ({
     .screenshot({ path: `${evidence}/explorer.png` });
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    if (width === 390) await page.locator('[data-panel="model"]').click();
+    if (width === 390) await menuCommand(page, "View", "Model tree");
     await edit(page, "supports", "s1");
     const scan = await new AxeBuilder({ page }).include("#modal").analyze();
     expect(scan.violations).toEqual([]);
@@ -242,7 +243,7 @@ test("Template galleries have accessible diagrams and fit a phone editor", async
 }) => {
   await start(page);
   await page.setViewportSize({ width: 390, height: 900 });
-  await page.locator('[data-panel="model"]').click();
+  await menuCommand(page, "View", "Model tree");
   for (const [key, id, template] of [
     ["sections", "sec1", "rhs150x5"],
     ["materials", "mat1", "concrete"],

@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { readFile, mkdir } from "node:fs/promises";
@@ -13,7 +14,7 @@ async function portal(page) {
 }
 async function exported(page) {
   const download = page.waitForEvent("download");
-  await page.locator("#export-project").click();
+  await menuCommand(page, "File", "Download project");
   return JSON.parse(await readFile(await (await download).path(), "utf8"));
 }
 async function point(page, id) {

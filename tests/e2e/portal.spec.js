@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { evidenceDir } from "../../tools/evidence.mjs";
 import { execFileSync } from "node:child_process";
 import AxeBuilder from "@axe-core/playwright";
@@ -13,7 +14,7 @@ async function create(page) {
 }
 async function exported(page) {
   const pending = page.waitForEvent("download");
-  await page.locator("#export-project").click();
+  await menuCommand(page, "File", "Download project");
   return JSON.parse(await readFile(await (await pending).path(), "utf8"));
 }
 test("M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen", async ({
@@ -120,7 +121,7 @@ test("M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and re
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
   const reportDownload = page.waitForEvent("download");
-  await page.locator("#export-report").click();
+  await menuCommand(page, "File", "Export calculation report");
   await writeFile(
     `${evidenceDir("evidence/M01/current")}/portal-report.html`,
     await readFile(await (await reportDownload).path()),

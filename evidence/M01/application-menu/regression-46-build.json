@@ -1,23 +1,42 @@
 {
-  "sourceHash": "defa0a7fc4093ae9821a16fb90f6605ddef2bce00aa6bf2f4b11984d94cd9c28",
-  "hashAlgorithmVersion": 1,
-  "exclusions": [
-    "evidence",
-    "delivery",
-    "dist",
-    "target",
-    "node_modules",
-    "tools/bin",
-    "docs",
-    "capabilities.json",
-    "release-manifest.json"
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "4cbd09231d6e44d3f0275304daa24f44fb2810a4c151cf839a2d43b0f893a2f6",
+  "buildHash": "8e9a88e63352663b0e052fc26b892812a45685f7990007022eb82cf8dd121f6e",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-22T10:15:34.855Z",
+  "status": "PASS",
+  "testCount": 5,
+  "testIds": [
+    "locked-native-build",
+    "locked-wasm-build",
+    "wasm-bindgen",
+    "draft2020-schema-compilation",
+    "unchanged-source-snapshot"
   ],
-  "files": {
+  "command": [
+    "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+    "/Users/p.munaawa/Documents/projects/labs/prokon/tools/build.mjs"
+  ],
+  "outputFiles": {
     "app.html": "734cfb10359ad4838aafaa9eba0451f362a65c0667e52423ec288519b41a003a",
     "app.js": "b6933f0a335fe97b435272fd84961792a0c8a832354e8bca27a51bd3d247c971",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
     "canvas-tools.js": "d88c75a97440dd265cafbf711ac0075cf46e33bb29f0f57b67efdc12cb5bbdca",
-    "command-menu.js": "0d3b4035675f46b679b34f5bdd88d478135e8247c2632d77f715fb0ac38f3c6e",
+    "command-menu.js": "f792fb32b5f3ca0ab2cef234b4756eb2ed56ff3a26288dd0eeb30b5c782a43d7",
     "entity-forms.js": "08e45f36ef7129658d72a6d8804e685a024937f8aec4c02163552ff579308b37",
     "entity-labels.js": "d29a211cdc74af49982d157a1b075aa21674ccc6ad8513e0cf3958d07fe487ae",
     "examples/B01.json": "a33daa5c89ff6759d57360a7650bb20c277d201ccc5aef1bd8ba73fd07f7d9c6",
@@ -41,7 +60,7 @@
     "modeling.js": "96b888143f50ece2a64c9151e3211944f4769abb5b94eb7724c4b25dcca6a03f",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "a8ca22e5a0ef556c8bdf2c78e5ff64e990d930a7a05ea4f2b8fe408d392a7b9f",
+    "pkg/workbench_wasm_api_bg.wasm": "36053045b309e04e71cc892794578fa52dc1905b138df4870252bc72e3a75fdf",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "594da120aec4b98bdb8bf5de23c98a797e0c0fddc37695a3f3b118e9502861e6",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",
@@ -61,7 +80,5 @@
     "topology.js": "6ee06278fcd9301a51c72ef58ba6226a4ea85df4d5b6773d4f7b31cd8f264b29",
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e",
     "workspace-ui.js": "af24a597d02fc44ce5425d69652669ecd7db602e61b84eca47078869482dbf31"
-  },
-  "buildHash": "ec1b298a2adc69bf6e0f8f032655a7309657a9d615d00a4458fd550e34b95195",
-  "releaseStatus": "working-preview-not-accepted"
+  }
 }

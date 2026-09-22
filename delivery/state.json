@@ -867,6 +867,15 @@
         "buildHash": "0f1e1624ac34bb1c785f50487eb7c6722d78705e720dd2f8df7edd200c6957fe",
         "sourceHash": "bdd079ace8f5fd6e5b1ce397e5f517316caa7d2ad1e136b93ee9dfc4163c1a6f",
         "testCount": 10
+      },
+      "applicationMenus": {
+        "status": "PASS",
+        "scope": "Full application command map, standard menus and shortcuts; View replaces toggle row; original ribbon retained",
+        "evidencePath": "evidence/M01/application-menu",
+        "sourceHash": "defa0a7fc4093ae9821a16fb90f6605ddef2bce00aa6bf2f4b11984d94cd9c28",
+        "buildHash": "ec1b298a2adc69bf6e0f8f032655a7309657a9d615d00a4458fd550e34b95195",
+        "testCount": 12,
+        "priorRegressionCount": 46
       }
     },
     "M01-INPUTS": {

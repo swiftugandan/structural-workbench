@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 async function start(page) {
@@ -23,7 +24,7 @@ async function point(page, id) {
 }
 async function model(page) {
   const d = page.waitForEvent("download");
-  await page.locator("#export-project").click();
+  await menuCommand(page, "File", "Download project");
   return JSON.parse(await readFile(await (await d).path(), "utf8"));
 }
 async function clickNode(page, id) {

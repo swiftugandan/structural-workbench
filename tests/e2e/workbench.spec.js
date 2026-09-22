@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { record, evidenceDir } from "../../tools/evidence.mjs";
@@ -52,7 +53,7 @@ test("M00-tour: edit, solve, stale, select, export, reopen, instability", async 
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
   const hash = await page.locator("#hash-status").textContent();
   const downloadPromise = page.waitForEvent("download");
-  await page.locator("#export-project").click();
+  await menuCommand(page, "File", "Download project");
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), "utf8"));
   expect(project.sections[0].Iy).toBe(0.00002);
@@ -64,7 +65,7 @@ test("M00-tour: edit, solve, stale, select, export, reopen, instability", async 
     JSON.stringify(project, null, 2),
   );
   const reportPromise = page.waitForEvent("download");
-  await page.locator("#export-report").click();
+  await menuCommand(page, "File", "Export calculation report");
   const report = await reportPromise;
   const html = await readFile(await report.path(), "utf8");
   expect(html).toContain("calculation record");
@@ -162,7 +163,13 @@ test("narrow screen retains tables and portable export", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await start(page);
   await solve(page);
-  await expect(page.locator("#export-project")).toBeVisible();
+  await page.locator("#menu-file").click();
+  await expect(
+    page
+      .locator("#application-menu")
+      .getByRole("menuitem", { name: "Download project", exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(page.locator("#results-content")).toContainText("-45");
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth > innerWidth,

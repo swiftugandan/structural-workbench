@@ -1,0 +1,32 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "4cbd09231d6e44d3f0275304daa24f44fb2810a4c151cf839a2d43b0f893a2f6",
+  "buildHash": "8e9a88e63352663b0e052fc26b892812a45685f7990007022eb82cf8dd121f6e",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-22T10:13:53.983Z",
+  "status": "PASS",
+  "testCount": 1,
+  "testIds": [
+    "actual-gpu-destruction-recovery"
+  ],
+  "command": [
+    "npm",
+    "run",
+    "test:e2e"
+  ],
+  "limitations": "Quota and cross-tab cases are separately present in Playwright report; full failure matrix remains a later release gate."
+}

@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { evidenceDir } from "../../tools/evidence.mjs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
@@ -6,7 +7,7 @@ import { execFileSync } from "node:child_process";
 const folder = evidenceDir("evidence/M01/topology");
 async function exported(page) {
   const pending = page.waitForEvent("download");
-  await page.locator("#export-project").click();
+  await menuCommand(page, "File", "Download project");
   return JSON.parse(await readFile(await (await pending).path(), "utf8"));
 }
 async function importProject(page, p) {
@@ -112,7 +113,7 @@ test("M01 topology: axes, loaded split preview, undo, redo, oracle, save and reo
       ).toBeLessThan(0.00000051);
   }
   const download = page.waitForEvent("download");
-  await page.locator("#export-report").click();
+  await menuCommand(page, "File", "Export calculation report");
   await writeFile(
     `${folder}/split-report.html`,
     await readFile(await (await download).path()),

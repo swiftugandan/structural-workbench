@@ -1,3 +1,4 @@
+import { menuCommand } from "./menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { frame } from "./helpers/frame.js";
@@ -133,7 +134,7 @@ test("M01 CAD capacity: 1000-member editing, 10000-member import picking orbit a
   }, large);
   const exportStart = Date.now(),
     download = page.waitForEvent("download");
-  await page.locator("#export-project").click();
+  await menuCommand(page, "File", "Download project");
   const file = await (await download).path();
   const exported = JSON.parse(await readFile(file, "utf8"));
   const exportMs = Date.now() - exportStart;

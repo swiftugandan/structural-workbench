@@ -1,3 +1,4 @@
+import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 
 test("UX ribbon, keyboard context menu and property drafts preserve model state", async ({
@@ -48,11 +49,11 @@ test("UX responsive panel navigation retains editable properties and results", a
   ]) {
     await page.setViewportSize(size);
     if (size.width < 900) {
-      await page.locator('button[data-panel="properties"]').click();
+      await menuCommand(page, "View", "Properties");
       await expect(page.locator("#inertia-y")).toBeVisible();
-      await page.locator('button[data-panel="model"]').click();
+      await menuCommand(page, "View", "Model tree");
       await expect(page.locator("#model-nav")).toBeVisible();
-      await page.locator('button[data-panel="canvas"]').click();
+      await menuCommand(page, "View", "Canvas");
       await expect(page.locator("#viewport")).toBeVisible();
     }
     expect(

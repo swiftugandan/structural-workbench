@@ -1,3 +1,4 @@
+import { commandMenu } from "./command-menu.js";
 import { structuralIcon } from "./structural-icons.js";
 import { icon as lucideIcon } from "./icons.js";
 import { entityLabel } from "./entity-labels.js";
@@ -149,6 +150,7 @@ export function workspaceUI({
   panels.setAttribute("aria-label", "Workspace panels");
   panels.innerHTML =
     '<button data-panel="canvas" aria-pressed="true">Canvas</button><button data-panel="model" aria-pressed="false">Model tree</button><button data-panel="properties" aria-pressed="false">Properties</button><button data-panel="results" aria-pressed="false">Results</button>';
+  panels.hidden = true;
   ribbon.after(panels);
   const layoutKey = "workbench-layout-v1";
   const defaults = {
@@ -209,6 +211,12 @@ export function workspaceUI({
       );
     }
     panels.querySelector('[data-panel="canvas"]').hidden = !narrow.matches;
+    panels
+      .querySelector('[data-panel="canvas"]')
+      .setAttribute(
+        "aria-pressed",
+        String($(".work-grid").dataset.panel === "canvas"),
+      );
     focus.textContent = focused ? "Restore layout" : "Focus canvas";
     focus.setAttribute("aria-pressed", String(focused));
   }
@@ -238,7 +246,7 @@ export function workspaceUI({
       $(".work-grid").dataset.panel = focused ? "canvas" : previousPanel;
     } else {
       const key = button.dataset.layout || button.dataset.panel;
-      if (narrow.matches && button.dataset.panel) {
+      if (key === "canvas" || (narrow.matches && button.dataset.panel)) {
         panel(key);
         return;
       }
@@ -453,5 +461,26 @@ export function workspaceUI({
     if (!menu.hidden && !menu.contains(e.target)) close(false);
   });
   window.addEventListener("resize", () => close(false));
+  commandMenu({
+    host: projectbar,
+    layoutControls: panels,
+    panel,
+    getProject,
+    canAct,
+    hasDraft,
+    selectEntities,
+    viewport,
+    activateCanvas: () => {
+      $(".work-grid").dataset.panel = "canvas";
+      renderLayout();
+    },
+    resetLayout: () => {
+      layout = { ...defaults };
+      focused = false;
+      $(".work-grid").dataset.panel = "canvas";
+      renderLayout();
+      saveLayout();
+    },
+  });
   return { panel };
 }
