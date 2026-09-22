@@ -18,9 +18,7 @@ http
       const file = path.resolve(
         root,
         "." +
-          decodeURIComponent(
-            url.pathname === "/" ? "/index.html" : url.pathname,
-          ),
+          decodeURIComponent(url.pathname === "/" ? "/app.html" : url.pathname),
       );
       if (!file.startsWith(root + path.sep)) throw Error("outside root");
       const body = await readFile(file);

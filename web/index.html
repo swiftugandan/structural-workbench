@@ -3,378 +3,358 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="theme-color" content="#142b44" />
-    <title>Structural Workbench</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <meta name="theme-color" content="#0d2235" />
+    <meta
+      name="description"
+      content="Structural Workbench is an open-source browser application for modelling, analysing, and understanding structural frames."
+    />
+    <title>Structural Workbench — Structural mechanics in your browser</title>
+    <link rel="stylesheet" href="./marketing.css" />
   </head>
   <body>
-    <header class="appbar">
-      <button id="home" class="brand" aria-label="Projects home">
-        <svg viewBox="0 0 32 32" aria-hidden="true">
-          <path d="M3 27V5h26v22M3 5l26 22M3 27L29 5M3 16h26" /></svg
-        ><span>STRUCTURAL <b>WORKBENCH</b></span>
-      </button>
-      <div class="bar-divider"></div>
-      <span id="top-context">Your engineering workspace</span>
-      <div class="spacer"></div>
-      <span class="local-badge">◉ Local workspace</span
-      ><button id="help" class="dark-button">Help & scope</button>
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="Structural Workbench home">
+        <svg viewBox="0 0 34 34" aria-hidden="true">
+          <path d="M4 29V5h26v24M4 5l26 24M4 29 30 5M4 17h26" />
+        </svg>
+        <span>STRUCTURAL <b>WORKBENCH</b></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#principles">Principles</a>
+        <a href="#status">Status</a>
+        <a
+          href="https://github.com/swiftugandan/structural-workbench"
+          target="_blank"
+          rel="noreferrer"
+          >GitHub <span aria-hidden="true">↗</span></a
+        >
+      </nav>
+      <a class="button button-small" href="./app.html">Launch workbench</a>
     </header>
-    <main id="landing">
-      <div class="landing-top">
-        <div>
-          <p class="eyebrow">STRUCTURAL ANALYSIS · MECHANICS PREVIEW</p>
-          <h1>A clear view of your structure.</h1>
-          <p class="intro">
-            Model, analyse and understand your frames.<br />From the first
-            member to a reproducible calculation record.
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="release-pill">
+            <span></span> Open-source mechanics preview
+          </div>
+          <h1>See the structure.<br /><em>Trust the trail.</em></h1>
+          <p class="hero-intro">
+            Model and analyse structural frames in the browser with a
+            Rust/WebAssembly engineering kernel and a WebGPU viewport. Your
+            project stays local, and every result remains tied to its model.
           </p>
+          <div class="hero-actions">
+            <a class="button" href="./app.html">Open the workbench</a>
+            <a class="text-link" href="#capabilities"
+              >Explore capabilities <span aria-hidden="true">↓</span></a
+            >
+          </div>
+          <div class="hero-notes" aria-label="Product highlights">
+            <span>Runs locally</span>
+            <span>No account</span>
+            <span>MIT licensed</span>
+          </div>
         </div>
-        <div class="landing-graphic" aria-hidden="true">
-          <svg viewBox="0 0 420 210">
+
+        <div
+          class="hero-visual"
+          aria-label="Illustrated structural frame analysis"
+        >
+          <div class="visual-topline">
+            <span>FRAME / PORTAL-01</span>
+            <span class="current"><i></i> ANALYSIS CURRENT</span>
+          </div>
+          <svg viewBox="0 0 720 500" role="img" aria-labelledby="frame-title">
+            <title id="frame-title">
+              Portal frame with supports, applied loads, and a deformation
+              diagram
+            </title>
             <defs>
               <pattern
-                id="grid"
-                width="25"
-                height="25"
+                id="minor-grid"
+                width="24"
+                height="24"
                 patternUnits="userSpaceOnUse"
               >
                 <path
-                  d="M25 0H0V25"
+                  d="M24 0H0V24"
                   fill="none"
-                  stroke="#dce4ec"
-                  stroke-width=".7"
+                  stroke="#b8c6d1"
+                  stroke-opacity=".28"
                 />
               </pattern>
-            </defs>
-            <rect width="420" height="210" fill="url(#grid)" />
-            <path
-              d="M70 170V60H195V170M195 60H325V170"
-              fill="none"
-              stroke="#183851"
-              stroke-width="5"
-            />
-            <path
-              d="M70 170Q72 109 83 60Q142 77 207 60Q263 77 338 60Q329 120 325 170"
-              fill="none"
-              stroke="#387afa"
-              stroke-width="2.5"
-            />
-            <path
-              d="M65 174h20m99 0h23m108 0h21M115 20v30m-5-7 5 7 5-7m127-23v30m-5-7 5 7 5-7"
-              fill="none"
-              stroke="#b76c2f"
-              stroke-width="2"
-            /></svg
-          ><span>One model. A traceable result.</span>
-        </div>
-      </div>
-      <section class="start-grid" aria-label="Start a project">
-        <button class="start-card" id="new-project">
-          <span class="card-icon">＋</span>
-          <h2>New frame</h2>
-          <p>Start with an editable cantilever<br />and make it your own.</p>
-          <span class="card-link">Create a project →</span></button
-        ><button class="start-card" id="open-project">
-          <span class="card-icon">↥</span>
-          <h2>Open project</h2>
-          <p>
-            Pick up where you left off.<br />Import a portable project file.
-          </p>
-          <span class="card-link">Choose JSON file →</span></button
-        ><button class="start-card" id="worked-examples">
-          <span class="card-icon">▱</span>
-          <h2>Worked examples</h2>
-          <p>
-            Explore axial, bending, torsion<br />and distributed-load cases.
-          </p>
-          <span class="card-link">Explore examples →</span>
-        </button>
-      </section>
-      <button id="new-portal" class="primary">＋ New planar portal</button>
-      <section class="recent-section">
-        <div class="section-heading">
-          <h2>Recent projects</h2>
-          <span>Saved on this device</span>
-        </div>
-        <div id="recent-projects" class="recent-list">
-          <p>No projects yet. Start a frame or open a worked example.</p>
-        </div>
-      </section>
-      <footer class="landing-footer">
-        <span>Rust / WebAssembly engineering kernel</span
-        ><span>WebGPU viewport</span
-        ><span>Private by default · No account required</span>
-      </footer>
-    </main>
-    <main id="workspace" hidden>
-      <div class="projectbar">
-        <div>
-          <input
-            id="project-name"
-            aria-label="Project name"
-            maxlength="256"
-          /><span id="save-status">Not saved</span>
-        </div>
-        <div class="project-actions">
-          <button id="undo" title="Undo engineering edit">↶ Undo</button
-          ><button id="redo" title="Redo engineering edit">↷ Redo</button
-          ><button id="export-project">↓ Project</button
-          ><button id="export-report">↓ Report</button
-          ><select id="result-case" aria-label="Analysis case"></select
-          ><button id="analyse" class="primary">▶ Analyse</button
-          ><button id="cancel" hidden>Cancel analysis</button>
-        </div>
-      </div>
-      <div id="message" role="status" aria-live="polite" hidden></div>
-      <div class="work-grid">
-        <aside class="model-panel">
-          <div class="panel-title">
-            Model explorer <span id="revision">r0</span>
-          </div>
-          <div class="project-summary">
-            <span class="project-symbol">▱</span>
-            <div>
-              <strong>Frame model</strong><small id="model-count"></small>
-            </div>
-          </div>
-          <nav id="model-nav" aria-label="Model entities"></nav>
-          <div class="model-bottom">
-            <p class="eyebrow">ANALYSIS MODEL</p>
-            <label
-              >Mode<select id="analysis-mode">
-                <option value="spatial">Spatial frame</option>
-                <option value="planarXZ">Planar XZ</option>
-              </select></label
-            >
-            <p>
-              Linear elastic · Euler–Bernoulli<br />Custom synthetic sections
-            </p>
-            <button id="scope" class="text-button">View capabilities ↗</button>
-          </div>
-        </aside>
-        <section class="canvas-panel" aria-label="Structural viewport">
-          <div class="viewport-toolbar">
-            <div class="segmented">
-              <button id="view-plan">Plan</button
-              ><button id="view-elevation" class="active">Elevation</button
-              ><button id="view-3d">3D</button>
-            </div>
-            <button id="draw-toggle" aria-pressed="false">
-              ＋ Draw member
-            </button>
-            <button id="select-tool" aria-pressed="true">Select</button
-            ><button id="pan-tool" aria-pressed="false">Pan</button
-            ><button id="orbit-tool" aria-pressed="false">Orbit</button
-            ><button id="add-node-tool">Node</button
-            ><button id="add-support-tool">Support</button
-            ><button id="add-load-tool">Load</button
-            ><button id="cad-tools">Edit selection</button
-            ><button id="measure-tool">Measure</button>
-            <button
-              id="dimensions-toggle"
-              aria-pressed="true"
-              title="Show member lengths"
-            >
-              Dimensions
-            </button>
-            <button id="axes-toggle" aria-pressed="false">Local axes</button>
-            <button id="topology">Topology</button>
-            <button id="fit">⊡ Fit</button
-            ><button
-              id="reset-viewport"
-              title="Recreate GPU viewport resources"
-            >
-              ↻ GPU
-            </button>
-            <div class="spacer"></div>
-            <label class="inline-label"
-              >Results
-              <select id="result-family" aria-label="Result family">
-                <option value="shape">Model &amp; deformation</option>
-                <option value="forces">Member forces</option>
-                <option value="moments">Member moments</option>
-              </select>
-            </label>
-            <label class="inline-label"
-              >Component
-              <select id="display-result" aria-label="Result component">
-                <option value="model">Model</option>
-                <option value="deformed">Deformation</option>
-              </select>
-            </label>
-            <label id="deformation-scale-control" class="inline-label" hidden
-              >Displacement ×
-              <input
-                id="deformation-scale"
-                aria-label="Deformation scale"
-                type="number"
-                min="0"
-                max="10000"
-                step="1"
-                value="10"
-                title="1 = true displacement; affects the picture only"
-              />
-            </label>
-            <label id="diagram-scale-control" class="inline-label" hidden
-              >Diagram ×
-              <input
-                id="diagram-scale"
-                aria-label="Diagram scale"
-                type="number"
-                min="0"
-                max="100"
-                step="0.1"
-                value="1"
-                title="Multiplier of the automatic diagram size; values remain unchanged"
-              />
-            </label>
-          </div>
-          <div id="drawing-panel" hidden>
-            <div class="plane-controls">
-              <label
-                >Working plane<select id="working-plane">
-                  <option>XZ</option>
-                  <option>XY</option>
-                  <option>YZ</option>
-                </select></label
-              ><label
-                >Plane offset (m)<input
-                  id="plane-offset"
-                  type="number"
-                  step="any"
-                  value="0" /></label
-              ><label
-                >Grid (m)<input
-                  id="grid-spacing"
-                  type="number"
-                  step="any"
-                  min="0.000001"
-                  value="0.5"
-              /></label>
-            </div>
-            <form id="draw-member">
-              <label
-                >Start X<input aria-label="Start X" value="0" required
-              /></label>
-              <label
-                >Start Z<input aria-label="Start Z" value="0" required
-              /></label>
-              <label
-                >End X<input aria-label="End X" value="4" required
-              /></label>
-              <label
-                >End Z<input aria-label="End Z" value="3" required
-              /></label>
-              <label>Material<select id="draw-material"></select></label>
-              <label>Section<select id="draw-section"></select></label>
-              <button type="submit" class="primary">Add member</button
-              ><button type="button" id="cancel-drawing">Cancel drawing</button>
-            </form>
-            <p id="draw-status" role="status"></p>
-          </div>
-          <div class="canvas-wrap">
-            <canvas
-              id="viewport"
-              aria-label="Frame model. Click to select, Shift toggles. Drag a selection box; middle drag or Space pans. Wheel zooms at the cursor."
-              tabindex="0"
-            ></canvas>
-            <div id="selection-box" hidden></div>
-            <div id="gpu-notice" hidden></div>
-            <div class="view-caption">
-              <span class="eyebrow">STRUCTURAL MODEL</span
-              ><strong id="view-title">Cantilever</strong
-              ><span id="view-subtitle">Global XZ · metres</span>
-            </div>
-            <div id="viewport-labels" aria-hidden="true"></div>
-            <div class="view-legend">
-              <span><i class="legend-line"></i>Undeformed</span
-              ><span id="deformation-legend" hidden
-                ><i class="legend-line blue"></i>Deformed ×
-                <output id="deformation-factor">10</output></span
+              <pattern
+                id="major-grid"
+                width="120"
+                height="120"
+                patternUnits="userSpaceOnUse"
               >
+                <rect width="120" height="120" fill="url(#minor-grid)" />
+                <path
+                  d="M120 0H0V120"
+                  fill="none"
+                  stroke="#8fa1af"
+                  stroke-opacity=".32"
+                />
+              </pattern>
+              <marker
+                id="arrow"
+                viewBox="0 0 10 10"
+                refX="5"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path d="M0 0 10 5 0 10Z" fill="#e6783c" />
+              </marker>
+            </defs>
+            <rect width="720" height="500" fill="url(#major-grid)" />
+            <g class="dimensions">
+              <path d="M112 436v25m492-25v25M112 452h492" />
+              <path d="m112 452 12-5v10Zm492 0-12-5v10Z" />
+              <text x="358" y="477">12.000 m</text>
+              <path d="M72 420H46m42-310H46M56 420V110" />
+              <text x="28" y="280" transform="rotate(-90 28 280)">6.000 m</text>
+            </g>
+            <g class="loads">
+              <path
+                d="M180 66v58m85-58v58m85-58v58m85-58v58m85-58v58"
+                marker-end="url(#arrow)"
+              />
+              <text x="350" y="43">24 kN/m</text>
+            </g>
+            <g class="model">
+              <path d="M112 420V130H604V420" />
+              <circle cx="112" cy="420" r="6" />
+              <circle cx="112" cy="130" r="6" />
+              <circle cx="604" cy="130" r="6" />
+              <circle cx="604" cy="420" r="6" />
+            </g>
+            <g class="supports">
+              <path d="m92 440 20-20 20 20Zm492 0 20-20 20 20Z" />
+              <path
+                d="M84 447h56m436 0h56M90 454l12-7m8 7 12-7m462 7 12-7m8 7 12-7"
+              />
+            </g>
+            <path
+              class="deformed"
+              d="M112 420Q116 260 130 134Q348 170 590 134Q601 266 604 420"
+            />
+            <g class="result-labels">
+              <rect x="300" y="174" width="116" height="42" rx="4" />
+              <text x="316" y="191">MAX UZ</text>
+              <text x="316" y="207">−18.42 mm</text>
+            </g>
+            <g class="axis" transform="translate(638 420)">
+              <path d="M0 0h38M0 0v-38M0 0l-20 16" />
+              <text x="42" y="4">X</text>
+              <text x="-4" y="-44">Z</text>
+              <text x="-32" y="25">Y</text>
+            </g>
+          </svg>
+          <div class="visual-footer">
+            <span>Rust / WASM kernel</span>
+            <span>Model hash <b>b35b…1cc2</b></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="proof-strip" aria-label="Current preview scope">
+        <div><strong>3D</strong><span>frame formulation</span></div>
+        <div><strong>11</strong><span>worked examples</span></div>
+        <div><strong>f64</strong><span>engineering precision</span></div>
+        <div><strong>0</strong><span>accounts or uploads</span></div>
+      </section>
+
+      <section class="section capabilities" id="capabilities">
+        <div class="section-heading">
+          <p class="eyebrow">A WORKING ANALYSIS PATH</p>
+          <h2>From first member to traceable result.</h2>
+          <p>
+            The preview joins modelling, calculation, inspection, persistence,
+            and export in one local browser workflow.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature feature-large">
+            <span class="feature-number">01</span>
+            <div>
+              <h3>Model on the canvas</h3>
+              <p>
+                Draw members, place supports and loads, snap precisely, edit
+                properties, and keep topology changes atomic and undoable.
+              </p>
             </div>
-            <div
-              id="action-legend"
-              class="action-legend"
-              role="status"
-              hidden
-            ></div>
-            <div class="axis-widget"></div>
-            <span id="reference-plane" class="reference-plane" hidden></span>
-            <span id="gpu-status">Initialising WebGPU…</span>
-          </div>
-          <p id="near-node-status" class="geometry-warning" role="status"></p>
-          <div class="viewport-status">
-            <span id="geometry-status" role="status"></span
-            ><span id="selected-status">Select a member to inspect</span
-            ><span id="hash-status">SI geometry · f64 precision</span>
-          </div>
-        </section>
-        <aside class="inspector">
-          <div class="panel-title">
-            Selection <span id="selection-tag">m1</span>
-          </div>
-          <div
-            class="inspector-tabs"
-            role="group"
-            aria-label="Selection details"
+            <div class="mini-canvas" aria-hidden="true">
+              <span class="grid-lines"></span>
+              <svg viewBox="0 0 420 190">
+                <path
+                  class="mini-model"
+                  d="M55 155V48h135v107M190 48h165v107"
+                />
+                <path
+                  class="mini-result"
+                  d="M55 155Q58 90 68 49Q128 66 197 49Q272 68 345 49Q354 98 355 155"
+                />
+                <circle cx="190" cy="48" r="7" />
+              </svg>
+            </div>
+          </article>
+          <article class="feature">
+            <span class="feature-number">02</span>
+            <h3>Calculate in Rust</h3>
+            <p>
+              Authoritative geometry, validation, units, stiffness assembly,
+              solving, and recovery run in the WebAssembly kernel.
+            </p>
+            <span class="feature-tag">Sparse frame solver</span>
+          </article>
+          <article class="feature">
+            <span class="feature-number">03</span>
+            <h3>Interrogate the answer</h3>
+            <p>
+              Inspect displacements, reactions, member actions, diagrams,
+              equilibrium checks, local axes, and signed component values.
+            </p>
+            <span class="feature-tag">Revision-aware results</span>
+          </article>
+          <article class="feature feature-wide">
+            <span class="feature-number">04</span>
+            <div>
+              <h3>Keep a portable record</h3>
+              <p>
+                Save locally, reopen projects, and export strict project JSON,
+                CSV results, or a standalone HTML calculation report.
+              </p>
+            </div>
+            <div class="export-list" aria-label="Available exports">
+              <span>PROJECT.JSON <b>↓</b></span>
+              <span>RESULTS.CSV <b>↓</b></span>
+              <span>REPORT.HTML <b>↓</b></span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="principles" id="principles">
+        <div class="principles-copy">
+          <p class="eyebrow">BUILT FOR SCRUTINY</p>
+          <h2>Engineering software should show its working.</h2>
+          <p>
+            Structural Workbench keeps numerical authority, display state, and
+            project persistence deliberately separate. A changed model makes old
+            results visibly stale. Failed operations preserve the last
+            recoverable project.
+          </p>
+          <a
+            class="text-link light"
+            href="https://github.com/swiftugandan/structural-workbench/blob/main/SPECIFICATION.md"
+            >Read the specification <span aria-hidden="true">↗</span></a
           >
-            <button data-inspector-tab="properties" aria-pressed="true">
-              Properties
-            </button>
-            <button data-inspector-tab="forces" aria-pressed="false">
-              Member results
-            </button>
-          </div>
-          <div id="inspector-content"></div>
-          <div id="force-inspector" hidden></div>
-        </aside>
-        <section class="results-panel">
-          <div class="results-tabs">
-            <button data-tab="displacements" class="active">
-              Displacements</button
-            ><button data-tab="reactions">Reactions</button
-            ><button data-tab="section-forces">Member forces</button
-            ><button data-tab="forces">End actions</button
-            ><button data-tab="equilibrium">Equilibrium</button>
-            <div class="spacer"></div>
-            <span id="result-status" class="badge">Not analysed</span
-            ><button id="export-csv">↓ CSV</button>
-          </div>
-          <div id="results-content">
-            <div class="empty-results">
-              <span>⌁</span><strong>Your results start here</strong>
-              <p>Review your model, then run an analysis.</p>
+        </div>
+        <ol class="principle-list">
+          <li>
+            <span>01</span>
+            <div>
+              <strong>One engineering authority</strong>
+              <p>
+                Committed geometry and calculations stay in Rust using f64
+                values.
+              </p>
             </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <strong>Results with provenance</strong>
+              <p>
+                Every result references its source model, settings, and solver
+                build.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <strong>Local by default</strong>
+              <p>
+                Projects remain in your browser unless you choose to export
+                them.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>04</span>
+            <div>
+              <strong>Unsupported means explicit</strong>
+              <p>
+                Unimplemented engineering domains are rejected instead of
+                approximated silently.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="section status" id="status">
+        <div class="status-card">
+          <div>
+            <p class="eyebrow">PREVIEW STATUS</p>
+            <h2>Useful today. Honest about tomorrow.</h2>
           </div>
-        </section>
-      </div>
-      <footer class="statusbar">
-        <span
-          >Units:
-          <select id="units" aria-label="Display units">
-            <option value="engineeringMetric">m · kN · mm</option>
-            <option value="SI">m · N · m</option>
-          </select></span
-        ><span id="kernel-status">Kernel starting…</span
-        ><span class="spacer"></span
-        ><span>Mechanics preview · No code-design claim</span>
-      </footer>
+          <div class="status-copy">
+            <p>
+              The current release supports linear, small-displacement 3D
+              Euler–Bernoulli frames, nodal actions, uniform member loads, self
+              weight, prescribed supports, and explicit combinations.
+            </p>
+            <p>
+              It does not provide buckling, nonlinear, shell, seismic,
+              steel-code, or concrete-code checks. It is a mechanics preview,
+              not certified design software or a substitute for qualified
+              engineering review.
+            </p>
+          </div>
+          <div class="status-actions">
+            <a class="button" href="./app.html">Try the preview</a>
+            <a
+              class="text-link"
+              href="https://github.com/swiftugandan/structural-workbench/releases"
+              >View releases <span aria-hidden="true">↗</span></a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="final-cta">
+        <p class="eyebrow">OPEN SOURCE · MIT LICENSED</p>
+        <h2>Bring a frame.<br />Leave with a record.</h2>
+        <a class="button button-light" href="./app.html"
+          >Launch Structural Workbench</a
+        >
+      </section>
     </main>
-    <input
-      type="file"
-      id="import-file"
-      accept=".json,application/json"
-      hidden
-    />
-    <dialog id="modal">
-      <div class="dialog-header">
-        <h2 id="modal-title"></h2>
-        <button id="close-modal" aria-label="Close dialog">×</button>
+
+    <footer class="site-footer">
+      <a class="wordmark footer-mark" href="#top">
+        <svg viewBox="0 0 34 34" aria-hidden="true">
+          <path d="M4 29V5h26v24M4 5l26 24M4 29 30 5M4 17h26" />
+        </svg>
+        <span>STRUCTURAL <b>WORKBENCH</b></span>
+      </a>
+      <p>Independent, open-source structural mechanics software.</p>
+      <div>
+        <a href="https://github.com/swiftugandan/structural-workbench"
+          >GitHub</a
+        >
+        <a
+          href="https://github.com/swiftugandan/structural-workbench/blob/main/LICENSE"
+          >MIT License</a
+        >
       </div>
-      <div id="modal-content"></div>
-    </dialog>
-    <script type="module" src="./app.js"></script>
+    </footer>
   </body>
 </html>
