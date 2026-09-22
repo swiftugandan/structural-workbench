@@ -103,3 +103,5 @@ Latest refinement: camera-aligned XYZ compass with green Y, balanced isometric d
 Diagram-plane correction: local member-plane projection replaces screen-perpendicular diagrams (My/Vz along z, Vy along y). Four analytical rendering checks pass, including rolled axes, foreshortening, zeros and missing frames. Browser regression evidence is recorded in evidence/M01/diagram-planes; live visual acceptance remains pending.
 
 Effect-direction follow-up: removed deformation's constant-depth overlay while retaining full XYZ displacement. Five focused rendering checks cover action planes, rotated axes, pure-Z and coupled deformation, depth and zero scale. Browser results are recorded in evidence/M01/effect-directions.
+
+Warehouse W01 added to Worked examples, opens in 3D. Analysed and independently cross-checked: 468 OpenSees and 468 native/WASM values, six equilibrium components and browser journey pass. Peak nodal displacement 8.80 mm; reactions balance 180 kN downward + 45 kN lateral. Synthetic demonstration inputs, not building design validation. Evidence: evidence/M01/warehouse.

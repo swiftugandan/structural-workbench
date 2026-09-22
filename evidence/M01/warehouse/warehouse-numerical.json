@@ -1,0 +1,80 @@
+{
+  "taskId": "M01-UX",
+  "milestone": "M01",
+  "sourceHash": "4afd6b08c7b352c06aac10afc59da1c4cdcb9b5466423e2461a267bd2de83822",
+  "buildHash": "f777b1bb29e225e8033f4c3df90c727f2fc9e1a20c40f730983b5f2f179f4e35",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "validate.mjs": "c447bee47b2fd79f03a626121f2cf749f3e4fb1770504697b224403c5b6f406d",
+    "numerical-results.json": "8eb173008d42d2670e97c2b86ba17a7ef8c2e34b6078b98131d8c0098f106a56"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-22T07:28:12.385Z",
+  "status": "PASS",
+  "testCount": 942,
+  "summary": {
+    "nodes": 20,
+    "members": 25,
+    "supports": 8,
+    "applied": [
+      0,
+      45000,
+      -180000
+    ],
+    "reactions": [
+      9.549694368615746e-12,
+      -44999.99999999981,
+      179999.99999999997
+    ],
+    "balance": [
+      9.549694368615746e-12,
+      1.7917045624926686e-10,
+      -2.9103830456733704e-11,
+      -8.149072527885437e-10,
+      5.820766091346741e-11,
+      -4.452886059880257e-9
+    ],
+    "maxTranslation": 0.008797537612550494,
+    "oracleComparisons": 468,
+    "wasmComparisons": 468,
+    "numericalChecks": {
+      "forcePass": true,
+      "globalBalance": [
+        1.000444171950221e-11,
+        1.8553691916167736e-10,
+        -1.4551915228366852e-11,
+        -8.149072527885437e-10,
+        0,
+        -4.452886059880257e-9
+      ],
+      "matrixNnz": 732,
+      "minScaledPivot": 0.012286443853760603,
+      "momentPass": true,
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "scaledResidual": 8.156895249364065e-17
+    }
+  },
+  "command": [
+    "node",
+    "evidence/M01/warehouse/validate.mjs"
+  ],
+  "artifacts": [
+    "validate.mjs",
+    "numerical-results.json"
+  ]
+}

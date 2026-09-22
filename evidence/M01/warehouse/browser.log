@@ -1,0 +1,10 @@
+
+Running 1 test using 1 worker
+
+(node:22242) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22242) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/warehouse.spec.js:2:1 › Warehouse example opens in 3D and solves spatial gravity and lateral loads (4.9s)
+
+  1 passed (6.2s)

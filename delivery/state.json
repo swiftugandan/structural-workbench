@@ -779,6 +779,17 @@
         "browserTests": 8,
         "status": "implemented-focused-checks-pass",
         "note": "Full/live acceptance pending; content snapshot includes concurrent work."
+      },
+      "warehouseExample": {
+        "sourceRevision": "802d7b0",
+        "sourceHash": "4afd6b08c7b352c06aac10afc59da1c4cdcb9b5466423e2461a267bd2de83822",
+        "buildHash": "f777b1bb29e225e8033f4c3df90c727f2fc9e1a20c40f730983b5f2f179f4e35",
+        "fixtureHash": "c34f12f5210af5dcd04eb61ebdd4f08bff4001616d6b2e43f4adabd8725659cf",
+        "evidencePath": "evidence/M01/warehouse",
+        "status": "implemented-numerically-cross-checked",
+        "oracleComparisons": 468,
+        "wasmComparisons": 468,
+        "browserTests": 1
       }
     },
     "M01-INPUTS": {
