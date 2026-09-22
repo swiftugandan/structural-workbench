@@ -1,3 +1,5 @@
+import { bindResultPicker } from "./result-picker.js";
+import { actionComponents } from "./render/action-diagrams.js";
 import { bindTemplates } from "./model-templates.js";
 import { structuralIcon } from "./structural-icons.js";
 import {
@@ -822,9 +824,9 @@ $("#analyse").onclick = async () => {
     });
     result = response;
     failed = false;
-    if (!["shearY", "shearZ", "moment"].includes(viewport.resultView))
+    if (!actionComponents[viewport.resultView])
       viewport.resultView = "deformed";
-    $("#display-result").value = viewport.resultView;
+    syncResultPicker(viewport.resultView);
     $("#deformation-legend").hidden = viewport.resultView !== "deformed";
     message("");
     renderResults();
@@ -906,11 +908,11 @@ $("#result-case").onchange = () => {
   viewport.update(project, null, selected);
   message("Selected analysis case changed. Analyse to calculate this case.");
 };
-$("#display-result").onchange = () => {
-  viewport.resultView = $("#display-result").value;
+const syncResultPicker = bindResultPicker((value) => {
+  viewport.resultView = value;
   $("#deformation-legend").hidden = viewport.resultView !== "deformed";
   viewport.draw();
-};
+});
 $("#deformation-scale").oninput = () => {
   viewport.scale = Math.max(
     0,

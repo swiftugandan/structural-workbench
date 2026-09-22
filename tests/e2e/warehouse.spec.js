@@ -12,10 +12,12 @@ test("Warehouse example opens in 3D and solves spatial gravity and lateral loads
   );
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  await page.locator("#result-family").selectOption("moments");
   await page.locator("#display-result").selectOption("moment");
   await expect(
     page.locator('[data-result-component="My"]').first(),
   ).toBeVisible();
+  await page.locator("#result-family").selectOption("shape");
   await page.locator("#display-result").selectOption("deformed");
   await expect(page.locator("#deformation-legend")).toBeVisible();
 });

@@ -1,5 +1,22 @@
 // Rendering consumes the signed local section actions recovered by Rust.
 export const actionComponents = {
+  axial: { scalar: true, index: 0, name: "N", title: "Axial N", unit: "N" },
+  torsion: {
+    scalar: true,
+    index: 3,
+    name: "T",
+    title: "Torsion T",
+    unit: "N·m",
+  },
+  momentZ: {
+    axis: 1,
+    plane: "xy",
+    offset: "y",
+    index: 5,
+    name: "Mz",
+    title: "Moment Mz",
+    unit: "N·m",
+  },
   shearY: {
     axis: 1,
     plane: "xy",
@@ -53,8 +70,9 @@ export function actionProjection(
   axes,
   amplitude,
 ) {
-  if (!samples.length || !axes || !(amplitude > 0)) return null;
-  const direction = axes[component.axis];
+  if (!samples.length || (!component.scalar && !axes) || !(amplitude > 0))
+    return null;
+  const direction = component.scalar ? [0, 0, 0] : axes[component.axis];
   const base = samples.map((s) => projectPoint(s.position));
   // Offset in the member's physical local plane before camera projection.
   // Do not normalise the projected axis: foreshortening and edge-on collapse

@@ -4,13 +4,11 @@ async function open(page, name, edit = () => {}) {
   const p = JSON.parse(await readFile(`fixtures/models/${name}.json`, "utf8"));
   edit(p);
   await page.goto("/");
-  await page
-    .locator("#import-file")
-    .setInputFiles({
-      name: "shear.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(p)),
-    });
+  await page.locator("#import-file").setInputFiles({
+    name: "shear.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(p)),
+  });
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
 }
 async function solve(page) {
@@ -21,6 +19,7 @@ test("Canvas exposes signed Vy and Vz, units, stale protection and retained sele
   page,
 }) => {
   await open(page, "B02", (p) => (p.loads[0].values[1] = 6000));
+  await page.locator("#result-family").selectOption("forces");
   await page.locator("#display-result").selectOption("shearY");
   await expect(page.locator("#action-legend")).toContainText(
     "Analyse to display",
@@ -30,6 +29,7 @@ test("Canvas exposes signed Vy and Vz, units, stale protection and retained sele
   await expect(page.locator('[data-result-component="Vy"]')).toContainText(
     "+6 kN",
   );
+  await page.locator("#result-family").selectOption("forces");
   await page.locator("#display-result").selectOption("shearZ");
   await expect(page.locator('[data-result-component="Vz"]')).toContainText(
     "-10 kN",
@@ -53,6 +53,7 @@ test("Canvas exposes signed Vy and Vz, units, stale protection and retained sele
   await expect(page.locator('[data-result-component="Vz"]')).toContainText(
     "-10,000 N",
   );
+  await page.locator("#result-family").selectOption("moments");
   await page.locator("#display-result").selectOption("moment");
   await expect(page.locator("#action-legend")).toContainText("Moment My");
 });
@@ -61,6 +62,7 @@ test("Uniform-load shear shows both signs and the unused component reports zero"
 }) => {
   await open(page, "B07");
   await solve(page);
+  await page.locator("#result-family").selectOption("forces");
   await page.locator("#display-result").selectOption("shearZ");
   const labels = page.locator('[data-result-component="Vz"]');
   await expect(labels).toHaveCount(2);
@@ -72,6 +74,7 @@ test("Uniform-load shear shows both signs and the unused component reports zero"
   expect(values[0]).toBeCloseTo(-30000, 5);
   expect(values[1]).toBeCloseTo(30000, 5);
   await expect(page.locator("#action-legend")).toContainText("peak 30 kN");
+  await page.locator("#result-family").selectOption("forces");
   await page.locator("#display-result").selectOption("shearY");
   await expect(page.locator("#action-legend")).toContainText("All values zero");
   await expect(page.locator('[data-result-component="Vy"]')).toContainText(

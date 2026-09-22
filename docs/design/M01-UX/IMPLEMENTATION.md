@@ -64,3 +64,7 @@ Vy/Vz and My retain their member-plane projection. Deformation uses the full glo
 ### 3D warehouse example
 
 Worked examples includes W01: a 12 m span × 18 m long pitched-roof warehouse with three 6 m bays, 6 m eaves and 8 m ridge. Twenty nodes, 25 rigid-jointed frame members and eight fixed bases form four transverse portals connected at both eaves and ridge. Opens in 3D. Synthetic section properties and combined illustrative roof/lateral nodal loads are deliberately not a code-designed building; self-weight is not included. Applied totals are Fz = −180 kN, Fy = +45 kN. Independent OpenSees and native/WASM comparison results are in evidence/M01/warehouse.
+
+### Grouped result selection and complete member actions
+
+The canvas picker now separates family from component: Model & deformation; Member forces (N, Vy, Vz); Member moments (My, Mz, T). Only two or three components appear at once, each family remembers its last selection, and action choices survive reanalysis. Native selects preserve keyboard and accessible-label support. Mz plots along local y in the local xy plane. Axial N and torsion T use signed on-member colour and numerical labels, not an invented transverse effect plane; colour indicates sign, not magnitude. Existing units, stale-result suppression and annotation limits apply. No solver values changed.

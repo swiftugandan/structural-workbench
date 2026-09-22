@@ -189,14 +189,20 @@
             </button>
             <div class="spacer"></div>
             <label class="inline-label"
-              >View<select id="display-result">
+              >Results
+              <select id="result-family" aria-label="Result family">
+                <option value="shape">Model &amp; deformation</option>
+                <option value="forces">Member forces</option>
+                <option value="moments">Member moments</option>
+              </select>
+            </label>
+            <label class="inline-label"
+              >Component
+              <select id="display-result" aria-label="Result component">
                 <option value="model">Model</option>
                 <option value="deformed">Deformation</option>
-                <option value="moment">Moment My</option>
-                <option value="shearY">Shear Vy</option>
-                <option value="shearZ">Shear Vz</option>
-              </select></label
-            >
+              </select>
+            </label>
           </div>
           <div id="drawing-panel" hidden>
             <div class="plane-controls">

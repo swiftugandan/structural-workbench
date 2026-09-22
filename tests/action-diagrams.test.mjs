@@ -80,3 +80,21 @@ test("Deformation preserves actual 3D displacement and camera depth", () => {
   assert.deepEqual(deformationProjection(mixed, camera, 10), [[1, -7, 3]]);
   assert.deepEqual(deformationProjection(mixed, camera, 0), [[3, -4, 2]]);
 });
+
+test("Mz uses local y; axial and torsion stay on member without invented transverse planes", () => {
+  const s = [
+    { position: [0, 0, 0], actions: [100, 0, 0, 20, 0, 30] },
+    { position: [2, 0, 0], actions: [100, 0, 0, 20, 0, 30] },
+  ];
+  const mz = actionProjection(s, (v) => v, c.momentZ, 30, axes, 2);
+  assert.deepEqual(mz.curve, [
+    [0, 2, 0],
+    [2, 2, 0],
+  ]);
+  for (const component of [c.axial, c.torsion]) {
+    const plot = actionProjection(s, (v) => v, component, 100, axes, 2);
+    assert.deepEqual(plot.curve, plot.base);
+  }
+  assert.equal(diagramPeak({ members: [{ samples: s }] }, c.axial), 100);
+  assert.equal(diagramPeak({ members: [{ samples: s }] }, c.torsion), 20);
+});

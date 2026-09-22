@@ -99,6 +99,7 @@ test("M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and re
   await expect(page.locator("#model-count")).toHaveText("4 nodes · 4 members");
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  await page.locator("#result-family").selectOption("shape");
   await page.locator("#display-result").selectOption("deformed");
   await mkdir(evidenceDir("evidence/M01/current"), { recursive: true });
   await writeFile(

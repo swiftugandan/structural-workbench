@@ -787,7 +787,7 @@ export class Viewport {
           : `${component.title} · Analyse to display`;
       else {
         const peak = diagramPeak(this.result, component);
-        actionLegend.textContent = `${component.title} · Local section actions · ${peak ? "Auto scale: peak " + actionText(peak, component, engineering, false) : "All values zero"} · + blue / − orange · Local ${component.plane} plane · + toward local ${component.offset} · Edge-on plots may overlap the member`;
+        actionLegend.textContent = `${component.title} · Local section actions · ${peak ? "Auto scale: peak " + actionText(peak, component, engineering, false) : "All values zero"} · + blue / − orange · ${component.scalar ? (component.name === "N" ? "On-member colour · + tension / − compression" : "On-member colour · torque about local x") : `Local ${component.plane} plane · + toward local ${component.offset} · Edge-on plots may overlap the member`}`;
         actionLegend.dataset.component = component.name;
         actionLegend.dataset.peak = String(peak);
         const frames = new Map(
@@ -811,7 +811,7 @@ export class Viewport {
             line(
               plot.curve[i - 1],
               plot.curve[i],
-              2,
+              component.scalar ? 5 : 2,
               sign >= 0 ? blue : orange,
             );
             if (i % 4 === 0 || i === plot.curve.length - 1)
