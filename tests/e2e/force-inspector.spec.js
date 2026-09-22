@@ -16,6 +16,17 @@ test("Selected member force diagram station, units and stale state", async ({
   await page.locator("#member-force-station").dispatchEvent("change");
   await expect(page.locator("#member-force-readout")).toContainText("x = 3 m");
   await expect(page.locator("#member-force-readout")).toContainText("0 kN");
+  await page.locator("#member-force-component").selectOption("uz");
+  await expect(page.locator("#member-force-readout")).toContainText(
+    "Uz -45 mm",
+  );
+  await page.locator("#member-force-component").selectOption("displacement");
+  await expect(page.locator("#member-force-readout")).toContainText(
+    "Total displacement 45 mm",
+  );
+  await page.locator("#units").selectOption("SI");
+  await expect(page.locator("#member-force-readout")).toContainText("0.045 m");
+  await page.locator("#units").selectOption("engineeringMetric");
   await page.locator("#member-force-component").selectOption("shearZ");
   await expect(page.locator("#member-force-readout")).toContainText("-10 kN");
   await page.locator("#units").selectOption("SI");

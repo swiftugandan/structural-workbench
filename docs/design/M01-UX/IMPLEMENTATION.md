@@ -78,3 +78,7 @@ Node selection shows separate schematic force arrows/moment arcs and exact globa
 ### Member-only forces inspector
 
 User direction supersedes the node inspector above: remove all node force/moment diagrams, reaction tables and connected-member contributions from this tab. Forces & moments now displays member results only. Selecting a node shows a short prompt to select a member; ordinary node properties remain in Properties. Removed the unused node-contribution implementation and its unit test. Browser regression asserts no SVG/table remains after selecting a node, then returns to member properties and checks stale results.
+
+### Member deformation detail
+
+The tab is now Member results. Its grouped component picker includes global Ux, Uy, Uz and total displacement magnitude, alongside the six actions. Recovered displacement is plotted against true distance along the member with station/end/extreme readouts and a displacement table. Engineering units use mm, SI uses m. These are explicitly auto-scaled displacement graphs rather than a projected 3D shape. Existing selection/stale guards apply. Cantilever regression verifies −45 mm Uz, 45 mm total and 0.045 m after changing units.
