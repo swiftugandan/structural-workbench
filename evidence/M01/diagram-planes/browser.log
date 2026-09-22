@@ -1,0 +1,16 @@
+
+Running 7 tests using 1 worker
+
+(node:15921) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15921) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes (4.0s)
+  ✓  2 tests/e2e/shear-diagrams.spec.js:20:1 › Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving (3.7s)
+  ✓  3 tests/e2e/shear-diagrams.spec.js:59:1 › Uniform-load shear shows both signs and the unused component reports zero (2.2s)
+  ✓  4 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (2.6s)
+  ✓  5 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (2.7s)
+  ✓  6 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (4.5s)
+  ✓  7 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (2.1s)
+
+  7 passed (23.4s)

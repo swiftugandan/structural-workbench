@@ -759,7 +759,17 @@
         "docs/design/M01-UX/AUDIT.md",
         "docs/design/M01-UX/CANVAS_INTERACTIONS.md"
       ],
-      "sourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195"
+      "sourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195",
+      "diagramPlaneRefinement": {
+        "sourceRevision": "b745910",
+        "sourceHash": "82c2519747e1df664e03f74e01d2289d4176ac845be8c249dce9c0bade3e1b00",
+        "buildHash": "0021fd965866ed2ea46af92b7b4c5af62892be15001fdb57675619200f61bc79",
+        "evidencePath": "evidence/M01/diagram-planes",
+        "browserTests": 7,
+        "unitTests": 4,
+        "status": "implemented-focused-checks-pass",
+        "note": "Live review pending; content snapshot includes concurrent guided-input work."
+      }
     }
   },
   "blockers": [

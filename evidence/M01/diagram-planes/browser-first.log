@@ -1,0 +1,35 @@
+
+Running 7 tests using 1 worker
+
+(node:15110) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15110) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes (6.8s)
+(node:15247) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15247) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/e2e/shear-diagrams.spec.js:20:1 › Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving (6.5s)
+  ✓  3 tests/e2e/shear-diagrams.spec.js:59:1 › Uniform-load shear shows both signs and the unused component reports zero (4.5s)
+  ✓  4 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (4.1s)
+  ✓  5 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (4.4s)
+  ✓  6 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (6.6s)
+  ✓  7 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (3.2s)
+
+
+  1) tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes 
+
+    Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'
+
+    Error: browserContext._wrapApiCall: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611.trace'
+
+    Error: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/58b4ffb2c6a8dac1c7ce4d2e9e7af0a0.zip'
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes 
+  6 passed (41.4s)

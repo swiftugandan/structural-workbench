@@ -1,0 +1,410 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/e2e/shear-diagrams.spec.js",
+      "tests/e2e/orientation.spec.js",
+      "tests/visual"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/M01/diagram-planes/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e/orientation.spec.js",
+      "file": "e2e/orientation.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "3D exposes Y direction and reference grid; orbit updates compass without model changes",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6797,
+                  "error": {
+                    "message": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'",
+                    "stack": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'"
+                    },
+                    {
+                      "message": "Error: browserContext._wrapApiCall: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611.trace'"
+                    },
+                    {
+                      "message": "Error: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/58b4ffb2c6a8dac1c7ce4d2e9e7af0a0.zip'"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T07:18:20.265Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/test-failed-1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611",
+          "file": "e2e/orientation.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/shear-diagrams.spec.js",
+      "file": "e2e/shear-diagrams.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6500,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T07:18:29.968Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49c57edd978718691409-095afe3f7a405796f6d4",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 20,
+          "column": 1
+        },
+        {
+          "title": "Uniform-load shear shows both signs and the unused component reports zero",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4507,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T07:18:36.963Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49c57edd978718691409-8b8cfac157c2240dfffd",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 59,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "visual/graphics.spec.js",
+      "file": "visual/graphics.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4052,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T07:18:41.555Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e5e117cc67153d047ad8-6c782177619b7436369d",
+          "file": "visual/graphics.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "visual/m01-graphics.spec.js",
+      "file": "visual/m01-graphics.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4377,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T07:18:45.732Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "472221e2415d7a30649b-bdaff5c7cdfd94292a12",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6618,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T07:18:50.179Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "472221e2415d7a30649b-ec00560d8221aca9b0fb",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "M01 graphics: depth occlusion and changing camera during asynchronous selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3238,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-22T07:18:56.867Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "472221e2415d7a30649b-cc9f6d92a3ce18b4d125",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 63,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-22T07:18:18.886Z",
+    "duration": 41415.257999999994,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
