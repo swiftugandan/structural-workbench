@@ -68,3 +68,9 @@ Worked examples includes W01: a 12 m span × 18 m long pitched-roof warehouse wi
 ### Grouped result selection and complete member actions
 
 The canvas picker now separates family from component: Model & deformation; Member forces (N, Vy, Vz); Member moments (My, Mz, T). Only two or three components appear at once, each family remembers its last selection, and action choices survive reanalysis. Native selects preserve keyboard and accessible-label support. Mz plots along local y in the local xy plane. Axial N and torsion T use signed on-member colour and numerical labels, not an invented transverse effect plane; colour indicates sign, not magnitude. Existing units, stale-result suppression and annotation limits apply. No solver values changed.
+
+### Selection Forces & moments inspector
+
+The right panel has Properties and Forces & moments tabs. Switching tabs preserves property drafts. Member selection shows an isolated, unfolded local-section diagram for N/Fx, Vy, Vz, T/Mx, My or Mz, true length, signed start/end/extreme values, a discrete recovered-station slider and expandable station/end-action tables. End-action tables explicitly distinguish node-on-member convention from cut-section actions. Diagram ordinates are schematic and independent of the canvas camera.
+
+Node selection shows separate schematic force arrows/moment arcs and exact global-axis tables for applied nodal loads (with result case/combination factors), support reactions, and connected-member-on-node actions. Connected actions use the negative transpose transformation of Rust local end forces with current Rust geometry frames. Missing frames are explicit. All results are withheld when missing or stale, units follow the workspace, and display values below 1e-9 SI are rounded to zero without changing stored results.

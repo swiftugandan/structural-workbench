@@ -2068,3 +2068,51 @@ textarea,
   font-size: 12px;
   color: #1b5dbd;
 }
+
+.inspector-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  flex-wrap: wrap;
+}
+.inspector-tabs [aria-pressed="true"] {
+  background: var(--pale);
+  color: #174d9c;
+}
+#force-inspector {
+  padding: 16px;
+  overflow: auto;
+  min-width: 0;
+}
+#force-inspector svg {
+  width: 100%;
+  max-width: 360px;
+  display: block;
+}
+#force-inspector svg text {
+  fill: #334155;
+  stroke: none;
+  font-size: 11px;
+}
+#force-inspector select,
+#force-inspector input {
+  width: 100%;
+  min-width: 0;
+}
+#force-inspector section {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.force-values {
+  width: 100%;
+  font-size: 12px;
+}
+.force-values td {
+  text-align: right;
+  white-space: nowrap;
+}
+#force-inspector output {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0;
+}

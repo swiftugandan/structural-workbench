@@ -293,9 +293,22 @@
         </section>
         <aside class="inspector">
           <div class="panel-title">
-            Properties <span id="selection-tag">m1</span>
+            Selection <span id="selection-tag">m1</span>
+          </div>
+          <div
+            class="inspector-tabs"
+            role="group"
+            aria-label="Selection details"
+          >
+            <button data-inspector-tab="properties" aria-pressed="true">
+              Properties
+            </button>
+            <button data-inspector-tab="forces" aria-pressed="false">
+              Forces &amp; moments
+            </button>
           </div>
           <div id="inspector-content"></div>
+          <div id="force-inspector" hidden></div>
         </aside>
         <section class="results-panel">
           <div class="results-tabs">

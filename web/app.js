@@ -1,3 +1,4 @@
+import { renderForceInspector } from "./force-inspector.js";
 import { bindResultPicker } from "./result-picker.js";
 import { actionComponents } from "./render/action-diagrams.js";
 import { bindTemplates } from "./model-templates.js";
@@ -573,7 +574,27 @@ function renderDirectProperties(key, entity) {
     };
   setBusy(busy);
 }
+function renderSelectionForces() {
+  renderForceInspector({
+    project,
+    result,
+    modelHash,
+    selected,
+    count: viewport.selection.size,
+    frames: viewport.axesProject === project ? viewport.localAxes : null,
+  });
+}
+for (const button of document.querySelectorAll("[data-inspector-tab]"))
+  button.onclick = () => {
+    const forces = button.dataset.inspectorTab === "forces";
+    $("#inspector-content").hidden = forces;
+    $("#force-inspector").hidden = !forces;
+    for (const tab of document.querySelectorAll("[data-inspector-tab]"))
+      tab.setAttribute("aria-pressed", String(tab === button));
+    if (forces) renderSelectionForces();
+  };
 function renderInspector() {
+  renderSelectionForces();
   formDirty = false;
   if (!selected || viewport.selection.size > 1) {
     const count = viewport.selection.size;
@@ -856,6 +877,7 @@ $("#analyse").onclick = async () => {
   } catch (e) {
     result = null;
     failed = true;
+    renderSelectionForces();
     message(e.message);
     renderResults();
     viewport.update(project, null, selected);
