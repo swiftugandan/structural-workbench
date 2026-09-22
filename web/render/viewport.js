@@ -4,6 +4,7 @@ import {
   diagramPeak,
   actionText,
   actionProjection,
+  deformationProjection,
 } from "./action-diagrams.js";
 import { dimensionLayout, dimensionText } from "./dimensions.js";
 import { supportSymbol } from "./support-symbols.js";
@@ -845,19 +846,13 @@ export class Viewport {
       }
     } else if (current && this.resultView === "deformed") {
       for (const member of this.result.members) {
-        const samples = member.samples;
-        for (let i = 1; i < samples.length; i++) {
-          const a = samples[i - 1],
-            b = samples[i];
-          const p = this.projectPoint(
-            a.position.map((v, j) => v + a.displacement[j] * this.scale),
-          );
-          const q = this.projectPoint(
-            b.position.map((v, j) => v + b.displacement[j] * this.scale),
-          );
-          p[2] = q[2] = 0.2;
-          line(p, q, 2.5, blue);
-        }
+        const curve = deformationProjection(
+          member.samples,
+          (p) => this.projectPoint(p),
+          this.scale,
+        );
+        for (let i = 1; i < curve.length; i++)
+          line(curve[i - 1], curve[i], 2.5, blue);
       }
     }
     if (this.snapPreview) {

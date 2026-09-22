@@ -81,3 +81,11 @@ export function actionProjection(
       : [...new Set([0, samples.length - 1, lo, hi])];
   return { base, curve, marks };
 }
+
+// Displacements are global vectors recovered by Rust; retain all components
+// and projected depth, including coupled effects that are not planar.
+export function deformationProjection(samples, projectPoint, scale) {
+  return samples.map((s) =>
+    projectPoint(s.position.map((v, j) => v + s.displacement[j] * scale)),
+  );
+}

@@ -5,6 +5,7 @@ import {
   diagramPeak,
   actionText,
   actionProjection,
+  deformationProjection,
 } from "../web/render/action-diagrams.js";
 const samples = [
   { position: [0, 0, 0], actions: [0, -3000, -10000, 0, 30000, 0] },
@@ -66,4 +67,16 @@ test("Zero shear stays on baseline and missing current axes suppress the plot", 
     actionProjection(samples, (v) => v, c.moment, 30000, null, 2),
     null,
   );
+});
+
+test("Deformation preserves actual 3D displacement and camera depth", () => {
+  const samples = [{ position: [2, 3, 4], displacement: [0, 0, -0.1] }];
+  assert.deepEqual(
+    deformationProjection(samples, (v) => v, 10),
+    [[2, 3, 3]],
+  );
+  const mixed = [{ position: [2, 3, 4], displacement: [0.1, -0.2, 0.3] }];
+  const camera = ([x, y, z]) => [y, -z, x];
+  assert.deepEqual(deformationProjection(mixed, camera, 10), [[1, -7, 3]]);
+  assert.deepEqual(deformationProjection(mixed, camera, 0), [[3, -4, 2]]);
 });

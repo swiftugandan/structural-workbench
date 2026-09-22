@@ -56,3 +56,7 @@ Replaced the fixed X/Z corner graphic with a camera-derived global X/Y/Z compass
 ### Physical member planes for action diagrams
 
 Supersedes the screen-perpendicular schematic offset: My and Vz are offset along the Rust-provided local z axis, Vy along local y, before camera projection. Positive action is plotted toward the positive local axis; the legend states the plane and sign convention. One model-space amplitude (18% of model extent at peak) is shared across members and stays fixed while orbiting. Foreshortening, depth and edge-on collapse follow the camera naturally. Missing or stale local frames suppress plots until the current geometry query arrives. No engineering values or solver conventions change.
+
+### All exposed effects retain physical directions
+
+Vy/Vz and My retain their member-plane projection. Deformation uses the full global displacement vector supplied by Rust, multiplied by the user scale before camera projection; its former constant-depth override is removed. Combined displacements remain spatial instead of being forced into a single plane. Rendering tests cover pure Z displacement, coupled XYZ displacement, camera rotation and zero scale as well as local action planes.
