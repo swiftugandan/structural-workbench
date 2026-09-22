@@ -815,6 +815,13 @@
         "status": "implemented-focused-checks-pass",
         "browserTests": 4,
         "unitTests": 1
+      },
+      "reactionTableFix": {
+        "sourceRevision": "295508e",
+        "sourceHash": "6a129fa8d499b9c61f8e3735996c355830462bb67b7b3b7db46b1e70c5aac198",
+        "buildHash": "da74a74663ba8812275b58347323c704e945b75edd651f86629c29e778e69507",
+        "evidencePath": "evidence/M01/force-table-fix",
+        "status": "PASS"
       }
     },
     "M01-INPUTS": {

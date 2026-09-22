@@ -43,3 +43,5 @@ Grouped result picker: Model/deformation, Member forces (N/Vy/Vz), Member moment
 Local X naming clarified in picker and canvas legends: N / Fx along local x, T / Mx about local x. Build and picker regression pass: evidence/M01/x-labels.
 
 Selection Forces & moments tab implemented: member component diagrams/station readout/end values and node applied/reaction/member-on-node diagrams with global tables. Units and stale guards verified. Evidence/M01/force-inspector: 4 browser + 1 analytical unit pass. Live visual/full acceptance pending.
+
+Fixed reaction table/SVG NaN coercion from typed-array map (295508e). Numeric values unchanged; expanded supported-node browser test verifies all six reaction rows. Evidence: evidence/M01/force-table-fix.
