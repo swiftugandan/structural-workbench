@@ -1,0 +1,16 @@
+
+Running 7 tests using 1 worker
+
+(node:29091) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29091) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (4.6s)
+  ✓  2 tests/e2e/result-picker.spec.js:3:1 › Grouped results expose all six actions and retain component across analysis (3.6s)
+  ✓  3 tests/e2e/shear-diagrams.spec.js:18:1 › Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving (3.6s)
+  ✓  4 tests/e2e/shear-diagrams.spec.js:60:1 › Uniform-load shear shows both signs and the unused component reports zero (2.5s)
+  ✓  5 tests/e2e/warehouse.spec.js:2:1 › Warehouse example opens in 3D and solves spatial gravity and lateral loads (3.6s)
+  ✓  6 tests/e2e/workspace-ux.spec.js:3:1 › UX ribbon, keyboard context menu and property drafts preserve model state (3.2s)
+  ✓  7 tests/e2e/workspace-ux.spec.js:40:1 › UX responsive panel navigation retains editable properties and results (2.3s)
+
+  7 passed (25.6s)

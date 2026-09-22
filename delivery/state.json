@@ -790,6 +790,15 @@
         "oracleComparisons": 468,
         "wasmComparisons": 468,
         "browserTests": 1
+      },
+      "resultPicker": {
+        "sourceRevision": "4ea66f9",
+        "sourceHash": "e8df47d704c6f8072caaab252a1b6cd8e66cf519ab655d0822afa5b26563f68a",
+        "buildHash": "b830648757556564b9b29ce2c5b8843fa82bb925913152b6214f3bcc34582b48",
+        "evidencePath": "evidence/M01/result-picker",
+        "status": "implemented-focused-checks-pass",
+        "browserTests": 7,
+        "unitTests": 6
       }
     },
     "M01-INPUTS": {
