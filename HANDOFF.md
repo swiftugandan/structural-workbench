@@ -49,3 +49,5 @@ Fixed reaction table/SVG NaN coercion from typed-array map (295508e). Numeric va
 User-directed removal: Forces & moments is now member-only; node diagrams/tables and contribution code removed. Member journey and node-empty-state browser check pass. Evidence: evidence/M01/member-only-inspector.
 
 Member results now includes global Ux/Uy/Uz/total displacement diagrams and station/end/extreme readouts in mm or m. Build and cantilever/browser regression pass: evidence/M01/member-deformation.
+
+Canvas toolbar exaggeration controls added: Displacement × and Diagram ×, with independent retained values and visible legend factors. Build, 6 rendering unit tests and 2 browser tests pass. Evidence: evidence/M01/graph-scale.

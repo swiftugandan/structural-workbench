@@ -836,6 +836,13 @@
         "buildHash": "0587cf1cd11328f4d53089c97eb12ac5ec76bb77ceaf3bb7cbbd6555ab54286b",
         "evidencePath": "evidence/M01/member-deformation",
         "status": "PASS"
+      },
+      "graphScale": {
+        "sourceRevision": "3d06236",
+        "sourceHash": "6b73972ce569081b6e5371e25e072625c49747a486282953f65a70e8e2066451",
+        "buildHash": "5219ef58e5d0edc64b4104c0c619b8ff70ec5dd9462961606e66b91eebc97621",
+        "evidencePath": "evidence/M01/graph-scale",
+        "status": "PASS"
       }
     },
     "M01-INPUTS": {

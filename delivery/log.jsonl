@@ -23,3 +23,4 @@
 {"observedAt":"2026-09-22T08:26:25.091Z","taskId":"M01-UX","event":"reaction-table-nan-fix","sourceRevision":"295508e","evidencePath":"evidence/M01/force-table-fix","result":"Typed-array rendering fix; unit and expanded supported-node browser test pass"}
 {"observedAt":"2026-09-22T08:31:32.869Z","taskId":"M01-UX","event":"member-only-inspector","sourceRevision":"eb87ee3","evidencePath":"evidence/M01/member-only-inspector","status":"PASS"}
 {"observedAt":"2026-09-22T08:42:29.719Z","taskId":"M01-UX","event":"member-deformation","sourceRevision":"8fc64c6","evidencePath":"evidence/M01/member-deformation","status":"PASS"}
+{"observedAt":"2026-09-22T08:46:53.583Z","taskId":"M01-UX","event":"canvas-exaggeration-controls","sourceRevision":"3d06236","evidencePath":"evidence/M01/graph-scale","status":"PASS"}
