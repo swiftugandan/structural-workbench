@@ -20,7 +20,7 @@ export function nodeContributions(project, result, nodeId, frames) {
     if (index >= 0)
       groups.push({
         name: `Support ${entityLabel(project, s.id)} reaction`,
-        values: result.reactions.slice(index * 6, index * 6 + 6),
+        values: Array.from(result.reactions.slice(index * 6, index * 6 + 6)),
       });
   }
   for (const m of project.members.filter(
@@ -92,7 +92,14 @@ export function renderForceInspector({
       ),
     );
   const table = (values, global = false) =>
-    `<table class="force-values"><thead><tr><th>Component</th><th>Value</th></tr></thead><tbody>${values.map((v, i) => `<tr><th>${global ? ["Fx", "Fy", "Fz", "Mx", "My", "Mz"][i] : names[i]}</th><td>${text(v, i)}</td></tr>`).join("")}</tbody></table>`;
+    `<table class="force-values"><thead><tr><th>Component</th><th>Value</th></tr></thead><tbody>${Array.from(
+      values,
+    )
+      .map(
+        (v, i) =>
+          `<tr><th>${global ? ["Fx", "Fy", "Fz", "Mx", "My", "Mz"][i] : names[i]}</th><td>${text(v, i)}</td></tr>`,
+      )
+      .join("")}</tbody></table>`;
   if (n) {
     const groups = nodeContributions(project, result, n.id, frames);
     host.innerHTML =
@@ -107,7 +114,7 @@ export function renderForceInspector({
             [-42, 32],
             [0, -48],
           ];
-          const glyph = g.values
+          const glyph = Array.from(g.values)
             .map((v, i) => {
               if (Math.abs(v) < 1e-9) return "";
               const [dx, dy] = dirs[i % 3],

@@ -13,7 +13,7 @@ test("Node loads respect combination factors and member-on-node sign and rotated
   const result = {
     caseId: "c",
     reactionSupportIds: ["s"],
-    reactions: [-2, -4, -6, -8, -10, -12],
+    reactions: new Float64Array([-2, -4, -6, -8, -10, -12]),
     members: [{ id: "m", endActions: [1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0] }],
   };
   const groups = nodeContributions(project, result, "n", [
@@ -27,6 +27,6 @@ test("Node loads respect combination factors and member-on-node sign and rotated
     },
   ]);
   assert.deepEqual(groups[0].values, [2, 4, 6, 8, 10, 12]);
-  assert.deepEqual(groups[1].values, result.reactions);
+  assert.deepEqual(groups[1].values, Array.from(result.reactions));
   assert.deepEqual(groups[2].values, [-3, -1, -2, -6, -4, -5]);
 });
