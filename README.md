@@ -30,10 +30,10 @@ values remain unchanged.
 
 ## Read in this order
 
-Start with [Agent.md](Agent.md), the delivery instruction entry point. [AGENTS.md](AGENTS.md) is included as a loader for compatible repository agents. Preserve existing repository instructions when installing it.
+Start with [AGENTS.md](AGENTS.md), the always-on delivery policy. [Agent.md](Agent.md) and [AGENT_RUNBOOK.md](AGENT_RUNBOOK.md) are compatibility shims into that file plus [skills/](skills/). Layout notes: [docs/agent/README.md](docs/agent/README.md). Preserve existing repository instructions when merging the loader into another repo.
 
 1. [SPECIFICATION.md](SPECIFICATION.md) — product decisions, architecture, numerical conventions and 24 vertical-slice milestones.
-2. [AGENT_RUNBOOK.md](AGENT_RUNBOOK.md) — autonomous execution, failure handling, resource blockers and evidence policy.
+2. [skills/](skills/) — session, task loop, numerical, evidence, resources and collab procedures (was AGENT_RUNBOOK.md).
 3. [VALIDATION.md](VALIDATION.md) — numerical tolerances, benchmark definitions, browser journeys and release gates.
 4. [contracts/PROTOCOL.md](contracts/PROTOCOL.md) and contracts/\*.schema.json — model, worker and result contracts.
 5. [fixtures/README.md](fixtures/README.md) and [fixtures/benchmarks.json](fixtures/benchmarks.json) — analytical truth and complete input models.
