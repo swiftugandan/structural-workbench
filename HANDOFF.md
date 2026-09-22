@@ -39,3 +39,5 @@ Effect-direction follow-up (633ee16): all exposed action diagrams retain member-
 Warehouse W01 added to Worked examples, opens in 3D. Analysed and independently cross-checked: 468 OpenSees and 468 native/WASM values, six equilibrium components and browser journey pass. Peak nodal displacement 8.80 mm; reactions balance 180 kN downward + 45 kN lateral. Synthetic demonstration inputs, not building design validation. Evidence: evidence/M01/warehouse.
 
 Grouped result picker: Model/deformation, Member forces (N/Vy/Vz), Member moments (My/Mz/T), remembered per-family choice and retained action after analysis. Mz follows local xy; N/T use signed on-member colouring. Evidence/M01/result-picker: 6 unit and 7 browser tests pass. Live visual/full milestone acceptance remain pending.
+
+Local X naming clarified in picker and canvas legends: N / Fx along local x, T / Mx about local x. Build and picker regression pass: evidence/M01/x-labels.

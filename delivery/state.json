@@ -799,6 +799,13 @@
         "status": "implemented-focused-checks-pass",
         "browserTests": 7,
         "unitTests": 6
+      },
+      "xLabels": {
+        "sourceRevision": "a7ad5c4",
+        "sourceHash": "9be77ee21e4b7bbbd90bfa23ae4e59da40ffede560b114e79fb24f45a97e2db8",
+        "buildHash": "2173cbb33fb0e5e765b809cf2690f30457454014f27adf2701b110d5c2f060f7",
+        "evidencePath": "evidence/M01/x-labels",
+        "status": "PASS"
       }
     },
     "M01-INPUTS": {

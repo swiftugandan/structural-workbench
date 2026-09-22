@@ -1,0 +1,1 @@
+Local X labels clarified in picker and canvas legend: N / Fx along local x; T / Mx about local x. Source change a7ad5c4. Source hash 9be77ee21e4b7bbbd90bfa23ae4e59da40ffede560b114e79fb24f45a97e2db8; build 2173cbb33fb0e5e765b809cf2690f30457454014f27adf2701b110d5c2f060f7. Build and existing all-component picker browser regression pass. Copy-only change; no solver change.
