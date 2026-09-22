@@ -203,6 +203,32 @@
                 <option value="deformed">Deformation</option>
               </select>
             </label>
+            <label id="deformation-scale-control" class="inline-label" hidden
+              >Displacement ×
+              <input
+                id="deformation-scale"
+                aria-label="Deformation scale"
+                type="number"
+                min="0"
+                max="10000"
+                step="1"
+                value="10"
+                title="1 = true displacement; affects the picture only"
+              />
+            </label>
+            <label id="diagram-scale-control" class="inline-label" hidden
+              >Diagram ×
+              <input
+                id="diagram-scale"
+                aria-label="Diagram scale"
+                type="number"
+                min="0"
+                max="100"
+                step="0.1"
+                value="1"
+                title="Multiplier of the automatic diagram size; values remain unchanged"
+              />
+            </label>
           </div>
           <div id="drawing-panel" hidden>
             <div class="plane-controls">
@@ -265,14 +291,8 @@
               <span><i class="legend-line"></i>Undeformed</span
               ><span id="deformation-legend" hidden
                 ><i class="legend-line blue"></i>Deformed ×
-                <input
-                  id="deformation-scale"
-                  aria-label="Deformation scale"
-                  type="number"
-                  min="0"
-                  max="10000"
-                  value="10"
-              /></span>
+                <output id="deformation-factor">10</output></span
+              >
             </div>
             <div
               id="action-legend"

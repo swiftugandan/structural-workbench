@@ -82,3 +82,7 @@ User direction supersedes the node inspector above: remove all node force/moment
 ### Member deformation detail
 
 The tab is now Member results. Its grouped component picker includes global Ux, Uy, Uz and total displacement magnitude, alongside the six actions. Recovered displacement is plotted against true distance along the member with station/end/extreme readouts and a displacement table. Engineering units use mm, SI uses m. These are explicitly auto-scaled displacement graphs rather than a projected 3D shape. Existing selection/stale guards apply. Cantilever regression verifies −45 mm Uz, 45 mm total and 0.045 m after changing units.
+
+### Canvas exaggeration controls
+
+Visible toolbar inputs are contextual: Displacement × (0–10000, default 10, 1 = actual displacement) and Diagram × (0–100, default 1, multiplies automatic member-plane amplitude). Their independent session values persist across result-component switches. Legends state the current factor; calculated values and model hash are unaffected. A zero factor collapses the graphical offset. N/T on-member sign colouring has no spatial diagram amplitude, so its scale control is hidden. This relocates the formerly small deformation legend input into the toolbar.

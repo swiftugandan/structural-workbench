@@ -22,6 +22,7 @@ export class Viewport {
     this.yaw = Math.PI / 4;
     this.pitch = Math.atan(1 / Math.sqrt(2));
     this.scale = 10;
+    this.diagramScale = 1;
     this.resultView = "model";
     this.viewRevision = 0;
     this.selected = "m1";
@@ -772,6 +773,13 @@ export class Viewport {
         );
     }
     const component = actionComponents[this.resultView];
+    document.querySelector("#deformation-scale-control").hidden =
+      this.resultView !== "deformed";
+    document.querySelector("#diagram-scale-control").hidden =
+      !component || component.scalar;
+    document.querySelector("#deformation-factor").textContent = String(
+      this.scale,
+    );
     const actionLegend = document.querySelector("#action-legend");
     actionLegend.hidden = !component;
     document.querySelector(".view-legend").hidden = Boolean(component);
@@ -787,7 +795,7 @@ export class Viewport {
           : `${component.title} · Analyse to display`;
       else {
         const peak = diagramPeak(this.result, component);
-        actionLegend.textContent = `${component.title} · Local section actions · ${peak ? "Auto scale: peak " + actionText(peak, component, engineering, false) : "All values zero"} · + blue / − orange · ${component.scalar ? (component.name === "N" ? "On-member colour · + tension / − compression" : "On-member colour · torque about local x") : `Local ${component.plane} plane · + toward local ${component.offset} · Edge-on plots may overlap the member`}`;
+        actionLegend.textContent = `${component.title} · Local section actions · ${peak ? "Auto scale: peak " + actionText(peak, component, engineering, false) : "All values zero"} · ${component.scalar ? "" : `Diagram ×${this.diagramScale} · `}+ blue / − orange · ${component.scalar ? (component.name === "N" ? "On-member colour · + tension / − compression" : "On-member colour · torque about local x") : `Local ${component.plane} plane · + toward local ${component.offset} · Edge-on plots may overlap the member`}`;
         actionLegend.dataset.component = component.name;
         actionLegend.dataset.peak = String(peak);
         const frames = new Map(
@@ -802,7 +810,7 @@ export class Viewport {
             component,
             peak,
             frames.get(member.id),
-            this.extent * 0.18,
+            this.extent * 0.18 * this.diagramScale,
           );
           if (!plot) continue;
           const values = member.samples.map((s) => s.actions[component.index]);

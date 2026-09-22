@@ -962,6 +962,19 @@ $("#deformation-scale").oninput = () => {
   );
   viewport.draw();
 };
+$("#diagram-scale").oninput = () => {
+  const value = Number($("#diagram-scale").value);
+  if ($("#diagram-scale").value === "" || !Number.isFinite(value)) return;
+  viewport.diagramScale = Math.max(0, Math.min(100, value));
+  viewport.draw();
+};
+for (const [id, field] of [
+  ["deformation-scale", "scale"],
+  ["diagram-scale", "diagramScale"],
+])
+  $("#" + id).onchange = () => {
+    $("#" + id).value = viewport[field];
+  };
 $("#fit").onclick = () => viewport.fit();
 $("#reset-viewport").onclick = () => {
   if (viewport.device && viewport.ready) {

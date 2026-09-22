@@ -76,7 +76,7 @@ export function actionProjection(
   axes,
   amplitude,
 ) {
-  if (!samples.length || (!component.scalar && !axes) || !(amplitude > 0))
+  if (!samples.length || (!component.scalar && !axes) || !(amplitude >= 0))
     return null;
   const direction = component.scalar ? [0, 0, 0] : axes[component.axis];
   const base = samples.map((s) => projectPoint(s.position));

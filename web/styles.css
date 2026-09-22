@@ -2116,3 +2116,10 @@ textarea,
   font-weight: 600;
   margin: 10px 0;
 }
+
+#deformation-scale,
+#diagram-scale {
+  width: 76px;
+  min-width: 0;
+  padding: 5px;
+}
