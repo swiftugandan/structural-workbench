@@ -780,6 +780,69 @@
         "status": "implemented-focused-checks-pass",
         "note": "Full/live acceptance pending; content snapshot includes concurrent work."
       }
+    },
+    "M01-INPUTS": {
+      "id": "M01-INPUTS",
+      "useCase": "Create and edit structural models with guided inputs, structural symbols, diagrams and section/load/material templates",
+      "dependencies": [],
+      "status": "ACCEPTED",
+      "acceptanceMeaning": "Bounded local automated input/template workflow only; parent M01 and release remain subject to existing external gates.",
+      "ownedPaths": [
+        "web/entity-forms.js",
+        "web/model-templates.js",
+        "web/structural-icons.js",
+        "web/icons.js",
+        "web/app.js",
+        "web/styles.css",
+        "web/workspace-ui.js",
+        "tests/e2e/guided-inputs.spec.js"
+      ],
+      "acceptanceIds": [
+        "guided-inputs",
+        "template-property-preservation",
+        "template-load-analysis",
+        "template-accessibility-mobile"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "npx playwright test tests/e2e tests/accessibility tests/visual",
+        "npm run test:wasm",
+        "npm run test:contracts",
+        "npm run test:security"
+      ],
+      "outcomes": [
+        {
+          "check": "browser-e2e-accessibility-graphics",
+          "status": "PASS",
+          "testCount": 42,
+          "evidencePath": "evidence/M01/guided-inputs/playwright-results.json"
+        },
+        {
+          "check": "native-WASM analytical comparisons",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M01/guided-inputs/wasm.json"
+        },
+        {
+          "check": "contracts",
+          "status": "PASS",
+          "testCount": 3
+        },
+        {
+          "check": "security",
+          "status": "PASS",
+          "testCount": 2
+        }
+      ],
+      "sourceRevision": "c0c01c7e7ff3ca79c6a7cfaf5fd80aa80c954ac1",
+      "testedSourceHash": "82c2519747e1df664e03f74e01d2289d4176ac845be8c249dce9c0bade3e1b00",
+      "buildHash": "0021fd965866ed2ea46af92b7b4c5af62892be15001fdb57675619200f61bc79",
+      "evidencePaths": [
+        "evidence/M01/guided-inputs/verification.json",
+        "evidence/M01/guided-inputs/tested-build.json",
+        "evidence/M01/guided-inputs/verified-source-files.json"
+      ],
+      "nextAction": "Complete live CUA visual review when admin-policy verification is available; preserve parent platform/release blockers."
     }
   },
   "blockers": [

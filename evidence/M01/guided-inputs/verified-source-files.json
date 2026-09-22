@@ -1,0 +1,9 @@
+{
+  "web/app.js": "9cc541d82a36bd5800252e25a7b97a7d36770689f94f9779ed1c44debc148e3e",
+  "web/entity-forms.js": "08e45f36ef7129658d72a6d8804e685a024937f8aec4c02163552ff579308b37",
+  "web/model-templates.js": "7a061acf7cf8ff183122d14dce0055a2a61355261cc93f927b294a63b29dd795",
+  "web/structural-icons.js": "8d4dde99cf08ad51a162d1c412f507fb33dc06063e4287eed8cd4df4c7f2aedf",
+  "web/icons.js": "65ec8229005afc593ed733db3c2cfd3e1bcc4d0721a697b80b48ce10bcee169a",
+  "web/workspace-ui.js": "4c2de8f060e3c9f7999c0148f5e7a57acc8919f08b35f4df38f77cbc34d9314c",
+  "web/styles.css": "422adf4fc6c484971a905d070b7ca4bed1d635ba9bd2709de0ed56a833430641"
+}

@@ -1,0 +1,3 @@
+Attempt: cua.getBrowser({url:"http://127.0.0.1:4173"}) followed by cua.createBrowserTab(browser.browserId,"http://127.0.0.1:4173",{visible:false}).
+Outcome: BLOCKED_RESOURCE. Browser security check unavailable; the admin-enforced policy could not be verified, so access was not granted.
+No alternate live-browser access was attempted. Automated repository tests are reported separately.
