@@ -843,6 +843,14 @@
         "buildHash": "5219ef58e5d0edc64b4104c0c619b8ff70ec5dd9462961606e66b91eebc97621",
         "evidencePath": "evidence/M01/graph-scale",
         "status": "PASS"
+      },
+      "layoutPanels": {
+        "status": "PASS",
+        "scope": "Layout toggles, focus/restore, local preferences; focused browser and live CUA verification",
+        "evidencePath": "evidence/M01/layout-panels",
+        "sourceHash": "20f83cf8315cba0b7a6ac9ed58d03b3338ee91fbba535aa6a291de05ac966bbf",
+        "buildHash": "13ffca2513c997b6cfae5a986eff97f826c0c77568a6743f15dbc2c02632b7aa",
+        "testCount": 4
       }
     },
     "M01-INPUTS": {

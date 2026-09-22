@@ -160,19 +160,107 @@ export function workspaceUI({
   panels.innerHTML =
     '<button data-panel="canvas" aria-pressed="true">Canvas</button><button data-panel="model" aria-pressed="false">Model tree</button><button data-panel="properties" aria-pressed="false">Properties</button><button data-panel="results" aria-pressed="false">Results</button>';
   ribbon.after(panels);
-  function panel(name) {
-    $(".work-grid").dataset.panel = name;
-    document
-      .querySelectorAll("button[data-panel]")
-      .forEach((b) =>
-        b.setAttribute("aria-pressed", String(b.dataset.panel === name)),
+  const layoutKey = "workbench-layout-v1";
+  const defaults = {
+    model: true,
+    properties: true,
+    results: true,
+    ribbon: true,
+    toolbar: true,
+  };
+  let layout = { ...defaults },
+    focused = false;
+  let previousPanel = "canvas";
+  try {
+    const saved = JSON.parse(localStorage.getItem(layoutKey));
+    for (const key of Object.keys(defaults))
+      if (typeof saved?.[key] === "boolean") layout[key] = saved[key];
+  } catch {
+    /* Layout preferences are optional. */
+  }
+  const targets = {
+    model: $(".model-panel"),
+    properties: $(".inspector"),
+    results: $(".results-panel"),
+    ribbon,
+    toolbar: $(".viewport-toolbar"),
+  };
+  for (const [key, label] of [
+    ["ribbon", "Ribbon"],
+    ["toolbar", "Canvas toolbar"],
+  ]) {
+    const button = document.createElement("button");
+    button.dataset.layout = key;
+    button.textContent = label;
+    panels.append(button);
+  }
+  const focus = document.createElement("button");
+  focus.id = "focus-canvas";
+  panels.append(focus);
+  const narrow = matchMedia("(max-width: 900px)");
+  function renderLayout() {
+    for (const [key, target] of Object.entries(targets)) {
+      const visible = !focused && layout[key];
+      target.classList.toggle(
+        "layout-hidden",
+        !visible && (!narrow.matches || ["ribbon", "toolbar"].includes(key)),
       );
+      $(".work-grid").classList.toggle("hide-" + key, !visible);
+      const button = panels.querySelector(
+        `[data-panel="${key}"], [data-layout="${key}"]`,
+      );
+      button?.setAttribute(
+        "aria-pressed",
+        String(
+          narrow.matches && ["model", "properties", "results"].includes(key)
+            ? $(".work-grid").dataset.panel === key
+            : visible,
+        ),
+      );
+    }
+    panels.querySelector('[data-panel="canvas"]').hidden = !narrow.matches;
+    focus.textContent = focused ? "Restore layout" : "Focus canvas";
+    focus.setAttribute("aria-pressed", String(focused));
+  }
+  function saveLayout() {
+    try {
+      localStorage.setItem(layoutKey, JSON.stringify(layout));
+    } catch {
+      /* Continue without persistence. */
+    }
+  }
+  function panel(name) {
+    focused = false;
+    if (name !== "canvas") layout[name] = true;
+    $(".work-grid").dataset.panel = name;
+    panels
+      .querySelector('[data-panel="canvas"]')
+      .setAttribute("aria-pressed", String(name === "canvas"));
+    renderLayout();
+    saveLayout();
   }
   panels.onclick = (e) => {
-    const b = e.target.closest("[data-panel]");
-    if (b) panel(b.dataset.panel);
+    const button = e.target.closest("button");
+    if (!button) return;
+    if (button === focus) {
+      if (!focused) previousPanel = $(".work-grid").dataset.panel;
+      focused = !focused;
+      $(".work-grid").dataset.panel = focused ? "canvas" : previousPanel;
+    } else {
+      const key = button.dataset.layout || button.dataset.panel;
+      if (narrow.matches && button.dataset.panel) {
+        panel(key);
+        return;
+      }
+      layout[key] = focused || !layout[key];
+      focused = false;
+      saveLayout();
+    }
+    renderLayout();
   };
-  panel("canvas");
+  narrow.addEventListener("change", renderLayout);
+  $(".work-grid").dataset.panel = "canvas";
+  renderLayout();
   $("#show-results").onclick = () => {
     panel("results");
     $("#results-content").focus();

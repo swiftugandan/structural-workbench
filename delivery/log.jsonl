@@ -24,3 +24,4 @@
 {"observedAt":"2026-09-22T08:31:32.869Z","taskId":"M01-UX","event":"member-only-inspector","sourceRevision":"eb87ee3","evidencePath":"evidence/M01/member-only-inspector","status":"PASS"}
 {"observedAt":"2026-09-22T08:42:29.719Z","taskId":"M01-UX","event":"member-deformation","sourceRevision":"8fc64c6","evidencePath":"evidence/M01/member-deformation","status":"PASS"}
 {"observedAt":"2026-09-22T08:46:53.583Z","taskId":"M01-UX","event":"canvas-exaggeration-controls","sourceRevision":"3d06236","evidencePath":"evidence/M01/graph-scale","status":"PASS"}
+{"observedAt": "2026-09-22T09:41:45.496972+00:00", "taskId": "M01-UX", "event": "workspace-layout-controls", "evidencePath": "evidence/M01/layout-panels", "status": "PASS", "buildHash": "13ffca2513c997b6cfae5a986eff97f826c0c77568a6743f15dbc2c02632b7aa"}

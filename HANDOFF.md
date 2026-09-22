@@ -51,3 +51,5 @@ User-directed removal: Forces & moments is now member-only; node diagrams/tables
 Member results now includes global Ux/Uy/Uz/total displacement diagrams and station/end/extreme readouts in mm or m. Build and cantilever/browser regression pass: evidence/M01/member-deformation.
 
 Canvas toolbar exaggeration controls added: Displacement × and Diagram ×, with independent retained values and visible legend factors. Build, 6 rendering unit tests and 2 browser tests pass. Evidence: evidence/M01/graph-scale.
+
+Workspace layout visibility: desktop panel/ribbon/toolbar toggles, persisted choices and Focus canvas/Restore layout implemented. Evidence/M01/layout-panels: build + 4 browser/accessibility checks pass; live CUA focus/restore verified at 1280x720. Preview on port 4175 (4173 serves another preview). This focused live check does not complete full M01-UX acceptance. Next: run the complete UX acceptance journey and required platform gates on this build.
