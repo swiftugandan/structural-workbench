@@ -5,77 +5,27 @@ const keys = ["axial", "shearY", "shearZ", "torsion", "moment", "momentZ"];
 const names = ["N / Fx", "Vy", "Vz", "T / Mx", "My", "Mz"];
 let component = "moment",
   station = 0;
-export function nodeContributions(project, result, nodeId, frames) {
-  const combination = project.combinations.find((c) => c.id === result.caseId);
-  const factors = combination
-    ? Object.fromEntries(combination.terms.map((t) => [t.case, t.factor]))
-    : { [result.caseId]: 1 };
-  const applied = Array(6).fill(0);
-  for (const l of project.loads)
-    if (l.type === "nodal" && l.node === nodeId)
-      l.values.forEach((v, i) => (applied[i] += v * (factors[l.case] || 0)));
-  const groups = [{ name: "Applied nodal loads", values: applied }];
-  for (const s of project.supports.filter((s) => s.node === nodeId)) {
-    const index = result.reactionSupportIds.indexOf(s.id);
-    if (index >= 0)
-      groups.push({
-        name: `Support ${entityLabel(project, s.id)} reaction`,
-        values: Array.from(result.reactions.slice(index * 6, index * 6 + 6)),
-      });
-  }
-  for (const m of project.members.filter(
-    (m) => m.start === nodeId || m.end === nodeId,
-  )) {
-    const frame = frames?.find((f) => f.id === m.id),
-      r = result.members.find((r) => r.id === m.id);
-    if (!frame || !r) {
-      groups.push({
-        name: `Member ${entityLabel(project, m.id)}`,
-        values: null,
-      });
-      continue;
-    }
-    const q = r.endActions.slice(
-      m.start === nodeId ? 0 : 6,
-      m.start === nodeId ? 6 : 12,
-    );
-    const values = Array.from(
-      { length: 6 },
-      (_, i) =>
-        -frame.axes.reduce(
-          (sum, axis, j) => sum + axis[i % 3] * q[j + (i < 3 ? 0 : 3)],
-          0,
-        ),
-    );
-    groups.push({
-      name: `Member ${entityLabel(project, m.id)} on node`,
-      values,
-    });
-  }
-  return groups;
-}
 export function renderForceInspector({
   project,
   result,
   modelHash,
   selected,
   count,
-  frames,
 }) {
   const host = document.querySelector("#force-inspector");
   if (!project || !selected || count !== 1) {
     host.innerHTML =
-      "<p>Select one member or node to inspect its forces and moments.</p>";
+      "<p>Select one member to inspect its forces and moments.</p>";
     return;
   }
-  const m = project.members.find((m) => m.id === selected),
-    n = project.nodes.find((n) => n.id === selected);
-  if (!m && !n) {
-    host.innerHTML = "<p>Select a member or node in the canvas.</p>";
+  const m = project.members.find((m) => m.id === selected);
+  if (!m) {
+    host.innerHTML =
+      "<p>Select a member to view its forces and moments. Node properties are available in Properties.</p>";
     return;
   }
   const label = (id) => esc(entityLabel(project, id));
-  const heading = `<h3>${m ? "Member" : "Node"} ${label(selected)}</h3>`;
+  const heading = `<h3>Member ${label(selected)}</h3>`;
   if (!result || result.modelHash !== modelHash) {
     host.innerHTML =
       heading +
@@ -91,47 +41,12 @@ export function renderForceInspector({
         engineering,
       ),
     );
-  const table = (values, global = false) =>
+  const table = (values) =>
     `<table class="force-values"><thead><tr><th>Component</th><th>Value</th></tr></thead><tbody>${Array.from(
       values,
     )
-      .map(
-        (v, i) =>
-          `<tr><th>${global ? ["Fx", "Fy", "Fz", "Mx", "My", "Mz"][i] : names[i]}</th><td>${text(v, i)}</td></tr>`,
-      )
+      .map((v, i) => `<tr><th>${names[i]}</th><td>${text(v, i)}</td></tr>`)
       .join("")}</tbody></table>`;
-  if (n) {
-    const groups = nodeContributions(project, result, n.id, frames);
-    host.innerHTML =
-      heading +
-      `<p>Global axes · ${label(result.caseId)}. Arrows show signed components; their lengths are schematic. Curved arrows denote moments.</p>` +
-      groups
-        .map((g) => {
-          if (!g.values)
-            return `<section><h4>${esc(g.name)}</h4><p>Local axes unavailable; reselect after geometry loads.</p></section>`;
-          const dirs = [
-            [65, 0],
-            [-42, 32],
-            [0, -48],
-          ];
-          const glyph = Array.from(g.values)
-            .map((v, i) => {
-              if (Math.abs(v) < 1e-9) return "";
-              const [dx, dy] = dirs[i % 3],
-                sign = Math.sign(v),
-                x = 105 + dx * sign,
-                y = 76 + dy * sign;
-              if (i < 3)
-                return `<path d="M105 76 L${x} ${y}" stroke="#225dc7" marker-end="url(#f${groups.indexOf(g)})"/><text x="${x}" y="${y - 7}" text-anchor="middle">${["Fx", "Fy", "Fz"][i]}</text>`;
-              const cx = 42 + (i - 3) * 65;
-              return `<path d="M${cx - 13} 145 A16 16 0 1 ${v > 0 ? 1 : 0} ${cx + 13} 145" stroke="#a64b12" marker-end="url(#f${groups.indexOf(g)})"/><text x="${cx}" y="169" text-anchor="middle">${["Mx", "My", "Mz"][i - 3]} ${v > 0 ? "+" : "−"}</text>`;
-            })
-            .join("");
-          return `<section><h4>${esc(g.name)}</h4><svg viewBox="0 0 240 180" role="img" aria-label="${esc(g.name)} force and moment directions"><defs><marker id="f${groups.indexOf(g)}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="#225dc7"/></marker></defs><g fill="none" stroke-width="2">${glyph}</g><circle cx="105" cy="76" r="5" fill="#52657b"/></svg>${table(g.values, true)}</section>`;
-        })
-        .join("");
-    return;
-  }
   const r = result.members.find((r) => r.id === m.id);
   if (!r) {
     host.innerHTML = heading + "<p>No member results.</p>";

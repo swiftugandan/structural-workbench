@@ -27,31 +27,11 @@ test("Selected member force diagram station, units and stale state", async ({
     .first()
     .boundingBox();
   await page.mouse.click(node.x - 9, node.y - 10);
-  await expect(page.locator("#force-inspector h3")).toHaveText("Node n2");
   await expect(page.locator("#force-inspector")).toContainText(
-    "Applied nodal loads",
+    "Select a member",
   );
-  await expect(page.locator("#force-inspector")).toContainText(
-    "Member m1 on node",
-  );
-  await expect(page.locator("#force-inspector")).toContainText("+10,000 N");
-  const base = await page
-    .locator('.node-label[data-entity-id="n1"]')
-    .first()
-    .boundingBox();
-  await page.mouse.click(base.x - 9, base.y - 10);
-  await expect(page.locator("#force-inspector h3")).toHaveText("Node n1");
-  const reaction = page
-    .locator("#force-inspector section")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Support s1 reaction",
-        exact: true,
-      }),
-    });
-  await expect(reaction.locator("tbody tr")).toHaveCount(6);
-  await expect(reaction).toContainText("+10,000 N");
-  await expect(page.locator("#force-inspector")).not.toContainText("NaN");
+  await expect(page.locator("#force-inspector svg")).toHaveCount(0);
+  await expect(page.locator("#force-inspector table")).toHaveCount(0);
   await page.locator('[data-member="m1"]').click();
   await page.locator('[data-inspector-tab="properties"]').click();
   await page.locator("#span").fill("4");

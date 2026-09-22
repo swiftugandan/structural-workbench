@@ -581,7 +581,6 @@ function renderSelectionForces() {
     modelHash,
     selected,
     count: viewport.selection.size,
-    frames: viewport.axesProject === project ? viewport.localAxes : null,
   });
 }
 for (const button of document.querySelectorAll("[data-inspector-tab]"))
