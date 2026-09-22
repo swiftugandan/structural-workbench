@@ -60,3 +60,7 @@ Supersedes the screen-perpendicular schematic offset: My and Vz are offset along
 ### All exposed effects retain physical directions
 
 Vy/Vz and My retain their member-plane projection. Deformation uses the full global displacement vector supplied by Rust, multiplied by the user scale before camera projection; its former constant-depth override is removed. Combined displacements remain spatial instead of being forced into a single plane. Rendering tests cover pure Z displacement, coupled XYZ displacement, camera rotation and zero scale as well as local action planes.
+
+### 3D warehouse example
+
+Worked examples includes W01: a 12 m span × 18 m long pitched-roof warehouse with three 6 m bays, 6 m eaves and 8 m ridge. Twenty nodes, 25 rigid-jointed frame members and eight fixed bases form four transverse portals connected at both eaves and ridge. Opens in 3D. Synthetic section properties and combined illustrative roof/lateral nodal loads are deliberately not a code-designed building; self-weight is not included. Applied totals are Fz = −180 kN, Fy = +45 kN. Independent OpenSees and native/WASM comparison results are in evidence/M01/warehouse.

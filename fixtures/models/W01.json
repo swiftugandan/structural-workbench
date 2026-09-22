@@ -1,0 +1,1050 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "W01",
+  "name": "3D warehouse frame",
+  "revision": 0,
+  "displayUnits": "engineeringMetric",
+  "analysisMode": "spatial",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "materials": [
+    {
+      "id": "mat1",
+      "name": "Illustrative steel",
+      "E": 210000000000.0,
+      "nu": 0.3,
+      "density": 7850
+    }
+  ],
+  "sections": [
+    {
+      "id": "sec1",
+      "name": "Illustrative frame section",
+      "A": 0.012,
+      "Iy": 0.0003,
+      "Iz": 0.0001,
+      "J": 1e-05,
+      "cy": 0.15,
+      "cz": 0.25,
+      "provenance": "Synthetic demonstration properties; not a designed or catalogue section"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        0,
+        0,
+        6
+      ]
+    },
+    {
+      "id": "n3",
+      "position": [
+        6,
+        0,
+        8
+      ]
+    },
+    {
+      "id": "n4",
+      "position": [
+        12,
+        0,
+        6
+      ]
+    },
+    {
+      "id": "n5",
+      "position": [
+        12,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "n6",
+      "position": [
+        0,
+        6,
+        0
+      ]
+    },
+    {
+      "id": "n7",
+      "position": [
+        0,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "n8",
+      "position": [
+        6,
+        6,
+        8
+      ]
+    },
+    {
+      "id": "n9",
+      "position": [
+        12,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "n10",
+      "position": [
+        12,
+        6,
+        0
+      ]
+    },
+    {
+      "id": "n11",
+      "position": [
+        0,
+        12,
+        0
+      ]
+    },
+    {
+      "id": "n12",
+      "position": [
+        0,
+        12,
+        6
+      ]
+    },
+    {
+      "id": "n13",
+      "position": [
+        6,
+        12,
+        8
+      ]
+    },
+    {
+      "id": "n14",
+      "position": [
+        12,
+        12,
+        6
+      ]
+    },
+    {
+      "id": "n15",
+      "position": [
+        12,
+        12,
+        0
+      ]
+    },
+    {
+      "id": "n16",
+      "position": [
+        0,
+        18,
+        0
+      ]
+    },
+    {
+      "id": "n17",
+      "position": [
+        0,
+        18,
+        6
+      ]
+    },
+    {
+      "id": "n18",
+      "position": [
+        6,
+        18,
+        8
+      ]
+    },
+    {
+      "id": "n19",
+      "position": [
+        12,
+        18,
+        6
+      ]
+    },
+    {
+      "id": "n20",
+      "position": [
+        12,
+        18,
+        0
+      ]
+    }
+  ],
+  "members": [
+    {
+      "id": "m1",
+      "start": "n1",
+      "end": "n2",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m2",
+      "start": "n2",
+      "end": "n3",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m3",
+      "start": "n3",
+      "end": "n4",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m4",
+      "start": "n4",
+      "end": "n5",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m5",
+      "start": "n6",
+      "end": "n7",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m6",
+      "start": "n7",
+      "end": "n8",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m7",
+      "start": "n8",
+      "end": "n9",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m8",
+      "start": "n9",
+      "end": "n10",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m9",
+      "start": "n11",
+      "end": "n12",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m10",
+      "start": "n12",
+      "end": "n13",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m11",
+      "start": "n13",
+      "end": "n14",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m12",
+      "start": "n14",
+      "end": "n15",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m13",
+      "start": "n16",
+      "end": "n17",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m14",
+      "start": "n17",
+      "end": "n18",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m15",
+      "start": "n18",
+      "end": "n19",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m16",
+      "start": "n19",
+      "end": "n20",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m17",
+      "start": "n2",
+      "end": "n7",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m18",
+      "start": "n3",
+      "end": "n8",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m19",
+      "start": "n4",
+      "end": "n9",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m20",
+      "start": "n7",
+      "end": "n12",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m21",
+      "start": "n8",
+      "end": "n13",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m22",
+      "start": "n9",
+      "end": "n14",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m23",
+      "start": "n12",
+      "end": "n17",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m24",
+      "start": "n13",
+      "end": "n18",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "m25",
+      "start": "n14",
+      "end": "n19",
+      "material": "mat1",
+      "section": "sec1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    }
+  ],
+  "supports": [
+    {
+      "id": "s1",
+      "node": "n1",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s2",
+      "node": "n5",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s3",
+      "node": "n6",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s4",
+      "node": "n10",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s5",
+      "node": "n11",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s6",
+      "node": "n15",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s7",
+      "node": "n16",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s8",
+      "node": "n20",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "loadCases": [
+    {
+      "id": "LC1",
+      "name": "Roof gravity + lateral demonstration",
+      "category": "other"
+    }
+  ],
+  "loads": [
+    {
+      "id": "l1",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n2",
+      "values": [
+        0,
+        2500,
+        -10000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l2",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n3",
+      "values": [
+        0,
+        2500,
+        -10000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l3",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n4",
+      "values": [
+        0,
+        2500,
+        -10000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l4",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n7",
+      "values": [
+        0,
+        5000,
+        -20000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l5",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n8",
+      "values": [
+        0,
+        5000,
+        -20000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l6",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n9",
+      "values": [
+        0,
+        5000,
+        -20000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l7",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n12",
+      "values": [
+        0,
+        5000,
+        -20000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l8",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n13",
+      "values": [
+        0,
+        5000,
+        -20000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l9",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n14",
+      "values": [
+        0,
+        5000,
+        -20000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l10",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n17",
+      "values": [
+        0,
+        2500,
+        -10000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l11",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n18",
+      "values": [
+        0,
+        2500,
+        -10000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "l12",
+      "case": "LC1",
+      "type": "nodal",
+      "node": "n19",
+      "values": [
+        0,
+        2500,
+        -10000,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "combinations": [],
+  "analysisSettings": {
+    "type": "linearStatic",
+    "formulation": "eulerBernoulli3D",
+    "mergeTolerance": 1e-06,
+    "timeoutMs": 30000,
+    "memoryLimitMiB": 512
+  },
+  "metadata": {
+    "description": "Illustrative 12 m span \u00d7 18 m long warehouse: three 6 m bays, 6 m eaves, 8 m ridge. Rigid-jointed spatial frame; fixed bases; longitudinal eave and ridge members. Synthetic section and nodal roof/lateral loads, no self-weight. Educational analysis model, not a designed building. Total applied Fz=-180 kN and Fy=45 kN.",
+    "createdBy": "Workbench example"
+  }
+}

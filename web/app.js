@@ -266,10 +266,16 @@ async function example(id, name) {
   p.id = "p" + crypto.randomUUID().replaceAll("-", "");
   p.name = name;
   await open(p);
+  if (id === "W01") $("#view-3d").click();
 }
 $("#new-project").onclick = () => example("B02", "Untitled cantilever");
 $("#worked-examples").onclick = () => {
   const examples = [
+    [
+      "W01",
+      "3D warehouse frame",
+      "12 × 18 m · 3 bays · pitched roof · gravity + lateral loads",
+    ],
     ["B02", "Cantilever", "3 m · tip force · bending about local y"],
     ["B01", "Axial extension", "2 m · axial force"],
     ["B03", "Saint Venant torsion", "2 m · applied torque"],
