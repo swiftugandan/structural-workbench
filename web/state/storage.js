@@ -121,3 +121,73 @@ export async function loadOriginal(projectId) {
     r.onerror = () => reject(r.error);
   });
 }
+
+/** Structural shape check before trusting an IndexedDB snapshot for open/recover. */
+export function isVerifiedSnapshot(project) {
+  return !!(
+    project &&
+    typeof project === "object" &&
+    typeof project.id === "string" &&
+    typeof project.schemaVersion === "string" &&
+    typeof project.revision === "number" &&
+    Array.isArray(project.nodes) &&
+    Array.isArray(project.members) &&
+    Array.isArray(project.materials) &&
+    Array.isArray(project.sections) &&
+    Array.isArray(project.loadCases)
+  );
+}
+
+async function historyRows(projectId) {
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const r = db.transaction("history").objectStore("history").getAll();
+    r.onsuccess = () =>
+      resolve(
+        r.result
+          .filter((x) => x.id === projectId)
+          .sort((a, b) => b.revision - a.revision),
+      );
+    r.onerror = () => reject(r.error);
+  });
+}
+
+/** Newest verified history snapshot for a project, or null. */
+export async function latestVerifiedHistory(projectId) {
+  for (const row of await historyRows(projectId)) {
+    if (isVerifiedSnapshot(row.project)) return structuredClone(row.project);
+  }
+  return null;
+}
+
+/**
+ * Resolve a durable project for open: prefer the projects pointer when verified,
+ * otherwise restore the newest verified history revision and rewrite the pointer.
+ */
+export async function resolveRecoverableProject(row) {
+  const id = row?.id || row?.project?.id;
+  if (!id) return null;
+  if (isVerifiedSnapshot(row.project)) {
+    return { project: structuredClone(row.project), recovered: false, fromRevision: null };
+  }
+  const recovered = await latestVerifiedHistory(id);
+  if (!recovered) return null;
+  const db = await database;
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction("projects", "readwrite");
+    tx.objectStore("projects").put({
+      id,
+      project: recovered,
+      updated: Date.now(),
+      recoveredFromCorruption: true,
+    });
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+  return {
+    project: recovered,
+    recovered: true,
+    fromRevision: recovered.revision,
+  };
+}

@@ -18,7 +18,15 @@ import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
 import { lineageSummary, renderMemberNav } from "./hierarchy.js";
 import { Gateway } from "./state/transport.js";
-import { save, recent, listRevisions, loadRevision, retainOriginal } from "./state/storage.js";
+import {
+  save,
+  recent,
+  listRevisions,
+  loadRevision,
+  retainOriginal,
+  isVerifiedSnapshot,
+  resolveRecoverableProject,
+} from "./state/storage.js";
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
 import { initOffline, afterSaved } from "./offline.js";
@@ -184,12 +192,29 @@ async function showRecent() {
         "<p>No projects yet. Start a frame or open a worked example.</p>";
       return;
     }
+    let listed = 0;
     for (const item of rows) {
+      const resolved = await resolveRecoverableProject(item);
+      if (!resolved) continue;
       const b = document.createElement("button");
       b.className = "recent-row";
-      b.innerHTML = `<div><strong>${esc(item.project.name)}</strong><small>${item.project.nodes.length} nodes · ${item.project.members.length} members · Revision ${item.project.revision}</small></div><small>${new Date(item.updated).toLocaleDateString()}　↗</small>`;
-      b.onclick = () => open(item.project);
+      const note = resolved.recovered
+        ? ` · recovered r${resolved.fromRevision}`
+        : "";
+      b.innerHTML = `<div><strong>${esc(resolved.project.name)}</strong><small>${resolved.project.nodes.length} nodes · ${resolved.project.members.length} members · Revision ${resolved.project.revision}${esc(note)}</small></div><small>${new Date(item.updated).toLocaleDateString()}　↗</small>`;
+      b.onclick = async () => {
+        await open(resolved.project, {
+          recoveryNote: resolved.recovered
+            ? `Latest snapshot was corrupt. Restored verified revision ${resolved.fromRevision}. Unverified bytes were not opened.`
+            : "",
+        });
+      };
       $("#recent-projects").append(b);
+      listed += 1;
+    }
+    if (!listed) {
+      $("#recent-projects").innerHTML =
+        "<p>No verified local projects. Portable import and export remain available.</p>";
     }
   } catch {
     $("#recent-projects").innerHTML =
@@ -225,6 +250,22 @@ async function persist() {
   if (!project || readOnly) return;
   const snapshot = structuredClone(portable());
   $("#save-status").textContent = "Saving…";
+  if (
+    navigator.storage?.persist &&
+    !sessionStorage.getItem("wb-persist-warned")
+  ) {
+    sessionStorage.setItem("wb-persist-warned", "1");
+    try {
+      const durable = await navigator.storage.persist();
+      if (!durable && !$("#message").textContent) {
+        message(
+          "Browser persistence was not granted. Local snapshots may be evicted; download a project backup.",
+        );
+      }
+    } catch {
+      /* continue without durable persistence */
+    }
+  }
   saveQueue = saveQueue.catch(() => {}).then(() => save(snapshot));
   try {
     await saveQueue;
@@ -335,10 +376,14 @@ async function open(p, options = {}) {
         `Migrated schema ${report.from} → ${report.to}. Original file retained locally (${report.originalSha256.slice(0, 12)}…).` +
         (status ? "\n" + status : "");
     }
+    if (options.recoveryNote) {
+      status = options.recoveryNote + (status ? "\n" + status : "");
+    }
     message(status);
     refresh(s);
     viewport.fit();
-    persist();
+    await persist();
+    if (options.recoveryNote) message(options.recoveryNote);
   } catch (e) {
     message(e.message);
     if ($("#workspace").hidden)
@@ -1101,16 +1146,37 @@ $("#cancel").onclick = () => {
   message("CANCELLED: Analysis stopped. The model was not disturbed.");
   setAnalysing(false);
 };
+let restoringModelWorker = false;
 gateway.onCrash = async () => {
+  if (restoringModelWorker) return;
+  restoringModelWorker = true;
   message("Model Worker stopped. Restoring the last confirmed model.");
   const p = project && portable();
   gateway.respawnModel("Worker stopped");
-  if (p) {
-    await gateway.send("importProject", {
-      jsonUtf8: JSON.stringify(p),
-      replaceCurrent: false,
-    });
+  try {
+    if (p) {
+      // Empty session after respawn: import must not send a stale expectedRevision.
+      gateway.revision = null;
+      const s = await gateway.send("importProject", {
+        jsonUtf8: JSON.stringify(p),
+        replaceCurrent: false,
+      });
+      project = s.project;
+      project.name = p.name;
+      project.displayUnits = p.displayUnits;
+      modelHash = s.modelHash;
+      result = null;
+      failed = false;
+      refresh(s);
+      message(
+        "Model Worker stopped. Restored the last confirmed in-memory model. Download a backup if saves may have failed.",
+      );
+    }
+  } catch (e) {
+    message("Model Worker stopped. Automatic restore failed: " + e.message);
+  } finally {
     setBusy(false);
+    restoringModelWorker = false;
   }
 };
 gateway.onAnalysisCrash = () => {
@@ -1485,6 +1551,13 @@ directTools = canvasTools({
 });
 showRecent();
 initOffline().catch(() => {});
+window.__workbenchTest = {
+  crashModelWorker: async () => {
+    // Drive the app crash path once; respawnModel terminates the Worker.
+    await gateway.onCrash?.();
+  },
+  isVerifiedSnapshot,
+};
 gateway.ready.catch((e) =>
   modal("Kernel unavailable", `<p>${esc(e.message)}</p>`),
 );

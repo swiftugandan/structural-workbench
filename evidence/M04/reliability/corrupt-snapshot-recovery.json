@@ -1,0 +1,24 @@
+{
+  "taskId": "M04-D",
+  "milestone": "M04",
+  "sourceHash": "ad18337e387efc624d611a85bc20216904b75ca0449f357b6481e8052d9b5292",
+  "buildHash": "c2d5a65756605406f3184ea1db6046407ee81aed42d34a836929147f5b237269",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T12:07:26.737Z",
+  "status": "PASS",
+  "projectId": "pa706a93e1fb442e4b4c3318dcead7a68",
+  "restoredHashPrefix": "b748395c31de"
+}

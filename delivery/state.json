@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M04",
-  "activeTask": "M04-D",
+  "activeTask": "M04-parent",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1788,27 +1788,79 @@
     },
     "M04-D": {
       "id": "M04-D",
-      "useCase": "Crash/quota recovery matrix and/or calculation-record packaging toward parent M04",
+      "useCase": "Crash/quota recovery matrix: corrupt snapshot, Worker crash, persistence denied",
       "dependencies": [
         "M04-C"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
-        "web",
-        "tests",
-        "evidence/M04"
+        "web/state/storage.js",
+        "web/app.js",
+        "tests/e2e/reliability.spec.js",
+        "evidence/M04/reliability"
       ],
       "acceptanceIds": [
-        "SPECIFICATION-M04"
+        "VALIDATION-m04-reliability"
       ],
-      "nextAction": "Expand crash/quota/Worker-failure matrix or finish report/export acceptance for parent M04.",
-      "createdAt": "2026-09-23T11:55:00.000Z"
+      "requiredCommands": [
+        "npm run build",
+        "npx playwright test tests/e2e/reliability.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "corrupt-snapshot-recovery",
+          "status": "PASS",
+          "evidencePath": "evidence/M04/reliability/corrupt-snapshot-recovery.json"
+        },
+        {
+          "check": "model-worker-crash",
+          "status": "PASS",
+          "evidencePath": "evidence/M04/reliability/model-worker-crash.json"
+        },
+        {
+          "check": "persistence-denied",
+          "status": "PASS",
+          "evidencePath": "evidence/M04/reliability/persistence-denied.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M04/reliability"
+      ],
+      "sourceRevision": "f099304e8e3624c19ae941751bff3e799c62b7ad",
+      "sourceHash": "ad18337e387efc624d611a85bc20216904b75ca0449f357b6481e8052d9b5292",
+      "buildHash": "c2d5a65756605406f3184ea1db6046407ee81aed42d34a836929147f5b237269",
+      "nextAction": "Next: package parent M04 verifier, or report-plot/export equivalence slice.",
+      "createdAt": "2026-09-23T11:55:00.000Z",
+      "acceptedAt": "2026-09-23T12:15:00.000Z",
+      "acceptanceMeaning": "Bounded corrupt-snapshot recovery, model-Worker crash restore, and persistence-denied warning. Does not claim parent M04 or full memory soak."
+    },
+    "M04-parent": {
+      "id": "M04-parent",
+      "useCase": "Package accepted M04 slices into parent milestone acceptance",
+      "dependencies": [
+        "M04-A",
+        "M04-B",
+        "M04-C",
+        "M04-D"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "tools",
+        "evidence/M04",
+        "delivery"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M04",
+        "M04-parent"
+      ],
+      "nextAction": "Assemble same-build M04 parent verifier from A–D evidence; close remaining report-plot gaps if required by gate.",
+      "createdAt": "2026-09-23T12:15:00.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "52c2a451c6546df01b154bf7dbe4ed119ee52e5a",
-  "lastVerifiedBuildHash": "9e0591e881d7da0837f9563ab5f8826f3c8f1d76326e24365cfa5ae115d102b0",
-  "nextAction": "M04-C accepted. Next: M04-D crash/quota matrix or report packaging toward parent M04.",
+  "lastVerifiedSourceRevision": "f099304e8e3624c19ae941751bff3e799c62b7ad",
+  "lastVerifiedBuildHash": "c2d5a65756605406f3184ea1db6046407ee81aed42d34a836929147f5b237269",
+  "nextAction": "M04-D accepted. Next: M04-parent packaging or report-plot/export equivalence.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "b150b28246c7b6b539e98abfd43e9fc8434965d0d68b266a70b7df7fd88b8c62"
+  "lastVerifiedSourceHash": "ad18337e387efc624d611a85bc20216904b75ca0449f357b6481e8052d9b5292"
 }
