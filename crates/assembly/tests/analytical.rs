@@ -413,3 +413,103 @@ fn m01_global_rotation_relabelling_reordering_and_endpoint_reversal() {
         assert!((a - b).abs() < 1e-10);
     }
 }
+
+#[test]
+fn m03_all_axis_unit_nodal_actions() {
+    // B02 local axes coincide with global; tip unit loads must recover as tip
+    // end actions (node→element) with root reactions balancing forces and
+    // lever arms (L = 3 m). Section actions at x=0 equal −q_start.
+    let length = 3.0_f64;
+    for dof in 0..6 {
+        let mut p = fixture("B02");
+        if let workbench_model::Load::Nodal { values, .. } = &mut p.loads[0] {
+            *values = [0.; 6];
+            values[dof] = 1.0;
+        }
+        let r = analyse(&p, "LC1").unwrap();
+        let m = r.members.iter().find(|m| m.id == "m1").unwrap();
+        let tip = &m.end_actions[6..12];
+        let root = &m.end_actions[0..6];
+        for j in 0..6 {
+            let want = if j == dof { 1.0 } else { 0.0 };
+            assert!(
+                (tip[j] - want).abs() < 1e-9,
+                "dof {dof} tip[{j}] = {} want {want}",
+                tip[j]
+            );
+        }
+        for j in 0..3 {
+            assert!(
+                (root[j] + tip[j]).abs() < 1e-9,
+                "dof {dof} force balance [{j}]: root {} tip {}",
+                root[j],
+                tip[j]
+            );
+        }
+        assert!(
+            (root[3] + tip[3]).abs() < 1e-9,
+            "dof {dof} torsion balance"
+        );
+        assert!(
+            (root[4] + tip[4] - tip[2] * length).abs() < 1e-9,
+            "dof {dof} My lever: root {} tip {} Fz {}",
+            root[4],
+            tip[4],
+            tip[2]
+        );
+        assert!(
+            (root[5] + tip[5] + tip[1] * length).abs() < 1e-9,
+            "dof {dof} Mz lever: root {} tip {} Fy {}",
+            root[5],
+            tip[5],
+            tip[1]
+        );
+        let s0 = m
+            .samples
+            .iter()
+            .find(|s| s.station.abs() < 1e-15)
+            .expect("station 0 sample");
+        for j in 0..6 {
+            assert!(
+                (s0.actions[j] + root[j]).abs() < 1e-9,
+                "dof {dof} section[{j}] at 0 = {} vs −root {}",
+                s0.actions[j],
+                root[j]
+            );
+        }
+    }
+}
+
+#[test]
+fn m03_local_y_roll_swaps_bending_axes() {
+    // Tip Fz on B02 bends about local y (Iy). Rolling localY to global Z maps
+    // the same global load onto local y bending (Iz = 2 Iy), swapping My↔Mz
+    // at the fixed end and halving tip uz.
+    let base = fixture("B02");
+    let a = analyse(&base, "LC1").unwrap();
+    let mut rolled = base.clone();
+    rolled.members[0].local_y = [0., 0., 1.];
+    let b = analyse(&rolled, "LC1").unwrap();
+    let ea = &a.members.iter().find(|m| m.id == "m1").unwrap().end_actions;
+    let eb = &b.members.iter().find(|m| m.id == "m1").unwrap().end_actions;
+    assert!(
+        (ea[4] + 30_000.).abs() < 1e-6,
+        "base My_i {}",
+        ea[4]
+    );
+    assert!(ea[5].abs() < 1e-6, "base Mz_i {}", ea[5]);
+    assert!(eb[4].abs() < 1e-6, "rolled My_i {}", eb[4]);
+    assert!(
+        (eb[5] - 30_000.).abs() < 1e-6,
+        "rolled Mz_i {}",
+        eb[5]
+    );
+    let uz_a = a.node_displacements[8];
+    let uz_b = b.node_displacements[8];
+    assert!(
+        (uz_a * 0.5 - uz_b).abs() < 1e-12,
+        "uz tip base {uz_a} rolled {uz_b}"
+    );
+    assert!(a.node_displacements[7].abs() < 1e-12);
+    assert!(b.node_displacements[7].abs() < 1e-12);
+}

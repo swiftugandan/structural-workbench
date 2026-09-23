@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M03",
-  "activeTask": "M03-E",
+  "activeTask": "M03-F",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1510,27 +1510,74 @@
     },
     "M03-E": {
       "id": "M03-E",
-      "useCase": "Package parent M03 acceptance or remaining section-axis / hierarchy UX",
+      "useCase": "All-axis unit-action tests, member roll, and section-axis localY editing",
       "dependencies": [
         "M03-D"
       ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/assembly/tests/analytical.rs",
+        "tests/e2e/section-axis.spec.js",
+        "evidence/M03/section-axis"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M03-unit-action-roll"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-assembly --locked m03_",
+        "npx playwright test tests/e2e/section-axis.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "native-unit-action-and-roll",
+          "status": "PASS",
+          "testCount": 2,
+          "evidencePath": "evidence/M03/section-axis/native.json"
+        },
+        {
+          "check": "section-axis-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M03/section-axis/section-axis-browser.json",
+          "beforeMy_kNm": -30,
+          "afterMz_kNm": 30,
+          "tipUz_mm": -22.5
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M03/section-axis"
+      ],
+      "sourceRevision": "2943ca7e86754ad92dde6c93688051e19d788817",
+      "sourceHash": "df9d53d7b53a3999acf3ed80d907f4466cf79d3aa6f679ba23b0b480e6800c12",
+      "buildHash": "4fbb38788e78713f04c5f8ba37eab354dc3da5edb94bf58b0c9100bfc6bb9c9b",
+      "acceptanceMeaning": "Bounded unit-action, roll, and localY edit journey. Parent M03 still needs hierarchy UI and verifier packaging.",
+      "nextAction": "Next: physical/analytical hierarchy UI or parent M03 gate packaging.",
+      "createdAt": "2026-09-23T10:00:00.000Z",
+      "acceptedAt": "2026-09-23T10:20:00.000Z"
+    },
+    "M03-F": {
+      "id": "M03-F",
+      "useCase": "Physical/analytical hierarchy UI or parent M03 acceptance packaging",
+      "dependencies": [
+        "M03-E"
+      ],
       "status": "READY",
       "ownedPaths": [
+        "web",
         "tools",
-        "evidence/M03",
-        "web"
+        "evidence/M03"
       ],
       "acceptanceIds": [
         "SPECIFICATION-M03"
       ],
-      "nextAction": "Decide smallest remaining M03 gap: parent verifier packaging vs section-axis editing vs physical-analytical hierarchy UX.",
-      "createdAt": "2026-09-23T10:00:00.000Z"
+      "nextAction": "Implement physical-to-analytical hierarchy presentation or package parent M03 verifier.",
+      "createdAt": "2026-09-23T10:20:00.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "3429d661371a099055037ba75dbdf20aa20ee769",
-  "lastVerifiedBuildHash": "aff0bc50e5dfacf69b2a7b447ec0033baa9ac1ec4d9dea5a7d707f7c6fe6f337",
-  "nextAction": "M03-A\u2013D accepted. Next: M03-E parent packaging or remaining M03 UX/hierarchy gaps.",
+  "lastVerifiedSourceRevision": "2943ca7e86754ad92dde6c93688051e19d788817",
+  "lastVerifiedBuildHash": "4fbb38788e78713f04c5f8ba37eab354dc3da5edb94bf58b0c9100bfc6bb9c9b",
+  "nextAction": "M03-E accepted. Next: M03-F hierarchy UI or parent M03 packaging.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "a8ccaee1efaaa7309775d9385d80539486d8a86ae51c800fb103c6738b80e6e7"
+  "lastVerifiedSourceHash": "df9d53d7b53a3999acf3ed80d907f4466cf79d3aa6f679ba23b0b480e6800c12"
 }

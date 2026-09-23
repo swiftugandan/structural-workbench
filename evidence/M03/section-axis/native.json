@@ -1,0 +1,22 @@
+{
+  "taskId": "M03-E",
+  "milestone": "M03",
+  "check": "native-unit-action-and-roll",
+  "status": "PASS",
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "workbench-assembly",
+    "--locked",
+    "m03_"
+  ],
+  "tests": [
+    "m03_all_axis_unit_nodal_actions",
+    "m03_local_y_roll_swaps_bending_axes"
+  ],
+  "testCount": 2,
+  "sourceHash": "df9d53d7b53a3999acf3ed80d907f4466cf79d3aa6f679ba23b0b480e6800c12",
+  "buildHash": "4fbb38788e78713f04c5f8ba37eab354dc3da5edb94bf58b0c9100bfc6bb9c9b",
+  "observedAt": "2026-09-23T10:19:53.665Z"
+}
