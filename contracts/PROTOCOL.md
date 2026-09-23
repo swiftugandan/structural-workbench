@@ -21,6 +21,7 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 | getResults | {resultId: string, caseId: string, entityIds: string[]} | header plus typed buffers described below |
 | exportProject | {includeResults: boolean} | portable engineering JSON and optional separate result files with hashes |
 | evaluateDesign | {resultId: string, memberIds: string[], profileId: string, inputs: object} | design-run header and check tree |
+| computeSection | {shape: "solidRectangle", width: number, depth: number, customJ: number\|null} | A, Iy, Iz, J, cy, cz, provenance and jSource (SI). Does not mutate the project. width is along local y; depth along local z. Null customJ uses the Saint-Venant rectangle estimate. |
 
 An analyse acknowledgement is not a completed result. Every asynchronous event contains eventType, jobId, requestId, sourceRevision, modelHash and event payload. Events are analysisProgress, analysisCompleted, analysisFailed or analysisCancelled. An accepted job emits exactly one terminal event, including after Worker termination/restart. Progress stages are validation, assembly, factorisation, solve, recovery and complete; progress is indeterminate when a meaningful percentage is unavailable. Do not simulate numerical progress with timers.
 

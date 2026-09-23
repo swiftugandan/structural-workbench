@@ -215,6 +215,43 @@ fn load_variant_unit_conversion_preserves_exact_schema() {
 }
 
 #[test]
+fn compute_section_solid_rectangle_and_custom_j() {
+    let mut k = Kernel::new();
+    let out = request(
+        &mut k,
+        "computeSection",
+        Value::Null,
+        json!({"shape":"solidRectangle","width":0.1,"depth":0.2,"customJ":null}),
+    );
+    assert_eq!(out["status"], "ok", "{out}");
+    let p = &out["payload"];
+    assert!((p["A"].as_f64().unwrap() - 0.02).abs() < 1e-15);
+    assert!((p["Iy"].as_f64().unwrap() - 0.1 * 0.2_f64.powi(3) / 12.0).abs() < 1e-18);
+    assert!((p["Iz"].as_f64().unwrap() - 0.2 * 0.1_f64.powi(3) / 12.0).abs() < 1e-18);
+    assert_eq!(p["jSource"], "saintVenant");
+    assert!(p["provenance"].as_str().unwrap().contains("Saint-Venant"));
+
+    let custom = request(
+        &mut k,
+        "computeSection",
+        Value::Null,
+        json!({"shape":"solidRectangle","width":0.1,"depth":0.2,"customJ":1.25e-6}),
+    );
+    assert_eq!(custom["status"], "ok", "{custom}");
+    assert!((custom["payload"]["J"].as_f64().unwrap() - 1.25e-6).abs() < 1e-18);
+    assert_eq!(custom["payload"]["jSource"], "custom");
+
+    let bad = request(
+        &mut k,
+        "computeSection",
+        Value::Null,
+        json!({"shape":"solidRectangle","width":0.0,"depth":0.2,"customJ":null}),
+    );
+    assert_eq!(bad["status"], "error");
+    assert_eq!(bad["diagnostics"][0]["code"], "INVALID_SECTION");
+}
+
+#[test]
 fn analyse_multiple_ids_returns_envelope_with_provenance() {
     let mut k = Kernel::new();
     let p: Value =

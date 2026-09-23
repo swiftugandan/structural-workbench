@@ -8,6 +8,7 @@ import {
   entityFields,
   readEntityFields,
   bindEntityFields,
+  bindSectionCalculator,
   guideDiagram,
 } from "./entity-forms.js";
 import { entityLabel } from "./entity-labels.js";
@@ -1391,6 +1392,16 @@ function editEntity(key, old, draft) {
   $("#modal-content").innerHTML =
     `<form id="entity-form" class="entity-form">${entityFields(key, entity, project)}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`;
   bindEntityFields($("#entity-form"), key, project);
+  if (key === "sections") {
+    bindSectionCalculator($("#entity-form"), async ({ width, depth, customJ }) =>
+      gateway.send("computeSection", {
+        shape: "solidRectangle",
+        width,
+        depth,
+        customJ,
+      }),
+    );
+  }
   bindTemplates($("#entity-form"), key, entity, project, (next) =>
     editEntity(key, old, next),
   );

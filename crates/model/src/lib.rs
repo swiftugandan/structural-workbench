@@ -4,9 +4,11 @@ use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 
 mod migrate;
+mod section_props;
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, import_project,
 };
+pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Diagnostic {
     pub code: String,

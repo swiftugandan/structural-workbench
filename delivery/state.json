@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M05",
-  "activeTask": "M05-A",
+  "activeTask": "M05-B",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1882,23 +1882,83 @@
     },
     "M05-A": {
       "id": "M05-A",
-      "useCase": "Reuse geometry and compare sections (first M05 slice)",
+      "useCase": "Rectangular section property calculator with explicit custom J",
       "dependencies": [
         "M04-parent"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/model/src/section_props.rs",
+        "crates/model/src/lib.rs",
+        "crates/wasm-api/src/lib.rs",
+        "crates/wasm-api/tests/commands.rs",
+        "contracts/PROTOCOL.md",
+        "contracts/request.schema.json",
+        "web/entity-forms.js",
+        "web/app.js",
+        "web/styles.css",
+        "docs/formulations/section.md",
+        "tests/e2e/section-calculator.spec.js",
+        "evidence/M05/section-calculator"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M05-section-calculator"
+      ],
+      "nextAction": "Next M05 slice: parametric portal/beam template save, or project duplicate + side-by-side comparison.",
+      "createdAt": "2026-09-23T12:28:25.000Z",
+      "requiredCommands": [
+        "cargo test -p workbench-model --locked section_props",
+        "cargo test -p workbench-wasm-api --locked --test commands compute_section",
+        "npm run build",
+        "npx playwright test tests/e2e/section-calculator.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "native-section-props",
+          "status": "PASS",
+          "testCount": 4
+        },
+        {
+          "check": "wasm-compute-section",
+          "status": "PASS",
+          "testCount": 1
+        },
+        {
+          "check": "section-calculator-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M05/section-calculator/section-calculator-browser.json",
+          "tipUzApprox_mm": -6.75
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M05/section-calculator"
+      ],
+      "sourceRevision": "8d7f57e8c4503abeeb788e9cdab4a44bf44dcddd",
+      "sourceHash": "bfcd5a536d08d518a60ee409ddb00df330694e67c271b2ff972544721c9fe445",
+      "buildHash": "e126680a8f73e70a64645cd5c8b7b7b75e4b5f3f40b60ee2ce94feadbf156ed5",
+      "acceptanceMeaning": "Bounded solid-rectangle calculator (A/Iy/Iz/J/cy/cz + custom J) via computeSection; browser journey shows stiffness change and stale-result clear. Does not claim portal templates, catalogue assignment, or variant comparison.",
+      "acceptedAt": "2026-09-23T12:39:34.000Z"
+    },
+    "M05-B": {
+      "id": "M05-B",
+      "useCase": "Parametric portal template and/or project variant comparison",
+      "dependencies": [
+        "M05-A"
       ],
       "status": "READY",
       "ownedPaths": [],
       "acceptanceIds": [
         "SPECIFICATION-M05"
       ],
-      "nextAction": "Read SPECIFICATION M05 and pick the smallest complete first slice.",
-      "createdAt": "2026-09-23T12:28:25.000Z"
+      "nextAction": "Pick portal template reuse or duplicate+compare as the next complete slice.",
+      "createdAt": "2026-09-23T12:39:34.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "251ba27864edc47b4731cc5047ed16d12fc4d4ce",
-  "lastVerifiedBuildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
-  "nextAction": "M04 parent accepted. Begin M05 geometry reuse and section comparison without re-claiming M00\u2013M04.",
+  "lastVerifiedSourceRevision": "8d7f57e8c4503abeeb788e9cdab4a44bf44dcddd",
+  "lastVerifiedBuildHash": "e126680a8f73e70a64645cd5c8b7b7b75e4b5f3f40b60ee2ce94feadbf156ed5",
+  "nextAction": "M05-A accepted. Next: parametric portal template or project-variant comparison.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383"
+  "lastVerifiedSourceHash": "bfcd5a536d08d518a60ee409ddb00df330694e67c271b2ff972544721c9fe445"
 }

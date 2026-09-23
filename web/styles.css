@@ -2028,6 +2028,21 @@ textarea,
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
+.calculator-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0;
+}
+.calculator-grid .check,
+.calculator-grid [data-rect-j-field] {
+  grid-column: 1 / -1;
+}
+.section-calculator summary {
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
 .template-card {
   display: flex;
   flex-direction: column;

@@ -47,6 +47,33 @@ impl Kernel {
                 json!({"protocolVersion":1,"schemaVersions":["0.9.0","1.0.0"],"analysisTypes":["linearStatic"],"designProfiles":[],"limits":{"nodes":5000,"members":10000,"memoryMiB":512},"limitations":["Conservative fill guard may reject large models","No code compliance or commercial parity claim","Schema 0.9.0 imports migrate to 1.0.0; unknown majors are refused"]}),
             );
         }
+        if op == "computeSection" {
+            let payload = &r["payload"];
+            let shape = payload["shape"].as_str().unwrap_or("");
+            if shape != "solidRectangle" {
+                return Err(err(
+                    "UNSUPPORTED_FEATURE",
+                    "Only solidRectangle section computation is available",
+                ));
+            }
+            let width = payload["width"]
+                .as_f64()
+                .ok_or_else(|| err("INVALID_SCHEMA", "width must be a finite number"))?;
+            let depth = payload["depth"]
+                .as_f64()
+                .ok_or_else(|| err("INVALID_SCHEMA", "depth must be a finite number"))?;
+            let custom_j = if payload.get("customJ").map(|v| v.is_null()).unwrap_or(true) {
+                None
+            } else {
+                Some(
+                    payload["customJ"]
+                        .as_f64()
+                        .ok_or_else(|| err("INVALID_SCHEMA", "customJ must be a finite number"))?,
+                )
+            };
+            let section = workbench_model::solid_rectangle(width, depth, custom_j)?;
+            return Ok(serde_json::to_value(section).unwrap());
+        }
         if let Some(p) = &self.project {
             let expected = r.get("expectedRevision");
             let force_replace = matches!(op, "importProject" | "createProject")

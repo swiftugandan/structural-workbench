@@ -284,8 +284,9 @@ export function entityFields(key, entity, project, { compact = false } = {}) {
           field("cz", "Distance along local z · cz", entity.cz, "mm", 0.001),
       ) +
       help(
-        "These properties are shared by all members assigned to this section. The sketch is illustrative; it does not calculate section properties.",
-      );
+        "These properties are shared by all members assigned to this section. Use the solid-rectangle calculator below, or enter published catalogue values directly.",
+      ) +
+      `<details class="full section-calculator" open><summary>Solid rectangle calculator</summary><p class="form-help">Width is along local y; depth along local z. The kernel computes A, Iy, Iz, cy, cz and Saint-Venant J in SI. Optional custom J replaces the torsion estimate only.</p><div class="calculator-grid"><label>Width along local y <span class="field-unit">mm</span><input name="rect-width" inputmode="decimal" value="100" required data-testid="rect-width"></label><label>Depth along local z <span class="field-unit">mm</span><input name="rect-depth" inputmode="decimal" value="200" required data-testid="rect-depth"></label><label class="check"><input type="checkbox" name="rect-custom-j" data-testid="rect-custom-j"> Use custom torsion constant J</label><label data-rect-j-field hidden>Custom J <span class="field-unit">mm⁴</span><input name="rect-j" inputmode="decimal" value="" data-testid="rect-j"></label></div><button type="button" class="secondary" data-compute-rectangle data-testid="compute-rectangle">Compute properties</button><p class="form-help" data-rect-status aria-live="polite"></p></details>`;
   if (key === "supports")
     content =
       (!compact ? ref("node", "Supported point", "nodes") : "") +
@@ -635,4 +636,75 @@ export function bindEntityFields(form, key, project) {
     };
   controls.forEach((c) => c.addEventListener("change", update));
   update();
+}
+
+/** Wire the solid-rectangle calculator. `compute` receives SI metres and optional custom J. */
+export function bindSectionCalculator(form, compute) {
+  const button = form.querySelector("[data-compute-rectangle]");
+  if (!button || typeof compute !== "function") return;
+  const custom = form.elements.namedItem("rect-custom-j");
+  const jField = form.querySelector("[data-rect-j-field]");
+  const status = form.querySelector("[data-rect-status]");
+  const syncJ = () => {
+    if (jField) jField.hidden = !custom?.checked;
+  };
+  custom?.addEventListener("change", syncJ);
+  syncJ();
+  button.onclick = async () => {
+    status.textContent = "";
+    const widthMm = Number(form.elements.namedItem("rect-width")?.value);
+    const depthMm = Number(form.elements.namedItem("rect-depth")?.value);
+    if (!(widthMm > 0) || !(depthMm > 0)) {
+      status.textContent = "Enter positive width and depth.";
+      return;
+    }
+    let customJ = null;
+    if (custom?.checked) {
+      const jMm4 = Number(form.elements.namedItem("rect-j")?.value);
+      if (!(jMm4 > 0)) {
+        status.textContent = "Enter a positive custom J, or clear the override.";
+        return;
+      }
+      customJ = jMm4 * 1e-12;
+    }
+    try {
+      const section = await compute({
+        width: widthMm * 0.001,
+        depth: depthMm * 0.001,
+        customJ,
+      });
+      const set = (name, si, scale) => {
+        const el = form.elements.namedItem(name);
+        if (!el) return;
+        el.value = String(Number((si / scale).toPrecision(12)));
+        el.dataset.original = String(si);
+        el.dataset.initial = el.value;
+      };
+      set("A", section.A, 1e-6);
+      set("Iy", section.Iy, 1e-12);
+      set("Iz", section.Iz, 1e-12);
+      set("J", section.J, 1e-12);
+      set("cy", section.cy, 0.001);
+      set("cz", section.cz, 0.001);
+      const provenance = form.elements.namedItem("provenance");
+      if (provenance) {
+        provenance.value = section.provenance;
+        provenance.dataset.original = section.provenance;
+        provenance.dataset.initial = section.provenance;
+      }
+      const name = form.elements.namedItem("name");
+      if (name && (!name.value || name.value.startsWith("Custom"))) {
+        name.value = `Solid ${widthMm}×${depthMm} mm`;
+        name.dataset.original = name.value;
+        name.dataset.initial = name.value;
+      }
+      status.textContent =
+        section.jSource === "custom"
+          ? "Properties filled with custom J. Save to apply."
+          : "Properties filled from Saint-Venant rectangle. Save to apply.";
+      form.dispatchEvent(new Event("input", { bubbles: true }));
+    } catch (error) {
+      status.textContent = error.message || String(error);
+    }
+  };
 }
