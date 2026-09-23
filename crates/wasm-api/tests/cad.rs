@@ -155,6 +155,69 @@ fn near_coincident_nodes_warn_without_mutation() {
 }
 
 #[test]
+fn copy_bay_builds_spatial_frame_with_supports_and_ties() {
+    let mut portal = fixture();
+    portal["analysisMode"] = json!("planarXZ");
+    portal["name"] = json!("Portal for bay copy");
+    portal["nodes"] = json!([
+        {"id":"n1","position":[0.0,0.0,0.0]},
+        {"id":"n2","position":[0.0,0.0,3.0]},
+        {"id":"n3","position":[4.0,0.0,3.0]},
+        {"id":"n4","position":[4.0,0.0,0.0]}
+    ]);
+    portal["members"] = json!([
+        {"id":"m1","start":"n1","end":"n2","material":"mat1","section":"sec1","localY":[0,1,0],"releaseStart":{"my":false,"mz":false},"releaseEnd":{"my":false,"mz":false}},
+        {"id":"m2","start":"n2","end":"n3","material":"mat1","section":"sec1","localY":[0,1,0],"releaseStart":{"my":false,"mz":false},"releaseEnd":{"my":false,"mz":false}},
+        {"id":"m3","start":"n4","end":"n3","material":"mat1","section":"sec1","localY":[0,1,0],"releaseStart":{"my":false,"mz":false},"releaseEnd":{"my":false,"mz":false}}
+    ]);
+    portal["supports"] = json!([
+        {"id":"s1","node":"n1","fixed":[true,false,true,false,true,false],"prescribed":[0,0,0,0,0,0]},
+        {"id":"s2","node":"n4","fixed":[true,false,true,false,true,false],"prescribed":[0,0,0,0,0,0]}
+    ]);
+    portal["loads"] = json!([{
+        "id":"l1","case":"LC1","type":"nodal","node":"n3","values":[10000.0,0.0,0.0,0.0,0.0,0.0]
+    }]);
+    let (mut k, original) = open(portal);
+    assert_eq!(original["payload"]["project"]["analysisMode"], "planarXZ");
+    let bay = json!({
+        "id": "bay-command",
+        "type": "CopyBay",
+        "args": {
+            "ids": ["m1", "m2", "m3", "n1", "n2", "n3", "n4"],
+            "delta": [0, "6 m", 0],
+            "count": 1,
+            "includeSupports": true,
+            "tieUnsupportedNodes": true,
+            "setSpatial": true,
+            "stabilizeBases": true
+        }
+    });
+    let preview = req(
+        &mut k,
+        "queryGeometry",
+        0,
+        json!({"kind":"commandPreview","query":{"command":bay},"viewRevision":0}),
+    );
+    assert_eq!(preview["status"], "ok", "{preview}");
+    assert_eq!(preview["modelHash"], original["modelHash"]);
+    let out = req(&mut k, "applyCommand", 0, json!({"command": bay}));
+    assert_eq!(out["status"], "ok", "{out}");
+    let p = &out["payload"]["project"];
+    assert_eq!(p["analysisMode"], "spatial");
+    assert_eq!(p["nodes"].as_array().unwrap().len(), 8);
+    assert_eq!(p["members"].as_array().unwrap().len(), 8);
+    assert_eq!(p["supports"].as_array().unwrap().len(), 4);
+    for s in p["supports"].as_array().unwrap() {
+        assert_eq!(s["fixed"], json!([true, true, true, true, true, true]));
+    }
+    let analysed = req(&mut k, "analyse", 1, json!({"caseIds":["LC1"]}));
+    assert_eq!(analysed["status"], "ok", "{analysed}");
+    let undo = req(&mut k, "undo", 1, json!({}));
+    assert_eq!(undo["modelHash"], original["modelHash"]);
+    assert_eq!(undo["payload"]["project"]["analysisMode"], "planarXZ");
+}
+
+#[test]
 fn visible_labels_survive_copy_delete_undo_and_reopen() {
     let (mut k, original) = open(fixture());
     let labels = &original["payload"]["project"]["metadata"]["entityLabels"];

@@ -26,7 +26,7 @@ An analyse acknowledgement is not a completed result. Every asynchronous event c
 
 ## 2 Command vocabulary
 
-CommandV1 is {id, type, args}. Supported types and args are AddNode(node), AddMember(member), SetNodePosition({id,position}), SetMaterial(material), SetSection(section), SetSupport(support), SetLoadCase(loadCase), SetLoad(load), SetCombination(combination), SetGravity({gravity}), SetAnalysisMode({mode}), MoveNodes({ids,delta}), CopySelection({ids,delta,connectToExisting:false}), SplitMember({id,stations}), MergeNodes({sourceIds,targetId}), DeleteEntities({ids,cascade:false}) and Batch({commands}). Envelope names in parentheses are records, not executable functions.
+CommandV1 is {id, type, args}. Supported types and args are AddNode(node), AddMember(member), SetNodePosition({id,position}), SetMaterial(material), SetSection(section), SetSupport(support), SetLoadCase(loadCase), SetLoad(load), SetCombination(combination), SetGravity({gravity}), SetAnalysisMode({mode}), MoveNodes({ids,delta}), CopySelection({ids,delta,connectToExisting:false}), CopyBay({ids,delta,count,includeSupports:true,tieUnsupportedNodes:true,setSpatial?,stabilizeBases?}), SplitMember({id,stations}), MergeNodes({sourceIds,targetId}), DeleteEntities({ids,cascade:false}) and Batch({commands}). Envelope names in parentheses are records, not executable functions.
 
 Upsert-style Set operations must specify expected entity existence as create/update to detect accidental overwrites. Batch uses one model revision and one undo entry; nested Batch is rejected. Import commands do not bypass validation. Member splitting preserves member-load total and physical-parent provenance; IDs of new entities are deterministic from the command ID and ordinal. Undo stores sufficient inverse data to restore exact engineering values and IDs.
 
@@ -108,11 +108,18 @@ separate unless the user explicitly connects them.
 `commandPreview({command})` applies the same validation as commit to a disposable
 candidate. `MoveNodes({ids,delta})` includes selected member endpoints;
 `CopySelection({ids,delta,connectToExisting:false})` creates geometry with stable
-command-derived IDs, without copying restraints or loads. `DeleteGeometry({ids,
-cascade:true})` removes selected geometry and its dependent members/restraints/
-loads; the UI presents the full dependency preview first. It does not change the
-existing `DeleteEntities` non-cascading contract. All candidates satisfy the
-current project schema, which requires at least one node and member. Failed
-commands preserve the model and history. `measure({start,end})` takes node IDs and
-returns f64 distance and global delta in metres. `axes` also returns up to 100
-near-coincident node-pair warnings, without changing connectivity.
+command-derived IDs, without copying restraints or loads. `CopyBay({ids,delta,
+count,includeSupports:true,tieUnsupportedNodes:true})` duplicates selected portal
+geometry along `delta` for `count` additional bays (1–50), copies supports for
+selected nodes, and adds longitudinal members between consecutive unsupported
+node pairs so eaves/roof lines connect. Default `setSpatial:true` switches the
+project to spatial analysis; default `stabilizeBases:true` sets full six-DOF
+fixity on selected bases so a planar portal remains stable after the switch.
+Loads are not copied. `DeleteGeometry({ids, cascade:true})` removes selected
+geometry and its dependent members/restraints/loads; the UI presents the full
+dependency preview first. It does not change the existing `DeleteEntities`
+non-cascading contract. All candidates satisfy the current project schema, which
+requires at least one node and member. Failed commands preserve the model and
+history. `measure({start,end})` takes node IDs and returns f64 distance and
+global delta in metres. `axes` also returns up to 100 near-coincident node-pair
+warnings, without changing connectivity.

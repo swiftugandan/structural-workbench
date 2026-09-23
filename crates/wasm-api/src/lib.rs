@@ -283,7 +283,7 @@ impl Kernel {
 }
 fn apply(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     let kind = c["type"].as_str().unwrap_or("");
-    if ["MoveNodes", "CopySelection", "DeleteGeometry"].contains(&kind) {
+    if ["MoveNodes", "CopySelection", "CopyBay", "DeleteGeometry"].contains(&kind) {
         return cad::apply(v, c);
     }
     if ["SplitMember", "MergeNodes", "ConnectIntersections"].contains(&kind) {

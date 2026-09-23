@@ -361,6 +361,7 @@ function setBusy(value) {
   ))
     b.disabled = value || readOnly;
   $("#analysis-mode").disabled = value || formDirty || readOnly;
+  $("#copy-bay").disabled = value || formDirty || readOnly;
   $("#units").disabled = value || formDirty;
   $("#result-case").disabled = value || formDirty;
   $("#analyse").disabled = value || formDirty;

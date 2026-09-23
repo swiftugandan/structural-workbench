@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M03",
-  "activeTask": "M03-A",
+  "activeTask": "M03-B",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1331,24 +1331,82 @@
       "dependencies": [
         "M02-PARENT"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
-        "crates",
-        "web",
-        "tests",
-        "fixtures"
+        "crates/wasm-api/src/cad.rs",
+        "crates/wasm-api/src/lib.rs",
+        "crates/wasm-api/tests/cad.rs",
+        "contracts/PROTOCOL.md",
+        "web/modeling.js",
+        "web/app.html",
+        "web/app.js",
+        "web/command-menu.js",
+        "tests/e2e/bay-copy.spec.js",
+        "evidence/M03/bay-copy"
       ],
       "acceptanceIds": [
-        "SPECIFICATION-M03"
+        "M03-bay-copy-journey"
       ],
-      "nextAction": "Read SPECIFICATION M03; inspect warehouse/spatial gaps; implement smallest complete spatial-frame slice.",
-      "createdAt": "2026-09-23T08:16:57.924Z"
+      "requiredCommands": [
+        "cargo test -p workbench-wasm-api --locked --test cad",
+        "npm run build",
+        "npx playwright test tests/e2e/bay-copy.spec.js",
+        "npm run test:contracts"
+      ],
+      "outcomes": [
+        {
+          "check": "native-cad",
+          "status": "PASS",
+          "testCount": 6,
+          "evidencePath": "evidence/M03/bay-copy"
+        },
+        {
+          "check": "browser-bay-copy",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M03/bay-copy/bay-copy-browser.json"
+        },
+        {
+          "check": "contracts",
+          "status": "PASS",
+          "testCount": 3
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M03/bay-copy"
+      ],
+      "sourceRevision": "5190ee4e5f32f3f71177ab790f77b53454d3a3d9",
+      "sourceHash": "ba8e59487cae1410db0b57665820d86aee1bda5cb5417075ddf2443b11b5e1c4",
+      "buildHash": "81b562d1c36315f7c31a801e76c709619ec4dea7b9504d8885ed650240c40d7f",
+      "acceptanceMeaning": "Bounded local portal→CopyBay→spatial ties→My/Mz/T inspection slice only. Parent M03 remains unaccepted.",
+      "nextAction": "Next M03 slice: separate model/analysis Workers or skewed-frame OpenSees pack; do not claim parent M03.",
+      "createdAt": "2026-09-23T08:16:57.924Z",
+      "acceptedAt": "2026-09-23T09:23:03.940Z"
+    },
+    "M03-B": {
+      "id": "M03-B",
+      "useCase": "Separate model and analysis Workers so edits continue during a solve without applying stale results",
+      "dependencies": [
+        "M03-A"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "web/state/transport.js",
+        "web/worker.js",
+        "web/app.js",
+        "tests/e2e"
+      ],
+      "acceptanceIds": [
+        "M03-dual-workers"
+      ],
+      "nextAction": "Inspect single-worker transport; design dual Worker ownership so cancel+edit never treats a stale analysis as current.",
+      "createdAt": "2026-09-23T09:23:03.940Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "337d6128dcf47673ee146d3651208a45ca53e477",
-  "lastVerifiedBuildHash": "9b2ccb5c8ad40ed650df3bbe191a9161b1c6c9a79777fd96edac226c5e9637b0",
-  "nextAction": "M00–M02 accepted. Next: M03 spatial building frame (bay copy, roof beams, biaxial/torsion).",
+  "lastVerifiedSourceRevision": "5190ee4e5f32f3f71177ab790f77b53454d3a3d9",
+  "lastVerifiedBuildHash": "81b562d1c36315f7c31a801e76c709619ec4dea7b9504d8885ed650240c40d7f",
+  "nextAction": "M03-A bay-copy slice accepted. Next: M03-B separate model/analysis Workers (or skewed OpenSees pack if preferred).",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "695a419edc4afecccfee2f851c2123b56f9f6fdf9a513f746fa04ce618366396"
+  "lastVerifiedSourceHash": "ba8e59487cae1410db0b57665820d86aee1bda5cb5417075ddf2443b11b5e1c4"
 }

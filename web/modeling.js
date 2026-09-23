@@ -318,5 +318,113 @@ export function modeling({
   for (const id of ["working-plane", "plane-offset", "grid-spacing"])
     $("#" + id).onchange = planeChanged;
   viewport.onCancel = cancel;
+  $("#copy-bay").onclick = () => {
+    if (!canEdit()) return;
+    const p = getProject();
+    if (!p?.members?.length) {
+      message("Create a portal or members before copying a bay.");
+      return;
+    }
+    modal(
+      "Copy bay",
+      `<p>Duplicate the current portal frame along an axis, copy base supports, switch to spatial analysis and connect roof/eave nodes with longitudinal members. Loads are not copied. The whole model is arrayed so a partial selection cannot leave a half-copied bay.</p>
+      <form id="bay-form" class="entity-form">
+      <label>Bay spacing (m)<input name="spacing" type="number" step="any" min="0.000001" max="1000000" value="6" required></label>
+      <label>Additional bays<input name="count" type="number" min="1" max="50" step="1" value="1" required></label>
+      <label>Direction<select name="axis"><option value="Y" selected>+Y (building length)</option><option value="X">+X</option><option value="Z">+Z</option></select></label>
+      <p class="full form-help">Arrays every node and member in the project. Bases become fully fixed for spatial stability.</p>
+      <div id="bay-error" class="error-text" role="alert"></div>
+      <button type="submit" class="primary">Preview bay copy</button></form>
+      <div id="bay-preview" tabindex="0" class="cad-selection" role="region" aria-label="Proposed bay changes"></div>
+      <button id="bay-commit" class="primary" hidden>Commit bay copy</button>`,
+    );
+    let preview = null,
+      token = 0;
+    const selectedIds = () => [...p.nodes, ...p.members].map((x) => x.id);
+    const buildCommand = () => {
+      const f = new FormData($("#bay-form")),
+        spacing = Number(f.get("spacing")),
+        count = Number(f.get("count")),
+        axis = f.get("axis"),
+        delta = [0, 0, 0];
+      delta[{ X: 0, Y: 1, Z: 2 }[axis]] = spacing;
+      return {
+        id: "b" + crypto.randomUUID().replaceAll("-", ""),
+        type: "CopyBay",
+        args: {
+          ids: selectedIds(),
+          delta,
+          count,
+          includeSupports: true,
+          tieUnsupportedNodes: true,
+          setSpatial: true,
+          stabilizeBases: true,
+        },
+      };
+    };
+    $("#bay-form").oninput = () => {
+      preview = null;
+      token++;
+      $("#bay-preview").replaceChildren();
+      $("#bay-commit").hidden = true;
+    };
+    $("#bay-form").onsubmit = async (e) => {
+      e.preventDefault();
+      const generation = ++token;
+      $("#bay-error").textContent = "";
+      $("#bay-commit").hidden = true;
+      const candidate = buildCommand();
+      const revision = getProject().revision;
+      try {
+        const result = await gateway.send("queryGeometry", {
+          kind: "commandPreview",
+          query: { command: candidate },
+          viewRevision: viewport.viewRevision,
+        });
+        if (
+          generation !== token ||
+          getProject().revision !== revision ||
+          !$("#modal").open
+        )
+          return;
+        const after = result.project;
+        $("#bay-preview").innerHTML = `<p>Validated preview. One undo restores the planar portal. No model changes yet.</p>
+          <ul>
+            <li>Mode · ${esc(p.analysisMode)} → ${esc(after.analysisMode)}</li>
+            <li>Nodes · ${p.nodes.length} → ${after.nodes.length}</li>
+            <li>Members · ${p.members.length} → ${after.members.length}</li>
+            <li>Supports · ${p.supports.length} → ${after.supports.length}</li>
+          </ul>`;
+        preview = { candidate, revision };
+        $("#bay-commit").hidden = false;
+      } catch (err) {
+        if (generation === token) $("#bay-error").textContent = err.message;
+      }
+    };
+    $("#bay-commit").onclick = async () => {
+      if (!preview || !canEdit()) return;
+      if (getProject().revision !== preview.revision) {
+        $("#bay-error").textContent = "Model changed. Preview again.";
+        preview = null;
+        $("#bay-commit").hidden = true;
+        return;
+      }
+      try {
+        await command(
+          preview.candidate.type,
+          preview.candidate.args,
+          preview.candidate.id,
+        );
+        $("#modal").close();
+        viewport.mode = "3d";
+        viewport.fit();
+        message(
+          "Bay copied in spatial mode. Analyse to inspect My, Mz and torsion.",
+        );
+      } catch (err) {
+        $("#bay-error").textContent = err.message;
+      }
+    };
+  };
   return { cancel };
 }

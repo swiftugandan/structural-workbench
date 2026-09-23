@@ -169,6 +169,7 @@ export function commandMenu({
         cmd("Connect / split / merge…", "#topology", null, {
           blocked: editingBlocked,
         }),
+        cmd("Copy bay…", "#copy-bay", null, { blocked: editingBlocked }),
         null,
         ...[
           ["Nodes…", "nodes"],
