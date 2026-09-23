@@ -20,6 +20,10 @@ import { modeling } from "./modeling.js";
 import { lineageSummary, renderMemberNav } from "./hierarchy.js";
 import { Gateway } from "./state/transport.js";
 import {
+  duplicateAsVariant,
+  buildComparison,
+} from "./variants.js";
+import {
   save,
   recent,
   listRevisions,
@@ -1093,20 +1097,7 @@ $("#analyse").onclick = async () => {
   try {
     setAnalysing(true);
     message("Analysing the current model…");
-    const chosen = $("#result-case").value || project.loadCases[0]?.id;
-    const envelopeAll = chosen === "__envelope__";
-    const response = await gateway.send("analyse", {
-      caseIds: envelopeAll
-        ? project.loadCases.map((c) => c.id)
-        : project.loadCases.some((c) => c.id === chosen)
-          ? [chosen]
-          : [],
-      combinationIds: envelopeAll
-        ? project.combinations.map((c) => c.id)
-        : project.combinations.some((c) => c.id === chosen)
-          ? [chosen]
-          : [],
-    });
+    const response = await gateway.send("analyse", analysisPayload());
     result = response;
     failed = false;
     if (result.modelHash !== modelHash) {
@@ -1190,6 +1181,131 @@ gateway.onTimeout = () => {
 };
 $("#export-project").onclick = () =>
   download(project.id + ".json", JSON.stringify(portable(), null, 2));
+
+function analysisPayload() {
+  const chosen = $("#result-case").value || project.loadCases[0]?.id;
+  const envelopeAll = chosen === "__envelope__";
+  return {
+    caseIds: envelopeAll
+      ? project.loadCases.map((c) => c.id)
+      : project.loadCases.some((c) => c.id === chosen)
+        ? [chosen]
+        : [],
+    combinationIds: envelopeAll
+      ? project.combinations.map((c) => c.id)
+      : project.combinations.some((c) => c.id === chosen)
+        ? [chosen]
+        : [],
+  };
+}
+
+function captureBaselineFrom(snapshot) {
+  const record = {
+    project: snapshot.project,
+    modelHash: snapshot.modelHash,
+    jsonUtf8: JSON.stringify(snapshot.project),
+  };
+  sessionStorage.setItem("workbench-compare-baseline", JSON.stringify(record));
+  return record;
+}
+
+$("#duplicate-variant").onclick = async () => {
+  if (!project || formDirty) {
+    message(
+      formDirty
+        ? "Apply or cancel property changes before duplicating."
+        : "Open a project first.",
+    );
+    return;
+  }
+  try {
+    setBusy(true);
+    const snap = await gateway.send("exportProject", { includeResults: false });
+    captureBaselineFrom(snap);
+    const variant = duplicateAsVariant(snap.project);
+    await open(variant);
+    message(
+      `Duplicated as “${variant.name}”. Baseline “${snap.project.name}” retained for comparison.`,
+    );
+  } catch (e) {
+    message(e.message);
+  } finally {
+    setBusy(false);
+  }
+};
+
+$("#compare-variants").onclick = async () => {
+  if (!project || formDirty) {
+    message(
+      formDirty
+        ? "Apply or cancel property changes before comparing."
+        : "Open a project first.",
+    );
+    return;
+  }
+  const raw = sessionStorage.getItem("workbench-compare-baseline");
+  if (!raw) {
+    message("Duplicate as variant first to capture a baseline.");
+    return;
+  }
+  try {
+    setBusy(true);
+    setAnalysing(true);
+    message("Solving baseline and variant for comparison…");
+    const baseline = JSON.parse(raw);
+    const snap = await gateway.send("exportProject", { includeResults: false });
+    const payload = analysisPayload();
+    gateway.analysing = true;
+    let baselineResult;
+    let variantResult;
+    try {
+      baselineResult = await gateway.analyseJson(baseline.jsonUtf8, payload);
+      variantResult = await gateway.analyseJson(
+        JSON.stringify(snap.project),
+        payload,
+      );
+    } finally {
+      gateway.analysing = false;
+    }
+    const comparison = buildComparison({
+      baseline: { project: baseline.project, modelHash: baseline.modelHash },
+      baselineResult,
+      variant: { project: snap.project, modelHash: snap.modelHash },
+      variantResult,
+    });
+    result = variantResult;
+    failed = false;
+    modelHash = snap.modelHash;
+    renderResults();
+    renderInspector();
+    viewport.update(project, diagramResult(), selected);
+    const fmt = (v) =>
+      v == null || !Number.isFinite(v) ? "—" : `${(v * 1000).toPrecision(4)} mm`;
+    const hash = (h) =>
+      `<code style="overflow-wrap:anywhere;font-size:12px">${esc(h)}</code>`;
+    $("#modal-content").innerHTML = `<div class="variant-compare"><h2>Variant comparison</h2><p>Both rows are from independent solves of the captured baseline and the current project. Model hashes identify each stiffness variant.</p><table><thead><tr><th scope="col"></th><th scope="col">Baseline</th><th scope="col">Variant</th></tr></thead><tbody><tr><th scope="row">Name</th><td>${esc(comparison.baseline.name)}</td><td>${esc(comparison.variant.name)}</td></tr><tr><th scope="row">Model hash</th><td>${hash(comparison.baseline.modelHash)}</td><td>${hash(comparison.variant.modelHash)}</td></tr><tr><th scope="row">Section Iy</th><td>${comparison.baseline.Iy?.toExponential?.(4) ?? "—"}</td><td>${comparison.variant.Iy?.toExponential?.(4) ?? "—"}</td></tr><tr><th scope="row">Tip uz (${esc(comparison.tipNode || "—")})</th><td>${fmt(comparison.baseline.tipUz)}</td><td>${fmt(comparison.variant.tipUz)}</td></tr></tbody></table><div class="dialog-actions"><button type="button" id="download-baseline-report">Download baseline report</button><button type="button" id="download-variant-report" class="primary">Download variant report</button></div></div>`;
+    $("#modal").showModal();
+    $("#download-baseline-report").onclick = () =>
+      download(
+        `${comparison.baseline.id}-report.html`,
+        report(baseline.project, baselineResult),
+        "text/html",
+      );
+    $("#download-variant-report").onclick = () =>
+      download(
+        `${comparison.variant.id}-report.html`,
+        report(snap.project, variantResult),
+        "text/html",
+      );
+    message("");
+  } catch (e) {
+    message(e.message);
+  } finally {
+    setAnalysing(false);
+    setBusy(false);
+  }
+};
+
 $("#export-report").onclick = () => {
   if (result && result.modelHash === modelHash && !failed)
     download(

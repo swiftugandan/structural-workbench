@@ -2043,6 +2043,19 @@ textarea,
   font-weight: 650;
   cursor: pointer;
 }
+.variant-compare table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-variant-numeric: tabular-nums;
+}
+.variant-compare th,
+.variant-compare td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #d5deeb;
+  vertical-align: top;
+}
 .template-card {
   display: flex;
   flex-direction: column;

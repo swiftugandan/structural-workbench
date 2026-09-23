@@ -1,5 +1,5 @@
 {
-  "sourceHash": "bfcd5a536d08d518a60ee409ddb00df330694e67c271b2ff972544721c9fe445",
+  "sourceHash": "2b1adfa831ba53fa121309962d394a15f8c390906fe9acb9e131f81dd5e40e6b",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -13,11 +13,11 @@
     "release-manifest.json"
   ],
   "files": {
-    "app.html": "afaf607ac739f8b029e130198d6462481a283b33b63d7d6bd8130d0000ebbf66",
-    "app.js": "89e85d72057b7b882cc13da5725edbafe1f2a9e1866923c0e03604855ba14e3c",
+    "app.html": "6f2f31307b755267e1b5faa7ec2214b7bd09765e253882b5c19fad8aff5654ae",
+    "app.js": "45090447eb7384635cc1d962bc24147c1de60267e1005c6a7e5119f5bc22d0f9",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
     "canvas-tools.js": "d88c75a97440dd265cafbf711ac0075cf46e33bb29f0f57b67efdc12cb5bbdca",
-    "command-menu.js": "04ffa33c57efe624b4f921ea540fb07a616694cddd05304eb1f0b722450adbe5",
+    "command-menu.js": "bf0cef8854929a6260cd20c6f1da1476cbb59c313c2a22063894344cb26454fc",
     "entity-forms.js": "067cc6c451ac9a63caa747f4f3152233c3db30f2d8e509c2c6f6c2755106d582",
     "entity-labels.js": "d29a211cdc74af49982d157a1b075aa21674ccc6ad8513e0cf3958d07fe487ae",
     "examples/B01.json": "a33daa5c89ff6759d57360a7650bb20c277d201ccc5aef1bd8ba73fd07f7d9c6",
@@ -49,7 +49,7 @@
     "offline.js": "bcccfca2f33f5df48ae12b262aa2d7d3441113ba09b29394de42ef726a594834",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "d3f0189f7f0e65d104359a7caa41f19b218650c4ff6259471578e757bef4dc87",
+    "pkg/workbench_wasm_api_bg.wasm": "91f704a32e346ea87fb0755270a51050269c60c4f6971f09225440a2d81bf1e2",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",
@@ -63,14 +63,15 @@
     "result-picker.js": "211c0e3f8e12d10dc5cd86179e3813e0b2d5d6334a4d8bbb8c7fbc07ee6986b6",
     "schema-validator.js": "af581bd075e8d7126a8c79335d4e30e4ab34eb2513ec651ca7585b8675f480c2",
     "state/storage.js": "833f357021f633539afe3031cd02b4794489c463130b7802349ab6f3c1bd0b9c",
-    "state/transport.js": "38f029f6a6b2347e91a71a6a57103d0d7fa554ad41fbdde5bc93b5888ae0a4a1",
+    "state/transport.js": "74338e5f8f88cb48f142179255cae5ce2618e43c05832864d9e358c2eb1204a0",
     "structural-icons.js": "8d4dde99cf08ad51a162d1c412f507fb33dc06063e4287eed8cd4df4c7f2aedf",
-    "styles.css": "9b54dd8dd73b1242a961899297a6c6253a65da52e914deae68a85ebf037b7698",
+    "styles.css": "b86e12b7d72ad04d957d4abe97069e0454b7e18edd4a39ea0afef7506713eda8",
     "sw.js": "7aeba6b7ac72fcda86d3e650ef12b1982bd3bef829da98326de8b475e7838c75",
     "topology.js": "6ee06278fcd9301a51c72ef58ba6226a4ea85df4d5b6773d4f7b31cd8f264b29",
+    "variants.js": "e7be206d5557d058a6364b1c78706ccc3cf92852e6ab5ef8f49a010a700d243b",
     "worker.js": "c02d0970761feacf125283b324706d6116794e2f0e4382bd2a10bda7f68fc5ec",
     "workspace-ui.js": "ca7fa971cf49e666a081ac395df6719d45f1e92350083249c1a51a10a1c3149a"
   },
-  "buildHash": "e126680a8f73e70a64645cd5c8b7b7b75e4b5f3f40b60ee2ce94feadbf156ed5",
+  "buildHash": "d95e5ca9439160758930995645e37d90f34dcf93879bb5a721aad12d98086ecb",
   "releaseStatus": "working-preview-not-accepted"
 }

@@ -151,30 +151,37 @@ export class Gateway {
         this.revision,
       );
       const acceptedSnapshotHash = snap.modelHash;
-      const jsonUtf8 = JSON.stringify(snap.project);
-
-      // Fresh analysis Worker so cancel never disturbs the model Worker.
-      this.resetAnalysisWorker();
-      await this.analysisReady;
-      const imported = await this.post(
-        this.analysisWorker,
-        this.analysisPending,
-        "importProject",
-        { jsonUtf8, replaceCurrent: true },
-        null,
-      );
-      const result = await this.post(
-        this.analysisWorker,
-        this.analysisPending,
-        "analyse",
+      const result = await this.analyseJson(
+        JSON.stringify(snap.project),
         payload,
-        imported.project.revision,
+        acceptedSnapshotHash,
       );
-      result.acceptedSnapshotHash = acceptedSnapshotHash;
       return result;
     } finally {
       this.analysing = false;
     }
+  }
+
+  /** Analyse a project JSON on the disposable analysis Worker without touching the model Worker. */
+  async analyseJson(jsonUtf8, payload, acceptedSnapshotHash = null) {
+    this.resetAnalysisWorker();
+    await this.analysisReady;
+    const imported = await this.post(
+      this.analysisWorker,
+      this.analysisPending,
+      "importProject",
+      { jsonUtf8, replaceCurrent: true },
+      null,
+    );
+    const result = await this.post(
+      this.analysisWorker,
+      this.analysisPending,
+      "analyse",
+      payload,
+      imported.project.revision,
+    );
+    result.acceptedSnapshotHash = acceptedSnapshotHash ?? imported.modelHash;
+    return result;
   }
 
   resetAnalysisWorker() {

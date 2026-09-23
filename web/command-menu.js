@@ -61,6 +61,15 @@ export function commandMenu({
         }),
         null,
         cmd("Download project", "#export-project", "Mod+S"),
+        cmd("Duplicate as variant", "#duplicate-variant", null, {
+          blocked: () => !getProject() || hasDraft(),
+        }),
+        cmd("Compare with baseline…", "#compare-variants", null, {
+          blocked: () =>
+            !getProject() ||
+            hasDraft() ||
+            !sessionStorage.getItem("workbench-compare-baseline"),
+        }),
         cmd("Recover revision…", "#recover-revision", null, {
           blocked: () => !getProject(),
         }),

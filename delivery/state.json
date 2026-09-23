@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M05",
-  "activeTask": "M05-B",
+  "activeTask": "M05-C",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1942,23 +1942,73 @@
     },
     "M05-B": {
       "id": "M05-B",
-      "useCase": "Parametric portal template and/or project variant comparison",
+      "useCase": "Duplicate project as variant and compare independent solves by model hash",
       "dependencies": [
         "M05-A"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "web/variants.js",
+        "web/app.js",
+        "web/app.html",
+        "web/command-menu.js",
+        "web/state/transport.js",
+        "web/styles.css",
+        "tests/variants.test.mjs",
+        "tests/e2e/variants.spec.js",
+        "evidence/M05/variants"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M05-variants"
+      ],
+      "nextAction": "Next M05 slice: parametric portal/beam template save-reuse, then parent packaging.",
+      "createdAt": "2026-09-23T12:39:34.000Z",
+      "requiredCommands": [
+        "node --test tests/variants.test.mjs",
+        "npm run build",
+        "npx playwright test tests/e2e/variants.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "variants-unit",
+          "status": "PASS",
+          "testCount": 3
+        },
+        {
+          "check": "variants-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M05/variants/variants-browser.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M05/variants"
+      ],
+      "sourceRevision": "cb5248a085f5c5d06e0133153c79b552f9af7c2c",
+      "sourceHash": "2b1adfa831ba53fa121309962d394a15f8c390906fe9acb9e131f81dd5e40e6b",
+      "buildHash": "d95e5ca9439160758930995645e37d90f34dcf93879bb5a721aad12d98086ecb",
+      "acceptanceMeaning": "Bounded duplicate-as-variant + dual-solve comparison with both model hashes and downloadable reports. Does not claim parametric portal templates or parent M05.",
+      "acceptedAt": "2026-09-23T12:45:00.000Z"
+    },
+    "M05-C": {
+      "id": "M05-C",
+      "useCase": "Parametric portal/beam template save and reuse",
+      "dependencies": [
+        "M05-B"
       ],
       "status": "READY",
       "ownedPaths": [],
       "acceptanceIds": [
-        "SPECIFICATION-M05"
+        "SPECIFICATION-M05-templates"
       ],
-      "nextAction": "Pick portal template reuse or duplicate+compare as the next complete slice.",
-      "createdAt": "2026-09-23T12:39:34.000Z"
+      "nextAction": "Implement reusable parametric portal template create/save/apply.",
+      "createdAt": "2026-09-23T12:45:00.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "8d7f57e8c4503abeeb788e9cdab4a44bf44dcddd",
-  "lastVerifiedBuildHash": "e126680a8f73e70a64645cd5c8b7b7b75e4b5f3f40b60ee2ce94feadbf156ed5",
-  "nextAction": "M05-A accepted. Next: parametric portal template or project-variant comparison.",
+  "lastVerifiedSourceRevision": "cb5248a085f5c5d06e0133153c79b552f9af7c2c",
+  "lastVerifiedBuildHash": "d95e5ca9439160758930995645e37d90f34dcf93879bb5a721aad12d98086ecb",
+  "nextAction": "M05-B accepted. Next: parametric portal template, then parent M05.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "bfcd5a536d08d518a60ee409ddb00df330694e67c271b2ff972544721c9fe445"
+  "lastVerifiedSourceHash": "2b1adfa831ba53fa121309962d394a15f8c390906fe9acb9e131f81dd5e40e6b"
 }
