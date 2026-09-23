@@ -2470,20 +2470,29 @@
       "dependencies": [
         "M07-C"
       ],
-      "status": "READY",
+      "status": "IMPLEMENTING",
       "ownedPaths": [
-        "web",
+        "web/steel-check.js",
+        "web/app.js",
+        "web/command-menu.js",
         "crates/wasm-api",
-        "tests/e2e",
-        "docs/code-profiles/aisc-360-22-lrfd"
+        "tests/e2e/steel-check.spec.js"
       ],
       "acceptanceIds": [
         "SPECIFICATION-M07-ui"
       ],
-      "outcomes": [],
-      "evidencePaths": [],
+      "outcomes": [
+        {
+          "check": "steel-ui-s2d1",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/steel-ui/steel-ui-s2d1.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M07/steel-ui"
+      ],
       "attempts": [],
-      "nextAction": "Expose evaluateDesign inputs for S2 section props in UI; Pass/Fail only when profile enabled"
+      "nextAction": "Add fail cases, model-derived demands, report clause trail; then M07-parent packaging"
     }
   },
   "blockers": [
@@ -2506,7 +2515,7 @@
   ],
   "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
   "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
-  "nextAction": "M07-C accepted (clauses + lock enable). Next M07-D steel check UI / journeys.",
+  "nextAction": "M07-D: standalone S2-D1 UI PASS. Next: fail seeds, model-derived check, report trail, parent packaging.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
 }

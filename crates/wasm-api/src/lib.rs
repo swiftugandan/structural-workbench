@@ -339,6 +339,39 @@ impl Kernel {
                         .into(),
                     station: inputs["station"].as_f64().unwrap_or(0.0),
                 };
+                let section = inputs.get("section").and_then(|s| {
+                    if s.is_null() {
+                        return None;
+                    }
+                    Some(workbench_design::WSectionProps {
+                        ag: s["ag"].as_f64().unwrap_or(0.0),
+                        d: s["d"].as_f64().unwrap_or(0.0),
+                        tw: s["tw"].as_f64().unwrap_or(0.0),
+                        bf: s["bf"].as_f64().unwrap_or(0.0),
+                        tf: s["tf"].as_f64().unwrap_or(0.0),
+                        rx: s["rx"].as_f64().unwrap_or(0.0),
+                        ry: s["ry"].as_f64().unwrap_or(0.0),
+                        zx: s["zx"].as_f64().unwrap_or(0.0),
+                        zy: s["zy"].as_f64().unwrap_or(0.0),
+                        sx: s["sx"].as_f64().unwrap_or(0.0),
+                        sy: s["sy"].as_f64().unwrap_or(0.0),
+                        bf_over_2tf: s["bfOver2tf"].as_f64().unwrap_or(0.0),
+                        h_over_tw: s["hOverTw"].as_f64().unwrap_or(0.0),
+                        e: s["e"].as_f64().unwrap_or(200e9),
+                    })
+                });
+                let tension_end = inputs.get("tensionEnd").and_then(|t| {
+                    if t.is_null() {
+                        return None;
+                    }
+                    Some(workbench_design::TensionEndProps {
+                        u_floor: t["uFloor"].as_f64(),
+                        x_bar: t["xBar"].as_f64(),
+                        connection_length: t["connectionLength"].as_f64(),
+                        hole_count: t["holeCount"].as_u64().unwrap_or(0) as u32,
+                        hole_deduction_width: t["holeDeductionWidth"].as_f64().unwrap_or(0.0),
+                    })
+                });
                 let ctx = workbench_design::MemberContext {
                     member_id,
                     section_family: inputs["sectionFamily"]
@@ -356,7 +389,11 @@ impl Kernel {
                     cb: inputs["cb"].as_f64().unwrap_or(1.0),
                     torsion_present: inputs["torsionPresent"].as_bool().unwrap_or(false)
                         || demand.t.abs() > 0.0,
-                    ..workbench_design::MemberContext::default()
+                    section,
+                    tension_end,
+                    phi_c_pn: inputs["phiCPn"].as_f64(),
+                    phi_b_mnx: inputs["phiBMnx"].as_f64(),
+                    phi_b_mny: inputs["phiBMny"].as_f64(),
                 };
                 let registry = workbench_design::default_registry();
                 match registry.evaluate(profile_id, &demand, &ctx) {

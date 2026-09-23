@@ -225,6 +225,8 @@ export function commandMenu({
         null,
         cmd("Export calculation report", "#export-report"),
         cmd("Export results CSV", "#export-csv"),
+        null,
+        cmd("Steel member check…", "#steel-check"),
       ],
     ],
     [

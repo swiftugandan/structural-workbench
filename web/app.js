@@ -41,6 +41,7 @@ import {
   domainDisclosureFromLedger,
   importDisclosureMessage,
 } from "./capabilities-ledger.js";
+import { openSteelCheckDialog } from "./steel-check.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -154,6 +155,7 @@ function modal(title, html) {
     "Create a planar portal",
     "Worked examples",
     "Capabilities & assumptions",
+    "Steel member check",
     "Unable to open project",
     "Invalid project",
     "Project too large",
@@ -203,6 +205,20 @@ const scope = async () => {
 };
 $("#help").onclick = () => void scope();
 $("#scope").onclick = () => void scope();
+$("#steel-check").onclick = () =>
+  void openSteelCheckDialog({
+    gateway,
+    openModal: (title, html) => modal(title, html),
+    message,
+    getCapabilities: async () => {
+      // Prefer live WASM capabilities (includes enabled designProfiles).
+      try {
+        return await gateway.send("capabilities");
+      } catch {
+        return loadCapabilitiesLedger();
+      }
+    },
+  });
 async function showRecent() {
   try {
     const rows = await recent();
