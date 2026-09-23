@@ -1,0 +1,17 @@
+{
+  "milestone": "M02",
+  "status": "PASS",
+  "sourceHash": "695a419edc4afecccfee2f851c2123b56f9f6fdf9a513f746fa04ce618366396",
+  "buildHash": "9b2ccb5c8ad40ed650df3bbe191a9161b1c6c9a79777fd96edac226c5e9637b0",
+  "required": [
+    "build",
+    "native",
+    "contracts",
+    "numerical",
+    "wasm",
+    "browser-suite",
+    "m02-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-23T08:17:11.772Z"
+}

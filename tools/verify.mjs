@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { sourceHash } from "./build.mjs";
-import { common, m01, m01ux, recordIssues } from "./milestone-rules.mjs";
+import { common, m01, m01ux, m02, recordIssues } from "./milestone-rules.mjs";
 import { evidenceDir } from "./evidence.mjs";
 const milestone = process.argv[2] || "M00";
 const dir = evidenceDir(
@@ -9,10 +9,18 @@ const dir = evidenceDir(
     ? "evidence/M01/ux"
     : milestone === "M01"
       ? "evidence/M01/full"
-      : "evidence/M00/current",
+      : milestone === "M02"
+        ? "evidence/M02/full"
+        : "evidence/M00/current",
 );
 const required =
-  milestone === "M01-UX" ? m01ux : milestone === "M01" ? m01 : common;
+  milestone === "M01-UX"
+    ? m01ux
+    : milestone === "M01"
+      ? m01
+      : milestone === "M02"
+        ? m02
+        : common;
 const issues = [];
 const build = JSON.parse(await readFile("dist/build.json"));
 const hash = await sourceHash();
@@ -42,7 +50,7 @@ for (const name of required) {
     );
   }
 }
-if (!["M00", "M01", "M01-UX"].includes(milestone))
+if (!["M00", "M01", "M01-UX", "M02"].includes(milestone))
   issues.push(
     `${milestone}: remaining milestone-specific gates are not implemented`,
   );

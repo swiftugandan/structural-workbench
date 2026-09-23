@@ -1,0 +1,42 @@
+{
+  "taskId": "M02-SCENARIOS",
+  "milestone": "M02",
+  "sourceHash": "715a5098d069edab6d6b4ab79b8c90875e01392fcb9d6fc6a433171265ff734e",
+  "buildHash": "9a43510020af07545afc7421271ac0e430ef9a215d45911b30e531417065669a",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "scenarios-envelope.png": "f419dea8428031690961b8b8da322cd5aa64b1be4ac9804f0503a90781d0f24d",
+    "b11-project.json": "fb3c4c50f2b27b0960e733fffe1d5ee98fe1e16df2e358bc1b9891f358b3f1b3",
+    "v01-wind-project.json": "7ae59824afadf921186706e6178bedbc4a097a871fb68a3fa416474a18170145"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T07:20:11.700Z",
+  "status": "PASS",
+  "testCount": 2,
+  "testIds": [
+    "M02 scenarios: B11 combination factors tip load and reaction",
+    "M02 scenarios: dead/live/wind cases, strength combination and envelope provenance"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/scenarios.spec.js"
+  ],
+  "artifacts": [
+    "scenarios-envelope.png",
+    "b11-project.json",
+    "v01-wind-project.json"
+  ]
+}

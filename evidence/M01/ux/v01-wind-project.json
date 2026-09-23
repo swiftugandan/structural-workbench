@@ -1,0 +1,242 @@
+{
+  "analysisMode": "planarXZ",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [
+    {
+      "id": "C_uls",
+      "name": "1.2 dead + 1.5 live",
+      "purpose": "strength",
+      "terms": [
+        {
+          "case": "LC1",
+          "factor": 1.2
+        },
+        {
+          "case": "LC2",
+          "factor": 1.5
+        }
+      ]
+    },
+    {
+      "id": "cacb5c7c1",
+      "name": "ULS with wind",
+      "purpose": "strength",
+      "terms": [
+        {
+          "case": "LC1",
+          "factor": 1.2
+        },
+        {
+          "case": "LC2",
+          "factor": 1.5
+        },
+        {
+          "case": "lee078b09",
+          "factor": 1
+        }
+      ]
+    }
+  ],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "V01",
+  "loadCases": [
+    {
+      "category": "dead",
+      "id": "LC1",
+      "name": "Dead UDL"
+    },
+    {
+      "category": "live",
+      "id": "LC2",
+      "name": "Live point"
+    },
+    {
+      "category": "wind",
+      "id": "lee078b09",
+      "name": "Wind lateral"
+    }
+  ],
+  "loads": [
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -10000
+      ],
+      "id": "l1",
+      "member": "m1",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "LC2",
+      "id": "l2",
+      "member": "m1",
+      "station": 0.5,
+      "type": "point",
+      "values": [
+        0,
+        0,
+        -20000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "case": "lee078b09",
+      "id": "l2ba1e2ff",
+      "node": "n2",
+      "type": "nodal",
+      "values": [
+        5000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "E": 200000000000,
+      "density": 7850,
+      "id": "mat1",
+      "name": "Synthetic isotropic material",
+      "nu": 0.25
+    }
+  ],
+  "members": [
+    {
+      "end": "n2",
+      "id": "m1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n1"
+    }
+  ],
+  "metadata": {
+    "createdBy": "Specification package",
+    "description": "Envelope provenance: governing midspan My and uz must cite C_uls, not mixed extrema",
+    "entityLabels": {
+      "C_uls": "c1",
+      "LC1": "lc1",
+      "LC2": "lc2",
+      "cacb5c7c1": "c2",
+      "l1": "l1",
+      "l2": "l2",
+      "l2ba1e2ff": "l3",
+      "lee078b09": "lc3",
+      "m1": "m1",
+      "mat1": "mat1",
+      "n1": "n1",
+      "n2": "n2",
+      "s1": "s1",
+      "s2": "s2",
+      "sec1": "sec1"
+    }
+  },
+  "name": "V01 envelope provenance",
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        6,
+        0,
+        0
+      ]
+    }
+  ],
+  "revision": 3,
+  "schemaVersion": "1.0.0",
+  "sections": [
+    {
+      "A": 0.01,
+      "Iy": 0.00008,
+      "Iz": 0.00008,
+      "J": 0.00002,
+      "cy": 0.1,
+      "cz": 0.2,
+      "id": "sec1",
+      "name": "Synthetic principal section",
+      "provenance": "Original analytical fixture, not a catalogue section"
+    }
+  ],
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "id": "s1",
+      "node": "n1",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "id": "s2",
+      "node": "n2",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "taskId": "M01-FULL",
   "milestone": "M01",
-  "sourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487",
-  "buildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-21T17:36:54.684Z",
+  "observedAt": "2026-09-23T07:59:23.537Z",
   "status": "PASS",
   "testCount": 3,
   "testIds": [
@@ -33,8 +33,8 @@
   ],
   "gpu": {
     "info": {
-      "vendor": "google",
-      "architecture": "swiftshader",
+      "vendor": "amd",
+      "architecture": "gcn-3",
       "device": "",
       "description": ""
     },
@@ -42,30 +42,29 @@
       "depth32float-stencil8",
       "rg11b10ufloat-renderable",
       "bgra8unorm-storage",
+      "texture-formats-tier1",
       "texture-compression-bc",
+      "dual-source-blending",
       "core-features-and-limits",
-      "chromium-experimental-sampling-resource-table",
       "chromium-experimental-timestamp-query-inside-passes",
       "float32-filterable",
       "indirect-first-instance",
-      "texture-compression-astc-sliced-3d",
       "float32-blendable",
-      "subgroup-size-control",
       "texture-compression-unaligned",
-      "texture-compression-astc",
-      "texture-compression-etc2",
       "depth-clip-control",
       "texture-compression-bc-sliced-3d",
-      "clip-distances",
+      "texture-formats-tier2",
       "timestamp-query",
+      "shader-f16",
+      "clip-distances",
       "texture-component-swizzle",
       "subgroups"
     ],
     "limits": {
-      "maxTextureDimension2D": 8192
+      "maxTextureDimension2D": 16384
     },
     "dpr": 1,
-    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36"
   },
   "limitations": "Focused M00 graphics checks; full clipping/occlusion/far-origin performance matrix is not established."
 }

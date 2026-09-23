@@ -31,7 +31,9 @@
         "id": "",
         "name": "",
         "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
-        "testIgnore": [],
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
         "testMatch": [
           "**/*.spec.js"
         ],
@@ -90,12 +92,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5260,
+                  "duration": 3384,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:33:27.567Z",
+                  "startTime": "2026-09-23T07:55:44.074Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -112,6 +114,94 @@
           "id": "1c2357ba4171646c54ab-f4b5e68bcd440c0e2c90",
           "file": "accessibility/a11y.spec.js",
           "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/application-menu.spec.js",
+      "file": "e2e/application-menu.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Application menus share commands, keyboard navigation and disabled states",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2080,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:55:48.731Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-application-menu-Appli-1cf12-igation-and-disabled-states/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8522709c8597d6d19898-24154ab80d0209c5c20e",
+          "file": "e2e/application-menu.spec.js",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "Shortcuts respect text fields, preserve focus mode and use actual analysis",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1262,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:55:50.972Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-application-menu-Short-30795-ode-and-use-actual-analysis/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8522709c8597d6d19898-ea55c31360d716a4e309",
+          "file": "e2e/application-menu.spec.js",
+          "line": 72,
           "column": 1
         }
       ]
@@ -138,12 +228,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7858,
+                  "duration": 2231,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:33:33.391Z",
+                  "startTime": "2026-09-23T07:55:52.360Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -159,7 +249,7 @@
           ],
           "id": "1d50d27f02553b204281-71809e7bc587d641dfe2",
           "file": "e2e/cad.spec.js",
-          "line": 40,
+          "line": 43,
           "column": 1
         },
         {
@@ -178,12 +268,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12921,
+                  "duration": 3114,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:33:41.352Z",
+                  "startTime": "2026-09-23T07:55:54.772Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -199,7 +289,7 @@
           ],
           "id": "1d50d27f02553b204281-79ab7ba953abedc5fdc3",
           "file": "e2e/cad.spec.js",
-          "line": 86,
+          "line": 89,
           "column": 1
         },
         {
@@ -218,12 +308,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7369,
+                  "duration": 3684,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:33:54.378Z",
+                  "startTime": "2026-09-23T07:55:58.128Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -239,7 +329,607 @@
           ],
           "id": "1d50d27f02553b204281-70b1e2b34628ce025582",
           "file": "e2e/cad.spec.js",
-          "line": 152,
+          "line": 154,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/canvas-first.spec.js",
+      "file": "e2e/canvas-first.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas first: place support, draw force, edit assignments and undo without dialogs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3022,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:02.102Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-d07ca-ts-and-undo-without-dialogs/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-055bf972a48002c0cb04",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 35,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: two-click members, distributed loads, measure and nonmodal precision panel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2132,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:05.321Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-a5a08-nd-nonmodal-precision-panel/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-858dff4e570d3d4d02f0",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 99,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: point-to-point copy and dependency delete stay on canvas",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1756,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:07.612Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-d2d963df1c4d0369371a",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 139,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: node placement, split, move and Escape preserve atomic history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2656,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:09.512Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-4ade85ca546fbe223ecc",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "Readable labels hide internal IDs and persist after copy and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1741,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:12.376Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-de89dcd8e924d6f4333b",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 205,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/dimensions.spec.js",
+      "file": "e2e/dimensions.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1421,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:14.288Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-dimensions-Canvas-dime-8a7d7-and-toggle-without-mutation/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b59962eb4c8ce9dd2375-350531f86bab2027b8e8",
+          "file": "e2e/dimensions.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/force-inspector.spec.js",
+      "file": "e2e/force-inspector.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Selected member force diagram station, units and stale state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1707,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:15.855Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c4c2e0c8155373d91b60-0e48af1492cc6bb3b5ec",
+          "file": "e2e/force-inspector.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/graph-scale.spec.js",
+      "file": "e2e/graph-scale.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas exaggeration controls preserve model and independent factors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1369,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:17.722Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-graph-scale-Canvas-exa-7e1b1-del-and-independent-factors/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "956e7770843baf4ebeed-51309f874dcfd69cedff",
+          "file": "e2e/graph-scale.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/guided-inputs.spec.js",
+      "file": "e2e/guided-inputs.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Guided inputs preserve exact properties and references, edit units, and undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5008,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:19.215Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-guided-inputs-Guided-i-80592-erences-edit-units-and-undo/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-0f7da767256f1e9376b8",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "Support presets, directional loads, load types and combinations save through real kernel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3394,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:24.592Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-guided-inputs-Support--58c95-ns-save-through-real-kernel/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-cbf5fd46431d3d1c1ea5",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 69,
+          "column": 1
+        },
+        {
+          "title": "Guided forms are accessible and fit desktop and phone widths",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3192,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:28.258Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-guided-inputs-Guided-f-0555c-it-desktop-and-phone-widths/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-0ea0a2bf9218adcd8d2a",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 120,
+          "column": 1
+        },
+        {
+          "title": "Section templates use published properties, preserve identity, and save custom edits honestly",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5049,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:31.730Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-guided-inputs-Section--fe4d8--save-custom-edits-honestly/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-eb439cc4def2ee7295ec",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 156,
+          "column": 1
+        },
+        {
+          "title": "Material and load templates save editable defaults through the real kernel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5443,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:37.186Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-guided-inputs-Material-4f6a8-lts-through-the-real-kernel/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-a7eb839f660cf940da18",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 194,
+          "column": 1
+        },
+        {
+          "title": "Template galleries have accessible diagrams and fit a phone editor",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4083,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:43.160Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-guided-inputs-Template-0f50a-rams-and-fit-a-phone-editor/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-437041bfedb3e52efd52",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 241,
           "column": 1
         }
       ]
@@ -266,12 +956,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5882,
+                  "duration": 4711,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:01.933Z",
+                  "startTime": "2026-09-23T07:56:47.546Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -288,6 +978,102 @@
           "id": "c4e9259111cfadf83b9b-c43da883f3558016507a",
           "file": "e2e/keyboard.spec.js",
           "line": 20,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/layout-panels.spec.js",
+      "file": "e2e/layout-panels.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Layout controls reclaim canvas space and restore drafts and results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2299,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:52.752Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-layout-panels-Layout-c-63952--restore-drafts-and-results/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "04d9dfbc6874b8b621df-0e53d93e5852549fd8f6",
+          "file": "e2e/layout-panels.spec.js",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/orientation.spec.js",
+      "file": "e2e/orientation.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "3D exposes Y direction and reference grid; orbit updates compass without model changes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1398,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:56:55.207Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611",
+          "file": "e2e/orientation.spec.js",
+          "line": 2,
           "column": 1
         }
       ]
@@ -314,12 +1100,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 14504,
+                  "duration": 4428,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:07.912Z",
+                  "startTime": "2026-09-23T07:56:56.741Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -335,7 +1121,7 @@
           ],
           "id": "ac99bdd4c8a1ab9b01d7-640c0bf91e3d79602394",
           "file": "e2e/portal.spec.js",
-          "line": 19,
+          "line": 20,
           "column": 1
         },
         {
@@ -354,12 +1140,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5024,
+                  "duration": 2666,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:22.568Z",
+                  "startTime": "2026-09-23T07:57:01.541Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -375,7 +1161,103 @@
           ],
           "id": "ac99bdd4c8a1ab9b01d7-c4e781ecbc563940a245",
           "file": "e2e/portal.spec.js",
-          "line": 144,
+          "line": 146,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/prescribed.spec.js",
+      "file": "e2e/prescribed.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M02 prescribed: B09 analyse, edit settlement, reject free-DOF prescription",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2462,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:04.403Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-prescribed-M02-prescri-5b6a7-eject-free-DOF-prescription/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8cc5e36bb218a25ef27d-1a315ff9c08bc8fd3255",
+          "file": "e2e/prescribed.spec.js",
+          "line": 36,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/result-picker.spec.js",
+      "file": "e2e/result-picker.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Grouped results expose all six actions and retain component across analysis",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1701,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:07.035Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6839f378fef507f4e766-361eecee7b9475cecec6",
+          "file": "e2e/result-picker.spec.js",
+          "line": 3,
           "column": 1
         }
       ]
@@ -402,12 +1284,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1361,
+                  "duration": 994,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:27.746Z",
+                  "startTime": "2026-09-23T07:57:08.855Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -423,7 +1305,7 @@
           ],
           "id": "f977963720ef671db443-4aa2e7d89bb49acc9420",
           "file": "e2e/robustness.spec.js",
-          "line": 4,
+          "line": 5,
           "column": 1
         },
         {
@@ -442,12 +1324,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2201,
+                  "duration": 1497,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:29.158Z",
+                  "startTime": "2026-09-23T07:57:09.932Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -463,7 +1345,7 @@
           ],
           "id": "f977963720ef671db443-117b83fc6ce3e45694c6",
           "file": "e2e/robustness.spec.js",
-          "line": 26,
+          "line": 27,
           "column": 1
         },
         {
@@ -482,12 +1364,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1922,
+                  "duration": 1200,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:31.419Z",
+                  "startTime": "2026-09-23T07:57:11.530Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -503,7 +1385,7 @@
           ],
           "id": "f977963720ef671db443-ef0c5f9677c540eab881",
           "file": "e2e/robustness.spec.js",
-          "line": 45,
+          "line": 46,
           "column": 1
         },
         {
@@ -522,12 +1404,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1246,
+                  "duration": 798,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:33.397Z",
+                  "startTime": "2026-09-23T07:57:12.826Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -543,7 +1425,7 @@
           ],
           "id": "f977963720ef671db443-956dd18f967d863832ec",
           "file": "e2e/robustness.spec.js",
-          "line": 76,
+          "line": 77,
           "column": 1
         },
         {
@@ -562,12 +1444,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4516,
+                  "duration": 3492,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:34.685Z",
+                  "startTime": "2026-09-23T07:57:13.693Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -583,7 +1465,319 @@
           ],
           "id": "f977963720ef671db443-d8eb96ff8ab2b4d486e9",
           "file": "e2e/robustness.spec.js",
-          "line": 89,
+          "line": 90,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/scenarios.spec.js",
+      "file": "e2e/scenarios.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M02 scenarios: B11 combination factors tip load and reaction",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1223,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:17.282Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-scenarios-M02-scenario-fa1bf-ctors-tip-load-and-reaction/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "44a49f2122548fb1e331-09a4a28ea187dcdfea19",
+          "file": "e2e/scenarios.spec.js",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "M02 scenarios: dead/live/wind cases, strength combination and envelope provenance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2963,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:18.599Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-scenarios-M02-scenario-b0686-ion-and-envelope-provenance/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "44a49f2122548fb1e331-cd9fa5c58a1e790fb0ac",
+          "file": "e2e/scenarios.spec.js",
+          "line": 79,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/self-weight.spec.js",
+      "file": "e2e/self-weight.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M02 self-weight: B10 analyse, duplicate rejected, case delete keeps combinations valid",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2318,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:21.831Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-self-weight-M02-self-w-15646-te-keeps-combinations-valid/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "de6ff6ae0581f3cfb82a-79dfe475699d5877f34b",
+          "file": "e2e/self-weight.spec.js",
+          "line": 29,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/shear-diagrams.spec.js",
+      "file": "e2e/shear-diagrams.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1425,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:24.365Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49c57edd978718691409-095afe3f7a405796f6d4",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "Uniform-load shear shows both signs and the unused component reports zero",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1251,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:25.932Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49c57edd978718691409-8b8cfac157c2240dfffd",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 60,
+          "column": 1
+        },
+        {
+          "title": "Member forces table exposes signed shear at every station and exports it",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1333,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:27.283Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-shear-diagrams-Member--0b0e7-very-station-and-exports-it/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49c57edd978718691409-5623b6099fa2260e2e2d",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 84,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/support-symbols.spec.js",
+      "file": "e2e/support-symbols.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Support symbols track restraints, orientation, property edits and undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1806,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:28.742Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-support-symbols-Suppor-482f7-ion-property-edits-and-undo/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-50bb9196b001f540d601",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 3,
           "column": 1
         }
       ]
@@ -610,12 +1804,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12525,
+                  "duration": 4671,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:39.278Z",
+                  "startTime": "2026-09-23T07:57:30.685Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -631,7 +1825,7 @@
           ],
           "id": "d4c439445d305c34d2f8-58136303081eb6ca83e8",
           "file": "e2e/topology.spec.js",
-          "line": 30,
+          "line": 31,
           "column": 1
         },
         {
@@ -650,12 +1844,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10576,
+                  "duration": 2427,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:34:51.973Z",
+                  "startTime": "2026-09-23T07:57:35.688Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -671,7 +1865,55 @@
           ],
           "id": "d4c439445d305c34d2f8-08daf682ecb9c44b7c19",
           "file": "e2e/topology.spec.js",
-          "line": 130,
+          "line": 131,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/warehouse.spec.js",
+      "file": "e2e/warehouse.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Warehouse example opens in 3D and solves spatial gravity and lateral loads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1339,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:38.301Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-warehouse-Warehouse-ex-c59d6-l-gravity-and-lateral-loads/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "718243a0c92837cd20a2-9d86d409646115c6f38f",
+          "file": "e2e/warehouse.spec.js",
+          "line": 2,
           "column": 1
         }
       ]
@@ -698,12 +1940,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7380,
+                  "duration": 3064,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:35:02.649Z",
+                  "startTime": "2026-09-23T07:57:39.754Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -719,7 +1961,7 @@
           ],
           "id": "b31ec34b4df6c1b8b94b-f4c1b67d1ca7b7010add",
           "file": "e2e/workbench.spec.js",
-          "line": 13,
+          "line": 14,
           "column": 1
         },
         {
@@ -738,12 +1980,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1213,
+                  "duration": 968,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:35:10.144Z",
+                  "startTime": "2026-09-23T07:57:43.064Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -759,7 +2001,7 @@
           ],
           "id": "b31ec34b4df6c1b8b94b-76448ee4d188eb143dbd",
           "file": "e2e/workbench.spec.js",
-          "line": 117,
+          "line": 118,
           "column": 1
         },
         {
@@ -778,12 +2020,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2530,
+                  "duration": 1310,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:35:11.411Z",
+                  "startTime": "2026-09-23T07:57:44.121Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -799,7 +2041,7 @@
           ],
           "id": "b31ec34b4df6c1b8b94b-2c74c8784aac93559b37",
           "file": "e2e/workbench.spec.js",
-          "line": 128,
+          "line": 129,
           "column": 1
         },
         {
@@ -818,12 +2060,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2287,
+                  "duration": 1205,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:35:14.002Z",
+                  "startTime": "2026-09-23T07:57:45.536Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -839,7 +2081,7 @@
           ],
           "id": "b31ec34b4df6c1b8b94b-abe9c3aa6dbe4133853f",
           "file": "e2e/workbench.spec.js",
-          "line": 147,
+          "line": 148,
           "column": 1
         },
         {
@@ -858,12 +2100,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1226,
+                  "duration": 1035,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:35:16.340Z",
+                  "startTime": "2026-09-23T07:57:46.841Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -879,7 +2121,7 @@
           ],
           "id": "b31ec34b4df6c1b8b94b-08140615f557daade9d6",
           "file": "e2e/workbench.spec.js",
-          "line": 161,
+          "line": 162,
           "column": 1
         },
         {
@@ -898,12 +2140,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2406,
+                  "duration": 1351,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:35:17.646Z",
+                  "startTime": "2026-09-23T07:57:47.954Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -919,7 +2161,143 @@
           ],
           "id": "b31ec34b4df6c1b8b94b-fffecf2de0b0281e4353",
           "file": "e2e/workbench.spec.js",
-          "line": 177,
+          "line": 184,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/workspace-ux.spec.js",
+      "file": "e2e/workspace-ux.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "UX ribbon, keyboard context menu and property drafts preserve model state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1588,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:49.421Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-83e65a7ad3f2b6c886e2",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "UX responsive panel navigation retains editable properties and results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1736,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:51.131Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-e44db34fb2e098f39f25",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 39,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "marketing.spec.js",
+      "file": "marketing.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "marketing page presents the product and launches the workbench",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1089,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T07:57:52.963Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/marketing-marketing-page-p-1e728--and-launches-the-workbench/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ee2db27c83a0a6c8b4d6-29004cdc7765d8a33aef",
+          "file": "marketing.spec.js",
+          "line": 3,
           "column": 1
         }
       ]
@@ -946,12 +2324,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 75925,
+                  "duration": 79991,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:35:20.152Z",
+                  "startTime": "2026-09-23T07:57:54.131Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -967,7 +2345,7 @@
           ],
           "id": "10c540ae4ae910fd101e-33815042c97838e1f8c3",
           "file": "performance-cad.spec.js",
-          "line": 7,
+          "line": 8,
           "column": 1
         }
       ]
@@ -994,12 +2372,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5940,
+                  "duration": 2935,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:36:37.100Z",
+                  "startTime": "2026-09-23T07:59:14.556Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1042,12 +2420,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 9340,
+                  "duration": 4601,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:36:43.156Z",
+                  "startTime": "2026-09-23T07:59:17.696Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1090,12 +2468,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2224,
+                  "duration": 1138,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:36:52.635Z",
+                  "startTime": "2026-09-23T07:59:22.527Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1138,12 +2516,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2377,
+                  "duration": 1221,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:36:54.937Z",
+                  "startTime": "2026-09-23T07:59:23.777Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1178,12 +2556,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3728,
+                  "duration": 1577,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:36:57.371Z",
+                  "startTime": "2026-09-23T07:59:25.102Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1218,12 +2596,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1944,
+                  "duration": 1018,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-21T17:37:01.167Z",
+                  "startTime": "2026-09-23T07:59:26.789Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1247,9 +2625,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-21T17:33:26.148Z",
-    "duration": 217252.502,
-    "expected": 27,
+    "startTime": "2026-09-23T07:55:43.192Z",
+    "duration": 225715.766,
+    "expected": 58,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

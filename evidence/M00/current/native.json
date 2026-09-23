@@ -1,13 +1,16 @@
 {
   "taskId": "M00-A",
   "milestone": "M00",
-  "sourceHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
-  "buildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "native.log": "b1b62ea4bb96cd02e5d9d6b9d28a9a3bb91849fd572cbe308b9e243bbb03de16"
   },
   "runner": {
     "platform": "darwin",
@@ -16,23 +19,54 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-21T15:43:39.443Z",
+  "observedAt": "2026-09-23T07:47:41.040Z",
+  "artifacts": [
+    "native.log"
+  ],
   "status": "PASS",
-  "testCount": 13,
+  "testCount": 41,
   "testIds": [
-    "load_scale_and_superposition",
+    "analytical_id_collision_is_rejected",
+    "b07_key_stations_capture_exact_midspan_moment",
     "edits_scaling_and_instability",
+    "load_scale_and_superposition",
+    "n06_removed_support_is_unstable_at_analyse",
+    "n22_envelope_rejects_single_case",
+    "p01_interior_point_matches_b05_closed_form",
+    "point_station_at_end_is_invalid",
+    "m01_global_rotation_relabelling_reordering_and_endpoint_reversal",
+    "r01_my_releases_under_udl_match_simply_supported",
     "translation_and_storage_order_invariance",
     "analytical_b01_to_b11",
+    "v01_envelope_exposes_governing_combination",
+    "tests::condense_udl_both_my_releases_zeros_end_moments_in_fe",
+    "tests::condense_udl_both_mz_releases_zeros_end_moments_in_fe",
     "six_rigid_body_modes_and_symmetry",
     "axial_strain_energy_and_rotated_symmetry",
-    "rejects_unknown_and_negative_fields",
     "geometry_diagnostics",
     "labels_units_revision_do_not_change_hash",
+    "rejects_unknown_and_negative_fields",
     "negative_seed_diagnostics",
     "units",
+    "near_coincident_nodes_warn_without_mutation",
+    "projected_crossing_index_selection_depth_and_measurement",
+    "three_working_planes_snap_midpoint_grid_and_units",
+    "visible_labels_survive_copy_delete_undo_and_reopen",
+    "move_copy_delete_previews_and_undo_are_atomic",
     "engineering_units_are_parsed_in_rust_and_fail_atomically",
-    "atomic_undo_revision_conflict"
+    "crossing_snap_does_not_split_or_connect_members",
+    "atomic_undo_revision_conflict",
+    "analyse_multiple_ids_returns_envelope_with_provenance",
+    "snapping_is_authoritative_and_does_not_change_topology",
+    "member_creation_batch_is_one_atomic_history_step",
+    "load_variant_unit_conversion_preserves_exact_schema",
+    "local_axes_reversal_vertical_and_skew_are_right_handed",
+    "connect_crossing_is_explicit_and_reuses_one_shared_node",
+    "connect_t_junction_reuses_endpoint_and_three_way_crossing_is_single_joint",
+    "merge_moves_references_rejects_conflicts_distance_and_zero_length",
+    "merge_repeated_loads_and_stale_preview_cannot_mutate",
+    "split_self_weight_and_bad_stations_are_atomic",
+    "split_uniform_load_preserves_response_provenance_and_exact_undo"
   ],
   "command": [
     "cargo",
@@ -41,6 +75,8 @@
     "--locked"
   ],
   "exitCode": 0,
-  "startedAt": "2026-09-21T15:43:36.193Z",
-  "finishedAt": "2026-09-21T15:43:39.440Z"
+  "startedAt": "2026-09-23T07:47:39.147Z",
+  "finishedAt": "2026-09-23T07:47:41.037Z",
+  "copiedFrom": "evidence/M01/full",
+  "note": "Same-build copy from accepted M01 full corpus; hashes unchanged."
 }

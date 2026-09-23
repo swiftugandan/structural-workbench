@@ -1,0 +1,7 @@
+{
+  "task": "M02-PRESCRIBED",
+  "status": "ACCEPTED",
+  "sourceHash": "81396cd01047ab3984090f93072b198d8f62bdb9b8a2ec346d375051501a2cf7",
+  "buildHash": "10f132e7f95bf11eb9cbfcd39b823442095c68058efe4d5a03e3ffd7a085191a",
+  "notes": "B09 reactions/displacements, edit settlement 2mm \u2192 doubled Fx, INVALID_RESTRAINT on free DOF."
+}

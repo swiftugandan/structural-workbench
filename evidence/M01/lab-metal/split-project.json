@@ -1,0 +1,264 @@
+{
+  "analysisMode": "planarXZ",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "B07",
+  "loadCases": [
+    {
+      "category": "other",
+      "id": "LC1",
+      "name": "Reference load"
+    }
+  ],
+  "loads": [
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -10000
+      ],
+      "id": "t2c7eb26052378cb2dbff_l3",
+      "member": "t2c7eb26052378cb2dbff_m0",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -10000
+      ],
+      "id": "t2c7eb26052378cb2dbff_l4",
+      "member": "t2c7eb26052378cb2dbff_m1",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -10000
+      ],
+      "id": "t2c7eb26052378cb2dbff_l5",
+      "member": "t2c7eb26052378cb2dbff_m2",
+      "type": "uniform"
+    }
+  ],
+  "materials": [
+    {
+      "E": 200000000000,
+      "density": 7850,
+      "id": "mat1",
+      "name": "Synthetic isotropic material",
+      "nu": 0.25
+    }
+  ],
+  "members": [
+    {
+      "end": "t2c7eb26052378cb2dbff_n0",
+      "id": "t2c7eb26052378cb2dbff_m0",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "parentMemberId": "m1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n1",
+      "stationRange": [
+        0,
+        0.25
+      ]
+    },
+    {
+      "end": "t2c7eb26052378cb2dbff_n1",
+      "id": "t2c7eb26052378cb2dbff_m1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "parentMemberId": "m1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "t2c7eb26052378cb2dbff_n0",
+      "stationRange": [
+        0.25,
+        0.75
+      ]
+    },
+    {
+      "end": "n2",
+      "id": "t2c7eb26052378cb2dbff_m2",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "parentMemberId": "m1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "t2c7eb26052378cb2dbff_n1",
+      "stationRange": [
+        0.75,
+        1
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "Specification package",
+    "description": "Analytical verification only",
+    "entityLabels": {
+      "LC1": "lc1",
+      "l1": "l1",
+      "m1": "m1",
+      "mat1": "mat1",
+      "n1": "n1",
+      "n2": "n2",
+      "s1": "s1",
+      "s2": "s2",
+      "sec1": "sec1",
+      "t2c7eb26052378cb2dbff_l3": "l2",
+      "t2c7eb26052378cb2dbff_l4": "l3",
+      "t2c7eb26052378cb2dbff_l5": "l4",
+      "t2c7eb26052378cb2dbff_m0": "m2",
+      "t2c7eb26052378cb2dbff_m1": "m3",
+      "t2c7eb26052378cb2dbff_m2": "m4",
+      "t2c7eb26052378cb2dbff_n0": "n3",
+      "t2c7eb26052378cb2dbff_n1": "n4"
+    }
+  },
+  "name": "B07",
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        6,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "t2c7eb26052378cb2dbff_n0",
+      "position": [
+        1.5,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "t2c7eb26052378cb2dbff_n1",
+      "position": [
+        4.5,
+        0,
+        0
+      ]
+    }
+  ],
+  "revision": 1,
+  "schemaVersion": "1.0.0",
+  "sections": [
+    {
+      "A": 0.01,
+      "Iy": 0.00008,
+      "Iz": 0.00008,
+      "J": 0.00002,
+      "cy": 0.1,
+      "cz": 0.2,
+      "id": "sec1",
+      "name": "Synthetic principal section",
+      "provenance": "Original analytical fixture, not a catalogue section"
+    }
+  ],
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "id": "s1",
+      "node": "n1",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "id": "s2",
+      "node": "n2",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "milestone": "M01",
-  "status": "BLOCKED",
-  "sourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487",
-  "buildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0",
+  "status": "PASS",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "required": [
     "build",
     "native",
@@ -23,16 +23,9 @@
     "m01-capacity",
     "m01-startup",
     "computer-use",
-    "milestone-gates"
+    "milestone-gates",
+    "ux-acceptance"
   ],
-  "issues": [
-    "hardware-windows-linux: BLOCKED",
-    "hardware-windows-linux: no executed tests",
-    "hardware-windows-linux: required Windows/Linux runner missing",
-    "hardware-windows-linux: real GPU identity missing",
-    "hardware-windows-linux: same-build corpus incomplete",
-    "computer-use: BLOCKED",
-    "computer-use: no executed tests"
-  ],
-  "observedAt": "2026-09-21T17:40:10.360Z"
+  "issues": [],
+  "observedAt": "2026-09-23T08:00:15.617Z"
 }

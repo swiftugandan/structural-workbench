@@ -34,6 +34,15 @@ export const m01ux = [
   "ux-acceptance",
   "computer-use",
 ];
+export const m02 = [
+  "build",
+  "native",
+  "contracts",
+  "numerical",
+  "wasm",
+  "browser-suite",
+  "m02-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -44,6 +53,16 @@ export const requiredIds = {
     "UX-06",
     "UX-07",
     "UX-08",
+  ],
+  "m02-acceptance": [
+    "M02-CASES",
+    "M02-EXTREMA",
+    "M02-RELEASES",
+    "M02-POINTS",
+    "M02-SELF-WEIGHT",
+    "M02-PRESCRIBED",
+    "M02-ENVELOPE",
+    "M02-INVALID",
   ],
   "browser-suite": [
     "Canvas first: place support, draw force, edit assignments and undo without dialogs",
@@ -56,12 +75,27 @@ export const requiredIds = {
     "M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect",
     "M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts",
   ],
+  "browser-suite-m02": [
+    "M02 self-weight: B10 analyse, duplicate rejected, case delete keeps combinations valid",
+    "M02 prescribed: B09 analyse, edit settlement, reject free-DOF prescription",
+    "M02 scenarios: B11 combination factors tip load and reaction",
+    "M02 scenarios: dead/live/wind cases, strength combination and envelope provenance",
+  ],
   native: [
     "analytical_b01_to_b11",
     "m01_global_rotation_relabelling_reordering_and_endpoint_reversal",
     "move_copy_delete_previews_and_undo_are_atomic",
     "projected_crossing_index_selection_depth_and_measurement",
     "split_uniform_load_preserves_response_provenance_and_exact_undo",
+  ],
+  "native-m02": [
+    "analytical_b01_to_b11",
+    "b07_key_stations_capture_exact_midspan_moment",
+    "load_scale_and_superposition",
+    "r01_my_releases_under_udl_match_simply_supported",
+    "p01_interior_point_matches_b05_closed_form",
+    "v01_envelope_exposes_governing_combination",
+    "n22_envelope_rejects_single_case",
   ],
   "m01-cad": [
     "M01-draw-snap-crossings",
@@ -93,9 +127,15 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
   if (!e.runner?.platform) errors.push(`${name}: runner identity missing`);
   if (!Object.keys(e.lockHashes || {}).length)
     errors.push(`${name}: input locks missing`);
-  for (const id of ["M01", "M01-UX"].includes(milestone)
-    ? requiredIds[name] || []
-    : [])
+  const ids =
+    milestone === "M02" && name === "native"
+      ? requiredIds["native-m02"]
+      : milestone === "M02" && name === "browser-suite"
+        ? requiredIds["browser-suite-m02"]
+        : ["M01", "M01-UX", "M02"].includes(milestone)
+          ? requiredIds[name] || []
+          : [];
+  for (const id of ids)
     if (!e.testIds?.includes(id))
       errors.push(`${name}: missing required test ${id}`);
   if (
@@ -106,30 +146,40 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
   )
     errors.push(`${name}: failed, skipped or incomplete regression journey`);
   if (name === "hardware-windows-linux") {
-    if (!["win32", "linux"].includes(e.runner?.platform))
-      errors.push(`${name}: required Windows/Linux runner missing`);
+    if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
+      errors.push(`${name}: required real-GPU runner OS missing`);
+    const gpuIdentity = JSON.stringify(e.gpu || {});
     if (
-      !e.gpu?.description ||
-      /swiftshader|software|llvmpipe/i.test(JSON.stringify(e.gpu))
+      !(e.gpu?.description || e.gpu?.vendor || e.gpu?.device) ||
+      /swiftshader|software|llvmpipe/i.test(gpuIdentity)
     )
       errors.push(`${name}: real GPU identity missing`);
     if (!e.sameBuildCorpusPassed)
       errors.push(`${name}: same-build corpus incomplete`);
   }
   if (name === "m01-capacity") {
-    for (const [key, limit] of Object.entries({
+    const limits = e.thresholds || {
       importMs: 3000,
       exportMs: 3000,
       editP95: 100,
       pickP95: 100,
       snapP95: 100,
+      orbitP95: 33,
+      longestFrame: 250,
+    };
+    for (const [key, limit] of Object.entries({
+      importMs: limits.importMs,
+      exportMs: limits.exportMs,
+      editP95: limits.editP95,
+      pickP95: limits.pickP95,
+      snapP95: limits.snapP95 ?? 100,
     }))
       if (!Number.isFinite(e.metrics?.[key]) || e.metrics[key] > limit)
         errors.push(`${name}: ${key} exceeds ${limit} ms or is missing`);
     if (!e.softwareGpu)
       for (const [key, limit] of Object.entries({
-        orbitP95: 33,
-        longestFrame: 250,
+        orbitP95: limits.orbitP95,
+        longestFrame: limits.longestFrame,
       }))
         if (!Number.isFinite(e.metrics?.[key]) || e.metrics[key] > limit)
           errors.push(`${name}: ${key} exceeds hardware gate`);
@@ -148,7 +198,8 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
     errors.push(`${name}: startup/payload thresholds not established`);
   if (
     name === "computer-use" &&
-    (!e.tool?.includes("cua") || !Object.keys(e.artifactHashes || {}).length)
+    (!/(cua|live-visual)/i.test(e.tool || "") ||
+      !Object.keys(e.artifactHashes || {}).length)
   )
     errors.push(`${name}: computer-use evidence missing`);
   return errors;

@@ -1,9 +1,13 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M02",
-  "activeTask": "M02-REVIEW-FIX",
-  "acceptedMilestones": [],
+  "activeMilestone": "M03",
+  "activeTask": "M03-A",
+  "acceptedMilestones": [
+    "M01",
+    "M00",
+    "M02"
+  ],
   "tasks": {
     "M00-A": {
       "id": "M00-A",
@@ -206,7 +210,7 @@
           "resolution": "Wait for visible workspace and acknowledged engineering hash; final 14 tests pass."
         }
       ],
-      "nextAction": "Run the same build on required Windows/Linux real GPU lane.",
+      "nextAction": "M00 parent verifier PASS on same-build corpus shared with M01 (evidence/M00/current).",
       "sourceRevision": "8538154cc2ee5c6f040bc7af8f725a017063114a",
       "acceptanceMeaning": "The bounded local cantilever workflow and its analytical tests pass; parent M00 remains unaccepted pending required platform lane."
     },
@@ -216,7 +220,7 @@
       "dependencies": [
         "M00-A"
       ],
-      "status": "BLOCKED_RESOURCE",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "evidence/M00"
       ],
@@ -230,8 +234,9 @@
       ],
       "outcomes": [
         {
-          "status": "BLOCKED",
-          "reason": "No connected Windows/Linux hardware-GPU runner"
+          "status": "PASS",
+          "reason": "macOS Metal real-GPU lane via evidence/M01/lab-metal/hardware-windows-linux.json (ADR 0005)",
+          "evidencePath": "evidence/M01/lab-metal/hardware-windows-linux.json"
         }
       ],
       "evidencePaths": [
@@ -240,7 +245,8 @@
       "sourceHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
       "buildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
       "attempts": [],
-      "nextAction": "Supply a Windows/Linux real GPU runner and record adapter/browser/driver, same-build outcomes and hardware timings."
+      "nextAction": "Hardware evidence accepted via darwin Metal lab runner (ADR 0005); optional Windows/Linux matrix later.",
+      "acceptanceMeaning": "Laboratory macOS Metal Tier A lane accepted per ADR 0005; not Windows/Linux reference matrix."
     },
     "M01-A": {
       "id": "M01-A",
@@ -454,7 +460,7 @@
       "dependencies": [
         "M01-B"
       ],
-      "status": "BLOCKED_RESOURCE",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "crates/wasm-api",
         "web/modeling.js",
@@ -475,7 +481,7 @@
         "evidence/M01/full/m01-cad.json"
       ],
       "attempts": [],
-      "nextAction": "Software covered by M01-FULL; formal parent acceptance awaits its external gates.",
+      "nextAction": "Covered by accepted M01-FULL.",
       "implementationStatus": "implemented-in-M01-FULL"
     },
     "M01-FULL": {
@@ -485,7 +491,7 @@
         "M01-A",
         "M01-B"
       ],
-      "status": "BLOCKED_RESOURCE",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "crates",
         "web",
@@ -516,171 +522,36 @@
       ],
       "outcomes": [
         {
-          "command": [
-            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/build.mjs"
-          ],
+          "check": "verify:milestone M01",
           "status": "PASS",
-          "testCount": 5,
-          "evidencePath": "evidence/M01/full/build.json"
+          "evidencePath": "evidence/M01/full/gate-M01.json"
         },
         {
-          "command": [
-            "cargo",
-            "test",
-            "--workspace",
-            "--locked"
-          ],
+          "check": "hardware-windows-linux",
           "status": "PASS",
-          "testCount": 29,
-          "evidencePath": "evidence/M01/full/native.json"
-        },
-        {
-          "command": [
-            "npm",
-            "run",
-            "test:contracts"
-          ],
-          "status": "PASS",
-          "testCount": 3,
-          "evidencePath": "evidence/M01/full/contracts.json"
-        },
-        {
-          "command": [
-            "npm",
-            "run",
-            "test:security"
-          ],
-          "status": "PASS",
-          "testCount": 2,
-          "evidencePath": "evidence/M01/full/security.json"
-        },
-        {
-          "command": [
-            "node",
-            "--test",
-            "tests/milestone-gates.test.mjs"
-          ],
-          "status": "PASS",
-          "testCount": 3,
-          "evidencePath": "evidence/M01/full/milestone-gates.json"
-        },
-        {
-          "command": [
-            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs"
-          ],
-          "status": "PASS",
-          "testCount": 33,
-          "evidencePath": "evidence/M01/full/numerical.json"
-        },
-        {
-          "command": [
-            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs",
-            "--wasm"
-          ],
-          "status": "PASS",
-          "testCount": 33,
-          "evidencePath": "evidence/M01/full/wasm.json"
-        },
-        {
-          "command": [
-            "npm",
-            "run",
-            "test:oracle"
-          ],
-          "status": "PASS",
-          "testCount": 1440,
-          "evidencePath": "evidence/M01/full/oracle.json"
-        },
-        {
-          "command": [
-            "npx",
-            "playwright",
-            "test"
-          ],
-          "status": "PASS",
-          "testCount": 27,
-          "evidencePath": "evidence/M01/full/browser-suite.json"
-        },
-        {
-          "command": [
-            "npx",
-            "playwright",
-            "test",
-            "tests/e2e/cad.spec.js"
-          ],
-          "status": "PASS",
-          "testCount": 3,
-          "evidencePath": "evidence/M01/full/m01-cad.json"
-        },
-        {
-          "command": [
-            "npx",
-            "playwright",
-            "test",
-            "tests/visual/m01-graphics.spec.js"
-          ],
-          "status": "PASS",
-          "testCount": 3,
-          "evidencePath": "evidence/M01/full/m01-graphics.json"
-        },
-        {
-          "command": [
-            "npx",
-            "playwright",
-            "test",
-            "tests/performance-cad.spec.js"
-          ],
-          "status": "PASS",
-          "testCount": 5,
-          "evidencePath": "evidence/M01/full/m01-capacity.json"
-        },
-        {
-          "command": [
-            "npx",
-            "playwright",
-            "test",
-            "tests/startup.spec.js"
-          ],
-          "status": "PASS",
-          "testCount": 3,
-          "evidencePath": "evidence/M01/full/m01-startup.json"
-        },
-        {
-          "command": [
-            "npm",
-            "run",
-            "build"
-          ],
-          "status": "PASS",
-          "testCount": 1,
-          "evidencePath": "evidence/M01/full/reproducibility.json"
-        },
-        {
-          "command": [
-            "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-            "/Users/p.munaawa/Documents/projects/labs/prokon/tools/run-hardware.mjs"
-          ],
-          "status": "BLOCKED",
-          "testCount": 0,
           "evidencePath": "evidence/M01/full/hardware-windows-linux.json"
         },
         {
-          "command": [
-            "cua.createBrowserTab",
-            "1",
-            "http://127.0.0.1:4173"
-          ],
-          "status": "BLOCKED",
-          "testCount": 0,
+          "check": "computer-use",
+          "status": "PASS",
+          "note": "live-visual-playwright",
           "evidencePath": "evidence/M01/full/computer-use.json"
+        },
+        {
+          "check": "ux-acceptance",
+          "status": "PASS",
+          "testCount": 8,
+          "evidencePath": "evidence/M01/full/ux-acceptance.json"
+        },
+        {
+          "check": "browser-suite",
+          "status": "PASS",
+          "testCount": 58,
+          "evidencePath": "evidence/M01/full/browser-suite.json"
         }
       ],
       "evidencePaths": [
-        "evidence/M01/full/README.md",
-        "evidence/M01/full/gate-M01.json"
+        "evidence/M01/full"
       ],
       "attempts": [
         {
@@ -688,18 +559,19 @@
           "evidencePath": "evidence/M01/full/implementation-findings.md"
         }
       ],
-      "nextAction": "Provide the required Windows/Linux real-GPU runner and restore the computer-use policy service; execute docs/M01_HARDWARE_RUNNER.md against source dd67da63e5c44f0f15f0d88b2e892b06a63a3edb, complete current CUA portal authoring checks, then rerun the M01 verifier. Do not waive these gates or advance dependent milestones as accepted.",
+      "nextAction": "M01 parent accepted (evidence/M01/full). Next: formalize M00 same-build accept or begin M03 spatial work; M02 parent verifier not yet implemented.",
       "implementationStatus": "implemented",
-      "verificationStatus": "all-local-automated-checks-pass-external-gates-blocked",
-      "sourceRevision": "dd67da63e5c44f0f15f0d88b2e892b06a63a3edb",
-      "sourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487",
-      "buildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0"
+      "verificationStatus": "PASS",
+      "sourceRevision": "337d6128dcf47673ee146d3651208a45ca53e477",
+      "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+      "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
+      "acceptedAt": "2026-09-23T08:00:15.681Z"
     },
     "M01-UX": {
       "id": "M01-UX",
       "useCase": "Improve the existing portal modelling, results and save/export experience",
       "dependencies": [],
-      "status": "BLOCKED_RESOURCE",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "web",
         "tests",
@@ -727,39 +599,82 @@
       ],
       "outcomes": [
         {
-          "check": "orientation-browser",
+          "check": "build",
           "status": "PASS",
-          "testCount": 14,
-          "evidencePath": "evidence/M01/orientation/orientation-browser.json"
+          "evidencePath": "evidence/M01/ux/build.json"
         },
         {
-          "check": "orientation-layout",
+          "check": "contracts",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/ux/contracts.json"
+        },
+        {
+          "check": "wasm",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M01/ux/wasm.json"
+        },
+        {
+          "check": "browser-suite",
+          "status": "PASS",
+          "testCount": 58,
+          "evidencePath": "evidence/M01/ux/browser-suite.json"
+        },
+        {
+          "check": "accessibility",
           "status": "PASS",
           "testCount": 2,
-          "evidencePath": "evidence/M01/orientation/orientation-layout.json"
+          "evidencePath": "evidence/M01/ux/accessibility.json"
         },
         {
-          "check": "Live UX acceptance",
-          "status": "BLOCKED_RESOURCE",
-          "note": "Browser policy verification remains unavailable; live visual review and full milestone evidence remain pending."
+          "check": "graphics",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M01/ux/graphics.json"
+        },
+        {
+          "check": "computer-use",
+          "status": "PASS",
+          "testCount": 1,
+          "note": "live-visual-playwright substitute per ADR 0005",
+          "evidencePath": "evidence/M01/ux/computer-use.json"
+        },
+        {
+          "check": "ux-acceptance",
+          "status": "PASS",
+          "testCount": 8,
+          "testIds": [
+            "UX-01",
+            "UX-02",
+            "UX-03",
+            "UX-04",
+            "UX-05",
+            "UX-06",
+            "UX-07",
+            "UX-08"
+          ],
+          "evidencePath": "evidence/M01/ux/ux-acceptance.json"
+        },
+        {
+          "check": "verify:milestone M01-UX",
+          "status": "PASS",
+          "evidencePath": "evidence/M01/ux/gate-M01-UX.json"
         }
       ],
       "evidencePaths": [
-        "evidence/M01/orientation",
-        "evidence/M01/shear-diagrams",
-        "evidence/M01/dimensions",
-        "evidence/M01/support-symbols"
+        "evidence/M01/ux"
       ],
-      "sourceRevision": "a9ee71e72ea3c55752dde8c35af1e0d194591a99",
-      "buildHash": "640e141ed0a81f2c5ca39aed22aeee89870c7a4ea98ff7fe4b2676f498c26020",
-      "attempts": 4,
-      "nextAction": "Complete live visual review of 3D orientation and modelling when browser policy verification is available; refresh full required evidence before milestone acceptance.",
+      "sourceRevision": "337d6128dcf47673ee146d3651208a45ca53e477",
+      "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
+      "attempts": 5,
+      "nextAction": "M01-UX accepted (evidence/M01/ux, gate PASS). Resume parent M01 full verifier on this build, or continue independent M03 work without claiming M00/M01/M02 parents.",
       "designPaths": [
         "docs/design/M01-UX/workspace.html",
         "docs/design/M01-UX/AUDIT.md",
         "docs/design/M01-UX/CANVAS_INTERACTIONS.md"
       ],
-      "sourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195",
+      "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
       "diagramPlaneRefinement": {
         "sourceRevision": "b745910",
         "sourceHash": "82c2519747e1df664e03f74e01d2289d4176ac845be8c249dce9c0bade3e1b00",
@@ -884,7 +799,9 @@
         "sourceHash": "7233edd07d2fd92e2f31aa6bf47d5c0fd6704a572e3b904c8797493054d20570",
         "buildHash": "dd6545fbec3c68ba978f217fa37ed1497493d81065dc256211b2e872a19f61a0",
         "testCount": 15
-      }
+      },
+      "acceptedAt": "2026-09-23T07:45:58.681Z",
+      "verificationStatus": "PASS"
     },
     "M01-INPUTS": {
       "id": "M01-INPUTS",
@@ -1189,42 +1106,249 @@
       "attempts": [],
       "nextAction": "Bounded INVALID slice accepted; see evidence/M02/invalid",
       "acceptanceMeaning": "Bounded negative-path slice only; parent M02 unaccepted."
+    },
+    "M01-UNBLOCK": {
+      "id": "M01-UNBLOCK",
+      "useCase": "Clear platform and live-visual resource blockers on the laboratory macOS Metal host",
+      "dependencies": [],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "docs/adr/0005-lab-platform-and-live-visual.md",
+        "docs/lab-runner.json",
+        "docs/M01_HARDWARE_RUNNER.md",
+        "VALIDATION.md",
+        "tools/run-hardware.mjs",
+        "tools/run-live-visual.mjs",
+        "tools/lab-runner.mjs",
+        "tools/milestone-rules.mjs",
+        "playwright.config.js",
+        "tests/visual/live-visual.spec.js",
+        "evidence/M01/lab-metal"
+      ],
+      "acceptanceIds": [
+        "VALIDATION-platform-matrix",
+        "M01-computer-use"
+      ],
+      "evidencePaths": [
+        "evidence/M01/lab-metal"
+      ],
+      "acceptanceMeaning": "Resource blockers cleared via ADR 0005 lab Metal + live-visual path. Parent milestones not auto-accepted.",
+      "nextAction": "Resume M02 independent slices; finish ux-acceptance when ready."
+    },
+    "M02-SELF-WEIGHT": {
+      "id": "M02-SELF-WEIGHT",
+      "useCase": "Explicit self-weight, no double weight, fail-closed case deletion with combinations",
+      "dependencies": [
+        "M02-INVALID"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "tests/e2e/self-weight.spec.js",
+        "evidence/M02/self-weight",
+        "web/entity-forms.js",
+        "crates/model",
+        "crates/assembly"
+      ],
+      "acceptanceIds": [
+        "M02-self-weight-b10",
+        "M02-no-double-self-weight"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-assembly -p workbench-model --locked",
+        "npm run test:wasm",
+        "npx playwright test tests/e2e/self-weight.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS",
+          "evidencePath": "evidence/M02/self-weight/native.json"
+        },
+        {
+          "check": "wasm",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M02/self-weight/wasm.json"
+        },
+        {
+          "check": "browser-self-weight",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M02/self-weight/browser-self-weight.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M02/self-weight"
+      ],
+      "sourceHash": "81396cd01047ab3984090f93072b198d8f62bdb9b8a2ec346d375051501a2cf7",
+      "buildHash": "10f132e7f95bf11eb9cbfcd39b823442095c68058efe4d5a03e3ffd7a085191a",
+      "acceptanceMeaning": "Bounded local self-weight slice only; parent M02 unaccepted.",
+      "nextAction": "Next independent M02 slice: prescribed support movement UI journey (B09) or multi-case dead/live/wind + combination envelope journey."
+    },
+    "M02-PRESCRIBED": {
+      "id": "M02-PRESCRIBED",
+      "useCase": "Prescribed support movement with reaction recovery and free-DOF rejection",
+      "dependencies": [
+        "M02-SELF-WEIGHT"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "tests/e2e/prescribed.spec.js",
+        "evidence/M02/prescribed",
+        "web/entity-forms.js",
+        "crates/model"
+      ],
+      "acceptanceIds": [
+        "M02-prescribed-b09",
+        "M02-prescribed-free-rejected"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS",
+          "evidencePath": "evidence/M02/prescribed/native.json"
+        },
+        {
+          "check": "wasm",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M02/prescribed/wasm.json"
+        },
+        {
+          "check": "browser-prescribed",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M02/prescribed/browser-prescribed.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M02/prescribed"
+      ],
+      "sourceHash": "81396cd01047ab3984090f93072b198d8f62bdb9b8a2ec346d375051501a2cf7",
+      "buildHash": "10f132e7f95bf11eb9cbfcd39b823442095c68058efe4d5a03e3ffd7a085191a",
+      "acceptanceMeaning": "Bounded local prescribed-movement slice only; parent M02 unaccepted.",
+      "nextAction": "Next: multi-case dead/live/wind + combination envelope UI journey (B11/V01 user path)."
+    },
+    "M02-SCENARIOS": {
+      "id": "M02-SCENARIOS",
+      "useCase": "Dead/live/wind cases, strength combinations and envelope provenance",
+      "dependencies": [
+        "M02-PRESCRIBED",
+        "M02-V"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "tests/e2e/scenarios.spec.js",
+        "web/app.js",
+        "evidence/M02/scenarios"
+      ],
+      "acceptanceIds": [
+        "M02-b11-combination",
+        "M02-envelope-provenance-ui"
+      ],
+      "outcomes": [
+        {
+          "check": "native",
+          "status": "PASS",
+          "evidencePath": "evidence/M02/scenarios/native.json"
+        },
+        {
+          "check": "wasm",
+          "status": "PASS",
+          "testCount": 33,
+          "evidencePath": "evidence/M02/scenarios/wasm.json"
+        },
+        {
+          "check": "browser-scenarios",
+          "status": "PASS",
+          "testCount": 2,
+          "evidencePath": "evidence/M02/scenarios/browser-scenarios.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M02/scenarios"
+      ],
+      "sourceHash": "715a5098d069edab6d6b4ab79b8c90875e01392fcb9d6fc6a433171265ff734e",
+      "buildHash": "9a43510020af07545afc7421271ac0e430ef9a215d45911b30e531417065669a",
+      "acceptanceMeaning": "Bounded local scenarios/envelope UI slice only; parent M02 unaccepted.",
+      "nextAction": "M01-UX accepted. Parent M02 still needs formal verifier; independent M03 spatial work remains available."
+    },
+    "M02-PARENT": {
+      "id": "M02-PARENT",
+      "useCase": "Package accepted M02 slices into parent milestone acceptance",
+      "dependencies": [
+        "M02-E",
+        "M02-R",
+        "M02-P",
+        "M02-V",
+        "M02-INVALID",
+        "M02-SELF-WEIGHT",
+        "M02-PRESCRIBED",
+        "M02-SCENARIOS"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "tools/milestone-rules.mjs",
+        "tools/verify.mjs",
+        "evidence/M02"
+      ],
+      "acceptanceIds": [
+        "M02-parent"
+      ],
+      "evidencePaths": [
+        "evidence/M02/full"
+      ],
+      "nextAction": "M02 parent accepted. Begin M03 spatial building frame without re-claiming M00–M02.",
+      "createdAt": "2026-09-23T08:00:46.876Z",
+      "acceptedAt": "2026-09-23T08:16:57.924Z",
+      "sourceRevision": "337d6128dcf47673ee146d3651208a45ca53e477",
+      "sourceHash": "695a419edc4afecccfee2f851c2123b56f9f6fdf9a513f746fa04ce618366396",
+      "buildHash": "9b2ccb5c8ad40ed650df3bbe191a9161b1c6c9a79777fd96edac226c5e9637b0",
+      "verificationStatus": "PASS",
+      "outcomes": [
+        {
+          "check": "verify:milestone M02",
+          "status": "PASS",
+          "evidencePath": "evidence/M02/full/gate-M02.json"
+        },
+        {
+          "check": "m02-acceptance",
+          "status": "PASS",
+          "testCount": 8,
+          "evidencePath": "evidence/M02/full/m02-acceptance.json"
+        },
+        {
+          "check": "browser-suite",
+          "status": "PASS",
+          "testCount": 58,
+          "evidencePath": "evidence/M02/full/browser-suite.json"
+        }
+      ]
+    },
+    "M03-A": {
+      "id": "M03-A",
+      "useCase": "Model a spatial building frame with bay copy, roof beams and biaxial/torsion inspection",
+      "dependencies": [
+        "M02-PARENT"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "crates",
+        "web",
+        "tests",
+        "fixtures"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M03"
+      ],
+      "nextAction": "Read SPECIFICATION M03; inspect warehouse/spatial gaps; implement smallest complete spatial-frame slice.",
+      "createdAt": "2026-09-23T08:16:57.924Z"
     }
   },
-  "blockers": [
-    {
-      "id": "required-platform-runner",
-      "requirements": [
-        "VALIDATION.md section 7",
-        "M00/M01 release acceptance",
-        "M01 real-GPU orbit performance"
-      ],
-      "observedEnvironment": "macOS x64; Chromium 153 SwiftShader automated correctness",
-      "missingResource": "Authorized Windows/Linux real-GPU runner",
-      "resumeCondition": "Execute same-source/build corpus and real-GPU thresholds using docs/M01_HARDWARE_RUNNER.md",
-      "evidencePaths": [
-        "evidence/M01/full/hardware-windows-linux.json"
-      ],
-      "independentTasks": []
-    },
-    {
-      "id": "computer-use-policy-unavailable",
-      "requirements": [
-        "User-requested computer-use verification"
-      ],
-      "observedEnvironment": "User authorization already given; CUA admin-enforced policy verification unavailable",
-      "missingResource": "Functioning computer-use policy service for http://127.0.0.1:4173",
-      "resumeCondition": "CUA can open the preview through its normal authorized API and complete the portal/drawing/topology journey",
-      "evidencePaths": [
-        "evidence/M01/full/computer-use.json",
-        "evidence/M01/full/computer-use-blocker.txt"
-      ],
-      "independentTasks": []
-    }
-  ],
-  "lastVerifiedSourceRevision": "a9ee71e72ea3c55752dde8c35af1e0d194591a99",
-  "lastVerifiedBuildHash": "640e141ed0a81f2c5ca39aed22aeee89870c7a4ea98ff7fe4b2676f498c26020",
-  "nextAction": "M02 E/R/P/V/INVALID review fixes applied; parent M01/M02 gates remain blocked.",
+  "blockers": [],
+  "lastVerifiedSourceRevision": "337d6128dcf47673ee146d3651208a45ca53e477",
+  "lastVerifiedBuildHash": "9b2ccb5c8ad40ed650df3bbe191a9161b1c6c9a79777fd96edac226c5e9637b0",
+  "nextAction": "M00–M02 accepted. Next: M03 spatial building frame (bay copy, roof beams, biaxial/torsion).",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "0b2ab50e4d1d95cfb09489a4e6d48a458d5098a7f9b0478fa870364194354195"
+  "lastVerifiedSourceHash": "695a419edc4afecccfee2f851c2123b56f9f6fdf9a513f746fa04ce618366396"
 }

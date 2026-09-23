@@ -1,14 +1,15 @@
 {
   "taskId": "M00-A",
   "milestone": "M00",
-  "sourceHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
-  "buildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
+  "artifactHashes": {},
   "runner": {
     "platform": "darwin",
     "arch": "x64",
@@ -16,13 +17,34 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-21T15:44:42.120Z",
-  "status": "BLOCKED",
-  "testCount": 0,
-  "testIds": [],
+  "observedAt": "2026-09-23T07:59:28.992Z",
+  "status": "PASS",
   "command": [
-    "required-platform-lane"
+    "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+    "/Users/p.munaawa/Documents/projects/labs/prokon/tools/run-hardware.mjs"
   ],
-  "reason": "This session has macOS only. No Windows/Linux real-GPU runner is connected. Local macOS AMD observation does not satisfy that separate platform lane.",
-  "resumeCondition": "Run the pinned build and acceptance corpus on a Windows or Linux hardware-GPU runner with browser/adapter/driver and timing evidence."
+  "testCount": 10,
+  "testIds": [
+    "native",
+    "contracts",
+    "security",
+    "numerical",
+    "wasm",
+    "oracle",
+    "browser-suite",
+    "m01-capacity",
+    "m01-graphics",
+    "m01-startup"
+  ],
+  "gpu": {
+    "vendor": "amd",
+    "device": "",
+    "architecture": "gcn-3",
+    "description": "",
+    "dpr": 1,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36"
+  },
+  "sameBuildCorpusPassed": true,
+  "copiedFrom": "evidence/M01/full",
+  "note": "Same-build copy from accepted M01 full corpus; hashes unchanged."
 }

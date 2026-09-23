@@ -1,15 +1,41 @@
-# M01-UX candidate evidence
+# M01-UX acceptance evidence
 
-Source commit: 06ac4825bbfc6e620746f7ff8ff4b2fd679df644
-Source hash: cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36
-Build hash: 5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f
+Status: **PASS** (`gate-M01-UX.json`)
 
-Implemented grouped SVG icon ribbon, Rust-picked context actions, keyboard menu navigation/focus restoration, empty/multiple selection properties, draft cancellation/protection, responsive panel navigation and collapsible results. See docs/design/M01-UX/IMPLEMENTATION.md.
+Source revision: `337d6128dcf47673ee146d3651208a45ca53e477`
+Source hash: `05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a`
+Build hash: `5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728`
 
-Final checks: 29 browser tests (including accessibility, graphics, recovery, CAD capacity, keyboard and new UX paths); 33 signed native/WASM numerical comparisons; 3 contract tests; 4 milestone-verifier tests. All pass. Browser automation uses Chromium/SwiftShader and does not establish hardware performance or replace actual computer-use acceptance. Viewport coverage in the UX tests includes 390×844, 768×1024, 1280×720 and 1440×900.
+## Corpus
 
-The first browser run had four failures: three from an ARIA attribute on the panel container and one from an incorrect Copy operation name. Both defects were fixed; this directory contains the final build's rerun evidence.
+| Family | Result |
+| --- | --- |
+| build | PASS |
+| contracts | PASS (3) |
+| wasm | PASS (33) |
+| browser-suite | PASS (58) |
+| accessibility | PASS (2) |
+| graphics | PASS (3) |
+| computer-use | PASS (`live-visual-playwright`, ADR 0005) |
+| ux-acceptance | PASS (UX-01…UX-08) |
 
-The M01-UX verifier intentionally reports BLOCKED: the browser service cannot verify its admin-enforced policy, so live visual/computer-use review and the final UX-01–UX-08 acceptance record are pending. Do not infer acceptance from automated regression results. Existing parent Windows/Linux real-GPU acceptance also remains pending.
+Live observation uses headed Chrome + real Metal GPU screenshots (`live-visual-*.png`). CUA policy service was not required for this record.
 
-Reproduce using WORKBENCH_EVIDENCE_DIR=evidence/M01/ux, WORKBENCH_TASK_ID=M01-UX and WORKBENCH_MILESTONE=M01. Build first, then run npm run test:browser, npm run test:wasm, npm run test:contracts and node --test tests/milestone-gates.test.mjs. npm run verify:milestone -- M01-UX must remain blocked until the required live evidence exists. Never replace dist during tests.
+Acceptance narrative: `ACCEPTANCE.md`.
+
+## Reproduce
+
+```bash
+export WORKBENCH_EVIDENCE_DIR=evidence/M01/ux
+export WORKBENCH_TASK_ID=M01-UX
+export WORKBENCH_MILESTONE=M01
+npm run build
+node tools/run-check.mjs contracts npm run test:contracts
+npm run test:wasm   # requires preview on :4173
+npm run test:browser
+node tools/run-live-visual.mjs
+node tools/record-ux-acceptance.mjs
+npm run verify:milestone -- M01-UX
+```
+
+Do not replace `dist/` during the run. Parent M00/M01/M02 acceptance is separate.

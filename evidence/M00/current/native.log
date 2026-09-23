@@ -4,18 +4,22 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
-running 4 tests
-test load_scale_and_superposition ... ok
+running 13 tests
+test analytical_id_collision_is_rejected ... ok
+test b07_key_stations_capture_exact_midspan_moment ... ok
 test edits_scaling_and_instability ... ok
+test load_scale_and_superposition ... ok
+test n06_removed_support_is_unstable_at_analyse ... ok
+test n22_envelope_rejects_single_case ... ok
+test p01_interior_point_matches_b05_closed_form ... ok
+test point_station_at_end_is_invalid ... ok
+test m01_global_rotation_relabelling_reordering_and_endpoint_reversal ... ok
+test r01_my_releases_under_udl_match_simply_supported ... ok
 test translation_and_storage_order_invariance ... ok
 test analytical_b01_to_b11 ... ok
+test v01_envelope_exposes_governing_combination ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
-
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
 
 running 0 tests
@@ -31,6 +35,13 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test tests::condense_udl_both_my_releases_zeros_end_moments_in_fe ... ok
+test tests::condense_udl_both_mz_releases_zeros_end_moments_in_fe ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 2 tests
@@ -51,9 +62,9 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 4 tests
-test rejects_unknown_and_negative_fields ... ok
 test geometry_diagnostics ... ok
 test labels_units_revision_do_not_change_hash ... ok
+test rejects_unknown_and_negative_fields ... ok
 test negative_seed_diagnostics ... ok
 
 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
@@ -80,31 +91,38 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
-running 2 tests
+running 5 tests
+test near_coincident_nodes_warn_without_mutation ... ok
+test projected_crossing_index_selection_depth_and_measurement ... ok
+test three_working_planes_snap_midpoint_grid_and_units ... ok
+test visible_labels_survive_copy_delete_undo_and_reopen ... ok
+test move_copy_delete_previews_and_undo_are_atomic ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 7 tests
 test engineering_units_are_parsed_in_rust_and_fail_atomically ... ok
+test crossing_snap_does_not_split_or_connect_members ... ok
 test atomic_undo_revision_conflict ... ok
+test analyse_multiple_ids_returns_envelope_with_provenance ... ok
+test snapping_is_authoritative_and_does_not_change_topology ... ok
+test member_creation_batch_is_one_atomic_history_step ... ok
+test load_variant_unit_conversion_preserves_exact_schema ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
-
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
 
-running 0 tests
+running 7 tests
+test local_axes_reversal_vertical_and_skew_are_right_handed ... ok
+test connect_crossing_is_explicit_and_reuses_one_shared_node ... ok
+test connect_t_junction_reuses_endpoint_and_three_way_crossing_is_single_joint ... ok
+test merge_moves_references_rejects_conflicts_distance_and_zero_length ... ok
+test merge_repeated_loads_and_stale_preview_cannot_mutate ... ok
+test split_self_weight_and_bad_stations_are_atomic ... ok
+test split_uniform_load_preserves_response_provenance_and_exact_undo ... ok
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
 
 
 running 0 tests
@@ -136,7 +154,27 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.70s
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s
      Running unittests src/lib.rs (target/debug/deps/workbench_assembly-81cd25464be33af2)
      Running tests/analytical.rs (target/debug/deps/analytical-1644d477af80bc87)
      Running unittests src/main.rs (target/debug/deps/workbench_cli-a5e1657798293aed)
@@ -151,7 +189,9 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running unittests src/lib.rs (target/debug/deps/workbench_solver-0f629ec36abd834e)
      Running unittests src/lib.rs (target/debug/deps/workbench_units-b70ceb18dab5df68)
      Running unittests src/lib.rs (target/debug/deps/workbench_wasm_api-ccf40874d2c5536d)
+     Running tests/cad.rs (target/debug/deps/cad-f087c5f471ea6f88)
      Running tests/commands.rs (target/debug/deps/commands-973329f7bd33dc70)
+     Running tests/topology.rs (target/debug/deps/topology-1737729ecc3abed2)
    Doc-tests workbench_assembly
    Doc-tests workbench_design
    Doc-tests workbench_exchange

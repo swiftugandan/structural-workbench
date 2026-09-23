@@ -14,7 +14,7 @@
     0,
     -9.80665
   ],
-  "id": "p15e7c3d867d748ea8c6df524df5bc516",
+  "id": "p1809d3d7599342719953f98b27c47c90",
   "loadCases": [
     {
       "category": "other",
@@ -71,7 +71,17 @@
   ],
   "metadata": {
     "createdBy": "Specification package",
-    "description": "Analytical verification only"
+    "description": "Analytical verification only",
+    "entityLabels": {
+      "LC1": "lc1",
+      "l1": "l1",
+      "m1": "m1",
+      "mat1": "mat1",
+      "n1": "n1",
+      "n2": "n2",
+      "s1": "s1",
+      "sec1": "sec1"
+    }
   },
   "name": "Untitled cantilever",
   "nodes": [

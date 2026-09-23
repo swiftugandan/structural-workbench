@@ -1,0 +1,41 @@
+{
+  "taskId": "M01-UNBLOCK",
+  "milestone": "M01",
+  "sourceHash": "3c615fe0334b6c4962c9694d4e996733247c1a1c8bac20b2204876b806617fcb",
+  "buildHash": "2e8db58a94c44a1cd28ebda2da8814f1344ff92b9e1300530c0db188313e815f",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "workspace.png": "4035703c1e807e4c4490d2eff3bbd0204c9ffd4285a894fecf50b324bb467992",
+    "exported-project.json": "568b5a95aa6e00051f40cd1a29847e082fa5b6901b6a1f72c0c6a08d8203d4a6",
+    "calculation-report.html": "06e46e3ca9e7a50875820df811c123175801d82ef723b8dc7cea6545f7174f0e"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-22T16:41:44.082Z",
+  "status": "PASS",
+  "testCount": 1,
+  "testIds": [
+    "M00-tour"
+  ],
+  "command": [
+    "npm",
+    "run",
+    "test:e2e"
+  ],
+  "browser": "153.0.8010.53",
+  "artifacts": [
+    "workspace.png",
+    "exported-project.json",
+    "calculation-report.html"
+  ]
+}

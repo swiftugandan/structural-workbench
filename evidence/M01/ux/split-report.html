@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><title>B07 — calculation record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f8;padding:20px;font-size:12px}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}svg{width:100%;height:220px}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / CALCULATION RECORD</p><h1>B07</h1><p>Linear elastic frame analysis · LC1 · SI units</p><small>Model SHA-256: 6ae564a701cda7db3a90c30ae312595f7f72c9984eca6f5ac241974c288b4de3<br>Solver source: cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36<br>Settings: 71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da<br>Created 2026-09-21T18:09:44.378Z</small></header><p class="banner">Mechanics preview. Prismatic Euler–Bernoulli members, small displacement, isotropic material, principal axes and Saint Venant torsion. No shear deformation, buckling, material nonlinearity, connection design or building-code compliance. Commercial numerical parity is unknown.</p><h2>Model</h2><p>4 nodes · 3 members · planarXZ. Global Z up; right-hand rotations. Generated constraints fix uy, rx and rz at every node.</p><h2>Global XZ elevation</h2><p>Grey: undeformed. Blue: deformation ×10. Projection may hide out-of-plane members.</p><svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Global XZ elevation with deformation amplified ten times"><polyline points="50,150 54.875,150 59.75,150 64.625,150 69.5,150 74.375,150 79.25,150 84.125,150 89,150 93.875,150 98.75,150 103.625,150 108.5,150 113.375,150 118.24999999999999,150 123.125,150 128,150 132.875,150 137.75,150 142.625,150 147.5,150 152.375,150 157.25,150 162.125,150 167,150 171.875,150 176.75,150 181.62500000000003,150 186.49999999999997,150 191.375,150 196.25,150 201.125,150 206.00000000000003,150 210.87499999999997,150 215.75,150 220.625,150 225.5,150 230.37500000000003,150 235.24999999999997,150 240.125,150 245,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="50,150 54.875,150.2741973936081 59.75,150.54826718444824 64.625,150.8220832426071 69.5,151.09552104492187 74.375,151.36845767498016 79.25,151.6407718231201 84.125,151.91234378643037 89,152.18305546875 93.875,152.45279038066863 98.75,152.72143363952637 103.625,152.98887196941376 108.5,153.25499370117188 113.375,153.51968877239227 118.24999999999999,153.782848727417 123.125,154.04436671733856 128,154.3041375 132.875,154.56205743999482 137.75,154.818024508667 142.625,155.071938284111 147.5,155.32369995117188 152.375,155.573212301445 157.25,155.82037973327638 162.125,156.06510825176238 167,156.30730546875 171.875,156.5468806028366 176.75,156.7837444793701 181.62500000000003,157.01780953044891 186.49999999999997,157.24898979492187 191.375,157.47720091838838 196.25,157.70236015319824 201.125,157.92438635845184 206.00000000000003,158.1432 210.87499999999997,158.35872315044404 215.75,158.57087948913573 220.625,158.77959430217743 225.5,158.98479448242188 230.37500000000003,159.18640852947235 235.24999999999997,159.38436654968262 240.125,159.57860025615693 245,159.76904296875" fill="none" stroke="#225dc7" stroke-width="2"/><polyline points="245,150 254.75,150 264.5,150 274.25,150 284,150 293.75,150 303.5,150 313.25,150 323,150 332.75,150 342.5,150 352.25,150 362,150 371.75,150 381.5,150 391.25,150 401,150 410.75,150 420.5,150 430.25,150 440,150 449.75,150 459.50000000000006,150 469.24999999999994,150 479,150 488.75,150 498.5,150 508.25000000000006,150 518,150 527.75,150 537.5,150 547.25,150 557,150 566.75,150 576.5,150 586.25,150 596,150 605.75,150 615.5,150 625.25,150 635,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="245,159.76904296875 254.75,160.13829672546387 264.5,160.4916265136719 274.25,160.8285567352295 284,161.1486375 293.75,161.4514446258545 303.5,161.73657963867188 313.25,162.00366977233887 323,162.25236796875 332.75,162.4823528778076 342.5,162.69332885742188 352.25,162.88502597351075 362,163.0572 371.75,163.20963241882325 381.5,163.3421304199219 391.25,163.45452690124512 401,163.54668046875 410.75,163.61847543640138 420.5,163.66982182617187 430.25,163.700655368042 440,163.7109375 449.75,163.700655368042 459.50000000000006,163.66982182617187 469.24999999999994,163.61847543640138 479,163.54668046875 488.75,163.45452690124512 498.5,163.3421304199219 508.25000000000006,163.20963241882325 518,163.0572 527.75,162.88502597351075 537.5,162.69332885742188 547.25,162.4823528778076 557,162.25236796875 566.75,162.00366977233887 576.5,161.73657963867188 586.25,161.4514446258545 596,161.1486375 605.75,160.8285567352295 615.5,160.4916265136719 625.25,160.13829672546387 635,159.76904296875" fill="none" stroke="#225dc7" stroke-width="2"/><polyline points="635,150 639.875,150 644.75,150 649.625,150 654.5,150 659.375,150 664.25,150 669.125,150 674,150 678.875,150 683.75,150 688.625,150 693.5,150 698.375,150 703.25,150 708.125,150 713,150 717.875,150 722.75,150 727.625,150 732.5,150 737.375,150 742.25,150 747.125,150 752,150 756.875,150 761.75,150 766.625,150 771.5,150 776.375,150 781.25,150 786.125,150 791,150 795.875,150 800.75,150 805.625,150 810.5,150 815.375,150 820.25,150 825.125,150 830,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="635,159.76904296875 639.875,159.57860025615693 644.75,159.38436654968262 649.625,159.18640852947235 654.5,158.98479448242188 659.375,158.77959430217743 664.25,158.57087948913573 669.125,158.35872315044404 674,158.1432 678.875,157.92438635845184 683.75,157.70236015319824 688.625,157.47720091838838 693.5,157.24898979492187 698.375,157.01780953044891 703.25,156.7837444793701 708.125,156.5468806028366 713,156.30730546875 717.875,156.06510825176238 722.75,155.82037973327638 727.625,155.573212301445 732.5,155.32369995117188 737.375,155.071938284111 742.25,154.818024508667 747.125,154.56205743999482 752,154.3041375 756.875,154.04436671733856 761.75,153.782848727417 766.625,153.51968877239227 771.5,153.25499370117188 776.375,152.98887196941376 781.25,152.72143363952637 786.125,152.45279038066863 791,152.18305546875 795.875,151.91234378643037 800.75,151.6407718231201 805.625,151.36845767498016 810.5,151.09552104492187 815.375,150.8220832426071 820.25,150.54826718444824 825.125,150.2741973936081 830,150" fill="none" stroke="#225dc7" stroke-width="2"/></svg><h2>Nodal displacements</h2><table><tr><th>Node</th><th>ux (m)</th><th>uy (m)</th><th>uz (m)</th><th>rx (rad)</th><th>ry (rad)</th><th>rz (rad)</th></tr><tr><th>n1</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00562500000</td><td>0.00000000</td></tr><tr><th>n2</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>-0.00562500000</td><td>0.00000000</td></tr><tr><th>ta28951c7560202a16af9_n0</th><td>0.00000000</td><td>0.00000000</td><td>-0.00751464844</td><td>0.00000000</td><td>0.00386718750</td><td>0.00000000</td></tr><tr><th>ta28951c7560202a16af9_n1</th><td>0.00000000</td><td>0.00000000</td><td>-0.00751464844</td><td>0.00000000</td><td>-0.00386718750</td><td>0.00000000</td></tr></table><h2>Physical support reactions</h2><table><tr><th>Support</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>s1</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr><tr><th>s2</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr></table><h2>Member end actions</h2><p>Actions applied by nodes to the element, in local axes. These differ from cut-face section actions.</p><h3>ta28951c7560202a16af9_m0 · 1.5 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>2.91038305e-11</td><td>0.00000000</td></tr><tr><th>j</th><td>0.00000000</td><td>0.00000000</td><td>-15000.0000</td><td>0.00000000</td><td>-33750.0000</td><td>0.00000000</td></tr></table><h3>ta28951c7560202a16af9_m1 · 3 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>0.00000000</td><td>0.00000000</td><td>15000.0000</td><td>0.00000000</td><td>33750.0000</td><td>0.00000000</td></tr><tr><th>j</th><td>0.00000000</td><td>0.00000000</td><td>15000.0000</td><td>0.00000000</td><td>-33750.0000</td><td>0.00000000</td></tr></table><h3>ta28951c7560202a16af9_m2 · 1.5 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>0.00000000</td><td>0.00000000</td><td>-15000.0000</td><td>0.00000000</td><td>33750.0000</td><td>0.00000000</td></tr><tr><th>j</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>-2.91038305e-11</td><td>0.00000000</td></tr></table><h2>Equilibrium and diagnostics</h2><pre>{
+<!doctype html><html lang="en"><meta charset="utf-8"><title>B07 — calculation record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f8;padding:20px;font-size:12px}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}svg{width:100%;height:220px}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / CALCULATION RECORD</p><h1>B07</h1><p>Linear elastic frame analysis · LC1 · SI units</p><small>Model SHA-256: c60e9d88da88e62ece12a59d31150b8896154f5cc5acad0adbe71ee6a8a51bf1<br>Solver source: 05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a<br>Settings: 71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da<br>Created 2026-09-23T07:43:16.206Z</small></header><p class="banner">Mechanics preview. Prismatic Euler–Bernoulli members, small displacement, isotropic material, principal axes and Saint Venant torsion. No shear deformation, buckling, material nonlinearity, connection design or building-code compliance. Commercial numerical parity is unknown.</p><h2>Model</h2><p>4 nodes · 3 members · planarXZ. Global Z up; right-hand rotations. Generated constraints fix uy, rx and rz at every node.</p><h2>Global XZ elevation</h2><p>Grey: undeformed. Blue: deformation ×10. Projection may hide out-of-plane members.</p><svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Global XZ elevation with deformation amplified ten times"><polyline points="50,150 54.875,150 59.75,150 64.625,150 69.5,150 74.375,150 79.25,150 84.125,150 89,150 93.875,150 98.75,150 103.625,150 108.5,150 113.375,150 118.24999999999999,150 123.125,150 128,150 132.875,150 137.75,150 142.625,150 147.5,150 152.375,150 157.25,150 162.125,150 167,150 171.875,150 176.75,150 181.62500000000003,150 186.49999999999997,150 191.375,150 196.25,150 201.125,150 206.00000000000003,150 210.87499999999997,150 215.75,150 220.625,150 225.5,150 230.37500000000003,150 235.24999999999997,150 240.125,150 245,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="50,150 54.875,150.2741973936081 59.75,150.54826718444824 64.625,150.8220832426071 69.5,151.09552104492187 74.375,151.36845767498016 79.25,151.6407718231201 84.125,151.91234378643037 89,152.18305546875 93.875,152.45279038066863 98.75,152.72143363952637 103.625,152.98887196941376 108.5,153.25499370117188 113.375,153.51968877239227 118.24999999999999,153.782848727417 123.125,154.04436671733856 128,154.3041375 132.875,154.56205743999482 137.75,154.818024508667 142.625,155.071938284111 147.5,155.32369995117188 152.375,155.573212301445 157.25,155.82037973327638 162.125,156.06510825176238 167,156.30730546875 171.875,156.5468806028366 176.75,156.7837444793701 181.62500000000003,157.01780953044891 186.49999999999997,157.24898979492187 191.375,157.47720091838838 196.25,157.70236015319824 201.125,157.92438635845184 206.00000000000003,158.1432 210.87499999999997,158.35872315044404 215.75,158.57087948913573 220.625,158.77959430217743 225.5,158.98479448242188 230.37500000000003,159.18640852947235 235.24999999999997,159.38436654968262 240.125,159.57860025615693 245,159.76904296875" fill="none" stroke="#225dc7" stroke-width="2"/><polyline points="245,150 254.75,150 264.5,150 274.25,150 284,150 293.75,150 303.5,150 313.25,150 323,150 332.75,150 342.5,150 352.25,150 362,150 371.75,150 381.5,150 391.25,150 401,150 410.75,150 420.5,150 430.25,150 440,150 449.75,150 459.50000000000006,150 469.24999999999994,150 479,150 488.75,150 498.5,150 508.25000000000006,150 518,150 527.75,150 537.5,150 547.25,150 557,150 566.75,150 576.5,150 586.25,150 596,150 605.75,150 615.5,150 625.25,150 635,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="245,159.76904296875 254.75,160.13829672546387 264.5,160.4916265136719 274.25,160.8285567352295 284,161.1486375 293.75,161.4514446258545 303.5,161.73657963867188 313.25,162.00366977233887 323,162.25236796875 332.75,162.4823528778076 342.5,162.69332885742188 352.25,162.88502597351075 362,163.0572 371.75,163.20963241882325 381.5,163.3421304199219 391.25,163.45452690124512 401,163.54668046875 410.75,163.61847543640138 420.5,163.66982182617187 430.25,163.700655368042 440,163.7109375 449.75,163.700655368042 459.50000000000006,163.66982182617187 469.24999999999994,163.61847543640138 479,163.54668046875 488.75,163.45452690124512 498.5,163.3421304199219 508.25000000000006,163.20963241882325 518,163.0572 527.75,162.88502597351075 537.5,162.69332885742188 547.25,162.4823528778076 557,162.25236796875 566.75,162.00366977233887 576.5,161.73657963867188 586.25,161.4514446258545 596,161.1486375 605.75,160.8285567352295 615.5,160.4916265136719 625.25,160.13829672546387 635,159.76904296875" fill="none" stroke="#225dc7" stroke-width="2"/><polyline points="635,150 639.875,150 644.75,150 649.625,150 654.5,150 659.375,150 664.25,150 669.125,150 674,150 678.875,150 683.75,150 688.625,150 693.5,150 698.375,150 703.25,150 708.125,150 713,150 717.875,150 722.75,150 727.625,150 732.5,150 737.375,150 742.25,150 747.125,150 752,150 756.875,150 761.75,150 766.625,150 771.5,150 776.375,150 781.25,150 786.125,150 791,150 795.875,150 800.75,150 805.625,150 810.5,150 815.375,150 820.25,150 825.125,150 830,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="635,159.76904296875 639.875,159.57860025615693 644.75,159.38436654968262 649.625,159.18640852947235 654.5,158.98479448242188 659.375,158.77959430217743 664.25,158.57087948913573 669.125,158.35872315044404 674,158.1432 678.875,157.92438635845184 683.75,157.70236015319824 688.625,157.47720091838838 693.5,157.24898979492187 698.375,157.01780953044891 703.25,156.7837444793701 708.125,156.5468806028366 713,156.30730546875 717.875,156.06510825176238 722.75,155.82037973327638 727.625,155.573212301445 732.5,155.32369995117188 737.375,155.071938284111 742.25,154.818024508667 747.125,154.56205743999482 752,154.3041375 756.875,154.04436671733856 761.75,153.782848727417 766.625,153.51968877239227 771.5,153.25499370117188 776.375,152.98887196941376 781.25,152.72143363952637 786.125,152.45279038066863 791,152.18305546875 795.875,151.91234378643037 800.75,151.6407718231201 805.625,151.36845767498016 810.5,151.09552104492187 815.375,150.8220832426071 820.25,150.54826718444824 825.125,150.2741973936081 830,150" fill="none" stroke="#225dc7" stroke-width="2"/></svg><h2>Nodal displacements</h2><table><tr><th>Node</th><th>ux (m)</th><th>uy (m)</th><th>uz (m)</th><th>rx (rad)</th><th>ry (rad)</th><th>rz (rad)</th></tr><tr><th>n1</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00562500000</td><td>0.00000000</td></tr><tr><th>n2</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>-0.00562500000</td><td>0.00000000</td></tr><tr><th>n3</th><td>0.00000000</td><td>0.00000000</td><td>-0.00751464844</td><td>0.00000000</td><td>0.00386718750</td><td>0.00000000</td></tr><tr><th>n4</th><td>0.00000000</td><td>0.00000000</td><td>-0.00751464844</td><td>0.00000000</td><td>-0.00386718750</td><td>0.00000000</td></tr></table><h2>Physical support reactions</h2><table><tr><th>Support</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>s1</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr><tr><th>s2</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr></table><h2>Member end actions</h2><p>Actions applied by nodes to the element, in local axes. These differ from cut-face section actions.</p><h3>m2 · 1.5 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>2.91038305e-11</td><td>0.00000000</td></tr><tr><th>j</th><td>0.00000000</td><td>0.00000000</td><td>-15000.0000</td><td>0.00000000</td><td>-33750.0000</td><td>0.00000000</td></tr></table><h3>m3 · 3 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>0.00000000</td><td>0.00000000</td><td>15000.0000</td><td>0.00000000</td><td>33750.0000</td><td>0.00000000</td></tr><tr><th>j</th><td>0.00000000</td><td>0.00000000</td><td>15000.0000</td><td>0.00000000</td><td>-33750.0000</td><td>0.00000000</td></tr></table><h3>m4 · 1.5 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>0.00000000</td><td>0.00000000</td><td>-15000.0000</td><td>0.00000000</td><td>33750.0000</td><td>0.00000000</td></tr><tr><th>j</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>-2.91038305e-11</td><td>0.00000000</td></tr></table><h2>Equilibrium and diagnostics</h2><pre>{
   &quot;checks&quot;: {
     &quot;forcePass&quot;: true,
     &quot;globalBalance&quot;: [
@@ -23,32 +23,32 @@
   &quot;generatedConstraints&quot;: [
     {
       &quot;dof&quot;: 1,
-      &quot;nodeId&quot;: &quot;ta28951c7560202a16af9_n0&quot;,
+      &quot;nodeId&quot;: &quot;tb89d1fda86f2c042db8c_n0&quot;,
       &quot;reaction&quot;: 0
     },
     {
       &quot;dof&quot;: 3,
-      &quot;nodeId&quot;: &quot;ta28951c7560202a16af9_n0&quot;,
+      &quot;nodeId&quot;: &quot;tb89d1fda86f2c042db8c_n0&quot;,
       &quot;reaction&quot;: 0
     },
     {
       &quot;dof&quot;: 5,
-      &quot;nodeId&quot;: &quot;ta28951c7560202a16af9_n0&quot;,
+      &quot;nodeId&quot;: &quot;tb89d1fda86f2c042db8c_n0&quot;,
       &quot;reaction&quot;: 0
     },
     {
       &quot;dof&quot;: 1,
-      &quot;nodeId&quot;: &quot;ta28951c7560202a16af9_n1&quot;,
+      &quot;nodeId&quot;: &quot;tb89d1fda86f2c042db8c_n1&quot;,
       &quot;reaction&quot;: 0
     },
     {
       &quot;dof&quot;: 3,
-      &quot;nodeId&quot;: &quot;ta28951c7560202a16af9_n1&quot;,
+      &quot;nodeId&quot;: &quot;tb89d1fda86f2c042db8c_n1&quot;,
       &quot;reaction&quot;: 0
     },
     {
       &quot;dof&quot;: 5,
-      &quot;nodeId&quot;: &quot;ta28951c7560202a16af9_n1&quot;,
+      &quot;nodeId&quot;: &quot;tb89d1fda86f2c042db8c_n1&quot;,
       &quot;reaction&quot;: 0
     }
   ]
@@ -85,8 +85,8 @@
         0,
         -10000
       ],
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_l3&quot;,
-      &quot;member&quot;: &quot;ta28951c7560202a16af9_m0&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_l3&quot;,
+      &quot;member&quot;: &quot;tb89d1fda86f2c042db8c_m0&quot;,
       &quot;type&quot;: &quot;uniform&quot;
     },
     {
@@ -97,8 +97,8 @@
         0,
         -10000
       ],
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_l4&quot;,
-      &quot;member&quot;: &quot;ta28951c7560202a16af9_m1&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_l4&quot;,
+      &quot;member&quot;: &quot;tb89d1fda86f2c042db8c_m1&quot;,
       &quot;type&quot;: &quot;uniform&quot;
     },
     {
@@ -109,8 +109,8 @@
         0,
         -10000
       ],
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_l5&quot;,
-      &quot;member&quot;: &quot;ta28951c7560202a16af9_m2&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_l5&quot;,
+      &quot;member&quot;: &quot;tb89d1fda86f2c042db8c_m2&quot;,
       &quot;type&quot;: &quot;uniform&quot;
     }
   ],
@@ -125,8 +125,8 @@
   ],
   &quot;members&quot;: [
     {
-      &quot;end&quot;: &quot;ta28951c7560202a16af9_n0&quot;,
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_m0&quot;,
+      &quot;end&quot;: &quot;tb89d1fda86f2c042db8c_n0&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_m0&quot;,
       &quot;localY&quot;: [
         0,
         1,
@@ -150,8 +150,8 @@
       ]
     },
     {
-      &quot;end&quot;: &quot;ta28951c7560202a16af9_n1&quot;,
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_m1&quot;,
+      &quot;end&quot;: &quot;tb89d1fda86f2c042db8c_n1&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_m1&quot;,
       &quot;localY&quot;: [
         0,
         1,
@@ -168,7 +168,7 @@
         &quot;mz&quot;: false
       },
       &quot;section&quot;: &quot;sec1&quot;,
-      &quot;start&quot;: &quot;ta28951c7560202a16af9_n0&quot;,
+      &quot;start&quot;: &quot;tb89d1fda86f2c042db8c_n0&quot;,
       &quot;stationRange&quot;: [
         0.25,
         0.75
@@ -176,7 +176,7 @@
     },
     {
       &quot;end&quot;: &quot;n2&quot;,
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_m2&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_m2&quot;,
       &quot;localY&quot;: [
         0,
         1,
@@ -193,7 +193,7 @@
         &quot;mz&quot;: false
       },
       &quot;section&quot;: &quot;sec1&quot;,
-      &quot;start&quot;: &quot;ta28951c7560202a16af9_n1&quot;,
+      &quot;start&quot;: &quot;tb89d1fda86f2c042db8c_n1&quot;,
       &quot;stationRange&quot;: [
         0.75,
         1
@@ -202,7 +202,26 @@
   ],
   &quot;metadata&quot;: {
     &quot;createdBy&quot;: &quot;Specification package&quot;,
-    &quot;description&quot;: &quot;Analytical verification only&quot;
+    &quot;description&quot;: &quot;Analytical verification only&quot;,
+    &quot;entityLabels&quot;: {
+      &quot;LC1&quot;: &quot;lc1&quot;,
+      &quot;l1&quot;: &quot;l1&quot;,
+      &quot;m1&quot;: &quot;m1&quot;,
+      &quot;mat1&quot;: &quot;mat1&quot;,
+      &quot;n1&quot;: &quot;n1&quot;,
+      &quot;n2&quot;: &quot;n2&quot;,
+      &quot;s1&quot;: &quot;s1&quot;,
+      &quot;s2&quot;: &quot;s2&quot;,
+      &quot;sec1&quot;: &quot;sec1&quot;,
+      &quot;tb89d1fda86f2c042db8c_l3&quot;: &quot;l2&quot;,
+      &quot;tb89d1fda86f2c042db8c_l4&quot;: &quot;l3&quot;,
+      &quot;tb89d1fda86f2c042db8c_l5&quot;: &quot;l4&quot;,
+      &quot;tb89d1fda86f2c042db8c_m0&quot;: &quot;m2&quot;,
+      &quot;tb89d1fda86f2c042db8c_m1&quot;: &quot;m3&quot;,
+      &quot;tb89d1fda86f2c042db8c_m2&quot;: &quot;m4&quot;,
+      &quot;tb89d1fda86f2c042db8c_n0&quot;: &quot;n3&quot;,
+      &quot;tb89d1fda86f2c042db8c_n1&quot;: &quot;n4&quot;
+    }
   },
   &quot;name&quot;: &quot;B07&quot;,
   &quot;nodes&quot;: [
@@ -223,7 +242,7 @@
       ]
     },
     {
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_n0&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_n0&quot;,
       &quot;position&quot;: [
         1.5,
         0,
@@ -231,7 +250,7 @@
       ]
     },
     {
-      &quot;id&quot;: &quot;ta28951c7560202a16af9_n1&quot;,
+      &quot;id&quot;: &quot;tb89d1fda86f2c042db8c_n1&quot;,
       &quot;position&quot;: [
         4.5,
         0,

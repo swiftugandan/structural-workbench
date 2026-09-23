@@ -87,7 +87,9 @@ Test routes are exposed by ordinary application UI. Developer-only deterministic
 
 ## 7 Platform and graphics matrix
 
-Baseline Tier A is a pinned desktop Chromium build on a real Windows or Linux GPU runner. Add a second Tier A lane on macOS when available. Desktop Firefox and Safari are Tier B until their actual release/browser/adapter combinations pass the same corpus; never infer support from marketing or an old compatibility table. Save OS, browser, driver where available, adapter features/limits, screen resolution and devicePixelRatio in evidence.
+Baseline Tier A is a pinned desktop Chromium build on a real GPU runner. Allowed OS lanes are Windows, Linux, or macOS (laboratory hosts included). The recorded adapter must be a hardware GPU — SwiftShader, llvmpipe and other software adapters never satisfy Tier A. Prefer Windows/Linux for multi-platform release matrices when available; a single verified macOS Metal lane is sufficient to clear the laboratory hardware gate (see `docs/adr/0005-lab-platform-and-live-visual.md`). Desktop Firefox and Safari are Tier B until their actual release/browser/adapter combinations pass the same corpus; never infer support from marketing or an old compatibility table. Save OS, browser, driver where available, adapter features/limits, screen resolution and devicePixelRatio in evidence.
+
+When the computer-use (CUA) policy service is unavailable, live visual acceptance may use a headed real-GPU Playwright journey with hashed screenshots (`tools/run-live-visual.mjs`). Headless software-GPU automation alone does not replace that live review.
 
 Run headless/software-GPU correctness tests on each PR. They cannot satisfy hardware performance gates. Run the real-GPU matrix at milestone release and nightly when available. Required rendering cases: transparent selection overlay, depth occlusion, long/short members, zero camera distance handling, devicePixelRatio 1/2, resize, near/far clipping, far-origin geometry, selection ID mapping and camera changes during asynchronous pick. Numerical output must remain unchanged by camera or GPU settings.
 
@@ -95,7 +97,7 @@ Screenshot policy: fixed camera, deterministic geometry, no blinking cursors, an
 
 ## 8 Performance and capacity gates
 
-These are proposed targets. M00 captures the actual runner identity; agents may not select a new faster runner to conceal a regression. Reference class: 4 physical CPU cores, 16 GiB RAM, modern integrated GPU and 1440×900 viewport. Record actual model, OS, power state and browser; compare on that pinned machine. Performance evidence uses release builds, one warm-up plus five measured runs, no developer tools and no test throttling.
+These are proposed targets for the reference class (4 physical CPU cores, 16 GiB RAM, modern integrated GPU and 1440×900 viewport). M00/M01 capture the actual runner identity; agents may not select a new faster runner to conceal a regression. Record actual model, OS, power state and browser; compare on that pinned machine. A laboratory host that cannot meet the reference orbit numbers must pin measured thresholds in `docs/lab-runner.json` (see ADR 0005) and must not claim reference-class performance equivalence. Performance evidence uses release builds, one warm-up plus five measured runs, no developer tools and no test throttling.
 
 | Scenario | Gate |
 | --- | --- |

@@ -49,8 +49,8 @@
   ],
   "members": [
     {
-      "end": "tfbb39f78f3184c8fc6e9_n0",
-      "id": "tfbb39f78f3184c8fc6e9_m0",
+      "end": "td0c3d09736185502d658_n0",
+      "id": "td0c3d09736185502d658_m0",
       "localY": [
         0,
         1,
@@ -75,7 +75,7 @@
     },
     {
       "end": "n2",
-      "id": "tfbb39f78f3184c8fc6e9_m1",
+      "id": "td0c3d09736185502d658_m1",
       "localY": [
         0,
         1,
@@ -92,15 +92,15 @@
         "mz": false
       },
       "section": "sec1",
-      "start": "tfbb39f78f3184c8fc6e9_n0",
+      "start": "td0c3d09736185502d658_n0",
       "stationRange": [
         0.5,
         1
       ]
     },
     {
-      "end": "tfbb39f78f3184c8fc6e9_n0",
-      "id": "tfbb39f78f3184c8fc6e9_m2",
+      "end": "td0c3d09736185502d658_n0",
+      "id": "td0c3d09736185502d658_m2",
       "localY": [
         0,
         1,
@@ -125,7 +125,7 @@
     },
     {
       "end": "n4",
-      "id": "tfbb39f78f3184c8fc6e9_m3",
+      "id": "td0c3d09736185502d658_m3",
       "localY": [
         0,
         1,
@@ -142,7 +142,7 @@
         "mz": false
       },
       "section": "sec1",
-      "start": "tfbb39f78f3184c8fc6e9_n0",
+      "start": "td0c3d09736185502d658_n0",
       "stationRange": [
         0.5,
         1
@@ -151,7 +151,26 @@
   ],
   "metadata": {
     "createdBy": "Specification package",
-    "description": "Analytical verification only"
+    "description": "Analytical verification only",
+    "entityLabels": {
+      "LC1": "lc1",
+      "l1": "l1",
+      "m1": "m1",
+      "m2": "m2",
+      "mat1": "mat1",
+      "n1": "n1",
+      "n2": "n2",
+      "n3": "n3",
+      "n4": "n4",
+      "near": "n5",
+      "s1": "s1",
+      "sec1": "sec1",
+      "td0c3d09736185502d658_m0": "m3",
+      "td0c3d09736185502d658_m1": "m4",
+      "td0c3d09736185502d658_m2": "m5",
+      "td0c3d09736185502d658_m3": "m6",
+      "td0c3d09736185502d658_n0": "n6"
+    }
   },
   "name": "B02",
   "nodes": [
@@ -196,7 +215,7 @@
       ]
     },
     {
-      "id": "tfbb39f78f3184c8fc6e9_n0",
+      "id": "td0c3d09736185502d658_n0",
       "position": [
         1.5,
         0,

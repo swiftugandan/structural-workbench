@@ -1,8 +1,8 @@
 {
-  "taskId": "M00-A",
-  "milestone": "M00",
-  "sourceHash": "24c441df45211cefced8888f1ec4f2298714b3a256195d005643a520b7c761e6",
-  "buildHash": "66292018275eb048644b4399bbfe5fe347888ac1fa9bf5599ebcbe4311083bc3",
+  "taskId": "M01-FULL",
+  "milestone": "M01",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-22T15:11:41.282Z",
+  "observedAt": "2026-09-23T07:47:39.075Z",
   "status": "PASS",
   "testCount": 5,
   "testIds": [
@@ -33,7 +33,7 @@
   ],
   "outputFiles": {
     "app.html": "d563b189f3639e046c9f59a585e5a72415b5ca74bac82f8d5b11437b1f254252",
-    "app.js": "507d085ae31c1727ef8730246e951878a8b9fe6338871175cbf7b4596647cae3",
+    "app.js": "499a48761a8d475d293750a01cd2def58d395ea2f36f1e93da258fc8f560c7cc",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
     "canvas-tools.js": "d88c75a97440dd265cafbf711ac0075cf46e33bb29f0f57b67efdc12cb5bbdca",
     "command-menu.js": "0d3b4035675f46b679b34f5bdd88d478135e8247c2632d77f715fb0ac38f3c6e",
@@ -63,7 +63,7 @@
     "modeling.js": "96b888143f50ece2a64c9151e3211944f4769abb5b94eb7724c4b25dcca6a03f",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "39be62a2361e662cfb6d79f739760c3c3d1775d3a63631269a7aa0b8c4eb7a39",
+    "pkg/workbench_wasm_api_bg.wasm": "95299ed79c2f0d3ac54480c7bfd5d63bbf7e4d842cd07e6927aebdf300fd36fc",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",

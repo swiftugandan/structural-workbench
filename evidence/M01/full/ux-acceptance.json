@@ -1,0 +1,140 @@
+{
+  "taskId": "M01-FULL",
+  "milestone": "M01",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "ACCEPTANCE.md": "ef38224b1ef849a3f6347842b73f908c4580c57b05e10056ca4340301fe5762a",
+    "live-visual-landing.png": "93ce5f204d25cd8e45dda5f71b0556edb1c21728a2f81739072a576a6e3c84d3",
+    "live-visual-portal.png": "484b65689d78d803c372b5358260f6e4b975c4fda8b67face0eec14b1e7abb93",
+    "live-visual-results.png": "bdb07cafbbed58661c032bcc41da780b5aa29565972648e7c11af64bf6412910"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T07:59:34.523Z",
+  "status": "PASS",
+  "testCount": 8,
+  "testIds": [
+    "UX-01",
+    "UX-02",
+    "UX-03",
+    "UX-04",
+    "UX-05",
+    "UX-06",
+    "UX-07",
+    "UX-08"
+  ],
+  "command": [
+    "node",
+    "tools/record-ux-acceptance.mjs",
+    "npm",
+    "run",
+    "verify:milestone",
+    "--",
+    "M01-UX"
+  ],
+  "artifacts": [
+    "ACCEPTANCE.md",
+    "live-visual-landing.png",
+    "live-visual-portal.png",
+    "live-visual-results.png"
+  ],
+  "criteria": [
+    {
+      "id": "UX-01",
+      "title": "Design",
+      "evidence": [
+        "docs/design/M01-UX/AUDIT.md",
+        "docs/design/M01-UX/workspace.html",
+        "docs/design/M01-UX/CANVAS_INTERACTIONS.md",
+        "docs/design/M01-UX/IMPLEMENTATION.md"
+      ],
+      "observation": "Design package and audit present. Live visual screenshots refresh the observed-live column for workspace/results states."
+    },
+    {
+      "id": "UX-02",
+      "title": "Hierarchy",
+      "evidence": [
+        "tests/e2e/application-menu.spec.js",
+        "tests/e2e/workspace-ux.spec.js",
+        "tests/e2e/canvas-first.spec.js",
+        "tests/e2e/layout-panels.spec.js"
+      ],
+      "observation": "Ribbon/menus/context actions and properties panel exercised in browser suite; live-visual confirms canvas-first landing and portal workspace."
+    },
+    {
+      "id": "UX-03",
+      "title": "Authoring",
+      "evidence": [
+        "tests/e2e/portal.spec.js",
+        "tests/e2e/canvas-first.spec.js",
+        "tests/e2e/keyboard.spec.js",
+        "tests/e2e/cad.spec.js"
+      ],
+      "observation": "Portal create/draw/edit/undo and keyboard authoring pass automated e2e; live-visual creates and analyses a portal."
+    },
+    {
+      "id": "UX-04",
+      "title": "Results",
+      "evidence": [
+        "tests/e2e/result-picker.spec.js",
+        "tests/e2e/workbench.spec.js",
+        "tests/e2e/shear-diagrams.spec.js",
+        "live-visual-results.png"
+      ],
+      "observation": "Analyse → current results, stale after edit, and export paths covered by e2e; live-visual captures analysed results screen."
+    },
+    {
+      "id": "UX-05",
+      "title": "Accessibility",
+      "evidence": [
+        "accessibility.json",
+        "tests/accessibility/a11y.spec.js"
+      ],
+      "observation": "Automated axe WCAG 2A/2AA/2.1AA scans on landing and solved workspace pass on this build."
+    },
+    {
+      "id": "UX-06",
+      "title": "Responsive",
+      "evidence": [
+        "tests/e2e/workspace-ux.spec.js",
+        "tests/e2e/guided-inputs.spec.js",
+        "tests/e2e/portal.spec.js"
+      ],
+      "observation": "390/768/desktop widths covered by existing responsive e2e (guided inputs, portal compact, workspace overlays)."
+    },
+    {
+      "id": "UX-07",
+      "title": "Recovery",
+      "evidence": [
+        "tests/e2e/robustness.spec.js",
+        "tests/e2e/workbench.spec.js"
+      ],
+      "observation": "Storage quota, GPU loss, invalid import, cancel, and unknown-field rejection preserve the project in automated robustness journeys."
+    },
+    {
+      "id": "UX-08",
+      "title": "Regression",
+      "evidence": [
+        "browser-suite.json",
+        "wasm.json",
+        "contracts.json",
+        "computer-use.json"
+      ],
+      "observation": "Full browser suite, contracts, and WASM numerical comparisons pass on this source/build. Live-visual substitutes for CUA per ADR 0005."
+    }
+  ],
+  "liveMethod": "live-visual-playwright",
+  "limitations": "CUA substituted by ADR 0005 live-visual; parent M01 gate remains separate."
+}

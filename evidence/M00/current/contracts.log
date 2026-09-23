@@ -6,17 +6,17 @@ TAP version 13
 # Subtest: B01–B11 conform to Draft 2020-12 contract
 ok 1 - B01–B11 conform to Draft 2020-12 contract
   ---
-  duration_ms: 15.901093
+  duration_ms: 12.776139
   ...
 # Subtest: unknown fields and unknown schema rejected
 ok 2 - unknown fields and unknown schema rejected
   ---
-  duration_ms: 2.077926
+  duration_ms: 1.281456
   ...
 # Subtest: actual WASM request/response envelopes conform to Draft 2020-12
 ok 3 - actual WASM request/response envelopes conform to Draft 2020-12
   ---
-  duration_ms: 210.126141
+  duration_ms: 59.925181
   ...
 1..3
 # tests 3
@@ -26,4 +26,4 @@ ok 3 - actual WASM request/response envelopes conform to Draft 2020-12
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 544.715543
+# duration_ms 266.144832

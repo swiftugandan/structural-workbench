@@ -1,6 +1,6 @@
 # M01-UX — Improve the modelling workspace UI and UX
 
-Status: BLOCKED_RESOURCE (canvas-first implementation and automated regression pass; live visual/browser acceptance pending). Parent: M01. Priority: next, before the final M01 acceptance run and M02 feature work. Requested by the user on 21 September 2026.
+Status: ACCEPTED (evidence/M01/ux; `npm run verify:milestone -- M01-UX` PASS; UX-01–UX-08 + live-visual computer-use per ADR 0005). Parent: M01 (still unaccepted). Requested by the user on 21 September 2026.
 
 ## Outcome
 
@@ -58,4 +58,4 @@ Keep plain HTML/JavaScript/CSS, WebGPU and Rust/WASM authority. Do not add M02 e
 
 Deliver the implemented UI, design artifacts, acceptance evidence and explicit remaining limitations. Then resume the required real-GPU/platform and computer-use acceptance on the new build. Creating this task is planning completion only; its implementation and acceptance remain pending.
 
-Current refinement evidence lives in `evidence/M01/canvas-first/`. The candidate also separates hidden internal IDs from persistent short visible labels. Native coverage checks copy/delete/undo/reopen stability; browser coverage checks copied-member canvas and inspector labels after reopen. Live UX acceptance remains required.
+Current refinement evidence lives in `evidence/M01/ux/` (accepted). Earlier focused candidates under `evidence/M01/canvas-first/` and related slice dirs remain historical. Parent M01 still requires its full verifier families on a same-build corpus.

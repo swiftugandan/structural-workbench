@@ -14,7 +14,7 @@
     0,
     -9.80665
   ],
-  "id": "p7bbc00a33bb7",
+  "id": "pde69a8b3d3de",
   "loadCases": [
     {
       "category": "other",
@@ -51,26 +51,6 @@
     {
       "end": "n2",
       "id": "m1",
-      "localY": [
-        0,
-        1,
-        0
-      ],
-      "material": "mat1",
-      "releaseEnd": {
-        "my": false,
-        "mz": false
-      },
-      "releaseStart": {
-        "my": false,
-        "mz": false
-      },
-      "section": "sec1",
-      "start": "n1"
-    },
-    {
-      "end": "n3",
-      "id": "m1f2583956fe8",
       "localY": [
         0,
         1,
@@ -127,11 +107,47 @@
       },
       "section": "sec1",
       "start": "n4"
+    },
+    {
+      "end": "n3",
+      "id": "mb44bbd7c1ec1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n1"
     }
   ],
   "metadata": {
     "createdBy": "Structural Workbench",
-    "description": "User-created XZ portal; synthetic editable section"
+    "description": "User-created XZ portal; synthetic editable section",
+    "entityLabels": {
+      "LC1": "lc1",
+      "l1": "l1",
+      "m1": "m1",
+      "m2": "m2",
+      "m3": "m3",
+      "mat1": "mat1",
+      "mb44bbd7c1ec1": "m4",
+      "n1": "n1",
+      "n2": "n2",
+      "n3": "n3",
+      "n4": "n4",
+      "s1": "s1",
+      "s2": "s2",
+      "sec1": "sec1"
+    }
   },
   "name": "Planar portal",
   "nodes": [

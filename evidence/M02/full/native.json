@@ -1,0 +1,80 @@
+{
+  "taskId": "M02-PARENT",
+  "milestone": "M02",
+  "sourceHash": "695a419edc4afecccfee2f851c2123b56f9f6fdf9a513f746fa04ce618366396",
+  "buildHash": "9b2ccb5c8ad40ed650df3bbe191a9161b1c6c9a79777fd96edac226c5e9637b0",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "native.log": "5094f04dac93f68bf05b5493a72f40e8b32baadefa070ee4d800045d7e0a52dd"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T08:03:43.370Z",
+  "artifacts": [
+    "native.log"
+  ],
+  "status": "PASS",
+  "testCount": 41,
+  "testIds": [
+    "analytical_id_collision_is_rejected",
+    "b07_key_stations_capture_exact_midspan_moment",
+    "edits_scaling_and_instability",
+    "load_scale_and_superposition",
+    "n06_removed_support_is_unstable_at_analyse",
+    "n22_envelope_rejects_single_case",
+    "p01_interior_point_matches_b05_closed_form",
+    "point_station_at_end_is_invalid",
+    "m01_global_rotation_relabelling_reordering_and_endpoint_reversal",
+    "r01_my_releases_under_udl_match_simply_supported",
+    "translation_and_storage_order_invariance",
+    "analytical_b01_to_b11",
+    "v01_envelope_exposes_governing_combination",
+    "tests::condense_udl_both_my_releases_zeros_end_moments_in_fe",
+    "tests::condense_udl_both_mz_releases_zeros_end_moments_in_fe",
+    "six_rigid_body_modes_and_symmetry",
+    "axial_strain_energy_and_rotated_symmetry",
+    "geometry_diagnostics",
+    "labels_units_revision_do_not_change_hash",
+    "rejects_unknown_and_negative_fields",
+    "negative_seed_diagnostics",
+    "units",
+    "near_coincident_nodes_warn_without_mutation",
+    "projected_crossing_index_selection_depth_and_measurement",
+    "three_working_planes_snap_midpoint_grid_and_units",
+    "visible_labels_survive_copy_delete_undo_and_reopen",
+    "move_copy_delete_previews_and_undo_are_atomic",
+    "crossing_snap_does_not_split_or_connect_members",
+    "engineering_units_are_parsed_in_rust_and_fail_atomically",
+    "atomic_undo_revision_conflict",
+    "analyse_multiple_ids_returns_envelope_with_provenance",
+    "snapping_is_authoritative_and_does_not_change_topology",
+    "member_creation_batch_is_one_atomic_history_step",
+    "load_variant_unit_conversion_preserves_exact_schema",
+    "local_axes_reversal_vertical_and_skew_are_right_handed",
+    "connect_crossing_is_explicit_and_reuses_one_shared_node",
+    "connect_t_junction_reuses_endpoint_and_three_way_crossing_is_single_joint",
+    "merge_repeated_loads_and_stale_preview_cannot_mutate",
+    "merge_moves_references_rejects_conflicts_distance_and_zero_length",
+    "split_self_weight_and_bad_stations_are_atomic",
+    "split_uniform_load_preserves_response_provenance_and_exact_undo"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--workspace",
+    "--locked"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-23T08:03:41.217Z",
+  "finishedAt": "2026-09-23T08:03:43.368Z"
+}

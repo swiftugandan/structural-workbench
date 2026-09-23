@@ -1,15 +1,19 @@
 {
   "taskId": "M01-UX",
   "milestone": "M01",
-  "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36",
-  "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
-  "artifactHashes": {},
+  "artifactHashes": {
+    "live-visual-landing.png": "93ce5f204d25cd8e45dda5f71b0556edb1c21728a2f81739072a576a6e3c84d3",
+    "live-visual-portal.png": "484b65689d78d803c372b5358260f6e4b975c4fda8b67face0eec14b1e7abb93",
+    "live-visual-results.png": "bdb07cafbbed58661c032bcc41da780b5aa29565972648e7c11af64bf6412910"
+  },
   "runner": {
     "platform": "darwin",
     "arch": "x64",
@@ -17,15 +21,23 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-21T18:10:04.744Z",
-  "status": "BLOCKED_RESOURCE",
-  "testCount": 0,
-  "testIds": [],
-  "command": [
-    "cua.createBrowserTab",
-    "1",
-    "http://127.0.0.1:4173"
+  "observedAt": "2026-09-23T07:45:27.764Z",
+  "status": "PASS",
+  "testCount": 1,
+  "testIds": [
+    "Live visual: portal authoring, analyse and results on real GPU"
   ],
-  "reason": "Browser service could not verify admin-enforced policy; access was not granted. No alternate control route used.",
-  "journeyPassed": false
+  "tool": "live-visual-playwright",
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/visual/live-visual.spec.js"
+  ],
+  "artifacts": [
+    "live-visual-landing.png",
+    "live-visual-portal.png",
+    "live-visual-results.png"
+  ],
+  "reason": "CUA policy unavailable; headed real-GPU Playwright live visual recorded (ADR 0005)."
 }

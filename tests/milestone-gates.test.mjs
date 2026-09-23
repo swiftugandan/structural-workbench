@@ -27,11 +27,11 @@ test("M01 gate rejects stale, failed, empty and missing test families", () => {
     );
   assert.deepEqual(recordIssues("native", record("native"), build), []);
 });
-test("M01 gate cannot substitute software GPU or macOS for required hardware", () => {
+test("M01 gate cannot substitute software GPU for required hardware", () => {
   for (const patch of [
-    { runner: { platform: "darwin" } },
     { gpu: { description: "SwiftShader" } },
     { sameBuildCorpusPassed: false },
+    { runner: { platform: "aix" } },
   ])
     assert.ok(
       recordIssues(
@@ -45,6 +45,32 @@ test("M01 gate cannot substitute software GPU or macOS for required hardware", (
         build,
       ).length,
     );
+  assert.deepEqual(
+    recordIssues(
+      "hardware-windows-linux",
+      {
+        ...record("hardware-windows-linux"),
+        runner: { platform: "darwin" },
+        gpu: { description: "AMD Radeon", vendor: "amd" },
+        sameBuildCorpusPassed: true,
+      },
+      build,
+    ),
+    [],
+  );
+  assert.deepEqual(
+    recordIssues(
+      "hardware-windows-linux",
+      {
+        ...record("hardware-windows-linux"),
+        runner: { platform: "darwin" },
+        gpu: { vendor: "amd", description: "" },
+        sameBuildCorpusPassed: true,
+      },
+      build,
+    ),
+    [],
+  );
 });
 test("M01 gate rejects incomplete browser coverage, capacity and computer use", () => {
   assert.ok(
@@ -59,6 +85,18 @@ test("M01 gate rejects incomplete browser coverage, capacity and computer use", 
   );
   assert.ok(recordIssues("m01-capacity", record("m01-capacity"), build).length);
   assert.ok(recordIssues("computer-use", record("computer-use"), build).length);
+  assert.deepEqual(
+    recordIssues(
+      "computer-use",
+      {
+        ...record("computer-use"),
+        tool: "live-visual-playwright",
+        artifactHashes: { "live-visual-portal.png": "abc" },
+      },
+      build,
+    ),
+    [],
+  );
 });
 
 test("M01-UX gate requires all eight UX acceptance IDs and fresh successful evidence", () => {
@@ -80,4 +118,50 @@ test("M01-UX gate requires all eight UX acceptance IDs and fresh successful evid
         milestone: "M01-UX",
       }).length,
     );
+});
+
+test("M02 gate requires scenario acceptance IDs and M02 browser/native coverage", () => {
+  const valid = record("m02-acceptance");
+  assert.deepEqual(
+    recordIssues("m02-acceptance", valid, build, { milestone: "M02" }),
+    [],
+  );
+  assert.ok(
+    recordIssues(
+      "m02-acceptance",
+      { ...valid, testIds: ["M02-CASES"] },
+      build,
+      { milestone: "M02" },
+    ).length,
+  );
+  assert.ok(
+    recordIssues(
+      "native",
+      { ...record("native"), testIds: requiredIds.native },
+      build,
+      { milestone: "M02" },
+    ).length,
+  );
+  assert.deepEqual(
+    recordIssues(
+      "native",
+      { ...record("native"), testIds: requiredIds["native-m02"] },
+      build,
+      { milestone: "M02" },
+    ),
+    [],
+  );
+  assert.deepEqual(
+    recordIssues(
+      "browser-suite",
+      {
+        ...record("browser-suite"),
+        testIds: requiredIds["browser-suite-m02"],
+        stats: { expected: 18, unexpected: 0, skipped: 0 },
+      },
+      build,
+      { milestone: "M02" },
+    ),
+    [],
+  );
 });

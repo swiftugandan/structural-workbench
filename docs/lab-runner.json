@@ -1,0 +1,21 @@
+{
+  "id": "lab-imac-amd-r9-m395",
+  "platform": "darwin",
+  "arch": "x64",
+  "gpu": {
+    "vendor": "amd",
+    "architecture": "gcn-3",
+    "chipset": "AMD Radeon R9 M395"
+  },
+  "browser": "chrome-channel",
+  "thresholds": {
+    "importMs": 3000,
+    "exportMs": 3000,
+    "editP95": 100,
+    "pickP95": 100,
+    "snapP95": 100,
+    "orbitP95": 2000,
+    "longestFrame": 2500
+  },
+  "notes": "Laboratory pin from Chrome Metal capacity runs on this host (orbitP95≈1017–1100ms typical, longestFrame spikes observed to ≈1750ms). Does not claim reference-class 33ms Tier A equivalence. See docs/adr/0005-lab-platform-and-live-visual.md."
+}

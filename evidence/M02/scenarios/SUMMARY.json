@@ -1,0 +1,7 @@
+{
+  "task": "M02-SCENARIOS",
+  "status": "ACCEPTED",
+  "sourceHash": "715a5098d069edab6d6b4ab79b8c90875e01392fcb9d6fc6a433171265ff734e",
+  "buildHash": "9a43510020af07545afc7421271ac0e430ef9a215d45911b30e531417065669a",
+  "notes": "B11 combination; V01+wind envelope with governing c1/C_uls My=-99 kN\u00b7m; envelope tip-probe crash fixed."
+}

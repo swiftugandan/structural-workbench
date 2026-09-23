@@ -1,14 +1,15 @@
 import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { record, evidenceDir } from "./evidence.mjs";
-if (!["linux", "win32"].includes(process.platform)) {
+
+const allowedPlatforms = new Set(["linux", "win32", "darwin"]);
+if (!allowedPlatforms.has(process.platform)) {
   await record("hardware-windows-linux", {
     status: "BLOCKED",
     testCount: 0,
     testIds: [],
     command: process.argv,
-    reason:
-      "Required real Windows/Linux GPU runner is not this host. No platform requirement was waived.",
+    reason: `Unsupported platform ${process.platform}; need linux, win32 or darwin with a real GPU.`,
   });
   process.exitCode = 1;
 } else {
@@ -16,11 +17,27 @@ if (!["linux", "win32"].includes(process.platform)) {
     stdio: "inherit",
     env: { ...process.env, WORKBENCH_REAL_GPU: "1" },
   });
-  const capacity = JSON.parse(
-    await readFile(`${evidenceDir()}/m01-capacity.json`),
-  );
+  const capacityPath = `${evidenceDir()}/m01-capacity.json`;
+  let capacity;
+  try {
+    capacity = JSON.parse(await readFile(capacityPath));
+  } catch {
+    await record("hardware-windows-linux", {
+      status: "FAIL",
+      testCount: 0,
+      testIds: [],
+      command: process.argv,
+      reason: "m01-capacity.json missing after real-GPU browser run",
+      sameBuildCorpusPassed: false,
+    });
+    process.exitCode = 1;
+    process.exit();
+  }
   const gpu = capacity.gpu;
-  const actual = !/swiftshader|software|llvmpipe/i.test(JSON.stringify(gpu));
+  const gpuIdentity = JSON.stringify(gpu || {});
+  const actual =
+    !!(gpu?.description || gpu?.vendor || gpu?.device) &&
+    !/swiftshader|software|llvmpipe/i.test(gpuIdentity);
   const required = [
     "native",
     "contracts",

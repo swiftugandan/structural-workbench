@@ -5,8 +5,10 @@ test("3D exposes Y direction and reference grid; orbit updates compass without m
   await page.goto("/");
   await page.locator("#new-project").click();
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
+  await expect(page.locator("#hash-status")).not.toHaveText("");
   const hash = await page.locator("#hash-status").textContent();
   await page.locator("#view-3d").click();
+  await expect(page.locator("#hash-status")).toHaveText(hash);
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-reference-plane",
     "XY",

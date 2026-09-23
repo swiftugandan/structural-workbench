@@ -25,8 +25,9 @@ const log = (r.stdout || "") + (r.stderr || "");
 await writeFile(`${evidenceDir()}/browser-suite.log`, log);
 const artifacts = (await readdir(evidenceDir())).filter(
   (f) =>
-    /\.(png|html)$/.test(f) ||
-    /^(portal|split|connected|capacity)-.*\.json$/.test(f),
+    (/\.(png|html)$/.test(f) ||
+      /^(portal|split|connected|capacity)-.*\.json$/.test(f)) &&
+    !/^live-visual-/.test(f),
 );
 await record("browser-suite", {
   status: passed ? "PASS" : "FAIL",

@@ -1,8 +1,8 @@
 {
   "taskId": "M01-UX",
   "milestone": "M01",
-  "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36",
-  "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-21T18:11:39.455Z",
+  "observedAt": "2026-09-23T07:44:58.997Z",
   "status": "PASS",
   "testCount": 5,
   "testIds": [
@@ -29,11 +29,11 @@
     "test:performance"
   ],
   "timesMs": [
-    1338,
-    1084,
-    933,
-    1042,
-    865
+    348,
+    364,
+    350,
+    476,
+    344
   ],
   "limitations": "Software GPU baseline only. Not a hardware or full-size release gate."
 }

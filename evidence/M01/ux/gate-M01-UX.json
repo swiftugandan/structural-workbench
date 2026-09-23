@@ -1,8 +1,8 @@
 {
   "milestone": "M01-UX",
-  "status": "BLOCKED",
-  "sourceHash": "cb7767bbd3a6e3986224e094b83a5f2af4b6a4febbd4cd809e1e0401646a1f36",
-  "buildHash": "5da51b214b5c84f67646dc1eeea50de187a9964c9245e7c42993e01246b8410f",
+  "status": "PASS",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "required": [
     "build",
     "contracts",
@@ -13,11 +13,6 @@
     "ux-acceptance",
     "computer-use"
   ],
-  "issues": [
-    "ux-acceptance: missing or unreadable evidence (ENOENT)",
-    "computer-use: BLOCKED_RESOURCE",
-    "computer-use: no executed tests",
-    "computer-use: computer-use evidence missing"
-  ],
-  "observedAt": "2026-09-21T18:12:16.933Z"
+  "issues": [],
+  "observedAt": "2026-09-23T07:45:28.292Z"
 }

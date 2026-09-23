@@ -1,5 +1,5 @@
 {
-  "sourceHash": "24c441df45211cefced8888f1ec4f2298714b3a256195d005643a520b7c761e6",
+  "sourceHash": "695a419edc4afecccfee2f851c2123b56f9f6fdf9a513f746fa04ce618366396",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -14,7 +14,7 @@
   ],
   "files": {
     "app.html": "d563b189f3639e046c9f59a585e5a72415b5ca74bac82f8d5b11437b1f254252",
-    "app.js": "507d085ae31c1727ef8730246e951878a8b9fe6338871175cbf7b4596647cae3",
+    "app.js": "499a48761a8d475d293750a01cd2def58d395ea2f36f1e93da258fc8f560c7cc",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
     "canvas-tools.js": "d88c75a97440dd265cafbf711ac0075cf46e33bb29f0f57b67efdc12cb5bbdca",
     "command-menu.js": "0d3b4035675f46b679b34f5bdd88d478135e8247c2632d77f715fb0ac38f3c6e",
@@ -44,7 +44,7 @@
     "modeling.js": "96b888143f50ece2a64c9151e3211944f4769abb5b94eb7724c4b25dcca6a03f",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "39be62a2361e662cfb6d79f739760c3c3d1775d3a63631269a7aa0b8c4eb7a39",
+    "pkg/workbench_wasm_api_bg.wasm": "2bec4abe4f686cfe02eb2faabe23c87bcb01c7f2a16bee7d7635fae625e73705",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",
@@ -65,6 +65,6 @@
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e",
     "workspace-ui.js": "ca7fa971cf49e666a081ac395df6719d45f1e92350083249c1a51a10a1c3149a"
   },
-  "buildHash": "66292018275eb048644b4399bbfe5fe347888ac1fa9bf5599ebcbe4311083bc3",
-  "releaseStatus": "working-preview-not-accepted"
+  "buildHash": "9b2ccb5c8ad40ed650df3bbe191a9161b1c6c9a79777fd96edac226c5e9637b0",
+  "releaseStatus": "m00-m02-accepted-working-preview"
 }

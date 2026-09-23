@@ -1,8 +1,8 @@
 {
   "taskId": "M01-FULL",
   "milestone": "M01",
-  "sourceHash": "41b746236180167af15ba4808d3b4f94fc60c25c55c889f7a996f5dcef42b487",
-  "buildHash": "d2743420b0da59f74e29b83bc3bde6ad4e0e062bad615408a93628a2861d37a0",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-21T17:37:02.650Z",
+  "observedAt": "2026-09-23T07:59:27.686Z",
   "status": "PASS",
   "testCount": 3,
   "testIds": [
@@ -31,6 +31,6 @@
     "test",
     "tests/visual/m01-graphics.spec.js"
   ],
-  "browser": "153.0.8010.12",
+  "browser": "153.0.8010.53",
   "limitations": "Actual GPU/platform performance acceptance is separate."
 }

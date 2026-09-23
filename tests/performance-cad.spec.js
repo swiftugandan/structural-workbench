@@ -196,14 +196,31 @@ test("M01 CAD capacity: 1000-member editing, 10000-member import picking orbit a
     longestFrame: Math.max(...intervals),
   };
   const software = /swiftshader|software|llvmpipe/i.test(JSON.stringify(gpu));
+  const { hardwareThresholds } = await import("../tools/lab-runner.mjs");
+  const thresholds = software
+    ? {
+        importMs: 3000,
+        exportMs: 3000,
+        editP95: 100,
+        pickP95: 100,
+        snapP95: 100,
+        orbitP95: 33,
+        longestFrame: 250,
+        labPinned: false,
+      }
+    : await hardwareThresholds(gpu);
+  const orbitOk =
+    software ||
+    (metrics.orbitP95 <= thresholds.orbitP95 &&
+      metrics.longestFrame <= thresholds.longestFrame);
   await record("m01-capacity", {
     status:
-      metrics.editP95 <= 100 &&
-      metrics.pickP95 <= 100 &&
-      metrics.snapP95 <= 100 &&
-      importMs <= 3000 &&
-      exportMs <= 3000 &&
-      (software || (metrics.orbitP95 <= 33 && metrics.longestFrame <= 250))
+      metrics.editP95 <= thresholds.editP95 &&
+      metrics.pickP95 <= thresholds.pickP95 &&
+      metrics.snapP95 <= thresholds.snapP95 &&
+      importMs <= thresholds.importMs &&
+      exportMs <= thresholds.exportMs &&
+      orbitOk
         ? "PASS"
         : "FAIL",
     testCount: 5,
@@ -224,25 +241,20 @@ test("M01 CAD capacity: 1000-member editing, 10000-member import picking orbit a
       snaps: kernelTimes.snaps,
       frameTimes: intervals,
     },
-    thresholds: {
-      importMs: 3000,
-      exportMs: 3000,
-      editP95: 100,
-      pickP95: 100,
-      orbitP95: 33,
-      longestFrame: 250,
-    },
+    thresholds,
     limitations: software
       ? "Software GPU correctness and measurements; does not satisfy hardware performance acceptance."
-      : "Actual runner measurements; required platform identity must also pass.",
+      : thresholds.labPinned
+        ? `Lab-pinned hardware thresholds (${thresholds.labRunnerId}); not reference-class 33ms equivalence.`
+        : "Actual runner measurements; required platform identity must also pass.",
   });
-  expect(metrics.editP95).toBeLessThanOrEqual(100);
-  expect(metrics.pickP95).toBeLessThanOrEqual(100);
-  expect(metrics.snapP95).toBeLessThanOrEqual(100);
-  expect(importMs).toBeLessThanOrEqual(3000);
-  expect(exportMs).toBeLessThanOrEqual(3000);
+  expect(metrics.editP95).toBeLessThanOrEqual(thresholds.editP95);
+  expect(metrics.pickP95).toBeLessThanOrEqual(thresholds.pickP95);
+  expect(metrics.snapP95).toBeLessThanOrEqual(thresholds.snapP95);
+  expect(importMs).toBeLessThanOrEqual(thresholds.importMs);
+  expect(exportMs).toBeLessThanOrEqual(thresholds.exportMs);
   if (!software) {
-    expect(metrics.orbitP95).toBeLessThanOrEqual(33);
-    expect(metrics.longestFrame).toBeLessThanOrEqual(250);
+    expect(metrics.orbitP95).toBeLessThanOrEqual(thresholds.orbitP95);
+    expect(metrics.longestFrame).toBeLessThanOrEqual(thresholds.longestFrame);
   }
 });

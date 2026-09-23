@@ -1,14 +1,15 @@
 {
   "taskId": "M00-A",
   "milestone": "M00",
-  "sourceHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
-  "buildHash": "6042cad46ca78964f28140f7802aa6dcfb6ae62707a4d05b35f1a3b7d11a54c3",
+  "sourceHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
+  "buildHash": "5c6f34d49aeb228c1ef12a0721d8b8728fc29137ae752fb07e54a3fa83d68728",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
+  "artifactHashes": {},
   "runner": {
     "platform": "darwin",
     "arch": "x64",
@@ -16,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-21T15:43:37.970Z",
+  "observedAt": "2026-09-23T07:47:42.906Z",
   "command": [
     "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
     "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs"
@@ -216,7 +217,7 @@
         ],
         "modelHash": "85fef026b8fd5ef4bff4dffec9c61fa1a455fcad4f228b5bb5e5bf782ab6a50b",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -1129,6 +1130,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  100000.00000000001,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  100000.00000000001,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -1333,7 +1376,7 @@
         ],
         "modelHash": "b746173099483e9c5aedf960a474c986ed3b74317a7519a0d7ee5ae2ec9de758",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -2246,6 +2289,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -10000.000000000004,
+                  0,
+                  29999.999999999996,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -10000.000000000004,
+                  0,
+                  -1.4551915228366852e-11,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -2450,7 +2535,7 @@
         ],
         "modelHash": "862e3094b81f3921bc745a04501c9cb97a11cbc4860d5ddc8ef408eeb1f39d9c",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -3363,6 +3448,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  0,
+                  1000.0000000000001,
+                  0,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  0,
+                  1000.0000000000001,
+                  0,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -3567,7 +3694,7 @@
         ],
         "modelHash": "b4c25a36e7398d4703c61e50bca2640094f67590bdc202d0f6f0833cc0a64479",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -4480,6 +4607,48 @@
                   -7.275957614183426e-12
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  -9999.999999999993,
+                  0,
+                  0,
+                  0,
+                  -29999.999999999985
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  -9999.999999999993,
+                  0,
+                  0,
+                  0,
+                  -7.275957614183426e-12
+                ]
+              }
             ]
           }
         ],
@@ -4732,7 +4901,7 @@
         ],
         "modelHash": "121a6501b8b78078281afb50ab345c500b390d288ad990b2512c33eb00c09b14",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -5675,6 +5844,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -9999.999999999996,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -9999.999999999996,
+                  0,
+                  -29999.99999999999,
+                  0
+                ]
+              }
             ]
           },
           {
@@ -6556,6 +6767,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  10000.000000000004,
+                  0,
+                  -30000.00000000001,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  10000.000000000004,
+                  0,
+                  0,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -6760,7 +7013,7 @@
         ],
         "modelHash": "2a9ec7f876b9781b8e4f1903aad81e86937d0da0e0a3bea224d6891001ae48b0",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -7673,6 +7926,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -10000.000000000004,
+                  0,
+                  29999.999999999996,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -10000.000000000004,
+                  0,
+                  -1.4551915228366852e-11,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -7895,7 +8190,7 @@
         ],
         "modelHash": "0a52c7e2b531d271b644fcf37a22d248adb7d8dd14923bf8400edf4b8bfecca6",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -8815,6 +9110,63 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -30000.000000000004,
+                  0,
+                  1.0913936421275139e-11,
+                  0
+                ]
+              },
+              {
+                "station": 0.5000000000000001,
+                "kind": "extremum",
+                "components": [
+                  "My"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  3.637978807091713e-12,
+                  0,
+                  -45000.00000000001,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  29999.999999999996,
+                  0,
+                  -2.9103830456733704e-11,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -9037,7 +9389,7 @@
         ],
         "modelHash": "22b4e0bdccd77cff1fea134f9a59146e9b1870d904842e82f1777d8e6b624060",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -9957,6 +10309,63 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -30000,
+                  0,
+                  30000,
+                  0
+                ]
+              },
+              {
+                "station": 0.5,
+                "kind": "extremum",
+                "components": [
+                  "My"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  -15000,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  30000,
+                  0,
+                  30000,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -10166,7 +10575,7 @@
         ],
         "modelHash": "e4f93dcafa64a658f34c216f0c38a7980d625a8d7da5ace1f30e4aad85980964",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -11086,6 +11495,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  1000000,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  1000000,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -11285,7 +11736,7 @@
         ],
         "modelHash": "c3e3651eb0d19be276c1b836e3b69f35665f24082656fd2beb58edbf96ff4679",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "LC1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -12198,6 +12649,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -2309.4660750000003,
+                  0,
+                  3464.1991125000004,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -12437,7 +12930,7 @@
         ],
         "modelHash": "8307c1ae731d6d482da7c97f4bc901cf5e5fe7f62a86dc5d97c1e333fdf50d53",
         "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-        "solverBuildHash": "64784dd0c3b6ccfe811f3f6e78a8520673d2c4a653b51f3fdebaba8a1c9fa158",
+        "solverBuildHash": "05ed4b9bea0c3bf78ebcdb8be305508c5f1b55188f9d543c0dbd3a57a232c29a",
         "caseId": "C1",
         "sourceRevision": 0,
         "nodeIds": [
@@ -13350,6 +13843,48 @@
                   0
                 ]
               }
+            ],
+            "keyStations": [
+              {
+                "station": 0,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -19500,
+                  0,
+                  58500,
+                  0
+                ]
+              },
+              {
+                "station": 1,
+                "kind": "end",
+                "components": [
+                  "N",
+                  "Vy",
+                  "Vz",
+                  "T",
+                  "My",
+                  "Mz"
+                ],
+                "actions": [
+                  0,
+                  0,
+                  -19500,
+                  0,
+                  0,
+                  0
+                ]
+              }
             ]
           }
         ],
@@ -13376,5 +13911,7 @@
         "diagnostics": []
       }
     }
-  ]
+  ],
+  "copiedFrom": "evidence/M01/full",
+  "note": "Same-build copy from accepted M01 full corpus; hashes unchanged."
 }
