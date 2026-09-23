@@ -27,6 +27,7 @@ export async function sourceHash() {
     "package.json",
     "package-lock.json",
     "playwright.config.js",
+    "capabilities.json",
   );
   const h = createHash("sha256");
   for (const p of paths.sort()) {
@@ -77,6 +78,7 @@ if (process.argv[1]?.endsWith("/build.mjs")) {
   );
   await cp("web", "dist", { recursive: true });
   await cp("fixtures/models", "dist/examples", { recursive: true });
+  await cp("capabilities.json", "dist/capabilities.json");
   for (const name of ["project", "request", "response"]) {
     const schema = JSON.parse(await readFile(`contracts/${name}.schema.json`));
     const ajv = new Ajv({
@@ -108,7 +110,6 @@ if (process.argv[1]?.endsWith("/build.mjs")) {
       "node_modules",
       "tools/bin",
       "docs",
-      "capabilities.json",
       "release-manifest.json",
     ],
     files: {},

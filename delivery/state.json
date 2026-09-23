@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M06",
-  "activeTask": "M06-B",
+  "activeTask": "M06-parent",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2133,19 +2133,66 @@
       "dependencies": [
         "M06-A"
       ],
-      "status": "READY",
-      "ownedPaths": [],
-      "acceptanceIds": [
-        "SPECIFICATION-M06"
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "capabilities.json",
+        "web/capabilities-ledger.js",
+        "web/app.js",
+        "web/reports/report.js",
+        "web/index.html",
+        "tools/build.mjs",
+        "crates/wasm-api/src/lib.rs",
+        "contracts/PROTOCOL.md",
+        "tests/capability-ledger.test.mjs",
+        "tests/e2e/capability-ledger.spec.js",
+        "evidence/M06/capability-ledger"
       ],
-      "nextAction": "Publish analysis capability ledger with numerical parity UNKNOWN.",
-      "createdAt": "2026-09-23T12:56:36.000Z"
+      "acceptanceIds": [
+        "SPECIFICATION-M06-capability-ledger"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "node --test tests/capability-ledger.test.mjs",
+        "npm run test:contracts",
+        "npx playwright test tests/e2e/capability-ledger.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "capability-ledger-unit",
+          "status": "PASS",
+          "testCount": 2
+        },
+        {
+          "check": "contracts",
+          "status": "PASS",
+          "testCount": 3
+        },
+        {
+          "check": "capability-ledger-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M06/capability-ledger/capability-ledger-browser.json",
+          "comparisonStatus": "UNKNOWN",
+          "excludedCount": 15,
+          "capabilityCount": 11
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M06/capability-ledger"
+      ],
+      "sourceRevision": "3ee1c3f4e0349e5a83021ca68cbe34192da49ed5",
+      "sourceHash": "4d1a3b540238d675059117b4568f0861525d91c1dc8d347fe4f85b47a190d85f",
+      "buildHash": "fc317f75c87f9354fd54fafb11dc34db54b0634af30c622e9a4ca7f40642ddcb",
+      "nextAction": "Next: parent M06 packaging / release tour gates, or remaining M06 performance and end-to-end release evidence.",
+      "createdAt": "2026-09-23T12:56:36.000Z",
+      "acceptedAt": "2026-09-23T13:23:35.000Z",
+      "acceptanceMeaning": "Bounded analysis capability ledger with UNKNOWN commercial parity, SPEC excluded-domain disclosures in UI/import/report/WASM capabilities, and dist-served capabilities.json. Does not claim parent M06 or full release tour."
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "def8aaf174c428dd408d831ed2a738bdec45dfcc",
-  "lastVerifiedBuildHash": "6886af27d7eddc433121c23bb5fea1ace90c461d101fd5afd4bc78cb3119ab19",
-  "nextAction": "M06-A accepted. Next: capability manifest / domain disclosure or remaining M06 release gates.",
+  "lastVerifiedSourceRevision": "3ee1c3f4e0349e5a83021ca68cbe34192da49ed5",
+  "lastVerifiedBuildHash": "fc317f75c87f9354fd54fafb11dc34db54b0634af30c622e9a4ca7f40642ddcb",
+  "nextAction": "M06-B accepted. Next: parent M06 packaging / release tour, or remaining M06 gates — do not re-claim M00–M05.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "49177a6ca6099207acf6421e32b10404a7a961bb274a8bdf6ad6d49c6599177e"
+  "lastVerifiedSourceHash": "4d1a3b540238d675059117b4568f0861525d91c1dc8d347fe4f85b47a190d85f"
 }

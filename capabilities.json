@@ -1,149 +1,199 @@
 {
   "version": 1,
-  "releaseStatus": "working-preview-not-accepted",
+  "releaseStatus": "analysis-mvp-candidate",
+  "comparisonStatus": "UNKNOWN",
+  "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
+  "supportedDomain": {
+    "summary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1).",
+    "analysisTypes": ["linearStatic"],
+    "formulation": "eulerBernoulli3D / isotropic / prismatic / SI",
+    "limits": {
+      "nodes": 5000,
+      "members": 10000,
+      "cases": 100,
+      "combinations": 500,
+      "activeDofs": 30000,
+      "memoryMiB": 512
+    }
+  },
+  "excludedDomains": [
+    "shells",
+    "solids",
+    "arbitrary CAD solids",
+    "plasticity",
+    "second-order response",
+    "cable/tension-only members",
+    "soil contact",
+    "code-generated wind/seismic loads",
+    "code-certified member sizing",
+    "connections",
+    "reinforcement detailing",
+    "DWG/native PROKON formats",
+    "Revit plugins",
+    "live collaboration",
+    "mobile CAD editing"
+  ],
   "capabilities": [
     {
       "capabilityId": "linear-frame",
       "scopeKey": "eulerBernoulli3D / isotropic / prismatic / SI",
-      "implementationStatus": "implemented-preview",
-      "verificationStatus": "analytical-native-wasm-and-oracle",
-      "comparisonStatus": "UNKNOWN_PROKON",
+      "implementationStatus": "implemented",
+      "verificationStatus": "analytical-native-wasm-oracle-and-parent-gates",
+      "comparisonStatus": "UNKNOWN",
       "resourceBlockers": [],
       "limitations": [
-        "No end releases or interior member point actions; full capacity unverified"
+        "Axial/shear/torsion releases rejected; My/Mz end releases only",
+        "No shear deformation, buckling or geometric nonlinearity",
+        "Memory guard may refuse large models under tight budgets"
       ],
       "evidenceReferences": [
         "evidence/M00/current/numerical.json",
         "evidence/M00/current/wasm.json",
-        "evidence/M00/current/oracle.json"
+        "evidence/M00/current/oracle.json",
+        "evidence/M02/full/gate-M02.json",
+        "evidence/M03/full/gate-M03.json"
       ]
     },
     {
-      "capabilityId": "cantilever-workflow",
-      "scopeKey": "M00 / local Chromium",
-      "implementationStatus": "implemented-preview",
-      "verificationStatus": "browser-tested",
-      "comparisonStatus": "UNKNOWN_PROKON",
+      "capabilityId": "loads-releases-envelopes",
+      "scopeKey": "M02 / UDL / self-weight / point loads / My-Mz releases / combinations / envelopes",
+      "implementationStatus": "implemented",
+      "verificationStatus": "native-wasm-browser-and-parent-gate",
+      "comparisonStatus": "UNKNOWN",
       "resourceBlockers": [],
       "limitations": [
-        "Formal platform acceptance remains open"
+        "Envelope extrema are per-scalar with governing provenance, not a simultaneous force set"
       ],
       "evidenceReferences": [
-        "evidence/M00/current/e2e-tour.json"
+        "evidence/M02/full/gate-M02.json",
+        "evidence/M02/full/m02-acceptance.json"
       ]
     },
     {
-      "capabilityId": "planar-portal-authoring",
-      "scopeKey": "M01 / XZ analytical portal / XZ XY YZ CAD working planes",
-      "implementationStatus": "implemented-preview",
-      "verificationStatus": "same-build-local-automated-checks-pass-external-gates-blocked",
-      "comparisonStatus": "UNKNOWN_PROKON",
-      "resourceBlockers": [
-        "required-platform-runner",
-        "computer-use-policy-unavailable"
-      ],
+      "capabilityId": "spatial-building-frame",
+      "scopeKey": "M03 / CopyBay / dual Workers / 5k capacity / section axis / hierarchy",
+      "implementationStatus": "implemented",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
       "limitations": [
-        "Formal M01 acceptance requires current Windows/Linux real-GPU and computer-use verification",
-        "Connect intersections remains restricted to 2-200 nonparallel XZ members; copies are geometry-only",
-        "Schema requires at least one node and member; full 30000-DOF solve capacity belongs to M03"
+        "OpenSees pack covers S01/S02/B07; R01/B09 native-only per ADR 0006"
       ],
       "evidenceReferences": [
-        "evidence/M01/full/browser-suite.json",
-        "evidence/M01/full/native.json",
-        "evidence/M01/full/m01-cad.json",
-        "evidence/M01/full/m01-capacity.json",
+        "evidence/M03/full/gate-M03.json"
+      ]
+    },
+    {
+      "capabilityId": "persistence-recovery-offline",
+      "scopeKey": "M04 / IndexedDB / SW cache / migrate 0.9→1.0 / crash-quota matrix",
+      "implementationStatus": "implemented",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Unknown major schemas are refused; originals retained on migration"
+      ],
+      "evidenceReferences": [
+        "evidence/M04/full/gate-M04.json"
+      ]
+    },
+    {
+      "capabilityId": "sections-variants-templates",
+      "scopeKey": "M05 / solid-rectangle calculator / variants / portal templates",
+      "implementationStatus": "implemented",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Only solidRectangle section computation; custom J or documented rectangle torsion estimate"
+      ],
+      "evidenceReferences": [
+        "evidence/M05/full/gate-M05.json"
+      ]
+    },
+    {
+      "capabilityId": "elastic-stress-screen",
+      "scopeKey": "M06 / mechanics-v1 fibre stress / non-code disclaimer",
+      "implementationStatus": "implemented",
+      "verificationStatus": "native-and-browser-B12",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Elastic longitudinal fibre stress only — not member stability or building-code compliance"
+      ],
+      "evidenceReferences": [
+        "evidence/M06/stress-screen/stress-screen-browser.json"
+      ]
+    },
+    {
+      "capabilityId": "webgpu-viewport",
+      "scopeKey": "WebGPU / orthographic 3D / GPU ID / Rust screen picking",
+      "implementationStatus": "implemented",
+      "verificationStatus": "lab-metal-and-software-gpu",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Laboratory macOS Metal Tier A accepted per ADR 0005; optional Windows/Linux matrix later",
+        "WebGPU f32 is display-only; engineering truth remains f64"
+      ],
+      "evidenceReferences": [
+        "evidence/M01/full/gate-M01.json",
+        "evidence/M01/lab-metal/hardware-windows-linux.json"
+      ]
+    },
+    {
+      "capabilityId": "cad-authoring",
+      "scopeKey": "M01 / portal / working planes / topology / snap",
+      "implementationStatus": "implemented",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Connect intersections limited to nonparallel XZ members within documented counts"
+      ],
+      "evidenceReferences": [
         "evidence/M01/full/gate-M01.json"
       ]
     },
     {
-      "capabilityId": "webgpu",
-      "scopeKey": "WebGPU / orthographic 3D / GPU ID and Rust screen picking",
-      "implementationStatus": "implemented-preview",
-      "verificationStatus": "same-build-local-automated-checks-pass-external-gates-blocked",
-      "comparisonStatus": "UNKNOWN_PROKON",
-      "resourceBlockers": [
-        "required-platform-runner",
-        "computer-use-policy-unavailable"
-      ],
-      "limitations": [
-        "Full graphics/platform matrix unverified"
-      ],
-      "evidenceReferences": [
-        "evidence/M01/full/graphics.json",
-        "evidence/M01/full/m01-graphics.json",
-        "evidence/M01/full/m01-capacity.json"
-      ]
-    },
-    {
-      "capabilityId": "persistence-report",
-      "scopeKey": "IndexedDB / JSON / CSV / standalone HTML",
-      "implementationStatus": "implemented-preview",
-      "verificationStatus": "browser-tested",
-      "comparisonStatus": "UNKNOWN_PROKON",
-      "resourceBlockers": [],
-      "limitations": [
-        "Offline cache, migrations, history recovery UI not implemented"
-      ],
-      "evidenceReferences": [
-        "evidence/M00/current/browser-suite.json"
-      ]
-    },
-    {
       "capabilityId": "steel-code",
-      "scopeKey": "AISC 360-22 LRFD proposed",
-      "implementationStatus": "not-implemented",
+      "scopeKey": "M07 / AISC 360-22 LRFD proposed",
+      "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
-      "comparisonStatus": "UNKNOWN_PROKON",
-      "resourceBlockers": [],
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [
+        "standards-and-benchmark-bundle"
+      ],
       "limitations": [
-        "Standards, examples and complete checks not acquired"
+        "Outside analysis MVP; blocked pending standard/benchmark acquisition"
       ],
       "evidenceReferences": []
     },
     {
       "capabilityId": "concrete-code",
-      "scopeKey": "ACI 318-19 proposed",
-      "implementationStatus": "not-implemented",
+      "scopeKey": "M08 / ACI 318-19 proposed",
+      "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
-      "comparisonStatus": "UNKNOWN_PROKON",
-      "resourceBlockers": [],
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [
+        "standards-and-benchmark-bundle"
+      ],
       "limitations": [
-        "Standards, examples and detailing not acquired"
+        "Outside analysis MVP; blocked pending standard/benchmark acquisition"
       ],
       "evidenceReferences": []
     },
     {
       "capabilityId": "advanced-suite",
-      "scopeKey": "M09-M23",
-      "implementationStatus": "not-implemented",
+      "scopeKey": "M09–M23",
+      "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
-      "comparisonStatus": "UNKNOWN_PROKON",
+      "comparisonStatus": "UNKNOWN",
       "resourceBlockers": [],
       "limitations": [
-        "See original roadmap and resource register"
+        "Outside analysis MVP; see PARITY_ROADMAP.md"
       ],
       "evidenceReferences": []
-    },
-    {
-      "capabilityId": "local-axes-topology",
-      "scopeKey": "M01-B / Rust f64 axes / split and merge / 2–200 selected XZ nonparallel intersections",
-      "implementationStatus": "implemented-preview",
-      "verificationStatus": "native-and-automated-browser-with-split-beam-opensees",
-      "comparisonStatus": "UNKNOWN_PROKON",
-      "resourceBlockers": [
-        "required-platform-runner"
-      ],
-      "limitations": [
-        "Collinear overlaps excluded; spatial Connect unavailable",
-        "Current hardware and computer-use gates remain blocked"
-      ],
-      "evidenceReferences": [
-        "evidence/M01/topology/topology-authoring.json",
-        "evidence/M01/topology/regression/native.json",
-        "evidence/M01/topology/regression/browser-suite.json",
-        "evidence/M01/full/browser-suite.json",
-        "evidence/M01/full/native.json"
-      ]
     }
   ]
 }

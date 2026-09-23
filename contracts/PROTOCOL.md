@@ -8,7 +8,7 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 
 | Operation | Request payload | Successful payload |
 | --- | --- | --- |
-| capabilities | {} | protocolVersion, schemaVersions[], analysisTypes[], limits, gpu status, designProfiles[] |
+| capabilities | {} | protocolVersion, schemaVersions[], analysisTypes[], limits (nodes/members/cases/combinations/activeDofs/memoryMiB), gpu status, designProfiles[], comparisonStatus (`UNKNOWN` until licensed commercial comparisons exist), supportedDomains[], excludedDomains[], domainDisclosure, limitations[] |
 | createProject | {project: ProjectV1} | snapshot header and render delta |
 | importProject | {jsonUtf8: string, replaceCurrent: boolean} | validated snapshot header, migration report and render delta |
 | applyCommand | {command: CommandV1} | new revision, modelHash, affected IDs, undo availability and render delta |

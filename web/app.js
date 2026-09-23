@@ -35,6 +35,12 @@ import {
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
 import { initOffline, afterSaved } from "./offline.js";
+import {
+  loadCapabilitiesLedger,
+  renderCapabilitiesModalHtml,
+  domainDisclosureFromLedger,
+  importDisclosureMessage,
+} from "./capabilities-ledger.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -181,13 +187,22 @@ $("#modal").addEventListener("close", () => {
 $("#modal").addEventListener("click", (e) => {
   if (e.target === $("#modal")) $("#modal").close();
 });
-const scope = () =>
-  modal(
-    "Capabilities & assumptions",
-    `<p>This is an early structural mechanics workbench, with an actual Rust/WebAssembly solver. It is not an accepted analysis MVP or a code-design product.</p><ul class="scope-list"><li>Linear, small-displacement 3D Euler–Bernoulli frames.</li><li>Nodal actions, uniform member loads, interior point loads, self weight and explicit linear combinations.</li><li>Prescribed supports and planar XZ constraints.</li><li>SI engineering data; display values in engineering metric or SI.</li><li>End My/Mz releases via static condensation; interior point loads via analytical splitting with force-jump stations.</li><li>Multi-case envelopes with per-scalar governing provenance (not a simultaneous force set).</li><li>Conservative memory guard may refuse large models; full size/performance targets are unverified.</li><li>No buckling, nonlinear, shell, seismic, steel-code or concrete-code checks.</li><li>Numerical equivalence to PROKON is unknown.</li></ul><p>Viewport: click to select, Shift-click to toggle, drag blank space to box-select, middle-drag or Space to pan, wheel to zoom towards the pointer. In 3D, Alt-drag or the Orbit tool to orbit. Right-click for context actions. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p><p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`,
-  );
-$("#help").onclick = scope;
-$("#scope").onclick = scope;
+const scope = async () => {
+  try {
+    const ledger = await loadCapabilitiesLedger();
+    modal(
+      "Capabilities & assumptions",
+      renderCapabilitiesModalHtml(ledger, esc),
+    );
+  } catch (e) {
+    modal(
+      "Capabilities & assumptions",
+      `<p>Unable to load the capability ledger (${esc(e.message)}).</p><p class="notice-small" data-testid="parity-unknown">Numerical parity with commercial solvers is UNKNOWN. Excluded domains include shells, solids, plasticity, second-order response, code-certified member sizing, connections and DWG/native PROKON formats.</p>`,
+    );
+  }
+};
+$("#help").onclick = () => void scope();
+$("#scope").onclick = () => void scope();
 async function showRecent() {
   try {
     const rows = await recent();
@@ -381,6 +396,11 @@ async function open(p, options = {}) {
         `Migrated schema ${report.from} → ${report.to}. Original file retained locally (${report.originalSha256.slice(0, 12)}…).` +
         (status ? "\n" + status : "");
     }
+    const disclosure =
+      s.domainDisclosure ||
+      domainDisclosureFromLedger(await loadCapabilitiesLedger().catch(() => ({})));
+    const domainNote = importDisclosureMessage(disclosure);
+    status = domainNote + (status ? "\n" + status : "");
     if (options.recoveryNote) {
       status = options.recoveryNote + (status ? "\n" + status : "");
     }

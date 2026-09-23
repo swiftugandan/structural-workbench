@@ -43,9 +43,7 @@ impl Kernel {
             return Err(err("INVALID_SCHEMA", "Protocol version must be 1"));
         }
         if op == "capabilities" {
-            return Ok(
-                json!({"protocolVersion":1,"schemaVersions":["0.9.0","1.0.0"],"analysisTypes":["linearStatic"],"designProfiles":[],"limits":{"nodes":5000,"members":10000,"memoryMiB":512},"limitations":["Conservative fill guard may reject large models","No code compliance or commercial parity claim","Schema 0.9.0 imports migrate to 1.0.0; unknown majors are refused"]}),
-            );
+            return Ok(capabilities_payload());
         }
         if op == "computeSection" {
             let payload = &r["payload"];
@@ -118,6 +116,7 @@ impl Kernel {
                 self.redo.clear();
                 let mut snap = self.snapshot();
                 snap["migrationReport"] = serde_json::to_value(migration).unwrap();
+                snap["domainDisclosure"] = domain_disclosure();
                 Ok(snap)
             }
             "getSnapshot" | "exportProject" => Ok(self.snapshot()),
@@ -486,4 +485,66 @@ fn normalise_units(kind: &str, a: &mut Value) -> Result<()> {
         _ => {}
     }
     Ok(())
+}
+
+fn excluded_domains() -> Value {
+    json!([
+        "shells",
+        "solids",
+        "arbitrary CAD solids",
+        "plasticity",
+        "second-order response",
+        "cable/tension-only members",
+        "soil contact",
+        "code-generated wind/seismic loads",
+        "code-certified member sizing",
+        "connections",
+        "reinforcement detailing",
+        "DWG/native PROKON formats",
+        "Revit plugins",
+        "live collaboration",
+        "mobile CAD editing"
+    ])
+}
+
+fn domain_disclosure() -> Value {
+    json!({
+        "comparisonStatus": "UNKNOWN",
+        "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
+        "supportedSummary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1).",
+        "excludedDomains": excluded_domains()
+    })
+}
+
+fn capabilities_payload() -> Value {
+    json!({
+        "protocolVersion": 1,
+        "schemaVersions": ["0.9.0", "1.0.0"],
+        "analysisTypes": ["linearStatic"],
+        "designProfiles": [],
+        "gpu": { "required": true, "role": "display-only-f32" },
+        "limits": {
+            "nodes": 5000,
+            "members": 10000,
+            "cases": 100,
+            "combinations": 500,
+            "activeDofs": 30000,
+            "memoryMiB": 512
+        },
+        "comparisonStatus": "UNKNOWN",
+        "supportedDomains": [
+            "linearStaticFrame",
+            "nodalAndMemberLoads",
+            "explicitCombinations",
+            "elasticFibreStressScreen"
+        ],
+        "excludedDomains": excluded_domains(),
+        "domainDisclosure": domain_disclosure(),
+        "limitations": [
+            "Conservative fill guard may reject large models",
+            "No code compliance or commercial parity claim",
+            "Schema 0.9.0 imports migrate to 1.0.0; unknown majors are refused",
+            "Elastic stress screen is mechanics-v1 only — not stability or building-code checks"
+        ]
+    })
 }
