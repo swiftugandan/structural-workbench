@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M07",
-  "activeTask": "M07-parent",
+  "activeMilestone": "M08",
+  "activeTask": null,
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -10,7 +10,8 @@
     "M03",
     "M04",
     "M05",
-    "M06"
+    "M06",
+    "M07"
   ],
   "tasks": {
     "M00-A": {
@@ -2517,7 +2518,7 @@
       "dependencies": [
         "M07-D"
       ],
-      "status": "VERIFYING",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "tools/run-m07-parent.mjs",
         "tools/record-m07-acceptance.mjs",
@@ -2530,17 +2531,23 @@
       ],
       "outcomes": [
         {
-          "check": "review-2026-09-23",
-          "status": "FAIL",
-          "evidencePath": "evidence/M07/full/ACCEPTANCE.md",
-          "notes": "Premature ACCEPTED revoked: overall-status priority inverted PROTOCOL; classification fail-open on zero λ; H1 formula-only overclaim; gitignored log artifact hashes; evaluateDesign dropped from PROTOCOL ops table"
+          "check": "gate-M07",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/full/gate-M07.json"
+        },
+        {
+          "check": "m07-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/full/m07-acceptance.json"
         }
       ],
       "evidencePaths": [
         "evidence/M07/full"
       ],
       "attempts": [],
-      "nextAction": "Re-run npm run verify:m07 after review fixes; do not re-ACCEPT until gate PASS on tracked artifacts and ledger matches scope"
+      "nextAction": "M08 blocked on concrete resources; optional LTB flexure expansion",
+      "acceptedAt": "2026-09-23T16:22:54.668Z",
+      "acceptanceMeaning": "S2 AISC 360-22 LRFD after review remediation: PROTOCOL fail>unsupported overall, fail-closed section/applicability gates, LTB/HSS/torsion unsupported journeys, H1 formula with published φ + shapes-DB W14×99, tracked playwright artifacts. LTB clause math and commercial parity remain out of scope."
     }
   },
   "blockers": [
@@ -2573,9 +2580,9 @@
       "resumeWhen": "Acquire ACI/concrete standard + examples into resources/private and lock hashes (same human-download pattern as M07 AISC)"
     }
   ],
-  "lastVerifiedSourceRevision": "1963d2d13e41aedd12e4b18bb714bc5df54b5c6c",
-  "lastVerifiedBuildHash": "8dae72c2aaccceb83aaada4fc9198fc202bbdac9040132db7fd19887154df503",
-  "nextAction": "M07-parent VERIFYING: re-run verify:m07 after PROTOCOL aggregation + classification fail-closed fixes. M08 still blocked on concrete resources.",
+  "lastVerifiedSourceRevision": "pending-commit",
+  "lastVerifiedBuildHash": "c5e5ac5eb3b4dd45fdb269d81484ba964f0d2a4fc73cb9e17121aa113be3208b",
+  "nextAction": "M07 ACCEPTED after review remediation. M08 blocked on R-CODE-CONCRETE / R-CONCRETE-EXAMPLES.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "c579beb905921b53da630674808a9c15b04ceb0929c128719956bbbb1e81e74f"
+  "lastVerifiedSourceHash": "59b2d58d67008f7c0c4c4c6b510e81bcb84cf816cf4e0bd985fff9b5c8dd374b"
 }

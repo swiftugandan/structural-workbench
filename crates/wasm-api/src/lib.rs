@@ -374,12 +374,13 @@ impl Kernel {
                 });
                 let ctx = workbench_design::MemberContext {
                     member_id,
+                    // Fail-closed: missing family/flags must not default into S2 applicability.
                     section_family: inputs["sectionFamily"]
                         .as_str()
-                        .unwrap_or("W")
+                        .unwrap_or("")
                         .into(),
-                    doubly_symmetric: inputs["doublySymmetric"].as_bool().unwrap_or(true),
-                    prismatic: inputs["prismatic"].as_bool().unwrap_or(true),
+                    doubly_symmetric: inputs["doublySymmetric"].as_bool().unwrap_or(false),
+                    prismatic: inputs["prismatic"].as_bool().unwrap_or(false),
                     fy: inputs["fy"].as_f64().unwrap_or(0.0),
                     fu: inputs["fu"].as_f64().unwrap_or(0.0),
                     length: inputs["length"].as_f64().unwrap_or(0.0),

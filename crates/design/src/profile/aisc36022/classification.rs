@@ -42,12 +42,13 @@ pub fn check_classification(section: &WSectionProps, fy: f64) -> CheckOutcome {
     let r = classify_compression_w(section, fy);
     let ok = r.flanges_nonslender && r.web_nonslender;
     // Classification is a predicate, not a demand/φRn ratio — leave numerical fields null.
+    // Slender elements are outside the M07-C nonslender path → unsupported (not fail).
     CheckOutcome {
         check_id: "classification".into(),
         status: if ok {
             CheckStatus::Pass
         } else {
-            CheckStatus::Fail
+            CheckStatus::Unsupported
         },
         clause: "B4.1a".into(),
         demand: None,
@@ -66,7 +67,7 @@ pub fn check_classification(section: &WSectionProps, fy: f64) -> CheckOutcome {
         message: if ok {
             "Flanges and web are nonslender for compression".into()
         } else {
-            "Slender compression elements outside M07-C nonslender path".into()
+            "Slender compression elements are outside the M07-C nonslender path".into()
         },
     }
 }

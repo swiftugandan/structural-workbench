@@ -70,6 +70,20 @@ pub fn check_compression(
     ky: f64,
     pu: f64,
 ) -> CheckOutcome {
+    if section.ag <= 0.0 || section.rx <= 0.0 || section.ry <= 0.0 {
+        return CheckOutcome::unsupported(
+            "compression",
+            "E3",
+            "Ag, rx and ry are required for flexural-buckling compression",
+        );
+    }
+    if section.bf_over_2tf <= 0.0 || section.h_over_tw <= 0.0 {
+        return CheckOutcome::unsupported(
+            "compression",
+            "B4.1a",
+            "bf/2tf and h/tw are required before E3 compression",
+        );
+    }
     match evaluate_compression(section, fy, length, kx, ky) {
         Ok(r) => {
             let status = if pu <= r.phi_c_pn {

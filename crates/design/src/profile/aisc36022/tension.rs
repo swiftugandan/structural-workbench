@@ -80,6 +80,13 @@ pub fn check_tension(
     end: &TensionEndProps,
     pu: f64,
 ) -> CheckOutcome {
+    if section.ag <= 0.0 {
+        return CheckOutcome::unsupported(
+            "tension",
+            "D2",
+            "Ag is required for tension yielding and rupture",
+        );
+    }
     let r = evaluate_tension(section, fy, fu, end);
     let status = if pu <= r.governing_phi_pn {
         CheckStatus::Pass

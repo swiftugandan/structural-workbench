@@ -28,6 +28,13 @@ pub fn evaluate_shear_major_g21a(section: &WSectionProps, fy: f64) -> ShearResul
 }
 
 pub fn check_shear_major(section: &WSectionProps, fy: f64, vu: f64) -> CheckOutcome {
+    if section.d <= 0.0 || section.tw <= 0.0 {
+        return CheckOutcome::unsupported(
+            "shear",
+            "G2.1",
+            "d and tw are required for major-axis shear",
+        );
+    }
     let r = evaluate_shear_major_g21a(section, fy);
     let status = if vu <= r.phi_v_vn {
         CheckStatus::Pass

@@ -6,13 +6,19 @@
       "S2-D1",
       "S2-E1C",
       "S2-F11B",
-      "S2-G1B"
+      "S2-G1B",
+      "S2-H1B"
     ],
     "fail": [
       "S2-D1-fail",
       "S2-E1C-fail",
       "S2-F11B-fail",
       "S2-G1B-fail"
+    ],
+    "unsupported": [
+      "S2-LTB-unsupported",
+      "S2-HSS-unsupported",
+      "S2-torsion-unsupported"
     ]
   }
 }

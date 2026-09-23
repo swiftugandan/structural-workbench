@@ -72,9 +72,14 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
   });
   await openSteelPanel(page);
 
-  const passSeeds = ["S2-D1", "S2-E1C", "S2-F11B", "S2-G1B"];
+  const passSeeds = ["S2-D1", "S2-E1C", "S2-F11B", "S2-G1B", "S2-H1B"];
   const failSeeds = ["S2-D1-fail", "S2-E1C-fail", "S2-F11B-fail", "S2-G1B-fail"];
-  const results = { pass: [], fail: [] };
+  const unsupportedSeeds = [
+    "S2-LTB-unsupported",
+    "S2-HSS-unsupported",
+    "S2-torsion-unsupported",
+  ];
+  const results = { pass: [], fail: [], unsupported: [] };
 
   for (const id of passSeeds) {
     await runSeed(page, id, "pass");
@@ -84,9 +89,14 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
     await runSeed(page, id, "fail");
     results.fail.push(id);
   }
+  for (const id of unsupportedSeeds) {
+    await runSeed(page, id, "unsupported");
+    results.unsupported.push(id);
+  }
 
   expect(results.pass.length).toBeGreaterThanOrEqual(3);
   expect(results.fail.length).toBeGreaterThanOrEqual(3);
+  expect(results.unsupported.length).toBe(3);
 
   await record("steel-ui-complete-member-matrix", {
     status: "PASS",
@@ -142,12 +152,15 @@ test("model-derived demand check lands in calculation report clause trail", asyn
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
 
   await openSteelPanel(page);
-  await page.locator("[data-testid='steel-seed']").selectOption("S2-D1");
+  await page.locator("[data-testid='steel-seed']").selectOption("S2-G1B");
   await page.locator("[data-testid='steel-load-seed']").click();
   await expect(page.locator("[data-testid='steel-use-analysis']")).toBeEnabled();
   await page.locator("[data-testid='steel-use-analysis']").click();
   await expect(page.locator("[data-testid='steel-case-loaded']")).toContainText(
     /Model-derived/i,
+  );
+  await expect(page.locator("[data-testid='steel-case-loaded']")).toContainText(
+    /LC1|m1/i,
   );
   await page.locator("[data-testid='steel-run-check']").click();
   await expect(page.locator("[data-testid='steel-overall']")).toBeVisible({
@@ -155,6 +168,10 @@ test("model-derived demand check lands in calculation report clause trail", asyn
   });
   const overall = await page.locator("[data-testid='steel-overall']").innerText();
   expect(["pass", "fail", "unsupported", "indeterminate"]).toContain(overall);
+  // B02 tip load produces shear/moment — not an empty demand set.
+  await expect(page.locator("[data-testid='steel-check-row']").first()).toBeVisible();
+  const rowCount = await page.locator("[data-testid='steel-check-row']").count();
+  expect(rowCount).toBeGreaterThan(0);
 
   await closeModal(page);
 
@@ -165,7 +182,9 @@ test("model-derived demand check lands in calculation report clause trail", asyn
   expect(html).toMatch(/Steel design checks/);
   expect(html).toMatch(/data-testid="report-design-run"/);
   expect(html).toMatch(/data-testid="report-design-check"/);
-  expect(html).toMatch(/B4\.1a|D2|F2-1|G2\.1|H1/);
+  expect(html).toMatch(/not envelope maxima/i);
+  expect(html).toMatch(/B4\.1a|D2|F2-1|G2\.1|H1|G2/);
+  expect(html).toContain(overall);
 
   await record("steel-ui-model-derived-report", {
     status: "PASS",

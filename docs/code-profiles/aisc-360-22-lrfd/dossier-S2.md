@@ -37,4 +37,4 @@ manifest/corpus is present (`aisc_s2_resources_verified()`). Private PDFs are no
 required in CI; when vault PDFs exist locally, `verify_vault_pdfs_if_present`
 confirms hashes.
 
-Parent M07 acceptance still needs M07-D UI journeys and same-build packaging.
+Parent M07 packages S2 fixtures + Screen 04 UI on one build. LTB (`Lb>0`), HSS/torsion remain unsupported. H1 is formula-checked with published φ capacities (example unbraced length deferred until LTB lands). Commercial PROKON parity remains UNKNOWN.

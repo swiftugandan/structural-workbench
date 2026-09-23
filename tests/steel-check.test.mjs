@@ -19,17 +19,23 @@ test("fail seeds raise demand above published capacity", () => {
   assert.equal(shearFail.memberIds[0], "S2-G1B-fail");
 });
 
-test("seed catalog has ≥3 pass and ≥3 fail complete-member cases", () => {
+test("seed catalog has ≥3 pass, ≥3 fail, and unsupported scope cases", () => {
   const catalog = seedCatalog();
   const pass = catalog.filter((s) => s.expect === "pass");
   const fail = catalog.filter((s) => s.expect === "fail");
+  const unsupported = catalog.filter((s) => s.expect === "unsupported");
   assert.ok(pass.length >= 3, `pass=${pass.length}`);
   assert.ok(fail.length >= 3, `fail=${fail.length}`);
+  assert.ok(unsupported.length >= 3, `unsupported=${unsupported.length}`);
   for (const s of catalog) {
     const p = seedPayload(s.id);
     assert.equal(p.profileId, "aisc-360-22-lrfd");
     assert.ok(p.inputs.section);
   }
+  const ltb = seedPayload("S2-LTB-unsupported");
+  assert.ok(ltb.inputs.lb > 0);
+  assert.equal(seedPayload("S2-HSS-unsupported").inputs.sectionFamily, "HSS");
+  assert.equal(seedPayload("S2-torsion-unsupported").inputs.torsionPresent, true);
 });
 
 test("applyAnalysisDemand overlays midspan sample and rejects envelopes", () => {
@@ -64,6 +70,21 @@ test("applyAnalysisDemand overlays midspan sample and rejects envelopes", () => 
   assert.equal(next.inputs.station, 0.5);
   assert.match(next.resultId, /^model-derived:/);
   assert.equal(next.inputs.section.ag, base.inputs.section.ag);
+  assert.equal(next.inputs.torsionPresent, false);
+
+  const withTorsion = applyAnalysisDemand(base, {
+    result: {
+      ...result,
+      members: [
+        {
+          id: "m1",
+          length: 5,
+          samples: [{ station: 0.5, actions: [0, 0, 0, 12, 0, 0] }],
+        },
+      ],
+    },
+  });
+  assert.equal(withTorsion.inputs.torsionPresent, true);
 
   assert.throws(
     () =>

@@ -243,7 +243,7 @@ const SEEDS = {
     },
   },
   "S2-H1B": {
-    label: "S2-H1B interaction pass · W14×99",
+    label: "S2-H1B H1 formula pass · W14×99 (published φ; Lb=0 path)",
     expect: "pass",
     payload: () => ({
       profileId: "aisc-360-22-lrfd",
@@ -258,6 +258,8 @@ const SEEDS = {
         length: 14 * FT,
         ky: 1,
         kz: 1,
+        // Example H.1B has unbraced length 14 ft; LTB is deferred. This seed
+        // exercises H1 with published φ capacities on the continuous-brace path.
         lb: 0,
         cb: 1,
         torsionPresent: false,
@@ -273,6 +275,7 @@ const SEEDS = {
         phiBMnx: 642 * KIP_FT,
         phiBMny: 311 * KIP_FT,
         section: {
+          // AISC Shapes Database v16.0 — W14X99 (US customary)
           ag: 29.1 * IN * IN,
           d: 14.2 * IN,
           tw: 0.485 * IN,
@@ -281,15 +284,50 @@ const SEEDS = {
           rx: 6.17 * IN,
           ry: 3.71 * IN,
           zx: 173 * IN * IN * IN,
-          zy: 84 * IN * IN * IN,
+          zy: 83.6 * IN * IN * IN,
           sx: 0,
           sy: 0,
-          bfOver2tf: 9.35,
-          hOverTw: 25.1,
+          bfOver2tf: 9.34,
+          hOverTw: 23.5,
           e: 29000 * KSI,
         },
       },
     }),
+  },
+  "S2-LTB-unsupported": {
+    label: "S2 LTB unsupported · Lb>0 on W18×50",
+    expect: "unsupported",
+    payload: () => {
+      const p = SEEDS["S2-F11B"].payload();
+      p.memberIds = ["S2-LTB-unsupported"];
+      p.resultId = "standalone-S2-LTB-unsupported";
+      p.inputs.lb = 10 * FT;
+      return p;
+    },
+  },
+  "S2-HSS-unsupported": {
+    label: "S2 HSS unsupported · non-W family",
+    expect: "unsupported",
+    payload: () => {
+      const p = SEEDS["S2-D1"].payload();
+      p.memberIds = ["S2-HSS-unsupported"];
+      p.resultId = "standalone-S2-HSS-unsupported";
+      p.inputs.sectionFamily = "HSS";
+      p.inputs.doublySymmetric = true;
+      return p;
+    },
+  },
+  "S2-torsion-unsupported": {
+    label: "S2 torsion unsupported",
+    expect: "unsupported",
+    payload: () => {
+      const p = SEEDS["S2-D1"].payload();
+      p.memberIds = ["S2-torsion-unsupported"];
+      p.resultId = "standalone-S2-torsion-unsupported";
+      p.inputs.torsionPresent = true;
+      p.inputs.t = 10 * KIP_FT;
+      return p;
+    },
   },
 };
 
@@ -358,6 +396,7 @@ export function applyAnalysisDemand(payload, { result, memberId, station = 0.5 }
       my,
       mz,
       length: member.length ?? payload.inputs.length,
+      torsionPresent: !!(payload.inputs.torsionPresent || Math.abs(t) > 0),
     },
   };
 }

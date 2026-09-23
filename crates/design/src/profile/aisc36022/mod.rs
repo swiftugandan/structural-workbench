@@ -178,6 +178,7 @@ impl CodeProfile for Aisc36022LrfdProfile {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::profile::{CheckStatus, DesignDemand, DesignRun, WSectionProps};
 
     #[test]
     fn rejects_hss_and_torsion() {
@@ -186,6 +187,8 @@ mod tests {
         };
         let mut ctx = MemberContext {
             section_family: "HSS".into(),
+            doubly_symmetric: true,
+            prismatic: true,
             ..MemberContext::default()
         };
         assert!(matches!(
@@ -198,5 +201,80 @@ mod tests {
             profile.applicability(&ctx),
             ProfileApplicability::Unsupported(_)
         ));
+    }
+
+    #[test]
+    fn lb_gt_zero_flexure_is_unsupported() {
+        let profile = Aisc36022LrfdProfile {
+            resources_verified: true,
+        };
+        let section = WSectionProps {
+            zx: 1e-4,
+            e: 200e9,
+            ..WSectionProps::default()
+        };
+        let ctx = MemberContext {
+            member_id: "m1".into(),
+            section_family: "W".into(),
+            doubly_symmetric: true,
+            prismatic: true,
+            fy: 345e6,
+            lb: 3.0,
+            section: Some(section),
+            ..MemberContext::default()
+        };
+        let demand = DesignDemand {
+            mz: 100e3,
+            combination_id: "ULS".into(),
+            ..DesignDemand::default()
+        };
+        let checks = profile.run_checks(&demand, &ctx);
+        assert!(checks.iter().any(|c| {
+            c.check_id == "flexure" && c.status == CheckStatus::Unsupported
+        }));
+        assert_eq!(
+            DesignRun::overall_from_checks(&checks),
+            CheckStatus::Unsupported
+        );
+    }
+
+    #[test]
+    fn missing_zx_flexure_is_unsupported_not_numeric_fail() {
+        let profile = Aisc36022LrfdProfile {
+            resources_verified: true,
+        };
+        let ctx = MemberContext {
+            member_id: "m1".into(),
+            section_family: "W".into(),
+            doubly_symmetric: true,
+            prismatic: true,
+            fy: 345e6,
+            lb: 0.0,
+            section: Some(WSectionProps::default()),
+            ..MemberContext::default()
+        };
+        let demand = DesignDemand {
+            mz: 100e3,
+            combination_id: "ULS".into(),
+            ..DesignDemand::default()
+        };
+        let checks = profile.run_checks(&demand, &ctx);
+        let flex = checks.iter().find(|c| c.check_id == "flexure").unwrap();
+        assert_eq!(flex.status, CheckStatus::Unsupported);
+        assert!(flex.demand.is_none());
+    }
+
+    #[test]
+    fn missing_classification_ratios_are_unsupported() {
+        let outcome = classification::check_classification(
+            &WSectionProps {
+                bf_over_2tf: 0.0,
+                h_over_tw: 0.0,
+                e: 200e9,
+                ..WSectionProps::default()
+            },
+            345e6,
+        );
+        assert_eq!(outcome.status, CheckStatus::Unsupported);
     }
 }

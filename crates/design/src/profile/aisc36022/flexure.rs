@@ -36,6 +36,13 @@ pub fn check_flexure_major_continuous(
             "Lateral-torsional buckling (Lb > 0) is outside the continuous-brace F2 yielding path",
         );
     }
+    if section.zx <= 0.0 {
+        return CheckOutcome::unsupported(
+            "flexure",
+            "F2-1",
+            "Zx is required for major-axis flexural yielding",
+        );
+    }
     let r = evaluate_flexure_major_yielding(section, fy);
     let status = if mu <= r.phi_b_mn {
         CheckStatus::Pass

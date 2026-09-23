@@ -83,7 +83,7 @@ await record("steel-ui-unit", {
   testCount: 5,
   testIds: [
     "fail seeds raise demand above published capacity",
-    "seed catalog has ≥3 pass and ≥3 fail complete-member cases",
+    "seed catalog has ≥3 pass, ≥3 fail, and unsupported scope cases",
     "applyAnalysisDemand overlays midspan sample and rejects envelopes",
     "capabilities.json publishes UNKNOWN parity and SPEC exclusions",
     "ledger helpers render disclosures without inventing parity",
