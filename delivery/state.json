@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M07",
-  "activeTask": "M07-A",
+  "activeTask": "M07-B",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2291,7 +2291,7 @@
       "dependencies": [
         "M06-parent"
       ],
-      "status": "IMPLEMENTING",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "crates/design",
         "crates/wasm-api",
@@ -2308,11 +2308,49 @@
         "cargo test -p workbench-design --locked",
         "cargo test -p workbench-wasm-api --locked"
       ],
-      "outcomes": [],
+      "outcomes": [
+        {
+          "check": "native-design",
+          "status": "PASS",
+          "testCount": 4
+        },
+        {
+          "check": "native-wasm-api",
+          "status": "PASS",
+          "testCount": 22
+        }
+      ],
       "evidencePaths": [],
       "attempts": [],
-      "nextAction": "Finish M07-A evidence record; then M07-B acquire AISC 360-22 + Design Examples into resources.lock (PDFs not committed).",
-      "acceptanceMeaning": "Bounded profile trait/registry + evaluateDesign dispatch + disabled aisc-360-22-lrfd metadata. No clause math; parent M07 unaccepted."
+      "nextAction": "M07-B: human downloads AISC PDFs into resources/private; run node tools/acquire-steel-resources.mjs",
+      "acceptanceMeaning": "Bounded profile trait/registry + evaluateDesign dispatch + disabled aisc-360-22-lrfd metadata. No clause math; parent M07 unaccepted.",
+      "acceptedAt": "2026-09-23T14:10:00.000Z"
+    },
+    "M07-B": {
+      "id": "M07-B",
+      "useCase": "Acquire AISC 360-22 and Design Examples v16 into resources.lock",
+      "dependencies": [
+        "M07-A"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "ownedPaths": [
+        "resources/private",
+        "resources.lock.json",
+        "tools/acquire-steel-resources.mjs",
+        "docs/code-profiles/aisc-360-22-lrfd"
+      ],
+      "acceptanceIds": [
+        "VALIDATION-m07-resources"
+      ],
+      "outcomes": [],
+      "evidencePaths": [],
+      "attempts": [
+        {
+          "issue": "aisc.org returns Cloudflare 403 to automated curl/fetch",
+          "resolution": "Acquisition helper ready; waiting for browser download into resources/private/"
+        }
+      ],
+      "nextAction": "User places aisc-360-22.pdf and aisc-design-examples-v16.pdf under resources/private/, then run node tools/acquire-steel-resources.mjs"
     }
   },
   "blockers": [
@@ -2321,12 +2359,12 @@
       "affects": ["M07", "M07-B", "M07-C", "M07-D"],
       "resourceIds": ["R-CODE-STEEL", "R-STEEL-EXAMPLES"],
       "status": "BLOCKED_RESOURCE",
-      "resumeWhen": "Download AISC 360-22 + Design Examples v16 to local vault, hash into resources.lock.json; do not commit PDFs"
+      "resumeWhen": "Browser-download AISC 360-22 + Design Examples v16 into resources/private/; run node tools/acquire-steel-resources.mjs; merge hashes into resources.lock.json"
     }
   ],
   "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
   "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
-  "nextAction": "M07-A profile skeleton in progress (AISC 360-22 LRFD S2 + CodeProfile trait). Next after A: M07-B resource acquisition, or resume M22 browser study UI in parallel.",
+  "nextAction": "M07-A committed. M07-B blocked: download AISC PDFs in a browser to resources/private/, then run acquire-steel-resources.mjs. Parallel: M22-B browser study UI.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
 }

@@ -12,11 +12,20 @@
 
 ## Acquisition (do not invent clauses)
 
+AISC pages are Cloudflare-protected; agents cannot download the PDFs automatically.
+A human must download them in a normal browser, then run the hasher.
+
 1. Download ANSI/AISC 360-22 PDF from [aisc.org AISC 360](https://www.aisc.org/publications/steel-standards/aisc-360) (free).
-2. Download Manual Companion Design Examples v16.0 (+ errata) from AISC Manual Companion pages.
-3. Optionally acquire Shapes Database v16 for catalogue convenience.
-4. Store under a local ignored vault (e.g. `resources/private/` — never commit PDFs).
-5. Record SHA-256 and rights notes in `resources.lock.json`.
+2. Download Manual Companion Design Examples v16.0 from [Manual Companion 16th](https://www.aisc.org/aisc/publications/steel-construction-manual/manual-companion-for-16th-edition/).
+3. Optionally: errata PDF + Shapes Database v16.
+4. Rename into `resources/private/` as:
+   - `aisc-360-22.pdf`
+   - `aisc-design-examples-v16.pdf`
+   - `aisc-manual-companion-v160-vol1-errata.pdf` (optional)
+   - `aisc-shapes-database-v16.xlsx` (optional)
+5. Run `node tools/acquire-steel-resources.mjs` and merge the printed `acquired` entries into `resources.lock.json` (remove `R-CODE-STEEL` / `R-STEEL-EXAMPLES` from `unresolved`).
+
+Never commit the PDFs. Never enable `resources_verified` on the profile until the lock hashes match the local vault.
 
 ## Clause map (to fill in M07-C)
 
