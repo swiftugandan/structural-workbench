@@ -1,0 +1,13 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 tests/e2e/bay-copy.spec.js:12:1 › M03 copy portal into bays, analyse and inspect My Mz torsion (7.3s)
+  ✓  2 tests/e2e/dual-workers.spec.js:9:1 › M03 dual Workers: cancel leaves model intact; superseded solve stays stale (8.2s)
+  ✓  3 tests/e2e/hierarchy.spec.js:18:1 › M03 hierarchy: split shows physical parent and analytical children (3.9s)
+  ✓  4 tests/e2e/section-axis.spec.js:32:1 › M03 section-axis: edit localY roll swaps My/Mz end actions (5.4s)
+
+  4 passed (26.7s)
+(node:19452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:19452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

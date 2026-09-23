@@ -1,0 +1,121 @@
+{
+  "taskId": "M03-parent",
+  "milestone": "M03",
+  "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
+  "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "ACCEPTANCE.md": "a13f0295694fc07ac81a3e3634c48583eac284e5eb9b5e08c39f590a2973e5d0"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T10:38:02.424Z",
+  "status": "PASS",
+  "testCount": 8,
+  "testIds": [
+    "M03-ORBIT-COPY",
+    "M03-DUAL-WORKERS",
+    "M03-ORACLE",
+    "M03-CAPACITY",
+    "M03-UNIT-ACTION",
+    "M03-ROLL",
+    "M03-SECTION-AXIS",
+    "M03-HIERARCHY"
+  ],
+  "command": [
+    "node",
+    "tools/record-m03-acceptance.mjs",
+    "npm",
+    "run",
+    "verify:milestone",
+    "--",
+    "M03"
+  ],
+  "artifacts": [
+    "ACCEPTANCE.md"
+  ],
+  "criteria": [
+    {
+      "id": "M03-ORBIT-COPY",
+      "title": "Spatial orbit and bay copy",
+      "evidence": [
+        "m03-browser.json",
+        "evidence/M03/bay-copy"
+      ],
+      "observation": "CopyBay portal journey builds a spatial frame, analyses My/Mz/T and round-trips export."
+    },
+    {
+      "id": "M03-DUAL-WORKERS",
+      "title": "Separate model/analysis Workers and cancel",
+      "evidence": [
+        "m03-browser.json",
+        "evidence/M03/dual-workers"
+      ],
+      "observation": "Cancel restores the model; a superseded solve never becomes Current after edits."
+    },
+    {
+      "id": "M03-ORACLE",
+      "title": "Skewed and asymmetric OpenSees pack",
+      "evidence": [
+        "m03-oracle.json",
+        "evidence/M03/oracle-pack"
+      ],
+      "observation": "S01 skewed spatial frame and S02 asymmetric portal match the OpenSees pack on this build."
+    },
+    {
+      "id": "M03-CAPACITY",
+      "title": "5,000-node multibay solve and memory guard",
+      "evidence": [
+        "m03-capacity.json",
+        "evidence/M03/capacity"
+      ],
+      "observation": "Connected 5k-node frame solves under the median gate; tight MEMORY_LIMIT refuses high-fill."
+    },
+    {
+      "id": "M03-UNIT-ACTION",
+      "title": "All-axis unit-action tests",
+      "evidence": [
+        "native.json"
+      ],
+      "observation": "Tip unit loads recover tip end actions with root lever balance and section@0 = −q_i."
+    },
+    {
+      "id": "M03-ROLL",
+      "title": "Member reversal and roll",
+      "evidence": [
+        "native.json",
+        "m03-browser.json"
+      ],
+      "observation": "Endpoint reversal remains covered by m01 invariance; localY roll swaps My/Mz and halves tip uz."
+    },
+    {
+      "id": "M03-SECTION-AXIS",
+      "title": "Section-axis editing",
+      "evidence": [
+        "m03-browser.json",
+        "evidence/M03/section-axis"
+      ],
+      "observation": "Property-form localY edit re-analyses with swapped end moments in the forces table."
+    },
+    {
+      "id": "M03-HIERARCHY",
+      "title": "Physical-to-analytical mapping UI",
+      "evidence": [
+        "m03-browser.json",
+        "evidence/M03/hierarchy"
+      ],
+      "observation": "Split children group under physical parent in the model tree with inspector lineage."
+    }
+  ],
+  "limitations": "Bounded spatial-building-frame parent; no commercial equivalence claim."
+}

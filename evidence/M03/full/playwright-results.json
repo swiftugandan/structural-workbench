@@ -1,0 +1,279 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/e2e/bay-copy.spec.js",
+      "tests/e2e/dual-workers.spec.js",
+      "tests/e2e/section-axis.spec.js",
+      "tests/e2e/hierarchy.spec.js"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/M03/full/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e/bay-copy.spec.js",
+      "file": "e2e/bay-copy.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 copy portal into bays, analyse and inspect My Mz torsion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7325,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T10:37:36.702Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-bay-copy-M03-copy-port-3f7ab-e-and-inspect-My-Mz-torsion/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "43ff70d730d535be037d-38c8147a809edc89c121",
+          "file": "e2e/bay-copy.spec.js",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/dual-workers.spec.js",
+      "file": "e2e/dual-workers.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 dual Workers: cancel leaves model intact; superseded solve stays stale",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8159,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T10:37:44.469Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "904c0a01dd53dc04daa3-57ff540c538dc8193d46",
+          "file": "e2e/dual-workers.spec.js",
+          "line": 9,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/hierarchy.spec.js",
+      "file": "e2e/hierarchy.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 hierarchy: split shows physical parent and analytical children",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3876,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T10:37:52.777Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-hierarchy-M03-hierarch-9d9d7-ent-and-analytical-children/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0f92d2632f5c64f63d83-808af6c090a418cc38cc",
+          "file": "e2e/hierarchy.spec.js",
+          "line": 18,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/section-axis.spec.js",
+      "file": "e2e/section-axis.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 section-axis: edit localY roll swaps My/Mz end actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5388,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T10:37:56.739Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-section-axis-M03-secti-733aa-oll-swaps-My-Mz-end-actions/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2755c1b82590d4747dc5-0bf76314a24920b79141",
+          "file": "e2e/section-axis.spec.js",
+          "line": 32,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-23T10:37:35.609Z",
+    "duration": 26722.335,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

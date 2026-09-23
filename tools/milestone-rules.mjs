@@ -43,6 +43,14 @@ export const m02 = [
   "browser-suite",
   "m02-acceptance",
 ];
+export const m03 = [
+  "build",
+  "native",
+  "m03-capacity",
+  "m03-oracle",
+  "m03-browser",
+  "m03-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -63,6 +71,22 @@ export const requiredIds = {
     "M02-PRESCRIBED",
     "M02-ENVELOPE",
     "M02-INVALID",
+  ],
+  "m03-acceptance": [
+    "M03-ORBIT-COPY",
+    "M03-DUAL-WORKERS",
+    "M03-ORACLE",
+    "M03-CAPACITY",
+    "M03-UNIT-ACTION",
+    "M03-ROLL",
+    "M03-SECTION-AXIS",
+    "M03-HIERARCHY",
+  ],
+  "m03-browser": [
+    "M03 copy portal into bays, analyse and inspect My Mz torsion",
+    "M03 dual Workers: cancel leaves model intact; superseded solve stays stale",
+    "M03 section-axis: edit localY roll swaps My/Mz end actions",
+    "M03 hierarchy: split shows physical parent and analytical children",
   ],
   "browser-suite": [
     "Canvas first: place support, draw force, edit assignments and undo without dialogs",
@@ -97,6 +121,12 @@ export const requiredIds = {
     "v01_envelope_exposes_governing_combination",
     "n22_envelope_rejects_single_case",
   ],
+  "native-m03": [
+    "analytical_b01_to_b11",
+    "m01_global_rotation_relabelling_reordering_and_endpoint_reversal",
+    "m03_all_axis_unit_nodal_actions",
+    "m03_local_y_roll_swaps_bending_axes",
+  ],
   "m01-cad": [
     "M01-draw-snap-crossings",
     "M01-multiselect-atomic-edit",
@@ -130,11 +160,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
   const ids =
     milestone === "M02" && name === "native"
       ? requiredIds["native-m02"]
-      : milestone === "M02" && name === "browser-suite"
-        ? requiredIds["browser-suite-m02"]
-        : ["M01", "M01-UX", "M02"].includes(milestone)
-          ? requiredIds[name] || []
-          : [];
+      : milestone === "M03" && name === "native"
+        ? requiredIds["native-m03"]
+        : milestone === "M02" && name === "browser-suite"
+          ? requiredIds["browser-suite-m02"]
+          : ["M01", "M01-UX", "M02", "M03"].includes(milestone)
+            ? requiredIds[name] || []
+            : [];
   for (const id of ids)
     if (!e.testIds?.includes(id))
       errors.push(`${name}: missing required test ${id}`);
@@ -145,6 +177,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 18)
   )
     errors.push(`${name}: failed, skipped or incomplete regression journey`);
+  if (
+    name === "m03-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 4)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M03 browser journey`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);

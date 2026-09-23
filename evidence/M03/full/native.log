@@ -1,0 +1,34 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 15 tests
+test analytical_id_collision_is_rejected ... ok
+test b07_key_stations_capture_exact_midspan_moment ... ok
+test edits_scaling_and_instability ... ok
+test load_scale_and_superposition ... ok
+test m03_local_y_roll_swaps_bending_axes ... ok
+test n06_removed_support_is_unstable_at_analyse ... ok
+test n22_envelope_rejects_single_case ... ok
+test m01_global_rotation_relabelling_reordering_and_endpoint_reversal ... ok
+test p01_interior_point_matches_b05_closed_form ... ok
+test point_station_at_end_is_invalid ... ok
+test m03_all_axis_unit_nodal_actions ... ok
+test r01_my_releases_under_udl_match_simply_supported ... ok
+test translation_and_storage_order_invariance ... ok
+test analytical_b01_to_b11 ... ok
+test v01_envelope_exposes_governing_combination ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running unittests src/lib.rs (target/debug/deps/workbench_assembly-e0f45365098a542c)
+     Running tests/analytical.rs (target/debug/deps/analytical-86605e9bb0214005)
+   Doc-tests workbench_assembly
