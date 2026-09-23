@@ -10,7 +10,7 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "cli-test.log": "081cb1e741d0c923c5652faf850c78398743a41261a13b37a453a2f852126600",
+    "cli-test.txt": "081cb1e741d0c923c5652faf850c78398743a41261a13b37a453a2f852126600",
     "s22-e-report.json": "fa2030d10ac435af4c3ab567ef200319b3504171037649d938dc3ac4a51e0701"
   },
   "runner": {
@@ -20,7 +20,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T13:34:57.177Z",
+  "observedAt": "2026-09-23T13:36:39.712Z",
   "status": "PASS",
   "testCount": 1,
   "testIds": [
@@ -34,7 +34,7 @@
     "--locked"
   ],
   "artifacts": [
-    "cli-test.log",
+    "cli-test.txt",
     "s22-e-report.json"
   ],
   "variantCount": 2,
