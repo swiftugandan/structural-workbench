@@ -408,7 +408,7 @@ fn analyse_assembled(project: &Project, case: &str) -> Result<Analysis> {
         reactions: support_values,
         generated_constraint_reactions: generated,
         members: member_results,
-        numerical_checks: json!({"scaledResidual":solved.residual,"minScaledPivot":solved.min_pivot,"matrixNnz":solved.nnz,"globalBalance":balances,"origin":[0,0,0],"forcePass":true,"momentPass":true}),
+        numerical_checks: json!({"scaledResidual":solved.residual,"minScaledPivot":solved.min_pivot,"matrixNnz":solved.nnz,"factorNnzEstimate":solved.factor_nnz_estimate,"globalBalance":balances,"origin":[0,0,0],"forcePass":true,"momentPass":true}),
         diagnostics,
     })
 }

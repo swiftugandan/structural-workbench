@@ -1,0 +1,64 @@
+{
+  "taskId": "M03-D",
+  "milestone": "M03",
+  "sourceHash": "a8ccaee1efaaa7309775d9385d80539486d8a86ae51c800fb103c6738b80e6e7",
+  "buildHash": "aff0bc50e5dfacf69b2a7b447ec0033baa9ac1ec4d9dea5a7d707f7c6fe6f337",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "validate.mjs": "c7ccf3c5c923f431a0667fb656b9cc6a94ea2cc08e7509b766d0a4165d0d5217",
+    "capacity-results.json": "f0725f0f6485c41b0ebaec16ed50c3d97ca16f79af3be2b73bcb8fe3c109fd54",
+    "README.md": "7e4e143a4bb5927e5cca5b50cf0b3e4e54ce946bea743ac317c12d678d69aad2"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T10:01:49.150Z",
+  "status": "PASS",
+  "testCount": 6,
+  "summary": {
+    "seed": 1,
+    "grid": "20x25x10",
+    "nodes": 5000,
+    "members": 10000,
+    "supports": 500,
+    "activeDofs": 27000,
+    "matrixNnz": 334956,
+    "factorNnzEstimate": 16077888,
+    "solveMs": [
+      4774,
+      4534,
+      4530,
+      4552,
+      4662
+    ],
+    "medianSolveMs": 4552,
+    "gateMs": 5000,
+    "memoryLimitMiB": 512,
+    "highFill": {
+      "description": "Same 5k-node multibay with memoryLimitMiB=64 forces the sparse fill guard",
+      "nodes": 5000,
+      "members": 10000,
+      "memoryLimitMiB": 64,
+      "refused": true,
+      "code": "MEMORY_LIMIT"
+    }
+  },
+  "command": [
+    "node",
+    "evidence/M03/capacity/validate.mjs"
+  ],
+  "artifacts": [
+    "validate.mjs",
+    "capacity-results.json",
+    "README.md"
+  ]
+}

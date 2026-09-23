@@ -5,9 +5,22 @@ pub struct Solution {
     pub residual: f64,
     pub min_pivot: f64,
     pub nnz: usize,
+    pub factor_nnz_estimate: usize,
 }
 pub trait LinearSolver {
     fn solve(&self, a: &CsMat<f64>, b: &[f64], budget: usize) -> Result<Solution>;
+}
+
+/// Conservative bytes for a sparse LDL attempt: matrix + estimated factor fill,
+/// never pretending a building frame is dense. Dense n² remains a hard ceiling.
+fn sparse_budget_bytes(n: usize, nnz: usize) -> Option<usize> {
+    let dense_triangle = n.checked_mul(n.saturating_add(1) / 2)?;
+    // 3D framed grids typically fill far less than dense; 48× nnz is a cautious multiplier.
+    let factor = nnz.checked_mul(48)?.min(dense_triangle);
+    let entries = nnz.checked_add(factor)?;
+    entries
+        .checked_mul(16)?
+        .checked_add(n.checked_mul(64)?)
 }
 pub struct SparseLdl;
 impl LinearSolver for SparseLdl {
@@ -19,13 +32,15 @@ impl LinearSolver for SparseLdl {
                 residual: 0.,
                 min_pivot: 1.,
                 nnz: 0,
+                factor_nnz_estimate: 0,
             });
         }
-        if n.checked_mul(n)
-            .and_then(|x| x.checked_mul(16))
-            .unwrap_or(usize::MAX)
-            > budget
-        {
+        let factor_nnz_estimate = a
+            .nnz()
+            .saturating_mul(48)
+            .min(n.saturating_mul(n.saturating_add(1) / 2));
+        let estimate = sparse_budget_bytes(n, a.nnz()).unwrap_or(usize::MAX);
+        if estimate > budget {
             return Err(err(
                 "MEMORY_LIMIT",
                 "Conservative sparse fill estimate exceeds memory budget",
@@ -87,6 +102,20 @@ impl LinearSolver for SparseLdl {
             residual: eta,
             min_pivot: min,
             nnz: a.nnz(),
+            factor_nnz_estimate,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn sparse_budget_allows_framed_scale_but_rejects_near_dense() {
+        // ~27k free DOFs with a few hundred thousand matrix entries stays under 512 MiB / 2.
+        let budget = 512usize * 1024 * 1024 / 2;
+        assert!(sparse_budget_bytes(27_000, 330_000).unwrap() < budget);
+        // Near-dense pathological fill still exceeds the same budget.
+        assert!(sparse_budget_bytes(8_000, 8_000 * 4_000).unwrap() > budget);
     }
 }

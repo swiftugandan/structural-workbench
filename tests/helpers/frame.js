@@ -1,19 +1,20 @@
-// Deterministic connected 20×25×10 frame. All vertical members plus in-plane
-// beam edges are connected; no disconnected-cantilever performance shortcut.
-export function frame(base, count = 10000) {
+// Deterministic connected multibay frame generator.
+// Default seed layout: 20×25×10 nodes (5,000), columns + floor beams, fixed bases.
+export function frame(base, count = 10000, options = {}) {
+  const seed = options.seed ?? 1;
+  const nx = options.nx ?? 20,
+    ny = options.ny ?? 25,
+    nz = options.nz ?? 10;
   const p = structuredClone(base);
-  p.id = "cadCapacity";
-  p.name = "CAD capacity frame";
+  p.id = options.id ?? "cadCapacity";
+  p.name = options.name ?? "CAD capacity frame";
   p.analysisMode = "spatial";
   p.nodes = [];
   p.members = [];
   p.supports = [];
   p.loads = [];
   p.combinations = [];
-  const nx = 20,
-    ny = 25,
-    nz = 10,
-    id = (x, y, z) => `n${z * nx * ny + y * nx + x}`;
+  const id = (x, y, z) => `n${z * nx * ny + y * nx + x}`;
   for (let z = 0; z < nz; z++)
     for (let y = 0; y < ny; y++)
       for (let x = 0; x < nx; x++) {
@@ -47,7 +48,7 @@ export function frame(base, count = 10000) {
           add(id(x, y, z), id(x, y + 1, z));
       }
   p.members = p.members.slice(0, count);
-  if (count < 10000) {
+  if (count < nx * ny * (nz - 1) + nx * ny * nz * 2) {
     const used = new Set(p.members.flatMap((m) => [m.start, m.end]));
     p.nodes = p.nodes.filter((n) => used.has(n.id));
     p.supports = p.supports.filter((s) => used.has(s.node));
@@ -61,5 +62,11 @@ export function frame(base, count = 10000) {
       values: [1000, 0, -1000, 0, 0, 0],
     },
   ];
+  p.metadata = {
+    ...(p.metadata || {}),
+    description: `Multibay generator seed=${seed} grid=${nx}x${ny}x${nz} members=${p.members.length}`,
+    createdBy: p.metadata?.createdBy || "Structural Workbench",
+    entityLabels: p.metadata?.entityLabels || {},
+  };
   return p;
 }

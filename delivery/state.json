@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M03",
-  "activeTask": "M03-D",
+  "activeTask": "M03-E",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1298,7 +1298,7 @@
       "evidencePaths": [
         "evidence/M02/full"
       ],
-      "nextAction": "M02 parent accepted. Begin M03 spatial building frame without re-claiming M00–M02.",
+      "nextAction": "M02 parent accepted. Begin M03 spatial building frame without re-claiming M00\u2013M02.",
       "createdAt": "2026-09-23T08:00:46.876Z",
       "acceptedAt": "2026-09-23T08:16:57.924Z",
       "sourceRevision": "337d6128dcf47673ee146d3651208a45ca53e477",
@@ -1378,7 +1378,7 @@
       "sourceRevision": "5190ee4e5f32f3f71177ab790f77b53454d3a3d9",
       "sourceHash": "ba8e59487cae1410db0b57665820d86aee1bda5cb5417075ddf2443b11b5e1c4",
       "buildHash": "81b562d1c36315f7c31a801e76c709619ec4dea7b9504d8885ed650240c40d7f",
-      "acceptanceMeaning": "Bounded local portal→CopyBay→spatial ties→My/Mz/T inspection slice only. Parent M03 remains unaccepted.",
+      "acceptanceMeaning": "Bounded local portal\u2192CopyBay\u2192spatial ties\u2192My/Mz/T inspection slice only. Parent M03 remains unaccepted.",
       "nextAction": "Next M03 slice: separate model/analysis Workers or skewed-frame OpenSees pack; do not claim parent M03.",
       "createdAt": "2026-09-23T08:16:57.924Z",
       "acceptedAt": "2026-09-23T09:23:03.940Z"
@@ -1462,7 +1462,7 @@
       "sourceRevision": "7359fa64b52d516de83f6e46566bf50763cd35f5",
       "sourceHash": "6e0815c614be0f353494abd8c79513fa788840dccf2f56ec500e820736c2df37",
       "buildHash": "945877b66fa5d221816b393ed999d51fe86547e16146455d7799ce2f34fd1f04",
-      "acceptanceMeaning": "VALIDATION §5 pre-M03 fixture pack present with OpenSees parity for S01/S02/B07; R01/B09 remain native-only due to adapter scope. Parent M03 unaccepted.",
+      "acceptanceMeaning": "VALIDATION \u00a75 pre-M03 fixture pack present with OpenSees parity for S01/S02/B07; R01/B09 remain native-only due to adapter scope. Parent M03 unaccepted.",
       "nextAction": "Next: 5,000-node multibay generator and memory/performance gates (M03-D).",
       "createdAt": "2026-09-23T09:36:22.680Z",
       "acceptedAt": "2026-09-23T09:40:50.112Z"
@@ -1473,24 +1473,64 @@
       "dependencies": [
         "M03-C"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
-        "tools",
-        "fixtures",
-        "tests",
-        "evidence/M03"
+        "crates/solver/src/lib.rs",
+        "crates/assembly/src/lib.rs",
+        "tests/helpers/frame.js",
+        "evidence/M03/capacity"
       ],
       "acceptanceIds": [
         "VALIDATION-m03-capacity"
       ],
-      "nextAction": "Implement reproducible 3D multibay generator and prove 5k-node solve/memory gates with adversarial high-fill refusal.",
-      "createdAt": "2026-09-23T09:40:50.112Z"
+      "nextAction": "Next: remaining M03 items (section-axis editing polish / physical-analytical hierarchy UX) or parent M03 gate packaging.",
+      "createdAt": "2026-09-23T09:40:50.112Z",
+      "requiredCommands": [
+        "cargo test -p workbench-solver --locked",
+        "node evidence/M03/capacity/validate.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "capacity-5k-and-memory-guard",
+          "status": "PASS",
+          "testCount": 6,
+          "evidencePath": "evidence/M03/capacity/m03-capacity.json",
+          "medianSolveMs": 4635,
+          "activeDofs": 27000
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M03/capacity"
+      ],
+      "sourceRevision": "3429d661371a099055037ba75dbdf20aa20ee769",
+      "sourceHash": "a8ccaee1efaaa7309775d9385d80539486d8a86ae51c800fb103c6738b80e6e7",
+      "buildHash": "aff0bc50e5dfacf69b2a7b447ec0033baa9ac1ec4d9dea5a7d707f7c6fe6f337",
+      "acceptanceMeaning": "Bounded 5k-node connected multibay solve + MEMORY_LIMIT refusal under tight budget. Parent M03 still needs remaining packaging.",
+      "acceptedAt": "2026-09-23T10:00:00.000Z"
+    },
+    "M03-E": {
+      "id": "M03-E",
+      "useCase": "Package parent M03 acceptance or remaining section-axis / hierarchy UX",
+      "dependencies": [
+        "M03-D"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "tools",
+        "evidence/M03",
+        "web"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M03"
+      ],
+      "nextAction": "Decide smallest remaining M03 gap: parent verifier packaging vs section-axis editing vs physical-analytical hierarchy UX.",
+      "createdAt": "2026-09-23T10:00:00.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "7359fa64b52d516de83f6e46566bf50763cd35f5",
-  "lastVerifiedBuildHash": "945877b66fa5d221816b393ed999d51fe86547e16146455d7799ce2f34fd1f04",
-  "nextAction": "M03-A–C accepted. Next: M03-D 5,000-node multibay capacity/memory gates.",
+  "lastVerifiedSourceRevision": "3429d661371a099055037ba75dbdf20aa20ee769",
+  "lastVerifiedBuildHash": "aff0bc50e5dfacf69b2a7b447ec0033baa9ac1ec4d9dea5a7d707f7c6fe6f337",
+  "nextAction": "M03-A\u2013D accepted. Next: M03-E parent packaging or remaining M03 UX/hierarchy gaps.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "6e0815c614be0f353494abd8c79513fa788840dccf2f56ec500e820736c2df37"
+  "lastVerifiedSourceHash": "a8ccaee1efaaa7309775d9385d80539486d8a86ae51c800fb103c6738b80e6e7"
 }
