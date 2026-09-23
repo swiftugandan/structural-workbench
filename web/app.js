@@ -16,6 +16,7 @@ import { workspaceUI } from "./workspace-ui.js";
 import { cad } from "./cad.js";
 import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
+import { lineageSummary, renderMemberNav } from "./hierarchy.js";
 import { Gateway } from "./state/transport.js";
 import { save, recent } from "./state/storage.js";
 import { Viewport } from "./render/viewport.js";
@@ -104,9 +105,17 @@ function selectEntities(ids, toggle = false) {
   renderInspector();
   renderNav();
   viewport.update(project, diagramResult(), selected);
-  $("#selected-status").textContent = viewport.selection.size
-    ? `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).map(label).join(", ")}`
-    : "No entities selected";
+  if (!viewport.selection.size)
+    $("#selected-status").textContent = "No entities selected";
+  else if (viewport.selection.size === 1) {
+    const only = [...viewport.selection][0];
+    const member = project.members.find((m) => m.id === only);
+    const lineage = member ? lineageSummary(project, member, label) : null;
+    $("#selected-status").textContent = lineage
+      ? `Analytical ${label(member.id)} · physical ${lineage.physicalLabel}${lineage.stations ? ` · ${lineage.stations}` : ""}`
+      : `1 selected · ${label(only)}`;
+  } else
+    $("#selected-status").textContent = `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).map(label).join(", ")}`;
 }
 const cadTools = cad({
   getProject: () => project,
@@ -519,13 +528,7 @@ function renderNav() {
       ([key, groupLabel, icon]) =>
         `${{ nodes: "Structure", sections: "Member properties", loadCases: "Loading" }[key] ? `<h3 class="nav-section-title">${{ nodes: "Structure", sections: "Member properties", loadCases: "Loading" }[key]}</h3>` : ""}<button aria-label="${groupLabel} ${project[key].length}" data-group="${key}"><span class="nav-icon" aria-hidden="true">${structuralIcon(icon)}</span><span class="nav-label">${groupLabel}</span><span class="count">${project[key].length}</span></button>${
           key === "members"
-            ? project.members
-                .filter((m, i) => i < 100 || m.id === selected)
-                .map(
-                  (m) =>
-                    `<button class="entity ${selected === m.id ? "active" : ""}" data-member="${esc(m.id)}" ${selected === m.id ? 'aria-current="true"' : ""}><span class="nav-label">${esc(label(m.id))}</span><small>${esc(label(m.start))} → ${esc(label(m.end))}</small></button>`,
-                )
-                .join("")
+            ? renderMemberNav(project.members, { selected, label, esc })
             : ""
         }`,
     )
@@ -656,11 +659,13 @@ function renderInspector() {
     start.position.every((x) => x === 0) &&
     end.position[1] === 0 &&
     end.position[2] === 0;
+  const lineage = lineageSummary(project, m, label);
   $("#selection-tag").textContent = label(m.id);
-  $("#selected-status").textContent =
-    `Member ${label(m.id)} selected · ${label(m.start)} → ${label(m.end)}`;
+  $("#selected-status").textContent = lineage
+    ? `Analytical ${label(m.id)} · physical ${lineage.physicalLabel}${lineage.stations ? ` · ${lineage.stations}` : ""}`
+    : `Member ${label(m.id)} selected · ${label(m.start)} → ${label(m.end)}`;
   $("#inspector-content").innerHTML =
-    `<div class="inspector-heading"><span class="symbol">${structuralIcon("member")}</span><div><strong>Member ${esc(label(m.id))}</strong><small>${esc(label(m.start))} → ${esc(label(m.end))} · Custom section</small></div></div><form id="member-form"><div class="form-section"><h3>Geometry</h3>${guideDiagram("members")}<div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(label(mat.id))}</h3><div class="fields">${input("elasticity", "Elastic stiffness E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(label(sec.id))}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "Twisting resistance J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Bending about y · Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Bending about z · Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(label(m.start))}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Vertical tip force [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result && result.analysisType !== "envelope" ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(label(m.id))} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples?.at(-1)?.displacement?.[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : result?.analysisType === "envelope" ? `<div class="probe"><small>Envelope result · ${esc(label(m.id))}</small><p class="form-help">Open Results for per-scalar governing provenance. Envelope values are not a tip probe.</p></div>` : ""}`;
+    `<div class="inspector-heading"><span class="symbol">${structuralIcon("member")}</span><div><strong>Member ${esc(label(m.id))}</strong><small>${esc(label(m.start))} → ${esc(label(m.end))} · Custom section</small></div></div>${lineage ? `<div class="form-section lineage-panel" data-physical="${esc(lineage.physicalId)}"><h3>Physical lineage</h3><p>${esc(lineage.text)}</p><p class="form-help">Parent ID and station range are provenance from split/connect. They do not remesh automatically.</p></div>` : ""}<form id="member-form"><div class="form-section"><h3>Geometry</h3>${guideDiagram("members")}<div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(label(mat.id))}</h3><div class="fields">${input("elasticity", "Elastic stiffness E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(label(sec.id))}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "Twisting resistance J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Bending about y · Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Bending about z · Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(label(m.start))}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Vertical tip force [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result && result.analysisType !== "envelope" ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(label(m.id))} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples?.at(-1)?.displacement?.[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : result?.analysisType === "envelope" ? `<div class="probe"><small>Envelope result · ${esc(label(m.id))}</small><p class="form-help">Open Results for per-scalar governing provenance. Envelope values are not a tip probe.</p></div>` : ""}`;
   $("#discard-properties").onclick = () => {
     message("");
     renderInspector();
@@ -1123,7 +1128,18 @@ function entityList(key) {
   }[key];
   modal(
     title,
-    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[key].map((v) => `<tr><th>${esc(label(v.id))}</th><td>${esc(v.name || label(v.node) || v.type || (v.start ? `${label(v.start)} → ${label(v.end)}` : v.position?.join(", ") || ""))}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`).join("")}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${entityGuides[key][0].toLowerCase()}</button>`,
+    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[key].map((v) => {
+      const lineage = key === "members" ? lineageSummary(project, v, label) : null;
+      const description =
+        lineage?.text ||
+        v.name ||
+        label(v.node) ||
+        v.type ||
+        (v.start
+          ? `${label(v.start)} → ${label(v.end)}`
+          : v.position?.join(", ") || "");
+      return `<tr${lineage ? ` data-physical="${esc(lineage.physicalId)}"` : ""}><th>${esc(label(v.id))}</th><td>${esc(description)}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`;
+    }).join("")}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${entityGuides[key][0].toLowerCase()}</button>`,
   );
   for (const b of document.querySelectorAll("[data-edit]"))
     b.onclick = () =>

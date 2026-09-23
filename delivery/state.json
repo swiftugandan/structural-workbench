@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M03",
-  "activeTask": "M03-F",
+  "activeTask": "M03-parent",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1557,27 +1557,76 @@
     },
     "M03-F": {
       "id": "M03-F",
-      "useCase": "Physical/analytical hierarchy UI or parent M03 acceptance packaging",
+      "useCase": "Physical/analytical hierarchy UI for split lineage",
       "dependencies": [
         "M03-E"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
-        "web",
-        "tools",
-        "evidence/M03"
+        "web/hierarchy.js",
+        "web/app.js",
+        "web/styles.css",
+        "tests/hierarchy.test.mjs",
+        "tests/e2e/hierarchy.spec.js",
+        "evidence/M03/hierarchy"
       ],
       "acceptanceIds": [
-        "SPECIFICATION-M03"
+        "SPECIFICATION-M03-hierarchy-ui"
       ],
-      "nextAction": "Implement physical-to-analytical hierarchy presentation or package parent M03 verifier.",
-      "createdAt": "2026-09-23T10:20:00.000Z"
+      "requiredCommands": [
+        "node --test tests/hierarchy.test.mjs",
+        "npx playwright test tests/e2e/hierarchy.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "hierarchy-unit",
+          "status": "PASS",
+          "testCount": 2,
+          "evidencePath": "evidence/M03/hierarchy/unit.json"
+        },
+        {
+          "check": "hierarchy-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M03/hierarchy/hierarchy-browser.json",
+          "analyticalChildren": 3
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M03/hierarchy"
+      ],
+      "sourceRevision": "af5ed2e3906cf5ca6963ca4b8748b2dc4e760eca",
+      "sourceHash": "815535c565cf69a6638928619c2b8cd10b15c56aef468f45455bcd63caa3cfbc",
+      "buildHash": "cee57e22bf364b70175018ddc0581e4c5b801843eb8baf0a64e11cf8362cbdd8",
+      "acceptanceMeaning": "Bounded lineage presentation for split children. Parent M03 still needs formal verifier packaging.",
+      "nextAction": "Package parent M03 verifier from accepted A\u2013F slices.",
+      "createdAt": "2026-09-23T10:20:00.000Z",
+      "acceptedAt": "2026-09-23T10:26:00.000Z"
+    },
+    "M03-parent": {
+      "id": "M03-parent",
+      "useCase": "Package accepted M03 slices into parent milestone acceptance",
+      "dependencies": [
+        "M03-F"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "tools",
+        "evidence/M03",
+        "delivery"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M03",
+        "M03-parent"
+      ],
+      "nextAction": "Implement verify:milestone M03 packaging over bay-copy, dual-worker, oracle-pack, capacity, section-axis and hierarchy evidence.",
+      "createdAt": "2026-09-23T10:26:00.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "2943ca7e86754ad92dde6c93688051e19d788817",
-  "lastVerifiedBuildHash": "4fbb38788e78713f04c5f8ba37eab354dc3da5edb94bf58b0c9100bfc6bb9c9b",
-  "nextAction": "M03-E accepted. Next: M03-F hierarchy UI or parent M03 packaging.",
+  "lastVerifiedSourceRevision": "af5ed2e3906cf5ca6963ca4b8748b2dc4e760eca",
+  "lastVerifiedBuildHash": "cee57e22bf364b70175018ddc0581e4c5b801843eb8baf0a64e11cf8362cbdd8",
+  "nextAction": "M03-F accepted. Next: M03-parent verifier packaging.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "df9d53d7b53a3999acf3ed80d907f4466cf79d3aa6f679ba23b0b480e6800c12"
+  "lastVerifiedSourceHash": "815535c565cf69a6638928619c2b8cd10b15c56aef468f45455bcd63caa3cfbc"
 }

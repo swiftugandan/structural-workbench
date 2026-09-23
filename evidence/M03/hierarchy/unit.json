@@ -1,0 +1,15 @@
+{
+  "taskId": "M03-F",
+  "milestone": "M03",
+  "check": "hierarchy-unit",
+  "status": "PASS",
+  "command": [
+    "node",
+    "--test",
+    "tests/hierarchy.test.mjs"
+  ],
+  "testCount": 2,
+  "sourceHash": "815535c565cf69a6638928619c2b8cd10b15c56aef468f45455bcd63caa3cfbc",
+  "buildHash": "cee57e22bf364b70175018ddc0581e4c5b801843eb8baf0a64e11cf8362cbdd8",
+  "observedAt": "2026-09-23T10:26:18.475Z"
+}
