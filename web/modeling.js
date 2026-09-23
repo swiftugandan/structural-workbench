@@ -1,5 +1,9 @@
 import { entityLabel } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
+import {
+  listPortalTemplates,
+  savePortalTemplate,
+} from "./state/storage.js";
 const $ = (s) => document.querySelector(s);
 const uid = (prefix) =>
   prefix + crypto.randomUUID().replaceAll("-", "").slice(0, 12);
@@ -41,29 +45,57 @@ export function modeling({
     $("#drawing-panel").hidden = true;
     $("#draw-toggle").setAttribute("aria-pressed", "false");
   };
-  $("#new-portal").onclick = () => {
+  async function showPortalForm(preset = {}) {
+    const templates = await listPortalTemplates().catch(() => []);
+    const templateList =
+      templates.length === 0
+        ? ""
+        : `<div class="full template-library" data-portal-templates><summary class="portal-template-heading">Saved portal templates</summary><div class="template-grid">${templates
+            .map(
+              (t) =>
+                `<button type="button" class="template-card" data-portal-template="${esc(t.id)}" data-span="${t.span}" data-height="${t.height}" data-force="${t.force}" data-bases="${esc(t.bases)}" data-name="${esc(t.name)}"><strong>${esc(t.name)}</strong><small>${t.span} m × ${t.height} m · ${t.force} N · ${t.bases}</small></button>`,
+            )
+            .join("")}</div></div>`;
     modal(
       "Create a planar portal",
       `<p>Two columns and a roof beam in the global XZ plane. Dimensions are in metres. All three members share an editable material and section.</p><form id="portal-form" class="entity-form">
-      <label>Project name<input name="name" value="Planar portal" required maxlength="256"></label>
-      <label>Span (m)<input name="span" type="number" step="any" min="0.000001" max="1000000" value="4" required></label>
-      <label>Height (m)<input name="height" type="number" step="any" min="0.000001" max="1000000" value="3" required></label>
-      <label>Roof force +X (N)<input name="force" type="number" step="any" value="10000" required></label>
-      <label>Column bases<select name="bases"><option value="fixed">Fixed</option><option value="pinned">Pinned in XZ (rotation Ry free)</option></select></label>
+      ${templateList}
+      <label>Project name<input name="name" value="${esc(preset.name || "Planar portal")}" required maxlength="256"></label>
+      <label>Span (m)<input name="span" type="number" step="any" min="0.000001" max="1000000" value="${preset.span ?? 4}" required data-testid="portal-span"></label>
+      <label>Height (m)<input name="height" type="number" step="any" min="0.000001" max="1000000" value="${preset.height ?? 3}" required data-testid="portal-height"></label>
+      <label>Roof force +X (N)<input name="force" type="number" step="any" value="${preset.force ?? 10000}" required data-testid="portal-force"></label>
+      <label>Column bases<select name="bases" data-testid="portal-bases"><option value="fixed"${(preset.bases || "fixed") === "fixed" ? " selected" : ""}>Fixed</option><option value="pinned"${preset.bases === "pinned" ? " selected" : ""}>Pinned in XZ (rotation Ry free)</option></select></label>
+      <label class="check full"><input type="checkbox" name="saveTemplate" data-testid="portal-save-template"> Save these dimensions as a reusable portal template</label>
       <p class="full">Synthetic section: A = 10,000 mm², Iy = 10,000,000 mm⁴, Iz = 20,000,000 mm⁴. E = 200 GPa. Change these in Properties before interpreting results.</p>
       <div id="portal-error" class="error-text" role="alert"></div><button type="submit" class="primary">Create portal</button></form>`,
     );
+    for (const b of document.querySelectorAll("[data-portal-template]")) {
+      b.onclick = () => {
+        const form = $("#portal-form");
+        form.elements.namedItem("name").value = b.dataset.name;
+        form.elements.namedItem("span").value = b.dataset.span;
+        form.elements.namedItem("height").value = b.dataset.height;
+        form.elements.namedItem("force").value = b.dataset.force;
+        form.elements.namedItem("bases").value = b.dataset.bases;
+      };
+    }
     $("#portal-form").onsubmit = async (e) => {
       e.preventDefault();
-      const button = e.target.querySelector("button");
+      const button = e.target.querySelector("button[type=submit]");
       button.disabled = true;
       try {
         const f = new FormData(e.target),
           w = Number(f.get("span")),
-          h = Number(f.get("height"));
+          h = Number(f.get("height")),
+          force = Number(f.get("force")),
+          bases = f.get("bases") === "pinned" ? "pinned" : "fixed",
+          name = String(f.get("name") || "Planar portal");
+        if (f.get("saveTemplate")) {
+          await savePortalTemplate({ name, span: w, height: h, force, bases });
+        }
         const p = await fetch("./examples/B02.json").then((r) => r.json());
         p.id = uid("p");
-        p.name = f.get("name");
+        p.name = name;
         p.analysisMode = "planarXZ";
         p.nodes = [
           { id: "n1", position: [0, 0, 0] },
@@ -79,7 +111,7 @@ export function modeling({
         p.supports = ["n1", "n4"].map((node, i) => ({
           id: "s" + (i + 1),
           node,
-          fixed: [true, false, true, false, f.get("bases") === "fixed", false],
+          fixed: [true, false, true, false, bases === "fixed", false],
           prescribed: [0, 0, 0, 0, 0, 0],
         }));
         p.loadCases = [
@@ -91,11 +123,11 @@ export function modeling({
             case: "LC1",
             type: "nodal",
             node: "n3",
-            values: [Number(f.get("force")), 0, 0, 0, 0, 0],
+            values: [force, 0, 0, 0, 0, 0],
           },
         ];
         p.metadata = {
-          description: "User-created XZ portal; synthetic editable section",
+          description: `User-created XZ portal ${w} m × ${h} m; synthetic editable section`,
           createdBy: "Structural Workbench",
         };
         await open(p);
@@ -103,13 +135,19 @@ export function modeling({
           viewport.mode = "elevation";
           viewport.fit();
         }
-      } catch (e) {
-        if ($("#portal-error")) $("#portal-error").textContent = e.message;
-        else message(e.message);
+        if (f.get("saveTemplate")) {
+          message(`Portal created. Template “${name}” saved for reuse.`);
+        }
+      } catch (err) {
+        if ($("#portal-error")) $("#portal-error").textContent = err.message;
+        else message(err.message);
       } finally {
         button.disabled = false;
       }
     };
+  }
+  $("#new-portal").onclick = () => {
+    showPortalForm().catch((e) => message(e.message));
   };
   $("#draw-toggle").onclick = () => {
     if (drawing) {

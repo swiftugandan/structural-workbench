@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M05",
-  "activeTask": "M05-C",
+  "activeTask": "M05-parent",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1992,23 +1992,70 @@
     },
     "M05-C": {
       "id": "M05-C",
-      "useCase": "Parametric portal/beam template save and reuse",
+      "useCase": "Save and reuse parametric portal templates",
       "dependencies": [
         "M05-B"
       ],
-      "status": "READY",
-      "ownedPaths": [],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "web/state/storage.js",
+        "web/modeling.js",
+        "web/styles.css",
+        "tests/e2e/portal-templates.spec.js",
+        "evidence/M05/portal-templates"
+      ],
       "acceptanceIds": [
         "SPECIFICATION-M05-templates"
       ],
-      "nextAction": "Implement reusable parametric portal template create/save/apply.",
-      "createdAt": "2026-09-23T12:45:00.000Z"
+      "nextAction": "Package parent M05 verifier from A\u2013C slices.",
+      "createdAt": "2026-09-23T12:45:00.000Z",
+      "requiredCommands": [
+        "npm run build",
+        "npx playwright test tests/e2e/portal-templates.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "portal-templates-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M05/portal-templates/portal-templates-browser.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M05/portal-templates"
+      ],
+      "sourceRevision": "ec688e02470b6158c72f1f50b4daff1df692dc5b",
+      "sourceHash": "d7564d2ec10b80316778c82b4ba2144aac8d0e0c53a5c4984d56ed015b76ab19",
+      "buildHash": "f42ab49ce0ad02d469b19372ac81825fc0dd03663a574f772bf382fc1376bdc3",
+      "acceptanceMeaning": "Bounded parametric portal template save/reuse via IndexedDB. Does not claim parent M05.",
+      "acceptedAt": "2026-09-23T12:48:01.000Z"
+    },
+    "M05-parent": {
+      "id": "M05-parent",
+      "useCase": "Package accepted M05 slices into parent milestone acceptance",
+      "dependencies": [
+        "M05-A",
+        "M05-B",
+        "M05-C"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "tools",
+        "evidence/M05",
+        "delivery"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M05",
+        "M05-parent"
+      ],
+      "nextAction": "Assemble same-build M05 parent verifier from A\u2013C evidence.",
+      "createdAt": "2026-09-23T12:48:01.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "cb5248a085f5c5d06e0133153c79b552f9af7c2c",
-  "lastVerifiedBuildHash": "d95e5ca9439160758930995645e37d90f34dcf93879bb5a721aad12d98086ecb",
-  "nextAction": "M05-B accepted. Next: parametric portal template, then parent M05.",
+  "lastVerifiedSourceRevision": "ec688e02470b6158c72f1f50b4daff1df692dc5b",
+  "lastVerifiedBuildHash": "f42ab49ce0ad02d469b19372ac81825fc0dd03663a574f772bf382fc1376bdc3",
+  "nextAction": "M05-C accepted. Package parent M05 same-build verifier.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "2b1adfa831ba53fa121309962d394a15f8c390906fe9acb9e131f81dd5e40e6b"
+  "lastVerifiedSourceHash": "d7564d2ec10b80316778c82b4ba2144aac8d0e0c53a5c4984d56ed015b76ab19"
 }

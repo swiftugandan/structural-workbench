@@ -1,5 +1,5 @@
 const DB_NAME = "structural-workbench";
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 const database = new Promise((resolve, reject) => {
   const r = indexedDB.open(DB_NAME, DB_VERSION);
@@ -11,6 +11,8 @@ const database = new Promise((resolve, reject) => {
       db.createObjectStore("history", { keyPath: "key" });
     if (!db.objectStoreNames.contains("originals"))
       db.createObjectStore("originals", { keyPath: "id" });
+    if (!db.objectStoreNames.contains("templates"))
+      db.createObjectStore("templates", { keyPath: "id" });
   };
   r.onsuccess = () => resolve(r.result);
   r.onerror = () => reject(r.error);
@@ -190,4 +192,62 @@ export async function resolveRecoverableProject(row) {
     recovered: true,
     fromRevision: recovered.revision,
   };
+}
+
+export function portalTemplateId() {
+  return "t" + crypto.randomUUID().replaceAll("-", "").slice(0, 12);
+}
+
+/** Parametric portal template (span/height/force/bases) — not a full project snapshot. */
+export async function savePortalTemplate(template) {
+  const record = {
+    id: template.id || portalTemplateId(),
+    kind: "portal",
+    name: String(template.name || "Portal template").slice(0, 256),
+    span: Number(template.span),
+    height: Number(template.height),
+    force: Number(template.force),
+    bases: template.bases === "pinned" ? "pinned" : "fixed",
+    savedAt: Date.now(),
+  };
+  if (
+    !(record.span > 0) ||
+    !(record.height > 0) ||
+    !Number.isFinite(record.force)
+  ) {
+    throw Error(
+      "Portal template needs positive span and height, and a finite force.",
+    );
+  }
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("templates", "readwrite");
+    tx.objectStore("templates").put(record);
+    tx.oncomplete = () => resolve(record);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+export async function listPortalTemplates() {
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const r = db.transaction("templates").objectStore("templates").getAll();
+    r.onsuccess = () =>
+      resolve(
+        r.result
+          .filter((x) => x.kind === "portal")
+          .sort((a, b) => b.savedAt - a.savedAt),
+      );
+    r.onerror = () => reject(r.error);
+  });
+}
+
+export async function deletePortalTemplate(id) {
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("templates", "readwrite");
+    tx.objectStore("templates").delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
 }
