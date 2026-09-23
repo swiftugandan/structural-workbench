@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M07",
-  "activeTask": "M07-D",
+  "activeTask": "M07-parent",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -10,7 +10,8 @@
     "M03",
     "M04",
     "M05",
-    "M06"
+    "M06",
+    "M07"
   ],
   "tasks": {
     "M00-A": {
@@ -2470,7 +2471,7 @@
       "dependencies": [
         "M07-C"
       ],
-      "status": "IMPLEMENTING",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "web/steel-check.js",
         "web/app.js",
@@ -2507,7 +2508,33 @@
         "evidence/M07/steel-ui"
       ],
       "attempts": [],
-      "nextAction": "Screen 04 check-tree polish if needed; then M07-parent same-build packaging"
+      "nextAction": "M07-parent same-build packaging",
+      "acceptedAt": "2026-09-23T16:05:00.000Z",
+      "acceptanceMeaning": "Screen 04 steel UI with ≥3 pass/fail seeds, model-derived demand overlay, governing util + clause trail in calculation report. LTB and non-W remain unsupported."
+    },
+    "M07-parent": {
+      "id": "M07-parent",
+      "useCase": "Same-build M07 packaging: S2 fixtures + steel UI + report trail",
+      "dependencies": [
+        "M07-D"
+      ],
+      "status": "IMPLEMENTING",
+      "ownedPaths": [
+        "tools/run-m07-parent.mjs",
+        "tools/record-m07-acceptance.mjs",
+        "tools/verify.mjs",
+        "tools/milestone-rules.mjs",
+        "evidence/M07/full"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M07"
+      ],
+      "outcomes": [],
+      "evidencePaths": [
+        "evidence/M07/full"
+      ],
+      "attempts": [],
+      "nextAction": "npm run verify:m07"
     }
   },
   "blockers": [
@@ -2530,7 +2557,7 @@
   ],
   "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
   "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
-  "nextAction": "M07-D matrix + report trail PASS. Next: Screen 04 check-tree polish if needed, then M07-parent packaging.",
+  "nextAction": "M07-D ACCEPTED. Run npm run verify:m07 for parent packaging.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
 }

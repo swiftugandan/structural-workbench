@@ -1,0 +1,44 @@
+{
+  "taskId": "M07-parent",
+  "milestone": "M07",
+  "sourceHash": "c579beb905921b53da630674808a9c15b04ceb0929c128719956bbbb1e81e74f",
+  "buildHash": "8dae72c2aaccceb83aaada4fc9198fc202bbdac9040132db7fd19887154df503",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "s2-fixtures-native.log": "02603fe748c7efbdb2472cdacdb79dc2a067ebd1867545b08d18fe31107ef6c0"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T16:01:38.693Z",
+  "status": "PASS",
+  "testCount": 5,
+  "testIds": [
+    "s2_d1_tension_matches_example",
+    "s2_e1c_compression_matches_example",
+    "s2_f11b_flexure_matches_example",
+    "s2_g1b_shear_matches_example",
+    "s2_h1b_interaction_matches_example"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "workbench-design",
+    "--locked",
+    "--",
+    "aisc36022::fixture_tests"
+  ],
+  "artifacts": [
+    "s2-fixtures-native.log"
+  ]
+}

@@ -22,6 +22,7 @@
     "verify:m04": "node tools/run-m04-parent.mjs",
     "verify:m05": "node tools/run-m05-parent.mjs",
     "verify:m06": "node tools/run-m06-parent.mjs",
+    "verify:m07": "node tools/run-m07-parent.mjs",
     "verify:release": "node tools/verify.mjs release",
     "setup": "node tools/bootstrap.mjs",
     "test:graphics": "playwright test tests/visual",

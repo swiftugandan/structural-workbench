@@ -396,10 +396,16 @@ function formatForceN(n) {
 }
 
 function renderResult(run) {
-  const rows = (run.checks || [])
+  const checks = run.checks || [];
+  let governing = null;
+  for (const c of checks) {
+    if (c.utilisation == null || Number.isNaN(c.utilisation)) continue;
+    if (!governing || c.utilisation > governing.utilisation) governing = c;
+  }
+  const rows = checks
     .map(
       (c) =>
-        `<tr data-testid="steel-check-row" data-check-id="${esc(c.checkId)}">
+        `<tr data-testid="steel-check-row" data-check-id="${esc(c.checkId)}" data-status="${esc(c.status)}">
           <th scope="row">${esc(c.checkId)}</th>
           <td>${esc(c.clause)}</td>
           <td data-testid="steel-check-status">${esc(c.status)}</td>
@@ -410,8 +416,12 @@ function renderResult(run) {
         </tr>`,
     )
     .join("");
+  const gov = governing
+    ? `<p data-testid="steel-governing">Governing: <strong>${esc(governing.checkId)}</strong> · ${esc(governing.clause)} · ${formatUtil(governing.utilisation)}</p>`
+    : `<p data-testid="steel-governing">Governing: —</p>`;
   return `<p><strong>Overall:</strong> <span data-testid="steel-overall">${esc(run.overall)}</span>
     · member ${esc(run.memberId)} · ${esc(run.combinationId)}</p>
+  ${gov}
   <table data-testid="steel-check-table">
     <thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>φRn</th><th>Util.</th><th>Notes</th></tr></thead>
     <tbody>${rows}</tbody>

@@ -1,0 +1,15 @@
+{
+  "milestone": "M07",
+  "status": "PASS",
+  "sourceHash": "c579beb905921b53da630674808a9c15b04ceb0929c128719956bbbb1e81e74f",
+  "buildHash": "8dae72c2aaccceb83aaada4fc9198fc202bbdac9040132db7fd19887154df503",
+  "required": [
+    "build",
+    "s2-fixtures-native",
+    "steel-ui-unit",
+    "m07-browser",
+    "m07-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-23T16:02:19.118Z"
+}

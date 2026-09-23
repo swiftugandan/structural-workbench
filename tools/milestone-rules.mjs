@@ -76,6 +76,13 @@ export const m06 = [
   "m06-browser",
   "m06-acceptance",
 ];
+export const m07 = [
+  "build",
+  "s2-fixtures-native",
+  "steel-ui-unit",
+  "m07-browser",
+  "m07-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -154,6 +161,32 @@ export const requiredIds = {
     "M06 stress screen: B02 shows elastic fibre stresses with disclaimer",
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
     "M06 release tour: analyse, stress screen, ledger, save and report",
+  ],
+  "m07-acceptance": [
+    "M07-S2-FIXTURES",
+    "M07-UI-MATRIX",
+    "M07-MODEL-REPORT",
+  ],
+  "m07-browser": [
+    "standalone S2-D1 steel check passes via evaluateDesign UI",
+    "complete-member matrix: ≥3 pass and ≥3 fail seeds",
+    "standalone S2-D1 fail seed reports overall fail",
+    "model-derived demand check lands in calculation report clause trail",
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+  ],
+  "s2-fixtures-native": [
+    "s2_d1_tension_matches_example",
+    "s2_e1c_compression_matches_example",
+    "s2_f11b_flexure_matches_example",
+    "s2_g1b_shear_matches_example",
+    "s2_h1b_interaction_matches_example",
+  ],
+  "steel-ui-unit": [
+    "fail seeds raise demand above published capacity",
+    "seed catalog has ≥3 pass and ≥3 fail complete-member cases",
+    "applyAnalysisDemand overlays midspan sample and rejects envelopes",
+    "capabilities.json publishes UNKNOWN parity and SPEC exclusions",
+    "ledger helpers render disclosures without inventing parity",
   ],
   "b12-native": ["b12_corner_extrema_and_axis_probes"],
   "capability-ledger-unit": [
@@ -258,7 +291,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
         ? requiredIds["native-m03"]
         : milestone === "M02" && name === "browser-suite"
           ? requiredIds["browser-suite-m02"]
-          : ["M01", "M01-UX", "M02", "M03", "M04", "M05", "M06"].includes(milestone)
+          : ["M01", "M01-UX", "M02", "M03", "M04", "M05", "M06", "M07"].includes(milestone)
             ? requiredIds[name] || []
             : [];
   for (const id of ids)
@@ -299,6 +332,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 3)
   )
     errors.push(`${name}: failed, skipped or incomplete M06 browser journey`);
+  if (
+    name === "m07-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 5)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M07 browser journey`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);
