@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "releaseStatus": "analysis-mvp-candidate",
+  "releaseStatus": "analysis-mvp-accepted",
   "comparisonStatus": "UNKNOWN",
   "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
   "supportedDomain": {

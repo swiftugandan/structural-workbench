@@ -68,6 +68,14 @@ export const m05 = [
   "m05-browser",
   "m05-acceptance",
 ];
+export const m06 = [
+  "build",
+  "b12-native",
+  "capability-ledger-unit",
+  "contracts",
+  "m06-browser",
+  "m06-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -136,6 +144,21 @@ export const requiredIds = {
     "M05 section calculator: rectangle stiffens tip deflection and clears stale result",
     "M05 variants: duplicate, stiffen, compare retains both hashes and reports",
     "M05 portal templates: save dimensions and reuse on a new portal",
+  ],
+  "m06-acceptance": [
+    "M06-STRESS-SCREEN",
+    "M06-CAPABILITY-LEDGER",
+    "M06-RELEASE-TOUR",
+  ],
+  "m06-browser": [
+    "M06 stress screen: B02 shows elastic fibre stresses with disclaimer",
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+    "M06 release tour: analyse, stress screen, ledger, save and report",
+  ],
+  "b12-native": ["b12_corner_extrema_and_axis_probes"],
+  "capability-ledger-unit": [
+    "capabilities.json publishes UNKNOWN parity and SPEC exclusions",
+    "ledger helpers render disclosures without inventing parity",
   ],
   "section-props": [
     "square_matches_exact_second_moments",
@@ -235,7 +258,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
         ? requiredIds["native-m03"]
         : milestone === "M02" && name === "browser-suite"
           ? requiredIds["browser-suite-m02"]
-          : ["M01", "M01-UX", "M02", "M03", "M04", "M05"].includes(milestone)
+          : ["M01", "M01-UX", "M02", "M03", "M04", "M05", "M06"].includes(milestone)
             ? requiredIds[name] || []
             : [];
   for (const id of ids)
@@ -269,6 +292,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 3)
   )
     errors.push(`${name}: failed, skipped or incomplete M05 browser journey`);
+  if (
+    name === "m06-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 3)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M06 browser journey`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);

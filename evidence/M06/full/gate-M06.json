@@ -1,0 +1,16 @@
+{
+  "milestone": "M06",
+  "status": "PASS",
+  "sourceHash": "6852b05f6e5b227e322c24276a60667cb02570966614f48ef9c64aa14bc0031b",
+  "buildHash": "9f1bbe86a5699334abd741c90aa76e1416b3505f4c2b7312725ed6fc1d105c8f",
+  "required": [
+    "build",
+    "b12-native",
+    "capability-ledger-unit",
+    "contracts",
+    "m06-browser",
+    "m06-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-23T13:30:54.167Z"
+}

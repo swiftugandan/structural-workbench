@@ -1,15 +1,16 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M06",
-  "activeTask": "M06-parent",
+  "activeMilestone": "M22",
+  "activeTask": "M22-A",
   "acceptedMilestones": [
     "M01",
     "M00",
     "M02",
     "M03",
     "M04",
-    "M05"
+    "M05",
+    "M06"
   ],
   "tasks": {
     "M00-A": {
@@ -2187,12 +2188,77 @@
       "createdAt": "2026-09-23T12:56:36.000Z",
       "acceptedAt": "2026-09-23T13:23:35.000Z",
       "acceptanceMeaning": "Bounded analysis capability ledger with UNKNOWN commercial parity, SPEC excluded-domain disclosures in UI/import/report/WASM capabilities, and dist-served capabilities.json. Does not claim parent M06 or full release tour."
+    },
+    "M06-parent": {
+      "id": "M06-parent",
+      "useCase": "Package accepted M06 slices into parent milestone acceptance",
+      "dependencies": [
+        "M06-A",
+        "M06-B"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "tools",
+        "evidence/M06",
+        "delivery",
+        "tests/e2e/m06-release-tour.spec.js",
+        "package.json"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M06",
+        "M06-parent"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "npm run verify:m06"
+      ],
+      "outcomes": [
+        {
+          "check": "m06-parent-gate",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M06/full/gate-M06.json",
+          "sourceHash": "6852b05f6e5b227e322c24276a60667cb02570966614f48ef9c64aa14bc0031b",
+          "buildHash": "9f1bbe86a5699334abd741c90aa76e1416b3505f4c2b7312725ed6fc1d105c8f"
+        },
+        {
+          "check": "m06-acceptance",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M06/full/m06-acceptance.json"
+        },
+        {
+          "check": "m06-browser",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M06/full/m06-browser.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M06/full"
+      ],
+      "sourceRevision": "06f448cb740bf4f8fbfb1cb136fed0b1c8d15902",
+      "sourceHash": "6852b05f6e5b227e322c24276a60667cb02570966614f48ef9c64aa14bc0031b",
+      "buildHash": "9f1bbe86a5699334abd741c90aa76e1416b3505f4c2b7312725ed6fc1d105c8f",
+      "verificationStatus": "PASS",
+      "nextAction": "M06 parent accepted. M07 blocked on steel standard/benchmark resources; continue independent DAG-ready work.",
+      "createdAt": "2026-09-23T13:24:00.000Z",
+      "acceptedAt": "2026-09-23T13:30:54.000Z",
+      "acceptanceMeaning": "Parent M06 analysis MVP gate PASS on same-build corpus: B12 stress screen, capability ledger with UNKNOWN parity and SPEC exclusions, end-to-end release tour (analyse/stress/ledger/save/report). Commercial parity remains UNKNOWN; design-code packages stay excluded."
     }
   },
-  "blockers": [],
-  "lastVerifiedSourceRevision": "3ee1c3f4e0349e5a83021ca68cbe34192da49ed5",
-  "lastVerifiedBuildHash": "fc317f75c87f9354fd54fafb11dc34db54b0634af30c622e9a4ca7f40642ddcb",
-  "nextAction": "M06-B accepted. Next: parent M06 packaging / release tour, or remaining M06 gates — do not re-claim M00–M05.",
+  "blockers": [
+    {
+      "id": "M07-steel-resources",
+      "affects": ["M07"],
+      "resourceIds": ["R-CODE-STEEL", "R-STEEL-EXAMPLES"],
+      "status": "BLOCKED_RESOURCE",
+      "resumeWhen": "Authoritative steel code profile and verified examples acquired into resources.lock.json"
+    }
+  ],
+  "lastVerifiedSourceRevision": "06f448cb740bf4f8fbfb1cb136fed0b1c8d15902",
+  "lastVerifiedBuildHash": "9f1bbe86a5699334abd741c90aa76e1416b3505f4c2b7312725ed6fc1d105c8f",
+  "nextAction": "Analysis MVP (M06) accepted. M07 blocked on steel standards/benchmarks. Next independent slice: M22 study automation (depends on M06, no resource gate) — do not invent code clauses.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "4d1a3b540238d675059117b4568f0861525d91c1dc8d347fe4f85b47a190d85f"
+  "lastVerifiedSourceHash": "6852b05f6e5b227e322c24276a60667cb02570966614f48ef9c64aa14bc0031b"
 }
