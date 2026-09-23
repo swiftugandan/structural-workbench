@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M07",
-  "activeTask": "M07-C",
+  "activeTask": "M07-D",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2432,7 +2432,7 @@
       "dependencies": [
         "M07-B"
       ],
-      "status": "IMPLEMENTING",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "crates/design",
         "docs/code-profiles/aisc-360-22-lrfd",
@@ -2448,6 +2448,11 @@
           "status": "PASS",
           "testCount": 9,
           "note": "Includes S2-D1/E1C/F11B/G1B/H1B fixture regressions"
+        },
+        {
+          "check": "lock-enable",
+          "status": "PASS",
+          "note": "aisc_s2_resources_verified enables profile from committed lock+fixtures; vault PDF hash check when present"
         }
       ],
       "evidencePaths": [
@@ -2455,7 +2460,30 @@
         "fixtures/design/aisc-360-22-lrfd"
       ],
       "attempts": [],
-      "nextAction": "Wire resources.lock verification to enable profile; extend LTB flexure; M07-D UI when clauses green"
+      "nextAction": "M07-D Screen 04 UI + model-derived/standalone journeys, or LTB flexure seeds",
+      "acceptedAt": "2026-09-23T15:20:00.000Z",
+      "acceptanceMeaning": "S2 clause modules + fixture regressions + resources.lock/fixture enable gate. Profile enabled=true in default registry. Parent M07 and M07-D UI remain open."
+    },
+    "M07-D": {
+      "id": "M07-D",
+      "useCase": "Screen 04 steel check UI, model-derived + standalone journeys, reports",
+      "dependencies": [
+        "M07-C"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "web",
+        "crates/wasm-api",
+        "tests/e2e",
+        "docs/code-profiles/aisc-360-22-lrfd"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M07-ui"
+      ],
+      "outcomes": [],
+      "evidencePaths": [],
+      "attempts": [],
+      "nextAction": "Expose evaluateDesign inputs for S2 section props in UI; Pass/Fail only when profile enabled"
     }
   },
   "blockers": [
@@ -2478,7 +2506,7 @@
   ],
   "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
   "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
-  "nextAction": "M07-C clause modules + S2 fixture tests PASS; profile still disabled pending lock-enable wiring and M07-D UI.",
+  "nextAction": "M07-C accepted (clauses + lock enable). Next M07-D steel check UI / journeys.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
 }

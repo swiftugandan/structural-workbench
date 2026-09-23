@@ -54,7 +54,7 @@ test("M06 capability ledger: View capabilities shows UNKNOWN parity and exclusio
   ).toBeVisible();
   await expect(
     page.locator('[data-capability-id="steel-code"]'),
-  ).toContainText("excluded");
+  ).toContainText("partial");
 
   const capsRes = await page.request.get("/capabilities.json");
   expect(capsRes.ok()).toBeTruthy();

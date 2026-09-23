@@ -32,7 +32,9 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
     ),
   );
   const steel = ledger.capabilities.find((c) => c.capabilityId === "steel-code");
-  assert.equal(steel.implementationStatus, "excluded");
+  assert.equal(steel.implementationStatus, "partial");
+  assert.equal(steel.verificationStatus, "fixture-pass");
+  assert.deepEqual(steel.resourceBlockers, []);
 });
 
 test("ledger helpers render disclosures without inventing parity", () => {

@@ -157,21 +157,23 @@
     },
     {
       "capabilityId": "steel-code",
-      "scopeKey": "M07 / aisc-360-22-lrfd S2 proposed",
-      "implementationStatus": "excluded",
-      "verificationStatus": "not-verified",
+      "scopeKey": "M07 / aisc-360-22-lrfd S2",
+      "implementationStatus": "partial",
+      "verificationStatus": "fixture-pass",
       "comparisonStatus": "UNKNOWN",
-      "resourceBlockers": [
-        "R-CODE-STEEL",
-        "R-STEEL-EXAMPLES"
-      ],
+      "resourceBlockers": [],
       "limitations": [
-        "CodeProfile registry ships aisc-360-22-lrfd metadata with enabled=false until resources.lock verification",
-        "No clause math or Pass/Fail checks until M07-B/C"
+        "AISC 360-22 LRFD S2 enabled after resources.lock + fixture corpus verification",
+        "S2 covers classification, tension, compression E3, continuous-brace flexure F2, shear G2.1, H1",
+        "LTB flexure (Lb>0), UI journeys and parent M07 packaging remain open",
+        "Not a claim of commercial PROKON parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/adr/0007-pluggable-design-profiles.md",
-        "docs/code-profiles/aisc-360-22-lrfd/README.md"
+        "docs/code-profiles/aisc-360-22-lrfd/README.md",
+        "docs/code-profiles/aisc-360-22-lrfd/dossier-S2.md",
+        "fixtures/design/aisc-360-22-lrfd/",
+        "resources.lock.json"
       ]
     },
     {

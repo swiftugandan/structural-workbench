@@ -31,9 +31,10 @@ For each fixture, an agent/test must:
 
 ## Enabling the profile
 
-`resources_verified` / `enabled` may flip only after:
+`resources_verified` / `enabled` flips when committed `resources.lock.json` contains
+`R-CODE-STEEL` + `R-STEEL-EXAMPLES` with SHA-256 digests **and** the S2 fixture
+manifest/corpus is present (`aisc_s2_resources_verified()`). Private PDFs are not
+required in CI; when vault PDFs exist locally, `verify_vault_pdfs_if_present`
+confirms hashes.
 
-- lock hashes still match the local vault PDFs, and
-- native tests for these fixtures pass against implemented clause code (M07-C).
-
-Until then the profile stays registered and disabled.
+Parent M07 acceptance still needs M07-D UI journeys and same-build packaging.

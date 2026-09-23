@@ -8,7 +8,7 @@
 | Method | LRFD |
 | M07 breadth | S2 — prismatic doubly-symmetric W: classification, tension, compression, flexure, shear, H1 interaction |
 | Resource gates | `R-CODE-STEEL`, `R-STEEL-EXAMPLES` |
-| Status | Registered, **not enabled** (resources.lock hashes present; clause dossier / fixtures still pending) |
+| Status | Registered and **enabled** when committed `resources.lock` + S2 fixtures verify (no private PDFs required in CI) |
 
 ## Acquisition (do not invent clauses)
 

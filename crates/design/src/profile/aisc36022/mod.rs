@@ -7,6 +7,7 @@ mod interaction;
 mod shear;
 mod tension;
 pub mod units;
+pub mod verify;
 
 #[cfg(test)]
 mod fixture_tests;
@@ -16,11 +17,20 @@ use super::{
     PROFILE_AISC_360_22_LRFD,
 };
 
-/// Profile. `enabled` remains false until resource verification.
-#[derive(Debug, Default, Clone)]
+pub use verify::{aisc_s2_resources_verified, verify_lock_and_manifest, verify_vault_pdfs_if_present};
+
+/// Profile. `enabled` follows committed lock + S2 fixture corpus verification.
+#[derive(Debug, Clone)]
 pub struct Aisc36022LrfdProfile {
-    /// Flip only after resources.lock hashes + dossier verification.
     pub resources_verified: bool,
+}
+
+impl Default for Aisc36022LrfdProfile {
+    fn default() -> Self {
+        Self {
+            resources_verified: aisc_s2_resources_verified(),
+        }
+    }
 }
 
 impl CodeProfile for Aisc36022LrfdProfile {
@@ -48,7 +58,7 @@ impl CodeProfile for Aisc36022LrfdProfile {
                 "Torsion, non-prismatic and non-W shapes return unsupported".into(),
                 "Continuous-brace flexure path only when Lb ≈ 0; LTB deferred".into(),
                 "H1 uses φcPn/φbMn from prior checks or explicit context fields".into(),
-                "Profile remains disabled until resources.lock verification is wired".into(),
+                "S2 seeds: D.1, E.1C, F.1-1B (Lb=0), G.1B, H.1B; LTB flexure deferred".into(),
             ],
         }
     }

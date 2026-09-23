@@ -11,7 +11,9 @@ pub use profile::{
     ProfileApplicability, ProfileMetadata, ProfileRegistry, TensionEndProps, WSectionProps,
     PROFILE_AISC_360_22_LRFD,
 };
-pub use profile::aisc36022::Aisc36022LrfdProfile;
+pub use profile::aisc36022::{
+    aisc_s2_resources_verified, verify_vault_pdfs_if_present, Aisc36022LrfdProfile,
+};
 
 use workbench_model::Section;
 
@@ -87,13 +89,14 @@ mod tests {
     }
 
     #[test]
-    fn registry_lists_aisc_but_does_not_enable_until_lock() {
+    fn registry_enables_aisc_when_lock_and_fixtures_verify() {
+        assert!(aisc_s2_resources_verified());
         let registry = default_registry();
         let meta = registry.metadata();
         assert_eq!(meta.len(), 1);
         assert_eq!(meta[0].id, PROFILE_AISC_360_22_LRFD);
-        assert!(!meta[0].enabled);
-        assert!(registry.enabled_profiles().is_empty());
+        assert!(meta[0].enabled);
+        assert_eq!(registry.enabled_profiles().len(), 1);
 
         let demand = DesignDemand {
             n: 0.0,
@@ -123,11 +126,12 @@ mod tests {
         let run = registry
             .evaluate(PROFILE_AISC_360_22_LRFD, &demand, &ctx)
             .expect("profile registered");
+        // Enabled, but empty demand without section props → unsupported section gate.
         assert_eq!(run.overall, CheckStatus::Unsupported);
         assert!(
             run.checks
                 .iter()
-                .any(|c| c.check_id == "profile.resources")
+                .any(|c| c.check_id == "profile.section" || c.check_id == "profile.demand")
         );
     }
 
