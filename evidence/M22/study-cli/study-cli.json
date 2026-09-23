@@ -1,0 +1,45 @@
+{
+  "taskId": "M22-A",
+  "milestone": "M22",
+  "sourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee",
+  "buildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
+  "lockHashes": {
+    "Cargo.lock": "983c1010a32196e71c767bba6173dbe2423b8a604751d280327438ef0d507ab9",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "cli-test.log": "081cb1e741d0c923c5652faf850c78398743a41261a13b37a453a2f852126600",
+    "s22-e-report.json": "fa2030d10ac435af4c3ab567ef200319b3504171037649d938dc3ac4a51e0701"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T13:34:57.177Z",
+  "status": "PASS",
+  "testCount": 1,
+  "testIds": [
+    "s22_e_sweep_changes_hash_and_tip"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "workbench-cli",
+    "--locked"
+  ],
+  "artifacts": [
+    "cli-test.log",
+    "s22-e-report.json"
+  ],
+  "variantCount": 2,
+  "modelHashes": [
+    "b746173099483e9c5aedf960a474c986ed3b74317a7519a0d7ee5ae2ec9de758",
+    "8875bb24ee8a1ea66dbaffb16bf10c994998b2f2ed93599dbc3b3c2dab375bc2"
+  ]
+}

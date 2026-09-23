@@ -2245,6 +2245,45 @@
       "createdAt": "2026-09-23T13:24:00.000Z",
       "acceptedAt": "2026-09-23T13:30:54.000Z",
       "acceptanceMeaning": "Parent M06 analysis MVP gate PASS on same-build corpus: B12 stress screen, capability ledger with UNKNOWN parity and SPEC exclusions, end-to-end release tour (analyse/stress/ledger/save/report). Commercial parity remains UNKNOWN; design-code packages stay excluded."
+    },
+    "M22-A": {
+      "id": "M22-A",
+      "useCase": "Native CLI declarative study sweep with per-variant model/result hashes",
+      "dependencies": [
+        "M06-parent"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/cli",
+        "fixtures/studies",
+        "contracts/PROTOCOL.md",
+        "evidence/M22/study-cli"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M22-study-cli"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-cli --locked",
+        "./target/release/workbench-cli study fixtures/studies/S22-E.json"
+      ],
+      "outcomes": [
+        {
+          "check": "study-cli",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M22/study-cli/study-cli.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M22/study-cli"
+      ],
+      "sourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
+      "sourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee",
+      "buildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
+      "nextAction": "Next M22: in-browser declarative study UI, cancellation/resource budgets, or comparative HTML reports.",
+      "createdAt": "2026-09-23T13:32:00.000Z",
+      "acceptedAt": "2026-09-23T13:35:00.000Z",
+      "acceptanceMeaning": "Bounded native CLI study runner with JSON-pointer variants, validation gate, distinct model hashes and observed DOF. Does not claim browser study UI or parent M22."
     }
   },
   "blockers": [
@@ -2256,9 +2295,9 @@
       "resumeWhen": "Authoritative steel code profile and verified examples acquired into resources.lock.json"
     }
   ],
-  "lastVerifiedSourceRevision": "06f448cb740bf4f8fbfb1cb136fed0b1c8d15902",
-  "lastVerifiedBuildHash": "9f1bbe86a5699334abd741c90aa76e1416b3505f4c2b7312725ed6fc1d105c8f",
-  "nextAction": "Analysis MVP (M06) accepted. M07 blocked on steel standards/benchmarks. Next independent slice: M22 study automation (depends on M06, no resource gate) — do not invent code clauses.",
+  "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
+  "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
+  "nextAction": "M22-A CLI study accepted. Next: M22 browser study UI / comparative reports, or unblock M07 with steel resources.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "6852b05f6e5b227e322c24276a60667cb02570966614f48ef9c64aa14bc0031b"
+  "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
 }

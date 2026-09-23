@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "S22-E",
+  "name": "B02 material stiffness sweep",
+  "baseProject": "../models/B02.json",
+  "caseId": "LC1",
+  "observe": {
+    "nodeId": "n2",
+    "dof": "uz"
+  },
+  "variants": [
+    {
+      "id": "E200",
+      "set": [{ "path": "/materials/0/E", "value": 200000000000.0 }]
+    },
+    {
+      "id": "E210",
+      "set": [{ "path": "/materials/0/E", "value": 210000000000.0 }]
+    }
+  ]
+}
