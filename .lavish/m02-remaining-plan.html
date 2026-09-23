@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Remaining M02 Plan</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :where(.grid, .flex) > * { min-width: 0; }
+    :where(p, h1, h2, h3, li, td, th, label, .badge) { overflow-wrap: anywhere; }
+    :where(svg) { max-width: 100%; height: auto; }
+    :root {
+      --navy: #142b44; --muted: #53667c; --border: #dce3eb;
+      --blue: #225dc7; --pale: #edf4ff; --canvas: #f5f7fa;
+      --ok: #1f7a4c; --warn: #9a6700; --bad: #b42318;
+    }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: #1d334b;
+      background:
+        radial-gradient(1000px 420px at 0% -10%, #d9e7ff 0%, transparent 55%),
+        var(--canvas);
+    }
+    .wb-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 10px; box-shadow: 0 1px 0 rgba(20,43,68,.04);
+    }
+    .wb-kicker {
+      font-size: .75rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); font-weight: 600;
+    }
+    .fig-caption { color: var(--muted); font-size: .9rem; }
+    .diagram-wrap {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 10px; padding: .75rem;
+    }
+    .diagram-wrap svg { display: block; width: 100%; color: #1d334b; }
+    .chip {
+      display: inline-flex; align-items: center;
+      border: 1px solid var(--border); background: var(--pale);
+      color: var(--navy); border-radius: 999px; padding: .15rem .65rem;
+      font-size: .78rem; font-weight: 600;
+    }
+    .chip.ok { background: #e8f7ef; border-color: #b7e0c7; color: var(--ok); }
+    .chip.warn { background: #fff7e6; border-color: #f0d9a0; color: var(--warn); }
+    .chip.bad { background: #fdeceb; border-color: #f0b4ae; color: var(--bad); }
+    .chip.done { background: #eef2f6; color: var(--muted); }
+    .opt-rec { outline: 2px solid var(--blue); outline-offset: -2px; }
+  </style>
+</head>
+<body data-theme="light">
+  <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <header class="space-y-3">
+      <p class="wb-kicker">Kun / M02 remaining plan</p>
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[color:var(--navy)]">
+        Don’t rebuild combinations. Finish the hard physics.
+      </h1>
+      <p class="text-lg max-w-3xl text-[color:var(--muted)]">
+        Uniform loads, self-weight, prescribed motion, cases/combinations and B07–B11 seeds already exist.
+        What’s left is what the kernel still rejects: My/Mz releases, interior point actions, exact extrema/discontinuities, and envelopes with real governing-combination provenance.
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <span class="chip ok">done: UDL / SW / combos</span>
+        <span class="chip bad">blocked: releases</span>
+        <span class="chip bad">blocked: point loads</span>
+        <span class="chip warn">sampled ≠ extrema</span>
+        <span class="chip warn">no envelope API</span>
+      </div>
+      <div class="wb-card p-4 mt-2 space-y-2" data-lavish-revision="r1" id="decided">
+        <p class="wb-kicker">Decided (this review)</p>
+        <ul class="text-sm space-y-1 list-disc pl-5">
+          <li><strong>Sequence A</strong> — E → R → P → V</li>
+          <li><strong>First slice</strong> — E (exact extrema + discontinuities)</li>
+          <li><strong>In scope</strong> — E, R, P, V, INVALID</li>
+          <li><strong>Deferred</strong> — PARTIAL (partial-span / interior couple) until after P or pre-M06</li>
+        </ul>
+      </div>
+    </header>
+    <script type="application/json" data-lavish-revisions>
+[{"id":"r1","label":"Round 1","timestamp":"2026-09-22T14:20:00Z","summary":"Locked A-ERPV, first=E, scope E/R/P/V/INVALID; PARTIAL deferred; added E technical outline"},{"id":"r2","label":"Round 2","timestamp":"2026-09-22T14:25:00Z","summary":"User chose implement-E; plan board closed"}]
+    </script>
+
+    <section class="wb-card p-5 sm:p-6 space-y-3" id="goal">
+      <p class="wb-kicker">Goal</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">M02 user outcome (spec)</h2>
+      <p>Apply dead/live/wind cases to a loaded beam or portal, define explicit combinations, and inspect the <strong>governing</strong> deflection and moment <strong>with provenance</strong>.</p>
+      <p class="fig-caption">Contract: <code>SPECIFICATION.md</code> §M02 · seeds B07–B11 · INVALID load/release corpus · roadmap depends on M01 (formal accept still blocked by M01 platform/CUA).</p>
+    </section>
+
+    <section class="space-y-3" id="gap-map">
+      <div>
+        <p class="wb-kicker">Diagram 1 · gap map</p>
+        <h2 class="text-xl font-semibold text-[color:var(--navy)]">What’s green vs what’s still a wall</h2>
+      </div>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 920 340" role="img" aria-labelledby="gap-title">
+          <title id="gap-title">M02 gap map</title>
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#53667c"/>
+            </marker>
+          </defs>
+          <!-- done -->
+          <text x="40" y="36" font-size="13" font-weight="700" fill="#1f7a4c">ALREADY SHIPPED (local)</text>
+          <rect id="g-udl" x="40" y="52" width="140" height="56" rx="8" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2"/>
+          <title>Uniform loads</title>
+          <text x="110" y="85" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">UDL + SW</text>
+          <rect id="g-pres" x="200" y="52" width="140" height="56" rx="8" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2"/>
+          <title>Prescribed motion</title>
+          <text x="270" y="85" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">prescribed Δ</text>
+          <rect id="g-combo" x="360" y="52" width="140" height="56" rx="8" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2"/>
+          <title>Combinations</title>
+          <text x="430" y="85" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">combos</text>
+          <rect id="g-b" x="520" y="52" width="140" height="56" rx="8" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2"/>
+          <title>B07-B11 fixtures</title>
+          <text x="590" y="85" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">B07–B11</text>
+          <rect id="g-samp" x="680" y="52" width="200" height="56" rx="8" fill="#fff7e6" stroke="#9a6700" stroke-width="2"/>
+          <title>Fixed sample polyline</title>
+          <text x="780" y="78" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">41-station samples</text>
+          <text x="780" y="96" text-anchor="middle" font-size="11" fill="#9a6700">not exact extrema</text>
+
+          <!-- remaining -->
+          <text x="40" y="160" font-size="13" font-weight="700" fill="#b42318">REMAINING WALLS</text>
+          <rect id="g-rel" x="40" y="176" width="200" height="72" rx="10" fill="#fdeceb" stroke="#b42318" stroke-width="2"/>
+          <title>End releases</title>
+          <text x="140" y="208" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">My/Mz releases</text>
+          <text x="140" y="228" text-anchor="middle" font-size="11" fill="#53667c">rejected in validate()</text>
+
+          <rect id="g-pt" x="260" y="176" width="200" height="72" rx="10" fill="#fdeceb" stroke="#b42318" stroke-width="2"/>
+          <title>Interior point loads</title>
+          <text x="360" y="208" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">Interior point P</text>
+          <text x="360" y="228" text-anchor="middle" font-size="11" fill="#53667c">needs analytical split</text>
+
+          <rect id="g-ext" x="480" y="176" width="200" height="72" rx="10" fill="#fff7e6" stroke="#9a6700" stroke-width="2"/>
+          <title>Exact extrema</title>
+          <text x="580" y="208" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">Exact extrema</text>
+          <text x="580" y="228" text-anchor="middle" font-size="11" fill="#53667c">+ discontinuities</text>
+
+          <rect id="g-env" x="700" y="176" width="180" height="72" rx="10" fill="#fff7e6" stroke="#9a6700" stroke-width="2"/>
+          <title>Envelopes</title>
+          <text x="790" y="208" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">Envelopes</text>
+          <text x="790" y="228" text-anchor="middle" font-size="11" fill="#53667c">governing combo ID</text>
+
+          <text x="40" y="300" font-size="12" fill="#53667c">Evidence on disk: crates/model rejects releases &amp; point loads; assembly samples 0..=40; UI picks one case/combo — no envelope object.</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-4" id="workstreams">
+      <p class="wb-kicker">Proposed workstreams</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">Four slices, one acceptance story</h2>
+      <div class="overflow-x-auto">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Slice</th>
+              <th>Kernel change</th>
+              <th>Acceptance hook</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="ws-e">
+              <td><span class="badge badge-soft badge-warning">E</span></td>
+              <td><strong>Extrema + discontinuities</strong></td>
+              <td>Section-action functions emit breakpoints + exact interior extrema; samples derive from that</td>
+              <td>Diagrams show jump/peak, not only 41 polyline points · B08 interior recovery stays green</td>
+            </tr>
+            <tr id="ws-r">
+              <td><span class="badge badge-soft badge-error">R</span></td>
+              <td><strong>My/Mz releases</strong></td>
+              <td>Static condensation of K <em>and</em> fe · singular release diagnostic</td>
+              <td>Pin-ended UDL under distributed load · release INVALID corpus</td>
+            </tr>
+            <tr id="ws-p">
+              <td><span class="badge badge-soft badge-error">P</span></td>
+              <td><strong>Interior point actions</strong></td>
+              <td>Analytical child elements at station; recover one-sided force jump</td>
+              <td>Mid-member P produces exact jump · UI stops rejecting point loads</td>
+            </tr>
+            <tr id="ws-v">
+              <td><span class="badge badge-soft badge-info">V</span></td>
+              <td><strong>Envelopes + provenance</strong></td>
+              <td>Per-scalar max/min with governing case/combo + station; never mix into fake simultaneous vector</td>
+              <td>Envelope UI/report shows real governing combination</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div role="alert" class="alert alert-warning">
+        <span>Formal M02 accept still depends on M01 in <code>roadmap.json</code>. Implement evidence now; do not waive M01 platform/CUA blockers or relabel parent M02 accepted.</span>
+      </div>
+    </section>
+
+    <section class="space-y-3" id="sequence">
+      <div>
+        <p class="wb-kicker">Diagram 2 · recommended sequence</p>
+        <h2 class="text-xl font-semibold text-[color:var(--navy)]">Why this order</h2>
+        <p class="fig-caption">Extrema first upgrades recovery for loads you already solve. Releases and point loads both need that recovery story. Envelopes consume multi-case results last.</p>
+      </div>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 920 200" role="img" aria-labelledby="seq-title">
+          <title id="seq-title">Recommended M02 sequence</title>
+          <rect id="s-e" x="30" y="50" width="160" height="80" rx="10" fill="#fff7e6" stroke="#9a6700" stroke-width="2"/>
+          <text x="110" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">1 · Extrema</text>
+          <text x="110" y="105" text-anchor="middle" font-size="11" fill="#53667c">E</text>
+          <rect id="s-r" x="230" y="50" width="160" height="80" rx="10" fill="#fdeceb" stroke="#b42318" stroke-width="2"/>
+          <text x="310" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">2 · Releases</text>
+          <text x="310" y="105" text-anchor="middle" font-size="11" fill="#53667c">R</text>
+          <rect id="s-p" x="430" y="50" width="160" height="80" rx="10" fill="#fdeceb" stroke="#b42318" stroke-width="2"/>
+          <text x="510" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">3 · Point P</text>
+          <text x="510" y="105" text-anchor="middle" font-size="11" fill="#53667c">P</text>
+          <rect id="s-v" x="630" y="50" width="160" height="80" rx="10" fill="#edf4ff" stroke="#225dc7" stroke-width="2"/>
+          <text x="710" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">4 · Envelope</text>
+          <text x="710" y="105" text-anchor="middle" font-size="11" fill="#53667c">V</text>
+          <rect id="s-ev" x="830" y="50" width="60" height="80" rx="10" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2"/>
+          <text x="860" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#142b44">ev</text>
+          <path d="M190 90 H230" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr)" fill="none"/>
+          <path d="M390 90 H430" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr)" fill="none"/>
+          <path d="M590 90 H630" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr)" fill="none"/>
+          <path d="M790 90 H830" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr)" fill="none"/>
+          <text x="460" y="170" text-anchor="middle" font-size="12" fill="#53667c">Each slice: formulation note → failing fixture → Rust → native/WASM → thin UI → e2e · hash evidence under evidence/M02/</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-3" id="proposal">
+      <p class="wb-kicker">Concrete proposal</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">How I’d execute</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-sm">
+        <li><strong>E — Extrema:</strong> replace “sample then pretend peak” with section-action recovery that inserts load discontinuities and analytical extrema stations; keep 41-sample polylines as display derivatives only (<code>crates/assembly</code> + <code>crates/results</code>).</li>
+        <li><strong>R — Releases:</strong> implement My/Mz static condensation on K and fe in <code>crates/frame</code>; unlock validate(); add pin-ended UDL analytical + oracle; UI release toggles already exist in schema — stop rejecting.</li>
+        <li><strong>P — Point loads:</strong> split physical member into analytical children at station (deterministic IDs); recover left/right section actions; UI: allow point load form that currently says “split manually”.</li>
+        <li><strong>V — Envelopes:</strong> new result view over solved cases/combos — each scalar stores {value, caseOrComboId, station, memberId}; ban mixing independent maxima into one design vector.</li>
+        <li><strong>Evidence:</strong> expand INVALID load/release fixtures; browser journey dead/live/wind → combo → governing moment provenance → save/reopen; record under <code>evidence/M02/</code> without claiming parent accept.</li>
+      </ol>
+    </section>
+
+    <section class="space-y-3" id="options">
+      <div>
+        <p class="wb-kicker">Decision</p>
+        <h2 class="text-xl font-semibold text-[color:var(--navy)]">Sequencing options</h2>
+      </div>
+      <div class="grid gap-4 lg:grid-cols-3">
+        <article class="wb-card p-4 opt-rec space-y-2" id="opt-erpv" data-lavish-revision="r1">
+          <div class="flex justify-between gap-2 items-start">
+            <h3 class="font-semibold text-[color:var(--navy)]">A · E→R→P→V</h3>
+            <span class="badge badge-soft badge-success">chosen</span>
+          </div>
+          <p class="text-sm text-[color:var(--muted)]">Locked. Recovery quality first, then blocked physics, envelope last.</p>
+        </article>
+        <article class="wb-card p-4 space-y-2 opacity-60" id="opt-rp">
+          <h3 class="font-semibold text-[color:var(--navy)]">B · R→P first</h3>
+          <p class="text-sm text-[color:var(--muted)]">Not chosen.</p>
+        </article>
+        <article class="wb-card p-4 space-y-2 opacity-50" id="opt-ev">
+          <h3 class="font-semibold text-[color:var(--navy)]">C · Envelope UX first</h3>
+          <p class="text-sm text-[color:var(--muted)]">Rejected — false milestone signal.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-4" id="scope-receipt" data-lavish-revision="r1">
+      <p class="wb-kicker">Tracked-batch receipt</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">Scope items</h2>
+      <div class="overflow-x-auto">
+        <table class="table table-sm">
+          <thead><tr><th>ID</th><th>Outcome</th><th>Evidence</th></tr></thead>
+          <tbody>
+            <tr><td>E</td><td>addressed</td><td>First slice; outline below</td></tr>
+            <tr><td>R</td><td>addressed</td><td>Sequence step 2 after E</td></tr>
+            <tr><td>P</td><td>addressed</td><td>Sequence step 3 after R</td></tr>
+            <tr><td>V</td><td>addressed</td><td>Sequence step 4 last</td></tr>
+            <tr><td>INVALID</td><td>addressed</td><td>Ship with R/P negative fixtures; expand N08/N09 family</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fig-caption">PARTIAL was not submitted — deferred out of remaining-M02 must-address set.</p>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-4" id="slice-e" data-lavish-revision="r1">
+      <p class="wb-kicker">First slice · E</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">Exact extrema + discontinuities</h2>
+      <p class="fig-caption">Today: <code>assembly</code> walks <code>0..=40</code> stations and applies a UDL particular solution. Peaks in the UI are min/max of those samples — not guaranteed analytical extrema, and point-load jumps cannot appear until P.</p>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 920 200" role="img" aria-labelledby="e-title">
+          <title id="e-title">Extrema recovery pipeline</title>
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#53667c"/>
+            </marker>
+          </defs>
+          <rect id="e1" x="30" y="55" width="150" height="70" rx="10" fill="#edf4ff" stroke="#225dc7" stroke-width="2"/>
+          <text x="105" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">section s(x)</text>
+          <rect id="e2" x="220" y="55" width="150" height="70" rx="10" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2"/>
+          <text x="295" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">breakpoints</text>
+          <text x="295" y="108" text-anchor="middle" font-size="11" fill="#53667c">ends · loads</text>
+          <rect id="e3" x="410" y="55" width="150" height="70" rx="10" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2"/>
+          <text x="485" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">exact extrema</text>
+          <text x="485" y="108" text-anchor="middle" font-size="11" fill="#53667c">per component</text>
+          <rect id="e4" x="600" y="55" width="150" height="70" rx="10" fill="#fff" stroke="#dce3eb" stroke-width="2"/>
+          <text x="675" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">result keys</text>
+          <text x="675" y="108" text-anchor="middle" font-size="11" fill="#53667c">+ display samples</text>
+          <rect id="e5" x="790" y="55" width="100" height="70" rx="10" fill="#fff7e6" stroke="#9a6700" stroke-width="2"/>
+          <text x="840" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">UI/plots</text>
+          <path d="M180 90 H220" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr2)" fill="none"/>
+          <path d="M370 90 H410" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr2)" fill="none"/>
+          <path d="M560 90 H600" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr2)" fill="none"/>
+          <path d="M750 90 H790" stroke="#53667c" stroke-width="1.75" marker-end="url(#arr2)" fill="none"/>
+        </svg>
+      </div>
+      <ol class="list-decimal pl-5 text-sm space-y-1">
+        <li>Formulation note in <code>docs/formulations/</code>: section actions from end actions + integrated loads; where V=0 → M extrema; one-sided values at discontinuities.</li>
+        <li>Extend <code>MemberResult</code> with extrema/discontinuity stations (keep <code>samples</code> as derived display polyline).</li>
+        <li>Failing analytical checks: peak moment of UDL beam must match qL²/8 at midspan even if sample grid were coarse; later P adds jump tests.</li>
+        <li>Native + WASM agree; force-inspector / diagrams read extrema keys for min/max labels.</li>
+        <li>No schema migration if additive JSON fields only; reports stay hash-bound.</li>
+      </ol>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-3" id="risks">
+      <p class="wb-kicker">Risks</p>
+      <ul class="list-disc pl-5 text-sm space-y-1">
+        <li>Condensing stiffness but not fe → passes no-load checks, fails UDL release (spec calls this out).</li>
+        <li>Faking interior point load by nearest node → wrong station / wrong jump.</li>
+        <li>Envelope from independent max N and max M → illegal simultaneous vector for later design.</li>
+        <li>Claiming M02 accepted while M01 platform gates blocked.</li>
+        <li>Partial-span / interior couple fixtures in VALIDATION.md are required before M06 — schedule at least one with P.</li>
+      </ul>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-3" id="decide" data-lavish-revision="r2">
+      <p class="wb-kicker">Plan status</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">Closed — implementing E</h2>
+      <div role="alert" class="alert alert-info">
+        <span>Go: implement-E. Architecture/plan review ended; coding continues in the agent session.</span>
+      </div>
+    </section>
+
+    <footer class="pb-10 text-sm text-[color:var(--muted)] space-y-1">
+      <p>Design: project tokens from <code>web/styles.css</code>; Tailwind/DaisyUI for layout/controls only.</p>
+      <p>Receipts: <code>crates/model/src/lib.rs</code> (reject releases/points), <code>crates/assembly/src/lib.rs</code> (0..=40 samples), <code>SPECIFICATION.md</code> §M02, <code>VALIDATION.md</code> B07–B11.</p>
+    </footer>
+  </main>
+</body>
+</html>

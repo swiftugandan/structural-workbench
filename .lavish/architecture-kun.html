@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How I'd Architect Structural Workbench</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :where(.grid, .flex) > * { min-width: 0; }
+    :where(p, h1, h2, h3, h4, li, td, th, .badge, label) { overflow-wrap: anywhere; }
+    :where(img, svg) { max-width: 100%; height: auto; }
+    :root {
+      --navy: #142b44;
+      --muted: #53667c;
+      --border: #dce3eb;
+      --blue: #225dc7;
+      --pale: #edf4ff;
+      --canvas: #f5f7fa;
+      --ink: #1d334b;
+      --ok: #1f7a4c;
+      --warn: #9a6700;
+      --bad: #b42318;
+    }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 10% -10%, #d9e7ff 0%, transparent 55%),
+        radial-gradient(900px 400px at 90% 0%, #e8f0f7 0%, transparent 50%),
+        var(--canvas);
+    }
+    .wb-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 1px 0 rgba(20, 43, 68, 0.04);
+    }
+    .wb-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .fig-caption { color: var(--muted); font-size: 0.9rem; }
+    .opt-rec { outline: 2px solid var(--blue); outline-offset: -2px; }
+    .diagram-wrap { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; }
+    .diagram-wrap svg { display: block; width: 100%; height: auto; color: var(--ink); }
+    .chip {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      border: 1px solid var(--border); background: var(--pale);
+      color: var(--navy); border-radius: 999px; padding: 0.15rem 0.65rem;
+      font-size: 0.78rem; font-weight: 600;
+    }
+    .chip.warn { background: #fff7e6; border-color: #f0d9a0; color: var(--warn); }
+    .chip.ok { background: #e8f7ef; border-color: #b7e0c7; color: var(--ok); }
+    .chip.bad { background: #fdeceb; border-color: #f0b4ae; color: var(--bad); }
+  </style>
+</head>
+<body data-theme="light">
+  <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <header class="space-y-3">
+      <p class="wb-kicker">Kun / architecture judgment</p>
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[color:var(--navy)]">
+        Keep the spine. Fix the incentive plane.
+      </h1>
+      <p class="text-lg max-w-3xl text-[color:var(--muted)]">
+        I would not redesign this product's runtime. The Rust→WASM truth / Worker protocol / WebGPU-display split is already the right architecture.
+        What I'd redesign is how delivery pressure gets applied — because right now polish can ship while parent gates stay blocked.
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <span class="chip ok">runtime: keep</span>
+        <span class="chip warn">delivery: tighten</span>
+        <span class="chip">evidence: sacred</span>
+        <span class="chip bad">parity claims: gated</span>
+      </div>
+      <div class="wb-card p-4 mt-2 space-y-2" data-lavish-revision="r1" id="decided">
+        <p class="wb-kicker">Decided (this review)</p>
+        <ul class="text-sm space-y-1 list-disc pl-5">
+          <li><strong>Direction A</strong> — Spec-faithful deepen</li>
+          <li><strong>Intent</strong> — verified analysis MVP engineers can trust</li>
+          <li><strong>Next</strong> — M02 loads / combinations on kernel + protocol (platform gates stay blocked, not waived)</li>
+          <li><strong>Mode</strong> — full vertical slice (contracts → Rust → UI → e2e) in one pass</li>
+        </ul>
+      </div>
+    </header>
+    <script type="application/json" data-lavish-revisions>
+[
+  {"id":"r1","label":"Round 1","timestamp":"2026-09-22T13:10:00Z","summary":"Locked A + verified-MVP + M02 loads; replaced open questions with an M02 execution spine"},
+  {"id":"r2","label":"Round 2","timestamp":"2026-09-22T13:15:00Z","summary":"Locked full-slice mode; plan marked approved"},
+  {"id":"r3","label":"Round 3","timestamp":"2026-09-22T13:20:00Z","summary":"User chose start-m02; architecture review closed for implementation"}
+]
+    </script>
+
+    <section class="wb-card p-5 sm:p-6 space-y-3" id="current-state">
+      <p class="wb-kicker">Current state (from disk)</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">What already exists</h2>
+      <div class="grid gap-3 sm:grid-cols-3">
+        <div class="rounded-lg border border-[color:var(--border)] p-3 bg-[color:var(--pale)]">
+          <div class="text-2xl font-bold tabular-nums">M00–M01</div>
+          <p class="text-sm text-[color:var(--muted)] mt-1">Local cantilever + portal slices implemented; parent milestones still blocked on Windows/Linux real-GPU + CUA policy.</p>
+        </div>
+        <div class="rounded-lg border border-[color:var(--border)] p-3">
+          <div class="text-2xl font-bold tabular-nums">~1.3k</div>
+          <p class="text-sm text-[color:var(--muted)] mt-1"><code>web/app.js</code> lines — the JS shell is becoming the gravity well.</p>
+        </div>
+        <div class="rounded-lg border border-[color:var(--border)] p-3">
+          <div class="text-2xl font-bold tabular-nums">11</div>
+          <p class="text-sm text-[color:var(--muted)] mt-1"><code>crates/design</code> lib lines — design is correctly a stub until resources unlock it.</p>
+        </div>
+      </div>
+      <p class="fig-caption">Sources: <code>delivery/state.json</code>, <code>SPECIFICATION.md</code> §5, crate/web line counts.</p>
+    </section>
+
+    <!-- Diagram 1: runtime -->
+    <section class="space-y-3" id="runtime">
+      <div>
+        <p class="wb-kicker">Diagram 1 · runtime</p>
+        <h2 class="text-xl font-semibold text-[color:var(--navy)]">Who is allowed to know the truth?</h2>
+        <p class="fig-caption">One question: engineering numbers must never originate in JS or GPU.</p>
+      </div>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 920 420" role="img" aria-labelledby="rt-title rt-desc">
+          <title id="rt-title">Runtime authority layers</title>
+          <desc id="rt-desc">UI and WebGPU talk to a Worker gateway. Rust owns model, solve, results, and design. Snapshots go to storage and reports. GPU is display only.</desc>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#53667c" />
+            </marker>
+          </defs>
+          <!-- UI band -->
+          <rect id="rt-ui" x="40" y="28" width="200" height="88" rx="10" fill="#edf4ff" stroke="#225dc7" stroke-width="2" />
+          <title>UI shell</title>
+          <text x="140" y="68" text-anchor="middle" font-size="15" font-weight="700" fill="#142b44">HTML / JS shell</text>
+          <text x="140" y="90" text-anchor="middle" font-size="12" fill="#53667c">format · preview · UI</text>
+
+          <rect id="rt-gpu" x="280" y="28" width="200" height="88" rx="10" fill="#fff7e6" stroke="#9a6700" stroke-width="2" />
+          <title>WebGPU viewport</title>
+          <text x="380" y="68" text-anchor="middle" font-size="15" font-weight="700" fill="#142b44">WebGPU viewport</text>
+          <text x="380" y="90" text-anchor="middle" font-size="12" fill="#53667c">f32 display only</text>
+
+          <!-- Worker -->
+          <rect id="rt-worker" x="180" y="160" width="280" height="72" rx="10" fill="#142b44" />
+          <title>Worker command gateway</title>
+          <text x="320" y="192" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Worker · protocol gateway</text>
+          <text x="320" y="214" text-anchor="middle" font-size="12" fill="#b8c7d8">revision · modelHash · cancel</text>
+
+          <!-- Rust band -->
+          <rect id="rt-rust" x="40" y="280" width="520" height="110" rx="12" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2" />
+          <title>Rust kernel</title>
+          <text x="56" y="308" font-size="13" font-weight="700" fill="#1f7a4c">RUST KERNEL · f64 authority</text>
+          <rect id="rt-model" x="56" y="322" width="110" height="48" rx="8" fill="#fff" stroke="#1f7a4c" />
+          <text x="111" y="350" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">model</text>
+          <rect id="rt-solve" x="180" y="322" width="110" height="48" rx="8" fill="#fff" stroke="#1f7a4c" />
+          <text x="235" y="350" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">solve</text>
+          <rect id="rt-results" x="304" y="322" width="110" height="48" rx="8" fill="#fff" stroke="#1f7a4c" />
+          <text x="359" y="350" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">results</text>
+          <rect id="rt-design" x="428" y="322" width="110" height="48" rx="8" fill="#fff" stroke="#1f7a4c" stroke-dasharray="4 3" />
+          <text x="483" y="350" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">design*</text>
+
+          <!-- Side stores -->
+          <rect id="rt-store" x="620" y="160" width="240" height="72" rx="10" fill="#fff" stroke="#dce3eb" stroke-width="2" />
+          <title>Persistence</title>
+          <text x="740" y="192" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">IndexedDB + download</text>
+          <text x="740" y="214" text-anchor="middle" font-size="12" fill="#53667c">portable project bytes</text>
+
+          <rect id="rt-report" x="620" y="280" width="240" height="110" rx="10" fill="#fff" stroke="#dce3eb" stroke-width="2" />
+          <title>Reports</title>
+          <text x="740" y="330" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">Reports / tables</text>
+          <text x="740" y="352" text-anchor="middle" font-size="12" fill="#53667c">hash-bound calc record</text>
+
+          <!-- edges -->
+          <line x1="140" y1="116" x2="260" y2="160" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" />
+          <line x1="380" y1="116" x2="360" y2="160" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" />
+          <line x1="320" y1="232" x2="320" y2="280" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" />
+          <line x1="460" y1="196" x2="620" y2="196" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" />
+          <line x1="560" y1="335" x2="620" y2="335" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" />
+          <line x1="480" y1="116" x2="700" y2="160" stroke="#9a6700" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)" />
+          <text x="590" y="130" font-size="11" fill="#9a6700">render packets only</text>
+        </svg>
+      </div>
+      <p class="fig-caption">Peers (Frame3DD-WASM, Stabileo, Hekatan) all land on “native solver in WASM + browser viz.” Your twist that matters: WebGPU is never the numerical authority, and cancel kills the analysis worker instead of pretending cooperative cancel works.</p>
+    </section>
+
+    <!-- Diagram 2: delivery -->
+    <section class="space-y-3" id="delivery">
+      <div>
+        <p class="wb-kicker">Diagram 2 · delivery OS</p>
+        <h2 class="text-xl font-semibold text-[color:var(--navy)]">The architecture agents actually need</h2>
+        <p class="fig-caption">Specs without an evidence plane become a feature factory. You've already built most of this — protect it.</p>
+      </div>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 920 360" role="img" aria-labelledby="dl-title">
+          <title id="dl-title">Delivery architecture</title>
+          <rect id="dl-spec" x="40" y="40" width="180" height="100" rx="10" fill="#edf4ff" stroke="#225dc7" stroke-width="2" />
+          <text x="130" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">SPEC + contracts</text>
+          <text x="130" y="108" text-anchor="middle" font-size="12" fill="#53667c">intent</text>
+
+          <rect id="dl-slice" x="260" y="40" width="180" height="100" rx="10" fill="#fff" stroke="#dce3eb" stroke-width="2" />
+          <text x="350" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">Vertical slice</text>
+          <text x="350" y="108" text-anchor="middle" font-size="12" fill="#53667c">M00… journey</text>
+
+          <rect id="dl-ev" x="480" y="40" width="180" height="100" rx="10" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2" />
+          <text x="570" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">Hash evidence</text>
+          <text x="570" y="108" text-anchor="middle" font-size="12" fill="#53667c">oracle · e2e · a11y</text>
+
+          <rect id="dl-gate" x="700" y="40" width="180" height="100" rx="10" fill="#fff7e6" stroke="#9a6700" stroke-width="2" />
+          <text x="790" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#142b44">Accept / block</text>
+          <text x="790" y="108" text-anchor="middle" font-size="12" fill="#53667c">state.json</text>
+
+          <path d="M220 90 H260" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" fill="none" />
+          <path d="M440 90 H480" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" fill="none" />
+          <path d="M660 90 H700" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow)" fill="none" />
+
+          <rect id="dl-agent" x="40" y="200" width="400" height="120" rx="12" fill="#142b44" />
+          <text x="240" y="245" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Agent loop</text>
+          <text x="240" y="270" text-anchor="middle" font-size="12" fill="#b8c7d8">fresh context · worktree · review isolation</text>
+          <text x="240" y="292" text-anchor="middle" font-size="12" fill="#b8c7d8">no “accepted” without verifier receipts</text>
+
+          <rect id="dl-risk" x="480" y="200" width="400" height="120" rx="12" fill="#fdeceb" stroke="#b42318" stroke-width="2" />
+          <text x="680" y="245" text-anchor="middle" font-size="15" font-weight="700" fill="#b42318">Anti-pattern to kill</text>
+          <text x="680" y="270" text-anchor="middle" font-size="12" fill="#53667c">UX polish counted as milestone progress</text>
+          <text x="680" y="292" text-anchor="middle" font-size="12" fill="#53667c">while platform/CUA gates stay BLOCKED</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Proposal -->
+    <section class="wb-card p-5 sm:p-6 space-y-4" id="proposal">
+      <p class="wb-kicker">Proposed approach</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">Architecture I'd actually run</h2>
+      <ol class="space-y-3 list-decimal pl-5">
+        <li>
+          <strong>Runtime spine stays.</strong> Rust crates own model/units/assembly/solver/results/design/exchange; one Worker owns the project; JS only formats and CAD-previews; WebGPU rebases f64→f32 for display.
+        </li>
+        <li>
+          <strong>Protocol is the real API.</strong> Treat <code>contracts/</code> + worker ops as the product boundary. Anything that can't be expressed as a revision-aware command is not a feature yet.
+        </li>
+        <li>
+          <strong>Split workers on schedule, not vibes.</strong> Spec already says model Worker vs analysis Worker by M03. Do that when edit-during-solve is real — not as premature microservices.
+        </li>
+        <li>
+          <strong>Design codes are plugins with resource gates.</strong> Keep <code>crates/design</code> empty-ish until clause text + examples are lawful. Never invent jurisdiction compliance.
+        </li>
+        <li>
+          <strong>Thin the JS shell.</strong> <code>app.js</code> is already the place complexity hides. Carve command forms / results / persistence behind the existing module seams before M02 load-combination work lands.
+        </li>
+        <li>
+          <strong>Delivery OS &gt; org chart.</strong> <code>AGENTS.md</code> + <code>delivery/state.json</code> + hash-bound evidence is the operating system. For high-stakes merges I'd gate through <a href="https://github.com/kunchenguid/no-mistakes" class="link">no-mistakes</a>. I would <em>not</em> stand up firstmate until parallel-session juggling actually hurts.
+        </li>
+        <li>
+          <strong>Parity is a matrix, not a vibe.</strong> Workflow / numerical / code / exchange / ops stay separate rows. No single “% PROKON” number. Ever.
+        </li>
+      </ol>
+      <div role="alert" class="alert alert-warning">
+        <span>Hard take: finishing another ribbon polish while M00/M01 parent acceptance is blocked on a real-GPU runner is optimizing the wrong objective. Independent DAG work is fine; calling it milestone acceptance is not.</span>
+      </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="space-y-3" id="options">
+      <div>
+        <p class="wb-kicker">Decision</p>
+        <h2 class="text-xl font-semibold text-[color:var(--navy)]">Three directions</h2>
+      </div>
+      <div class="grid gap-4 lg:grid-cols-3">
+        <article class="wb-card p-4 opt-rec space-y-2" id="opt-a" data-lavish-revision="r1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-[color:var(--navy)]">A · Spec-faithful deepen</h3>
+            <span class="badge badge-soft badge-success">chosen</span>
+          </div>
+          <p class="text-sm text-[color:var(--muted)]">Keep runtime. Ship M02 loads/combinations on the protocol. Thin <code>app.js</code> only as needed for that slice. Do not waive platform/CUA blockers.</p>
+          <p class="text-sm"><strong>Cost:</strong> slower “demo wow.” <strong>Gain:</strong> trustworthy calc product.</p>
+        </article>
+        <article class="wb-card p-4 space-y-2 opacity-60" id="opt-b">
+          <h3 class="font-semibold text-[color:var(--navy)]">B · Kernel-first library</h3>
+          <p class="text-sm text-[color:var(--muted)]">Not chosen. Keep CLI/oracle strength inside the existing crate graph without demoting the browser client.</p>
+        </article>
+        <article class="wb-card p-4 space-y-2 opacity-50" id="opt-c">
+          <h3 class="font-semibold text-[color:var(--navy)]">C · Framework rewrite</h3>
+          <p class="text-sm text-[color:var(--muted)]">Rejected. Spec forbids it; frameworks burn agent context without buying f64 truth.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-4" id="m02-spine" data-lavish-revision="r1">
+      <p class="wb-kicker">Next slice · M02</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">Loads &amp; combinations — execution spine</h2>
+      <p class="fig-caption">Verified-MVP rule: a combination is not “done” until oracle + WASM + browser journey agree on the same modelHash.</p>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 920 220" role="img" aria-labelledby="m02-title">
+          <title id="m02-title">M02 execution spine</title>
+          <defs>
+            <marker id="arrow-m02" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#53667c" />
+            </marker>
+          </defs>
+          <rect id="m02-schema" x="30" y="50" width="150" height="90" rx="10" fill="#edf4ff" stroke="#225dc7" stroke-width="2" />
+          <text x="105" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">schema + cmds</text>
+          <text x="105" y="112" text-anchor="middle" font-size="11" fill="#53667c">cases · factors</text>
+          <rect id="m02-rust" x="210" y="50" width="150" height="90" rx="10" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2" />
+          <text x="285" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">Rust assemble</text>
+          <text x="285" y="112" text-anchor="middle" font-size="11" fill="#53667c">linear combo</text>
+          <rect id="m02-oracle" x="390" y="50" width="150" height="90" rx="10" fill="#e8f7ef" stroke="#1f7a4c" stroke-width="2" />
+          <text x="465" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">oracle fixtures</text>
+          <text x="465" y="112" text-anchor="middle" font-size="11" fill="#53667c">native = wasm</text>
+          <rect id="m02-ui" x="570" y="50" width="150" height="90" rx="10" fill="#fff" stroke="#dce3eb" stroke-width="2" />
+          <text x="645" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">UI assign/edit</text>
+          <text x="645" y="112" text-anchor="middle" font-size="11" fill="#53667c">no JS math</text>
+          <rect id="m02-e2e" x="750" y="50" width="140" height="90" rx="10" fill="#fff7e6" stroke="#9a6700" stroke-width="2" />
+          <text x="820" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#142b44">e2e journey</text>
+          <text x="820" y="112" text-anchor="middle" font-size="11" fill="#53667c">hash-bound</text>
+          <path d="M180 95 H210" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow-m02)" fill="none" />
+          <path d="M360 95 H390" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow-m02)" fill="none" />
+          <path d="M540 95 H570" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow-m02)" fill="none" />
+          <path d="M720 95 H750" stroke="#53667c" stroke-width="1.75" marker-end="url(#arrow-m02)" fill="none" />
+          <text x="460" y="180" text-anchor="middle" font-size="12" fill="#53667c">Parent M00/M01 platform blockers remain recorded — independent M02 work must not pretend they passed.</text>
+        </svg>
+      </div>
+      <ol class="list-decimal pl-5 space-y-2 text-sm">
+        <li>Extend contracts for combination provenance (case ID × factor, reject duplicates/nesting per §6.1).</li>
+        <li>Implement combination application only in Rust assembly/results recovery — envelopes carry governing case/combination + station.</li>
+        <li>Add analytical + oracle fixtures before UI; WASM must match native within existing tolerances.</li>
+        <li>UI: create/edit cases and combinations via worker commands; display only.</li>
+        <li>Browser journey: assign loads → combine → analyse → inspect envelope → save/reopen → report excludes stale results.</li>
+      </ol>
+    </section>
+
+    <!-- Risks -->
+    <section class="wb-card p-5 sm:p-6 space-y-3" id="risks">
+      <p class="wb-kicker">Risks</p>
+      <h2 class="text-xl font-semibold text-[color:var(--navy)]">What breaks the architecture</h2>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>Risk</th>
+              <th>Why it matters</th>
+              <th>Counter</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>JS computes “just a little” engineering</td>
+              <td>Silent drift from WASM truth</td>
+              <td>Contract tests + oracle; ban stiffness/combo in JS</td>
+            </tr>
+            <tr>
+              <td>M23 roadmap as backlog guilt</td>
+              <td>Agents ship shells for shells/steel/concrete without fixtures</td>
+              <td>Inventory gate + resource block before code</td>
+            </tr>
+            <tr>
+              <td>Self-authored unit tests as proof</td>
+              <td>Looks green, misses user journey</td>
+              <td>Prefer e2e + numerical oracles for acceptance</td>
+            </tr>
+            <tr>
+              <td>Claiming code compliance early</td>
+              <td>Liability + false marketing</td>
+              <td>mechanics-v1 until lawful clause corpus</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="wb-card p-5 sm:p-6 space-y-4" id="decide" data-lavish-revision="r3">
+      <div>
+        <p class="wb-kicker">Plan status</p>
+        <h2 class="text-xl font-semibold text-[color:var(--navy)]">Approved — implementation starting</h2>
+        <p class="fig-caption">Leaving this board. Next work is the M02 full vertical slice in the repo.</p>
+      </div>
+      <div role="alert" class="alert alert-info">
+        <span>Go: start-m02. Architecture review closed. Implementation continues in the coding session.</span>
+      </div>
+    </section>
+
+    <footer class="pb-10 text-sm text-[color:var(--muted)] space-y-2">
+      <p>Design source: project tokens from <code>web/styles.css</code> (--navy/--blue/--pale), with Tailwind+DaisyUI only for layout/controls.</p>
+      <p>More depth available: worker split sequence, crate dependency graph, or a no-mistakes gate sketch for release evidence.</p>
+      <p>Related: <a class="link" href="https://github.com/kunchenguid/no-mistakes">no-mistakes</a> · <a class="link" href="https://github.com/kunchenguid/axi">AXI principles</a> · <a class="link" href="https://kunchenguid.substack.com/p/everyone-should-have-an-opinionsmd">opinion maps</a></p>
+    </footer>
+  </main>
+</body>
+</html>

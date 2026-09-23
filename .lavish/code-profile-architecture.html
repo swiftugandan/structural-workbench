@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Code-profile architecture — add any design code later</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :where(.grid, .flex) > * { min-width: 0; }
+    :where(p, h1, h2, h3, h4, li, td, th, label) { overflow-wrap: anywhere; }
+    :where(svg) { max-width: 100%; height: auto; }
+    :root {
+      --navy: #142b44;
+      --muted: #53667c;
+      --border: #dce3eb;
+      --blue: #225dc7;
+      --pale: #edf4ff;
+      --canvas: #f5f7fa;
+      --ink: #1d334b;
+      --ok: #1f7a4c;
+      --warn: #9a6700;
+      --bad: #b42318;
+    }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 480px at 8% -8%, #d9e7ff 0%, transparent 55%),
+        radial-gradient(800px 360px at 92% 0%, #e8f0f7 0%, transparent 50%),
+        var(--canvas);
+      line-height: 1.45;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    h1 { font-size: 1.85rem; color: var(--navy); margin: 0.35rem 0 0.5rem; letter-spacing: -0.02em; }
+    h2 { font-size: 1.15rem; color: var(--navy); margin: 0 0 0.65rem; }
+    h3 { font-size: 0.95rem; color: var(--navy); margin: 0 0 0.4rem; }
+    p { margin: 0 0 0.75rem; color: var(--ink); }
+    .kicker {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); font-weight: 700;
+    }
+    .lead { font-size: 1.05rem; color: var(--muted); max-width: 42rem; }
+    .card {
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.1rem 1.2rem; margin: 1.15rem 0;
+      box-shadow: 0 1px 0 rgba(20, 43, 68, 0.04);
+    }
+    .card.rec { outline: 2px solid var(--blue); outline-offset: -2px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+    .chip {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      border: 1px solid var(--border); background: var(--pale);
+      color: var(--navy); border-radius: 999px; padding: 0.12rem 0.6rem;
+      font-size: 0.75rem; font-weight: 600; margin-right: 0.25rem;
+    }
+    .chip.warn { background: #fff7e6; border-color: #f0d9a0; color: var(--warn); }
+    .chip.ok { background: #e8f7ef; border-color: #b7e0c7; color: var(--ok); }
+    .chip.bad { background: #fdeceb; border-color: #f0b8b4; color: var(--bad); }
+    .fig { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; margin: 0.75rem 0 0.35rem; }
+    .fig svg { display: block; width: 100%; color: var(--ink); }
+    .caption { color: var(--muted); font-size: 0.88rem; margin-bottom: 1rem; }
+    ul { margin: 0.2rem 0 0.6rem 1.1rem; padding: 0; color: var(--ink); }
+    li { margin: 0.25rem 0; }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.86em; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.55rem 0.45rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    form label { display: flex; gap: 0.55rem; align-items: flex-start; margin: 0.45rem 0; cursor: pointer; }
+    form button {
+      margin-top: 0.75rem; background: var(--blue); color: #fff; border: 0;
+      border-radius: 6px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer;
+    }
+    form button:hover { filter: brightness(1.05); }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .stack > * + * { margin-top: 0.55rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">Structural Workbench · design packages</p>
+    <h1>How to make “any code later” boring.</h1>
+    <p class="lead">
+      Goal: adding AISC, Eurocode, ACI, CSA… is a new <strong>profile crate + resource lock + fixtures</strong>,
+      not a fork of the solver, UI, or report pipeline. Analysis stays code-agnostic; compliance stays pluggable and fail-closed.
+    </p>
+    <p>
+      <span class="chip ok">today</span> mechanics-v1 stress screen in <code>crates/design</code> ·
+      <span class="chip warn">blocked</span> M07 until standard + examples lock ·
+      <span class="chip">hook ready</span> <code>evaluateDesign</code> / <code>designProfiles[]</code>
+    </p>
+
+    <section class="card" id="current">
+      <h2>1. What already exists (don’t reinvent)</h2>
+      <p class="muted">SPEC §9 + PROTOCOL §5 already define the shape. Kernel today refuses design until a profile is enabled.</p>
+      <div class="fig" id="fig-today">
+        <svg viewBox="0 0 920 220" role="img" aria-labelledby="t-today">
+          <title id="t-today">Today: analysis stack with empty design plug</title>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="#53667c"/>
+            </marker>
+          </defs>
+          <rect id="box-ui" x="20" y="70" width="150" height="80" rx="8" fill="#edf4ff" stroke="#225dc7" stroke-width="1.5"/>
+          <text x="95" y="105" text-anchor="middle" font-size="14" font-weight="600" fill="#142b44">UI / report</text>
+          <text x="95" y="125" text-anchor="middle" font-size="11" fill="#53667c">JS format only</text>
+
+          <line x1="170" y1="110" x2="220" y2="110" stroke="#53667c" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <rect id="box-wasm" x="220" y="70" width="170" height="80" rx="8" fill="#fff" stroke="#dce3eb" stroke-width="1.5"/>
+          <text x="305" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#142b44">wasm-api</text>
+          <text x="305" y="120" text-anchor="middle" font-size="11" fill="#53667c">evaluateDesign →</text>
+          <text x="305" y="135" text-anchor="middle" font-size="11" fill="#b42318">UNSUPPORTED</text>
+
+          <line x1="390" y1="110" x2="440" y2="110" stroke="#53667c" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <rect id="box-analysis" x="440" y="40" width="200" height="140" rx="8" fill="#fff" stroke="#142b44" stroke-width="1.8"/>
+          <text x="540" y="75" text-anchor="middle" font-size="14" font-weight="600" fill="#142b44">Analysis kernel</text>
+          <text x="540" y="98" text-anchor="middle" font-size="11" fill="#53667c">model · assembly · solver</text>
+          <text x="540" y="116" text-anchor="middle" font-size="11" fill="#53667c">results · hashes</text>
+          <text x="540" y="145" text-anchor="middle" font-size="11" fill="#1f7a4c">code-agnostic f64 truth</text>
+
+          <line x1="640" y1="110" x2="690" y2="110" stroke="#53667c" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+
+          <rect id="box-design" x="690" y="70" width="200" height="80" rx="8" fill="#fff7e6" stroke="#9a6700" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="790" y="105" text-anchor="middle" font-size="14" font-weight="600" fill="#9a6700">design crate</text>
+          <text x="790" y="125" text-anchor="middle" font-size="11" fill="#53667c">mechanics-v1 only</text>
+        </svg>
+      </div>
+      <p class="caption">Evidence: <code>crates/wasm-api</code> empty <code>designProfiles</code>; <code>evaluateDesign</code> hard-fails; SPEC already mandates pure Rust checks + pinned profile metadata.</p>
+    </section>
+
+    <section class="card rec" id="target">
+      <h2>2. Target shape — profile plugins on a frozen contract</h2>
+      <p>One shared <strong>DesignHost</strong> owns action transfer, roll-up status, and reporting. Each code is a versioned plugin that never touches stiffness.</p>
+      <div class="fig" id="fig-target">
+        <svg viewBox="0 0 920 340" role="img" aria-labelledby="t-target">
+          <title id="t-target">Target: analysis feeds DesignHost; profiles plug in</title>
+          <defs>
+            <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="#53667c"/>
+            </marker>
+          </defs>
+          <rect id="t-analysis" x="30" y="120" width="180" height="90" rx="8" fill="#fff" stroke="#142b44" stroke-width="1.8"/>
+          <text x="120" y="155" text-anchor="middle" font-size="14" font-weight="600" fill="#142b44">Analysis result</text>
+          <text x="120" y="175" text-anchor="middle" font-size="11" fill="#53667c">modelHash · actions</text>
+          <text x="120" y="192" text-anchor="middle" font-size="11" fill="#53667c">stations · cases</text>
+
+          <line x1="210" y1="165" x2="270" y2="165" stroke="#53667c" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+          <rect id="t-host" x="270" y="90" width="240" height="150" rx="8" fill="#edf4ff" stroke="#225dc7" stroke-width="1.8"/>
+          <text x="390" y="125" text-anchor="middle" font-size="15" font-weight="700" fill="#142b44">DesignHost</text>
+          <text x="390" y="148" text-anchor="middle" font-size="11" fill="#53667c">resolve profileId</text>
+          <text x="390" y="166" text-anchor="middle" font-size="11" fill="#53667c">transfer governing actions</text>
+          <text x="390" y="184" text-anchor="middle" font-size="11" fill="#53667c">run check tree</text>
+          <text x="390" y="202" text-anchor="middle" font-size="11" fill="#53667c">aggregate pass/fail/unsupported</text>
+          <text x="390" y="220" text-anchor="middle" font-size="11" fill="#53667c">bind report + capabilities</text>
+
+          <line x1="510" y1="140" x2="580" y2="70" stroke="#53667c" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <line x1="510" y1="165" x2="580" y2="165" stroke="#53667c" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <line x1="510" y1="200" x2="580" y2="260" stroke="#53667c" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+          <rect id="t-p1" x="580" y="30" width="300" height="70" rx="8" fill="#fff" stroke="#dce3eb" stroke-width="1.5"/>
+          <text x="730" y="58" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">profile: aisc-360-22-lrfd</text>
+          <text x="730" y="78" text-anchor="middle" font-size="11" fill="#53667c">crate + dossier + fixtures + lock hashes</text>
+
+          <rect id="t-p2" x="580" y="125" width="300" height="70" rx="8" fill="#fff" stroke="#dce3eb" stroke-width="1.5"/>
+          <text x="730" y="153" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">profile: en1993-1-1 + NA</text>
+          <text x="730" y="173" text-anchor="middle" font-size="11" fill="#53667c">same trait · different edition pin</text>
+
+          <rect id="t-p3" x="580" y="220" width="300" height="70" rx="8" fill="#fff" stroke="#dce3eb" stroke-width="1.5"/>
+          <text x="730" y="248" text-anchor="middle" font-size="13" font-weight="600" fill="#142b44">profile: aci-318-19 · …</text>
+          <text x="730" y="268" text-anchor="middle" font-size="11" fill="#53667c">optional Cargo feature / WASM slice</text>
+
+          <text x="390" y="320" text-anchor="middle" font-size="12" fill="#53667c">UI only lists profiles with verificationStatus ≠ not-verified</text>
+        </svg>
+      </div>
+      <p class="caption">Adding a code = new crate (or feature) that implements one trait + ships its clause map and example corpus. Host + PROTOCOL check tree stay frozen.</p>
+    </section>
+
+    <section class="card" id="contract">
+      <h2>3. The frozen seam (what every profile must speak)</h2>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Owns</th><th>Must not own</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Analysis</strong></td>
+            <td>Geometry, loads, solve, recovery, envelopes, hashes</td>
+            <td>fy, φ, γ, classification, utilisation</td>
+          </tr>
+          <tr>
+            <td><strong>Action transfer</strong> (host)</td>
+            <td>Pick simultaneous action vector from a real case/combination at station/side</td>
+            <td>Envelope max-of-max as if concurrent</td>
+          </tr>
+          <tr>
+            <td><strong>CodeProfile</strong> (plugin)</td>
+            <td>Applicability, resistance, intermediates, clause/formula IDs, mandatory set</td>
+            <td>Mutating the model or inventing missing actions</td>
+          </tr>
+          <tr>
+            <td><strong>Ledger + UI</strong></td>
+            <td>Advertise enabled profiles; refuse unsupported domains; render check tree</td>
+            <td>Hard-coding clause text or “green” without mandatory coverage</td>
+          </tr>
+          <tr>
+            <td><strong>Resource lock</strong></td>
+            <td>Edition, annex, content hash, rights, example IDs</td>
+            <td>URLs alone; OSS formula libs as sole authority</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted" style="margin-top:0.75rem">Check object shape already fixed in PROTOCOL §5: <code>pass | fail | unsupported | indeterminate</code> with nullable numerics never coerced to 0.</p>
+    </section>
+
+    <section class="card" id="recipe">
+      <h2>4. Recipe to add a future code (checklist)</h2>
+      <ol>
+        <li><strong>Amen</strong> the profile ID: <span class="mono">en1993-1-1:2005+ukna</span> or <span class="mono">aisc-360-22-lrfd</span> — never bare “Eurocode”.</li>
+        <li><strong>Lock resources</strong> into <code>resources.lock.json</code> (standard hash + worked examples). Gate stays closed until this exists.</li>
+        <li><strong>Write dossier</strong> under <code>docs/code-profiles/&lt;id&gt;/</code> (clause map, branches, unsupported predicates).</li>
+        <li><strong>Implement crate</strong> <span class="mono">workbench-design-&lt;id&gt;</span> behind Cargo feature; register in <code>DesignHost</code>.</li>
+        <li><strong>Fixtures</strong>: ≥3 pass, ≥3 fail, boundary cases per mandatory check family; independent expected values.</li>
+        <li><strong>Advertise</strong> only after verification: <code>designProfiles[]</code> + <code>capabilities.json</code> row with <code>comparisonStatus</code> still honest.</li>
+        <li><strong>UI/report</strong>: no new screens required beyond selecting <code>profileId</code> and rendering the check tree.</li>
+      </ol>
+    </section>
+
+    <section class="card" id="options">
+      <h2>5. Packaging options</h2>
+      <div class="grid-2">
+        <div class="card stack" id="opt-a" style="margin:0; outline:2px solid var(--blue); outline-offset:-2px;">
+          <h3>A · Trait + Cargo features <span class="chip ok">recommended</span></h3>
+          <p class="muted">One host crate; each profile is <code>workbench-design-*</code> enabled by feature. WASM builds ship only enabled profiles (size control).</p>
+          <ul>
+            <li>Pros: clear deps, optional WASM slices, matches Rust ownership rule</li>
+            <li>Cons: rebuild to add a profile to a given release</li>
+          </ul>
+        </div>
+        <div class="card stack" id="opt-b" style="margin:0;">
+          <h3>B · Dynamic WASM modules</h3>
+          <p class="muted">Load profile WASM at runtime from a URL/registry.</p>
+          <ul>
+            <li>Pros: hot-add codes without app rebuild</li>
+            <li>Cons: fights CSP / “no dynamic remote modules” MVP constraint; harder hash-binding</li>
+          </ul>
+        </div>
+        <div class="card stack" id="opt-c" style="margin:0;">
+          <h3>C · Data-driven rule tables only</h3>
+          <p class="muted">JSON coefficients + generic engine, no per-code Rust.</p>
+          <ul>
+            <li>Pros: looks “easy” to extend</li>
+            <li>Cons: collapses on branching codes; invents a mini-language; weak clause evidence</li>
+          </ul>
+        </div>
+        <div class="card stack" id="opt-d" style="margin:0;">
+          <h3>D · Wrap OSS libs (Blueprints / eurocodepy) as oracles</h3>
+          <p class="muted">Native CI oracle only; product path still Rust profile + locked standard.</p>
+          <ul>
+            <li>Pros: extra cross-check once resources exist</li>
+            <li>Cons: cannot replace authoritative text/examples; Python not in WASM MVP</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="skeleton">
+      <h2>6. Suggested trait sketch (illustrative)</h2>
+      <pre class="mono" style="background:#f3f5f8;padding:1rem;border-radius:8px;overflow:auto;font-size:0.8rem;line-height:1.4;margin:0;">pub trait CodeProfile: Send + Sync {
+  fn meta(&amp;self) -&gt; ProfileMeta; // id, edition, annex, sourceHashes, version
+  fn mandatory_checks(&amp;self) -&gt; &amp;'static [CheckId];
+  fn evaluate_member(&amp;self, ctx: &amp;MemberDesignContext) -&gt; DesignRun;
+}
+
+// MemberDesignContext carries: modelHash, resultId, member, section, material,
+// restraint/Le inputs, simultaneous actions at station — never envelope maxima alone.
+</pre>
+      <p class="caption">Host aggregates child checks with PROTOCOL roll-up. Incomplete mandatory set ⇒ overall <code>unsupported</code>, never pass.</p>
+    </section>
+
+    <section class="card" id="open-std">
+      <h2>Open standards we can piggyback?</h2>
+      <p><strong>Short answer:</strong> yes for <em>plumbing</em>, no for the <em>legal text of the design code</em>.</p>
+      <div class="grid-2">
+        <div class="stack">
+          <h3><span class="chip ok">piggyback</span> Open contracts &amp; data</h3>
+          <ul>
+            <li>Our own PROTOCOL check tree + profile metadata (already the extension seam)</li>
+            <li>Section catalogues with clear licences (e.g. public shape tables) as <em>inputs</em>, not as code authority</li>
+            <li>Independent oracles we already use (OpenSees) and optional OSS formula libs as <em>cross-checks</em></li>
+            <li>Later exchange: DXF/IFC schemas (open), mapped through <code>exchange</code> — still not a member-check code</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3><span class="chip bad">cannot replace</span> Design code authority</h3>
+          <ul>
+            <li>EN 1993 / EN 1992 / AISC 360 / ACI 318 text + official examples are <strong>copyrighted</strong></li>
+            <li>No open “Eurocode pack” that satisfies <code>R-CODE-STEEL</code> (edition hash + rights + worked examples)</li>
+            <li>Blueprints / eurocodepy / pyaisc = secondary implementations, not the standard</li>
+          </ul>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:0.75rem">Architecture implication: piggyback the <strong>plugin contract</strong> (open, ours). Pin each jurisdiction’s document separately when you have lawful access. Don’t wait for a mythical open EN/AISC text dump.</p>
+    </section>
+
+    <section class="card" id="risks">
+      <h2>7. Risks if we skip this</h2>
+      <ul>
+        <li>Hard-coding AISC types into <code>assembly</code> / UI → Eurocode becomes a rewrite.</li>
+        <li>Treating OSS formula packages as the standard → rights + verification failure.</li>
+        <li>Advertising “Eurocode” without annex/edition → SPEC violation.</li>
+        <li>Shipping all world codes in one WASM blob → download/memory pain; feature slices fix this.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="decide">
+      <h2>Decide</h2>
+      <p class="muted">Pick packaging + whether to stub the host now (still refuse real codes until resources lock).</p>
+      <form data-lavish-question="code-arch"
+        onsubmit="event.preventDefault(); const fd = new FormData(event.currentTarget); const pack = fd.get('pack'); const stub = fd.get('stub'); if (!pack) return; window.lavish.queuePrompt('Use packaging ' + pack + '; stub host now: ' + stub + '. Proceed with that architecture for design profiles.', { tag: 'choice', text: 'Packaging: ' + pack + '; stub: ' + stub, element: event.currentTarget, data: { question: 'code-arch', packaging: pack, stubHost: stub } });">
+        <p><strong>Packaging</strong></p>
+        <label><input type="radio" name="pack" value="A-features" checked> A — Trait + Cargo features (recommended)</label>
+        <label><input type="radio" name="pack" value="B-dynamic"> B — Dynamic WASM modules</label>
+        <label><input type="radio" name="pack" value="C-datadriven"> C — Data-driven rule tables</label>
+        <label><input type="radio" name="pack" value="A-plus-D-oracle"> A + D — Features now, OSS libs as CI oracles later</label>
+        <p style="margin-top:0.9rem"><strong>Stub DesignHost before resources?</strong></p>
+        <label><input type="radio" name="stub" value="yes-skeleton" checked> Yes — skeleton + registry, still fail-closed until lock</label>
+        <label><input type="radio" name="stub" value="wait-resources"> No — wait until a standard pack is acquired</label>
+        <button type="submit">Queue this answer</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
