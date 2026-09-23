@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { sourceHash } from "./build.mjs";
-import { common, m01, m01ux, m02, m03, m04, recordIssues } from "./milestone-rules.mjs";
+import { common, m01, m01ux, m02, m03, m04, m05, recordIssues } from "./milestone-rules.mjs";
 import { evidenceDir } from "./evidence.mjs";
 const milestone = process.argv[2] || "M00";
 const dir = evidenceDir(
@@ -15,7 +15,9 @@ const dir = evidenceDir(
           ? "evidence/M03/full"
           : milestone === "M04"
             ? "evidence/M04/full"
-            : "evidence/M00/current",
+            : milestone === "M05"
+              ? "evidence/M05/full"
+              : "evidence/M00/current",
 );
 const required =
   milestone === "M01-UX"
@@ -28,7 +30,9 @@ const required =
           ? m03
           : milestone === "M04"
             ? m04
-            : common;
+            : milestone === "M05"
+              ? m05
+              : common;
 const issues = [];
 const build = JSON.parse(await readFile("dist/build.json"));
 const hash = await sourceHash();

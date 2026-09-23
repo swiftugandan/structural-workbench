@@ -60,6 +60,14 @@ export const m04 = [
   "m04-record",
   "m04-acceptance",
 ];
+export const m05 = [
+  "build",
+  "section-props",
+  "compute-section",
+  "variants-unit",
+  "m05-browser",
+  "m05-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -118,6 +126,28 @@ export const requiredIds = {
     "M04-export-import-equivalence",
     "M04-report-matches-display",
     "M04-csv-units",
+  ],
+  "m05-acceptance": [
+    "M05-SECTION-CALCULATOR",
+    "M05-VARIANTS",
+    "M05-PORTAL-TEMPLATES",
+  ],
+  "m05-browser": [
+    "M05 section calculator: rectangle stiffens tip deflection and clears stale result",
+    "M05 variants: duplicate, stiffen, compare retains both hashes and reports",
+    "M05 portal templates: save dimensions and reuse on a new portal",
+  ],
+  "section-props": [
+    "square_matches_exact_second_moments",
+    "rectangle_swaps_inertias_with_axes",
+    "custom_j_overrides_saint_venant",
+    "rejects_non_positive",
+  ],
+  "compute-section": ["compute_section_solid_rectangle_and_custom_j"],
+  "variants-unit": [
+    "duplicateAsVariant remaps id/name/revision and keeps entity links",
+    "buildComparison requires matching hashes and reports tip uz",
+    "tipUz and sectionIy helpers",
   ],
   "m03-browser": [
     "M03 copy portal into bays, analyse and inspect My Mz torsion",
@@ -205,7 +235,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
         ? requiredIds["native-m03"]
         : milestone === "M02" && name === "browser-suite"
           ? requiredIds["browser-suite-m02"]
-          : ["M01", "M01-UX", "M02", "M03", "M04"].includes(milestone)
+          : ["M01", "M01-UX", "M02", "M03", "M04", "M05"].includes(milestone)
             ? requiredIds[name] || []
             : [];
   for (const id of ids)
@@ -232,6 +262,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 10)
   )
     errors.push(`${name}: failed, skipped or incomplete M04 browser journey`);
+  if (
+    name === "m05-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 3)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M05 browser journey`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);

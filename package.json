@@ -20,6 +20,7 @@
     "verify:milestone": "node tools/verify.mjs",
     "verify:m03": "node tools/run-m03-parent.mjs",
     "verify:m04": "node tools/run-m04-parent.mjs",
+    "verify:m05": "node tools/run-m05-parent.mjs",
     "verify:release": "node tools/verify.mjs release",
     "setup": "node tools/bootstrap.mjs",
     "test:graphics": "playwright test tests/visual",

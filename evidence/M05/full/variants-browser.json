@@ -1,0 +1,25 @@
+{
+  "taskId": "M05-parent",
+  "milestone": "M05",
+  "sourceHash": "9fc9760080593bc56f59134729e665e20d8d972e896be181979d2e4416e00a63",
+  "buildHash": "8faef8eb55634fe740794f9f4f09459c548dd6d6b1ed08b01059836b095d5574",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T12:50:19.490Z",
+  "status": "PASS",
+  "baselineHash": "b746173099483e9c5aedf960a474c986ed3b74317a7519a0d7ee5ae2ec9de758",
+  "variantHash": "da193104976e1027c3e2aa319b3e4c84d41c3e295c2ff3a420e9d25778b83f92",
+  "pageErrors": []
+}

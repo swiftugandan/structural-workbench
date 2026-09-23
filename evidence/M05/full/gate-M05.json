@@ -1,0 +1,18 @@
+{
+  "milestone": "M05",
+  "status": "BLOCKED",
+  "sourceHash": "9fc9760080593bc56f59134729e665e20d8d972e896be181979d2e4416e00a63",
+  "buildHash": "8faef8eb55634fe740794f9f4f09459c548dd6d6b1ed08b01059836b095d5574",
+  "required": [
+    "build",
+    "section-props",
+    "compute-section",
+    "variants-unit",
+    "m05-browser",
+    "m05-acceptance"
+  ],
+  "issues": [
+    "M05: remaining milestone-specific gates are not implemented"
+  ],
+  "observedAt": "2026-09-23T12:50:22.667Z"
+}
