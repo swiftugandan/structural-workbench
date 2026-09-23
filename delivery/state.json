@@ -1303,7 +1303,7 @@
       "evidencePaths": [
         "evidence/M02/full"
       ],
-      "nextAction": "M02 parent accepted. Begin M03 spatial building frame without re-claiming M00–M02.",
+      "nextAction": "M02 parent accepted. Begin M03 spatial building frame without re-claiming M00\u2013M02.",
       "createdAt": "2026-09-23T08:00:46.876Z",
       "acceptedAt": "2026-09-23T08:16:57.924Z",
       "sourceRevision": "337d6128dcf47673ee146d3651208a45ca53e477",
@@ -1383,7 +1383,7 @@
       "sourceRevision": "5190ee4e5f32f3f71177ab790f77b53454d3a3d9",
       "sourceHash": "ba8e59487cae1410db0b57665820d86aee1bda5cb5417075ddf2443b11b5e1c4",
       "buildHash": "81b562d1c36315f7c31a801e76c709619ec4dea7b9504d8885ed650240c40d7f",
-      "acceptanceMeaning": "Bounded local portal→CopyBay→spatial ties→My/Mz/T inspection slice only. Parent M03 remains unaccepted.",
+      "acceptanceMeaning": "Bounded local portal\u2192CopyBay\u2192spatial ties\u2192My/Mz/T inspection slice only. Parent M03 remains unaccepted.",
       "nextAction": "Next M03 slice: separate model/analysis Workers or skewed-frame OpenSees pack; do not claim parent M03.",
       "createdAt": "2026-09-23T08:16:57.924Z",
       "acceptedAt": "2026-09-23T09:23:03.940Z"
@@ -1467,7 +1467,7 @@
       "sourceRevision": "7359fa64b52d516de83f6e46566bf50763cd35f5",
       "sourceHash": "6e0815c614be0f353494abd8c79513fa788840dccf2f56ec500e820736c2df37",
       "buildHash": "945877b66fa5d221816b393ed999d51fe86547e16146455d7799ce2f34fd1f04",
-      "acceptanceMeaning": "VALIDATION §5 pre-M03 fixture pack present with OpenSees parity for S01/S02/B07; R01/B09 remain native-only due to adapter scope. Parent M03 unaccepted.",
+      "acceptanceMeaning": "VALIDATION \u00a75 pre-M03 fixture pack present with OpenSees parity for S01/S02/B07; R01/B09 remain native-only due to adapter scope. Parent M03 unaccepted.",
       "nextAction": "Next: 5,000-node multibay generator and memory/performance gates (M03-D).",
       "createdAt": "2026-09-23T09:36:22.680Z",
       "acceptedAt": "2026-09-23T09:40:50.112Z"
@@ -1604,7 +1604,7 @@
       "sourceHash": "815535c565cf69a6638928619c2b8cd10b15c56aef468f45455bcd63caa3cfbc",
       "buildHash": "cee57e22bf364b70175018ddc0581e4c5b801843eb8baf0a64e11cf8362cbdd8",
       "acceptanceMeaning": "Bounded lineage presentation for split children. Parent M03 still needs formal verifier packaging.",
-      "nextAction": "Package parent M03 verifier from accepted A–F slices.",
+      "nextAction": "Package parent M03 verifier from accepted A\u2013F slices.",
       "createdAt": "2026-09-23T10:20:00.000Z",
       "acceptedAt": "2026-09-23T10:26:00.000Z"
     },
@@ -1624,7 +1624,7 @@
         "SPECIFICATION-M03",
         "M03-parent"
       ],
-      "nextAction": "M03 gap-closure re-verified. Continue M04-B without re-claiming M00–M03.",
+      "nextAction": "M03 gap-closure re-verified. Continue M04-B without re-claiming M00\u2013M03.",
       "createdAt": "2026-09-23T10:26:00.000Z",
       "requiredCommands": [
         "npm run build",
@@ -1646,7 +1646,7 @@
       "sourceRevision": "dec82d579d8a76bd889a77c098ea037b320abb65",
       "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
       "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
-      "acceptanceMeaning": "Parent M03 spatial building-frame gate PASS on same-build corpus: orbit/copy with spatial loads + My/Mz/T, dual Workers + timed cancel, OpenSees S01/S02/B07 + native R01/B09 (ADR 0006), 5k capacity + WASM MEMORY_LIMIT, unit-action/roll, section-axis, hierarchy, GPU-during-analysis, UI≤100ms.",
+      "acceptanceMeaning": "Parent M03 spatial building-frame gate PASS on same-build corpus: orbit/copy with spatial loads + My/Mz/T, dual Workers + timed cancel, OpenSees S01/S02/B07 + native R01/B09 (ADR 0006), 5k capacity + WASM MEMORY_LIMIT, unit-action/roll, section-axis, hierarchy, GPU-during-analysis, UI\u2264100ms.",
       "acceptedAt": "2026-09-23T11:16:51.919Z"
     },
     "M04-A": {
@@ -1788,7 +1788,7 @@
       "nextAction": "Next M04 slice: crash/quota matrix packaging, report plots, or parent M04 gate.",
       "createdAt": "2026-09-23T11:41:29.115Z",
       "acceptedAt": "2026-09-23T11:55:00.000Z",
-      "acceptanceMeaning": "Bounded 0.9.0→1.0.0 migration chain with original retention and unknown-schema refusal. Does not claim parent M04 or full crash matrix."
+      "acceptanceMeaning": "Bounded 0.9.0\u21921.0.0 migration chain with original retention and unknown-schema refusal. Does not claim parent M04 or full crash matrix."
     },
     "M04-D": {
       "id": "M04-D",
@@ -1857,14 +1857,14 @@
         "SPECIFICATION-M04",
         "M04-parent"
       ],
-      "nextAction": "M04 parent accepted. Begin M05 without re-claiming M00–M04.",
+      "nextAction": "M04 parent accepted. Begin M05 without re-claiming M00\u2013M04.",
       "createdAt": "2026-09-23T12:15:00.000Z",
       "acceptedAt": "2026-09-23T12:28:25.000Z",
       "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
       "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
       "sourceRevision": "251ba27864edc47b4731cc5047ed16d12fc4d4ce",
       "verificationStatus": "PASS",
-      "acceptanceMeaning": "Parent M04 recovery/offline/migration/reliability/calculation-record gate PASS on same-build corpus: revision recovery, build-ID SW cache, 0.9→1.0 migrate with originals, corrupt/crash/persistence matrix, quota/lease, secure exports, export/import equivalence and report/CSV record.",
+      "acceptanceMeaning": "Parent M04 recovery/offline/migration/reliability/calculation-record gate PASS on same-build corpus: revision recovery, build-ID SW cache, 0.9\u21921.0 migrate with originals, corrupt/crash/persistence matrix, quota/lease, secure exports, export/import equivalence and report/CSV record.",
       "requiredCommands": [
         "npm run build",
         "npm run verify:m04"
@@ -2010,7 +2010,7 @@
       "acceptanceIds": [
         "SPECIFICATION-M05-templates"
       ],
-      "nextAction": "Package parent M05 verifier from A–C slices.",
+      "nextAction": "Package parent M05 verifier from A\u2013C slices.",
       "createdAt": "2026-09-23T12:45:00.000Z",
       "requiredCommands": [
         "npm run build",
@@ -2051,7 +2051,7 @@
         "SPECIFICATION-M05",
         "M05-parent"
       ],
-      "nextAction": "M05 parent accepted. Begin M06 without re-claiming M00–M05.",
+      "nextAction": "M05 parent accepted. Begin M06 without re-claiming M00\u2013M05.",
       "createdAt": "2026-09-23T12:48:01.000Z",
       "acceptedAt": "2026-09-23T12:52:04.000Z",
       "sourceHash": "e040f64e27a39466f82a6c5c75ead5d9b7dd8336988f42ca8ebc8668e046037b",
@@ -2420,10 +2420,10 @@
         {
           "at": "2026-09-23T14:57:10.648Z",
           "issue": "Human browser download completed",
-          "resolution": "Copied A360-22W-ewr.pdf → aisc-360-22.pdf and P901-23W.pdf → aisc-design-examples-v16.pdf; merged lock"
+          "resolution": "Copied A360-22W-ewr.pdf \u2192 aisc-360-22.pdf and P901-23W.pdf \u2192 aisc-design-examples-v16.pdf; merged lock"
         }
       ],
-      "nextAction": "M07-C: implement classification→tension→compression→flexure→shear→H1 against seeded fixtures",
+      "nextAction": "M07-C: implement classification\u2192tension\u2192compression\u2192flexure\u2192shear\u2192H1 against seeded fixtures",
       "acceptedAt": "2026-09-23T15:05:00.000Z",
       "acceptanceMeaning": "Required AISC PDFs locked + S2 numeric fixtures/dossier extracted. Profile remains disabled until M07-C clause evidence."
     },
@@ -2510,7 +2510,7 @@
       "attempts": [],
       "nextAction": "M07-parent same-build packaging",
       "acceptedAt": "2026-09-23T16:05:00.000Z",
-      "acceptanceMeaning": "Screen 04 steel UI with ≥3 pass/fail seeds, model-derived demand overlay, governing util + clause trail in calculation report. LTB and non-W remain unsupported."
+      "acceptanceMeaning": "Screen 04 steel UI with \u22653 pass/fail seeds, model-derived demand overlay, governing util + clause trail in calculation report. LTB and non-W remain unsupported."
     },
     "M07-parent": {
       "id": "M07-parent",
@@ -2547,7 +2547,7 @@
       "attempts": [],
       "nextAction": "M08 blocked on concrete resources; optional LTB flexure expansion",
       "acceptedAt": "2026-09-23T16:22:54.668Z",
-      "acceptanceMeaning": "S2 AISC 360-22 LRFD after review remediation: PROTOCOL fail>unsupported overall, fail-closed section/applicability gates, LTB/HSS/torsion unsupported journeys, H1 formula with published φ + shapes-DB W14×99, tracked playwright artifacts. LTB clause math and commercial parity remain out of scope."
+      "acceptanceMeaning": "S2 AISC 360-22 LRFD after review remediation: PROTOCOL fail>unsupported overall, fail-closed section/applicability gates, LTB/HSS/torsion unsupported journeys, H1 formula with published \u03c6 + shapes-DB W14\u00d799, tracked playwright artifacts. LTB clause math and commercial parity remain out of scope."
     }
   },
   "blockers": [
@@ -2580,7 +2580,7 @@
       "resumeWhen": "Acquire ACI/concrete standard + examples into resources/private and lock hashes (same human-download pattern as M07 AISC)"
     }
   ],
-  "lastVerifiedSourceRevision": "pending-commit",
+  "lastVerifiedSourceRevision": "1f3ee6d0295af062c0c380e9e26021b106d3dd8e",
   "lastVerifiedBuildHash": "c5e5ac5eb3b4dd45fdb269d81484ba964f0d2a4fc73cb9e17121aa113be3208b",
   "nextAction": "M07 ACCEPTED after review remediation. M08 blocked on R-CODE-CONCRETE / R-CONCRETE-EXAMPLES.",
   "handoffPath": "HANDOFF.md",
