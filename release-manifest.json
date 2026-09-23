@@ -1,5 +1,5 @@
 {
-  "sourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee",
+  "sourceHash": "bad916fd470746e4ac889c49d57e749769aabf124f9be9d0caa966cfd26754a0",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -12,13 +12,13 @@
     "release-manifest.json"
   ],
   "files": {
-    "app.html": "c486c025c50fb463886c314f50388e0b036f55c1a050724bf2034e3cf9739e79",
-    "app.js": "04d818892b211cb474f9df297eaf20f78a916fb6e93a96bd1181174d2d51945d",
+    "app.html": "df0f5684104ffd634083dfbdc0a0088af842e6b63189a82a6c84b96028a44329",
+    "app.js": "22574b714273e68c9c93d36d51fc912bbbdc9e977bda2d7b94b4862506dc482b",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
     "canvas-tools.js": "d88c75a97440dd265cafbf711ac0075cf46e33bb29f0f57b67efdc12cb5bbdca",
     "capabilities-ledger.js": "cf5b8150e066473c960776d2e3a0653a80ebb785cc03257ab84f97c69a11d2a4",
-    "capabilities.json": "81c083c214f7c1e95290b0b4032d0e6ad817f67ba26033770835c3f3fd390522",
-    "command-menu.js": "bf0cef8854929a6260cd20c6f1da1476cbb59c313c2a22063894344cb26454fc",
+    "capabilities.json": "2d33be75592753ab87f1afa55b8401ec53a552e4031797417286e33589149234",
+    "command-menu.js": "865f92389417ae575bd43eff5706a950a3ee9249668de91505a557a32df3d4f6",
     "entity-forms.js": "067cc6c451ac9a63caa747f4f3152233c3db30f2d8e509c2c6f6c2755106d582",
     "entity-labels.js": "d29a211cdc74af49982d157a1b075aa21674ccc6ad8513e0cf3958d07fe487ae",
     "examples/B01.json": "a33daa5c89ff6759d57360a7650bb20c277d201ccc5aef1bd8ba73fd07f7d9c6",
@@ -50,7 +50,7 @@
     "offline.js": "bcccfca2f33f5df48ae12b262aa2d7d3441113ba09b29394de42ef726a594834",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "f499a5d2353c313c55749e07a4b82d5d2ff5d5616fa3322fa2dbf9644547c421",
+    "pkg/workbench_wasm_api_bg.wasm": "26f3d895da4c148377bdc4ebcfe784076b1fff4a411344e10c90ff79ac6f49ed",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",
@@ -59,12 +59,12 @@
     "render/support-symbols.js": "f20ac5999120b6ef48dad26111012cd32e81770fc6598fce457ef29dd44d4ad3",
     "render/viewport.js": "18f52e518cfcf2613d785e9691f6bec523e1213ba71d57c2f7f88e20961c69d5",
     "reports/report.js": "22a2b77c4691e4a7cedda37dc06bfa1e553b460b68942727ba4ddd05721604fa",
-    "request-validator.js": "2dbf2ebfe18df0161a81c43ba4468a1c04cfbd4b4f7efb8d96ab0e0d5c5e471d",
-    "response-validator.js": "5300ce321ee880e5a8206772d229bbcd4684ffbba7db936c3ffe5d94ce80abf0",
+    "request-validator.js": "c23058ecf708326b459585cb4fec2525b4c98b1c6dcd0b5057233f27e27585c8",
+    "response-validator.js": "a6c66587a44be02f7529e64fe1737a66c4a2e19aa9bb0b7e705a179c20dd279a",
     "result-picker.js": "211c0e3f8e12d10dc5cd86179e3813e0b2d5d6334a4d8bbb8c7fbc07ee6986b6",
     "schema-validator.js": "af581bd075e8d7126a8c79335d4e30e4ab34eb2513ec651ca7585b8675f480c2",
     "state/storage.js": "eaafbc48438b9f8bc06ec4c8c25785ec930e2c7cf5a478f5935ea67c9c54eb42",
-    "state/transport.js": "74338e5f8f88cb48f142179255cae5ce2618e43c05832864d9e358c2eb1204a0",
+    "state/transport.js": "1afa3064cec6a022af06456b2b7dd1d056fd06660e4d8e3ae9c6c9ecbdbc899f",
     "structural-icons.js": "8d4dde99cf08ad51a162d1c412f507fb33dc06063e4287eed8cd4df4c7f2aedf",
     "styles.css": "36e1d1583cfc6044471e6552bc2cbe02fd0f242972f57ad7f22bd9c6d8e8014f",
     "sw.js": "7aeba6b7ac72fcda86d3e650ef12b1982bd3bef829da98326de8b475e7838c75",
@@ -73,6 +73,6 @@
     "worker.js": "c02d0970761feacf125283b324706d6116794e2f0e4382bd2a10bda7f68fc5ec",
     "workspace-ui.js": "ca7fa971cf49e666a081ac395df6719d45f1e92350083249c1a51a10a1c3149a"
   },
-  "buildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
+  "buildHash": "1e74ec89757ca0a068b35c6f4aa9e8da35441f3ec1164b06aa708075ed060b0d",
   "releaseStatus": "working-preview-not-accepted"
 }

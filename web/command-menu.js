@@ -204,6 +204,11 @@ export function commandMenu({
         cmd("Cancel analysis", "#cancel", null, {
           blocked: () => $("#cancel").hidden,
         }),
+        {
+          label: "Run study…",
+          action: () => $("#study-file").click(),
+          blocked: () => !window.__studyReady?.(),
+        },
         null,
         cmd("Results table", "#show-results"),
         {

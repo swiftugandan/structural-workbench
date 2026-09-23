@@ -1356,6 +1356,55 @@ $("#export-report").onclick = () => {
       "text/html",
     );
 };
+
+window.__studyReady = () => !!project && !analysing && !busy;
+$("#study-file").onchange = async () => {
+  const file = $("#study-file").files?.[0];
+  $("#study-file").value = "";
+  if (!file || !project) return;
+  let study;
+  try {
+    study = JSON.parse(await file.text());
+  } catch (e) {
+    message(`INVALID_SCHEMA: Study JSON parse failed: ${e.message}`);
+    return;
+  }
+  try {
+    setAnalysing(true);
+    message(`Running study ${study.id || file.name}…`);
+    const studyReport = await gateway.send("runStudy", { study });
+    const rows = (studyReport.variants || [])
+      .map(
+        (v) =>
+          `<tr><th scope="row">${esc(v.variantId)}</th><td><code>${esc(String(v.modelHash || "").slice(0, 12))}…</code></td><td><code>${esc(String(v.resultId || "").slice(0, 12))}…</code></td><td>${esc(String(v.observed?.value ?? "—"))}</td></tr>`,
+      )
+      .join("");
+    const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>${esc(studyReport.studyId || "study")} report</title>
+<style>body{font:14px/1.4 system-ui;margin:2rem;color:#142b44}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd;padding:.4rem .6rem;text-align:left}code{font-size:12px}</style></head><body>
+<h1>Study ${esc(studyReport.studyName || studyReport.studyId || "")}</h1>
+<p>${esc(studyReport.variantCount || 0)} variants · case ${esc(studyReport.caseId || "")} · base ${esc(studyReport.baseSource || "openProject")}</p>
+<table><thead><tr><th>Variant</th><th>Model hash</th><th>Result id</th><th>Observed</th></tr></thead><tbody>${rows}</tbody></table>
+</body></html>`;
+    $("#show-results")?.click();
+    $("#results-content").innerHTML = `<p class="notice-small" data-testid="study-report-banner">Declarative study comparison (M22). Hashes are from the Rust kernel; the open project was not mutated.</p>
+<table data-testid="study-report-table"><thead><tr><th scope="col">Variant</th><th scope="col">Model hash</th><th scope="col">Result id</th><th scope="col">Observed</th></tr></thead><tbody>${rows}</tbody></table>
+<p><button type="button" id="download-study-report" class="primary">Download study HTML</button></p>`;
+    $("#download-study-report").onclick = () =>
+      download(
+        `${studyReport.studyId || "study"}-report.html`,
+        html,
+        "text/html",
+      );
+    message(
+      `Study ${studyReport.studyId || ""} finished · ${studyReport.variantCount} variants`,
+    );
+  } catch (e) {
+    if (!/CANCELLED|TIMEOUT/.test(e.message)) message(e.message);
+  } finally {
+    setAnalysing(false);
+  }
+};
+
 $("#export-csv").onclick = () => {
   if (result && result.modelHash === modelHash && !failed)
     download(project.id + "-results.csv", csv(result, project), "text/csv");

@@ -82,7 +82,7 @@ impl Kernel {
                     "Model changed; reload the current snapshot",
                 ));
             }
-        } else if !["createProject", "importProject", "evaluateDesign"].contains(&op) {
+        } else if !["createProject", "importProject", "evaluateDesign", "runStudy"].contains(&op) {
             return Err(err("INVALID_SCHEMA", "Open a project first"));
         }
         let payload = &r["payload"];
@@ -372,6 +372,33 @@ impl Kernel {
                     }
                     Err(message) => Err(err("UNSUPPORTED_FEATURE", message)),
                 }
+            }
+            "runStudy" => {
+                let study = payload
+                    .get("study")
+                    .ok_or_else(|| err("INVALID_SCHEMA", "study object required"))?;
+                let base_text = if let Some(text) = payload["baseProjectJson"].as_str() {
+                    text.to_string()
+                } else if let Some(p) = &self.project {
+                    serde_json::to_string(p).unwrap()
+                } else {
+                    return Err(err(
+                        "INVALID_SCHEMA",
+                        "Open a project or supply baseProjectJson",
+                    ));
+                };
+                let mut report = workbench_assembly::execute_study_document(study, &base_text)?;
+                if let Some(obj) = report.as_object_mut() {
+                    obj.insert(
+                        "baseSource".into(),
+                        json!(if payload.get("baseProjectJson").is_some() {
+                            "payload"
+                        } else {
+                            "openProject"
+                        }),
+                    );
+                }
+                Ok(report)
             }
             _ => Err(err(
                 "UNSUPPORTED_FEATURE",

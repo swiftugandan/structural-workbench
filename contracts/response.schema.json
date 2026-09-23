@@ -23,7 +23,8 @@
         "queryGeometry",
         "getResults",
         "exportProject",
-        "evaluateDesign"
+        "evaluateDesign",
+        "runStudy"
       ]
     },
     "status": {

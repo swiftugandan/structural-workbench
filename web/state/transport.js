@@ -81,7 +81,7 @@ export class Gateway {
     const requestId = `request-${++this.count}`;
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
-        if (operation === "analyse" || pending === this.analysisPending) {
+        if (operation === "analyse" || operation === "runStudy" || pending === this.analysisPending) {
           this.cancelAnalysis(
             "TIMEOUT: operation exceeded its configured time limit",
           );
@@ -110,6 +110,7 @@ export class Gateway {
 
   async send(operation, payload = {}) {
     if (operation === "analyse") return this.analyse(payload);
+    if (operation === "runStudy") return this.runStudy(payload);
     if (operation === "cancelAnalysis") {
       this.cancelAnalysis();
       return { cancelled: true };
@@ -182,6 +183,38 @@ export class Gateway {
     );
     result.acceptedSnapshotHash = acceptedSnapshotHash ?? imported.modelHash;
     return result;
+  }
+
+  /** Run a declarative study on the analysis Worker (cancelable via cancelAnalysis). */
+  async runStudy(payload) {
+    if (this.analysing)
+      throw Error("Analysis already running; cancel it before starting another");
+    this.analysing = true;
+    try {
+      let baseProjectJson = payload.baseProjectJson;
+      if (!baseProjectJson) {
+        await this.ready;
+        const snap = await this.post(
+          this.modelWorker,
+          this.pending,
+          "exportProject",
+          { includeResults: false },
+          this.revision,
+        );
+        baseProjectJson = JSON.stringify(snap.project);
+      }
+      this.resetAnalysisWorker();
+      await this.analysisReady;
+      return await this.post(
+        this.analysisWorker,
+        this.analysisPending,
+        "runStudy",
+        { study: payload.study, baseProjectJson },
+        null,
+      );
+    } finally {
+      this.analysing = false;
+    }
   }
 
   resetAnalysisWorker() {

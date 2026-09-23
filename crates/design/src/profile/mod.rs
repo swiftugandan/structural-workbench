@@ -249,7 +249,7 @@ impl ProfileRegistry {
             .ok_or_else(|| format!("Unknown design profile '{profile_id}'"))?;
         let meta = profile.metadata();
         let mut checks = Vec::new();
-        let mut limitations = meta.limitations.clone();
+        let limitations = meta.limitations.clone();
 
         if !meta.enabled {
             checks.push(CheckOutcome::unsupported(

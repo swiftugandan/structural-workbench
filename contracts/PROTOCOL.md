@@ -20,7 +20,7 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 | queryGeometry | {kind: ray or snap or measure, query: object, viewRevision: integer} | entity IDs, f64 positions/distances and matching viewRevision |
 | getResults | {resultId: string, caseId: string, entityIds: string[]} | header plus typed buffers described below |
 | exportProject | {includeResults: boolean} | portable engineering JSON and optional separate result files with hashes |
-| evaluateDesign | {resultId: string, memberIds: string[], profileId: string, inputs: object} | design-run header and check tree |
+| runStudy | {study: object, baseProjectJson?: string} | Comparative study report (variant model/result hashes). Uses open project when baseProjectJson omitted. |
 | computeSection | {shape: "solidRectangle", width: number, depth: number, customJ: number\|null} | A, Iy, Iz, J, cy, cz, provenance and jSource (SI). Does not mutate the project. width is along local y; depth along local z. Null customJ uses the Saint-Venant rectangle estimate. |
 
 ## 1.1 Declarative study files (native CLI)

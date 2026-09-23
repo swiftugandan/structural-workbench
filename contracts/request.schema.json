@@ -24,7 +24,8 @@
         "getResults",
         "exportProject",
         "evaluateDesign",
-        "computeSection"
+        "computeSection",
+        "runStudy"
       ]
     },
     "expectedRevision": {

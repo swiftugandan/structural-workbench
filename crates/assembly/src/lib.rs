@@ -1,5 +1,6 @@
 mod expand;
 mod envelope;
+mod study;
 
 use serde_json::json;
 use sprs::TriMat;
@@ -13,6 +14,7 @@ use workbench_solver::{LinearSolver, SparseLdl};
 use expand::{expand_point_loads, remap_to_physical};
 
 pub use envelope::envelope;
+pub use study::{apply_pointer, execute_study_document};
 
 fn section_actions(end: &[f64], q: [f64; 3], x: f64) -> [f64; 6] {
     [
