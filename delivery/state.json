@@ -2496,13 +2496,18 @@
           "check": "steel-ui-model-derived-report",
           "status": "PASS",
           "evidencePath": "evidence/M07/steel-ui/steel-ui-model-derived-report.json"
+        },
+        {
+          "check": "steel-ui-complete-member-matrix",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/steel-ui/steel-ui-complete-member-matrix.json"
         }
       ],
       "evidencePaths": [
         "evidence/M07/steel-ui"
       ],
       "attempts": [],
-      "nextAction": "Expand to ≥3 pass + ≥3 fail complete-member journeys / Screen 04 check tree; then M07-parent packaging"
+      "nextAction": "Screen 04 check-tree polish if needed; then M07-parent same-build packaging"
     }
   },
   "blockers": [
@@ -2525,7 +2530,7 @@
   ],
   "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
   "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
-  "nextAction": "M07-D: fail seeds + model-derived report trail PASS. Next: ≥3 pass/fail complete members / Screen 04 check tree, then M07-parent packaging.",
+  "nextAction": "M07-D matrix + report trail PASS. Next: Screen 04 check-tree polish if needed, then M07-parent packaging.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
 }

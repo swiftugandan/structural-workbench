@@ -24,6 +24,17 @@ async function closeModal(page) {
   await expect(page.locator("#modal")).not.toBeVisible();
 }
 
+async function runSeed(page, seedId, expectOverall) {
+  await page.locator("[data-testid='steel-seed']").selectOption(seedId);
+  await page.locator("[data-testid='steel-load-seed']").click();
+  await expect(page.locator("[data-testid='steel-case-loaded']")).toBeVisible();
+  await page.locator("[data-testid='steel-run-check']").click();
+  await expect(page.locator("[data-testid='steel-overall']")).toHaveText(
+    expectOverall,
+    { timeout: 15_000 },
+  );
+}
+
 test("standalone S2-D1 steel check passes via evaluateDesign UI", async ({
   page,
 }) => {
@@ -36,13 +47,7 @@ test("standalone S2-D1 steel check passes via evaluateDesign UI", async ({
   });
 
   await openSteelPanel(page);
-
-  await page.locator("[data-testid='steel-load-s2d1']").click();
-  await expect(page.locator("[data-testid='steel-case-loaded']")).toBeVisible();
-  await page.locator("[data-testid='steel-run-check']").click();
-  await expect(page.locator("[data-testid='steel-overall']")).toHaveText("pass", {
-    timeout: 15_000,
-  });
+  await runSeed(page, "S2-D1", "pass");
   await expect(
     page.locator('[data-testid="steel-check-row"][data-check-id="tension"]'),
   ).toContainText("pass");
@@ -52,6 +57,41 @@ test("standalone S2-D1 steel check passes via evaluateDesign UI", async ({
     pageErrors: errors,
     overall: "pass",
     fixture: "S2-D1",
+  });
+  expect(errors).toEqual([]);
+});
+
+test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto("/");
+  await page.locator("#new-project").click();
+  await expect(page.locator("#kernel-status")).toContainText("ready", {
+    timeout: 60_000,
+  });
+  await openSteelPanel(page);
+
+  const passSeeds = ["S2-D1", "S2-E1C", "S2-F11B", "S2-G1B"];
+  const failSeeds = ["S2-D1-fail", "S2-E1C-fail", "S2-F11B-fail", "S2-G1B-fail"];
+  const results = { pass: [], fail: [] };
+
+  for (const id of passSeeds) {
+    await runSeed(page, id, "pass");
+    results.pass.push(id);
+  }
+  for (const id of failSeeds) {
+    await runSeed(page, id, "fail");
+    results.fail.push(id);
+  }
+
+  expect(results.pass.length).toBeGreaterThanOrEqual(3);
+  expect(results.fail.length).toBeGreaterThanOrEqual(3);
+
+  await record("steel-ui-complete-member-matrix", {
+    status: "PASS",
+    pageErrors: errors,
+    results,
   });
   expect(errors).toEqual([]);
 });
@@ -66,14 +106,7 @@ test("standalone S2-D1 fail seed reports overall fail", async ({ page }) => {
   });
 
   await openSteelPanel(page);
-  await page.locator("[data-testid='steel-load-s2d1-fail']").click();
-  await expect(page.locator("[data-testid='steel-case-loaded']")).toContainText(
-    /fail/i,
-  );
-  await page.locator("[data-testid='steel-run-check']").click();
-  await expect(page.locator("[data-testid='steel-overall']")).toHaveText("fail", {
-    timeout: 15_000,
-  });
+  await runSeed(page, "S2-D1-fail", "fail");
   await expect(
     page.locator('[data-testid="steel-check-row"][data-check-id="tension"]'),
   ).toContainText("fail");
@@ -109,7 +142,8 @@ test("model-derived demand check lands in calculation report clause trail", asyn
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
 
   await openSteelPanel(page);
-  await page.locator("[data-testid='steel-load-s2d1']").click();
+  await page.locator("[data-testid='steel-seed']").selectOption("S2-D1");
+  await page.locator("[data-testid='steel-load-seed']").click();
   await expect(page.locator("[data-testid='steel-use-analysis']")).toBeEnabled();
   await page.locator("[data-testid='steel-use-analysis']").click();
   await expect(page.locator("[data-testid='steel-case-loaded']")).toContainText(

@@ -5,6 +5,8 @@ import {
   s2D1FailPayload,
   s2G1BFailPayload,
   s2D1Payload,
+  seedCatalog,
+  seedPayload,
 } from "../web/steel-check.js";
 
 test("fail seeds raise demand above published capacity", () => {
@@ -15,6 +17,19 @@ test("fail seeds raise demand above published capacity", () => {
   const shearFail = s2G1BFailPayload();
   assert.ok(shearFail.inputs.vz > 0);
   assert.equal(shearFail.memberIds[0], "S2-G1B-fail");
+});
+
+test("seed catalog has ≥3 pass and ≥3 fail complete-member cases", () => {
+  const catalog = seedCatalog();
+  const pass = catalog.filter((s) => s.expect === "pass");
+  const fail = catalog.filter((s) => s.expect === "fail");
+  assert.ok(pass.length >= 3, `pass=${pass.length}`);
+  assert.ok(fail.length >= 3, `fail=${fail.length}`);
+  for (const s of catalog) {
+    const p = seedPayload(s.id);
+    assert.equal(p.profileId, "aisc-360-22-lrfd");
+    assert.ok(p.inputs.section);
+  }
 });
 
 test("applyAnalysisDemand overlays midspan sample and rejects envelopes", () => {

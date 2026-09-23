@@ -3,129 +3,316 @@
 const IN = 0.0254;
 const FT = 0.3048;
 const KIP = 4448.2216152605;
+const KIP_FT = 1355.8179483314;
 const KSI = 6.894757293168361e6;
 
-function w8x21Section() {
-  const bf = 5.27 * IN;
-  const tf = 0.4 * IN;
-  const ag = 6.16 * IN * IN;
-  return {
-    ag,
-    d: 8.28 * IN,
-    tw: 0,
-    bf,
-    tf,
-    rx: 0,
-    ry: 1.26 * IN,
-    zx: 0,
-    zy: 0,
-    sx: 0,
-    sy: 0,
-    bfOver2tf: 0,
-    hOverTw: 0,
-    e: 29000 * KSI,
-  };
-}
+const SEEDS = {
+  "S2-D1": {
+    label: "S2-D1 tension pass · W8×21",
+    expect: "pass",
+    payload: () => ({
+      profileId: "aisc-360-22-lrfd",
+      memberIds: ["S2-D1"],
+      resultId: "standalone-S2-D1",
+      inputs: {
+        sectionFamily: "W",
+        doublySymmetric: true,
+        prismatic: true,
+        fy: 50 * KSI,
+        fu: 65 * KSI,
+        length: 25 * FT,
+        ky: 1,
+        kz: 1,
+        lb: 0,
+        cb: 1,
+        torsionPresent: false,
+        combinationId: "1.2D+1.6L",
+        station: 0,
+        n: 180 * KIP,
+        vy: 0,
+        vz: 0,
+        my: 0,
+        mz: 0,
+        t: 0,
+        section: {
+          ag: 6.16 * IN * IN,
+          d: 8.28 * IN,
+          tw: 0,
+          bf: 5.27 * IN,
+          tf: 0.4 * IN,
+          rx: 0,
+          ry: 1.26 * IN,
+          zx: 0,
+          zy: 0,
+          sx: 0,
+          sy: 0,
+          bfOver2tf: 0,
+          hOverTw: 0,
+          e: 29000 * KSI,
+        },
+        tensionEnd: {
+          uFloor: (2 * 5.27 * 0.4) / 6.16,
+          xBar: 0.831 * IN,
+          connectionLength: 9.0 * IN,
+          holeCount: 4,
+          holeDeductionWidth: 0.875 * IN,
+        },
+      },
+    }),
+  },
+  "S2-D1-fail": {
+    label: "S2-D1 tension fail · Pu=400 kip",
+    expect: "fail",
+    payload: () => {
+      const p = SEEDS["S2-D1"].payload();
+      p.memberIds = ["S2-D1-fail"];
+      p.resultId = "standalone-S2-D1-fail";
+      p.inputs.n = 400 * KIP;
+      return p;
+    },
+  },
+  "S2-E1C": {
+    label: "S2-E1C compression pass · W14×132",
+    expect: "pass",
+    payload: () => ({
+      profileId: "aisc-360-22-lrfd",
+      memberIds: ["S2-E1C"],
+      resultId: "standalone-S2-E1C",
+      inputs: {
+        sectionFamily: "W",
+        doublySymmetric: true,
+        prismatic: true,
+        fy: 50 * KSI,
+        fu: 65 * KSI,
+        length: 30 * FT,
+        ky: 1,
+        kz: 1,
+        lb: 0,
+        cb: 1,
+        torsionPresent: false,
+        combinationId: "1.2D+1.6L",
+        station: 0,
+        n: -840 * KIP,
+        vy: 0,
+        vz: 0,
+        my: 0,
+        mz: 0,
+        t: 0,
+        section: {
+          ag: 38.8 * IN * IN,
+          d: 0,
+          tw: 0,
+          bf: 0,
+          tf: 0,
+          rx: 6.28 * IN,
+          ry: 3.76 * IN,
+          zx: 0,
+          zy: 0,
+          sx: 0,
+          sy: 0,
+          bfOver2tf: 7.15,
+          hOverTw: 17.7,
+          e: 29000 * KSI,
+        },
+      },
+    }),
+  },
+  "S2-E1C-fail": {
+    label: "S2-E1C compression fail · Pu=1000 kip",
+    expect: "fail",
+    payload: () => {
+      const p = SEEDS["S2-E1C"].payload();
+      p.memberIds = ["S2-E1C-fail"];
+      p.resultId = "standalone-S2-E1C-fail";
+      p.inputs.n = -1000 * KIP;
+      return p;
+    },
+  },
+  "S2-F11B": {
+    label: "S2-F11B flexure pass · W18×50 Lb=0",
+    expect: "pass",
+    payload: () => ({
+      profileId: "aisc-360-22-lrfd",
+      memberIds: ["S2-F11B"],
+      resultId: "standalone-S2-F11B",
+      inputs: {
+        sectionFamily: "W",
+        doublySymmetric: true,
+        prismatic: true,
+        fy: 50 * KSI,
+        fu: 65 * KSI,
+        length: 35 * FT,
+        ky: 1,
+        kz: 1,
+        lb: 0,
+        cb: 1,
+        torsionPresent: false,
+        combinationId: "1.2D+1.6L",
+        station: 0.5,
+        n: 0,
+        vy: 0,
+        vz: 0,
+        my: 0,
+        mz: 266 * KIP_FT,
+        t: 0,
+        section: {
+          ag: 0,
+          d: 0,
+          tw: 0,
+          bf: 0,
+          tf: 0,
+          rx: 0,
+          ry: 0,
+          zx: 101 * IN * IN * IN,
+          zy: 0,
+          sx: 0,
+          sy: 0,
+          bfOver2tf: 0,
+          hOverTw: 0,
+          e: 29000 * KSI,
+        },
+      },
+    }),
+  },
+  "S2-F11B-fail": {
+    label: "S2-F11B flexure fail · Mu=500 kip·ft",
+    expect: "fail",
+    payload: () => {
+      const p = SEEDS["S2-F11B"].payload();
+      p.memberIds = ["S2-F11B-fail"];
+      p.resultId = "standalone-S2-F11B-fail";
+      p.inputs.mz = 500 * KIP_FT;
+      return p;
+    },
+  },
+  "S2-G1B": {
+    label: "S2-G1B shear pass · W24×62",
+    expect: "pass",
+    payload: () => ({
+      profileId: "aisc-360-22-lrfd",
+      memberIds: ["S2-G1B"],
+      resultId: "standalone-S2-G1B",
+      inputs: {
+        sectionFamily: "W",
+        doublySymmetric: true,
+        prismatic: true,
+        fy: 50 * KSI,
+        fu: 65 * KSI,
+        length: 20 * FT,
+        ky: 1,
+        kz: 1,
+        lb: 0,
+        cb: 1,
+        torsionPresent: false,
+        combinationId: "1.2D+1.6L",
+        station: 0,
+        n: 0,
+        vy: 0,
+        vz: 290 * KIP,
+        my: 0,
+        mz: 0,
+        t: 0,
+        section: {
+          ag: 0,
+          d: 23.7 * IN,
+          tw: 0.43 * IN,
+          bf: 0,
+          tf: 0,
+          rx: 0,
+          ry: 0,
+          zx: 0,
+          zy: 0,
+          sx: 0,
+          sy: 0,
+          bfOver2tf: 0,
+          hOverTw: 0,
+          e: 29000 * KSI,
+        },
+      },
+    }),
+  },
+  "S2-G1B-fail": {
+    label: "S2-G1B shear fail · Vu=400 kip",
+    expect: "fail",
+    payload: () => {
+      const p = SEEDS["S2-G1B"].payload();
+      p.memberIds = ["S2-G1B-fail"];
+      p.resultId = "standalone-S2-G1B-fail";
+      p.inputs.vz = 400 * KIP;
+      return p;
+    },
+  },
+  "S2-H1B": {
+    label: "S2-H1B interaction pass · W14×99",
+    expect: "pass",
+    payload: () => ({
+      profileId: "aisc-360-22-lrfd",
+      memberIds: ["S2-H1B"],
+      resultId: "standalone-S2-H1B",
+      inputs: {
+        sectionFamily: "W",
+        doublySymmetric: true,
+        prismatic: true,
+        fy: 50 * KSI,
+        fu: 65 * KSI,
+        length: 14 * FT,
+        ky: 1,
+        kz: 1,
+        lb: 0,
+        cb: 1,
+        torsionPresent: false,
+        combinationId: "1.2D+1.6L",
+        station: 0,
+        n: -400 * KIP,
+        vy: 0,
+        vz: 0,
+        my: 80 * KIP_FT,
+        mz: 250 * KIP_FT,
+        t: 0,
+        phiCPn: 1130 * KIP,
+        phiBMnx: 642 * KIP_FT,
+        phiBMny: 311 * KIP_FT,
+        section: {
+          ag: 29.1 * IN * IN,
+          d: 14.2 * IN,
+          tw: 0.485 * IN,
+          bf: 14.6 * IN,
+          tf: 0.78 * IN,
+          rx: 6.17 * IN,
+          ry: 3.71 * IN,
+          zx: 173 * IN * IN * IN,
+          zy: 84 * IN * IN * IN,
+          sx: 0,
+          sy: 0,
+          bfOver2tf: 9.35,
+          hOverTw: 25.1,
+          e: 29000 * KSI,
+        },
+      },
+    }),
+  },
+};
 
-function w8x21TensionEnd() {
-  return {
-    uFloor: (2 * 5.27 * 0.4) / 6.16,
-    xBar: 0.831 * IN,
-    connectionLength: 9.0 * IN,
-    holeCount: 4,
-    holeDeductionWidth: 0.875 * IN,
-  };
-}
-
-function w24x62Section() {
-  return {
-    ag: 0,
-    d: 23.7 * IN,
-    tw: 0.43 * IN,
-    bf: 0,
-    tf: 0,
-    rx: 0,
-    ry: 0,
-    zx: 0,
-    zy: 0,
-    sx: 0,
-    sy: 0,
-    bfOver2tf: 0,
-    hOverTw: 0,
-    e: 29000 * KSI,
-  };
-}
-
-/** S2-D1 payload in SI — fixtures/design/aisc-360-22-lrfd/S2-D1-tension-W8x21.json */
 export function s2D1Payload() {
-  return {
-    profileId: "aisc-360-22-lrfd",
-    memberIds: ["S2-D1"],
-    resultId: "standalone-S2-D1",
-    inputs: {
-      sectionFamily: "W",
-      doublySymmetric: true,
-      prismatic: true,
-      fy: 50 * KSI,
-      fu: 65 * KSI,
-      length: 25 * FT,
-      ky: 1,
-      kz: 1,
-      lb: 0,
-      cb: 1,
-      torsionPresent: false,
-      combinationId: "1.2D+1.6L",
-      station: 0,
-      n: 180 * KIP,
-      vy: 0,
-      vz: 0,
-      my: 0,
-      mz: 0,
-      t: 0,
-      section: w8x21Section(),
-      tensionEnd: w8x21TensionEnd(),
-    },
-  };
+  return SEEDS["S2-D1"].payload();
 }
-
-/** Same section as S2-D1 with Pu raised above φtPn rupture (211 kip). */
 export function s2D1FailPayload() {
-  const base = s2D1Payload();
-  base.memberIds = ["S2-D1-fail"];
-  base.resultId = "standalone-S2-D1-fail";
-  base.inputs.n = 400 * KIP;
-  return base;
+  return SEEDS["S2-D1-fail"].payload();
 }
-
-/** S2-G1B shear with Vu above φvVn (306 kip). */
 export function s2G1BFailPayload() {
-  return {
-    profileId: "aisc-360-22-lrfd",
-    memberIds: ["S2-G1B-fail"],
-    resultId: "standalone-S2-G1B-fail",
-    inputs: {
-      sectionFamily: "W",
-      doublySymmetric: true,
-      prismatic: true,
-      fy: 50 * KSI,
-      fu: 65 * KSI,
-      length: 20 * FT,
-      ky: 1,
-      kz: 1,
-      lb: 0,
-      cb: 1,
-      torsionPresent: false,
-      combinationId: "1.2D+1.6L",
-      station: 0,
-      n: 0,
-      vy: 0,
-      vz: 400 * KIP,
-      my: 0,
-      mz: 0,
-      t: 0,
-      section: w24x62Section(),
-    },
-  };
+  return SEEDS["S2-G1B-fail"].payload();
+}
+export function seedPayload(id) {
+  const seed = SEEDS[id];
+  if (!seed) throw new Error(`Unknown steel seed ${id}`);
+  return seed.payload();
+}
+export function seedCatalog() {
+  return Object.entries(SEEDS).map(([id, s]) => ({
+    id,
+    label: s.label,
+    expect: s.expect,
+  }));
 }
 
 /**
@@ -240,14 +427,25 @@ function shell(profileMeta, { hasResults }) {
     .slice(0, 4)
     .map((l) => `<li>${esc(l)}</li>`)
     .join("");
+  const options = seedCatalog()
+    .map(
+      (s) =>
+        `<option value="${esc(s.id)}" data-expect="${esc(s.expect)}">${esc(s.label)}</option>`,
+    )
+    .join("");
   return `<div data-testid="steel-check-panel">
     <p>${badge}</p>
     <p class="form-help">Standalone or model-derived member check against AISC 360-22 LRFD S2.</p>
     <p class="notice-small">Not a professional certification claim. Commercial PROKON parity remains UNKNOWN. Envelopes cannot supply design demands.</p>
-    <div class="fields" style="margin:0.75rem 0; display:flex; flex-wrap:wrap; gap:0.5rem">
-      <button type="button" data-testid="steel-load-s2d1" id="steel-load-s2d1">Load S2-D1 pass</button>
-      <button type="button" data-testid="steel-load-s2d1-fail" id="steel-load-s2d1-fail">Load S2-D1 fail</button>
-      <button type="button" data-testid="steel-load-s2g1b-fail" id="steel-load-s2g1b-fail">Load shear fail</button>
+    <div class="fields" style="margin:0.75rem 0; display:flex; flex-wrap:wrap; gap:0.5rem; align-items:end">
+      <label class="form-help" style="display:flex;flex-direction:column;gap:0.25rem;min-width:16rem">
+        Seed case
+        <select id="steel-seed" data-testid="steel-seed">${options}</select>
+      </label>
+      <button type="button" data-testid="steel-load-seed" id="steel-load-seed">Load seed</button>
+      <button type="button" data-testid="steel-load-s2d1" id="steel-load-s2d1" hidden>Load S2-D1</button>
+      <button type="button" data-testid="steel-load-s2d1-fail" id="steel-load-s2d1-fail" hidden>Load S2-D1 fail</button>
+      <button type="button" data-testid="steel-load-s2g1b-fail" id="steel-load-s2g1b-fail" hidden>Load shear fail</button>
       <button type="button" data-testid="steel-use-analysis" id="steel-use-analysis" ${hasResults ? "" : "disabled"}>Use analysis demand</button>
       <button type="button" data-testid="steel-run-check" id="steel-run-check" ${enabled ? "" : "disabled"}>Run check</button>
     </div>
@@ -282,6 +480,7 @@ export async function openSteelCheckDialog({
   const status = () => document.getElementById("steel-case-status");
   const resultHost = () => document.getElementById("steel-check-result");
   const runBtn = () => document.getElementById("steel-run-check");
+  const seedSelect = () => document.getElementById("steel-seed");
 
   function loadCase(next, label) {
     payload = next;
@@ -292,12 +491,26 @@ export async function openSteelCheckDialog({
     message(profileMeta.enabled ? label : "Profile disabled — cannot run Pass/Fail.");
   }
 
-  document.getElementById("steel-load-s2d1").onclick = () =>
-    loadCase(s2D1Payload(), "Loaded S2-D1 pass · Pu = 180 kip.");
-  document.getElementById("steel-load-s2d1-fail").onclick = () =>
-    loadCase(s2D1FailPayload(), "Loaded S2-D1 fail · Pu = 400 kip (> φtPn).");
-  document.getElementById("steel-load-s2g1b-fail").onclick = () =>
-    loadCase(s2G1BFailPayload(), "Loaded shear fail · Vu = 400 kip (> φvVn).");
+  function loadSelectedSeed() {
+    const id = seedSelect().value;
+    const meta = SEEDS[id];
+    loadCase(meta.payload(), `Loaded ${meta.label}.`);
+  }
+
+  document.getElementById("steel-load-seed").onclick = loadSelectedSeed;
+  // Compat aliases for earlier e2e selectors.
+  document.getElementById("steel-load-s2d1").onclick = () => {
+    seedSelect().value = "S2-D1";
+    loadSelectedSeed();
+  };
+  document.getElementById("steel-load-s2d1-fail").onclick = () => {
+    seedSelect().value = "S2-D1-fail";
+    loadSelectedSeed();
+  };
+  document.getElementById("steel-load-s2g1b-fail").onclick = () => {
+    seedSelect().value = "S2-G1B-fail";
+    loadSelectedSeed();
+  };
 
   document.getElementById("steel-use-analysis").onclick = () => {
     try {
