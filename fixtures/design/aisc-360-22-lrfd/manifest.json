@@ -1,0 +1,47 @@
+{
+  "profileId": "aisc-360-22-lrfd",
+  "breadth": "S2",
+  "sourceEdition": {
+    "specification": "ANSI/AISC 360-22",
+    "examples": "Manual Companion Volume 1 Design Examples v16.0",
+    "lockIds": ["R-CODE-STEEL", "R-STEEL-EXAMPLES"]
+  },
+  "notice": "Numeric reconstitution only. Not a substitute for the locked PDFs. Do not redistribute publisher content.",
+  "fixtures": [
+    {
+      "id": "S2-D1",
+      "file": "S2-D1-tension-W8x21.json",
+      "checks": ["tension", "classification-connection-net"],
+      "exampleId": "D.1"
+    },
+    {
+      "id": "S2-E1C",
+      "file": "S2-E1C-compression-W14x132.json",
+      "checks": ["classification", "compression"],
+      "exampleId": "E.1C"
+    },
+    {
+      "id": "S2-F11B",
+      "file": "S2-F11B-flexure-W18x50.json",
+      "checks": ["flexure"],
+      "exampleId": "F.1-1B"
+    },
+    {
+      "id": "S2-G1B",
+      "file": "S2-G1B-shear-W24x62.json",
+      "checks": ["shear"],
+      "exampleId": "G.1B"
+    },
+    {
+      "id": "S2-H1B",
+      "file": "S2-H1B-interaction-W14x99.json",
+      "checks": ["interaction-H1", "compression", "flexure"],
+      "exampleId": "H.1B"
+    }
+  ],
+  "defaultTolerance": {
+    "relative": 0.005,
+    "force_kip": 1.0,
+    "moment_kip_ft": 1.0
+  }
+}

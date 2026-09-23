@@ -1,0 +1,45 @@
+{
+  "id": "S2-G1B",
+  "exampleId": "G.1B",
+  "exampleTitle": "W-Shape in Major-Axis Shear",
+  "relatedExamples": ["G.1A"],
+  "pdfPages": [239, 240],
+  "designMethod": "LRFD",
+  "section": {
+    "family": "W",
+    "designation": "W24X62",
+    "materialAstm": "A992",
+    "Fy_ksi": 50,
+    "d_in": 23.7,
+    "tw_in": 0.43
+  },
+  "member": {
+    "prismatic": true,
+    "doublySymmetric": true,
+    "axis": "major"
+  },
+  "loads": {
+    "VD_kip": 48,
+    "VL_kip": 145,
+    "Vu_kip": 290,
+    "combination": "1.2D+1.6L"
+  },
+  "published": {
+    "Cv1": 1.0,
+    "Aw_in2": 10.2,
+    "Vn_kip": 306,
+    "phi_v": 1.0,
+    "phi_v_Vn_kip": 306,
+    "g21a_applicable": true,
+    "pass": true
+  },
+  "specEquations": ["G2-1", "G2-2", "G2.1"],
+  "si": {
+    "Fy_MPa": 344.738,
+    "d_mm": 601.98,
+    "tw_mm": 10.922,
+    "Vu_kN": 1289.984,
+    "phi_v_Vn_kN": 1361.156
+  },
+  "toleranceRef": "manifest.defaultTolerance"
+}

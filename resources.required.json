@@ -17,16 +17,19 @@
     },
     {
       "id": "R-CODE-STEEL",
-      "status": "not_acquired",
+      "status": "acquired",
       "requiredBy": [
         "M07"
       ],
       "definition": "SOURCES.md section 3",
-      "sourceEdition": null,
-      "sourceHash": null,
-      "rightsStatus": "unverified",
-      "localPath": null,
-      "validationEvidence": []
+      "sourceEdition": "ANSI/AISC 360-22",
+      "sourceHash": "6b1322440eedaa0b82d617811dc4b2a2657e7492cf9067cbb3debdf9e610abb7",
+      "rightsStatus": "local_free_download_not_redistributed",
+      "localPath": "resources/private/aisc-360-22.pdf",
+      "validationEvidence": [
+        "resources.lock.json#R-CODE-STEEL"
+      ],
+      "retrievedAt": "2026-09-23T14:57:10.648Z"
     },
     {
       "id": "R-COLUMN-EXAMPLES",
@@ -280,16 +283,19 @@
     },
     {
       "id": "R-STEEL-EXAMPLES",
-      "status": "not_acquired",
+      "status": "acquired",
       "requiredBy": [
         "M07"
       ],
       "definition": "SOURCES.md section 3",
-      "sourceEdition": null,
-      "sourceHash": null,
-      "rightsStatus": "unverified",
-      "localPath": null,
-      "validationEvidence": []
+      "sourceEdition": "Manual Companion Volume 1 Design Examples v16.0",
+      "sourceHash": "ec25b52e1d7b6b9ec9e5eaccc27452153208784d7d715908daa2595dd8f92423",
+      "rightsStatus": "local_free_download_not_redistributed",
+      "localPath": "resources/private/aisc-design-examples-v16.pdf",
+      "validationEvidence": [
+        "resources.lock.json#R-STEEL-EXAMPLES"
+      ],
+      "retrievedAt": "2026-09-23T14:57:10.648Z"
     }
   ]
 }

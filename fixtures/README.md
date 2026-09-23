@@ -1,5 +1,7 @@
 # Fixture interpretation
 
+`fixtures/design/aisc-360-22-lrfd/` holds M07 S2 steel-design seeds reconstituted from locked AISC Design Examples (numeric I/O only; see `docs/code-profiles/aisc-360-22-lrfd/dossier-S2.md`). They are not proof that clause code exists yet.
+
 benchmarks.json contains twelve independently derived analytical acceptance seeds. Eleven reference complete project JSON files under models. B12 is a pure section-stress function case; its signed point probes use y=0,z=+cz and y=+cy,z=0 in addition to the four-corner extrema. These files are inputs and expected outputs; they are not evidence that a solver has passed.
 
 Every engineering value is SI. selectors are adapter assertions: node.n2.uz means the global displacement uz of node n2; reaction.s1.my means global reaction moment about Y at support s1; member.m1.station0_5 means station x/L=0.5 on the physical member; station1 is its end. A trailing .abs requests magnitude because opposite diagram sign conventions must first be normalised to the stated cut convention. All displacement selectors retain their signed global direction. Other force/moment selectors are signed. No selector uses screen coordinates.

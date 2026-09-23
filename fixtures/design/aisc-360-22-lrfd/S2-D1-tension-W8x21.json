@@ -1,0 +1,62 @@
+{
+  "id": "S2-D1",
+  "exampleId": "D.1",
+  "exampleTitle": "W-Shape Tension Member",
+  "pdfPages": [38, 39, 40],
+  "designMethod": "LRFD",
+  "section": {
+    "family": "W",
+    "designation": "W8X21",
+    "materialAstm": "A992",
+    "Fy_ksi": 50,
+    "Fu_ksi": 65,
+    "Ag_in2": 6.16,
+    "bf_in": 5.27,
+    "tf_in": 0.4,
+    "d_in": 8.28,
+    "ry_in": 1.26
+  },
+  "member": {
+    "length_ft": 25.0,
+    "prismatic": true,
+    "doublySymmetric": true
+  },
+  "connection": {
+    "boltsPerLine": 4,
+    "boltLines": 1,
+    "boltDiameter_in": 0.75,
+    "standardHoles": true,
+    "connectedElements": "both_flanges",
+    "connectionLength_in": 9.0,
+    "note": "Geometry from Example D.1 Fig D.1-1; hole deduction per Spec B4.3b (dh + 1/16 in)"
+  },
+  "loads": {
+    "PD_kip": 30,
+    "PL_kip": 90,
+    "Pu_kip": 180,
+    "combination": "1.2D+1.6L"
+  },
+  "published": {
+    "U": 0.908,
+    "An_in2": 4.76,
+    "Ae_in2": 4.32,
+    "Ae_over_Ag": 0.701,
+    "Pn_yield_kip": null,
+    "phi_t_Pn_yield_kip": 277,
+    "Pn_rupture_kip": 281,
+    "phi_t_Pn_rupture_kip": 211,
+    "governing": "rupture",
+    "L_over_ry": 238,
+    "slendernessOk": true,
+    "pass": true
+  },
+  "specEquations": ["D2-1", "D2-2", "D3-1", "B4.3b", "D1"],
+  "si": {
+    "Fy_MPa": 344.738,
+    "Fu_MPa": 448.159,
+    "Ag_mm2": 3974.18,
+    "Pu_kN": 800.68,
+    "phi_t_Pn_rupture_kN": 938.575
+  },
+  "toleranceRef": "manifest.defaultTolerance"
+}

@@ -28,7 +28,7 @@ const expected = [
     id: "R-CODE-STEEL",
     file: "aisc-360-22.pdf",
     edition: "ANSI/AISC 360-22",
-    origin: "https://www.aisc.org/publications/steel-standards/aisc-360",
+    origin: "https://www.aisc.org/aisc/publications/current-standards/aisc-360/",
     required: true,
   },
   {

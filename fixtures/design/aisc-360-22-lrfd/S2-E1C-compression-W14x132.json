@@ -1,0 +1,54 @@
+{
+  "id": "S2-E1C",
+  "exampleId": "E.1C",
+  "exampleTitle": "W-Shape Available Compressive Strength Calculation",
+  "relatedExamples": ["E.1A"],
+  "pdfPages": [72, 73],
+  "designMethod": "LRFD",
+  "section": {
+    "family": "W",
+    "designation": "W14X132",
+    "materialAstm": "A992",
+    "Fy_ksi": 50,
+    "E_ksi": 29000,
+    "Ag_in2": 38.8,
+    "rx_in": 6.28,
+    "ry_in": 3.76,
+    "bf_over_2tf": 7.15,
+    "h_over_tw": 17.7
+  },
+  "member": {
+    "length_ft": 30.0,
+    "Kx": 1.0,
+    "Ky": 1.0,
+    "Lc_ft": 30.0,
+    "governingAxis": "y",
+    "prismatic": true,
+    "doublySymmetric": true
+  },
+  "loads": {
+    "PD_kip": 140,
+    "PL_kip": 420,
+    "Pu_kip": 840,
+    "combination": "1.2D+1.6L"
+  },
+  "published": {
+    "flangeClassification": "nonslender",
+    "webClassification": "nonslender",
+    "lambda_r_flange": 13.5,
+    "lambda_r_web": 35.9,
+    "Lc_over_ry": 95.7,
+    "phi_c_Fn_ksi": 23.0,
+    "phi_c_Pn_kip": 892,
+    "pass": true
+  },
+  "specEquations": ["B4.1a-Case1", "B4.1a-Case5", "E3-1"],
+  "si": {
+    "Fy_MPa": 344.738,
+    "E_MPa": 199948,
+    "Ag_mm2": 25032.2,
+    "Pu_kN": 3736.506,
+    "phi_c_Pn_kN": 3967.814
+  },
+  "toleranceRef": "manifest.defaultTolerance"
+}

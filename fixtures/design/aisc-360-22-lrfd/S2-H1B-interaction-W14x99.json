@@ -1,0 +1,50 @@
+{
+  "id": "S2-H1B",
+  "exampleId": "H.1B",
+  "exampleTitle": "W-Shape Subject to Combined Compression and Bending Moment About Both Axes (Braced Frame)",
+  "relatedExamples": ["H.1A"],
+  "pdfPages": [266, 267],
+  "designMethod": "LRFD",
+  "section": {
+    "family": "W",
+    "designation": "W14X99",
+    "materialAstm": "A992",
+    "Fy_ksi": 50
+  },
+  "member": {
+    "unbracedLength_ft": 14.0,
+    "Kx": 1.0,
+    "Ky": 1.0,
+    "Lc_ft": 14.0,
+    "ends": "pinned",
+    "frameType": "braced",
+    "analysisIncludesPdelta": true,
+    "prismatic": true,
+    "doublySymmetric": true
+  },
+  "loads": {
+    "Pu_kip": 400,
+    "Mux_kip_ft": 250,
+    "Muy_kip_ft": 80.0,
+    "note": "Required strengths from second-order analysis including P-δ (as stated in Example H.1B)"
+  },
+  "published": {
+    "phi_c_Pn_kip": 1130,
+    "phi_b_Mnx_kip_ft": 642,
+    "phi_b_Mny_kip_ft": 311,
+    "Pr_over_Pc": 0.354,
+    "interactionEquation": "H1-1a",
+    "interactionRatio": 0.929,
+    "pass": true
+  },
+  "specEquations": ["H1-1a"],
+  "si": {
+    "Pu_kN": 1779.289,
+    "Mux_kNm": 338.955,
+    "Muy_kNm": 108.465,
+    "phi_c_Pn_kN": 5026.49,
+    "phi_b_Mnx_kNm": 870.435,
+    "phi_b_Mny_kNm": 421.659
+  },
+  "toleranceRef": "manifest.defaultTolerance"
+}

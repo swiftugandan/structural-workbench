@@ -1,0 +1,49 @@
+{
+  "id": "S2-F11B",
+  "exampleId": "F.1-1B",
+  "exampleTitle": "W-Shape Flexural Member Design in Major-Axis Bending, Continuously Braced",
+  "relatedExamples": ["F.1-1A"],
+  "pdfPages": [168, 169, 170],
+  "designMethod": "LRFD",
+  "section": {
+    "family": "W",
+    "designation": "W18X50",
+    "materialAstm": "A992",
+    "Fy_ksi": 50,
+    "Zx_in3": 101,
+    "Ix_in4": 800,
+    "compactness": "compact"
+  },
+  "member": {
+    "span_ft": 35.0,
+    "Lb_ft": 0,
+    "bracing": "continuous",
+    "support": "simple",
+    "prismatic": true,
+    "doublySymmetric": true
+  },
+  "loads": {
+    "wD_kip_per_ft": 0.45,
+    "wL_kip_per_ft": 0.75,
+    "wu_kip_per_ft": 1.74,
+    "Mu_kip_ft": 266,
+    "combination": "1.2D+1.6L",
+    "liveDeflectionLimit": "L/360"
+  },
+  "published": {
+    "Mp_kip_in": 5050,
+    "Mp_kip_ft": 421,
+    "phi_b": 0.9,
+    "phi_b_Mn_kip_ft": 379,
+    "limitState": "yielding-F2",
+    "pass": true
+  },
+  "specEquations": ["F2-1", "F1"],
+  "si": {
+    "Fy_MPa": 344.738,
+    "Zx_mm3": 1654990,
+    "Mu_kNm": 360.648,
+    "phi_b_Mn_kNm": 513.855
+  },
+  "toleranceRef": "manifest.defaultTolerance"
+}

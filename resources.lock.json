@@ -383,11 +383,46 @@
       "rightsStatus": "Installed from public PyPI distribution; no binary redistribution in repository",
       "validationUse": "O01-O20 spatial portal comparisons",
       "localEnvironment": "tools/oracle-env"
+    },
+    {
+      "id": "R-CODE-STEEL",
+      "edition": "ANSI/AISC 360-22",
+      "authoritativeOrigin": "https://www.aisc.org/aisc/publications/current-standards/aisc-360/",
+      "contentHashSha256": "6b1322440eedaa0b82d617811dc4b2a2657e7492cf9067cbb3debdf9e610abb7",
+      "rightsStatus": "Acquired for local implementation use from free AISC download; not redistributed in repository",
+      "localPath": "resources/private/aisc-360-22.pdf",
+      "retrievedAt": "2026-09-23T14:57:10.648Z",
+      "validationUse": "M07 aisc-360-22-lrfd S2 clause dossier and fixtures",
+      "sourceFilenames": [
+        "A360-22W-ewr.pdf"
+      ]
+    },
+    {
+      "id": "R-STEEL-EXAMPLES",
+      "edition": "Manual Companion Volume 1 Design Examples v16.0",
+      "authoritativeOrigin": "https://www.aisc.org/aisc/publications/steel-construction-manual/manual-companion-for-16th-edition/",
+      "contentHashSha256": "ec25b52e1d7b6b9ec9e5eaccc27452153208784d7d715908daa2595dd8f92423",
+      "rightsStatus": "Acquired for local implementation use from free AISC download; not redistributed in repository",
+      "localPath": "resources/private/aisc-design-examples-v16.pdf",
+      "retrievedAt": "2026-09-23T14:57:10.648Z",
+      "validationUse": "M07 aisc-360-22-lrfd S2 clause dossier and fixtures",
+      "sourceFilenames": [
+        "P901-23W.pdf"
+      ]
+    },
+    {
+      "id": "R-STEEL-SHAPES-V16",
+      "edition": "AISC Shapes Database v16.0",
+      "authoritativeOrigin": "https://www.aisc.org/aisc/publications/steel-construction-manual/",
+      "contentHashSha256": "82d0ceb96a0d938ae1a6bd9637cb10a1e269225b5d668dce5b0bdc8d86013496",
+      "rightsStatus": "Acquired for local implementation use from free AISC download; not redistributed in repository",
+      "localPath": "resources/private/aisc-shapes-database-v16.xlsx",
+      "retrievedAt": "2026-09-23T14:57:10.648Z",
+      "validationUse": "M07 aisc-360-22-lrfd S2 clause dossier and fixtures"
     }
   ],
   "unresolved": [
     "R-CODE-CONCRETE",
-    "R-CODE-STEEL",
     "R-COLUMN-EXAMPLES",
     "R-COMPOSITE-CODE",
     "R-CONCRETE-EXAMPLES",
@@ -406,7 +441,6 @@
     "R-PROKON-LICENSED-CORPUS",
     "R-SEISMIC-CODE",
     "R-SHELL-BENCHMARKS",
-    "R-STABILITY-ORACLE",
-    "R-STEEL-EXAMPLES"
+    "R-STABILITY-ORACLE"
   ]
 }
