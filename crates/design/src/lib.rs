@@ -8,7 +8,8 @@ mod profile;
 
 pub use profile::{
     CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,
-    ProfileApplicability, ProfileMetadata, ProfileRegistry, PROFILE_AISC_360_22_LRFD,
+    ProfileApplicability, ProfileMetadata, ProfileRegistry, TensionEndProps, WSectionProps,
+    PROFILE_AISC_360_22_LRFD,
 };
 pub use profile::aisc36022::Aisc36022LrfdProfile;
 
@@ -117,6 +118,7 @@ mod tests {
             lb: 6.0,
             cb: 1.0,
             torsion_present: false,
+            ..MemberContext::default()
         };
         let run = registry
             .evaluate(PROFILE_AISC_360_22_LRFD, &demand, &ctx)

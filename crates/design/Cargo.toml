@@ -5,4 +5,5 @@ edition = "2024"
 license = "MIT"
 [dependencies]
 workbench-model = { path = "../model" }
+serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true

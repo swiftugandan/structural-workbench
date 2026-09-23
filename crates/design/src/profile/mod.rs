@@ -43,6 +43,45 @@ pub struct DesignDemand {
     pub station: f64,
 }
 
+/// Doubly-symmetric W geometric properties in SI (m, m², m³, m⁴).
+///
+/// Strong-axis AISC `x` maps to workbench local `z` bending (`mz` demand);
+/// weak-axis AISC `y` maps to local `y` (`my`).
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct WSectionProps {
+    pub ag: f64,
+    pub d: f64,
+    pub tw: f64,
+    pub bf: f64,
+    pub tf: f64,
+    pub rx: f64,
+    pub ry: f64,
+    pub zx: f64,
+    pub zy: f64,
+    pub sx: f64,
+    pub sy: f64,
+    /// Flange width-to-thickness ratio bf/(2 tf) (dimensionless).
+    pub bf_over_2tf: f64,
+    /// Web slenderness h/tw (dimensionless).
+    pub h_over_tw: f64,
+    pub e: f64,
+}
+
+/// Tension-end inputs for Spec D2/D3 (SI).
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct TensionEndProps {
+    /// Gross area of connected flange elements / Ag floor for U (optional).
+    pub u_floor: Option<f64>,
+    /// Spec Table D3.1 Case 2 x̄ (m).
+    pub x_bar: Option<f64>,
+    /// Connection length ℓ (m).
+    pub connection_length: Option<f64>,
+    /// Number of holes deducted from Ag (both flanges).
+    pub hole_count: u32,
+    /// Hole diameter + 1/16 in. deduction width per Spec B4.3b (m).
+    pub hole_deduction_width: f64,
+}
+
 /// Geometry/material/restraint inputs required by member checks.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MemberContext {
@@ -58,6 +97,16 @@ pub struct MemberContext {
     pub lb: f64,
     pub cb: f64,
     pub torsion_present: bool,
+    /// Required for S2 clause math when the profile is enabled.
+    pub section: Option<WSectionProps>,
+    /// Optional bolted/welded tension end detail for D2/D3.
+    pub tension_end: Option<TensionEndProps>,
+    /// Optional φcPn (N) when H1 should use a precomputed axial resistance.
+    pub phi_c_pn: Option<f64>,
+    /// Optional φbMnx (N·m) strong-axis flexural resistance for H1.
+    pub phi_b_mnx: Option<f64>,
+    /// Optional φbMny (N·m) weak-axis flexural resistance for H1.
+    pub phi_b_mny: Option<f64>,
 }
 
 impl Default for MemberContext {
@@ -75,6 +124,11 @@ impl Default for MemberContext {
             lb: 0.0,
             cb: 1.0,
             torsion_present: false,
+            section: None,
+            tension_end: None,
+            phi_c_pn: None,
+            phi_b_mnx: None,
+            phi_b_mny: None,
         }
     }
 }
@@ -105,6 +159,35 @@ impl CheckOutcome {
             units: String::new(),
             assumptions: Vec::new(),
             intermediates: json!({}),
+            message: message.into(),
+        }
+    }
+
+    pub fn result(
+        check_id: &str,
+        clause: &str,
+        status: CheckStatus,
+        demand: f64,
+        resistance: f64,
+        units: &str,
+        intermediates: Value,
+        message: impl Into<String>,
+    ) -> Self {
+        let utilisation = if resistance.abs() > f64::EPSILON {
+            Some(demand / resistance)
+        } else {
+            None
+        };
+        Self {
+            check_id: check_id.into(),
+            status,
+            clause: clause.into(),
+            demand: Some(demand),
+            resistance: Some(resistance),
+            utilisation,
+            units: units.into(),
+            assumptions: Vec::new(),
+            intermediates,
             message: message.into(),
         }
     }

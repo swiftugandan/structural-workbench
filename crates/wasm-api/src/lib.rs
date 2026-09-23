@@ -356,6 +356,7 @@ impl Kernel {
                     cb: inputs["cb"].as_f64().unwrap_or(1.0),
                     torsion_present: inputs["torsionPresent"].as_bool().unwrap_or(false)
                         || demand.t.abs() > 0.0,
+                    ..workbench_design::MemberContext::default()
                 };
                 let registry = workbench_design::default_registry();
                 match registry.evaluate(profile_id, &demand, &ctx) {
