@@ -22,6 +22,7 @@ export async function save(project) {
       id: project.id,
       revision: project.revision,
       project,
+      savedAt: Date.now(),
     });
     const request = store.getAll();
     request.onsuccess = () => {
@@ -40,6 +41,42 @@ export async function recent() {
   return new Promise((resolve, reject) => {
     const r = db.transaction("projects").objectStore("projects").getAll();
     r.onsuccess = () => resolve(r.result.sort((a, b) => b.updated - a.updated));
+    r.onerror = () => reject(r.error);
+  });
+}
+/** Committed IndexedDB snapshots for one project, newest revision first. */
+export async function listRevisions(projectId) {
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const r = db.transaction("history").objectStore("history").getAll();
+    r.onsuccess = () =>
+      resolve(
+        r.result
+          .filter((x) => x.id === projectId)
+          .sort((a, b) => b.revision - a.revision)
+          .map((x) => ({
+            revision: x.revision,
+            savedAt: x.savedAt ?? null,
+            nodes: x.project?.nodes?.length ?? 0,
+            members: x.project?.members?.length ?? 0,
+            name: x.project?.name ?? "",
+          })),
+      );
+    r.onerror = () => reject(r.error);
+  });
+}
+export async function loadRevision(projectId, revision) {
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const r = db
+      .transaction("history")
+      .objectStore("history")
+      .get(`${projectId}:${revision}`);
+    r.onsuccess = () => {
+      if (!r.result?.project)
+        reject(Error(`No committed snapshot for revision ${revision}.`));
+      else resolve(structuredClone(r.result.project));
+    };
     r.onerror = () => reject(r.error);
   });
 }

@@ -61,6 +61,9 @@ export function commandMenu({
         }),
         null,
         cmd("Download project", "#export-project", "Mod+S"),
+        cmd("Recover revision…", "#recover-revision", null, {
+          blocked: () => !getProject(),
+        }),
         cmd("Export calculation report", "#export-report", "Mod+Shift+E"),
         cmd("Export results CSV", "#export-csv"),
         null,

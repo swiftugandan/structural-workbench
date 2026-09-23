@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M04",
-  "activeTask": "M04-A",
+  "activeTask": "M04-B",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1647,27 +1647,67 @@
     },
     "M04-A": {
       "id": "M04-A",
-      "useCase": "Offline cache/update lifecycle or historical-revision recovery UI",
+      "useCase": "Historical revision recovery from committed IndexedDB snapshots",
       "dependencies": [
         "M03-parent"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "web/state/storage.js",
+        "web/app.js",
+        "web/app.html",
+        "web/command-menu.js",
+        "tests/e2e/recovery.spec.js",
+        "evidence/M04/recovery"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M04-recovery-ui"
+      ],
+      "nextAction": "Next M04 slice: offline service-worker cache or schema migration fixtures.",
+      "createdAt": "2026-09-23T10:38:23.000Z",
+      "requiredCommands": [
+        "npx playwright test tests/e2e/recovery.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "recovery-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M04/recovery/recovery-browser.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M04/recovery"
+      ],
+      "sourceRevision": "65b617421d9cd2290a05a0f0e13564f31fd7e6e0",
+      "sourceHash": "14d56dcf2e7bb0d28a80e82981b20137d4cc74a1da87cfcd7735a83933b0c148",
+      "buildHash": "b2c84d3bb5afa5f320045659e803b623473f1e3a0845bf71d06572ec9a2b80b5",
+      "acceptanceMeaning": "Bounded recovery UI for committed local revisions; dirty forms refuse restore. Parent M04 unaccepted.",
+      "acceptedAt": "2026-09-23T10:43:49.000Z"
+    },
+    "M04-B": {
+      "id": "M04-B",
+      "useCase": "Offline static cache (service worker) or schema migration fixtures",
+      "dependencies": [
+        "M04-A"
       ],
       "status": "READY",
       "ownedPaths": [
         "web",
-        "crates",
+        "tools",
         "evidence/M04"
       ],
       "acceptanceIds": [
         "SPECIFICATION-M04"
       ],
-      "nextAction": "Inspect M04 requirements and pick the smallest persistence/recovery slice.",
-      "createdAt": "2026-09-23T10:38:23.000Z"
+      "nextAction": "Implement atomic build-ID asset cache or tested schema migration chain.",
+      "createdAt": "2026-09-23T10:43:49.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "dec82d579d8a76bd889a77c098ea037b320abb65",
-  "lastVerifiedBuildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
-  "nextAction": "M03 parent accepted. Next: M04 persistence/recovery (M04-A).",
+  "lastVerifiedSourceRevision": "65b617421d9cd2290a05a0f0e13564f31fd7e6e0",
+  "lastVerifiedBuildHash": "b2c84d3bb5afa5f320045659e803b623473f1e3a0845bf71d06572ec9a2b80b5",
+  "nextAction": "M04-A accepted. Next: M04-B offline cache or migrations.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1"
+  "lastVerifiedSourceHash": "14d56dcf2e7bb0d28a80e82981b20137d4cc74a1da87cfcd7735a83933b0c148"
 }

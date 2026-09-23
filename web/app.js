@@ -18,7 +18,7 @@ import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
 import { lineageSummary, renderMemberNav } from "./hierarchy.js";
 import { Gateway } from "./state/transport.js";
-import { save, recent } from "./state/storage.js";
+import { save, recent, listRevisions, loadRevision } from "./state/storage.js";
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
 const label = (id) => entityLabel(project, id);
@@ -237,6 +237,59 @@ async function persist() {
     );
   }
 }
+async function recoverRevision() {
+  if (!project || formDirty || readOnly) {
+    message(
+      formDirty
+        ? "Apply or discard unapplied property changes before recovering a committed revision. Recovery never claims unsaved edits were stored."
+        : "Open a writable project before recovering a revision.",
+    );
+    return;
+  }
+  let rows;
+  try {
+    rows = await listRevisions(project.id);
+  } catch (e) {
+    message("Local history unavailable. " + e.message);
+    return;
+  }
+  if (!rows.length) {
+    message("No committed local revisions yet. Edit and wait for a local save.");
+    return;
+  }
+  const current = project.revision;
+  modal(
+    "Recover committed revision",
+    `<p>These snapshots were written to this browser after a successful local save. Unapplied form edits are never stored here.</p>
+    <div class="entity-table-wrap"><table><thead><tr><th>Revision</th><th>Saved</th><th>Model</th><th></th></tr></thead><tbody>
+    ${rows
+      .map((r) => {
+        const when = r.savedAt
+          ? new Date(r.savedAt).toLocaleString()
+          : "unknown time";
+        const mark = r.revision === current ? " · current" : "";
+        return `<tr data-revision="${r.revision}"><th>r${r.revision}${mark}</th><td>${esc(when)}</td><td>${r.nodes} nodes · ${r.members} members</td><td>${r.revision === current ? "" : `<button type="button" data-recover="${r.revision}">Restore r${r.revision}</button>`}</td></tr>`;
+      })
+      .join("")}
+    </tbody></table></div>`,
+  );
+  for (const b of document.querySelectorAll("[data-recover]"))
+    b.onclick = async () => {
+      try {
+        const snapshot = await loadRevision(
+          project.id,
+          Number(b.dataset.recover),
+        );
+        await open(snapshot);
+        message(
+          `Restored committed revision ${snapshot.revision}. Unsaved edits were not claimed as saved.`,
+        );
+      } catch (e) {
+        message(e.message);
+      }
+    };
+}
+$("#recover-revision").onclick = () => recoverRevision();
 async function open(p) {
   modelTools.cancel();
   try {
