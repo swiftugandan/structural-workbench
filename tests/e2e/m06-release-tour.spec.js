@@ -26,7 +26,8 @@ test("M06 release tour: analyse, stress screen, ledger, save and report", async 
     buffer: Buffer.from(JSON.stringify(fixture)),
   });
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
-  await expect(page.locator("#message")).toContainText(/parity:\s*UNKNOWN/i);
+  await expect(page.locator("#message")).not.toContainText(/parity:|Excluded/i);
+  await expect(page.locator("#footer-scope")).toBeVisible();
 
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");

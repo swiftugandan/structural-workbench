@@ -9,14 +9,16 @@ async function record(name, body) {
 }
 
 async function openSteelPanel(page) {
-  await page.locator("[data-testid='steel-check-open']").evaluate((el) => {
-    el.hidden = false;
-    el.click();
-  });
+  await expect(page.locator("[data-testid='steel-check-open']")).toBeVisible();
+  await page.locator("[data-testid='steel-check-open']").click();
   await expect(page.locator("[data-testid='steel-check-panel']")).toBeVisible();
-  await expect(page.locator("[data-testid='steel-profile-badge']")).toContainText(
-    /enabled/i,
-  );
+  await expect(
+    page.locator("[data-testid='steel-profile-badge']"),
+  ).toContainText(/enabled/i);
+  await expect(
+    page.getByRole("heading", { name: "Demand source" }),
+  ).toBeVisible();
+  await expect(page.locator("#steel-run-check")).toBeDisabled();
 }
 
 async function closeModal(page) {
@@ -28,6 +30,9 @@ async function runSeed(page, seedId, expectOverall) {
   await page.locator("[data-testid='steel-seed']").selectOption(seedId);
   await page.locator("[data-testid='steel-load-seed']").click();
   await expect(page.locator("[data-testid='steel-case-loaded']")).toBeVisible();
+  await expect(
+    page.locator("[data-testid='steel-input-summary']"),
+  ).toBeVisible();
   await page.locator("[data-testid='steel-run-check']").click();
   await expect(page.locator("[data-testid='steel-overall']")).toHaveText(
     expectOverall,
@@ -73,7 +78,12 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
   await openSteelPanel(page);
 
   const passSeeds = ["S2-D1", "S2-E1C", "S2-F11B", "S2-G1B", "S2-H1B"];
-  const failSeeds = ["S2-D1-fail", "S2-E1C-fail", "S2-F11B-fail", "S2-G1B-fail"];
+  const failSeeds = [
+    "S2-D1-fail",
+    "S2-E1C-fail",
+    "S2-F11B-fail",
+    "S2-G1B-fail",
+  ];
   const unsupportedSeeds = [
     "S2-LTB-unsupported",
     "S2-HSS-unsupported",
@@ -83,6 +93,11 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
 
   for (const id of passSeeds) {
     await runSeed(page, id, "pass");
+    if (id === "S2-F11B") {
+      await expect(page.locator('[data-check-id="flexure"]')).toContainText(
+        "kN·m",
+      );
+    }
     results.pass.push(id);
   }
   for (const id of failSeeds) {
@@ -104,6 +119,24 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
     results,
   });
   expect(errors).toEqual([]);
+});
+
+test("steel check remains usable in a narrow viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.locator("#new-project").click();
+  await expect(page.locator("#kernel-status")).toContainText("ready", {
+    timeout: 60_000,
+  });
+  await openSteelPanel(page);
+  await runSeed(page, "S2-D1", "pass");
+  await page
+    .locator("[data-testid='steel-governing']")
+    .scrollIntoViewIfNeeded();
+  await expect(
+    page.locator("[data-testid='steel-governing']"),
+  ).toBeInViewport();
+  await expect(page.locator("#close-modal")).toBeVisible();
 });
 
 test("standalone S2-D1 fail seed reports overall fail", async ({ page }) => {
@@ -154,7 +187,9 @@ test("model-derived demand check lands in calculation report clause trail", asyn
   await openSteelPanel(page);
   await page.locator("[data-testid='steel-seed']").selectOption("S2-G1B");
   await page.locator("[data-testid='steel-load-seed']").click();
-  await expect(page.locator("[data-testid='steel-use-analysis']")).toBeEnabled();
+  await expect(
+    page.locator("[data-testid='steel-use-analysis']"),
+  ).toBeEnabled();
   await page.locator("[data-testid='steel-use-analysis']").click();
   await expect(page.locator("[data-testid='steel-case-loaded']")).toContainText(
     /Model-derived/i,
@@ -166,11 +201,17 @@ test("model-derived demand check lands in calculation report clause trail", asyn
   await expect(page.locator("[data-testid='steel-overall']")).toBeVisible({
     timeout: 15_000,
   });
-  const overall = await page.locator("[data-testid='steel-overall']").innerText();
+  const overall = await page
+    .locator("[data-testid='steel-overall']")
+    .innerText();
   expect(["pass", "fail", "unsupported", "indeterminate"]).toContain(overall);
   // B02 tip load produces shear/moment — not an empty demand set.
-  await expect(page.locator("[data-testid='steel-check-row']").first()).toBeVisible();
-  const rowCount = await page.locator("[data-testid='steel-check-row']").count();
+  await expect(
+    page.locator("[data-testid='steel-check-row']").first(),
+  ).toBeVisible();
+  const rowCount = await page
+    .locator("[data-testid='steel-check-row']")
+    .count();
   expect(rowCount).toBeGreaterThan(0);
 
   await closeModal(page);

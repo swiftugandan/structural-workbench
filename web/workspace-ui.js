@@ -142,6 +142,22 @@ export function workspaceUI({
     icon("settings") +
     '<span>Actions</span></button></div><span class="ribbon-caption">Inspect</span>';
   $("#ribbon-content").append(resultGroup);
+  const designGroup = document.createElement("div");
+  designGroup.className = "ribbon-group";
+  designGroup.dataset.category = "Design";
+  const designCommands = document.createElement("div");
+  designCommands.className = "ribbon-commands";
+  const steelCheck = $("#steel-check");
+  steelCheck.hidden = false;
+  steelCheck.innerHTML = icon("settings") + "<span>Steel check</span>";
+  steelCheck.title = "Check a steel member with the enabled AISC profile";
+  designCommands.append(steelCheck);
+  designGroup.append(designCommands);
+  const designCaption = document.createElement("span");
+  designCaption.className = "ribbon-caption";
+  designCaption.textContent = "Design";
+  designGroup.append(designCaption);
+  $("#ribbon-content").append(designGroup);
   for (const [id, img, text] of [
     ["undo", "undo", "Undo"],
     ["redo", "redo", "Redo"],

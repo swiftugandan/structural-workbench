@@ -1,8 +1,8 @@
 {
   "milestone": "M07",
   "status": "PASS",
-  "sourceHash": "59b2d58d67008f7c0c4c4c6b510e81bcb84cf816cf4e0bd985fff9b5c8dd374b",
-  "buildHash": "c5e5ac5eb3b4dd45fdb269d81484ba964f0d2a4fc73cb9e17121aa113be3208b",
+  "sourceHash": "87355d586145a0b5cc95e38a1a44e485d0317d10129b351a3fcb044b8e8c624b",
+  "buildHash": "4a4152c285e90912c6629b09748e6ed9988db193c06c8410f72a2c724126dea7",
   "required": [
     "build",
     "s2-fixtures-native",
@@ -11,5 +11,5 @@
     "m07-acceptance"
   ],
   "issues": [],
-  "observedAt": "2026-09-23T16:22:54.668Z"
+  "observedAt": "2026-09-23T17:04:22.108Z"
 }

@@ -1,4 +1,8 @@
-# M01-UX canvas-first handoff
+# Structural Workbench handoff
+
+## Current design UI update — 2026-09-23
+
+M07 steel member check now has a visible ribbon command and a three-step setup/results dialog. The ordinary workspace no longer repeats the long parity/exclusion notice; capabilities and design scope are available on demand. M07 same-build gate PASS at source `87355d586145a0b5cc95e38a1a44e485d0317d10129b351a3fcb044b8e8c624b`, build `4a4152c285e90912c6629b09748e6ed9988db193c06c8410f72a2c724126dea7`. See `evidence/M07/design-ui/README.md` and screenshot, plus `evidence/M07/full/gate-M07.json`. Preview on port 4182. The next dependency task is still M08, blocked on concrete code/examples resources in `delivery/state.json`. The historical M01 notes below describe earlier work and should not override the current delivery state.
 
 Work in /Users/p.munaawa/Documents/projects/labs/prokon on main (trunk based development). The ChatGPT project mirror's sources remain read-only. Do not spawn agents unless newly authorized.
 

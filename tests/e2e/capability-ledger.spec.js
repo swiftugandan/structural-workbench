@@ -32,8 +32,8 @@ test("M06 capability ledger: View capabilities shows UNKNOWN parity and exclusio
     buffer: Buffer.from(JSON.stringify(fixture)),
   });
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
-  await expect(page.locator("#message")).toContainText(/parity:\s*UNKNOWN/i);
-  await expect(page.locator("#message")).toContainText(/Excluded/i);
+  await expect(page.locator("#message")).not.toContainText(/parity:|Excluded/i);
+  await expect(page.locator("#footer-scope")).toBeVisible();
 
   await page.locator("#scope").click();
   await expect(page.locator("[data-testid='parity-unknown']")).toContainText(

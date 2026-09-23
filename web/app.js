@@ -19,10 +19,7 @@ import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
 import { lineageSummary, renderMemberNav } from "./hierarchy.js";
 import { Gateway } from "./state/transport.js";
-import {
-  duplicateAsVariant,
-  buildComparison,
-} from "./variants.js";
+import { duplicateAsVariant, buildComparison } from "./variants.js";
 import {
   save,
   recent,
@@ -38,8 +35,6 @@ import { initOffline, afterSaved } from "./offline.js";
 import {
   loadCapabilitiesLedger,
   renderCapabilitiesModalHtml,
-  domainDisclosureFromLedger,
-  importDisclosureMessage,
 } from "./capabilities-ledger.js";
 import { openSteelCheckDialog } from "./steel-check.js";
 const label = (id) => entityLabel(project, id);
@@ -137,7 +132,8 @@ function selectEntities(ids, toggle = false) {
       ? `Analytical ${label(member.id)} · physical ${lineage.physicalLabel}${lineage.stations ? ` · ${lineage.stations}` : ""}`
       : `1 selected · ${label(only)}`;
   } else
-    $("#selected-status").textContent = `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).map(label).join(", ")}`;
+    $("#selected-status").textContent =
+      `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).map(label).join(", ")}`;
 }
 const cadTools = cad({
   getProject: () => project,
@@ -164,6 +160,7 @@ function modal(title, html) {
   ].includes(title);
   const dialog = $("#modal");
   if (dialog.open) dialog.close();
+  dialog.classList.toggle("steel-dialog", title === "Steel member check");
   dialog.classList.toggle("command-dock", !blocking);
   document.body.classList.toggle("command-dock-open", !blocking);
   if (blocking) dialog.showModal();
@@ -206,11 +203,11 @@ const scope = async () => {
 };
 $("#help").onclick = () => void scope();
 $("#scope").onclick = () => void scope();
+$("#footer-scope").onclick = () => void scope();
 $("#steel-check").onclick = () =>
   void openSteelCheckDialog({
     gateway,
     openModal: (title, html) => modal(title, html),
-    message,
     getCapabilities: async () => {
       // Prefer live WASM capabilities (includes enabled designProfiles).
       try {
@@ -221,6 +218,7 @@ $("#steel-check").onclick = () =>
     },
     getAnalysisContext: () => ({
       result: diagramResult(),
+      modelHash,
       selectedMemberId:
         selected && project?.members?.some((m) => m.id === selected)
           ? selected
@@ -345,7 +343,9 @@ async function recoverRevision() {
     return;
   }
   if (!rows.length) {
-    message("No committed local revisions yet. Edit and wait for a local save.");
+    message(
+      "No committed local revisions yet. Edit and wait for a local save.",
+    );
     return;
   }
   const current = project.revision;
@@ -385,8 +385,7 @@ async function open(p, options = {}) {
   modelTools.cancel();
   try {
     setBusy(true);
-    const originalUtf8 =
-      options.originalUtf8 ?? JSON.stringify(p);
+    const originalUtf8 = options.originalUtf8 ?? JSON.stringify(p);
     const s = await gateway.send("importProject", {
       jsonUtf8: originalUtf8,
       replaceCurrent: true,
@@ -424,11 +423,6 @@ async function open(p, options = {}) {
         `Migrated schema ${report.from} → ${report.to}. Original file retained locally (${report.originalSha256.slice(0, 12)}…).` +
         (status ? "\n" + status : "");
     }
-    const disclosure =
-      s.domainDisclosure ||
-      domainDisclosureFromLedger(await loadCapabilitiesLedger().catch(() => ({})));
-    const domainNote = importDisclosureMessage(disclosure);
-    status = domainNote + (status ? "\n" + status : "");
     if (options.recoveryNote) {
       status = options.recoveryNote + (status ? "\n" + status : "");
     }
@@ -980,13 +974,14 @@ function renderResults() {
       return eng ? "kN" : "N";
     };
     const row = (entity, component, extreme, kind) => {
-      const where = extreme.station != null
-        ? ` · x/L=${Number(extreme.station.toPrecision(6))}${extreme.side ? ` ${extreme.side}` : ""}`
-        : extreme.nodeId
-          ? ` · node ${label(extreme.nodeId)}`
-          : extreme.supportId
-            ? ` · support ${label(extreme.supportId)}`
-            : "";
+      const where =
+        extreme.station != null
+          ? ` · x/L=${Number(extreme.station.toPrecision(6))}${extreme.side ? ` ${extreme.side}` : ""}`
+          : extreme.nodeId
+            ? ` · node ${label(extreme.nodeId)}`
+            : extreme.supportId
+              ? ` · support ${label(extreme.supportId)}`
+              : "";
       return [
         entity,
         component,
@@ -1030,11 +1025,16 @@ function renderResults() {
             `<p class="notice-small" role="status">${esc(d.code || "")}: ${esc(d.message || "")}</p>`,
         )
         .join("") +
-      `<table><thead><tr>${["Entity", "Component", "Extreme", "Value", "Unit", "Governing"]
+      `<table><thead><tr>${[
+        "Entity",
+        "Component",
+        "Extreme",
+        "Value",
+        "Unit",
+        "Governing",
+      ]
         .map((h) => `<th scope="col">${h}</th>`)
-        .join(
-          "",
-        )}</tr></thead><tbody>${rows
+        .join("")}</tr></thead><tbody>${rows
         .map(
           (r) =>
             `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`,
@@ -1133,12 +1133,7 @@ function renderResults() {
     const eng = project.displayUnits === "engineeringMetric";
     const scale = eng ? 1e-6 : 1;
     const unit = eng ? "MPa" : "Pa";
-    heads = [
-      "Member",
-      "Station",
-      `σ max [${unit}]`,
-      `σ min [${unit}]`,
-    ];
+    heads = ["Member", "Station", `σ max [${unit}]`, `σ min [${unit}]`];
     rows = (result.members || [])
       .filter((m) => m.stressScreen)
       .map((m) => [
@@ -1351,10 +1346,13 @@ $("#compare-variants").onclick = async () => {
     renderInspector();
     viewport.update(project, diagramResult(), selected);
     const fmt = (v) =>
-      v == null || !Number.isFinite(v) ? "—" : `${(v * 1000).toPrecision(4)} mm`;
+      v == null || !Number.isFinite(v)
+        ? "—"
+        : `${(v * 1000).toPrecision(4)} mm`;
     const hash = (h) =>
       `<code style="overflow-wrap:anywhere;font-size:12px">${esc(h)}</code>`;
-    $("#modal-content").innerHTML = `<div class="variant-compare"><h2>Variant comparison</h2><p>Both rows are from independent solves of the captured baseline and the current project. Model hashes identify each stiffness variant.</p><table><thead><tr><th scope="col"></th><th scope="col">Baseline</th><th scope="col">Variant</th></tr></thead><tbody><tr><th scope="row">Name</th><td>${esc(comparison.baseline.name)}</td><td>${esc(comparison.variant.name)}</td></tr><tr><th scope="row">Model hash</th><td>${hash(comparison.baseline.modelHash)}</td><td>${hash(comparison.variant.modelHash)}</td></tr><tr><th scope="row">Section Iy</th><td>${comparison.baseline.Iy?.toExponential?.(4) ?? "—"}</td><td>${comparison.variant.Iy?.toExponential?.(4) ?? "—"}</td></tr><tr><th scope="row">Tip uz (${esc(comparison.tipNode || "—")})</th><td>${fmt(comparison.baseline.tipUz)}</td><td>${fmt(comparison.variant.tipUz)}</td></tr></tbody></table><div class="dialog-actions"><button type="button" id="download-baseline-report">Download baseline report</button><button type="button" id="download-variant-report" class="primary">Download variant report</button></div></div>`;
+    $("#modal-content").innerHTML =
+      `<div class="variant-compare"><h2>Variant comparison</h2><p>Both rows are from independent solves of the captured baseline and the current project. Model hashes identify each stiffness variant.</p><table><thead><tr><th scope="col"></th><th scope="col">Baseline</th><th scope="col">Variant</th></tr></thead><tbody><tr><th scope="row">Name</th><td>${esc(comparison.baseline.name)}</td><td>${esc(comparison.variant.name)}</td></tr><tr><th scope="row">Model hash</th><td>${hash(comparison.baseline.modelHash)}</td><td>${hash(comparison.variant.modelHash)}</td></tr><tr><th scope="row">Section Iy</th><td>${comparison.baseline.Iy?.toExponential?.(4) ?? "—"}</td><td>${comparison.variant.Iy?.toExponential?.(4) ?? "—"}</td></tr><tr><th scope="row">Tip uz (${esc(comparison.tipNode || "—")})</th><td>${fmt(comparison.baseline.tipUz)}</td><td>${fmt(comparison.variant.tipUz)}</td></tr></tbody></table><div class="dialog-actions"><button type="button" id="download-baseline-report">Download baseline report</button><button type="button" id="download-variant-report" class="primary">Download variant report</button></div></div>`;
     $("#modal").showModal();
     $("#download-baseline-report").onclick = () =>
       download(
@@ -1417,7 +1415,8 @@ $("#study-file").onchange = async () => {
 <table><thead><tr><th>Variant</th><th>Model hash</th><th>Result id</th><th>Observed</th></tr></thead><tbody>${rows}</tbody></table>
 </body></html>`;
     $("#show-results")?.click();
-    $("#results-content").innerHTML = `<p class="notice-small" data-testid="study-report-banner">Declarative study comparison (M22). Hashes are from the Rust kernel; the open project was not mutated.</p>
+    $("#results-content").innerHTML =
+      `<p class="notice-small" data-testid="study-report-banner">Declarative study comparison (M22). Hashes are from the Rust kernel; the open project was not mutated.</p>
 <table data-testid="study-report-table"><thead><tr><th scope="col">Variant</th><th scope="col">Model hash</th><th scope="col">Result id</th><th scope="col">Observed</th></tr></thead><tbody>${rows}</tbody></table>
 <p><button type="button" id="download-study-report" class="primary">Download study HTML</button></p>`;
     $("#download-study-report").onclick = () =>
@@ -1518,18 +1517,25 @@ function entityList(key) {
   }[key];
   modal(
     title,
-    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[key].map((v) => {
-      const lineage = key === "members" ? lineageSummary(project, v, label) : null;
-      const description =
-        lineage?.text ||
-        v.name ||
-        label(v.node) ||
-        v.type ||
-        (v.start
-          ? `${label(v.start)} → ${label(v.end)}`
-          : v.position?.join(", ") || "");
-      return `<tr${lineage ? ` data-physical="${esc(lineage.physicalId)}"` : ""}><th>${esc(label(v.id))}</th><td>${esc(description)}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`;
-    }).join("")}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${entityGuides[key][0].toLowerCase()}</button>`,
+    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[
+      key
+    ]
+      .map((v) => {
+        const lineage =
+          key === "members" ? lineageSummary(project, v, label) : null;
+        const description =
+          lineage?.text ||
+          v.name ||
+          label(v.node) ||
+          v.type ||
+          (v.start
+            ? `${label(v.start)} → ${label(v.end)}`
+            : v.position?.join(", ") || "");
+        return `<tr${lineage ? ` data-physical="${esc(lineage.physicalId)}"` : ""}><th>${esc(label(v.id))}</th><td>${esc(description)}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`;
+      })
+      .join(
+        "",
+      )}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${entityGuides[key][0].toLowerCase()}</button>`,
   );
   for (const b of document.querySelectorAll("[data-edit]"))
     b.onclick = () =>
@@ -1632,13 +1638,15 @@ function editEntity(key, old, draft) {
     `<form id="entity-form" class="entity-form">${entityFields(key, entity, project)}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`;
   bindEntityFields($("#entity-form"), key, project);
   if (key === "sections") {
-    bindSectionCalculator($("#entity-form"), async ({ width, depth, customJ }) =>
-      gateway.send("computeSection", {
-        shape: "solidRectangle",
-        width,
-        depth,
-        customJ,
-      }),
+    bindSectionCalculator(
+      $("#entity-form"),
+      async ({ width, depth, customJ }) =>
+        gateway.send("computeSection", {
+          shape: "solidRectangle",
+          width,
+          depth,
+          customJ,
+        }),
     );
   }
   bindTemplates($("#entity-form"), key, entity, project, (next) =>

@@ -23,7 +23,7 @@
     <main id="landing">
       <div class="landing-top">
         <div>
-          <p class="eyebrow">STRUCTURAL ANALYSIS · MECHANICS PREVIEW</p>
+          <p class="eyebrow">STRUCTURAL MODELLING &amp; ANALYSIS</p>
           <h1>A clear view of your structure.</h1>
           <p class="intro">
             Model, analyse and understand your frames.<br />From the first
@@ -120,9 +120,12 @@
           <button id="undo" title="Undo engineering edit">↶ Undo</button
           ><button id="redo" title="Redo engineering edit">↷ Redo</button
           ><button id="export-project">↓ Project</button
-          ><button id="duplicate-variant" type="button" hidden>Duplicate as variant</button
-          ><button id="compare-variants" type="button" hidden>Compare with baseline</button
-          ><button id="recover-revision" type="button" hidden>Recover revision</button
+          ><button id="duplicate-variant" type="button" hidden>
+            Duplicate as variant</button
+          ><button id="compare-variants" type="button" hidden>
+            Compare with baseline</button
+          ><button id="recover-revision" type="button" hidden>
+            Recover revision</button
           ><button id="export-report">↓ Report</button
           ><select id="result-case" aria-label="Analysis case"></select
           ><button id="analyse" class="primary">▶ Analyse</button
@@ -180,8 +183,8 @@
             ><button id="orbit-tool" aria-pressed="false">Orbit</button
             ><button id="add-node-tool">Node</button
             ><button id="add-support-tool">Support</button
-            ><button id="add-load-tool">Load</button
-            >            <button id="cad-tools">Edit selection</button
+            ><button id="add-load-tool">Load</button>
+            <button id="cad-tools">Edit selection</button
             ><button id="copy-bay">Copy bay</button
             ><button id="measure-tool">Measure</button>
             <button
@@ -351,7 +354,8 @@
             ><button data-tab="reactions">Reactions</button
             ><button data-tab="section-forces">Member forces</button
             ><button data-tab="forces">End actions</button
-            ><button data-tab="stress" data-testid="tab-stress">Elastic stress</button
+            ><button data-tab="stress" data-testid="tab-stress">
+              Elastic stress</button
             ><button data-tab="equilibrium">Equilibrium</button>
             <div class="spacer"></div>
             <span id="result-status" class="badge">Not analysed</span
@@ -374,9 +378,10 @@
           </select></span
         ><span id="kernel-status">Kernel starting…</span
         ><span id="build-status">Build…</span
-        ><span id="offline-status">Online</span
-        ><span class="spacer"></span
-        ><span>Mechanics preview · No code-design claim</span>
+        ><span id="offline-status">Online</span><span class="spacer"></span
+        ><button id="footer-scope" type="button" class="text-button">
+          Analysis &amp; design scope
+        </button>
       </footer>
     </main>
     <input
@@ -392,7 +397,12 @@
       hidden
       data-testid="study-file"
     />
-    <button id="steel-check" type="button" hidden data-testid="steel-check-open">
+    <button
+      id="steel-check"
+      type="button"
+      hidden
+      data-testid="steel-check-open"
+    >
       Steel member check
     </button>
     <dialog id="modal">

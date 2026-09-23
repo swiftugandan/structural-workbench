@@ -94,12 +94,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4060,
+                  "duration": 3597,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T16:22:12.465Z",
+                  "startTime": "2026-09-23T17:03:44.384Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -142,12 +142,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5497,
+                  "duration": 4889,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T16:22:16.956Z",
+                  "startTime": "2026-09-23T17:03:48.339Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -163,7 +163,7 @@
           ],
           "id": "a7f9f3524b22b69adcb5-1dca2bea07b81ea19dd6",
           "file": "e2e/steel-check.spec.js",
-          "line": 38,
+          "line": 43,
           "column": 1
         },
         {
@@ -182,12 +182,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 20034,
+                  "duration": 16960,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T16:22:22.522Z",
+                  "startTime": "2026-09-23T17:03:53.298Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -203,7 +203,47 @@
           ],
           "id": "a7f9f3524b22b69adcb5-c638569669ad407ff935",
           "file": "e2e/steel-check.spec.js",
-          "line": 64,
+          "line": 69,
+          "column": 1
+        },
+        {
+          "title": "steel check remains usable in a narrow viewport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1950,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T17:04:10.379Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-steel-check-steel-chec-06e66-usable-in-a-narrow-viewport/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a7f9f3524b22b69adcb5-c9bf9f5cf31ff145116a",
+          "file": "e2e/steel-check.spec.js",
+          "line": 124,
           "column": 1
         },
         {
@@ -222,12 +262,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5665,
+                  "duration": 4875,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T16:22:42.685Z",
+                  "startTime": "2026-09-23T17:04:12.397Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -243,7 +283,7 @@
           ],
           "id": "a7f9f3524b22b69adcb5-18af81555ad0276b7d5e",
           "file": "e2e/steel-check.spec.js",
-          "line": 109,
+          "line": 142,
           "column": 1
         },
         {
@@ -262,12 +302,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5509,
+                  "duration": 4140,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T16:22:48.470Z",
+                  "startTime": "2026-09-23T17:04:17.344Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -283,7 +323,7 @@
           ],
           "id": "a7f9f3524b22b69adcb5-6bcb428e1c111d79d80d",
           "file": "e2e/steel-check.spec.js",
-          "line": 133,
+          "line": 166,
           "column": 1
         }
       ]
@@ -291,9 +331,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-23T16:22:11.548Z",
-    "duration": 42651.604,
-    "expected": 5,
+    "startTime": "2026-09-23T17:03:43.396Z",
+    "duration": 38251.816999999995,
+    "expected": 6,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

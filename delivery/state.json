@@ -2548,6 +2548,63 @@
       "nextAction": "M08 blocked on concrete resources; optional LTB flexure expansion",
       "acceptedAt": "2026-09-23T16:22:54.668Z",
       "acceptanceMeaning": "S2 AISC 360-22 LRFD after review remediation: PROTOCOL fail>unsupported overall, fail-closed section/applicability gates, LTB/HSS/torsion unsupported journeys, H1 formula with published \u03c6 + shapes-DB W14\u00d799, tracked playwright artifacts. LTB clause math and commercial parity remain out of scope."
+    },
+    "M07-UX": {
+      "id": "M07-UX",
+      "useCase": "Make the steel design workflow and its result provenance understandable",
+      "dependencies": [
+        "M07-parent"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "web/steel-check.js",
+        "web/workspace-ui.js",
+        "web/app.js",
+        "web/app.html",
+        "web/styles.css",
+        "web/capabilities-ledger.js",
+        "tests/e2e/steel-check.spec.js",
+        "tests/e2e/capability-ledger.spec.js",
+        "tests/e2e/m06-release-tour.spec.js"
+      ],
+      "acceptanceIds": [
+        "USER-design-ui-clarity",
+        "DESIGN_SCREENS-Screen04"
+      ],
+      "requiredCommands": [
+        "npm run verify:m07",
+        "npx playwright test tests/e2e/m06-release-tour.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "M07 same-build gate",
+          "status": "PASS",
+          "browserTests": 6,
+          "evidencePath": "evidence/M07/full/gate-M07.json"
+        },
+        {
+          "check": "live Chrome design journey",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/design-ui/steel-check-desktop.png"
+        },
+        {
+          "check": "steel dialog axe WCAG scan",
+          "status": "PASS",
+          "violations": 0,
+          "incomplete": 0,
+          "evidencePath": "evidence/M07/design-ui/README.md"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M07/design-ui",
+        "evidence/M07/full"
+      ],
+      "sourceHash": "87355d586145a0b5cc95e38a1a44e485d0317d10129b351a3fcb044b8e8c624b",
+      "buildHash": "4a4152c285e90912c6629b09748e6ed9988db193c06c8410f72a2c724126dea7",
+      "attempts": [],
+      "acceptedAt": "2026-09-23T17:05:24Z",
+      "nextAction": "M08 concrete resource gate remains blocked; continue when code and example resources are locked.",
+      "acceptanceMeaning": "UI clarity refinement for existing bounded AISC S2 check. No new design scope or model-section assignment."
     }
   },
   "blockers": [
@@ -2581,8 +2638,8 @@
     }
   ],
   "lastVerifiedSourceRevision": "1f3ee6d0295af062c0c380e9e26021b106d3dd8e",
-  "lastVerifiedBuildHash": "c5e5ac5eb3b4dd45fdb269d81484ba964f0d2a4fc73cb9e17121aa113be3208b",
-  "nextAction": "M07 ACCEPTED after review remediation. M08 blocked on R-CODE-CONCRETE / R-CONCRETE-EXAMPLES.",
+  "lastVerifiedBuildHash": "4a4152c285e90912c6629b09748e6ed9988db193c06c8410f72a2c724126dea7",
+  "nextAction": "M07-UX complete with same-build M07 gate PASS. M08 remains blocked on R-CODE-CONCRETE / R-CONCRETE-EXAMPLES.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "59b2d58d67008f7c0c4c4c6b510e81bcb84cf816cf4e0bd985fff9b5c8dd374b"
+  "lastVerifiedSourceHash": "87355d586145a0b5cc95e38a1a44e485d0317d10129b351a3fcb044b8e8c624b"
 }

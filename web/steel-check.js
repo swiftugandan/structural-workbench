@@ -357,7 +357,10 @@ export function seedCatalog() {
  * Overlay simultaneous section actions from an analysis sample onto a W payload.
  * Keeps catalogue section/tension props; replaces demand + provenance only.
  */
-export function applyAnalysisDemand(payload, { result, memberId, station = 0.5 }) {
+export function applyAnalysisDemand(
+  payload,
+  { result, memberId, station = 0.5 },
+) {
   if (!payload?.inputs || !result?.members?.length) {
     throw new Error("Load a W seed case and analyse the model first.");
   }
@@ -425,13 +428,47 @@ function esc(s) {
 }
 
 function formatUtil(u) {
-  if (u == null || Number.isNaN(u)) return "—";
+  if (u == null || !Number.isFinite(u)) return "—";
   return (u * 100).toFixed(1) + "%";
 }
 
-function formatForceN(n) {
-  if (n == null) return "—";
-  return (n / 1e3).toFixed(1) + " kN";
+function formatCheckValue(value, units) {
+  if (value == null || !Number.isFinite(value)) return "—";
+  if (units === "N") return (value / 1e3).toFixed(1) + " kN";
+  if (units === "N·m") return (value / 1e3).toFixed(1) + " kN·m";
+  if (units === "-") return value.toFixed(3);
+  return `${value.toPrecision(4)} ${units || ""}`.trim();
+}
+
+function formatAction(value, moment = false) {
+  return `${(value / 1e3).toFixed(1)} ${moment ? "kN·m" : "kN"}`;
+}
+
+const checkNames = {
+  classification: "Section classification",
+  tension: "Tension",
+  compression: "Compression",
+  flexure: "Major-axis flexure",
+  shear: "Shear",
+  "interaction-H1": "Axial and bending interaction",
+};
+
+function renderInputSummary(payload, source, modelHash, exampleLabel = "") {
+  const i = payload.inputs;
+  const sectionName =
+    i.sectionFamily === "W"
+      ? exampleLabel.match(/W\d+×\d+/)?.[0] || "Reference W section"
+      : i.sectionFamily;
+  const sourceText =
+    source === "model"
+      ? `Current analysis · ${esc(modelHash?.slice(0, 12) || "unknown hash")}…`
+      : `Published example input · ${esc(payload.resultId)}`;
+  return `<div class="steel-input-summary" data-testid="steel-input-summary">
+    <div><span>Section source</span><strong>${esc(sectionName)}</strong><small>${esc(exampleLabel.split(" ")[0] || "S2")} example properties; the model section is not substituted.</small></div>
+    <div><span>Demand source</span><strong>${sourceText}</strong><small>${esc(i.combinationId)} · x/L ${Number(i.station).toFixed(3)} · member ${esc(payload.memberIds[0])}</small></div>
+    <div><span>Demand actions</span><strong>N ${formatAction(i.n)} · Vz ${formatAction(i.vz)}</strong><small>My ${formatAction(i.my, true)} · Mz ${formatAction(i.mz, true)} · local axes</small></div>
+    <div><span>Check assumptions</span><strong>W shape · ${Number(i.length).toFixed(2)} m</strong><small>Ky ${i.ky} · Kz ${i.kz} · Lb ${Number(i.lb).toFixed(2)} m · Cb ${i.cb}</small></div>
+  </div>`;
 }
 
 function renderResult(run) {
@@ -442,36 +479,45 @@ function renderResult(run) {
     if (!governing || c.utilisation > governing.utilisation) governing = c;
   }
   const rows = checks
-    .map(
-      (c) =>
-        `<tr data-testid="steel-check-row" data-check-id="${esc(c.checkId)}" data-status="${esc(c.status)}">
-          <th scope="row">${esc(c.checkId)}</th>
-          <td>${esc(c.clause)}</td>
-          <td data-testid="steel-check-status">${esc(c.status)}</td>
-          <td>${formatForceN(c.demand)}</td>
-          <td>${formatForceN(c.resistance)}</td>
-          <td>${formatUtil(c.utilisation)}</td>
-          <td>${esc(c.message || "")}</td>
-        </tr>`,
-    )
+    .map((c) => {
+      const detail = Object.entries(c.intermediates || {})
+        .map(
+          ([key, value]) =>
+            `<div><dt>${esc(key)}</dt><dd>${esc(typeof value === "number" ? Number(value.toPrecision(6)) : JSON.stringify(value))}</dd></div>`,
+        )
+        .join("");
+      const assumptions = (c.assumptions || [])
+        .map((a) => `<li>${esc(a)}</li>`)
+        .join("");
+      return `<tr data-testid="steel-check-row" data-check-id="${esc(c.checkId)}" data-status="${esc(c.status)}">
+      <th scope="row"><strong>${esc(checkNames[c.checkId] || c.checkId)}</strong><small>${esc(c.checkId)}</small></th>
+      <td>${esc(c.clause)}</td>
+      <td><span class="steel-status steel-status-${esc(c.status)}" data-testid="steel-check-status">${esc(c.status)}</span></td>
+      <td>${formatCheckValue(c.demand, c.units)}</td>
+      <td>${formatCheckValue(c.resistance, c.units)}</td>
+      <td><strong>${formatUtil(c.utilisation)}</strong>${c.utilisation != null && Number.isFinite(c.utilisation) ? `<span class="steel-meter"><span style="width:${Math.min(100, Math.max(0, c.utilisation * 100))}%"></span></span>` : ""}</td>
+      <td><details><summary>Details</summary><p>${esc(c.message || "No additional note.")}</p>${assumptions ? `<ul>${assumptions}</ul>` : ""}${detail ? `<dl>${detail}</dl>` : ""}</details></td>
+    </tr>`;
+    })
     .join("");
   const gov = governing
-    ? `<p data-testid="steel-governing">Governing: <strong>${esc(governing.checkId)}</strong> · ${esc(governing.clause)} · ${formatUtil(governing.utilisation)}</p>`
-    : `<p data-testid="steel-governing">Governing: —</p>`;
-  return `<p><strong>Overall:</strong> <span data-testid="steel-overall">${esc(run.overall)}</span>
-    · member ${esc(run.memberId)} · ${esc(run.combinationId)}</p>
-  ${gov}
-  <table data-testid="steel-check-table">
-    <thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>φRn</th><th>Util.</th><th>Notes</th></tr></thead>
+    ? `<p data-testid="steel-governing">Governing check <strong>${esc(checkNames[governing.checkId] || governing.checkId)}</strong> · ${esc(governing.clause)} · ${formatUtil(governing.utilisation)}</p>`
+    : `<p data-testid="steel-governing">No numeric governing ratio for this check.</p>`;
+  return `<div class="steel-result-hero steel-result-${esc(run.overall)}">
+    <div><span class="steel-eyebrow">Overall result</span><strong data-testid="steel-overall">${esc(run.overall)}</strong><small>${esc(run.memberId)} · ${esc(run.combinationId)} · x/L ${Number(run.station).toFixed(3)}</small></div>
+    <div>${gov}<small>Highest reported ratio is shown; an unsupported check still limits the overall result.</small></div>
+  </div>
+  <div class="steel-check-table-wrap"><table data-testid="steel-check-table">
+    <thead><tr><th scope="col">Check</th><th scope="col">Clause</th><th scope="col">Status</th><th scope="col">Demand</th><th scope="col">Resistance</th><th scope="col">Utilisation</th><th scope="col">Calculation trail</th></tr></thead>
     <tbody>${rows}</tbody>
-  </table>`;
+  </table></div>`;
 }
 
-function shell(profileMeta, { hasResults }) {
+function shell(profileMeta, { hasResults, resultState, selectedMemberId }) {
   const enabled = !!profileMeta?.enabled;
   const badge = enabled
-    ? `<span class="badge" data-testid="steel-profile-badge">${esc(profileMeta.id)} · ${esc(profileMeta.edition || "")} · enabled</span>`
-    : `<span class="badge" data-testid="steel-profile-badge">profile disabled</span>`;
+    ? `<span class="steel-profile-badge" data-testid="steel-profile-badge">${esc(profileMeta.standard || "AISC 360")} · ${esc(profileMeta.edition || "2022")} · ${esc(profileMeta.designMethod || "LRFD")} · enabled</span>`
+    : `<span class="steel-profile-badge steel-status-unsupported" data-testid="steel-profile-badge">AISC profile disabled</span>`;
   const limits = (profileMeta?.limitations || [])
     .slice(0, 4)
     .map((l) => `<li>${esc(l)}</li>`)
@@ -482,62 +528,117 @@ function shell(profileMeta, { hasResults }) {
         `<option value="${esc(s.id)}" data-expect="${esc(s.expect)}">${esc(s.label)}</option>`,
     )
     .join("");
-  return `<div data-testid="steel-check-panel">
-    <p>${badge}</p>
-    <p class="form-help">Standalone or model-derived member check against AISC 360-22 LRFD S2.</p>
-    <p class="notice-small">Not a professional certification claim. Commercial PROKON parity remains UNKNOWN. Envelopes cannot supply design demands.</p>
-    <div class="fields" style="margin:0.75rem 0; display:flex; flex-wrap:wrap; gap:0.5rem; align-items:end">
-      <label class="form-help" style="display:flex;flex-direction:column;gap:0.25rem;min-width:16rem">
-        Seed case
-        <select id="steel-seed" data-testid="steel-seed">${options}</select>
-      </label>
-      <button type="button" data-testid="steel-load-seed" id="steel-load-seed">Load seed</button>
-      <button type="button" data-testid="steel-load-s2d1" id="steel-load-s2d1" hidden>Load S2-D1</button>
-      <button type="button" data-testid="steel-load-s2d1-fail" id="steel-load-s2d1-fail" hidden>Load S2-D1 fail</button>
-      <button type="button" data-testid="steel-load-s2g1b-fail" id="steel-load-s2g1b-fail" hidden>Load shear fail</button>
-      <button type="button" data-testid="steel-use-analysis" id="steel-use-analysis" ${hasResults ? "" : "disabled"}>Use analysis demand</button>
-      <button type="button" data-testid="steel-run-check" id="steel-run-check" ${enabled ? "" : "disabled"}>Run check</button>
+  return `<div class="steel-workspace" data-testid="steel-check-panel">
+    <header class="steel-intro">
+      <div><span class="steel-eyebrow">STEEL MEMBER DESIGN</span>
+        <h3>Check a steel member</h3><p>Choose a reference W section, select its demand source, then inspect each clause result.</p></div>
+      ${badge}
+    </header>
+    <div class="steel-workflow">
+      <div class="steel-steps">
+        <section class="steel-step" aria-labelledby="steel-step-section">
+          <span class="steel-step-number">01</span><div><h4 id="steel-step-section">Section and example</h4>
+          <p>Select a published S2 example. Its W-section properties and design assumptions are used in this check.</p>
+          <label for="steel-seed">Reference example</label>
+          <select id="steel-seed" data-testid="steel-seed">${options}</select>
+          <button type="button" data-testid="steel-load-seed" id="steel-load-seed">Load example</button>
+          <button type="button" data-testid="steel-load-s2d1" id="steel-load-s2d1" hidden>Load S2-D1</button>
+          <button type="button" data-testid="steel-load-s2d1-fail" id="steel-load-s2d1-fail" hidden>Load S2-D1 fail</button>
+          <button type="button" data-testid="steel-load-s2g1b-fail" id="steel-load-s2g1b-fail" hidden>Load shear fail</button></div>
+        </section>
+        <section class="steel-step" aria-labelledby="steel-step-demand">
+          <span class="steel-step-number">02</span><div><h4 id="steel-step-demand">Demand source</h4>
+          <p>Keep the example actions, or replace them with simultaneous actions from the current analysis.</p>
+          <button type="button" data-testid="steel-use-analysis" id="steel-use-analysis" ${hasResults ? "" : "disabled"}>Use current analysis</button>
+          <small id="steel-analysis-availability">${esc(resultState)}${selectedMemberId ? ` · member ${esc(selectedMemberId)}` : ""}</small>
+          <small>Model demand does not replace the reference W section. Envelopes and stale results cannot be used.</small></div>
+        </section>
+        <section class="steel-step" aria-labelledby="steel-step-run">
+          <span class="steel-step-number">03</span><div><h4 id="steel-step-run">Run and review</h4>
+          <p>Run the Rust/WASM profile and review the governing result and clause details.</p>
+          <button type="button" class="primary" data-testid="steel-run-check" id="steel-run-check" disabled>Run steel check</button></div>
+        </section>
+      </div>
+      <div class="steel-review">
+        <div class="steel-review-head"><div><span class="steel-eyebrow">CHECK SETUP</span><h4>Inputs and provenance</h4></div><span id="steel-source-chip" class="steel-source-chip">No input</span></div>
+        <p id="steel-case-status" data-testid="steel-case-status" role="status">Load an example to inspect its inputs.</p>
+        <div id="steel-input-summary" class="steel-empty">No case loaded.</div>
+        <div class="steel-review-head"><div><span class="steel-eyebrow">RESULTS</span><h4>Check breakdown</h4></div></div>
+        <div id="steel-check-result" data-testid="steel-check-result" class="steel-empty">Run a check to see its result and calculation trail.</div>
+      </div>
     </div>
-    <p class="notice-small" id="steel-case-status" data-testid="steel-case-status">No case loaded.</p>
-    <ul class="notice-small">${limits}</ul>
-    <div id="steel-check-result" data-testid="steel-check-result"></div>
+    <details class="steel-scope"><summary>Supported scope and limitations</summary>
+      <ul>${limits}</ul><p>Not a professional certification claim. Commercial PROKON parity remains unknown.</p></details>
   </div>`;
 }
 
 export async function openSteelCheckDialog({
   gateway,
   openModal,
-  message,
   getCapabilities,
   getAnalysisContext,
   onDesignRun,
 }) {
   const caps = (await getCapabilities?.()) || {};
   const profiles = caps.designProfiles || [];
-  const profileMeta =
-    profiles.find((p) => p.id === "aisc-360-22-lrfd") || {
-      id: "aisc-360-22-lrfd",
-      enabled: false,
-      limitations: [],
-    };
+  const profileMeta = profiles.find((p) => p.id === "aisc-360-22-lrfd") || {
+    id: "aisc-360-22-lrfd",
+    enabled: false,
+    limitations: [],
+  };
   const ctx = getAnalysisContext?.() || {};
-  const hasResults = !!(ctx.result && ctx.result.analysisType !== "envelope");
+  const hasResults = !!(
+    ctx.result &&
+    ctx.result.analysisType !== "envelope" &&
+    ctx.result.modelHash === ctx.modelHash
+  );
+  const resultState = !ctx.result
+    ? "Analyse the model to use its actions"
+    : ctx.result.analysisType === "envelope"
+      ? "Choose a real case or combination"
+      : !hasResults
+        ? "Analysis is stale; analyse again"
+        : "Current analysis available";
 
-  openModal("Steel member check", shell(profileMeta, { hasResults }));
+  openModal(
+    "Steel member check",
+    shell(profileMeta, {
+      hasResults,
+      resultState,
+      selectedMemberId: ctx.selectedMemberId,
+    }),
+  );
 
   let payload = null;
+  let source = "example";
+  let sourceModelHash = null;
   const status = () => document.getElementById("steel-case-status");
   const resultHost = () => document.getElementById("steel-check-result");
   const runBtn = () => document.getElementById("steel-run-check");
   const seedSelect = () => document.getElementById("steel-seed");
+  const inputHost = () => document.getElementById("steel-input-summary");
+  const sourceChip = () => document.getElementById("steel-source-chip");
 
   function loadCase(next, label) {
     payload = next;
+    source = "example";
+    sourceModelHash = null;
     status().textContent = label;
     status().setAttribute("data-testid", "steel-case-loaded");
     runBtn().disabled = !profileMeta.enabled;
-    resultHost().innerHTML = "";
-    message(profileMeta.enabled ? label : "Profile disabled — cannot run Pass/Fail.");
+    sourceChip().textContent = "Example actions";
+    inputHost().classList.remove("steel-empty");
+    inputHost().innerHTML = renderInputSummary(
+      payload,
+      source,
+      null,
+      seedSelect().selectedOptions[0].textContent,
+    );
+    resultHost().className = "steel-empty";
+    resultHost().textContent =
+      "Run a check to see its result and calculation trail.";
+    if (!profileMeta.enabled)
+      status().textContent += " Profile disabled; check unavailable.";
   }
 
   function loadSelectedSeed() {
@@ -547,6 +648,19 @@ export async function openSteelCheckDialog({
   }
 
   document.getElementById("steel-load-seed").onclick = loadSelectedSeed;
+  seedSelect().onchange = () => {
+    payload = null;
+    runBtn().disabled = true;
+    sourceChip().textContent = "Example not loaded";
+    status().textContent =
+      "Load the selected example to use its section and actions.";
+    status().setAttribute("data-testid", "steel-case-status");
+    inputHost().className = "steel-empty";
+    inputHost().textContent = "No case loaded.";
+    resultHost().className = "steel-empty";
+    resultHost().textContent =
+      "Run a check to see its result and calculation trail.";
+  };
   // Compat aliases for earlier e2e selectors.
   document.getElementById("steel-load-s2d1").onclick = () => {
     seedSelect().value = "S2-D1";
@@ -564,40 +678,74 @@ export async function openSteelCheckDialog({
   document.getElementById("steel-use-analysis").onclick = () => {
     try {
       if (!payload) {
-        message("Load a W seed case first, then overlay analysis demand.");
+        status().textContent = "Load a reference W-section example first.";
         return;
       }
       const analysis = getAnalysisContext?.() || {};
+      if (
+        !analysis.result ||
+        analysis.result.modelHash !== analysis.modelHash ||
+        analysis.result.analysisType === "envelope"
+      ) {
+        throw new Error(
+          "Current case results are required. Analyse the model, then reopen this check.",
+        );
+      }
       payload = applyAnalysisDemand(payload, {
         result: analysis.result,
         memberId: analysis.selectedMemberId,
         station: 0.5,
       });
+      source = "model";
+      sourceModelHash = analysis.modelHash;
       status().textContent = `Model-derived demand · member ${payload.memberIds[0]} · ${payload.inputs.combinationId} · x/L=${Number(payload.inputs.station).toPrecision(4)}`;
       status().setAttribute("data-testid", "steel-case-loaded");
-      resultHost().innerHTML = "";
-      message("Analysis demand applied to the loaded W section.");
+      sourceChip().textContent = "Current model actions";
+      inputHost().innerHTML = renderInputSummary(
+        payload,
+        source,
+        sourceModelHash,
+        seedSelect().selectedOptions[0].textContent,
+      );
+      resultHost().className = "steel-empty";
+      resultHost().textContent =
+        "Run a check to see its result and calculation trail.";
     } catch (e) {
-      message(e.message || String(e));
+      status().textContent = e.message || String(e);
     }
   };
 
   runBtn().onclick = async () => {
     if (!payload) {
-      message("Load a seed case first.");
+      status().textContent = "Load an example before running the check.";
       return;
     }
     if (!profileMeta.enabled) {
-      message("Design profile is not enabled.");
+      status().textContent = "This design profile is not enabled.";
       return;
     }
     try {
+      if (source === "model") {
+        const analysis = getAnalysisContext?.() || {};
+        if (
+          !analysis.result ||
+          analysis.result.modelHash !== sourceModelHash ||
+          analysis.modelHash !== sourceModelHash
+        ) {
+          throw new Error(
+            "Analysis demand is stale. Analyse the current model and reopen this check.",
+          );
+        }
+      }
+      runBtn().disabled = true;
       const run = await gateway.send("evaluateDesign", payload);
+      resultHost().className = "";
       resultHost().innerHTML = renderResult(run);
       onDesignRun?.(run, payload);
-      message(`Steel check overall: ${run.overall}`);
     } catch (e) {
-      message(e.message || String(e));
+      status().textContent = e.message || String(e);
+    } finally {
+      runBtn().disabled = !profileMeta.enabled;
     }
   };
 }

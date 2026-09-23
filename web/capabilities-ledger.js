@@ -72,7 +72,7 @@ ${limits}
 </table></div>
 <h3>Excluded from analysis MVP</h3>
 <ul class="scope-list" data-testid="excluded-domains">${excluded}</ul>
-<p>Screen labels and elastic stress values do not imply member stability or building-code compliance. Design-code packages remain excluded until their standards and benchmarks are acquired.</p>
+<p>Elastic stress values do not establish member stability or code compliance. Code checks apply only where an enabled profile explicitly supports the section, actions and assumptions.</p>
 <p>Viewport: click to select, Shift-click to toggle, drag blank space to box-select, middle-drag or Space to pan, wheel to zoom towards the pointer. In 3D, Alt-drag or the Orbit tool to orbit. Right-click for context actions. Home fits the model. Engineering edits use Apply changes and support undo/redo.</p>
 <p>Projects stay in this browser's IndexedDB. Download a project for a portable backup. Reports require a current successful analysis.</p>`;
 }
@@ -82,9 +82,7 @@ export function importDisclosureMessage(disclosure) {
     .slice(0, 6)
     .join("; ");
   const more =
-    (disclosure.excludedDomains || EXCLUDED_DOMAINS).length > 6
-      ? "; …"
-      : "";
+    (disclosure.excludedDomains || EXCLUDED_DOMAINS).length > 6 ? "; …" : "";
   return `Supported domain: linear elastic frame analysis only. Commercial numerical parity: ${disclosure.comparisonStatus || "UNKNOWN"}. Excluded (not imported/converted): ${excluded}${more}. See View capabilities for the full ledger.`;
 }
 
