@@ -2,6 +2,11 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
+
+mod migrate;
+pub use migrate::{
+    CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, import_project,
+};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Diagnostic {
     pub code: String,
@@ -162,34 +167,7 @@ pub struct Metadata {
 record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata});
 impl Project {
     pub fn parse(s: &str) -> Result<Self> {
-        if s.len() > 50 * 1024 * 1024 {
-            return Err(err("MEMORY_LIMIT", "Project exceeds 50 MiB"));
-        }
-        let raw: Value =
-            serde_json::from_str(s).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
-        if raw["schemaVersion"] != "1.0.0" {
-            return Err(err(
-                "UNSUPPORTED_SCHEMA",
-                "Only project schema 1.0.0 is supported",
-            ));
-        }
-        if raw["members"].as_array().is_some_and(|members| {
-            members.iter().any(|m| {
-                ["releaseStart", "releaseEnd"].iter().any(|k| {
-                    m[*k].as_object().is_some_and(|obj| {
-                        obj.keys().any(|key| key != "my" && key != "mz")
-                    })
-                })
-            })
-        }) {
-            return Err(err(
-                "UNSUPPORTED_FEATURE",
-                "Only My/Mz end releases are supported",
-            ));
-        }
-        let p: Self = serde_json::from_str(s).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
-        p.validate()?;
-        Ok(p)
+        Ok(import_project(s)?.0)
     }
     pub fn canonicalise(&mut self) {
         // Labels are presentation metadata. Internal IDs and references never change.
@@ -278,10 +256,10 @@ impl Project {
         digest(&serde_json::to_vec(&v).unwrap())
     }
     pub fn validate(&self) -> Result<()> {
-        if self.schema_version != "1.0.0" {
+        if self.schema_version != CURRENT_SCHEMA {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
-                "Only project schema 1.0.0 is supported",
+                format!("Only project schema {CURRENT_SCHEMA} is supported"),
             ));
         }
         if !["spatial", "planarXZ"].contains(&self.analysis_mode.as_str())

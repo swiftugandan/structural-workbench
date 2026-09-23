@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M04",
-  "activeTask": "M04-B",
+  "activeTask": "M04-D",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1687,27 +1687,128 @@
     },
     "M04-B": {
       "id": "M04-B",
-      "useCase": "Offline static cache (service worker) or schema migration fixtures",
+      "useCase": "Atomic build-ID offline static cache (service worker)",
       "dependencies": [
         "M04-A"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "web/sw.js",
+        "web/offline.js",
+        "web/app.js",
+        "web/app.html",
+        "web/styles.css",
+        "tests/e2e/offline-cache.spec.js",
+        "evidence/M04/offline-cache"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M04-offline-cache"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "npx playwright test tests/e2e/offline-cache.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "offline-cache-browser",
+          "status": "PASS",
+          "testCount": 2,
+          "evidencePath": "evidence/M04/offline-cache/offline-reopen.json"
+        },
+        {
+          "check": "update-after-save",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M04/offline-cache/update-after-save.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M04/offline-cache"
+      ],
+      "sourceRevision": "52c2a451c6546df01b154bf7dbe4ed119ee52e5a",
+      "sourceHash": "6ee509c9f9ad10a07a99e93980647373b107cdc29c45204eb8d8d62a09b2fe09",
+      "buildHash": "c0ca9366919fc5b5b3bdca28f0bdb4557fb47ea8a4749710396d8631c3db7bc7",
+      "nextAction": "Next M04 slice: schema migration fixtures, or crash/quota matrix packaging toward parent M04.",
+      "createdAt": "2026-09-23T10:43:49.000Z",
+      "acceptedAt": "2026-09-23T11:41:29.115Z",
+      "acceptanceMeaning": "Bounded local service-worker build-ID cache + offline reopen + update-after-save prompt. Does not claim schema migrations, full crash matrix, or parent M04."
+    },
+    "M04-C": {
+      "id": "M04-C",
+      "useCase": "Schema migration fixtures with original retention and unknown-schema refusal",
+      "dependencies": [
+        "M04-B"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/model/src/migrate.rs",
+        "crates/model/src/lib.rs",
+        "crates/model/tests/migrate.rs",
+        "crates/wasm-api/src/lib.rs",
+        "web/worker.js",
+        "web/state/storage.js",
+        "web/app.js",
+        "fixtures/models/LEGACY09-B02.json",
+        "fixtures/README.md",
+        "tests/e2e/migrations.spec.js",
+        "evidence/M04/migrations"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M04-migrations"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-model --locked --test migrate",
+        "npm run build",
+        "npx playwright test tests/e2e/migrations.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "native-migrate",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M04/migrations/native.json"
+        },
+        {
+          "check": "migration-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M04/migrations/migration-browser.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M04/migrations"
+      ],
+      "sourceRevision": "52c2a451c6546df01b154bf7dbe4ed119ee52e5a",
+      "sourceHash": "b150b28246c7b6b539e98abfd43e9fc8434965d0d68b266a70b7df7fd88b8c62",
+      "buildHash": "9e0591e881d7da0837f9563ab5f8826f3c8f1d76326e24365cfa5ae115d102b0",
+      "nextAction": "Next M04 slice: crash/quota matrix packaging, report plots, or parent M04 gate.",
+      "createdAt": "2026-09-23T11:41:29.115Z",
+      "acceptedAt": "2026-09-23T11:55:00.000Z",
+      "acceptanceMeaning": "Bounded 0.9.0→1.0.0 migration chain with original retention and unknown-schema refusal. Does not claim parent M04 or full crash matrix."
+    },
+    "M04-D": {
+      "id": "M04-D",
+      "useCase": "Crash/quota recovery matrix and/or calculation-record packaging toward parent M04",
+      "dependencies": [
+        "M04-C"
       ],
       "status": "READY",
       "ownedPaths": [
         "web",
-        "tools",
+        "tests",
         "evidence/M04"
       ],
       "acceptanceIds": [
         "SPECIFICATION-M04"
       ],
-      "nextAction": "Implement atomic build-ID asset cache or tested schema migration chain.",
-      "createdAt": "2026-09-23T10:43:49.000Z"
+      "nextAction": "Expand crash/quota/Worker-failure matrix or finish report/export acceptance for parent M04.",
+      "createdAt": "2026-09-23T11:55:00.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "dec82d579d8a76bd889a77c098ea037b320abb65",
-  "lastVerifiedBuildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
-  "nextAction": "M04-A accepted. Next: M04-B offline cache or migrations.",
+  "lastVerifiedSourceRevision": "52c2a451c6546df01b154bf7dbe4ed119ee52e5a",
+  "lastVerifiedBuildHash": "9e0591e881d7da0837f9563ab5f8826f3c8f1d76326e24365cfa5ae115d102b0",
+  "nextAction": "M04-C accepted. Next: M04-D crash/quota matrix or report packaging toward parent M04.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "14d56dcf2e7bb0d28a80e82981b20137d4cc74a1da87cfcd7735a83933b0c148"
+  "lastVerifiedSourceHash": "b150b28246c7b6b539e98abfd43e9fc8434965d0d68b266a70b7df7fd88b8c62"
 }

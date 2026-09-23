@@ -4,7 +4,7 @@ mod topology;
 mod view;
 use serde_json::{Value, json};
 use wasm_bindgen::prelude::*;
-use workbench_model::{Project, Result, err};
+use workbench_model::{Project, Result, err, import_project};
 #[wasm_bindgen]
 pub struct Kernel {
     project: Option<Project>,
@@ -44,7 +44,7 @@ impl Kernel {
         }
         if op == "capabilities" {
             return Ok(
-                json!({"protocolVersion":1,"schemaVersions":["1.0.0"],"analysisTypes":["linearStatic"],"designProfiles":[],"limits":{"nodes":5000,"members":10000,"memoryMiB":512},"limitations":["Conservative fill guard may reject large models","No code compliance or commercial parity claim"]}),
+                json!({"protocolVersion":1,"schemaVersions":["0.9.0","1.0.0"],"analysisTypes":["linearStatic"],"designProfiles":[],"limits":{"nodes":5000,"members":10000,"memoryMiB":512},"limitations":["Conservative fill guard may reject large models","No code compliance or commercial parity claim","Schema 0.9.0 imports migrate to 1.0.0; unknown majors are refused"]}),
             );
         }
         if let Some(p) = &self.project {
@@ -68,7 +68,17 @@ impl Kernel {
                 } else {
                     payload["project"].to_string()
                 };
-                let mut p = Project::parse(&text)?;
+                let (mut p, migration) = if op == "importProject" {
+                    import_project(&text)?
+                } else {
+                    let p = Project::parse(&text)?;
+                    (
+                        p,
+                        workbench_model::MigrationReport::identity(workbench_model::digest(
+                            text.as_bytes(),
+                        )),
+                    )
+                };
                 p.canonicalise();
                 if let Some(old) = &self.project {
                     p.revision = old.revision + 1;
@@ -76,7 +86,9 @@ impl Kernel {
                 self.project = Some(p);
                 self.undo.clear();
                 self.redo.clear();
-                Ok(self.snapshot())
+                let mut snap = self.snapshot();
+                snap["migrationReport"] = serde_json::to_value(migration).unwrap();
+                Ok(snap)
             }
             "getSnapshot" | "exportProject" => Ok(self.snapshot()),
             "validateModel" => {

@@ -1,0 +1,23 @@
+{
+  "taskId": "M04-C",
+  "milestone": "M04",
+  "sourceHash": "b150b28246c7b6b539e98abfd43e9fc8434965d0d68b266a70b7df7fd88b8c62",
+  "buildHash": "9e0591e881d7da0837f9563ab5f8826f3c8f1d76326e24365cfa5ae115d102b0",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "migrates_0_9_to_1_0_and_matches_current_hash",
+    "current_schema_import_is_identity_migration",
+    "unknown_future_schema_is_refused"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "workbench-model",
+    "--locked",
+    "--test",
+    "migrate"
+  ],
+  "observedAt": "2026-09-23T11:53:17.067Z"
+}

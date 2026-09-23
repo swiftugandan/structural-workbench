@@ -924,6 +924,24 @@ tbody tr:hover {
   max-height: 100px;
   overflow: auto;
 }
+#update-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #e7f0ff;
+  color: #1d3f6e;
+  border-bottom: 1px solid #b9cdea;
+  font-size: 12px;
+}
+#update-banner[hidden] {
+  display: none;
+}
+#update-banner .primary {
+  flex: 0 0 auto;
+}
 dialog {
   width: min(850px, calc(100vw - 32px));
   max-height: 85dvh;

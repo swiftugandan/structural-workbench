@@ -18,9 +18,10 @@ import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
 import { lineageSummary, renderMemberNav } from "./hierarchy.js";
 import { Gateway } from "./state/transport.js";
-import { save, recent, listRevisions, loadRevision } from "./state/storage.js";
+import { save, recent, listRevisions, loadRevision, retainOriginal } from "./state/storage.js";
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
+import { initOffline, afterSaved } from "./offline.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -227,8 +228,10 @@ async function persist() {
   saveQueue = saveQueue.catch(() => {}).then(() => save(snapshot));
   try {
     await saveQueue;
-    if (project?.revision === snapshot.revision)
+    if (project?.revision === snapshot.revision) {
       $("#save-status").textContent = "Saved locally";
+      afterSaved();
+    }
   } catch (e) {
     $("#save-status").textContent = "Save failed";
     message(
@@ -290,18 +293,20 @@ async function recoverRevision() {
     };
 }
 $("#recover-revision").onclick = () => recoverRevision();
-async function open(p) {
+async function open(p, options = {}) {
   modelTools.cancel();
   try {
     setBusy(true);
+    const originalUtf8 =
+      options.originalUtf8 ?? JSON.stringify(p);
     const s = await gateway.send("importProject", {
-      jsonUtf8: JSON.stringify(p),
+      jsonUtf8: originalUtf8,
       replaceCurrent: true,
     });
     await claimLease(s.project.id);
     project = s.project;
-    project.name = p.name;
-    project.displayUnits = p.displayUnits;
+    project.name = p.name ?? project.name;
+    project.displayUnits = p.displayUnits ?? project.displayUnits;
     modelHash = s.modelHash;
     result = null;
     failed = false;
@@ -311,11 +316,26 @@ async function open(p) {
     $("#landing").hidden = true;
     $("#workspace").hidden = false;
     $("#top-context").textContent = "Frame analysis";
-    message(
-      readOnly
-        ? "This project is open in another tab. This tab is read-only; exports and analysis remain available."
-        : "",
-    );
+    const report = s.migrationReport;
+    if (report?.originalSha256) {
+      await retainOriginal({
+        id: project.id,
+        originalUtf8,
+        sha256: report.originalSha256,
+        fromSchema: report.from,
+        toSchema: report.to,
+        steps: report.steps || [],
+      });
+    }
+    let status = readOnly
+      ? "This project is open in another tab. This tab is read-only; exports and analysis remain available."
+      : "";
+    if (report?.steps?.length) {
+      status =
+        `Migrated schema ${report.from} → ${report.to}. Original file retained locally (${report.originalSha256.slice(0, 12)}…).` +
+        (status ? "\n" + status : "");
+    }
+    message(status);
     refresh(s);
     viewport.fit();
     persist();
@@ -324,8 +344,20 @@ async function open(p) {
     if ($("#workspace").hidden)
       modal(
         "Unable to open project",
-        `<p>${esc(e.message)}</p><p>The current model has been preserved.</p>`,
+        `<p>${esc(e.message)}</p><p>The current model has been preserved.</p>${
+          options.originalUtf8 && /UNSUPPORTED_SCHEMA/.test(e.message)
+            ? `<p>Unknown schema opens only as a backup. <button type="button" id="download-unsupported-original" class="primary">Download original JSON</button></p>`
+            : ""
+        }`,
       );
+    if (options.originalUtf8 && /UNSUPPORTED_SCHEMA/.test(e.message)) {
+      const raw = options.originalUtf8;
+      queueMicrotask(() => {
+        $("#download-unsupported-original")?.addEventListener("click", () => {
+          download("unsupported-project.json", raw);
+        });
+      });
+    }
   } finally {
     setBusy(false);
   }
@@ -381,7 +413,8 @@ $("#import-file").onchange = async (e) => {
     return;
   }
   try {
-    await open(JSON.parse(await file.text()));
+    const originalUtf8 = await file.text();
+    await open(JSON.parse(originalUtf8), { originalUtf8 });
   } catch (e) {
     modal("Invalid project", `<p>${esc(e.message)}</p>`);
   }
@@ -1451,6 +1484,7 @@ directTools = canvasTools({
   },
 });
 showRecent();
+initOffline().catch(() => {});
 gateway.ready.catch((e) =>
   modal("Kernel unavailable", `<p>${esc(e.message)}</p>`),
 );

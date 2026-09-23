@@ -17,7 +17,7 @@
       <div class="bar-divider"></div>
       <span id="top-context">Your engineering workspace</span>
       <div class="spacer"></div>
-      <span class="local-badge">◉ Local workspace</span
+      <span id="local-badge" class="local-badge">◉ Local workspace</span
       ><button id="help" class="dark-button">Help & scope</button>
     </header>
     <main id="landing">
@@ -128,6 +128,15 @@
         </div>
       </div>
       <div id="message" role="status" aria-live="polite" hidden></div>
+      <div id="update-banner" role="status" aria-live="polite" hidden>
+        <span
+          >A new application build is ready. Reload after save so JS and WASM
+          stay on the same build ID.</span
+        >
+        <button type="button" id="reload-update" class="primary">
+          Reload now
+        </button>
+      </div>
       <div class="work-grid">
         <aside class="model-panel">
           <div class="panel-title">
@@ -361,6 +370,8 @@
             <option value="SI">m · N · m</option>
           </select></span
         ><span id="kernel-status">Kernel starting…</span
+        ><span id="build-status">Build…</span
+        ><span id="offline-status">Online</span
         ><span class="spacer"></span
         ><span>Mechanics preview · No code-design claim</span>
       </footer>

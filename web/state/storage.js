@@ -1,12 +1,21 @@
+const DB_NAME = "structural-workbench";
+const DB_VERSION = 2;
+
 const database = new Promise((resolve, reject) => {
-  const r = indexedDB.open("structural-workbench", 1);
+  const r = indexedDB.open(DB_NAME, DB_VERSION);
   r.onupgradeneeded = () => {
-    r.result.createObjectStore("projects", { keyPath: "id" });
-    r.result.createObjectStore("history", { keyPath: "key" });
+    const db = r.result;
+    if (!db.objectStoreNames.contains("projects"))
+      db.createObjectStore("projects", { keyPath: "id" });
+    if (!db.objectStoreNames.contains("history"))
+      db.createObjectStore("history", { keyPath: "key" });
+    if (!db.objectStoreNames.contains("originals"))
+      db.createObjectStore("originals", { keyPath: "id" });
   };
   r.onsuccess = () => resolve(r.result);
   r.onerror = () => reject(r.error);
 });
+
 export async function save(project) {
   const db = await database;
   return new Promise((resolve, reject) => {
@@ -36,6 +45,7 @@ export async function save(project) {
     tx.onabort = () => reject(tx.error);
   });
 }
+
 export async function recent() {
   const db = await database;
   return new Promise((resolve, reject) => {
@@ -44,6 +54,7 @@ export async function recent() {
     r.onerror = () => reject(r.error);
   });
 }
+
 /** Committed IndexedDB snapshots for one project, newest revision first. */
 export async function listRevisions(projectId) {
   const db = await database;
@@ -65,6 +76,7 @@ export async function listRevisions(projectId) {
     r.onerror = () => reject(r.error);
   });
 }
+
 export async function loadRevision(projectId, revision) {
   const db = await database;
   return new Promise((resolve, reject) => {
@@ -77,6 +89,35 @@ export async function loadRevision(projectId, revision) {
         reject(Error(`No committed snapshot for revision ${revision}.`));
       else resolve(structuredClone(r.result.project));
     };
+    r.onerror = () => reject(r.error);
+  });
+}
+
+/** Retain pre-migration project bytes. Application rollback cannot reverse an incompatible migration without this original. */
+export async function retainOriginal(record) {
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("originals", "readwrite");
+    tx.objectStore("originals").put({
+      id: record.id,
+      originalUtf8: record.originalUtf8,
+      sha256: record.sha256,
+      fromSchema: record.fromSchema,
+      toSchema: record.toSchema,
+      steps: record.steps || [],
+      retainedAt: Date.now(),
+    });
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+export async function loadOriginal(projectId) {
+  const db = await database;
+  return new Promise((resolve, reject) => {
+    const r = db.transaction("originals").objectStore("originals").get(projectId);
+    r.onsuccess = () => resolve(r.result ? structuredClone(r.result) : null);
     r.onerror = () => reject(r.error);
   });
 }
