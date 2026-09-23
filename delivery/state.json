@@ -2566,11 +2566,23 @@
       "status": "CLEARED_ACQUIRED",
       "resumeWhen": "Fixture dossier extraction from locked PDFs; do not enable profile until M07-C evidence",
       "clearedAt": "2026-09-23T14:57:10.648Z"
+    },
+    {
+      "id": "M08-concrete-resources",
+      "affects": [
+        "M08"
+      ],
+      "resourceIds": [
+        "R-CODE-CONCRETE",
+        "R-CONCRETE-EXAMPLES"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "resumeWhen": "Acquire ACI/concrete standard + examples into resources/private and lock hashes (same human-download pattern as M07 AISC)"
     }
   ],
-  "lastVerifiedSourceRevision": "dc7d50d13e41aedd12e4b18bb714bc5df54b5c6c",
+  "lastVerifiedSourceRevision": "1963d2d13e41aedd12e4b18bb714bc5df54b5c6c",
   "lastVerifiedBuildHash": "8dae72c2aaccceb83aaada4fc9198fc202bbdac9040132db7fd19887154df503",
-  "nextAction": "M07 ACCEPTED (S2). Next earliest ready: M08 concrete beam or deferred LTB flexure seeds.",
+  "nextAction": "M08 blocked on R-CODE-CONCRETE / R-CONCRETE-EXAMPLES. Independent: AISC LTB (Lb>0) flexure seeds against locked Design Examples.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "c579beb905921b53da630674808a9c15b04ceb0929c128719956bbbb1e81e74f"
 }
