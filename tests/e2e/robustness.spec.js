@@ -111,3 +111,37 @@ test("cancel terminates a blocked Worker and restores the model", async ({
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
   await expect(page.locator("#results-content")).toContainText("-45");
 });
+
+test("M03 dual Workers: edit during blocked analysis never marks stale solve Current", async ({
+  page,
+}) => {
+  await page.route("**/worker.js", async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace(
+      "const response = JSON.parse(",
+      'if(r.operation === "analyse"){const end=Date.now()+2500;while(Date.now()<end){}} const response = JSON.parse(',
+    );
+    await route.fulfill({ response, body });
+  });
+  await page.goto("/");
+  await page.locator("#new-project").click();
+  await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
+  const hash = await page.locator("#hash-status").textContent();
+  await page.locator("#analyse").click();
+  await expect(page.locator("#cancel")).toBeVisible();
+  // Model Worker stays live: mutate tip force while analysis Worker is blocked.
+  await page.locator("#inspector-content input").first().fill("3.5");
+  await page
+    .locator("#inspector-content")
+    .getByRole("button", { name: "Apply changes", exact: true })
+    .click();
+  await expect(page.locator("#hash-status")).not.toHaveText(hash);
+  await expect(page.locator("#message")).toContainText("stale", {
+    timeout: 10000,
+  });
+  await expect(page.locator("#result-status")).not.toHaveText("✓ Current");
+  await page.locator("#analyse").click();
+  await expect(page.locator("#result-status")).toHaveText("✓ Current", {
+    timeout: 15000,
+  });
+});

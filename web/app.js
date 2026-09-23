@@ -32,6 +32,7 @@ let project,
   selected = "m1",
   tab = "displacements",
   busy = false,
+  analysing = false,
   failed = false,
   formDirty = false,
   leaseRelease,
@@ -350,6 +351,7 @@ function setBusy(value) {
   ])
     $("#" + id).disabled =
       value ||
+      (id === "analyse" && analysing) ||
       (readOnly &&
         ["undo", "redo", "analysis-mode", "draw-toggle"].includes(id));
   if (project) {
@@ -364,7 +366,12 @@ function setBusy(value) {
   $("#copy-bay").disabled = value || formDirty || readOnly;
   $("#units").disabled = value || formDirty;
   $("#result-case").disabled = value || formDirty;
-  $("#analyse").disabled = value || formDirty;
+  $("#analyse").disabled = value || analysing || formDirty;
+  $("#cancel").hidden = !analysing;
+}
+function setAnalysing(value) {
+  analysing = value;
+  $("#analyse").disabled = value || busy || formDirty || !project;
   $("#cancel").hidden = !value;
 }
 function refresh(snapshot) {
@@ -945,9 +952,9 @@ for (const b of document.querySelectorAll("[data-tab]"))
     renderResults();
   };
 $("#analyse").onclick = async () => {
-  if (!project) return;
+  if (!project || analysing) return;
   try {
-    setBusy(true);
+    setAnalysing(true);
     message("Analysing the current model…");
     const chosen = $("#result-case").value || project.loadCases[0]?.id;
     const envelopeAll = chosen === "__envelope__";
@@ -965,6 +972,13 @@ $("#analyse").onclick = async () => {
     });
     result = response;
     failed = false;
+    if (result.modelHash !== modelHash) {
+      message(
+        "Analysis finished for an earlier model revision. Results are stale; analyse again for current results.",
+      );
+    } else {
+      message("");
+    }
     if (result.analysisType === "envelope") {
       viewport.resultView = "model";
       syncResultPicker("model");
@@ -975,38 +989,31 @@ $("#analyse").onclick = async () => {
       syncResultPicker(viewport.resultView);
       $("#deformation-legend").hidden = viewport.resultView !== "deformed";
     }
-    message("");
     renderResults();
     renderInspector();
     viewport.update(project, diagramResult(), selected);
   } catch (e) {
-    result = null;
-    failed = true;
-    renderSelectionForces();
+    if (!/CANCELLED|TIMEOUT/.test(e.message)) {
+      result = null;
+      failed = true;
+      renderSelectionForces();
+      renderResults();
+      viewport.update(project, null, selected);
+    }
     message(e.message);
-    renderResults();
-    viewport.update(project, null, selected);
   } finally {
-    setBusy(false);
+    setAnalysing(false);
   }
 };
-$("#cancel").onclick = async () => {
-  const p = project && portable();
-  gateway.cancel();
-  if (p) {
-    const s = await gateway.send("importProject", {
-      jsonUtf8: JSON.stringify(p),
-      replaceCurrent: false,
-    });
-    gateway.revision = s.project.revision;
-  }
-  message("CANCELLED: Model restored; you can edit or rerun.");
-  setBusy(false);
+$("#cancel").onclick = () => {
+  gateway.cancelAnalysis();
+  message("CANCELLED: Analysis stopped. The model was not disturbed.");
+  setAnalysing(false);
 };
 gateway.onCrash = async () => {
-  message("Worker stopped. Restoring the last confirmed model.");
+  message("Model Worker stopped. Restoring the last confirmed model.");
   const p = project && portable();
-  gateway.cancel("Worker stopped");
+  gateway.respawnModel("Worker stopped");
   if (p) {
     await gateway.send("importProject", {
       jsonUtf8: JSON.stringify(p),
@@ -1015,24 +1022,15 @@ gateway.onCrash = async () => {
     setBusy(false);
   }
 };
-gateway.onTimeout = async () => {
-  const p = project && portable();
-  if (p) {
-    setBusy(true);
-    try {
-      await gateway.send("importProject", {
-        jsonUtf8: JSON.stringify(p),
-        replaceCurrent: false,
-      });
-      message(
-        "TIMEOUT: Analysis stopped. The last confirmed model has been restored.",
-      );
-    } catch (e) {
-      message(e.message);
-    } finally {
-      setBusy(false);
-    }
-  }
+gateway.onAnalysisCrash = () => {
+  message("Analysis Worker stopped. The model is unchanged.");
+  setAnalysing(false);
+};
+gateway.onTimeout = () => {
+  message(
+    "TIMEOUT: Analysis stopped. The model Worker kept the last confirmed project.",
+  );
+  setAnalysing(false);
 };
 $("#export-project").onclick = () =>
   download(project.id + ".json", JSON.stringify(portable(), null, 2));

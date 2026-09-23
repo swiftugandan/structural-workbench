@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M03",
-  "activeTask": "M03-B",
+  "activeTask": "M03-C",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1389,24 +1389,69 @@
       "dependencies": [
         "M03-A"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "web/state/transport.js",
-        "web/worker.js",
         "web/app.js",
-        "tests/e2e"
+        "contracts/PROTOCOL.md",
+        "tests/e2e/dual-workers.spec.js",
+        "tests/e2e/robustness.spec.js",
+        "evidence/M03/dual-workers"
       ],
       "acceptanceIds": [
         "M03-dual-workers"
       ],
-      "nextAction": "Inspect single-worker transport; design dual Worker ownership so cancel+edit never treats a stale analysis as current.",
-      "createdAt": "2026-09-23T09:23:03.940Z"
+      "requiredCommands": [
+        "npm run build",
+        "npx playwright test tests/e2e/dual-workers.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "browser-dual-workers",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M03/dual-workers/dual-workers-browser.json"
+        },
+        {
+          "check": "robustness-cancel-and-dual",
+          "status": "PASS",
+          "testCount": 2
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M03/dual-workers"
+      ],
+      "sourceRevision": "9df9adfd360fa42364d39b968499d2be66eef737",
+      "sourceHash": "bfc244b1d0bfd4051e614c16e46decdfbe95bd29a339f09027f32e07ed902f4a",
+      "buildHash": "4614db62c4f50754edc55f7eeab99f5b8ac84793cfcb5830ac24bf0594920331",
+      "acceptanceMeaning": "Bounded dual-Worker cancel/stale slice only. Parent M03 remains unaccepted.",
+      "nextAction": "Next M03 slice: skewed-frame OpenSees pack or 5k-node multibay generator.",
+      "createdAt": "2026-09-23T09:23:03.940Z",
+      "acceptedAt": "2026-09-23T09:36:22.680Z"
+    },
+    "M03-C": {
+      "id": "M03-C",
+      "useCase": "Skewed spatial frame OpenSees comparison pack required before M03",
+      "dependencies": [
+        "M03-B"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "fixtures",
+        "tools",
+        "evidence/M03"
+      ],
+      "acceptanceIds": [
+        "VALIDATION-m03-oracle-pack"
+      ],
+      "nextAction": "Add skewed spatial / asymmetric 3D portal fixtures with OpenSees + native/WASM comparisons per VALIDATION.md.",
+      "createdAt": "2026-09-23T09:36:22.680Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "5190ee4e5f32f3f71177ab790f77b53454d3a3d9",
-  "lastVerifiedBuildHash": "81b562d1c36315f7c31a801e76c709619ec4dea7b9504d8885ed650240c40d7f",
-  "nextAction": "M03-A bay-copy slice accepted. Next: M03-B separate model/analysis Workers (or skewed OpenSees pack if preferred).",
+  "lastVerifiedSourceRevision": "9df9adfd360fa42364d39b968499d2be66eef737",
+  "lastVerifiedBuildHash": "4614db62c4f50754edc55f7eeab99f5b8ac84793cfcb5830ac24bf0594920331",
+  "nextAction": "M03-A and M03-B accepted. Next: M03-C skewed spatial OpenSees comparison pack.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "ba8e59487cae1410db0b57665820d86aee1bda5cb5417075ddf2443b11b5e1c4"
+  "lastVerifiedSourceHash": "bfc244b1d0bfd4051e614c16e46decdfbe95bd29a339f09027f32e07ed902f4a"
 }

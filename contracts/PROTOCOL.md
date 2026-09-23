@@ -24,6 +24,8 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 
 An analyse acknowledgement is not a completed result. Every asynchronous event contains eventType, jobId, requestId, sourceRevision, modelHash and event payload. Events are analysisProgress, analysisCompleted, analysisFailed or analysisCancelled. An accepted job emits exactly one terminal event, including after Worker termination/restart. Progress stages are validation, assembly, factorisation, solve, recovery and complete; progress is indeterminate when a meaningful percentage is unavailable. Do not simulate numerical progress with timers.
 
+From M03 the browser hosts two Workers: a durable model Worker owns create/import/commands/undo/queryGeometry, and a disposable analysis Worker receives an exported snapshot then `analyse`. Cancel/timeout terminates only the analysis Worker. Completed results whose `modelHash` no longer matches the live model are stale and must not be labelled current.
+
 ## 2 Command vocabulary
 
 CommandV1 is {id, type, args}. Supported types and args are AddNode(node), AddMember(member), SetNodePosition({id,position}), SetMaterial(material), SetSection(section), SetSupport(support), SetLoadCase(loadCase), SetLoad(load), SetCombination(combination), SetGravity({gravity}), SetAnalysisMode({mode}), MoveNodes({ids,delta}), CopySelection({ids,delta,connectToExisting:false}), CopyBay({ids,delta,count,includeSupports:true,tieUnsupportedNodes:true,setSpatial?,stabilizeBases?}), SplitMember({id,stations}), MergeNodes({sourceIds,targetId}), DeleteEntities({ids,cascade:false}) and Batch({commands}). Envelope names in parentheses are records, not executable functions.
