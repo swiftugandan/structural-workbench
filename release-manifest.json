@@ -1,5 +1,5 @@
 {
-  "sourceHash": "bfc244b1d0bfd4051e614c16e46decdfbe95bd29a339f09027f32e07ed902f4a",
+  "sourceHash": "6e0815c614be0f353494abd8c79513fa788840dccf2f56ec500e820736c2df37",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -33,6 +33,8 @@
     "examples/B11.json": "87d327f940bf7c86b65c1d04a2f959bea3c5596c8220328c986fbde014fabdc0",
     "examples/P01.json": "9c214c91b026bdd2c60483e9fe1f703865d4d2508e3cce85e23914ed782d1b87",
     "examples/R01.json": "e5dbff657f1b66ac201242cd44a0e19631248dcd280cd5e4742faf2929345eef",
+    "examples/S01.json": "6a44d5f8cafc011c332d3f06a2ee4ed37f3eb6d68f7afbf418f3f526f90ac2de",
+    "examples/S02.json": "8e67706305c09cbd2301b446456bb01dccab947c5ad93de71bd189223c596c2a",
     "examples/V01.json": "0a3707ca9aac072b360318c525ee977c343d9648f67f572909de0c6222a8c92d",
     "examples/W01.json": "c34f12f5210af5dcd04eb61ebdd4f08bff4001616d6b2e43f4adabd8725659cf",
     "force-inspector.js": "899b167c40b66e835eac43115caa0e51e585d189a170c0c59e734adb01ee73ba",
@@ -44,7 +46,7 @@
     "modeling.js": "57adc882a303fd23be1f7e3aeb04995f4bcf093e7483f23b3c2015074ad8049b",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "a76205b776b8052da4f910c3be079ce2055663a8b7e0303bf32105140ccf85ed",
+    "pkg/workbench_wasm_api_bg.wasm": "77e0e68261e5cbe636551022bd5ff8a29f10e86c4bff617b2bae6aae97a4345e",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",
@@ -65,6 +67,6 @@
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e",
     "workspace-ui.js": "ca7fa971cf49e666a081ac395df6719d45f1e92350083249c1a51a10a1c3149a"
   },
-  "buildHash": "4614db62c4f50754edc55f7eeab99f5b8ac84793cfcb5830ac24bf0594920331",
+  "buildHash": "945877b66fa5d221816b393ed999d51fe86547e16146455d7799ce2f34fd1f04",
   "releaseStatus": "working-preview-not-accepted"
 }

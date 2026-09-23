@@ -1,0 +1,41 @@
+{
+  "comparisons": 180,
+  "results": [
+    {
+      "id": "S01",
+      "role": "skewed-spatial-frame",
+      "status": "PASS",
+      "comparisons": 72,
+      "solver": "OpenSees",
+      "version": "3.4.0"
+    },
+    {
+      "id": "S02",
+      "role": "asymmetric-3d-portal",
+      "status": "PASS",
+      "comparisons": 72,
+      "solver": "OpenSees",
+      "version": "3.4.0"
+    },
+    {
+      "id": "B07",
+      "role": "distributed-loading",
+      "status": "PASS",
+      "comparisons": 36,
+      "solver": "OpenSees",
+      "version": "3.4.0"
+    },
+    {
+      "id": "R01",
+      "role": "released-beams",
+      "status": "NATIVE_ONLY",
+      "note": "OpenSees adapter excludes end releases; native analytical gate in evidence/M02/releases"
+    },
+    {
+      "id": "B09",
+      "role": "prescribed-support-motion",
+      "status": "NATIVE_ONLY",
+      "note": "OpenSees adapter excludes prescribed motion; native gate in evidence/M02/prescribed"
+    }
+  ]
+}

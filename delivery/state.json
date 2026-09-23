@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M03",
-  "activeTask": "M03-C",
+  "activeTask": "M03-D",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -1435,23 +1435,62 @@
       "dependencies": [
         "M03-B"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
-        "fixtures",
-        "tools",
-        "evidence/M03"
+        "fixtures/models/S01.json",
+        "fixtures/models/S02.json",
+        "fixtures/README.md",
+        "evidence/M03/oracle-pack"
       ],
       "acceptanceIds": [
         "VALIDATION-m03-oracle-pack"
       ],
-      "nextAction": "Add skewed spatial / asymmetric 3D portal fixtures with OpenSees + native/WASM comparisons per VALIDATION.md.",
-      "createdAt": "2026-09-23T09:36:22.680Z"
+      "requiredCommands": [
+        "node evidence/M03/oracle-pack/validate.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "opensees-pack",
+          "status": "PASS",
+          "testCount": 180,
+          "evidencePath": "evidence/M03/oracle-pack/m03-oracle-pack.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M03/oracle-pack"
+      ],
+      "sourceRevision": "7359fa64b52d516de83f6e46566bf50763cd35f5",
+      "sourceHash": "6e0815c614be0f353494abd8c79513fa788840dccf2f56ec500e820736c2df37",
+      "buildHash": "945877b66fa5d221816b393ed999d51fe86547e16146455d7799ce2f34fd1f04",
+      "acceptanceMeaning": "VALIDATION §5 pre-M03 fixture pack present with OpenSees parity for S01/S02/B07; R01/B09 remain native-only due to adapter scope. Parent M03 unaccepted.",
+      "nextAction": "Next: 5,000-node multibay generator and memory/performance gates (M03-D).",
+      "createdAt": "2026-09-23T09:36:22.680Z",
+      "acceptedAt": "2026-09-23T09:40:50.112Z"
+    },
+    "M03-D": {
+      "id": "M03-D",
+      "useCase": "5,000-node representative multibay frame meets numerical and memory gates",
+      "dependencies": [
+        "M03-C"
+      ],
+      "status": "READY",
+      "ownedPaths": [
+        "tools",
+        "fixtures",
+        "tests",
+        "evidence/M03"
+      ],
+      "acceptanceIds": [
+        "VALIDATION-m03-capacity"
+      ],
+      "nextAction": "Implement reproducible 3D multibay generator and prove 5k-node solve/memory gates with adversarial high-fill refusal.",
+      "createdAt": "2026-09-23T09:40:50.112Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "9df9adfd360fa42364d39b968499d2be66eef737",
-  "lastVerifiedBuildHash": "4614db62c4f50754edc55f7eeab99f5b8ac84793cfcb5830ac24bf0594920331",
-  "nextAction": "M03-A and M03-B accepted. Next: M03-C skewed spatial OpenSees comparison pack.",
+  "lastVerifiedSourceRevision": "7359fa64b52d516de83f6e46566bf50763cd35f5",
+  "lastVerifiedBuildHash": "945877b66fa5d221816b393ed999d51fe86547e16146455d7799ce2f34fd1f04",
+  "nextAction": "M03-A–C accepted. Next: M03-D 5,000-node multibay capacity/memory gates.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "bfc244b1d0bfd4051e614c16e46decdfbe95bd29a339f09027f32e07ed902f4a"
+  "lastVerifiedSourceHash": "6e0815c614be0f353494abd8c79513fa788840dccf2f56ec500e820736c2df37"
 }
