@@ -62,7 +62,7 @@ for (const name of required) {
     );
   }
 }
-if (!["M00", "M01", "M01-UX", "M02", "M03", "M04"].includes(milestone))
+if (!["M00", "M01", "M01-UX", "M02", "M03", "M04", "M05"].includes(milestone))
   issues.push(
     `${milestone}: remaining milestone-specific gates are not implemented`,
   );

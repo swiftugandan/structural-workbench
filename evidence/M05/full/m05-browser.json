@@ -1,8 +1,8 @@
 {
   "taskId": "M05-parent",
   "milestone": "M05",
-  "sourceHash": "9fc9760080593bc56f59134729e665e20d8d972e896be181979d2e4416e00a63",
-  "buildHash": "8faef8eb55634fe740794f9f4f09459c548dd6d6b1ed08b01059836b095d5574",
+  "sourceHash": "e040f64e27a39466f82a6c5c75ead5d9b7dd8336988f42ca8ebc8668e046037b",
+  "buildHash": "e7e8fc36d41efc5c964fa28ab6cc43f75103263eab72584d7e303c3cf56d04eb",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,8 +10,8 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "m05-browser.log": "e345abb7bda24fde146c4e5c79135794145472fe2257c46eb31825591eb270cd",
-    "playwright-results.json": "1db9ada63fdc36be438a1b761d94bcbcbc235dfe96d5101eececef4328a47e39"
+    "m05-browser.log": "be378cf0559a12ed975f74641f957836160de9c68f1904c60280386eaa4ad42b",
+    "playwright-results.json": "c2628c8907a188f78cd02cf0d780fd35e387d6fc8bf44dba1d26f7f0c49063ad"
   },
   "runner": {
     "platform": "darwin",
@@ -20,7 +20,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T12:50:22.172Z",
+  "observedAt": "2026-09-23T12:51:48.624Z",
   "status": "PASS",
   "testCount": 3,
   "testIds": [

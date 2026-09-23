@@ -1,14 +1,15 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M05",
-  "activeTask": "M05-parent",
+  "activeMilestone": "M06",
+  "activeTask": "M06-A",
   "acceptedMilestones": [
     "M01",
     "M00",
     "M02",
     "M03",
-    "M04"
+    "M04",
+    "M05"
   ],
   "tasks": {
     "M00-A": {
@@ -2038,7 +2039,7 @@
         "M05-B",
         "M05-C"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "tools",
         "evidence/M05",
@@ -2048,14 +2049,51 @@
         "SPECIFICATION-M05",
         "M05-parent"
       ],
-      "nextAction": "Assemble same-build M05 parent verifier from A\u2013C evidence.",
-      "createdAt": "2026-09-23T12:48:01.000Z"
+      "nextAction": "M05 parent accepted. Begin M06 without re-claiming M00\u2013M05.",
+      "createdAt": "2026-09-23T12:48:01.000Z",
+      "acceptedAt": "2026-09-23T12:52:04.000Z",
+      "sourceHash": "e040f64e27a39466f82a6c5c75ead5d9b7dd8336988f42ca8ebc8668e046037b",
+      "buildHash": "e7e8fc36d41efc5c964fa28ab6cc43f75103263eab72584d7e303c3cf56d04eb",
+      "sourceRevision": "485f62cdf1fb460f4279c41d928f5c616cc0f26f",
+      "verificationStatus": "PASS",
+      "requiredCommands": [
+        "npm run build",
+        "npm run verify:m05"
+      ],
+      "outcomes": [
+        {
+          "check": "m05-parent-gate",
+          "status": "PASS",
+          "testCount": 3,
+          "evidencePath": "evidence/M05/full/gate-M05.json",
+          "sourceHash": "e040f64e27a39466f82a6c5c75ead5d9b7dd8336988f42ca8ebc8668e046037b",
+          "buildHash": "e7e8fc36d41efc5c964fa28ab6cc43f75103263eab72584d7e303c3cf56d04eb"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M05/full"
+      ],
+      "acceptanceMeaning": "Parent M05 section calculator, variant comparison and portal templates PASS on same-build corpus."
+    },
+    "M06-A": {
+      "id": "M06-A",
+      "useCase": "Elastic stress/deflection screening for analysis MVP (first M06 slice)",
+      "dependencies": [
+        "M05-parent"
+      ],
+      "status": "READY",
+      "ownedPaths": [],
+      "acceptanceIds": [
+        "SPECIFICATION-M06"
+      ],
+      "nextAction": "Read SPECIFICATION M06 and pick the smallest complete first slice.",
+      "createdAt": "2026-09-23T12:52:04.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "ec688e02470b6158c72f1f50b4daff1df692dc5b",
-  "lastVerifiedBuildHash": "f42ab49ce0ad02d469b19372ac81825fc0dd03663a574f772bf382fc1376bdc3",
-  "nextAction": "M05-C accepted. Package parent M05 same-build verifier.",
+  "lastVerifiedSourceRevision": "485f62cdf1fb460f4279c41d928f5c616cc0f26f",
+  "lastVerifiedBuildHash": "e7e8fc36d41efc5c964fa28ab6cc43f75103263eab72584d7e303c3cf56d04eb",
+  "nextAction": "M05 parent accepted. Begin M06 analysis MVP elastic stress screening.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "d7564d2ec10b80316778c82b4ba2144aac8d0e0c53a5c4984d56ed015b76ab19"
+  "lastVerifiedSourceHash": "e040f64e27a39466f82a6c5c75ead5d9b7dd8336988f42ca8ebc8668e046037b"
 }
