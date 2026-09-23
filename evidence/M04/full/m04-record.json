@@ -1,0 +1,45 @@
+{
+  "taskId": "M04-parent",
+  "milestone": "M04",
+  "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
+  "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "exported-project.json": "395348b9aa13b5c4bc5874f0f6ba63fd74a5eddc8bce7d5542505e04b4b8e2d7",
+    "calculation-report.html": "8fb295931d9b4cb7efd2a296aa50b7e185e74fe715a326ad1fe36ed313d34766",
+    "results.csv": "bb1044009812f5087e4b5ed17c52514f0d362fa195bef5aa9e9b7c9b9853ae0a"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T12:27:01.535Z",
+  "status": "PASS",
+  "test": "M04 record: export/import equivalence and report matches displayed results",
+  "testIds": [
+    "M04-export-import-equivalence",
+    "M04-report-matches-display",
+    "M04-csv-units"
+  ],
+  "testCount": 3,
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/m04-record.spec.js"
+  ],
+  "hashPrefix": "b74617309948",
+  "artifacts": [
+    "exported-project.json",
+    "calculation-report.html",
+    "results.csv"
+  ]
+}

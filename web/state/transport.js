@@ -124,6 +124,19 @@ export class Gateway {
     );
   }
 
+  /** Import into an empty session after respawn — never send a stale expectedRevision. */
+  async importFresh(payload) {
+    await this.ready;
+    this.revision = null;
+    return this.post(
+      this.modelWorker,
+      this.pending,
+      "importProject",
+      payload,
+      null,
+    );
+  }
+
   async analyse(payload) {
     if (this.analysing)
       throw Error("Analysis already running; cancel it before starting another");
@@ -197,7 +210,12 @@ export class Gateway {
     }
     this.pending.clear();
     this.revision = null;
-    this.modelWorker.terminate();
+    const dying = this.modelWorker;
+    // Detach handlers before terminate so a late onerror cannot clear the
+    // replacement Worker's in-flight recovery import.
+    dying.onmessage = null;
+    dying.onerror = null;
+    dying.terminate();
     this.spawnModel();
   }
 }

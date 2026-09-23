@@ -245,3 +245,18 @@ fn analyse_multiple_ids_returns_envelope_with_provenance() {
     assert_eq!(my["min"]["caseOrCombinationId"], "C_uls");
     assert!((my["min"]["value"].as_f64().unwrap() + 99000.).abs() < 1e-1);
 }
+
+#[test]
+fn force_replace_import_with_null_revision() {
+    let mut k = Kernel::new();
+    let p: Value =
+        serde_json::from_str(&std::fs::read_to_string("../../fixtures/models/B02.json").unwrap())
+            .unwrap();
+    let a = request(&mut k, "createProject", Value::Null, json!({"project": p.clone()}));
+    assert_eq!(a["status"], "ok");
+    let mut p2 = p.clone();
+    p2["name"] = json!("Recovered");
+    let b = request(&mut k, "importProject", Value::Null, json!({"jsonUtf8": p2.to_string(), "replaceCurrent": false}));
+    assert_eq!(b["status"], "ok", "{b}");
+    assert_eq!(b["payload"]["project"]["name"], "Recovered");
+}

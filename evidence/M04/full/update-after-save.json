@@ -1,5 +1,5 @@
 {
-  "taskId": "M04-D",
+  "taskId": "M04-parent",
   "milestone": "M04",
   "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
   "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T12:26:40.394Z",
+  "observedAt": "2026-09-23T12:27:09.754Z",
   "status": "PASS",
-  "hashPrefix": "b74617309948"
+  "test": "prompts reload after save when a waiting build update is ready"
 }

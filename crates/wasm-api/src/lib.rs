@@ -48,7 +48,10 @@ impl Kernel {
             );
         }
         if let Some(p) = &self.project {
-            if r["expectedRevision"].as_u64() != Some(p.revision) {
+            let expected = r.get("expectedRevision");
+            let force_replace = matches!(op, "importProject" | "createProject")
+                && expected.map(|v| v.is_null()).unwrap_or(true);
+            if !force_replace && expected.and_then(|v| v.as_u64()) != Some(p.revision) {
                 return Err(err(
                     "REVISION_CONFLICT",
                     "Model changed; reload the current snapshot",

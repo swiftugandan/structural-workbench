@@ -1,5 +1,5 @@
 {
-  "sourceHash": "ad18337e387efc624d611a85bc20216904b75ca0449f357b6481e8052d9b5292",
+  "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -14,7 +14,7 @@
   ],
   "files": {
     "app.html": "afaf607ac739f8b029e130198d6462481a283b33b63d7d6bd8130d0000ebbf66",
-    "app.js": "675e99a6eed5cefc63062cfd4f495fc0d20d05efb48e4ad722e7535cf3aabbeb",
+    "app.js": "efe38c6c8a4c9d552048735359d0d0c9737b5d2648ce69facebdf838998260f9",
     "cad.js": "d1c24c33e00c888da5bbf3b9455d845ee604c8adffd455803ab18efbd3698c7f",
     "canvas-tools.js": "d88c75a97440dd265cafbf711ac0075cf46e33bb29f0f57b67efdc12cb5bbdca",
     "command-menu.js": "04ffa33c57efe624b4f921ea540fb07a616694cddd05304eb1f0b722450adbe5",
@@ -49,7 +49,7 @@
     "offline.js": "bcccfca2f33f5df48ae12b262aa2d7d3441113ba09b29394de42ef726a594834",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "11ab22c4c696d8d607814e45a90b83221ea1f95c5c8d20c2c111cbdc08870928",
+    "pkg/workbench_wasm_api_bg.wasm": "9826ec034ff499b1aaec80948e8eb3bba62d3bdf9d0216c45e1bf325123de3d7",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",
@@ -63,7 +63,7 @@
     "result-picker.js": "211c0e3f8e12d10dc5cd86179e3813e0b2d5d6334a4d8bbb8c7fbc07ee6986b6",
     "schema-validator.js": "af581bd075e8d7126a8c79335d4e30e4ab34eb2513ec651ca7585b8675f480c2",
     "state/storage.js": "833f357021f633539afe3031cd02b4794489c463130b7802349ab6f3c1bd0b9c",
-    "state/transport.js": "2bd7f1c9e0a06e79506a5e41372acde6c27e9b58f1e71999859a585018ce8c6b",
+    "state/transport.js": "38f029f6a6b2347e91a71a6a57103d0d7fa554ad41fbdde5bc93b5888ae0a4a1",
     "structural-icons.js": "8d4dde99cf08ad51a162d1c412f507fb33dc06063e4287eed8cd4df4c7f2aedf",
     "styles.css": "10ee0fab43ae4631cd2bfd4034307c755af13ece6af2229dbdffb7c251803d73",
     "sw.js": "7aeba6b7ac72fcda86d3e650ef12b1982bd3bef829da98326de8b475e7838c75",
@@ -71,6 +71,6 @@
     "worker.js": "c02d0970761feacf125283b324706d6116794e2f0e4382bd2a10bda7f68fc5ec",
     "workspace-ui.js": "ca7fa971cf49e666a081ac395df6719d45f1e92350083249c1a51a10a1c3149a"
   },
-  "buildHash": "c2d5a65756605406f3184ea1db6046407ee81aed42d34a836929147f5b237269",
+  "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
   "releaseStatus": "working-preview-not-accepted"
 }

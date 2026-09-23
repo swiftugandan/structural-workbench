@@ -1,0 +1,61 @@
+{
+  "taskId": "M04-parent",
+  "milestone": "M04",
+  "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
+  "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
+  "lockHashes": {
+    "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "m04-browser.log": "da4abb5402e0a6565b6d0b4bde6c3505cd3b8c62596b0e08699a7b9fe933b1d3",
+    "playwright-results.json": "4a51375d418eb90bbc18e903c383a5b5abcd31acda1b3c8a576c8d364ee42e53"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-23T12:27:26.809Z",
+  "status": "PASS",
+  "testCount": 10,
+  "testIds": [
+    "M04 recovery: restore committed revision; refuse while form dirty",
+    "precaches atomic build and reopens offline from IndexedDB",
+    "prompts reload after save when a waiting build update is ready",
+    "M04 migration: 0.9.0 imports, retains original, unknown schema refused",
+    "corrupt latest snapshot recovers verified history revision",
+    "model Worker crash restores last confirmed in-memory model",
+    "persistence denied warns without blocking export",
+    "M04 record: export/import equivalence and report matches displayed results",
+    "storage quota failure is explicit and downloads survive",
+    "single writer lock protects the second tab"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/reliability.spec.js",
+    "tests/e2e/recovery.spec.js",
+    "tests/e2e/migrations.spec.js",
+    "tests/e2e/m04-record.spec.js",
+    "tests/e2e/robustness.spec.js",
+    "tests/e2e/offline-cache.spec.js"
+  ],
+  "artifacts": [
+    "m04-browser.log",
+    "playwright-results.json"
+  ],
+  "stats": {
+    "startTime": "2026-09-23T12:26:55.871Z",
+    "duration": 30907.775999999998,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

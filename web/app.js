@@ -1155,9 +1155,7 @@ gateway.onCrash = async () => {
   gateway.respawnModel("Worker stopped");
   try {
     if (p) {
-      // Empty session after respawn: import must not send a stale expectedRevision.
-      gateway.revision = null;
-      const s = await gateway.send("importProject", {
+      const s = await gateway.importFresh({
         jsonUtf8: JSON.stringify(p),
         replaceCurrent: false,
       });

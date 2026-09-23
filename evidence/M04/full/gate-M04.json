@@ -1,0 +1,16 @@
+{
+  "milestone": "M04",
+  "status": "PASS",
+  "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
+  "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
+  "required": [
+    "build",
+    "migrate",
+    "m04-browser",
+    "security",
+    "m04-record",
+    "m04-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-23T12:27:27.539Z"
+}

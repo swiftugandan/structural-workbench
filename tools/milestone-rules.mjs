@@ -52,6 +52,14 @@ export const m03 = [
   "m03-browser",
   "m03-acceptance",
 ];
+export const m04 = [
+  "build",
+  "migrate",
+  "m04-browser",
+  "security",
+  "m04-record",
+  "m04-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -84,6 +92,32 @@ export const requiredIds = {
     "M03-HIERARCHY",
     "M03-GPU-DURING-ANALYSIS",
     "M03-UI-RESPONSIVENESS",
+  ],
+  "m04-acceptance": [
+    "M04-RECOVERY",
+    "M04-OFFLINE",
+    "M04-MIGRATION",
+    "M04-RELIABILITY",
+    "M04-QUOTA-LEASE",
+    "M04-SECURITY-EXPORTS",
+    "M04-RECORD",
+  ],
+  "m04-browser": [
+    "M04 recovery: restore committed revision; refuse while form dirty",
+    "precaches atomic build and reopens offline from IndexedDB",
+    "prompts reload after save when a waiting build update is ready",
+    "M04 migration: 0.9.0 imports, retains original, unknown schema refused",
+    "corrupt latest snapshot recovers verified history revision",
+    "model Worker crash restores last confirmed in-memory model",
+    "persistence denied warns without blocking export",
+    "M04 record: export/import equivalence and report matches displayed results",
+    "storage quota failure is explicit and downloads survive",
+    "single writer lock protects the second tab",
+  ],
+  "m04-record": [
+    "M04-export-import-equivalence",
+    "M04-report-matches-display",
+    "M04-csv-units",
   ],
   "m03-browser": [
     "M03 copy portal into bays, analyse and inspect My Mz torsion",
@@ -171,7 +205,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
         ? requiredIds["native-m03"]
         : milestone === "M02" && name === "browser-suite"
           ? requiredIds["browser-suite-m02"]
-          : ["M01", "M01-UX", "M02", "M03"].includes(milestone)
+          : ["M01", "M01-UX", "M02", "M03", "M04"].includes(milestone)
             ? requiredIds[name] || []
             : [];
   for (const id of ids)
@@ -191,6 +225,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 8)
   )
     errors.push(`${name}: failed, skipped or incomplete M03 browser journey`);
+  if (
+    name === "m04-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 10)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M04 browser journey`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);

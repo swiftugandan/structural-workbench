@@ -1,13 +1,14 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M04",
-  "activeTask": "M04-parent",
+  "activeMilestone": "M05",
+  "activeTask": "M05-A",
   "acceptedMilestones": [
     "M01",
     "M00",
     "M02",
-    "M03"
+    "M03",
+    "M04"
   ],
   "tasks": {
     "M00-A": {
@@ -1784,7 +1785,7 @@
       "nextAction": "Next M04 slice: crash/quota matrix packaging, report plots, or parent M04 gate.",
       "createdAt": "2026-09-23T11:41:29.115Z",
       "acceptedAt": "2026-09-23T11:55:00.000Z",
-      "acceptanceMeaning": "Bounded 0.9.0→1.0.0 migration chain with original retention and unknown-schema refusal. Does not claim parent M04 or full crash matrix."
+      "acceptanceMeaning": "Bounded 0.9.0\u21921.0.0 migration chain with original retention and unknown-schema refusal. Does not claim parent M04 or full crash matrix."
     },
     "M04-D": {
       "id": "M04-D",
@@ -1843,7 +1844,7 @@
         "M04-C",
         "M04-D"
       ],
-      "status": "READY",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "tools",
         "evidence/M04",
@@ -1853,14 +1854,51 @@
         "SPECIFICATION-M04",
         "M04-parent"
       ],
-      "nextAction": "Assemble same-build M04 parent verifier from A–D evidence; close remaining report-plot gaps if required by gate.",
-      "createdAt": "2026-09-23T12:15:00.000Z"
+      "nextAction": "M04 parent accepted. Begin M05 without re-claiming M00\u2013M04.",
+      "createdAt": "2026-09-23T12:15:00.000Z",
+      "acceptedAt": "2026-09-23T12:28:25.000Z",
+      "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
+      "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
+      "sourceRevision": "251ba27864edc47b4731cc5047ed16d12fc4d4ce",
+      "verificationStatus": "PASS",
+      "acceptanceMeaning": "Parent M04 recovery/offline/migration/reliability/calculation-record gate PASS on same-build corpus: revision recovery, build-ID SW cache, 0.9\u21921.0 migrate with originals, corrupt/crash/persistence matrix, quota/lease, secure exports, export/import equivalence and report/CSV record.",
+      "requiredCommands": [
+        "npm run build",
+        "npm run verify:m04"
+      ],
+      "outcomes": [
+        {
+          "check": "m04-parent-gate",
+          "status": "PASS",
+          "testCount": 7,
+          "evidencePath": "evidence/M04/full/gate-M04.json",
+          "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
+          "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M04/full"
+      ]
+    },
+    "M05-A": {
+      "id": "M05-A",
+      "useCase": "Reuse geometry and compare sections (first M05 slice)",
+      "dependencies": [
+        "M04-parent"
+      ],
+      "status": "READY",
+      "ownedPaths": [],
+      "acceptanceIds": [
+        "SPECIFICATION-M05"
+      ],
+      "nextAction": "Read SPECIFICATION M05 and pick the smallest complete first slice.",
+      "createdAt": "2026-09-23T12:28:25.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "f099304e8e3624c19ae941751bff3e799c62b7ad",
-  "lastVerifiedBuildHash": "c2d5a65756605406f3184ea1db6046407ee81aed42d34a836929147f5b237269",
-  "nextAction": "M04-D accepted. Next: M04-parent packaging or report-plot/export equivalence.",
+  "lastVerifiedSourceRevision": "251ba27864edc47b4731cc5047ed16d12fc4d4ce",
+  "lastVerifiedBuildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
+  "nextAction": "M04 parent accepted. Begin M05 geometry reuse and section comparison without re-claiming M00\u2013M04.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "ad18337e387efc624d611a85bc20216904b75ca0449f357b6481e8052d9b5292"
+  "lastVerifiedSourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383"
 }

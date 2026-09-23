@@ -1,5 +1,5 @@
 {
-  "taskId": "M04-D",
+  "taskId": "M04-parent",
   "milestone": "M04",
   "sourceHash": "60180f4e9fce34f1eb77ca984c64f681f46687df08da8ff288f3514bc542c383",
   "buildHash": "c3def15019f7a7505de6f160e910d84c28a9e5f34e4a58836223de8badd93634",
@@ -9,7 +9,9 @@
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
-  "artifactHashes": {},
+  "artifactHashes": {
+    "security.log": "a0b9c82d8b2205098f060c0955b767c0ec0faf31699b5e4925f2ed37bef0077d"
+  },
   "runner": {
     "platform": "darwin",
     "arch": "x64",
@@ -17,7 +19,19 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T12:26:40.394Z",
+  "observedAt": "2026-09-23T12:27:26.946Z",
   "status": "PASS",
-  "hashPrefix": "b74617309948"
+  "testCount": 2,
+  "testIds": [
+    "HTML labels escaped",
+    "CSV formula labels neutralised"
+  ],
+  "command": [
+    "node",
+    "--test",
+    "tests/security/exports.test.mjs"
+  ],
+  "artifacts": [
+    "security.log"
+  ]
 }

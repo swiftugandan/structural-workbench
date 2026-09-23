@@ -86,32 +86,43 @@ test.describe("M04 reliability matrix", () => {
     });
   });
 
-  test("model Worker crash restores last confirmed in-memory model", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    await page.locator("#new-project").click();
-    await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
-    await page.locator("#analyse").click();
-    await expect(page.locator("#result-status")).toHaveText("✓ Current");
-    const hash = await page.locator("#hash-status").textContent();
-
-    await page.evaluate(async () => {
-      await window.__workbenchTest.crashModelWorker();
-    });
-    await expect(page.locator("#message")).toContainText(
-      /Model Worker stopped|Restored the last confirmed/i,
-    );
-    await expect(page.locator("#hash-status")).toHaveText(hash);
-    await page.locator("#analyse").click();
-    await expect(page.locator("#result-status")).toHaveText("✓ Current");
-    await expect(page.locator("#results-content")).toContainText("-45");
-
-    await record("model-worker-crash", {
-      status: "PASS",
-      hashPrefix: hash?.slice(0, 12),
-    });
+test("model Worker crash restores last confirmed in-memory model", async ({
+  page,
+  context,
+}) => {
+  // Avoid a stale service-worker controlling the page during Worker respawn.
+  await context.addInitScript(() => {
+    navigator.serviceWorker
+      ?.getRegistrations?.()
+      .then((regs) => regs.forEach((r) => r.unregister()));
   });
+  await page.goto("/");
+  await page.evaluate(async () => {
+    const regs = await navigator.serviceWorker?.getRegistrations?.();
+    if (regs) await Promise.all(regs.map((r) => r.unregister()));
+  });
+  await page.locator("#new-project").click();
+  await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
+  await page.locator("#analyse").click();
+  await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  const hash = await page.locator("#hash-status").textContent();
+
+  await page.evaluate(async () => {
+    await window.__workbenchTest.crashModelWorker();
+  });
+  await expect(page.locator("#message")).toContainText(
+    /Model Worker stopped|Restored the last confirmed/i,
+  );
+  await expect(page.locator("#hash-status")).toHaveText(hash);
+  await page.locator("#analyse").click();
+  await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  await expect(page.locator("#results-content")).toContainText("-45");
+
+  await record("model-worker-crash", {
+    status: "PASS",
+    hashPrefix: hash?.slice(0, 12),
+  });
+});
 
   test("persistence denied warns without blocking export", async ({ page }) => {
     await page.addInitScript(() => {
