@@ -1,8 +1,8 @@
 {
   "taskId": "M03-parent",
   "milestone": "M03",
-  "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
-  "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
+  "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
+  "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T10:37:52.385Z",
+  "observedAt": "2026-09-23T11:16:27.162Z",
   "status": "PASS",
   "testCount": 1,
   "testIds": [

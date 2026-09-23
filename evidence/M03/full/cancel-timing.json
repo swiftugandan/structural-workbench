@@ -9,9 +9,7 @@
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
-  "artifactHashes": {
-    "bay-copy-project.json": "868e5448acaa893285bfe9999ba4f7a2a235149db8d2e40ba118a815947eb19a"
-  },
+  "artifactHashes": {},
   "runner": {
     "platform": "darwin",
     "arch": "x64",
@@ -19,18 +17,12 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T11:16:18.036Z",
-  "test": "M03 copy portal into bays, analyse and inspect My Mz torsion",
-  "nodes": 8,
-  "members": 8,
-  "supports": 4,
-  "analysisMode": "spatial",
-  "peakEndActions_kNm": {
-    "My": 7.363396,
-    "Mz": 2.849337,
-    "T": 0.321773
-  },
-  "artifacts": [
-    "bay-copy-project.json"
-  ]
+  "observedAt": "2026-09-23T11:16:34.240Z",
+  "status": "PASS",
+  "testCount": 1,
+  "testIds": [
+    "m03-cancel-timing"
+  ],
+  "cancelledMs": 0.30000001192092896,
+  "editingRestoredMs": 0.30000001192092896
 }

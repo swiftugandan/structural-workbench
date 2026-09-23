@@ -1,8 +1,8 @@
 {
   "taskId": "M03-C",
   "milestone": "M03",
-  "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
-  "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
+  "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
+  "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,8 +10,8 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "validate.mjs": "932a30c9f3f61f781e692ab15545cba2a3866cdada9c0424d90213475b7cc110",
-    "numerical-results.json": "9f0f79387e51e82722c4becf2c1dae76fecfa9983baebf98b2c73b7747270d37",
+    "validate.mjs": "7655820b642fedeaf2d4465f0874b4a9f9c2f8385ffe12b97372362c09855fe0",
+    "numerical-results.json": "6b292a66c36ab12256465dd55aaa4da2489923a8a234022310ae84faeeb3e930",
     "README.md": "3343d71aec4f0d3a95a1e735b46651734fb9659474036681396505837116cd9f"
   },
   "runner": {
@@ -21,11 +21,18 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T10:37:34.496Z",
+  "observedAt": "2026-09-23T11:16:04.975Z",
   "status": "PASS",
-  "testCount": 180,
+  "testCount": 186,
+  "testIds": [
+    "S01",
+    "S02",
+    "B07",
+    "R01",
+    "B09"
+  ],
   "summary": {
-    "comparisons": 180,
+    "comparisons": 186,
     "results": [
       {
         "id": "S01",
@@ -54,16 +61,21 @@
       {
         "id": "R01",
         "role": "released-beams",
-        "status": "NATIVE_ONLY",
-        "note": "OpenSees adapter excludes end releases; native analytical gate in evidence/M02/releases"
+        "status": "NATIVE_CROSSCHECK",
+        "comparisons": 3,
+        "note": "OpenSees adapter excludes end releases (ADR 0006); native CLI cross-check vs analytical expectations",
+        "adr": "docs/adr/0006-opensees-adapter-scope.md"
       },
       {
         "id": "B09",
         "role": "prescribed-support-motion",
-        "status": "NATIVE_ONLY",
-        "note": "OpenSees adapter excludes prescribed motion; native gate in evidence/M02/prescribed"
+        "status": "NATIVE_CROSSCHECK",
+        "comparisons": 3,
+        "note": "OpenSees adapter excludes prescribed motion (ADR 0006); native CLI cross-check vs analytical expectations",
+        "adr": "docs/adr/0006-opensees-adapter-scope.md"
       }
-    ]
+    ],
+    "limitations": "OpenSees parity claimed only for S01/S02/B07; R01/B09 are native cross-checks per ADR 0006"
   },
   "command": [
     "node",

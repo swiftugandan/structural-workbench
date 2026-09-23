@@ -1,8 +1,8 @@
 {
   "taskId": "M03-parent",
   "milestone": "M03",
-  "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
-  "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
+  "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
+  "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,7 +10,7 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "native.log": "d8b029904ba0739b814be4c7979f3ec8bb5d3f98e242e493c836ad049604d8e7"
+    "native.log": "f76f1b17878c38651a19f7c72eb2d343599d5d6cad6accdf97e0966dff977275"
   },
   "runner": {
     "platform": "darwin",
@@ -19,7 +19,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T10:37:07.926Z",
+  "observedAt": "2026-09-23T11:14:51.757Z",
   "status": "PASS",
   "testCount": 15,
   "testIds": [
@@ -31,8 +31,8 @@
     "n06_removed_support_is_unstable_at_analyse",
     "n22_envelope_rejects_single_case",
     "m01_global_rotation_relabelling_reordering_and_endpoint_reversal",
-    "p01_interior_point_matches_b05_closed_form",
     "point_station_at_end_is_invalid",
+    "p01_interior_point_matches_b05_closed_form",
     "m03_all_axis_unit_nodal_actions",
     "r01_my_releases_under_udl_match_simply_supported",
     "translation_and_storage_order_invariance",

@@ -1,8 +1,8 @@
 {
   "taskId": "M03-D",
   "milestone": "M03",
-  "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
-  "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
+  "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
+  "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
   "lockHashes": {
     "Cargo.lock": "f3e2969d6725eeb5247d731484ada3408fad5b4512c1623179384244ac6cffe4",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,8 +10,8 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "validate.mjs": "c7ccf3c5c923f431a0667fb656b9cc6a94ea2cc08e7509b766d0a4165d0d5217",
-    "capacity-results.json": "6f6f3cce3b15d22ed7cdd7d110140be618947982d7a99b8d02b6a0cd733dcc59",
+    "validate.mjs": "d195ab7647b860b89e471914debb1bfcff627ca2724601ee5f0659062a360d2f",
+    "capacity-results.json": "ccd690c309cfa0c10f8e38e0e628761fdf495cc2023cccfb51c28ec5e4681d2a",
     "README.md": "75ca0870951c1f58f79f5fb73d65a913ccf8eb0320bc43e6529039e4129d6e7b"
   },
   "runner": {
@@ -21,7 +21,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T10:37:33.726Z",
+  "observedAt": "2026-09-23T11:16:02.014Z",
   "status": "PASS",
   "testCount": 6,
   "summary": {
@@ -34,13 +34,13 @@
     "matrixNnz": 334956,
     "factorNnzEstimate": 16077888,
     "solveMs": [
-      4301,
-      4015,
-      4054,
-      3958,
-      4262
+      4748,
+      4985,
+      4766,
+      5019,
+      4500
     ],
-    "medianSolveMs": 4054,
+    "medianSolveMs": 4766,
     "gateMs": 5000,
     "memoryLimitMiB": 512,
     "highFill": {

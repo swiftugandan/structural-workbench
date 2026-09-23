@@ -1,5 +1,5 @@
 {
-  "comparisons": 180,
+  "comparisons": 186,
   "results": [
     {
       "id": "S01",
@@ -28,14 +28,19 @@
     {
       "id": "R01",
       "role": "released-beams",
-      "status": "NATIVE_ONLY",
-      "note": "OpenSees adapter excludes end releases; native analytical gate in evidence/M02/releases"
+      "status": "NATIVE_CROSSCHECK",
+      "comparisons": 3,
+      "note": "OpenSees adapter excludes end releases (ADR 0006); native CLI cross-check vs analytical expectations",
+      "adr": "docs/adr/0006-opensees-adapter-scope.md"
     },
     {
       "id": "B09",
       "role": "prescribed-support-motion",
-      "status": "NATIVE_ONLY",
-      "note": "OpenSees adapter excludes prescribed motion; native gate in evidence/M02/prescribed"
+      "status": "NATIVE_CROSSCHECK",
+      "comparisons": 3,
+      "note": "OpenSees adapter excludes prescribed motion (ADR 0006); native CLI cross-check vs analytical expectations",
+      "adr": "docs/adr/0006-opensees-adapter-scope.md"
     }
-  ]
+  ],
+  "limitations": "OpenSees parity claimed only for S01/S02/B07; R01/B09 are native cross-checks per ADR 0006"
 }

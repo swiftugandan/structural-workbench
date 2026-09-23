@@ -1620,7 +1620,7 @@
         "SPECIFICATION-M03",
         "M03-parent"
       ],
-      "nextAction": "Begin M04 persistence/recovery work without re-claiming M00\u2013M03.",
+      "nextAction": "M03 gap-closure re-verified. Continue M04-B without re-claiming M00\u2013M03.",
       "createdAt": "2026-09-23T10:26:00.000Z",
       "requiredCommands": [
         "npm run build",
@@ -1630,20 +1630,20 @@
         {
           "check": "m03-parent-gate",
           "status": "PASS",
-          "testCount": 8,
+          "testCount": 10,
           "evidencePath": "evidence/M03/full/gate-M03.json",
-          "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
-          "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652"
+          "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
+          "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0"
         }
       ],
       "evidencePaths": [
         "evidence/M03/full"
       ],
       "sourceRevision": "dec82d579d8a76bd889a77c098ea037b320abb65",
-      "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
-      "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
-      "acceptanceMeaning": "Parent M03 spatial building-frame gate PASS on same-build corpus (orbit/copy, dual Workers, OpenSees pack, 5k capacity, unit-action/roll, section-axis, hierarchy).",
-      "acceptedAt": "2026-09-23T10:38:23.000Z"
+      "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
+      "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
+      "acceptanceMeaning": "Parent M03 spatial building-frame gate PASS on same-build corpus: orbit/copy with spatial loads + My/Mz/T, dual Workers + timed cancel, OpenSees S01/S02/B07 + native R01/B09 (ADR 0006), 5k capacity + WASM MEMORY_LIMIT, unit-action/roll, section-axis, hierarchy, GPU-during-analysis, UI\u2264100ms.",
+      "acceptedAt": "2026-09-23T11:16:51.919Z"
     },
     "M04-A": {
       "id": "M04-A",
@@ -1705,8 +1705,8 @@
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "65b617421d9cd2290a05a0f0e13564f31fd7e6e0",
-  "lastVerifiedBuildHash": "b2c84d3bb5afa5f320045659e803b623473f1e3a0845bf71d06572ec9a2b80b5",
+  "lastVerifiedSourceRevision": "dec82d579d8a76bd889a77c098ea037b320abb65",
+  "lastVerifiedBuildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
   "nextAction": "M04-A accepted. Next: M04-B offline cache or migrations.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "14d56dcf2e7bb0d28a80e82981b20137d4cc74a1da87cfcd7735a83933b0c148"

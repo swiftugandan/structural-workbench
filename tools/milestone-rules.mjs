@@ -47,6 +47,7 @@ export const m03 = [
   "build",
   "native",
   "m03-capacity",
+  "m03-wasm-memory",
   "m03-oracle",
   "m03-browser",
   "m03-acceptance",
@@ -81,12 +82,18 @@ export const requiredIds = {
     "M03-ROLL",
     "M03-SECTION-AXIS",
     "M03-HIERARCHY",
+    "M03-GPU-DURING-ANALYSIS",
+    "M03-UI-RESPONSIVENESS",
   ],
   "m03-browser": [
     "M03 copy portal into bays, analyse and inspect My Mz torsion",
     "M03 dual Workers: cancel leaves model intact; superseded solve stays stale",
     "M03 section-axis: edit localY roll swaps My/Mz end actions",
     "M03 hierarchy: split shows physical parent and analytical children",
+    "3D exposes Y direction and reference grid; orbit updates compass without model changes",
+    "M03 cancel timing: cancelled ≤250ms and editing restored ≤1s",
+    "M03 analyse click keeps UI event-loop gaps ≤100ms",
+    "M03 GPU loss during blocked analysis preserves model hash",
   ],
   "browser-suite": [
     "Canvas first: place support, draw force, edit assignments and undo without dialogs",
@@ -181,7 +188,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
     name === "m03-browser" &&
     (e.stats?.unexpected !== 0 ||
       e.stats?.skipped !== 0 ||
-      e.stats?.expected < 4)
+      e.stats?.expected < 8)
   )
     errors.push(`${name}: failed, skipped or incomplete M03 browser journey`);
   if (name === "hardware-windows-linux") {

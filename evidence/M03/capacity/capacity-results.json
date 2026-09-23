@@ -8,13 +8,13 @@
   "matrixNnz": 334956,
   "factorNnzEstimate": 16077888,
   "solveMs": [
-    4301,
-    4015,
-    4054,
-    3958,
-    4262
+    4748,
+    4985,
+    4766,
+    5019,
+    4500
   ],
-  "medianSolveMs": 4054,
+  "medianSolveMs": 4766,
   "gateMs": 5000,
   "memoryLimitMiB": 512,
   "highFill": {

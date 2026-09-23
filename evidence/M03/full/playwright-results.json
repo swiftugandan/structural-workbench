@@ -7,7 +7,10 @@
       "tests/e2e/bay-copy.spec.js",
       "tests/e2e/dual-workers.spec.js",
       "tests/e2e/section-axis.spec.js",
-      "tests/e2e/hierarchy.spec.js"
+      "tests/e2e/hierarchy.spec.js",
+      "tests/e2e/orientation.spec.js",
+      "tests/e2e/m03-gates.spec.js",
+      "--reporter=json"
     ],
     "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
     "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
@@ -47,14 +50,7 @@
     "quiet": false,
     "reporter": [
       [
-        "list",
-        null
-      ],
-      [
-        "json",
-        {
-          "outputFile": "evidence/M03/full/playwright-results.json"
-        }
+        "json"
       ]
     ],
     "reportSlowTests": {
@@ -96,12 +92,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7325,
+                  "duration": 10124,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T10:37:36.702Z",
+                  "startTime": "2026-09-23T11:16:08.327Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -117,7 +113,7 @@
           ],
           "id": "43ff70d730d535be037d-38c8147a809edc89c121",
           "file": "e2e/bay-copy.spec.js",
-          "line": 12,
+          "line": 19,
           "column": 1
         }
       ]
@@ -144,12 +140,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8159,
+                  "duration": 8743,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T10:37:44.469Z",
+                  "startTime": "2026-09-23T11:16:18.859Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -192,12 +188,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3876,
+                  "duration": 5273,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T10:37:52.777Z",
+                  "startTime": "2026-09-23T11:16:27.746Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -214,6 +210,182 @@
           "id": "0f92d2632f5c64f63d83-808af6c090a418cc38cc",
           "file": "e2e/hierarchy.spec.js",
           "line": 18,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/m03-gates.spec.js",
+      "file": "e2e/m03-gates.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 cancel timing: cancelled ≤250ms and editing restored ≤1s",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2027,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T11:16:33.120Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-cancel-t-80009-ms-and-editing-restored-≤1s/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-85c34e8e58e73d4bfeb3",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "M03 analyse click keeps UI event-loop gaps ≤100ms",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2648,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T11:16:35.210Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-cdddef79c11ac7d7c8b9",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 72,
+          "column": 1
+        },
+        {
+          "title": "M03 GPU loss during blocked analysis preserves model hash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3636,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T11:16:37.935Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-3d80ead95457bd2762c7",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 103,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/orientation.spec.js",
+      "file": "e2e/orientation.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "3D exposes Y direction and reference grid; orbit updates compass without model changes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3572,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-23T11:16:41.723Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611",
+          "file": "e2e/orientation.spec.js",
+          "line": 2,
           "column": 1
         }
       ]
@@ -240,12 +412,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5388,
+                  "duration": 5537,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T10:37:56.739Z",
+                  "startTime": "2026-09-23T11:16:45.381Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -269,9 +441,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-23T10:37:35.609Z",
-    "duration": 26722.335,
-    "expected": 4,
+    "startTime": "2026-09-23T11:16:06.647Z",
+    "duration": 44491.922999999995,
+    "expected": 8,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

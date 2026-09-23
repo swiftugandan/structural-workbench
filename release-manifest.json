@@ -1,5 +1,5 @@
 {
-  "sourceHash": "14d56dcf2e7bb0d28a80e82981b20137d4cc74a1da87cfcd7735a83933b0c148",
+  "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -47,7 +47,7 @@
     "modeling.js": "57adc882a303fd23be1f7e3aeb04995f4bcf093e7483f23b3c2015074ad8049b",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "381626f64c3b654ec730844172c1c9019b6dd558465751f0454d5bbfb9401f6e",
+    "pkg/workbench_wasm_api_bg.wasm": "e9a4f7c808edeef503c7d58a4d412c0f0ca71ee79baf290c8f1e1b76bf293280",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/dimensions.js": "91bfb6b8a9e81ac0f9b4d463084b290d58151e156b48f86b1d9f41366c35b166",
@@ -68,6 +68,6 @@
     "worker.js": "25b595de28281d5f96514ee00bee63d0fc050f0146ead09460318b866202a07e",
     "workspace-ui.js": "ca7fa971cf49e666a081ac395df6719d45f1e92350083249c1a51a10a1c3149a"
   },
-  "buildHash": "b2c84d3bb5afa5f320045659e803b623473f1e3a0845bf71d06572ec9a2b80b5",
+  "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
   "releaseStatus": "working-preview-not-accepted"
 }

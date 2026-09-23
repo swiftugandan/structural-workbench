@@ -1,16 +1,17 @@
 {
   "milestone": "M03",
   "status": "PASS",
-  "sourceHash": "cb448acbd4697e67ae7fd3988cb99a85dc4bcfa63710c4631edc77ab0d33a8d1",
-  "buildHash": "b9ee620f5e475d044fafd789c4c7e43e74d9f5c011785c3818a2a9133a0fd652",
+  "sourceHash": "e5e7582efadace516105fbabe73137901ff15516762e91db7bced365ffeeb0f9",
+  "buildHash": "e112692f8a1443629b1474de97ae08f837781c6d95af243ad7c147e4464cc1f0",
   "required": [
     "build",
     "native",
     "m03-capacity",
+    "m03-wasm-memory",
     "m03-oracle",
     "m03-browser",
     "m03-acceptance"
   ],
   "issues": [],
-  "observedAt": "2026-09-23T10:39:39.311Z"
+  "observedAt": "2026-09-23T11:16:51.919Z"
 }

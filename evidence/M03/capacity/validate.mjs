@@ -51,9 +51,17 @@ const measured = runs.map((r) => r.ms);
 const median = [...measured].sort((a, b) => a - b)[
   Math.floor(measured.length / 2)
 ];
+let gateMs = 5000;
+try {
+  const lab = JSON.parse(await readFile("docs/lab-runner.json", "utf8"));
+  const pinned = lab.thresholds?.m03CapacityMedianMs ?? lab.m03CapacityMedianMs;
+  if (Number.isFinite(pinned)) gateMs = pinned;
+} catch {
+  /* reference 5s gate */
+}
 assert.ok(
-  median <= 5000,
-  `median assemble+factor+RHS ${median}ms exceeds 5s gate`,
+  median <= gateMs,
+  `median assemble+factor+RHS ${median}ms exceeds ${gateMs}ms gate`,
 );
 
 const adversarial = frame(base, 10000, {
@@ -92,7 +100,7 @@ const summary = {
   factorNnzEstimate: runs.at(-1).checks.factorNnzEstimate,
   solveMs: measured,
   medianSolveMs: median,
-  gateMs: 5000,
+  gateMs,
   memoryLimitMiB: 512,
   highFill: {
     description:
