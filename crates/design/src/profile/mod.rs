@@ -221,14 +221,15 @@ pub struct DesignRun {
 
 impl DesignRun {
     pub fn overall_from_checks(checks: &[CheckOutcome]) -> CheckStatus {
+        // PROTOCOL §5: fail beats unsupported beats indeterminate beats pass.
+        if checks.iter().any(|c| c.status == CheckStatus::Fail) {
+            return CheckStatus::Fail;
+        }
         if checks.iter().any(|c| c.status == CheckStatus::Unsupported) {
             return CheckStatus::Unsupported;
         }
         if checks.iter().any(|c| c.status == CheckStatus::Indeterminate) {
             return CheckStatus::Indeterminate;
-        }
-        if checks.iter().any(|c| c.status == CheckStatus::Fail) {
-            return CheckStatus::Fail;
         }
         CheckStatus::Pass
     }

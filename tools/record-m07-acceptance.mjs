@@ -19,7 +19,7 @@ const criteria = [
     title: "AISC S2 fixture regressions (D/E/F/G/H)",
     required: ["s2-fixtures-native.json"],
     observation:
-      "Published Design Examples digits match clause modules for tension, compression, continuously braced flexure, shear and H1.",
+      "Published Design Examples digits match clause modules for tension, compression, continuously braced flexure and shear. H1 is formula-checked against published φ capacities only (not section-derived LTB).",
   },
   {
     id: "M07-UI-MATRIX",

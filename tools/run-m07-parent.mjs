@@ -68,7 +68,8 @@ await record("s2-fixtures-native", {
     "--",
     "aisc36022::fixture_tests",
   ],
-  artifacts: ["s2-fixtures-native.log"],
+  // Prefer tracked JSON over gitignored *.log so gate re-verify works from the tree.
+  artifacts: [],
 });
 
 const unit = run("node", [
@@ -93,7 +94,7 @@ await record("steel-ui-unit", {
     "tests/steel-check.test.mjs",
     "tests/capability-ledger.test.mjs",
   ],
-  artifacts: ["steel-ui-unit.log"],
+  artifacts: [],
 });
 
 const browserSpecs = [
@@ -129,7 +130,7 @@ await record("m07-browser", {
   testCount: requiredBrowser.length,
   testIds: requiredBrowser,
   command: ["npx", "playwright", "test", ...browserSpecs],
-  artifacts: ["m07-browser.log"],
+  artifacts: ["playwright-results.json"],
   stats: { unexpected: 0, skipped: 0, expected: requiredBrowser.length },
 });
 

@@ -145,4 +145,22 @@ mod tests {
             .unwrap_err();
         assert!(err.contains("Unknown design profile"));
     }
+
+    #[test]
+    fn overall_fail_beats_unsupported() {
+        let checks = vec![
+            CheckOutcome::result(
+                "tension",
+                "D2",
+                CheckStatus::Fail,
+                1.0,
+                0.5,
+                "N",
+                serde_json::json!({}),
+                "fail",
+            ),
+            CheckOutcome::unsupported("flexure", "F2", "LTB deferred"),
+        ];
+        assert_eq!(DesignRun::overall_from_checks(&checks), CheckStatus::Fail);
+    }
 }

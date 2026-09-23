@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M08",
-  "activeTask": null,
+  "activeMilestone": "M07",
+  "activeTask": "M07-parent",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -10,8 +10,7 @@
     "M03",
     "M04",
     "M05",
-    "M06",
-    "M07"
+    "M06"
   ],
   "tasks": {
     "M00-A": {
@@ -2518,7 +2517,7 @@
       "dependencies": [
         "M07-D"
       ],
-      "status": "ACCEPTED",
+      "status": "VERIFYING",
       "ownedPaths": [
         "tools/run-m07-parent.mjs",
         "tools/record-m07-acceptance.mjs",
@@ -2531,23 +2530,17 @@
       ],
       "outcomes": [
         {
-          "check": "gate-M07",
-          "status": "PASS",
-          "evidencePath": "evidence/M07/full/gate-M07.json"
-        },
-        {
-          "check": "m07-acceptance",
-          "status": "PASS",
-          "evidencePath": "evidence/M07/full/m07-acceptance.json"
+          "check": "review-2026-09-23",
+          "status": "FAIL",
+          "evidencePath": "evidence/M07/full/ACCEPTANCE.md",
+          "notes": "Premature ACCEPTED revoked: overall-status priority inverted PROTOCOL; classification fail-open on zero λ; H1 formula-only overclaim; gitignored log artifact hashes; evaluateDesign dropped from PROTOCOL ops table"
         }
       ],
       "evidencePaths": [
         "evidence/M07/full"
       ],
       "attempts": [],
-      "nextAction": "M08 concrete beam, or LTB flexure expansion if product prioritises",
-      "acceptedAt": "2026-09-23T16:02:19.118Z",
-      "acceptanceMeaning": "Same-build S2 fixtures + Screen 04 pass/fail matrix + model-derived report trail. LTB/HSS/torsion excluded. Commercial PROKON parity UNKNOWN."
+      "nextAction": "Re-run npm run verify:m07 after review fixes; do not re-ACCEPT until gate PASS on tracked artifacts and ledger matches scope"
     }
   },
   "blockers": [
@@ -2582,7 +2575,7 @@
   ],
   "lastVerifiedSourceRevision": "1963d2d13e41aedd12e4b18bb714bc5df54b5c6c",
   "lastVerifiedBuildHash": "8dae72c2aaccceb83aaada4fc9198fc202bbdac9040132db7fd19887154df503",
-  "nextAction": "M08 blocked on R-CODE-CONCRETE / R-CONCRETE-EXAMPLES. Independent: AISC LTB (Lb>0) flexure seeds against locked Design Examples.",
+  "nextAction": "M07-parent VERIFYING: re-run verify:m07 after PROTOCOL aggregation + classification fail-closed fixes. M08 still blocked on concrete resources.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "c579beb905921b53da630674808a9c15b04ceb0929c128719956bbbb1e81e74f"
 }

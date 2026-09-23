@@ -98,7 +98,7 @@ impl CodeProfile for Aisc36022LrfdProfile {
         let mu = demand.mz.abs();
         let vu = demand.vz.abs().max(demand.vy.abs());
 
-        if pu_comp > 0.0 || mu > 0.0 {
+        if pu_comp > 0.0 {
             checks.push(classification::check_classification(section, ctx.fy));
         }
 

@@ -165,7 +165,7 @@
       "limitations": [
         "AISC 360-22 LRFD S2 enabled after resources.lock + fixture corpus verification",
         "S2 covers classification, tension, compression E3, continuous-brace flexure F2, shear G2.1, H1",
-        "LTB flexure (Lb>0), UI journeys and parent M07 packaging remain open",
+        "LTB flexure (Lb>0) deferred; H1 formula-checked with published φ values only; commercial PROKON parity UNKNOWN",
         "Not a claim of commercial PROKON parity or professional code certification"
       ],
       "evidenceReferences": [
