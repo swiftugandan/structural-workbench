@@ -60,7 +60,8 @@ let project,
   leaseRelease,
   leaseId,
   readOnly = false,
-  saveQueue = Promise.resolve();
+  saveQueue = Promise.resolve(),
+  lastDesignRun = null;
 const viewport = new Viewport($("#viewport"), async (query) => {
   try {
     const cameraKey = JSON.stringify(query.camera),
@@ -217,6 +218,16 @@ $("#steel-check").onclick = () =>
       } catch {
         return loadCapabilitiesLedger();
       }
+    },
+    getAnalysisContext: () => ({
+      result: diagramResult(),
+      selectedMemberId:
+        selected && project?.members?.some((m) => m.id === selected)
+          ? selected
+          : project?.members?.[0]?.id,
+    }),
+    onDesignRun: (run) => {
+      lastDesignRun = run;
     },
   });
 async function showRecent() {
@@ -386,6 +397,7 @@ async function open(p, options = {}) {
     project.displayUnits = p.displayUnits ?? project.displayUnits;
     modelHash = s.modelHash;
     result = null;
+    lastDesignRun = null;
     failed = false;
     selected = project.members[0]?.id || null;
     viewport.selection = new Set(selected ? [selected] : []);
@@ -1214,6 +1226,7 @@ gateway.onCrash = async () => {
       project.displayUnits = p.displayUnits;
       modelHash = s.modelHash;
       result = null;
+      lastDesignRun = null;
       failed = false;
       refresh(s);
       message(
@@ -1368,7 +1381,9 @@ $("#export-report").onclick = () => {
   if (result && result.modelHash === modelHash && !failed)
     download(
       project.id + "-report.html",
-      report(portable(), result),
+      report(portable(), result, {
+        designRuns: lastDesignRun ? [lastDesignRun] : [],
+      }),
       "text/html",
     );
 };
@@ -1427,6 +1442,7 @@ $("#export-csv").onclick = () => {
 };
 $("#result-case").onchange = () => {
   result = null;
+  lastDesignRun = null;
   failed = false;
   renderResults();
   renderInspector();

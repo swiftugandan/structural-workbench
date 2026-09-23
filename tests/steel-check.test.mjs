@@ -1,0 +1,60 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  applyAnalysisDemand,
+  s2D1FailPayload,
+  s2G1BFailPayload,
+  s2D1Payload,
+} from "../web/steel-check.js";
+
+test("fail seeds raise demand above published capacity", () => {
+  const pass = s2D1Payload();
+  const fail = s2D1FailPayload();
+  assert.ok(fail.inputs.n > pass.inputs.n);
+  assert.equal(fail.memberIds[0], "S2-D1-fail");
+  const shearFail = s2G1BFailPayload();
+  assert.ok(shearFail.inputs.vz > 0);
+  assert.equal(shearFail.memberIds[0], "S2-G1B-fail");
+});
+
+test("applyAnalysisDemand overlays midspan sample and rejects envelopes", () => {
+  const base = s2D1Payload();
+  const result = {
+    caseId: "LC1",
+    analysisType: "static",
+    members: [
+      {
+        id: "m1",
+        length: 5,
+        samples: [
+          { station: 0, actions: [1, 0, 0, 0, 0, 0] },
+          { station: 0.5, actions: [100, 20, 30, 0, 40, 50] },
+          { station: 1, actions: [2, 0, 0, 0, 0, 0] },
+        ],
+      },
+    ],
+  };
+  const next = applyAnalysisDemand(base, {
+    result,
+    memberId: "m1",
+    station: 0.5,
+  });
+  assert.equal(next.memberIds[0], "m1");
+  assert.equal(next.inputs.n, 100);
+  assert.equal(next.inputs.vy, 20);
+  assert.equal(next.inputs.vz, 30);
+  assert.equal(next.inputs.my, 40);
+  assert.equal(next.inputs.mz, 50);
+  assert.equal(next.inputs.combinationId, "LC1");
+  assert.equal(next.inputs.station, 0.5);
+  assert.match(next.resultId, /^model-derived:/);
+  assert.equal(next.inputs.section.ag, base.inputs.section.ag);
+
+  assert.throws(
+    () =>
+      applyAnalysisDemand(base, {
+        result: { ...result, analysisType: "envelope" },
+      }),
+    /Envelopes/,
+  );
+});
