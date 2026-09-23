@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M07",
-  "activeTask": "M07-parent",
+  "activeMilestone": "M08",
+  "activeTask": null,
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2518,7 +2518,7 @@
       "dependencies": [
         "M07-D"
       ],
-      "status": "IMPLEMENTING",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "tools/run-m07-parent.mjs",
         "tools/record-m07-acceptance.mjs",
@@ -2529,12 +2529,25 @@
       "acceptanceIds": [
         "SPECIFICATION-M07"
       ],
-      "outcomes": [],
+      "outcomes": [
+        {
+          "check": "gate-M07",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/full/gate-M07.json"
+        },
+        {
+          "check": "m07-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/full/m07-acceptance.json"
+        }
+      ],
       "evidencePaths": [
         "evidence/M07/full"
       ],
       "attempts": [],
-      "nextAction": "npm run verify:m07"
+      "nextAction": "M08 concrete beam, or LTB flexure expansion if product prioritises",
+      "acceptedAt": "2026-09-23T16:02:19.118Z",
+      "acceptanceMeaning": "Same-build S2 fixtures + Screen 04 pass/fail matrix + model-derived report trail. LTB/HSS/torsion excluded. Commercial PROKON parity UNKNOWN."
     }
   },
   "blockers": [
@@ -2555,9 +2568,9 @@
       "clearedAt": "2026-09-23T14:57:10.648Z"
     }
   ],
-  "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
-  "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
-  "nextAction": "M07-D ACCEPTED. Run npm run verify:m07 for parent packaging.",
+  "lastVerifiedSourceRevision": "dc7d50d13e41aedd12e4b18bb714bc5df54b5c6c",
+  "lastVerifiedBuildHash": "8dae72c2aaccceb83aaada4fc9198fc202bbdac9040132db7fd19887154df503",
+  "nextAction": "M07 ACCEPTED (S2). Next earliest ready: M08 concrete beam or deferred LTB flexure seeds.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
+  "lastVerifiedSourceHash": "c579beb905921b53da630674808a9c15b04ceb0929c128719956bbbb1e81e74f"
 }
