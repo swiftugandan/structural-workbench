@@ -157,17 +157,22 @@
     },
     {
       "capabilityId": "steel-code",
-      "scopeKey": "M07 / AISC 360-22 LRFD proposed",
+      "scopeKey": "M07 / aisc-360-22-lrfd S2 proposed",
       "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
       "comparisonStatus": "UNKNOWN",
       "resourceBlockers": [
-        "standards-and-benchmark-bundle"
+        "R-CODE-STEEL",
+        "R-STEEL-EXAMPLES"
       ],
       "limitations": [
-        "Outside analysis MVP; blocked pending standard/benchmark acquisition"
+        "CodeProfile registry ships aisc-360-22-lrfd metadata with enabled=false until resources.lock verification",
+        "No clause math or Pass/Fail checks until M07-B/C"
       ],
-      "evidenceReferences": []
+      "evidenceReferences": [
+        "docs/adr/0007-pluggable-design-profiles.md",
+        "docs/code-profiles/aisc-360-22-lrfd/README.md"
+      ]
     },
     {
       "capabilityId": "concrete-code",

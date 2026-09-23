@@ -10,6 +10,7 @@ workbench-model = { path = "../model" }
 workbench-assembly = { path = "../assembly" }
 workbench-geometry = { path = "../geometry" }
 workbench-exchange = { path = "../exchange" }
+workbench-design = { path = "../design" }
 serde_json.workspace = true
 wasm-bindgen.workspace = true
 workbench-units = { path = "../units" }

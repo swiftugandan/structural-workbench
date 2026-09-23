@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="luxury">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>M07 steel design — pluggable open code profile</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :where(.grid, .flex) > * { min-width: 0; }
+    :where(p, h1, h2, h3, li, td, th, .badge, label) { overflow-wrap: anywhere; }
+    svg { max-width: 100%; height: auto; }
+    .fig-caption { font-size: 0.875rem; opacity: 0.75; margin-top: 0.5rem; }
+  </style>
+</head>
+<body class="bg-base-200 text-base-content min-h-screen">
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+    <header class="space-y-3">
+      <p class="text-sm uppercase tracking-widest opacity-60">Structural Workbench · M07 plan · decided</p>
+      <h1 class="text-3xl font-bold leading-tight">Steel member checks with one open code, easy to swap</h1>
+      <p class="text-lg opacity-80 max-w-3xl">
+        Goal: unblock M07 with a freely downloadable authoritative standard, implement a
+        <strong>profile trait</strong> so AISC today can become Eurocode/SANS later without rewriting the UI or action pipeline,
+        and never claim green without verified mandatory checks.
+      </p>
+      <div class="alert alert-success text-sm">
+        <span>
+          <strong>Approved.</strong> First pin = AISC 360-22 LRFD · breadth = S2 (prismatic W T/C/F/V + H1) · architecture = CodeProfile trait.
+          Next slice: <strong>M07-A</strong> profile skeleton (no clause math until resources.lock).
+        </span>
+      </div>
+    </header>
+
+    <section class="alert alert-info">
+      <div>
+        <h2 class="font-semibold">Current facts (from repo)</h2>
+        <ul class="list-disc ml-5 mt-2 space-y-1 text-sm">
+          <li>M00–M06 analysis MVP accepted; <code>crates/design</code> is mechanics-v1 stress screen only.</li>
+          <li><code>evaluateDesign</code> exists in PROTOCOL but WASM returns “No verified design code profile is enabled”.</li>
+          <li>Blocker: <code>R-CODE-STEEL</code> + <code>R-STEEL-EXAMPLES</code> not acquired (<code>resources.required.json</code>).</li>
+          <li>SPEC §9 and SOURCES already propose <strong>AISC 360-22 LRFD</strong> as the first pin — free PDF from aisc.org; Design Examples v16 companion also free.</li>
+          <li>Do <em>not</em> commit AISC PDFs into git; hash-lock local acquisition. AISC asks you link to their site, not redistribute standards on other sites.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Decision: which first code -->
+    <section class="card bg-base-100 shadow-sm" id="decision-code">
+      <div class="card-body space-y-4">
+        <h2 class="card-title">Decision 1 — first pinned code</h2>
+        <p class="text-sm opacity-80">
+          “Openly available” here means: free to download from the publisher for design use, with a clear acquisition path we can hash.
+          It does <em>not</em> mean we may paste the standard into the repo or invent clauses from memory.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Option</th>
+                <th>Access</th>
+                <th>Examples / shapes</th>
+                <th>Fit to SPEC</th>
+                <th>Swap cost later</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bg-success/10">
+                <td><strong>A — AISC 360-22 LRFD</strong> (recommended)</td>
+                <td>Free PDF at aisc.org current standards</td>
+                <td>v16 Design Examples + shapes DB free</td>
+                <td>Already named in SPEC/SOURCES/capabilities</td>
+                <td>Low if profile trait ships first</td>
+              </tr>
+              <tr>
+                <td>B — Eurocode EN 1993-1-1 + NA</td>
+                <td>Usually paid / national body; not freely redistributable</td>
+                <td>Worked examples fragmented; NA required</td>
+                <td>SPEC warns edition/NA pinning; resource harder</td>
+                <td>Same trait, more inputs (γ, ψ, NA)</td>
+              </tr>
+              <tr>
+                <td>C — Mechanics-only “design” (no code)</td>
+                <td>None</td>
+                <td>N/A</td>
+                <td>Fails M07 acceptance (code profile required)</td>
+                <td>— (not M07)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="badge badge-success gap-2 p-3">Decided: A — AISC 360-22 LRFD</p>
+      </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="space-y-4" id="architecture">
+      <h2 class="text-2xl font-bold">How swapping works</h2>
+      <p class="opacity-80 max-w-3xl">
+        One question this diagram answers: <em>what stays fixed when we add a second code?</em>
+        Fixed = action transfer, report tree shape, UI, WASM command.
+        Swappable = clause math, classification, φ/Ω or γ<sub>M</sub>, clause IDs, example corpus.
+      </p>
+
+      <figure class="card bg-base-100 shadow-sm p-4">
+        <svg id="arch-overview" viewBox="0 0 920 420" width="100%" role="img" aria-labelledby="arch-title arch-desc">
+          <title id="arch-title">Pluggable code-profile architecture</title>
+          <desc id="arch-desc">Analysis results feed a shared design orchestrator that dispatches to registered code profiles and returns a check tree.</desc>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" opacity="0.55" />
+            </marker>
+          </defs>
+
+          <!-- Shared pipeline -->
+          <rect id="node-results" x="24" y="40" width="160" height="72" rx="10" fill="var(--color-base-200)" stroke="currentColor" stroke-width="1.5" />
+          <title>Immutable analysis results</title>
+          <text x="104" y="72" text-anchor="middle" font-size="13" fill="currentColor">Result set</text>
+          <text x="104" y="92" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.65">hash + stations</text>
+
+          <rect id="node-actions" x="220" y="40" width="180" height="72" rx="10" fill="var(--color-base-200)" stroke="currentColor" stroke-width="1.5" />
+          <title>Shared action transfer</title>
+          <text x="310" y="72" text-anchor="middle" font-size="13" fill="currentColor">Action transfer</text>
+          <text x="310" y="92" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.65">one real combo · signs</text>
+
+          <rect id="node-orch" x="440" y="28" width="200" height="96" rx="10" fill="var(--color-primary)" fill-opacity="0.18" stroke="currentColor" stroke-width="2" />
+          <title>Design orchestrator</title>
+          <text x="540" y="68" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">Design orchestrator</text>
+          <text x="540" y="90" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">evaluateDesign(profileId)</text>
+          <text x="540" y="108" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">mandatory-gate logic</text>
+
+          <rect id="node-report" x="700" y="40" width="180" height="72" rx="10" fill="var(--color-base-200)" stroke="currentColor" stroke-width="1.5" />
+          <title>Check tree report</title>
+          <text x="790" y="72" text-anchor="middle" font-size="13" fill="currentColor">Check tree</text>
+          <text x="790" y="92" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.65">UI + HTML report</text>
+
+          <line x1="184" y1="76" x2="216" y2="76" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.55" />
+          <line x1="400" y1="76" x2="436" y2="76" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.55" />
+          <line x1="640" y1="76" x2="696" y2="76" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.55" />
+
+          <!-- Profiles -->
+          <text x="24" y="180" font-size="12" fill="currentColor" opacity="0.6">Registered profiles (Rust crates)</text>
+
+          <rect id="profile-aisc" x="160" y="200" width="200" height="100" rx="10" fill="var(--color-success)" fill-opacity="0.15" stroke="currentColor" stroke-width="2" />
+          <title>AISC 360-22 LRFD profile — M07 first pin</title>
+          <text x="260" y="236" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">aisc-360-22-lrfd</text>
+          <text x="260" y="258" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">M07 first pin</text>
+          <text x="260" y="278" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">clause map · examples</text>
+
+          <rect id="profile-ec" x="400" y="200" width="200" height="100" rx="10" fill="var(--color-base-200)" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" />
+          <title>Future Eurocode profile — not M07</title>
+          <text x="500" y="236" text-anchor="middle" font-size="13" fill="currentColor">en-1993-1-1-…</text>
+          <text x="500" y="258" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">future profile</text>
+          <text x="500" y="278" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">same trait</text>
+
+          <rect id="profile-other" x="640" y="200" width="200" height="100" rx="10" fill="var(--color-base-200)" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" />
+          <title>Future code profile placeholder</title>
+          <text x="740" y="236" text-anchor="middle" font-size="13" fill="currentColor">sans / bs / …</text>
+          <text x="740" y="258" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">future profile</text>
+          <text x="740" y="278" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">same trait</text>
+
+          <line x1="540" y1="124" x2="260" y2="198" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.45" />
+          <line x1="540" y1="124" x2="500" y2="198" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#arrow)" opacity="0.35" />
+          <line x1="540" y1="124" x2="740" y2="198" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#arrow)" opacity="0.35" />
+
+          <rect x="24" y="340" width="872" height="56" rx="8" fill="var(--color-base-200)" stroke="currentColor" stroke-opacity="0.25" />
+          <text x="40" y="374" font-size="12" fill="currentColor">
+            Registry rule: profile appears in capabilities.designProfiles[] only when resources.lock.json hashes + example corpus verify.
+            Missing mandatory check ⇒ overall UNSUPPORTED, never PASS.
+          </text>
+        </svg>
+        <p class="fig-caption px-2 pb-2">Solid = ships in M07. Dashed = later profiles behind the same <code>CodeProfile</code> trait.</p>
+      </figure>
+    </section>
+
+    <!-- Trait sketch -->
+    <section class="card bg-base-100 shadow-sm">
+      <div class="card-body space-y-3">
+        <h2 class="card-title">Rust surface (shared vs profile)</h2>
+        <div class="grid md:grid-cols-2 gap-4 text-sm">
+          <div class="bg-base-200 rounded-box p-4 space-y-2">
+            <h3 class="font-semibold">Shared (never code-specific)</h3>
+            <ul class="list-disc ml-4 space-y-1 opacity-90">
+              <li><code>DesignDemand</code> — N, Vy, Vz, My, Mz, T from one combination/station</li>
+              <li><code>MemberContext</code> — L, Ky/Kz, Cb, bracing, material Fy/Fu, section props</li>
+              <li><code>CheckOutcome</code> — pass/fail/unsupported/indeterminate + utilisation + intermediates</li>
+              <li><code>DesignRun</code> — header (profileId, modelHash, resultId) + ordered check tree</li>
+              <li>Mandatory-gate: any mandatory UNSUPPORTED ⇒ overall UNSUPPORTED</li>
+            </ul>
+          </div>
+          <div class="bg-base-200 rounded-box p-4 space-y-2">
+            <h3 class="font-semibold">Per profile (swap unit)</h3>
+            <ul class="list-disc ml-4 space-y-1 opacity-90">
+              <li><code>profile_id()</code> e.g. <code>aisc-360-22-lrfd</code></li>
+              <li>Metadata: standard, edition, method, source hashes, clause map version</li>
+              <li><code>applicability(&amp;ctx) -&gt; Apply</code> — reject torsion / non-W / etc.</li>
+              <li><code>run_checks(&amp;demand, &amp;ctx) -&gt; Vec&lt;CheckOutcome&gt;</code></li>
+              <li>Dossier under <code>docs/code-profiles/&lt;id&gt;/</code> + fixtures under <code>fixtures/design/&lt;id&gt;/</code></li>
+            </ul>
+          </div>
+        </div>
+        <p class="text-sm opacity-75">
+          Layout proposal: keep <code>workbench-design</code> as the orchestrator + mechanics screen;
+          add <code>workbench-design-aisc36022</code> (or <code>crates/design/profiles/aisc36022</code>) so Eurocode does not drag AISC into the WASM binary until enabled — or feature-flag profiles.
+          Prefer <strong>feature flags / separate crates</strong> over a giant match statement.
+        </p>
+      </div>
+    </section>
+
+    <!-- Scope decision -->
+    <section class="card bg-base-100 shadow-sm" id="decision-scope">
+      <div class="card-body space-y-4">
+        <h2 class="card-title">Decision 2 — first usable steel module breadth</h2>
+        <p class="text-sm opacity-80">
+          SPEC §9: if we only validate a continuously restrained beam, advertise exactly that.
+          Broader M07 stays incomplete until classification + buckling companions exist for the claimed domain.
+        </p>
+        <div class="grid md:grid-cols-3 gap-3 text-sm">
+          <div class="border border-base-300 rounded-box p-3 space-y-2">
+            <h3 class="font-semibold">S1 — Continuously braced W flexure + shear</h3>
+            <p class="opacity-75">Smallest green path. Lb = 0 / continuous. No LTB. Fastest evidence from Design Examples.</p>
+            <span class="badge badge-warning badge-sm">advertise narrow scope</span>
+          </div>
+          <div class="border border-primary rounded-box p-3 space-y-2 bg-primary/5">
+            <h3 class="font-semibold">S2 — Prismatic W: T/C/F/V + H1 interaction</h3>
+            <p class="opacity-75">User Ky/Kz, Lb, Cb. Classification + φc/φb paths. Matches SPEC M07 wording. Recommended.</p>
+            <span class="badge badge-primary badge-sm">SPEC-aligned</span>
+          </div>
+          <div class="border border-base-300 rounded-box p-3 space-y-2">
+            <h3 class="font-semibold">S3 — + HSS / channels / built-ups</h3>
+            <p class="opacity-75">More classification branches. Defer; reject unsupported shapes cleanly in S2.</p>
+            <span class="badge badge-ghost badge-sm">later</span>
+          </div>
+        </div>
+
+        <p class="badge badge-success gap-2 p-3">Decided: S2 — prismatic W T/C/F/V + H1; reject HSS/torsion/non-prismatic as UNSUPPORTED</p>
+      </div>
+    </section>
+
+    <!-- Implementation slices -->
+    <section class="space-y-4" id="slices">
+      <h2 class="text-2xl font-bold">Proposed delivery slices</h2>
+      <ol class="timeline timeline-vertical timeline-snap-icon">
+        <li>
+          <div class="timeline-middle"><span class="badge badge-primary badge-sm">A</span></div>
+          <div class="timeline-end timeline-box bg-base-100 mb-4">
+            <strong>M07-A Profile skeleton</strong>
+            <p class="text-sm opacity-80 mt-1">
+              <code>CodeProfile</code> trait, registry, empty <code>designProfiles</code> until lock,
+              <code>evaluateDesign</code> dispatches by id, UNSUPPORTED for unknown/disabled.
+              ADR + dossier skeleton under <code>docs/code-profiles/aisc-360-22-lrfd/</code>.
+              No clause math yet.
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle"><span class="badge badge-primary badge-sm">B</span></div>
+          <div class="timeline-end timeline-box bg-base-100 mb-4">
+            <strong>M07-B Resource acquisition</strong>
+            <p class="text-sm opacity-80 mt-1">
+              Download AISC 360-22 + Design Examples v16 (+ errata) + shapes DB to an ignored local vault;
+              write SHA-256 into <code>resources.lock.json</code>; record rights = acquired-for-implementation, not redistributed.
+              Extract fixture JSON from examples (our numbers, not copyrighted prose).
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle"><span class="badge badge-primary badge-sm">C</span></div>
+          <div class="timeline-end timeline-box bg-base-100 mb-4">
+            <strong>M07-C Clause families (S2)</strong>
+            <p class="text-sm opacity-80 mt-1">
+              Classification → tension → compression (E3) → flexure (F2/F…) → shear (G) → H1 interaction.
+              Each check: clause id, intermediates, boundary tests. Fail-closed on torsion / non-prismatic / missing Lb.
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle"><span class="badge badge-primary badge-sm">D</span></div>
+          <div class="timeline-end timeline-box bg-base-100 mb-4">
+            <strong>M07-D Product journey</strong>
+            <p class="text-sm opacity-80 mt-1">
+              Model-derived + standalone inputs; Screen 04 UI; section change → reanalyse → redesign;
+              report with clause trail; ≥3 pass + ≥3 fail complete members; capability ledger updates.
+            </p>
+          </div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-middle"><span class="badge badge-primary badge-sm">P</span></div>
+          <div class="timeline-end timeline-box bg-base-100 mb-4">
+            <strong>M07-parent</strong>
+            <p class="text-sm opacity-80 mt-1">Same-build verifier packaging. No second code required for acceptance.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Resource note -->
+    <section class="card bg-base-100 shadow-sm">
+      <div class="card-body space-y-2">
+        <h2 class="card-title text-lg">Resource handling (rights-aware)</h2>
+        <ul class="list-disc ml-5 text-sm space-y-1 opacity-90">
+          <li><strong>R-CODE-STEEL:</strong> ANSI/AISC 360-22 PDF from <a class="link" href="https://www.aisc.org/publications/steel-standards/aisc-360" target="_blank" rel="noopener">aisc.org</a> — free download; hash in lockfile; do not commit PDF.</li>
+          <li><strong>R-STEEL-EXAMPLES:</strong> Manual Companion Design Examples v16.0 (+ June 2025 errata) — free; fixture tables derived into repo JSON.</li>
+          <li><strong>Shapes:</strong> AISC Shapes Database v16 as optional catalogue input; section props still validated in Rust.</li>
+          <li>Formulation dossiers cite clause numbers and our independent recomputation; they do not paste copyrighted paragraphs.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Risks -->
+    <section class="space-y-3">
+      <h2 class="text-2xl font-bold">Risks</h2>
+      <ul class="space-y-2 text-sm">
+        <li class="alert alert-warning py-3"><span><strong>Invented clauses.</strong> Agents must not code from memory/snippets. Gate implementation on lockfile + dossier. Mitigate: checklist in <code>skills/prokon-numerical</code>.</span></li>
+        <li class="alert alert-warning py-3"><span><strong>Scope creep to “all AISC”.</strong> Reject unsupported shapes loudly; keep capability ledger honest.</span></li>
+        <li class="alert alert-warning py-3"><span><strong>Envelope as demand.</strong> Already forbidden — reuse simultaneous-combination rule from analysis.</span></li>
+        <li class="alert alert-warning py-3"><span><strong>PDF in CI.</strong> Examples must be reconstituted fixtures; CI must not require private PDFs after lock.</span></li>
+      </ul>
+    </section>
+
+    <!-- Approve plan -->
+    <section class="card bg-success text-success-content shadow-lg">
+      <div class="card-body space-y-2">
+        <h2 class="card-title">Direction locked</h2>
+        <p class="text-sm">
+          Approved <code>approve-AISC-S2-trait</code>. Implementation starts at M07-A (profile skeleton).
+          Annotate further only if you want to change breadth or resource path.
+        </p>
+      </div>
+    </section>
+
+    <footer class="text-xs opacity-50 pb-8">
+      Anchors: SPECIFICATION.md §9 + M07 · SOURCES.md R-CODE-STEEL · contracts/PROTOCOL.md evaluateDesign · crates/design · DESIGN_SCREENS.md Screen 04 · delivery/state.json blocker M07-steel-resources.
+      Plan artifact: docs/design/M07/plan.html
+    </footer>
+  </main>
+</body>
+</html>

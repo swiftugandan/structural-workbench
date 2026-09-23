@@ -7,3 +7,5 @@
 *.log
 /tools/oracle-env/
 /dist-previous/
+/resources/private/**
+!/resources/private/README.md

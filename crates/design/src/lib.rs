@@ -1,5 +1,16 @@
-//! Mechanics-v1 elastic section stress screening.
-//! Longitudinal fibre stress only. No stability, yield or code resistance.
+//! Design rules: mechanics-v1 stress screen + pluggable code profiles.
+//!
+//! Code profiles are registered behind [`profile::CodeProfile`]. A profile is
+//! advertised in capabilities and may return Pass/Fail only after its resource
+//! lock and clause corpus verify. Until then evaluateDesign returns UNSUPPORTED.
+
+mod profile;
+
+pub use profile::{
+    CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,
+    ProfileApplicability, ProfileMetadata, ProfileRegistry, PROFILE_AISC_360_22_LRFD,
+};
+pub use profile::aisc36022::Aisc36022LrfdProfile;
 
 use workbench_model::Section;
 
@@ -31,6 +42,13 @@ pub fn corner_stress_extrema(n: f64, my: f64, mz: f64, s: &Section) -> (f64, f64
         min = min.min(v);
     }
     (max, min)
+}
+
+/// Default registry used by WASM and native CLI.
+pub fn default_registry() -> ProfileRegistry {
+    let mut registry = ProfileRegistry::new();
+    registry.register(Box::new(Aisc36022LrfdProfile::default()));
+    registry
 }
 
 #[cfg(test)]
@@ -65,5 +83,60 @@ mod tests {
         assert!((at_y0 - 50e6).abs() < 1e-3, "y0 {at_y0}");
         let at_z0 = longitudinal_stress(n, my, mz, &s, s.cy, 0.0);
         assert!((at_z0 - -5e6).abs() < 1e-3, "z0 {at_z0}");
+    }
+
+    #[test]
+    fn registry_lists_aisc_but_does_not_enable_until_lock() {
+        let registry = default_registry();
+        let meta = registry.metadata();
+        assert_eq!(meta.len(), 1);
+        assert_eq!(meta[0].id, PROFILE_AISC_360_22_LRFD);
+        assert!(!meta[0].enabled);
+        assert!(registry.enabled_profiles().is_empty());
+
+        let demand = DesignDemand {
+            n: 0.0,
+            vy: 0.0,
+            vz: 0.0,
+            my: 0.0,
+            mz: 0.0,
+            t: 0.0,
+            combination_id: "ULS1".into(),
+            station: 0.5,
+        };
+        let ctx = MemberContext {
+            member_id: "m1".into(),
+            section_family: "W".into(),
+            doubly_symmetric: true,
+            prismatic: true,
+            fy: 345e6,
+            fu: 450e6,
+            length: 6.0,
+            ky: 1.0,
+            kz: 1.0,
+            lb: 6.0,
+            cb: 1.0,
+            torsion_present: false,
+        };
+        let run = registry
+            .evaluate(PROFILE_AISC_360_22_LRFD, &demand, &ctx)
+            .expect("profile registered");
+        assert_eq!(run.overall, CheckStatus::Unsupported);
+        assert!(
+            run.checks
+                .iter()
+                .any(|c| c.check_id == "profile.resources")
+        );
+    }
+
+    #[test]
+    fn unknown_profile_is_error() {
+        let registry = default_registry();
+        let demand = DesignDemand::default();
+        let ctx = MemberContext::default();
+        let err = registry
+            .evaluate("does-not-exist", &demand, &ctx)
+            .unwrap_err();
+        assert!(err.contains("Unknown design profile"));
     }
 }

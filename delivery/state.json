@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M22",
-  "activeTask": "M22-B",
+  "activeMilestone": "M07",
+  "activeTask": "M07-A",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2284,20 +2284,49 @@
       "createdAt": "2026-09-23T13:32:00.000Z",
       "acceptedAt": "2026-09-23T13:35:00.000Z",
       "acceptanceMeaning": "Bounded native CLI study runner with JSON-pointer variants, validation gate, distinct model hashes and observed DOF. Does not claim browser study UI or parent M22."
+    },
+    "M07-A": {
+      "id": "M07-A",
+      "useCase": "Pluggable CodeProfile registry with AISC 360-22 LRFD stub disabled until resource lock",
+      "dependencies": [
+        "M06-parent"
+      ],
+      "status": "IMPLEMENTING",
+      "ownedPaths": [
+        "crates/design",
+        "crates/wasm-api",
+        "docs/adr/0007-pluggable-design-profiles.md",
+        "docs/code-profiles/aisc-360-22-lrfd",
+        "docs/design/M07",
+        "agent-tasks/M07.md",
+        "capabilities.json"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M07-profile-system"
+      ],
+      "requiredCommands": [
+        "cargo test -p workbench-design --locked",
+        "cargo test -p workbench-wasm-api --locked"
+      ],
+      "outcomes": [],
+      "evidencePaths": [],
+      "attempts": [],
+      "nextAction": "Finish M07-A evidence record; then M07-B acquire AISC 360-22 + Design Examples into resources.lock (PDFs not committed).",
+      "acceptanceMeaning": "Bounded profile trait/registry + evaluateDesign dispatch + disabled aisc-360-22-lrfd metadata. No clause math; parent M07 unaccepted."
     }
   },
   "blockers": [
     {
       "id": "M07-steel-resources",
-      "affects": ["M07"],
+      "affects": ["M07", "M07-B", "M07-C", "M07-D"],
       "resourceIds": ["R-CODE-STEEL", "R-STEEL-EXAMPLES"],
       "status": "BLOCKED_RESOURCE",
-      "resumeWhen": "Authoritative steel code profile and verified examples acquired into resources.lock.json"
+      "resumeWhen": "Download AISC 360-22 + Design Examples v16 to local vault, hash into resources.lock.json; do not commit PDFs"
     }
   ],
   "lastVerifiedSourceRevision": "ae1235b9ba624e57da1eabc43983d7270d108caa",
   "lastVerifiedBuildHash": "08b39f79f5916ab3f4dcffd14c77aab048715ea589c4566bb11775378dd1422c",
-  "nextAction": "M22-A CLI study accepted. Next: M22 browser study UI / comparative reports, or unblock M07 with steel resources.",
+  "nextAction": "M07-A profile skeleton in progress (AISC 360-22 LRFD S2 + CodeProfile trait). Next after A: M07-B resource acquisition, or resume M22 browser study UI in parallel.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "fc5d1f25de35befb6b938462bc644d71172c5887dc7271e4eddfaab8ed12bdee"
 }

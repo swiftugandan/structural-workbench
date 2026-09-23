@@ -490,6 +490,7 @@ dependencies = [
 name = "workbench-design"
 version = "0.1.0"
 dependencies = [
+ "serde_json",
  "workbench-model",
 ]
 
@@ -550,6 +551,7 @@ dependencies = [
  "serde_json",
  "wasm-bindgen",
  "workbench-assembly",
+ "workbench-design",
  "workbench-exchange",
  "workbench-geometry",
  "workbench-model",

@@ -82,7 +82,7 @@ impl Kernel {
                     "Model changed; reload the current snapshot",
                 ));
             }
-        } else if !["createProject", "importProject"].contains(&op) {
+        } else if !["createProject", "importProject", "evaluateDesign"].contains(&op) {
             return Err(err("INVALID_SCHEMA", "Open a project first"));
         }
         let payload = &r["payload"];
@@ -311,10 +311,68 @@ impl Kernel {
                     json!({"entityId":best,"distance":distance,"viewRevision":payload["viewRevision"]}),
                 )
             }
-            "evaluateDesign" => Err(err(
-                "UNSUPPORTED_FEATURE",
-                "No verified design code profile is enabled",
-            )),
+            "evaluateDesign" => {
+                let profile_id = payload["profileId"].as_str().unwrap_or("").trim();
+                if profile_id.is_empty() {
+                    return Err(err("INVALID_SCHEMA", "profileId is required"));
+                }
+                let member_ids = payload["memberIds"]
+                    .as_array()
+                    .cloned()
+                    .unwrap_or_default();
+                let member_id = member_ids
+                    .first()
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("standalone")
+                    .to_string();
+                let inputs = &payload["inputs"];
+                let demand = workbench_design::DesignDemand {
+                    n: inputs["n"].as_f64().unwrap_or(0.0),
+                    vy: inputs["vy"].as_f64().unwrap_or(0.0),
+                    vz: inputs["vz"].as_f64().unwrap_or(0.0),
+                    my: inputs["my"].as_f64().unwrap_or(0.0),
+                    mz: inputs["mz"].as_f64().unwrap_or(0.0),
+                    t: inputs["t"].as_f64().unwrap_or(0.0),
+                    combination_id: inputs["combinationId"]
+                        .as_str()
+                        .unwrap_or("standalone")
+                        .into(),
+                    station: inputs["station"].as_f64().unwrap_or(0.0),
+                };
+                let ctx = workbench_design::MemberContext {
+                    member_id,
+                    section_family: inputs["sectionFamily"]
+                        .as_str()
+                        .unwrap_or("W")
+                        .into(),
+                    doubly_symmetric: inputs["doublySymmetric"].as_bool().unwrap_or(true),
+                    prismatic: inputs["prismatic"].as_bool().unwrap_or(true),
+                    fy: inputs["fy"].as_f64().unwrap_or(0.0),
+                    fu: inputs["fu"].as_f64().unwrap_or(0.0),
+                    length: inputs["length"].as_f64().unwrap_or(0.0),
+                    ky: inputs["ky"].as_f64().unwrap_or(1.0),
+                    kz: inputs["kz"].as_f64().unwrap_or(1.0),
+                    lb: inputs["lb"].as_f64().unwrap_or(0.0),
+                    cb: inputs["cb"].as_f64().unwrap_or(1.0),
+                    torsion_present: inputs["torsionPresent"].as_bool().unwrap_or(false)
+                        || demand.t.abs() > 0.0,
+                };
+                let registry = workbench_design::default_registry();
+                match registry.evaluate(profile_id, &demand, &ctx) {
+                    Ok(run) => {
+                        let mut out = run.to_json();
+                        if let Some(obj) = out.as_object_mut() {
+                            obj.insert("resultId".into(), payload["resultId"].clone());
+                            obj.insert(
+                                "modelHash".into(),
+                                json!(self.project.as_ref().map(|p| p.hash())),
+                            );
+                        }
+                        Ok(out)
+                    }
+                    Err(message) => Err(err("UNSUPPORTED_FEATURE", message)),
+                }
+            }
             _ => Err(err(
                 "UNSUPPORTED_FEATURE",
                 format!("Unsupported operation {op}"),
@@ -521,7 +579,11 @@ fn capabilities_payload() -> Value {
         "protocolVersion": 1,
         "schemaVersions": ["0.9.0", "1.0.0"],
         "analysisTypes": ["linearStatic"],
-        "designProfiles": [],
+        "designProfiles": workbench_design::default_registry()
+            .metadata()
+            .into_iter()
+            .map(|m| m.to_json())
+            .collect::<Vec<_>>(),
         "gpu": { "required": true, "role": "display-only-f32" },
         "limits": {
             "nodes": 5000,
