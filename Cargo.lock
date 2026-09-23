@@ -469,6 +469,7 @@ version = "0.1.0"
 dependencies = [
  "serde_json",
  "sprs",
+ "workbench-design",
  "workbench-frame",
  "workbench-geometry",
  "workbench-model",

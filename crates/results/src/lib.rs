@@ -9,6 +9,20 @@ pub struct MemberResult {
     /// Authoritative stations for peaks/jumps (ends, extrema, discontinuities).
     #[serde(default)]
     pub key_stations: Vec<KeyStation>,
+    /// Elastic longitudinal fibre stress screen (mechanics-v1). Not a code check.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stress_screen: Option<StressScreen>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct StressScreen {
+    /// Maximum corner longitudinal stress (Pa, tension positive).
+    pub max_pa: f64,
+    /// Minimum corner longitudinal stress (Pa).
+    pub min_pa: f64,
+    pub station: f64,
+    pub disclaimer: String,
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

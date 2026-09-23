@@ -336,12 +336,35 @@ fn analyse_assembled(project: &Project, case: &str) -> Result<Analysis> {
             });
         }
         key_stations.sort_by(|a, b| a.station.partial_cmp(&b.station).unwrap());
+        let mut stress_screen: Option<workbench_results::StressScreen> = None;
+        for ks in &key_stations {
+            let n = ks.actions[0];
+            let my = ks.actions[4];
+            let mz = ks.actions[5];
+            let (max_pa, min_pa) =
+                workbench_design::corner_stress_extrema(n, my, mz, sec);
+            let candidate = workbench_results::StressScreen {
+                max_pa,
+                min_pa,
+                station: ks.station,
+                disclaimer: "Elastic longitudinal fibre stress only (mechanics-v1). Not a member stability or building-code check.".into(),
+            };
+            let take = match &stress_screen {
+                None => true,
+                Some(prev) => candidate.max_pa.abs().max(candidate.min_pa.abs())
+                    > prev.max_pa.abs().max(prev.min_pa.abs()),
+            };
+            if take {
+                stress_screen = Some(candidate);
+            }
+        }
         member_results.push(MemberResult {
             id: m.id.clone(),
             length: l,
             end_actions: end,
             samples,
             key_stations,
+            stress_screen,
         });
     }
     workbench_model::finite(&u)?;

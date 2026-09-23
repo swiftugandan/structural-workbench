@@ -1081,6 +1081,28 @@ function renderResults() {
         )} N m</small></div><div><strong>Scaled residual</strong><small>${c.scaledResidual.toExponential(4)} · min pivot ${c.minScaledPivot.toExponential(4)}</small></div></div>`;
     return;
   }
+  if (tab === "stress") {
+    const eng = project.displayUnits === "engineeringMetric";
+    const scale = eng ? 1e-6 : 1;
+    const unit = eng ? "MPa" : "Pa";
+    heads = [
+      "Member",
+      "Station",
+      `σ max [${unit}]`,
+      `σ min [${unit}]`,
+    ];
+    rows = (result.members || [])
+      .filter((m) => m.stressScreen)
+      .map((m) => [
+        label(m.id),
+        format(m.stressScreen.station * 100) + "%",
+        format(m.stressScreen.maxPa * scale),
+        format(m.stressScreen.minPa * scale),
+      ]);
+    $("#results-content").innerHTML =
+      `<p class="notice-small" data-testid="stress-disclaimer">Elastic longitudinal fibre stress only (mechanics-v1). Not a member stability or building-code check.</p>${current ? "" : '<p class="notice-small">Stale results — these values belong to the previous model.</p>'}<table><thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`).join("")}</tbody></table>`;
+    return;
+  }
   $("#results-content").innerHTML =
     `${tab === "section-forces" ? '<p class="notice-small">Local member axes · signed section forces, matching the diagrams. Position: 0% at start (i), 100% at end (j).</p>' : tab === "forces" ? '<p class="notice-small">Local nodal actions applied to the member ends. Their signs differ from section forces.</p>' : ""}${current ? "" : '<p class="notice-small">Stale results — these values belong to the previous model.</p>'}<table><thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`).join("")}</tbody></table>`;
 }

@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M06",
-  "activeTask": "M06-A",
+  "activeTask": "M06-B",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2077,23 +2077,75 @@
     },
     "M06-A": {
       "id": "M06-A",
-      "useCase": "Elastic stress/deflection screening for analysis MVP (first M06 slice)",
+      "useCase": "Elastic longitudinal fibre stress screen (mechanics-v1)",
       "dependencies": [
         "M05-parent"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/design/src/lib.rs",
+        "crates/results/src/lib.rs",
+        "crates/assembly/src/lib.rs",
+        "crates/assembly/src/expand.rs",
+        "crates/assembly/Cargo.toml",
+        "web/app.js",
+        "web/app.html",
+        "tests/e2e/stress-screen.spec.js",
+        "evidence/M06/stress-screen"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M06-stress-screen",
+        "VALIDATION-B12"
+      ],
+      "nextAction": "Next M06: capability manifest / supported-domain disclosure, or parent packaging after remaining gates.",
+      "createdAt": "2026-09-23T12:52:04.000Z",
+      "requiredCommands": [
+        "cargo test -p workbench-design",
+        "cargo test -p workbench-assembly --test analytical",
+        "npm run build",
+        "npx playwright test tests/e2e/stress-screen.spec.js"
+      ],
+      "outcomes": [
+        {
+          "check": "native-b12",
+          "status": "PASS",
+          "testCount": 1
+        },
+        {
+          "check": "stress-screen-browser",
+          "status": "PASS",
+          "testCount": 1,
+          "evidencePath": "evidence/M06/stress-screen/stress-screen-browser.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M06/stress-screen"
+      ],
+      "sourceRevision": "def8aaf174c428dd408d831ed2a738bdec45dfcc",
+      "sourceHash": "49177a6ca6099207acf6421e32b10404a7a961bb274a8bdf6ad6d49c6599177e",
+      "buildHash": "6886af27d7eddc433121c23bb5fea1ace90c461d101fd5afd4bc78cb3119ab19",
+      "acceptanceMeaning": "Bounded elastic fibre stress screen on analysis results with explicit non-code disclaimer. Does not claim parent M06, capability ledger or release tour.",
+      "acceptedAt": "2026-09-23T12:56:36.000Z"
+    },
+    "M06-B": {
+      "id": "M06-B",
+      "useCase": "Capability manifest and supported-domain disclosures",
+      "dependencies": [
+        "M06-A"
       ],
       "status": "READY",
       "ownedPaths": [],
       "acceptanceIds": [
         "SPECIFICATION-M06"
       ],
-      "nextAction": "Read SPECIFICATION M06 and pick the smallest complete first slice.",
-      "createdAt": "2026-09-23T12:52:04.000Z"
+      "nextAction": "Publish analysis capability ledger with numerical parity UNKNOWN.",
+      "createdAt": "2026-09-23T12:56:36.000Z"
     }
   },
   "blockers": [],
-  "lastVerifiedSourceRevision": "485f62cdf1fb460f4279c41d928f5c616cc0f26f",
-  "lastVerifiedBuildHash": "e7e8fc36d41efc5c964fa28ab6cc43f75103263eab72584d7e303c3cf56d04eb",
-  "nextAction": "M05 parent accepted. Begin M06 analysis MVP elastic stress screening.",
+  "lastVerifiedSourceRevision": "def8aaf174c428dd408d831ed2a738bdec45dfcc",
+  "lastVerifiedBuildHash": "6886af27d7eddc433121c23bb5fea1ace90c461d101fd5afd4bc78cb3119ab19",
+  "nextAction": "M06-A accepted. Next: capability manifest / domain disclosure or remaining M06 release gates.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "e040f64e27a39466f82a6c5c75ead5d9b7dd8336988f42ca8ebc8668e046037b"
+  "lastVerifiedSourceHash": "49177a6ca6099207acf6421e32b10404a7a961bb274a8bdf6ad6d49c6599177e"
 }

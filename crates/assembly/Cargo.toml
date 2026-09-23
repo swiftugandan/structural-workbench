@@ -9,5 +9,6 @@ workbench-geometry = { path = "../geometry" }
 workbench-frame = { path = "../frame" }
 workbench-solver = { path = "../solver" }
 workbench-results = { path = "../results" }
+workbench-design = { path = "../design" }
 serde_json.workspace = true
 sprs.workspace = true

@@ -400,6 +400,7 @@ fn stitch_member(
         end_actions,
         samples,
         key_stations,
+        stress_screen: None,
     })
 }
 
