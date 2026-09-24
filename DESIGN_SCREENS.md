@@ -43,6 +43,34 @@ The design screen combines input provenance, a mandatory-check tree, governing u
 
 Implementation notes: render this screen only for an enabled, verified code profile; an unsupported mandatory check changes overall status to unsupported; link demand to one real model hash, result set, station and combination; preserve exact clause and intermediate-value traceability in the export.
 
+**Post-M07 target:** Screen 04’s information architecture remains valid, but the primary product path moves into the existing application shell. Ownership is exclusive per ADR 0008: **M07-F** = inspector + calc drawer (mockups 01–02); **M07-G** = overview / catalogue / study (mockups 03–05). See `PARITY_ROADMAP.md` §3.1 and [`docs/design/M07-WORKFLOW/`](docs/design/M07-WORKFLOW/README.md).
+
+### Approved steel shell mockups (from design conversation)
+
+![Selected member steel design](docs/design/M07-WORKFLOW/screens/approved/01-member-design.png)
+
+![Calculation details](docs/design/M07-WORKFLOW/screens/approved/02-calculation-details.png)
+
+![Whole-model overview](docs/design/M07-WORKFLOW/screens/approved/03-overview.png)
+
+![Section catalogue](docs/design/M07-WORKFLOW/screens/approved/04-section-catalogue.png)
+
+![Section study](docs/design/M07-WORKFLOW/screens/approved/05-section-study.png)
+
+Full specification with §36 screen contracts: [`docs/design/M07-WORKFLOW/structural-workbench-steel-design-spec.md`](docs/design/M07-WORKFLOW/structural-workbench-steel-design-spec.md). Layout only — code pins and S2 breadth remain SPEC. Serviceability PASS/FAIL waits for **M07-S**; until then show not checked.
+
+## Planned design-shell screens (retrieved mockups)
+
+These reuse Screen 02’s shell regions. Mockups and briefs live under `docs/design/M0*-WORKFLOW/`.
+
+| Screen family | Owning slice | Design pack |
+| --- | --- | --- |
+| Selected-member steel design + calculation details | M07-F | [`docs/design/M07-WORKFLOW/`](docs/design/M07-WORKFLOW/README.md) |
+| Whole-model steel overview / catalogue / section study | M07-G | same |
+| RC beam reinforcement + schedule | M08-SHELL | [`docs/design/M08-WORKFLOW/`](docs/design/M08-WORKFLOW/README.md) |
+| Slab mesh / contours / rebar maps | M10-SHELL | [`docs/design/M10-WORKFLOW/`](docs/design/M10-WORKFLOW/README.md) (captions; PNGs pending) |
+| Pad footing contact / structural / study | M11-SHELL | [`docs/design/M11-WORKFLOW/`](docs/design/M11-WORKFLOW/README.md) |
+
 ## Responsive and degraded behaviour
 
 The full CAD workspace targets 1280 by 720 or larger. At narrower widths, the tree and inspector become mutually exclusive overlays while save, analysis state, results tables and export remain accessible. If WebGPU is unavailable, retain modelling forms, tables, calculation results and portable project export with a clear viewport capability message.
@@ -54,6 +82,8 @@ The full CAD workspace targets 1280 by 720 or larger. At narrower widths, the tr
 | Projects | M00, M04, M05 |
 | Model workspace | M00–M03 |
 | Analysis results | M00–M06 |
-| Steel member check | M07 |
+| Steel member check (modal/harness) | M07 |
+| Integrated steel design shell | M07-E (inputs), M07-F (01–02), M07-G (03–05); M07-S/LTB deferred |
+| RC beam / slab / footing shells | M08-SHELL, M10-SHELL, M11-SHELL |
 
 The images contain illustrative project names and values. Acceptance comes from the contracts and validation corpus, not from reproducing those values or pixels.

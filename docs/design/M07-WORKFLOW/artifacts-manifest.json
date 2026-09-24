@@ -1,0 +1,42 @@
+{
+  "sourceShare": "https://chatgpt.com/share/6ab4c946-7764-83eb-b1c1-ada00c4d4642",
+  "title": "Steel Design Workflow",
+  "retrievedAt": "2026-09-24",
+  "cleanedAt": "2026-09-24",
+  "note": "Approved shell-matching steel screens only. Wrong-shell mockups and a misfiled RC captions dump were removed so agents do not treat them as layout or code contracts. Sibling packs live under docs/design/M08|M10|M11-WORKFLOW/. Schedule ownership: ADR 0008.",
+  "removed": [
+    "screens/superseded-wrong-shell/* (parallel design chrome — not the product shell)",
+    "source-image-captions.json (RC/Eurocode captions misfiled under M07)",
+    "images-manifest.json (empty stub)"
+  ],
+  "files": [
+    {
+      "path": "M07-WORKFLOW/README.md",
+      "role": "pack index + exclusive slice map"
+    },
+    {
+      "path": "M07-WORKFLOW/structural-workbench-steel-design-spec.md",
+      "role": "product IA / layout proposal — not schedule owner; bind via ADR 0008"
+    },
+    {
+      "path": "M07-WORKFLOW/screens/approved/01-member-design.png",
+      "role": "M07-F layout ref"
+    },
+    {
+      "path": "M07-WORKFLOW/screens/approved/02-calculation-details.png",
+      "role": "M07-F layout ref"
+    },
+    {
+      "path": "M07-WORKFLOW/screens/approved/03-overview.png",
+      "role": "M07-G layout ref"
+    },
+    {
+      "path": "M07-WORKFLOW/screens/approved/04-section-catalogue.png",
+      "role": "M07-G layout ref"
+    },
+    {
+      "path": "M07-WORKFLOW/screens/approved/05-section-study.png",
+      "role": "M07-G layout ref"
+    }
+  ]
+}

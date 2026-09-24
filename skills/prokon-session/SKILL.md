@@ -9,16 +9,18 @@ description: >
 
 ## First entry reading
 
-Read `SPEC_ROOT/README.md`, `SPECIFICATION.md`, `VALIDATION.md`, `contracts/PROTOCOL.md` and `agent-tasks/M00.md`. Load `skills/prokon-task-loop` before execution work. Inspect schema, relevant fixtures, roadmap and resource register. Later sessions: review changes and sections affected by the current task.
+Read `AGENTS.md`, then `delivery/state.json` (`activeMilestone`, `activeTask`, `nextAction`, `acceptedMilestones`). Load `skills/prokon-task-loop` before execution work. Inspect schema, relevant fixtures, roadmap and resource register only as the active task requires. Later sessions: review changes and sections affected by the current task.
+
+**Do not** start from M00 when `acceptedMilestones` already includes analysis/design parents — trust `nextAction`. The M00 example below is only for an empty `delivery/state.json`.
 
 ## Before writing code
 
 1. Inspect repository status and existing application code. Preserve unrelated user changes. Do not initialise a replacement project over existing work or invent a remote.
-2. Read `delivery/state.json`, the active task record, recent decisions and evidence for the current source revision. Verify claimed completed work still exists on disk.
+2. Read `delivery/state.json`, the active task record, recent decisions and evidence for the current source revision. Verify claimed completed work still exists on disk. Prefer root `nextAction` over nested `nextAction` on already-accepted tasks.
 3. Identify the earliest dependency-ready unaccepted milestone and its smallest complete task. If a resource blocks it, record the blocker and choose an independent task. Do not advance a dependent milestone by pretending its prerequisite passed.
 4. Record the next concrete action and resume. Do not ask the user to restate decisions already in the specification.
 
-Initial implementation task: M00 — edit, solve, display, save, reopen and report a cantilever using the actual WASM kernel and WebGPU viewport.
+When `delivery/state.json` is missing or empty, the bootstrap task is M00 — edit, solve, display, save, reopen and report a cantilever using the actual WASM kernel and WebGPU viewport.
 
 ## Durable delivery state
 

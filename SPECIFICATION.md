@@ -379,6 +379,8 @@ Add the code-profile system, action transfer, section classification, applicable
 
 Acceptance: authoritative examples per check family; boundary tests around classification, slenderness and interaction branches; independent oracle agreement; three failing and three passing complete-member cases minimum; unsupported section/torsion/brace condition returns unsupported. Every mandatory clause has traceable tests. No overall pass if any mandatory check is unimplemented.
 
+**Follow-on (does not reopen this parent gate):** after M07 acceptance, usable model-native workflow and shell UI expand under exclusive sub-milestones M07-E / M07-F / M07-G (and deferred M07-S / M07-LTB) per ADR 0008 and `agent-tasks/DESIGN-WORKFLOW.md`. Design-pack mockups are layout references; they do not change this milestone’s pinned code profile, S2 breadth, or numerical acceptance.
+
 ### M08 Design and schedule a concrete beam
 
 **User outcome:** select a supported rectangular RC beam, transfer actions, specify cover/bar options, obtain a validated reinforcement proposal and export its calculation and bar schedule.

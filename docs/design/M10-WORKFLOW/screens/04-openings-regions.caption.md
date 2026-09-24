@@ -1,0 +1,33 @@
+# 04-openings-regions
+
+Source sediment file: `file_00000000e19881f4b1d862546c99063b`
+
+PNG not recoverable from the public share CDN (asset present in conversation but not rendered).
+
+## Model caption (from ChatGPT share)
+
+Model caption: Wide screenshot of a software UI (desktop app) — a Structural Workbench interface with a reinforced concrete slab reinforcement map. Overall scene: a full-screen desktop application window with the same style as the previous images, showing a plan/diagram in the center, a left model tree, a right properties/inspector panel, and a bottom results table and legend/notes. Clean vector-ish UI, muted blue/gray theme, many labels and annotations, resembling engineering design software. No people.  
+
+Top bar: application title “Structural Workbench” at top left with menu items “File  Edit  View  Model  Design  Results  Drawings  Tools  Help”. On the far right of the top bar: “Riverside Office Block  |  Model.rswb  |” and a green dot with “Analysis current” plus window control icons (minimize, maximize, close). Under the main menu a toolbar row with icons and text: “Select”, “Pan”, “Orbit”, “Zoom”, “Fit”, “Hide”, “Show”, “Wireframe”, a highlighted/active “Shaded” button, then “Translucent”, “Storey” dropdown showing “Level 2”, “Design mode:” dropdown “Concrete (RC)”, then “Results”, “Report”, “Sync”.  
+
+Left panel: “Model Explorer” header with a search box text “Search model...”. A tree with “Riverside Office Block” > “Structure” > “Levels” > “Level Roof”, “Level 3”, highlighted “Level 2” (selected), under it “Columns (12)”, “Beams (18)”, “Slabs (6)” expanded with items “SL01” (selected with blue highlight), “SL02”, “SL03”, “SL04”, “SL05”, “SL06”. Then “Level 1”, “Level 0”. Below are collapsed sections: “Grids”, “Groups”, “Load cases & combinations”, “Load definitions”, “Materials” with “Concrete” and nested “C30/37”, “Reinforcement” > “B500B”; then “Sections”, “Design settings”, “Drawings”.  
+
+Center: large plan view of a slab reinforcement map with grid markers. The slab area is outlined in blue and filled with colored zones with dashed boundaries. At top above the plan are column-grid labels circles “A”, “B”, “C”, “D”, “E”; horizontal dimension texts “7.200 m”, “8.000 m”, “8.000 m”, “7.200 m”. Left side row numbers in circles: “4”, “3”, “2”, “1” with vertical dims “7.000 m”, “8.000 m”, “7.000 m”. The slab panel shows a rectangular/irregular slab with a central opening (white/gray rectangular opening with an X inside), multiple square column locations with gray/black column symbols and surrounding color zones. Zones are color-coded: pink/red near columns (corner and interior) with labels “TX-01” near top-left, top-center, top-right, bottom-left, bottom-center, bottom-right; orange/tan bands labeled “TX-02” around them; green background main field labeled “TX-03” in central areas. There is a central opening/void with a blue dashed surround and orange zone; label “TX-02” near it. Many dashed contour lines around zones. The slab boundary has a notch/step on the right side and columns at grid intersections with darker square cores. Text labels appear inside zones: “TX-01”, “TX-02”, “TX-03” repeated in several places. At bottom left of the plan is a small axis indicator with green “Y” up and red “X” right; there are grid and dashed reference lines. At top right of the plan area is a small 3D cube view widget with faces labeled “Top” on top, and “Front” and “Right” on sides.  
+
+To the right of the plan is a legend box titled “Top reinforcement X (Provided As)” with colored swatches and text: “H16 @ 125  (1,608 mm²/m)” in pink; “H16 @ 175  (1,149 mm²/m)” in orange; “H12 @ 200  (565 mm²/m)” in green; a dashed line legend “Zone boundary”; and a gray square swatch “Column”; and an outlined X-box icon “Opening”.  
+
+Right side panel: “Selection Inspector — SL01” with tabs “Properties”, “Concrete design” (active), “Member results”, “Drawings”. Under that: “SL01   Slab   |   Level 2” and at far right “Area: 462.5 m²”. Section “Section and material” with an “Edit…” button. Fields: “Thickness, h” = “250” “mm”; “Concrete grade” = “C30/37”; “Reinforcement grade” = “B500B”; “Nominal cover (top)” = “25” “mm”; “Nominal cover (bottom)” = “25” “mm”.  
+
+Then “Reinforcement map” with “Edit…” and fields: “Face” = “Top”; “Direction” = “X (global X)”; “Display” = “Provided As”; “Governing zone” = “TX-01”; “Required As” = “1145” “mm²/m”; “Provided As” = “1608” “mm²/m”; “Utilisation” = “0.71”; “Status” with a green check and “PASS”.  
+
+Then “Design settings” with “Edit…”: “Design code profile” = “EN 1992-1-1 (Eurocode 2)” with a star icon to the right; “Serviceability” = “Normal (crack control)”.  
+
+Bottom of this right panel: “Design readiness” checklist with green check items: “Analysis current  OK”, “Geometry recognised  OK”, “Support conditions  OK”; on right column “Reinforcement designed  OK”, “Zone checks complete  OK”, “Drawings up to date  OK”. A blue button at bottom right: “Run design” with a small dropdown arrow.  
+
+Bottom center area: tab bar with “Analysis”, “Member results”, “Concrete design”, active “Reinforcement (1)”, then “Schedule”, “Warnings (1)”, “Log”. Left bottom panel title area shows a big green check and “PASS” with “Reinforcement design satisfactory”. Under it: “Member” “SL01”; “Level” “Level 2”; “View” “Top – X direction”; “Display” “Provided As”; and a link “View zone details →”.  
+
+Center-bottom table: columns “Zone”, “Face”, “Direction”, “Bar arrangement”, “Required As (mm²/m)”, “Provided As (mm²/m)”, “Utilisation”, “Status”. Rows: “TX-01  Top  X  H16 @ 125  1145  1608  0.71  PASS” (green); “TX-02  Top  X  H16 @ 175  823  1149  0.72  PASS”; “TX-03  Top  X  H12 @ 200  412  565  0.73  PASS”; “TY-01  Top  Y  H16 @ 125  1086  1608  0.68  PASS”; “TY-02  Top  Y  H16 @ 175  791  1149  0.69  PASS”; “TY-03  Top  Y  H12 @ 200  398  565  0.70  PASS”; “TY-04  Top  Y  H12 @ 200  365  565  0.65  PASS”.  
+
+To the right of the table is a “Notes” panel with an information icon and text: “Reinforcement map shows provided reinforcement\nzoning for the selected face and direction.\n\nZones are defined automatically based on column\nregions, openings and span regions. Check detailing\nrequirements for bar curtailment and anchorage.\n\n1 zone with detailing note. See Warnings tab.”  
+
+Bottom status bar: left “Ready”; right side shows “Units: metric (kN, m, °C)  |  Snap: off  |  Grid: on  |  Calculations up to date” with a green indicator dot. The overall composition is crisp, technical, with readable sans-serif UI fonts, clean lines, and the slab reinforcement map dominating the center.<|has_watermark|><|has_borders|>

@@ -6,7 +6,7 @@ Harness-agnostic always-on policy. Full historical wording: `docs/agent/archive/
 
 Deliver the specified browser app through working vertical slices: Rust→WASM engineering kernel, WebGPU CAD viewport, plain HTML/JS ES modules/CSS. Success is functioning software with reproducible evidence — not plans, scaffolds, code volume or package-integrity checks alone.
 
-M00–M06 = analysis MVP. M07 steel design. M08 concrete beam. M09–M22 expand. M23 finite verified parity inventory. Do not treat M06 as full PROKON parity. Do not claim standards compliance or commercial equivalence without evidence.
+M00–M06 = analysis MVP. M07 = bounded steel check (accepted); M07-E→F→G = integrated steel workspace (ADR 0008; S/LTB deferred). M08 concrete beam. M09–M22 expand. M23 finite verified parity inventory. Do not treat M06 as full PROKON parity. Do not claim standards compliance or commercial equivalence without evidence.
 
 ## Sources of truth (priority)
 

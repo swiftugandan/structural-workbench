@@ -20,4 +20,4 @@ This file does not change the numerical contract, grant external permissions or 
 
 ## Begin now
 
-Reconstruct current repository state per `skills/prokon-session`. If no implementation exists, execute `SPEC_ROOT/agent-tasks/M00.md`. Make the cantilever workflow real, run its objective gates, preserve the evidence and continue. Do not stop at another plan when implementation is authorised.
+Reconstruct current repository state per `skills/prokon-session` and `delivery/state.json`. Execute the active task (today typically M07-E after accepted M00–M07). Only if no implementation / empty state exists, start from `agent-tasks/M00.md`. Do not stop at another plan when implementation is authorised.

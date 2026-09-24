@@ -4,7 +4,9 @@ This is the proposed target ledger, not a statement of delivered functionality. 
 
 ## Immediate delivery priority
 
-[M01-UX](agent-tasks/M01-UX.md) is the next sub-milestone within M01: improve and verify the existing UI/UX before final M01 acceptance and M02 implementation. It is planned, not accepted. Existing engineering scope and parent acceptance gates remain in force. Machine-readable scheduling is recorded in roadmap.json under subMilestones and delivery/state.json.
+Analysis MVP (M00–M06) and bounded AISC S2 steel check (M07 parent + M07-UX) are accepted. M08 remains blocked on concrete code/example resources.
+
+Next delivery focus is the **integrated design workspace** (ADR 0008): exclusive steel slices **M07-E → M07-F → M07-G**, with deferred **M07-S** / **M07-LTB**, then shell reuse for concrete modules after their engineering parents. Design packs under [`docs/design/M0*-WORKFLOW/`](docs/design/M07-WORKFLOW/README.md) are **layout refs only** — code pins remain SPEC/`SOURCES.md`. Earliest ready slice: [M07-E](agent-tasks/M07-E.md). Scheduling: `roadmap.json` `designExperienceProgram` / `subMilestones`, `delivery/state.json`. Parent M07 acceptance is not reopened.
 
 ## 1 Acceptance levels
 
@@ -22,8 +24,8 @@ The analysis baseline below is derived from the official [Sumo product page](htt
 | Physical to analytical mapping | M02–M03 | Deterministic child elements, stations and load conservation | Planned |
 | Linear frame analysis | M00–M06 | Analytical, independent oracle and matched commercial corpus | Planned |
 | Load cases, combinations and envelopes | M02 | Exact provenance and code-specific generator separately verified | Planned subset |
-| Model-derived design actions | M07–M08 | Same model/result hash, simultaneous action vectors and units | Planned |
-| Static second-order analysis | M09 | Convergence, geometric stiffness, imperfections and load-path comparisons | Planned |
+| Model-derived design actions | M07–M08 / M07-E | Same model/result hash, simultaneous action vectors, units, and model-native section provenance | Planned |
+| Static second-order analysis | M09 | Convergence, geometric stiffness, imperfections and load-path comparisons; required before unrestricted steel beam-column design beyond declared effective-length workflows | Planned |
 | Elastic buckling | M09 | Analytical critical loads, refinement, eigenmode pairing | Planned |
 | Shells and automated meshing | M10 | Patch/locking/distortion/convergence and commercial mesh equivalence | Planned |
 | Solid finite elements | M23 sub-slice | New solid-element dossier, patch/distortion/convergence and useful solid-analysis workflow | Inventory and formulation gate |
@@ -43,10 +45,14 @@ Module names are grounded in the official [Steel product page](https://prokon.co
 
 | Module or workflow | Planned slice | Specific parity condition |
 | --- | --- | --- |
-| Strut/compression member | M07 | Section classification, member buckling and code-specific resistance |
-| Beam column/combined forces | M07 | Stability, simultaneous actions and applicable interactions |
+| Strut/compression member | M07 / M07-E | Section classification, member buckling and code-specific resistance with declared stability method |
+| Beam column/combined forces | M07 / M09 | Simultaneous actions and interactions; unrestricted beam-column design waits on M09 or an explicitly restricted effective-length workflow |
 | Standalone member check | M07 | Same functions and outputs as model-derived checks |
-| Catalogue check/evaluate/optimise | M05/M07 | Provenance, valid candidate search and reanalysis after stiffness changes |
+| Model-native W catalogue binding | M07-E | Named model section resolves to versioned design properties; no silent seed overlay |
+| Design inputs and bracing | M07-E | Ky/Kz/Lb/Cb (and bracing segments) with visible provenance: catalogue / project default / derived / user / not provided |
+| Integrated steel design shell | M07-F then M07-G | F = selected member + calc details (mockups 01–02); G = overview / catalogue / study (03–05). ADR 0008. |
+| Whole-model steel review | M07-G | Bulk assign, design groups, batch progress/cancel, status tree, revision-addressable results (consumes readiness from M07-E) |
+| Catalogue check/evaluate/optimise | M05 / M07-G | Provenance, valid candidate search and reanalysis after stiffness changes |
 | Fin plate | M13 initial family | Complete connection failure modes, drawing and report |
 | End plate | M13 extension | Full selected end-plate family including supported moment-transfer behaviour |
 | Base plate | M13 extension | Plate/anchor/concrete/support assumptions and coupled failure modes |
@@ -61,19 +67,53 @@ Module names are grounded in the official [Steel product page](https://prokon.co
 | Crane beam | M23 sub-slice | Moving/eccentric actions, serviceability and code-specific checks |
 | Combine named module | M23 inventory | Verify exact vendor scope before declaring coverage |
 
+### 3.1 Integrated design workspace (post-M07 experience target)
+
+Binding: [ADR 0008](docs/adr/0008-integrated-design-workspace.md). Steel pack §31 phases map 1:1 onto exclusive slices (no double-booking). Mockups guide panel content inside the live shell; they do not authorize Eurocode pins, new chrome, or silent PASS for deferred phases.
+
+Target product loop (not yet fully delivered):
+
+`model setup → design basis → design readiness → member/group assignment → batch check → graphical review → failure investigation → alternatives → apply change → reanalyse → compare → report/review`
+
+Shell invariant for all material-design modules: **top menu/status; left Model Explorer; central WebGPU viewport + existing toolbar; right Selection inspector; bottom Results drawer; footer status**. Do not invent a parallel design navigation shell.
+
+| Experience capability | Owning slice | Notes |
+| --- | --- | --- |
+| Model-native section → design props | M07-E | Close analysis `Section` ↔ `WSectionProps`; pack phases 1–3 |
+| DesignValue provenance + Ky/Kz/Lb/Cb + bracing | M07-E | Catalogue / project default / derived / user / not provided |
+| Member design readiness | M07-E | Incomplete → READY-incomplete, never PASS |
+| Model-native demand path (no silent seed overlay) | M07-E | Demands from current analysis; seed path negative-tested |
+| Declared first-order / effective-length basis | M07-E then M09 | No silent second-order claim until M09 |
+| Selected-member inspector + calc drawer | M07-F | Mockups 01–02 only; pack phases 4–5 |
+| Why navigation (strength path) | M07-F | Governing combination → station → clause |
+| Strength status semantics | M07-F | PASS/FAIL/UNSUPPORTED/…; serviceability shown as not checked until M07-S |
+| Whole-model overview / batch / status tree | M07-G | Mockup 03; pack phase 7 |
+| Bulk assignment and design groups | M07-G | Preview/undo; family consistency |
+| Catalogue browser + section study + what-changed | M07-G | Mockups 04–05; pack phase 9; Apply triggers reanalysis |
+| Hierarchical multi-member reports | M07-G | Revision/hash-addressable results |
+| Strength vs serviceability separation | M07-S | Deferred; pack phase 8 — F/G must not invent service utilisations |
+| LTB / expanded W flexure beyond S2 | M07-LTB | Deferred; pack phase 6 — needs new fixtures |
+| Second-order / DAM workflows | M09 | Pack phase 10 |
+| Concrete beam shell screens | M08-SHELL | After M08 engineering; ACI pin per SPEC, not mockup Eurocode |
+| Slab surface design screens | M10-SHELL | After M10 + `R-SHELL-BENCHMARKS` |
+| Pad footing screens | M11-SHELL | After M11 engineering |
+
 ## 4 Concrete and detailing
 
-Module names and broad features below are grounded in the official [Concrete product page](https://prokon.com/concrete/). The roadmap subdivisions are proposed product increments.
+Module names and broad features below are grounded in the official [Concrete product page](https://prokon.com/concrete/). The roadmap subdivisions are proposed product increments. UI for each module must reuse the approved design shell (§3.1), not a separate calculator chrome.
 
 | Module or workflow | Planned slice | Specific parity condition |
 | --- | --- | --- |
 | Continuous beam | M08 extension | Patterned loading, support/span reinforcement and full code scope |
 | Beam section | M08 | Supported section/action domain and reinforcement checks |
+| RC beam design shell | M08-SHELL | Setup, reinforcement proposal, schedule, calculation details, readiness — same shell as steel |
 | Rectangular slab | M10 | Analysis-to-design mapping and supported reinforcement method |
+| Slab design shell | M10-SHELL | Contours with display-vs-design action distinction; Top/Bottom X/Y maps; openings/regions |
 | Rectangular column | M12 first | Interaction, slenderness and reinforcement layout |
 | Circular column | M12 extension | Independently validated section integration |
 | General column | M12 extension | Arbitrary supported geometry, bars and integration convergence |
 | Pad footing | M11 | Eccentric pressure/contact domain and structural checks |
+| Foundation design shell | M11-SHELL | Setup, soil/contact, structural checks, reinforcement, foundation study/overview |
 | Pile cap | M16 sub-slice | Selected strut-and-tie/other method, equilibrium and reinforcement |
 | Retaining wall | M16 sub-slice | Soil/water actions, stability and structural design |
 | Punching shear | M11/M16 | Code-specific perimeters, openings and reinforcement applicability |

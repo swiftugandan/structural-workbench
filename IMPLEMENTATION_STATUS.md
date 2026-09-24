@@ -60,7 +60,8 @@ working preview does not equal the complete 24-milestone project.
 | M04 | IndexedDB snapshots, single-writer lock, exports, escaped reports, stale controls, historical revision recovery UI (M04-A) | Offline cache/update lifecycle, schema migrations and full crash/recovery matrix |
 | M05 | Editable synthetic sections and examples | Parametric templates, section calculator, project variants and side-by-side comparison |
 | M06 | Unexposed elastic stress helper | Verified mechanics UI, accumulated regression, performance and clean release gates |
-| M07–M23 | No implemented product modules | Material-code packages, advanced analysis/design/exchange/automation and finite parity inventory |
+| M07 | Bounded AISC 360-22 LRFD S2 member check (parent + UX accepted); Screen-04 harness | Model-native workflow M07-E→F→G (ADR 0008); M07-S/LTB deferred |
+| M08–M23 | Not started as product modules (M08 blocked on concrete resources) | Material-code packages, advanced analysis/design/exchange/automation and finite parity inventory |
 
 My/Mz end releases use static condensation. Interior point actions expand
 deterministically at analyse time (physical model hash preserved). Axial/shear/
@@ -86,35 +87,7 @@ into external-resource blockers.
 
 ## Next concrete work
 
-First complete [M01-UX](agent-tasks/M01-UX.md), the user-requested UI/UX sub-milestone. Its interactive design and source-based audit are in docs/design/M01-UX/; the canvas-first revision implements direct geometry/assignment placement, point-to-point transforms, splitting, measurement, inline deletion and nonblocking property/precision panels, in addition to the ribbon and responsive workspace. Current candidate evidence is in evidence/M01/canvas-first; live visual/browser acceptance remains pending. Prioritize workspace hierarchy, modelling flow, results readability, responsive access and accessibility. Then refresh the changed-build evidence and resume parent acceptance below.
+Execute the integrated design workspace program ([agent-tasks/DESIGN-WORKFLOW.md](agent-tasks/DESIGN-WORKFLOW.md), ADR 0008): **M07-E** (phases 1–3) next, then thin **M07-F** (mockups 01–02), then **M07-G** (03–05). M07-S / M07-LTB deferred. M08 remains blocked on concrete resources; SHELL slices wait on engineering parents. Mockups are layout-only.
 
-Run the M01 candidate on the required Windows/Linux real-GPU runner and complete
-computer-use verification after the tool policy check becomes available. Use
-`docs/M01_HARDWARE_RUNNER.md` and the same-build verifier. Keep both parent
-milestones unaccepted until their required gates pass. Retain original fixtures.
+Authoritative hashes and task history: `delivery/state.json`. Historical M01 canvas/UX evidence lives under `evidence/M01/` — accepted context, not current priority. Remaining parent platform/CUA gaps (real-GPU runner, live visual) do not block M07-E.
 
-Current canvas-first/readable-label candidate: 34 browser tests, 30 native tests, 33 native/WASM numerical comparisons, 3 contract tests and 4 verifier tests pass. Stable short labels are separate from hidden IDs; no migrations. See evidence/M01/canvas-first. Live UX and required parent real-GPU acceptance remain blocked.
-
-Support-symbol refinement: fixed, pinned and roller glyphs follow active restraints and model/view orientation; custom/end-on constraints are explicit. 35 browser and 4 focused symbol checks pass, with 33 numerical comparisons and 3 contracts passing. Evidence: evidence/M01/support-symbols. Truss-joint/end-release symbols and corresponding solver support are not implemented.
-
-Canvas dimensions are implemented and pass 14 targeted browser plus 2 layout checks. True Rust lengths, display-only toggle and edit/undo refresh are verified. Evidence: evidence/M01/dimensions; no new full milestone or live-visual acceptance claimed.
-
-Latest refinement: canvas Shear Vy/Vz with signed annotations, unit-aware common scale, explicit zero values and stale-result suppression. Selection persists on reanalysis. Evidence: evidence/M01/shear-diagrams (15 targeted browser + 3 diagram tests). No solver/schema change; live review and full milestone acceptance remain pending.
-
-Latest refinement: camera-aligned XYZ compass with green Y, balanced isometric default and bounded XY reference grid at model minimum Z. Evidence: evidence/M01/orientation (14 targeted browser + 2 orientation checks pass). Camera movement preserves the engineering hash. Live visual review and full milestone acceptance remain pending.
-
-Diagram-plane correction: local member-plane projection replaces screen-perpendicular diagrams (My/Vz along z, Vy along y). Four analytical rendering checks pass, including rolled axes, foreshortening, zeros and missing frames. Browser regression evidence is recorded in evidence/M01/diagram-planes; live visual acceptance remains pending.
-
-Effect-direction follow-up: removed deformation's constant-depth overlay while retaining full XYZ displacement. Five focused rendering checks cover action planes, rotated axes, pure-Z and coupled deformation, depth and zero scale. Browser results are recorded in evidence/M01/effect-directions.
-
-Warehouse W01 added to Worked examples, opens in 3D. Analysed and independently cross-checked: 468 OpenSees and 468 native/WASM values, six equilibrium components and browser journey pass. Peak nodal displacement 8.80 mm; reactions balance 180 kN downward + 45 kN lateral. Synthetic demonstration inputs, not building design validation. Evidence: evidence/M01/warehouse.
-
-Grouped result picker: Model/deformation, Member forces (N/Vy/Vz), Member moments (My/Mz/T), remembered per-family choice and retained action after analysis. Mz follows local xy; N/T use signed on-member colouring. Evidence/M01/result-picker: 6 unit and 7 browser tests pass. Live visual/full milestone acceptance remain pending.
-
-Selection Forces & moments tab implemented: member component diagrams/station readout/end values and node applied/reaction/member-on-node diagrams with global tables. Units and stale guards verified. Evidence/M01/force-inspector: 4 browser + 1 analytical unit pass. Live visual/full acceptance pending.
-
-User-directed removal: Forces & moments is now member-only; node diagrams/tables and contribution code removed. Member journey and node-empty-state browser check pass. Evidence: evidence/M01/member-only-inspector.
-
-Member results now includes global Ux/Uy/Uz/total displacement diagrams and station/end/extreme readouts in mm or m. Build and cantilever/browser regression pass: evidence/M01/member-deformation.
-
-Canvas toolbar exaggeration controls added: Displacement × and Diagram ×, with independent retained values and visible legend factors. Build, 6 rendering unit tests and 2 browser tests pass. Evidence: evidence/M01/graph-scale.

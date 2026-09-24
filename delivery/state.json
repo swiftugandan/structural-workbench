@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M08",
-  "activeTask": null,
+  "activeMilestone": "M07-E",
+  "activeTask": "M07-E",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2666,7 +2666,7 @@
   ],
   "lastVerifiedSourceRevision": "1f3ee6d0295af062c0c380e9e26021b106d3dd8e",
   "lastVerifiedBuildHash": "4a4152c285e90912c6629b09748e6ed9988db193c06c8410f72a2c724126dea7",
-  "nextAction": "M07 UX preview deployed. Investigate host/local WASM artifact hash difference; full release gate remains blocked and M08 resources remain unavailable.",
+  "nextAction": "Execute M07-E per agent-tasks/M07-E.md (ADR 0008: pack phases 1–3 only). Then M07-F (01–02), then M07-G (03–05). M07-S/LTB deferred. Layout refs: docs/design/M07-WORKFLOW. M08 resources remain blocked.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "87355d586145a0b5cc95e38a1a44e485d0317d10129b351a3fcb044b8e8c624b"
 }

@@ -17,8 +17,17 @@
 </head>
 <body class="bg-base-200 text-base-content min-h-screen">
   <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+    <div class="alert alert-warning text-sm">
+      <span>
+        <strong>Historical plan only.</strong> Parent M07 (AISC 360-22 LRFD S2) is <em>accepted</em>.
+        Do not re-execute M07-A…D from this page. Next work is
+        <a href="../../../agent-tasks/M07-E.md"><code>M07-E</code></a> per
+        <a href="../../adr/0008-integrated-design-workspace.md">ADR 0008</a>.
+        Eurocode rows below are future profile options, not the current pin.
+      </span>
+    </div>
     <header class="space-y-3">
-      <p class="text-sm uppercase tracking-widest opacity-60">Structural Workbench · M07 plan · decided</p>
+      <p class="text-sm uppercase tracking-widest opacity-60">Structural Workbench · M07 plan · decided (archived for decisions)</p>
       <h1 class="text-3xl font-bold leading-tight">Steel member checks with one open code, easy to swap</h1>
       <p class="text-lg opacity-80 max-w-3xl">
         Goal: unblock M07 with a freely downloadable authoritative standard, implement a

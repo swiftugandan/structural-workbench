@@ -182,7 +182,7 @@
     {
       "id": "M07",
       "name": "Check a steel member under one pinned code profile",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M06"
       ],
@@ -202,7 +202,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "Bounded AISC 360-22 LRFD S2 member check accepted (evidence/M07/full). Integrated design workspace is scheduled as M07-E/F/G sub-milestones; they do not reopen this parent gate.",
+      "experienceFollowOns": [
+        "M07-E",
+        "M07-F",
+        "M07-G"
+      ]
     },
     {
       "id": "M08",
@@ -228,7 +233,10 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Product UI must reuse M07-F shell regions/patterns (inspector + drawer); schedule M08-SHELL for reinforcement-centric screens after engineering acceptance. Mockup Eurocode labels are not the code pin.",
+      "experienceFollowOns": [
+        "M08-SHELL"
+      ]
     },
     {
       "id": "M09",
@@ -252,7 +260,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Priority raised: unrestricted steel beam-column design beyond declared effective-length workflows depends on this milestone (see PARITY_ROADMAP.md §3.1)."
     },
     {
       "id": "M10",
@@ -277,7 +285,10 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Surface-design UI follows M10-SHELL in the approved shell; distinguish display-smoothed contours from design actions.",
+      "experienceFollowOns": [
+        "M10-SHELL"
+      ]
     },
     {
       "id": "M11",
@@ -301,7 +312,10 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Footing UI follows M11-SHELL (reaction → soil/contact → geometry → structural → detailing).",
+      "experienceFollowOns": [
+        "M11-SHELL"
+      ]
     },
     {
       "id": "M12",
@@ -617,19 +631,77 @@
       "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
     }
   ],
+  "designExperienceProgram": {
+    "id": "integrated-design-workspace",
+    "name": "Integrated design workspace",
+    "source": "https://chatgpt.com/share/6ab4c946-7764-83eb-b1c1-ada00c4d4642",
+    "sourceTitle": "Steel Design Workflow",
+    "adr": "docs/adr/0008-integrated-design-workspace.md",
+    "designPacks": [
+      "docs/design/M07-WORKFLOW",
+      "docs/design/M08-WORKFLOW",
+      "docs/design/M10-WORKFLOW",
+      "docs/design/M11-WORKFLOW"
+    ],
+    "steelSpec": "docs/design/M07-WORKFLOW/structural-workbench-steel-design-spec.md",
+    "steelSpecPhaseMap": {
+      "M07-E": ["1", "2", "3"],
+      "M07-F": ["4", "5"],
+      "M07-G": ["7", "9"],
+      "M07-S": ["8"],
+      "M07-LTB": ["6"],
+      "M09": ["10"]
+    },
+    "approvedSteelScreens": "docs/design/M07-WORKFLOW/screens/approved",
+    "paritySection": "PARITY_ROADMAP.md#31-integrated-design-workspace-post-m07-experience-target",
+    "shellInvariant": "top menu/status; left Model Explorer; central WebGPU viewport; right Selection inspector; bottom Results drawer; footer — no parallel design chrome",
+    "mockupsAreLayoutOnly": true,
+    "codePinsRemainSpec": true,
+    "targetLoop": [
+      "model setup",
+      "design basis",
+      "design readiness",
+      "member/group assignment",
+      "batch check",
+      "graphical review",
+      "failure investigation",
+      "alternatives",
+      "apply change",
+      "reanalyse",
+      "compare",
+      "report/review"
+    ],
+    "slices": [
+      "M07-E",
+      "M07-F",
+      "M07-G",
+      "M07-S",
+      "M07-LTB",
+      "M08-SHELL",
+      "M10-SHELL",
+      "M11-SHELL"
+    ],
+    "executionOrder": [
+      "M07-E",
+      "M07-F",
+      "M07-G",
+      "M07-S-or-M07-LTB-when-resourced",
+      "M08-then-M08-SHELL",
+      "M09-for-stability",
+      "M10-then-M10-SHELL",
+      "M11-then-M11-SHELL"
+    ]
+  },
   "subMilestones": [
     {
       "id": "M01-UX",
       "parentMilestone": "M01",
       "name": "Improve the modelling workspace UI and UX",
-      "state": "blocked-resource",
-      "priority": "next",
+      "state": "accepted",
+      "priority": "done",
       "dependsOn": [],
-      "prerequisite": "Existing M01 implementation candidate; parent acceptance is not a prerequisite for this refinement",
-      "requiredBefore": [
-        "M01 acceptance",
-        "M02 implementation"
-      ],
+      "prerequisite": "Completed; retained for historical scheduling",
+      "requiredBefore": [],
       "contractSection": "agent-tasks/M01-UX.md",
       "acceptanceIds": [
         "UX-01",
@@ -641,6 +713,261 @@
         "UX-07",
         "UX-08"
       ]
+    },
+    {
+      "id": "M07-E",
+      "parentMilestone": "M07",
+      "name": "Model-native steel identity, settings, and demand path",
+      "state": "planned",
+      "priority": "next",
+      "dependsOn": [
+        "M07"
+      ],
+      "prerequisite": "Accepted M07 parent (S2). Does not reopen parent acceptance.",
+      "requiredBefore": [
+        "M07-F"
+      ],
+      "steelSpecPhases": [
+        "1",
+        "2",
+        "3"
+      ],
+      "contractSection": "agent-tasks/M07-E.md",
+      "acceptanceIds": [
+        "DW-E1",
+        "DW-E2",
+        "DW-E3",
+        "DW-E4",
+        "DW-E5",
+        "DW-E6"
+      ],
+      "owns": [
+        "catalogue-binding",
+        "design-material-refs",
+        "design-value-provenance",
+        "effective-length-and-bracing",
+        "member-design-readiness",
+        "model-native-demand-path",
+        "declared-first-order-stability-basis"
+      ],
+      "doesNotOwn": [
+        "inspector-shell-migration",
+        "whole-model-batch",
+        "section-study",
+        "serviceability-checks",
+        "ltb-expansion"
+      ]
+    },
+    {
+      "id": "M07-F",
+      "parentMilestone": "M07",
+      "name": "Selected-member steel design in the existing shell",
+      "state": "planned",
+      "priority": "queued",
+      "dependsOn": [
+        "M07-E"
+      ],
+      "prerequisite": "M07-E complete",
+      "requiredBefore": [
+        "M07-G",
+        "M08-SHELL",
+        "M10-SHELL",
+        "M11-SHELL"
+      ],
+      "steelSpecPhases": [
+        "4",
+        "5"
+      ],
+      "contractSection": "agent-tasks/M07-F.md",
+      "acceptanceIds": [
+        "DW-F1",
+        "DW-F2",
+        "DW-F3",
+        "DW-F4",
+        "DW-F5"
+      ],
+      "screens": [
+        "selected-member-steel-design",
+        "calculation-details"
+      ],
+      "mockupRefs": [
+        "docs/design/M07-WORKFLOW/screens/approved/01-member-design.png",
+        "docs/design/M07-WORKFLOW/screens/approved/02-calculation-details.png"
+      ],
+      "owns": [
+        "inspector-design-tab",
+        "calculation-details-drawer",
+        "why-navigation",
+        "selected-member-status-semantics"
+      ],
+      "doesNotOwn": [
+        "whole-model-overview",
+        "catalogue-browser",
+        "section-study",
+        "serviceability-pass-fail",
+        "candidate-what-changed"
+      ]
+    },
+    {
+      "id": "M07-G",
+      "parentMilestone": "M07",
+      "name": "Whole-model steel review, catalogue, and section study",
+      "state": "planned",
+      "priority": "queued",
+      "dependsOn": [
+        "M07-F"
+      ],
+      "prerequisite": "M07-F selected-member shell path",
+      "requiredBefore": [
+        "Claiming production multi-member steel workflow completeness"
+      ],
+      "steelSpecPhases": [
+        "7",
+        "9"
+      ],
+      "contractSection": "agent-tasks/M07-G.md",
+      "acceptanceIds": [
+        "DW-G1",
+        "DW-G2",
+        "DW-G3",
+        "DW-G4",
+        "DW-G5",
+        "DW-G6"
+      ],
+      "screens": [
+        "whole-model-overview",
+        "section-catalogue",
+        "section-study"
+      ],
+      "mockupRefs": [
+        "docs/design/M07-WORKFLOW/screens/approved/03-overview.png",
+        "docs/design/M07-WORKFLOW/screens/approved/04-section-catalogue.png",
+        "docs/design/M07-WORKFLOW/screens/approved/05-section-study.png"
+      ],
+      "owns": [
+        "batch-design",
+        "design-status-tree",
+        "bulk-assign-and-groups",
+        "catalogue-browser-ui",
+        "section-study-and-apply",
+        "what-changed-after-apply",
+        "hierarchical-multi-member-reports"
+      ],
+      "doesNotOwn": [
+        "serviceability-checks",
+        "ltb-expansion",
+        "second-order-analysis"
+      ]
+    },
+    {
+      "id": "M07-S",
+      "parentMilestone": "M07",
+      "name": "Steel serviceability separation",
+      "state": "planned",
+      "priority": "deferred",
+      "dependsOn": [
+        "M07-F"
+      ],
+      "prerequisite": "M07-F; may proceed in parallel with M07-G",
+      "requiredBefore": [],
+      "steelSpecPhases": [
+        "8"
+      ],
+      "contractSection": "agent-tasks/M07-S.md",
+      "acceptanceIds": [
+        "DW-SVc1"
+      ],
+      "owns": [
+        "serviceability-criteria",
+        "service-combination-evaluation",
+        "separate-serviceability-status"
+      ]
+    },
+    {
+      "id": "M07-LTB",
+      "parentMilestone": "M07",
+      "name": "Evidence-backed W-shape strength expansion",
+      "state": "planned",
+      "priority": "deferred",
+      "dependsOn": [
+        "M07-E"
+      ],
+      "prerequisite": "New AISC fixture/dossier evidence beyond accepted S2",
+      "requiredBefore": [],
+      "steelSpecPhases": [
+        "6"
+      ],
+      "contractSection": "agent-tasks/M07-LTB.md",
+      "acceptanceIds": [
+        "DW-LTB1"
+      ],
+      "owns": [
+        "ltb-and-related-s2-expansions-with-fixtures"
+      ]
+    },
+    {
+      "id": "M08-SHELL",
+      "parentMilestone": "M08",
+      "name": "Concrete beam design screens in the approved shell",
+      "state": "planned",
+      "priority": "queued",
+      "dependsOn": [
+        "M08",
+        "M07-F"
+      ],
+      "prerequisite": "M08 engineering acceptance (ACI pin per SOURCES) and M07-F shell patterns; mockup Eurocode labels are not the contract",
+      "requiredBefore": [],
+      "contractSection": "agent-tasks/M08-SHELL.md",
+      "acceptanceIds": [
+        "DW-C1",
+        "DW-C2",
+        "DW-C3",
+        "DW-C4"
+      ],
+      "designPack": "docs/design/M08-WORKFLOW"
+    },
+    {
+      "id": "M10-SHELL",
+      "parentMilestone": "M10",
+      "name": "Slab design screens in the approved shell",
+      "state": "planned",
+      "priority": "queued",
+      "dependsOn": [
+        "M10",
+        "M07-F"
+      ],
+      "prerequisite": "M10 engineering + R-SHELL-BENCHMARKS; captions are layout intent until PNGs re-exported",
+      "requiredBefore": [],
+      "contractSection": "agent-tasks/M10-SHELL.md",
+      "acceptanceIds": [
+        "DW-S1",
+        "DW-S2",
+        "DW-S3",
+        "DW-S4"
+      ],
+      "designPack": "docs/design/M10-WORKFLOW"
+    },
+    {
+      "id": "M11-SHELL",
+      "parentMilestone": "M11",
+      "name": "Pad footing design screens in the approved shell",
+      "state": "planned",
+      "priority": "queued",
+      "dependsOn": [
+        "M11",
+        "M07-F"
+      ],
+      "prerequisite": "M11 engineering acceptance and M07-F shell patterns",
+      "requiredBefore": [],
+      "contractSection": "agent-tasks/M11-SHELL.md",
+      "acceptanceIds": [
+        "DW-P1",
+        "DW-P2",
+        "DW-P3",
+        "DW-P4",
+        "DW-P5"
+      ],
+      "designPack": "docs/design/M11-WORKFLOW"
     }
   ]
 }

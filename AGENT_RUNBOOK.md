@@ -13,4 +13,6 @@ Execution policy now lives in:
 
 Full historical Version 1.0 wording: [docs/agent/archive/AGENT_RUNBOOK.md](docs/agent/archive/AGENT_RUNBOOK.md).
 
-This runbook authorises no external purchase, publication or account access. Use permissions already provided in the implementation environment. Make reversible engineering choices within the contract and continue independent work when a resource is blocked.
+## Begin now
+
+Reconstruct current repository state per [skills/prokon-session](skills/prokon-session/SKILL.md) and `delivery/state.json`. Execute the active task. Do not restart from M00 when parents are already accepted.

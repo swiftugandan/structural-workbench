@@ -1,69 +1,19 @@
 # Structural Workbench handoff
 
-## Current design UI update — 2026-09-23
+**Authoritative next work:** read root `delivery/state.json` (`activeMilestone`, `activeTask`, `nextAction`). Do not treat older diary notes, nested historical `nextAction` fields inside accepted task records, or `docs/agent/archive/` as current priority.
 
-M07 steel member check now has a visible ribbon command and a three-step setup/results dialog. The ordinary workspace no longer repeats the long parity/exclusion notice; capabilities and design scope are available on demand. M07 same-build gate PASS at source `87355d586145a0b5cc95e38a1a44e485d0317d10129b351a3fcb044b8e8c624b`, build `4a4152c285e90912c6629b09748e6ed9988db193c06c8410f72a2c724126dea7`. See `evidence/M07/design-ui/README.md` and screenshot, plus `evidence/M07/full/gate-M07.json`. Preview on port 4182. The next dependency task is still M08, blocked on concrete code/examples resources in `delivery/state.json`. The historical M01 notes below describe earlier work and should not override the current delivery state.
+## Current state (2026-09-24)
 
-Deployment: commit `bb6e0d839f1b626dbd54447667a88792d5dc4431` is live at GitHub Pages after successful workflow 35895984719. The public S2-D1 Rust/WASM check returned `pass`. The hosted and local manifests have the same source hash but a different WASM byte hash; cause unknown. Full `verify:release` remains BLOCKED. See `evidence/M07/deployment/README.md`; do not claim byte-identical artifacts or accepted full release.
+- **Accepted parents:** M00–M07 (bounded AISC 360-22 LRFD S2). Analysis MVP complete; Screen-04 modal is the accepted M07 harness, not the target primary UX.
+- **Next slice:** [M07-E](agent-tasks/M07-E.md) — model-native steel identity, settings/provenance/readiness, demand path (steel pack phases 1–3). Binding: [ADR 0008](docs/adr/0008-integrated-design-workspace.md).
+- **Then:** M07-F (mockups 01–02) → M07-G (03–05). Deferred: M07-S (serviceability), M07-LTB (strength expansion). Program index: [agent-tasks/DESIGN-WORKFLOW.md](agent-tasks/DESIGN-WORKFLOW.md).
+- **Blocked:** M08 on concrete code/example resources (`delivery/state.json` blockers). SHELL UI slices wait on engineering parents.
+- **Layout refs only:** `docs/design/M0*-WORKFLOW/` — mockup Eurocode labels are not the code pin (SPEC/`SOURCES.md`).
 
-Work in /Users/p.munaawa/Documents/projects/labs/prokon on main (trunk based development). The ChatGPT project mirror's sources remain read-only. Do not spawn agents unless newly authorized.
+## Do not reopen
 
-The user's latest direction is a canvas-first modelling application. Support and Load were examples, not the complete scope. See docs/design/M01-UX/CANVAS_INTERACTIONS.md for the broad interaction audit and docs/design/M01-UX/IMPLEMENTATION.md for implemented behavior. The old interactive workspace design is illustrative, not the current production interaction model.
+Parent M07 numerical acceptance; M00–M06 analysis gates. Design packs do not change pinned codes or S2 breadth.
 
-## Current candidate
+## Session start
 
-The working app now has two-click member creation; snapped node placement; click-to-place support presets; click/drag point forces and member uniform loads; point-to-point Move/Copy; picked Split; two-node Measure; inline dependency Delete; direct node/support/load properties; and nonblocking precision/topology/entity panels. Context actions finish active placement tools. Routine modelling leaves the canvas available. Existing project-level creation/import/help flows may still use dialogs.
-
-The ribbon, keyboard context menu, selection/draft protection, responsive panels and results drawer remain in place. Rust still validates engineering state, units, topology and undo. No new solver domain or compliance scope is claimed.
-
-Read delivery/state.json and evidence/M01/canvas-first/README.md for the exact source/build identity and final checks. evidence/M01/ux describes the earlier toolbar-oriented candidate; evidence/M01/full describes the original M01 candidate. Never use earlier-build evidence to accept the current source.
-
-## Remaining acceptance
-
-Live computer use is blocked because the browser service cannot verify its admin-enforced policy. The user already authorized browser use; do not ask again or bypass the control. Once available, perform the actual canvas-first journey, visual review and UX-01–UX-08 acceptance. Fix any observed usability problems and refresh same-build evidence before accepting M01-UX.
-
-The required Windows/Linux real-GPU platform evidence also remains outstanding for parent M00/M01. Follow docs/M01_HARDWARE_RUNNER.md for that gate. Do not advance M02 by treating software-GPU tests as real hardware acceptance.
-
-Use WORKBENCH_EVIDENCE_DIR=evidence/M01/canvas-first, WORKBENCH_TASK_ID=M01-UX and WORKBENCH_MILESTONE=M01 for the current candidate. Build before tests; never replace dist during a run. npm run verify:milestone -- M01-UX intentionally remains blocked until live review and its acceptance record exist.
-
-Preview: http://127.0.0.1:4173 (npm run preview if needed). No push or remote configuration was requested.
-
-Latest user direction: hidden unique internal IDs with short visible labels; no migrations during active development. Implemented `metadata.entityLabels` in Rust canonicalisation and shared `web/entity-labels.js` presentation lookup. Label persistence/copy/deletion/undo/reopen covered by native and browser regressions. No migration layer.
-
-Latest refinement: constraint-aware, camera-aligned fixed/pinned/roller support glyphs and explicit custom/end-on markers. Current evidence is evidence/M01/support-symbols (35 browser, 4 glyph tests, 33 numerical comparisons, 3 contracts pass). Live CUA retry was blocked by unavailable policy verification. Truss joint/hinge symbols are not implemented; the kernel rejects member-end releases.
-
-Latest change: canvas dimensions enabled by default with View ribbon toggle, true Rust lengths, edit/undo refresh, extension lines and arrowheads. Current focused evidence: evidence/M01/dimensions (14 browser + 2 layout checks). Prior full-suite evidence is build-specific; refresh complete required evidence before accepting M01-UX.
-
-Latest refinement: canvas Shear Vy/Vz with signed annotations, unit-aware common scale, explicit zero values and stale-result suppression. Selection persists on reanalysis. Evidence: evidence/M01/shear-diagrams (15 targeted browser + 3 diagram tests). No solver/schema change; live review and full milestone acceptance remain pending.
-
-Latest refinement: camera-aligned XYZ compass with green Y, balanced isometric default and bounded XY reference grid at model minimum Z. Evidence: evidence/M01/orientation (14 targeted browser + 2 orientation checks pass). Camera movement preserves the engineering hash. Live visual review and full milestone acceptance remain pending.
-
-Diagram-plane correction: My and Vz now plot in each member's local XZ plane, Vy in local XY, using current Rust geometry frames before camera projection. Positive values point along positive local z/y; plots foreshorten and collapse edge-on naturally. Source commit b745910; focused evidence is evidence/M01/diagram-planes. Concurrent guided-input work is present in the tested content-addressed snapshot; use its build/source hashes, not the source commit alone, to identify the test build. Live visual and full milestone acceptance remain pending.
-
-Effect-direction follow-up (633ee16): all exposed action diagrams retain member-plane offsets, and deformation retains the full Rust global displacement vector and camera-projected depth. Combined effects stay spatial. Evidence: evidence/M01/effect-directions. Concurrent guided-input work remains separate; identify the tested snapshot by content/build hash. Live visual and full milestone acceptance remain pending.
-
-Warehouse W01 added to Worked examples, opens in 3D. Analysed and independently cross-checked: 468 OpenSees and 468 native/WASM values, six equilibrium components and browser journey pass. Peak nodal displacement 8.80 mm; reactions balance 180 kN downward + 45 kN lateral. Synthetic demonstration inputs, not building design validation. Evidence: evidence/M01/warehouse.
-
-Grouped result picker: Model/deformation, Member forces (N/Vy/Vz), Member moments (My/Mz/T), remembered per-family choice and retained action after analysis. Mz follows local xy; N/T use signed on-member colouring. Evidence/M01/result-picker: 6 unit and 7 browser tests pass. Live visual/full milestone acceptance remain pending.
-
-Local X naming clarified in picker and canvas legends: N / Fx along local x, T / Mx about local x. Build and picker regression pass: evidence/M01/x-labels.
-
-Selection Forces & moments tab implemented: member component diagrams/station readout/end values and node applied/reaction/member-on-node diagrams with global tables. Units and stale guards verified. Evidence/M01/force-inspector: 4 browser + 1 analytical unit pass. Live visual/full acceptance pending.
-
-Fixed reaction table/SVG NaN coercion from typed-array map (295508e). Numeric values unchanged; expanded supported-node browser test verifies all six reaction rows. Evidence: evidence/M01/force-table-fix.
-
-User-directed removal: Forces & moments is now member-only; node diagrams/tables and contribution code removed. Member journey and node-empty-state browser check pass. Evidence: evidence/M01/member-only-inspector.
-
-Member results now includes global Ux/Uy/Uz/total displacement diagrams and station/end/extreme readouts in mm or m. Build and cantilever/browser regression pass: evidence/M01/member-deformation.
-
-Canvas toolbar exaggeration controls added: Displacement × and Diagram ×, with independent retained values and visible legend factors. Build, 6 rendering unit tests and 2 browser tests pass. Evidence: evidence/M01/graph-scale.
-
-Workspace layout visibility: desktop panel/ribbon/toolbar toggles, persisted choices and Focus canvas/Restore layout implemented. Evidence/M01/layout-panels: build + 4 browser/accessibility checks pass; live CUA focus/restore verified at 1280x720. Preview on port 4175 (4173 serves another preview). This focused live check does not complete full M01-UX acceptance. Next: run the complete UX acceptance journey and required platform gates on this build.
-
-Compact ribbon: removed category tabs per user request; Office-style large primary buttons plus two rows of small commands. Final build and 4 browser/accessibility checks pass; live CUA visual sizing verified. Evidence: evidence/M01/compact-ribbon. Preview remains port 4175. Full milestone acceptance remains separate.
-
-Latest correction supersedes Office-style buttons: original icon-over-label ribbon buttons restored; category tabs remain removed. Modelling branding/project bars combined into a 51px desktop project header. Original Home/Help elements move back to branding bar on landing. Build + 10 browser/accessibility checks pass; live CUA verifies header and Home. Evidence: evidence/M01/compact-header.
-
-Application command system: File/Edit/View/Model/Analysis/Help menu bar, keyboard navigation/shortcuts and Help reference. View owns all panel/ribbon/focus toggles; dedicated toggle row removed. File owns export actions; quick undo/redo/case/Analyse remain in header. Original ribbon buttons retained. See docs/design/M01-UX/COMMAND_SYSTEM.md and evidence/M01/application-menu. Full 46-test regression passed before isolated pointer-switch fix; 12 final-build checks and live pointer verification pass after it. Preview remains 4175; full milestone acceptance is separate.
-
-Canvas navigation refinement: Pan/Orbit/Local axes/Dimensions/Fit moved from main ribbon into canvas toolbar. GPU button removed; View > Recreate viewport remains and recovery is tested there. Build + 15 browser checks pass; live layout verified. Evidence: evidence/M01/canvas-navigation. CAD test helper now correctly awaits two-click auto-commit instead of issuing a redundant Enter.
+`AGENTS.md` → `skills/prokon-session` → `delivery/state.json` → active agent-task. Preview: `npm run preview` after build.

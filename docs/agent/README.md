@@ -13,4 +13,4 @@ Always-on policy is root `AGENTS.md` (token-budgeted). Procedural detail is prog
 | `skills/prokon-collab` | Roles, ownership, integration |
 | `archive/` | Unmodified Version 1.0 `Agent.md`, `AGENT_RUNBOOK.md`, loader `AGENTS.md` |
 
-Contract files (`SPECIFICATION.md`, `VALIDATION.md`, fixtures, schemas) are unchanged by this split. Do not edit archive copies as living policy.
+Contract files (`SPECIFICATION.md`, `VALIDATION.md`, fixtures, schemas) are unchanged by this split. Do not edit archive copies as living policy. Do not load `archive/` for next-work priority — use root `delivery/state.json` and ADR 0008 for the integrated design workspace.
