@@ -102,8 +102,14 @@ caller view revision; the UI discards results after camera/model changes. The
 kernel caches the projected spatial index by model revision and camera. Node
 selection takes priority within eight CSS pixels, then depth/distance/stable ID.
 Box selection includes nodes and members wholly inside the rectangle.
-`viewGeometry` reports unconnected, nonparallel projected crossings and depth
-separation; these are display markers, never a topology command.
+`viewGeometry` reports unconnected, nonparallel finite member centreline
+intersections in world space, within the project merge tolerance (metres).
+Screen overlap alone is not an intersection. Each marker includes projected
+`point`, `memberIds`, `depthSeparation`, world-space `separation` and `tolerance`.
+Shared endpoint IDs are already connected and excluded; collinear overlaps are
+outside this diagnostic. Camera changes never change intersection eligibility,
+including edge-on views. These are display markers, never a topology command.
+See ADR 0011 for the correction from the former projection-only diagnostic.
 
 `snap` accepts XZ, XY or YZ `plane`, length-valued `position`, model-space
 `tolerance`, `features` and positive `grid`. Only candidates on the working plane

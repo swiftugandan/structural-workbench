@@ -78,6 +78,9 @@ pub struct Index {
     pub key: String,
     nodes: Vec<(String, Point)>,
     members: Vec<(String, String, String, Point, Point)>,
+    world_members: Vec<(Point, Point)>,
+    intersection_tolerance: f64,
+    screen_tolerance: f64,
     tree: Tree,
     boxes: Vec<Box2>,
     crossings: Option<Value>,
@@ -110,6 +113,21 @@ impl Index {
                 workbench_geometry::dot(d, basis[2]),
             ]
         };
+        let world_positions: BTreeMap<_, _> = p
+            .nodes
+            .iter()
+            .map(|n| (n.id.as_str(), n.position))
+            .collect();
+        let world_members = p
+            .members
+            .iter()
+            .map(|m| {
+                (
+                    world_positions[m.start.as_str()],
+                    world_positions[m.end.as_str()],
+                )
+            })
+            .collect();
         let positions: BTreeMap<_, _> = p
             .nodes
             .iter()
@@ -139,6 +157,9 @@ impl Index {
             key,
             nodes,
             members,
+            world_members,
+            intersection_tolerance: p.analysis_settings.merge_tolerance,
+            screen_tolerance: p.analysis_settings.merge_tolerance * factor,
             tree,
             boxes,
             crossings: None,
@@ -224,46 +245,70 @@ impl Index {
         }
         let mut crossings = vec![];
         for (i, m) in self.members.iter().enumerate() {
+            // Projection is only a broad-phase accelerator. Camera depth is not
+            // evidence that two members intersect in engineering space.
+            let area = Box2 {
+                lo: self.boxes[i].lo.map(|x| x - self.screen_tolerance),
+                hi: self.boxes[i].hi.map(|x| x + self.screen_tolerance),
+            };
             let mut found = vec![];
-            self.tree.query(&self.boxes[i], &mut found);
+            self.tree.query(&area, &mut found);
             for j in found {
-                if j <= i || !self.boxes[i].overlaps(&self.boxes[j]) {
+                if j <= i || !area.overlaps(&self.boxes[j]) {
                     continue;
                 }
                 let n = &self.members[j];
-                let (a, b, c, d) = (m.3, m.4, n.3, n.4);
-                let u = [b[0] - a[0], b[1] - a[1]];
-                let v = [d[0] - c[0], d[1] - c[1]];
-                let w = [c[0] - a[0], c[1] - a[1]];
-                let cross = |a: [f64; 2], b: [f64; 2]| a[0] * b[1] - a[1] * b[0];
-                let den = cross(u, v);
-                if den.abs() < 1e-10 {
+                if m.1 == n.1 || m.1 == n.2 || m.2 == n.1 || m.2 == n.2 {
                     continue;
                 }
-                let t = cross(w, v) / den;
-                let s = cross(w, u) / den;
-                if !(0. ..=1.).contains(&t) || !(0. ..=1.).contains(&s) {
+                let (a, b) = self.world_members[i];
+                let (c, d) = self.world_members[j];
+                let Some((t, s, separation)) =
+                    segment_intersection(a, b, c, d, self.intersection_tolerance)
+                else {
                     continue;
-                }
-                let endpoints = |t: f64, start: &String, end: &String| {
-                    if t.abs() < 1e-8 {
-                        Some(start.clone())
-                    } else if (t - 1.).abs() < 1e-8 {
-                        Some(end.clone())
-                    } else {
-                        None
-                    }
                 };
-                if let (Some(a), Some(b)) = (endpoints(t, &m.1, &m.2), endpoints(s, &n.1, &n.2)) {
-                    if a == b {
-                        continue;
-                    }
-                }
-                crossings.push(json!({"point":[a[0]+t*u[0],a[1]+t*u[1]],"memberIds":[m.0,n.0],"depthSeparation":(a[2]+t*(b[2]-a[2])-c[2]-s*(d[2]-c[2])).abs()}));
+                let first: Point = std::array::from_fn(|k| m.3[k] + t * (m.4[k] - m.3[k]));
+                let second: Point = std::array::from_fn(|k| n.3[k] + s * (n.4[k] - n.3[k]));
+                crossings.push(json!({"point":[(first[0]+second[0])*0.5,(first[1]+second[1])*0.5],"memberIds":[m.0,n.0],"depthSeparation":(first[2]-second[2]).abs(),"separation":separation,"tolerance":self.intersection_tolerance}));
             }
         }
         let value = json!({"crossings":crossings});
         self.crossings = Some(value.clone());
         value
     }
+}
+
+/// Closest points of nonparallel lines, bounded to their finite segments.
+/// Parallel/collinear overlap is outside this crossing diagnostic's scope.
+fn segment_intersection(
+    a: Point,
+    b: Point,
+    c: Point,
+    d: Point,
+    tolerance: f64,
+) -> Option<(f64, f64, f64)> {
+    use workbench_geometry::{cross, dot};
+    let u = std::array::from_fn(|i| b[i] - a[i]);
+    let v = std::array::from_fn(|i| d[i] - c[i]);
+    let w = std::array::from_fn(|i| c[i] - a[i]);
+    let normal = cross(u, v);
+    let denominator = dot(normal, normal);
+    let uu = dot(u, u);
+    let vv = dot(v, v);
+    if denominator <= 1e-24 * uu * vv {
+        return None;
+    }
+    let t = dot(cross(w, v), normal) / denominator;
+    let s = dot(cross(w, u), normal) / denominator;
+    if !(-tolerance / uu.sqrt()..=1. + tolerance / uu.sqrt()).contains(&t)
+        || !(-tolerance / vv.sqrt()..=1. + tolerance / vv.sqrt()).contains(&s)
+    {
+        return None;
+    }
+    let t = t.clamp(0., 1.);
+    let s = s.clamp(0., 1.);
+    let gap = std::array::from_fn(|i| a[i] + t * u[i] - c[i] - s * v[i]);
+    let separation = dot(gap, gap).sqrt();
+    (separation <= tolerance).then_some((t, s, separation))
 }

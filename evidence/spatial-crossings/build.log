@@ -1,0 +1,93 @@
+
+> structural-workbench@0.1.0 build
+> node tools/build.mjs
+
+warning: unused import: `verify_lock_and_manifest`
+  --> crates/design/src/profile/aisc36022/mod.rs:20:46
+   |
+20 | pub use verify::{aisc_s2_resources_verified, verify_lock_and_manifest, verify_vault_pdfs_if_present};
+   |                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `IN_TO_M` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:3:11
+  |
+3 | pub const IN_TO_M: f64 = 0.0254;
+  |           ^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `FT_TO_M` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:4:11
+  |
+4 | pub const FT_TO_M: f64 = 0.3048;
+  |           ^^^^^^^
+
+warning: constant `KIP_TO_N` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:5:11
+  |
+5 | pub const KIP_TO_N: f64 = 4_448.221_615_260_5;
+  |           ^^^^^^^^
+
+warning: constant `KSI_TO_PA` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:6:11
+  |
+6 | pub const KSI_TO_PA: f64 = 6.894_757_293_168_361e6;
+  |           ^^^^^^^^^
+
+warning: constant `KIP_FT_TO_NM` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:7:11
+  |
+7 | pub const KIP_FT_TO_NM: f64 = KIP_TO_N * FT_TO_M;
+  |           ^^^^^^^^^^^^
+
+warning: `workbench-design` (lib) generated 6 warnings (run `cargo fix --lib -p workbench-design` to apply 1 suggestion)
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
+    Finished `release` profile [optimized] target(s) in 40.12s
+warning: unused import: `verify_lock_and_manifest`
+  --> crates/design/src/profile/aisc36022/mod.rs:20:46
+   |
+20 | pub use verify::{aisc_s2_resources_verified, verify_lock_and_manifest, verify_vault_pdfs_if_present};
+   |                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `IN_TO_M` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:3:11
+  |
+3 | pub const IN_TO_M: f64 = 0.0254;
+  |           ^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `FT_TO_M` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:4:11
+  |
+4 | pub const FT_TO_M: f64 = 0.3048;
+  |           ^^^^^^^
+
+warning: constant `KIP_TO_N` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:5:11
+  |
+5 | pub const KIP_TO_N: f64 = 4_448.221_615_260_5;
+  |           ^^^^^^^^
+
+warning: constant `KSI_TO_PA` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:6:11
+  |
+6 | pub const KSI_TO_PA: f64 = 6.894_757_293_168_361e6;
+  |           ^^^^^^^^^
+
+warning: constant `KIP_FT_TO_NM` is never used
+ --> crates/design/src/profile/aisc36022/units.rs:7:11
+  |
+7 | pub const KIP_FT_TO_NM: f64 = KIP_TO_N * FT_TO_M;
+  |           ^^^^^^^^^^^^
+
+warning: `workbench-design` (lib) generated 6 warnings (run `cargo fix --lib -p workbench-design` to apply 1 suggestion)
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
+   Compiling workbench-cli v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/cli)
+    Finished `release` profile [optimized] target(s) in 40.81s
+Built static app c44002e98713992462db5bb59ae655efc809e57e5ebf9f5846e1829e15fff0e3

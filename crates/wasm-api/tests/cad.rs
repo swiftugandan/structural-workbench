@@ -85,7 +85,7 @@ fn three_working_planes_snap_midpoint_grid_and_units() {
     }
 }
 #[test]
-fn projected_crossing_index_selection_depth_and_measurement() {
+fn separated_projection_is_not_a_crossing_but_depth_picking_still_works() {
     let mut p = fixture();
     p["nodes"].as_array_mut().unwrap().extend([
         json!({"id":"n3","position":[1.5,1,-1]}),
@@ -105,8 +105,7 @@ fn projected_crossing_index_selection_depth_and_measurement() {
         0,
         json!({"kind":"viewGeometry","query":{"camera":camera},"viewRevision":10}),
     );
-    assert_eq!(out["payload"]["crossings"].as_array().unwrap().len(), 1);
-    assert_eq!(out["payload"]["crossings"][0]["depthSeparation"], 1.);
+    assert_eq!(out["payload"]["crossings"].as_array().unwrap().len(), 0);
     let out = req(
         &mut k,
         "queryGeometry",
@@ -259,4 +258,62 @@ fn visible_labels_survive_copy_delete_undo_and_reopen() {
         p["metadata"]["entityLabels"]
     );
     assert_eq!(reopened["modelHash"], copied["modelHash"]);
+}
+
+#[test]
+fn crossing_is_a_world_space_test_including_edge_on_views() {
+    let cameras = [
+        json!({"origin":[0,0,0],"basis":[[1,0,0],[0,0,1],[0,-1,0]],"center":[0,0],"factor":100}),
+        json!({"origin":[0,0,0],"basis":[[1,0,0],[0,1,0],[0,0,1]],"center":[30,70],"factor":0.1}),
+        json!({"origin":[0,0,0],"basis":[[0,1,0],[0,0,1],[1,0,0]],"center":[30,70],"factor":10000.}),
+    ];
+    for (offset, count) in [(0., 1), (0.5e-6, 1), (2e-6, 0), (1., 0)] {
+        let mut p = fixture();
+        p["nodes"].as_array_mut().unwrap().extend([
+            json!({"id":"n3","position":[1.5,offset,-1]}),
+            json!({"id":"n4","position":[1.5,offset,1]}),
+        ]);
+        let mut m = p["members"][0].clone();
+        m["id"] = json!("m2");
+        m["start"] = json!("n3");
+        m["end"] = json!("n4");
+        p["members"].as_array_mut().unwrap().push(m);
+        let (mut k, original) = open(p);
+        for camera in &cameras {
+            let out = req(
+                &mut k,
+                "queryGeometry",
+                0,
+                json!({"kind":"viewGeometry","query":{"camera":camera},"viewRevision":10}),
+            );
+            assert_eq!(
+                out["payload"]["crossings"].as_array().unwrap().len(),
+                count,
+                "offset {offset}, camera {camera}: {out}"
+            );
+            assert_eq!(out["modelHash"], original["modelHash"]);
+            if count == 1 {
+                assert!(
+                    (out["payload"]["crossings"][0]["separation"]
+                        .as_f64()
+                        .unwrap()
+                        - offset)
+                        .abs()
+                        < 1e-12
+                );
+            }
+        }
+    }
+    // The actual connected 3D reference must not acquire warnings on rotation.
+    let p = serde_json::to_value(workbench_model::residential_reference().unwrap()).unwrap();
+    let (mut k, _) = open(p);
+    for camera in &cameras {
+        let out = req(
+            &mut k,
+            "queryGeometry",
+            0,
+            json!({"kind":"viewGeometry","query":{"camera":camera},"viewRevision":10}),
+        );
+        assert_eq!(out["payload"]["crossings"], json!([]), "{out}");
+    }
 }

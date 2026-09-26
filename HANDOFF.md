@@ -1,3 +1,9 @@
+## Latest: spatial crossing diagnostic correction
+
+Rust now flags only nonparallel finite centreline contacts within the existing model merge tolerance. Members that merely overlap in a camera projection do not warn. True intersections remain visible in edge-on views. Shared endpoint IDs are already connected. This is diagnostic only; no automatic topology or analysis mutation. ADR 0011 records the explicit correction to the former projection-only contract. Evidence and reproduction: `evidence/spatial-crossings/`.
+
+Verified: 87 native tests, 3 contracts, 4 browser journeys and visible Chrome/AMD checks in XZ, XY and 3D with crossing display ON. Final gate: `evidence/spatial-crossings/crossing-gate.json`. Build `c44002e98713992462db5bb59ae655efc809e57e5ebf9f5846e1829e15fff0e3`.
+
 ## Latest: stair landing correction (UKR01-v2)
 
 V1 lacked a proper floor landing at the start of each storey. Corrected to returning flights with 4 x 1.5 m floor and intermediate platforms. `docs/design/stair-landing-audit.md` records the actual defect, new connected geometry, changed quantities and remaining finished-level/offset/headroom/detailing limitations. New worked examples produce v2; saved v1 projects are preserved. Latest downloadable model/report/plan and gate: `evidence/stair-landings/`. Build `c0012b5fc75712da60552daf122cad362bce2f0e00606179b925115d9d24caef`.

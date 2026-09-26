@@ -1,0 +1,63 @@
+{
+  "taskId": "SPATIAL-CROSSINGS",
+  "milestone": "M00",
+  "sourceHash": "fafd7f858f4701984696a55b3d2dc1e65ce1c7907cdff13a1313c29c71bdf179",
+  "buildHash": "c44002e98713992462db5bb59ae655efc809e57e5ebf9f5846e1829e15fff0e3",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "native.log": "692b3271fed310a8485a652d9bf5535c9760e3589cb13fadeb7667514b64c9ed",
+    "contracts.log": "6cb0baf6f9395b7c6d35c37ba800b3b59fe899d91e924098e8b99366fc351d76",
+    "build.json": "e09757b5b74ae307aebd739a4c1f65f6a119e8adea748e2bd437b11d1d6042f5",
+    "build.log": "abce57fffc24562d712da1d9264b0a5966ea1f07b411e1aca78f9becf41731b7",
+    "browser.log": "c32e28ae87dea711b4feb8cd525caafc008ff07bfc797bebf8c18a7389b5f850",
+    "playwright-results.json": "938fd3fa37c135c27674d6ed8465eb3ed334fdee79f6ba80193ea6224ef4970c",
+    "visible-browser.json": "21bfa93a8299a68926c4def389f58d74083effcc9ce56bd0f109dcfcd34f1c7d",
+    "visible-reference.png": "d057a8f9dd9cdab50bcb393c100e06004bad8de98516b665d2d8cf4d740de7e7",
+    "reference-crossings.png": "ab1d5e3106ab25b4fda330b882b5848ffe86072ed03fd6fada77e799443cb276",
+    "cad-crossings.png": "5c0c86edea9ac0d16a86f3c226e0da29a793664ba8578d7d91d0e5c04c2e70aa",
+    "cad-mobile.png": "0b8cf22eb2d7a80e82170dfbb8b07d2dff43447b6c9b3873c064942b2280e4e5"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T18:43:55.471Z",
+  "status": "PASS",
+  "nativeTests": 87,
+  "contractTests": 3,
+  "browserTests": 4,
+  "visibleBrowser": {
+    "platform": "macOS",
+    "gpu": "AMD WebGPU",
+    "views": [
+      "XZ",
+      "XY",
+      "3D"
+    ],
+    "crossingsEnabled": true,
+    "falseCrossings": 0,
+    "referenceAnalysis": "Current SLS"
+  },
+  "scope": "Finite nonparallel centreline contact within existing model merge tolerance; no topology mutation or physical collision/code acceptance.",
+  "artifacts": [
+    "native.log",
+    "contracts.log",
+    "build.json",
+    "build.log",
+    "browser.log",
+    "playwright-results.json",
+    "visible-browser.json",
+    "visible-reference.png",
+    "reference-crossings.png",
+    "cad-crossings.png",
+    "cad-mobile.png"
+  ]
+}

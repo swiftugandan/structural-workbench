@@ -2879,6 +2879,18 @@
         "Nominal circulation and load paths verified; finished levels, physical beam offsets, headroom, guarding and construction detailing remain unverified."
       ],
       "nextAction": "Resolve physical floor/beam offsets and detailed stair junction/headroom/guarding in the physical geometry model before construction acceptance."
+    },
+    "SPATIAL-CROSSINGS": {
+      "id": "SPATIAL-CROSSINGS",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "useCase": "Reject projection-only crossings for spatial members while preserving true disconnected contacts",
+      "evidencePath": "evidence/spatial-crossings/crossing-gate.json",
+      "notes": [
+        "Rust finite centreline test uses the existing merge tolerance; shared node IDs excluded; no topology mutation.",
+        "Parallel/collinear overlaps and physical section collision are outside this diagnostic."
+      ],
+      "sourceHash": "fafd7f858f4701984696a55b3d2dc1e65ce1c7907cdff13a1313c29c71bdf179",
+      "buildHash": "c44002e98713992462db5bb59ae655efc809e57e5ebf9f5846e1829e15fff0e3"
     }
   },
   "blockers": [
