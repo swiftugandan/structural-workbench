@@ -117,6 +117,7 @@ export class Gateway {
       [
         "evaluateModelDesign",
         "evaluateSteelOverview",
+        "studySteelCatalogue",
         "evaluateDesignPreview",
       ].includes(operation)
     )

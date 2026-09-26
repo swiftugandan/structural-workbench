@@ -253,3 +253,54 @@ fn overview_keeps_unready_members_and_matches_exact_member_runs() {
         "INVALID_LOAD"
     );
 }
+
+#[test]
+fn catalogue_study_reanalyses_self_weight_without_mutating_baseline() {
+    let mut k = open();
+    assign(&mut k, "W18X50");
+    inputs(&mut k, 0.0);
+    let mut p = req(&mut k, "getSnapshot", json!({}))["payload"]["project"].clone();
+    p["gravity"] = json!([0., 9.80665, 0.]);
+    p["loads"] = json!([{"id":"l1","case":"LC1","type":"selfWeight","members":["m1"],"factor":1.}]);
+    assert_eq!(
+        req(&mut k, "importProject", json!({"jsonUtf8":p.to_string()}))["status"],
+        "ok"
+    );
+    let baseline = evaluate(&mut k);
+    let before = req(&mut k, "exportProject", json!({}));
+    let input = json!({"modelHash":baseline["modelHash"],"resultId":baseline["resultId"],"caseId":"LC1","memberId":"m1","sectionRefs":["aisc-shapes-v16.0-subset-1:W18X50","aisc-shapes-v16.0-subset-1:W24X62","aisc-shapes-v16.0-subset-1:W14X99"]});
+    let r = req(&mut k, "studySteelCatalogue", input.clone());
+    assert_eq!(r["status"], "ok", "{r}");
+    assert_eq!(r["payload"]["complete"], true);
+    for row in r["payload"]["candidates"].as_array().unwrap() {
+        // Independent published input dimensions; direct cantilever mechanics.
+        let area_in2 = match row["designation"].as_str().unwrap() {
+            "W18X50" => 14.7,
+            "W24X62" => 18.2,
+            "W14X99" => 29.1,
+            _ => panic!(),
+        };
+        let mass = 7850. * area_in2 * 0.0254_f64.powi(2) * 3.;
+        assert!((row["massKg"].as_f64().unwrap() - mass).abs() < 1e-10);
+        let max_moment = row["run"]["stationChecks"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|c| c["actions"][5].as_f64().unwrap().abs())
+            .fold(0., f64::max);
+        assert!((max_moment - mass * 9.80665 * 1.5).abs() < 1e-7);
+        assert_eq!(row["reanalysed"], true);
+        assert_eq!(row["resultId"], row["run"]["resultId"]);
+        assert_eq!(row["modelHash"], row["run"]["modelHash"]);
+    }
+    assert_eq!(before, req(&mut k, "exportProject", json!({})));
+    let mut invalid = input;
+    invalid["sectionRefs"] = json!([
+        "aisc-shapes-v16.0-subset-1:W18X50",
+        "aisc-shapes-v16.0-subset-1:W18X50"
+    ]);
+    assert_eq!(
+        req(&mut k, "studySteelCatalogue", invalid)["status"],
+        "error"
+    );
+}

@@ -99,6 +99,7 @@ const viewport = new Viewport($("#viewport"), async (query) => {
 const memberDesignRuns = new Map();
 const overview = steelOverview({
   gateway,
+  command,
   download,
   context: () => ({
     project,

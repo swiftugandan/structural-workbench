@@ -1,0 +1,2646 @@
+{
+  "analysisSettingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+  "caseId": "LC1",
+  "contractVersion": 1,
+  "mock": false,
+  "modelHash": "5bfc72df4260d9775f55978487cd089b506a3838114d5d0b5290acac1fe5de06",
+  "resultId": "5bfc72df4260d977-LC1",
+  "reviewId": "9a36dea66126867d0a32ed3cc4aa6761a332d6e809ac4003e8ffeaba4513ff17",
+  "rows": [
+    {
+      "memberId": "m1",
+      "readiness": {
+        "axisConvention": "AISC strong x → local z (Mz, Vy); weak y → local y (My, Vz)",
+        "inputs": {
+          "bracing": "continuous",
+          "cb": {
+            "source": "user",
+            "value": 1
+          },
+          "ky": {
+            "source": "user",
+            "value": 1
+          },
+          "kz": {
+            "source": "user",
+            "value": 1
+          },
+          "lb": {
+            "source": "user",
+            "value": 0
+          },
+          "materialRef": "astm-a992-50-65-v1",
+          "profileId": "aisc-360-22-lrfd",
+          "sectionRef": "aisc-shapes-v16.0-subset-1:W18X50",
+          "stabilityBasis": "firstOrderUserEffectiveLength"
+        },
+        "memberId": "m1",
+        "missing": [],
+        "serviceability": "notChecked",
+        "stabilityBasis": "First-order analysis with user effective-length factors; second-order / direct analysis not checked",
+        "status": "ready",
+        "unsupported": []
+      },
+      "run": {
+        "analysisSettingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+        "bracingSegments": [
+          {
+            "end": 1,
+            "kind": "continuous",
+            "source": "user",
+            "start": 0
+          }
+        ],
+        "catalogue": "AISC Shapes Database v16.0, Database v16.0 worksheet; US customary columns",
+        "catalogueSourceHash": "82d0ceb96a0d938ae1a6bd9637cb10a1e269225b5d668dce5b0bdc8d86013496",
+        "checks": [
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -30000.00000000004
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 30000.00000000004,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.058420764299189416
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -30000.00000000004
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          }
+        ],
+        "combinationId": "LC1",
+        "contractVersion": 1,
+        "designRunId": "4284b40d8967fa7c9038291af82ff5c20a041bcfb3e228e5087e38a7b3826331",
+        "designSettingsHash": "bb61c0f6a51e14ab205d2493aaa2882c3a7bdc2cc956b4606faf3d13465b6008",
+        "governingAction": {
+          "actions": [
+            0,
+            -10000.000000000011,
+            0,
+            0,
+            0,
+            -30000.00000000004
+          ],
+          "assumptions": [],
+          "checkId": "flexure",
+          "clause": "F2-1",
+          "combinationId": "LC1",
+          "demand": 30000.00000000004,
+          "formulaId": "F2-1",
+          "intermediates": {
+            "Lb": 0,
+            "Mn": 570573.3865894643,
+            "Mp": 570573.3865894643,
+            "limitState": "yielding",
+            "phi_b": 0.9
+          },
+          "message": "Major-axis flexural yielding (continuously braced compact W)",
+          "resistance": 513516.0479305179,
+          "side": null,
+          "station": 0,
+          "status": "pass",
+          "units": "N·m",
+          "utilisation": 0.058420764299189416
+        },
+        "inputs": {
+          "bracing": "continuous",
+          "cb": {
+            "source": "user",
+            "value": 1
+          },
+          "ky": {
+            "source": "user",
+            "value": 1
+          },
+          "kz": {
+            "source": "user",
+            "value": 1
+          },
+          "lb": {
+            "source": "user",
+            "value": 0
+          },
+          "materialRef": "astm-a992-50-65-v1",
+          "profileId": "aisc-360-22-lrfd",
+          "sectionRef": "aisc-shapes-v16.0-subset-1:W18X50",
+          "stabilityBasis": "firstOrderUserEffectiveLength"
+        },
+        "limitations": [
+          "Bounded AISC S2 strength checks only",
+          "Tension details, weak-axis actions, LTB and second-order stability remain unsupported",
+          "No serviceability or connection design"
+        ],
+        "memberId": "m1",
+        "mock": false,
+        "modelHash": "5bfc72df4260d9775f55978487cd089b506a3838114d5d0b5290acac1fe5de06",
+        "overall": "pass",
+        "physicalMemberId": "pmca0df2c95aa144c1d0ff",
+        "profileId": "aisc-360-22-lrfd",
+        "profileVersion": "S2-model-native-1",
+        "resultId": "5bfc72df4260d977-LC1",
+        "serviceability": "notChecked",
+        "solverBuildHash": "2eb9215495d3b604294d52e5a738421a7781c972dfc0df35ae954c4f4685b7e7",
+        "source": "modelNative",
+        "sourceRevision": 2,
+        "stabilityBasis": "First-order analysis with user effective-length factors; no second-order / direct-analysis compliance claim",
+        "station": 0,
+        "stationChecks": [
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -30000.00000000004
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 30000.00000000004,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.058420764299189416
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -30000.00000000004
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -29250.00000000004
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 29250.00000000004,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.025,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.05696024519170968
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -29250.00000000004
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.025,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -28500.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 28500.000000000036,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.05,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.05549972608422994
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -28500.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.05,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -27750.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 27750.000000000036,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.075,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.05403920697675021
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -27750.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.075,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -27000.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 27000.000000000036,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.1,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.052578687869270474
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -27000.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.1,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -26250.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 26250.000000000036,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.125,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.05111816876179074
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -26250.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.125,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -25500.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 25500.000000000036,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.15,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.049657649654311006
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -25500.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.15,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -24750.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 24750.000000000036,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.175,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.04819713054683127
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -24750.000000000036
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.175,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -24000.000000000033
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 24000.000000000033,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.2,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.04673661143935153
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -24000.000000000033
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.2,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -23250.000000000033
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 23250.000000000033,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.225,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.045276092331871805
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -23250.000000000033
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.225,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -22500.000000000033
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 22500.000000000033,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.25,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.04381557322439207
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -22500.000000000033
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.25,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -21750.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 21750.00000000003,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.275,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.04235505411691233
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -21750.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.275,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -21000.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 21000.00000000003,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.3,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.040894535009432596
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -21000.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.3,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -20250.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 20250.00000000003,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.325,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.03943401590195286
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -20250.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.325,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -19500.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 19500.00000000003,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.35,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.03797349679447313
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -19500.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.35,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -18750.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 18750.00000000003,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.375,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.036512977686993395
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -18750.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.375,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -18000.000000000025
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 18000.000000000025,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.4,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.035052458579513654
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -18000.000000000025
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.4,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -17250.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 17250.00000000003,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.425,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.03359193947203393
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -17250.00000000003
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.425,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -16500.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 16500.000000000022,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.45,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.03213142036455418
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -16500.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.45,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -15750.000000000025
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 15750.000000000025,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.475,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.030670901257074452
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -15750.000000000025
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.475,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -15000.000000000024
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 15000.000000000024,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.5,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.029210382149594715
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -15000.000000000024
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.5,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -14250.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 14250.000000000022,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.525,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.027749863042114978
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -14250.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.525,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -13500.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 13500.000000000022,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.55,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.026289343934635244
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -13500.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.55,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -12750.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 12750.000000000022,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.575,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.02482882482715551
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -12750.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.575,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -12000.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 12000.000000000022,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.6,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.02336830571967578
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -12000.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.6,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -11250.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 11250.000000000018,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.625,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.02190778661219604
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -11250.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.625,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -10500.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 10500.000000000018,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.65,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.020447267504716305
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -10500.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.65,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -9750.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 9750.000000000015,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.675,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.018986748397236564
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -9750.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.675,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -9000.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 9000.000000000022,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.7,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.017526229289756844
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -9000.000000000022
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.7,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -8250.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 8250.000000000018,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.725,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.016065710182277104
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -8250.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.725,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -7500.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 7500.000000000015,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.75,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.014605191074797363
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -7500.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.75,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -6750.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 6750.000000000015,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.775,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.013144671967317629
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -6750.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.775,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -6000.000000000011
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 6000.000000000011,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.8,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.01168415285983789
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -6000.000000000011
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.8,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -5250.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 5250.000000000018,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.825,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.01022363375235817
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -5250.000000000018
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.825,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -4500.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 4500.000000000015,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.85,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.008763114644878429
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -4500.000000000015
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.85,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -3750.000000000011
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 3750.000000000011,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.875,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.007302595537398688
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -3750.000000000011
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.875,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -3000.0000000000073
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 3000.0000000000073,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.9,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.005842076429918948
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -3000.0000000000073
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.9,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -2250.0000000000073
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 2250.0000000000073,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.925,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.0043815573224392146
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -2250.0000000000073
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.925,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -1500.000000000011
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 1500.000000000011,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.95,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.002921038214959488
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -1500.000000000011
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.95,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -750.0000000000109
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 750.0000000000109,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 0.975,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 0.0014605191074797547
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -750.0000000000109
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 0.975,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -7.275957614183426e-12
+            ],
+            "assumptions": [],
+            "checkId": "flexure",
+            "clause": "F2-1",
+            "combinationId": "LC1",
+            "demand": 7.275957614183426e-12,
+            "formulaId": "F2-1",
+            "intermediates": {
+              "Lb": 0,
+              "Mn": 570573.3865894643,
+              "Mp": 570573.3865894643,
+              "limitState": "yielding",
+              "phi_b": 0.9
+            },
+            "message": "Major-axis flexural yielding (continuously braced compact W)",
+            "resistance": 513516.0479305179,
+            "side": null,
+            "station": 1,
+            "status": "pass",
+            "units": "N·m",
+            "utilisation": 1.4168900160970065e-17
+          },
+          {
+            "actions": [
+              0,
+              -10000.000000000011,
+              0,
+              0,
+              0,
+              -7.275957614183426e-12
+            ],
+            "assumptions": [],
+            "checkId": "shear",
+            "clause": "G2.1",
+            "combinationId": "LC1",
+            "demand": 10000.000000000011,
+            "formulaId": "G2.1",
+            "intermediates": {
+              "Aw": 0.0041225724,
+              "Cv1": 1,
+              "Vn": 852724.0836454377,
+              "phi_v": 1
+            },
+            "message": "Major-axis shear with Cv1 = 1.0 (G2.1(a))",
+            "resistance": 852724.0836454377,
+            "side": null,
+            "station": 1,
+            "status": "pass",
+            "units": "N",
+            "utilisation": 0.011727122749072028
+          }
+        ],
+        "structureHash": "340c39c879514a9f434a4023b50552a0fd19a4640d6d1b39c866d90dbbdd4059",
+        "warnings": [
+          "Only the selected case/combination is checked; load completeness is the user's responsibility"
+        ]
+      },
+      "status": "pass",
+      "utilisation": 0.058420764299189416
+    },
+    {
+      "memberId": "m2",
+      "readiness": {
+        "axisConvention": "AISC strong x → local z (Mz, Vy); weak y → local y (My, Vz)",
+        "inputs": null,
+        "memberId": "m2",
+        "missing": [
+          "Assign a recognised catalogue section and steel material"
+        ],
+        "serviceability": "notChecked",
+        "stabilityBasis": "First-order analysis with user effective-length factors; second-order / direct analysis not checked",
+        "status": "incomplete",
+        "unsupported": []
+      },
+      "run": null,
+      "status": "notChecked",
+      "utilisation": null
+    }
+  ],
+  "scope": "All analytical members; selected case only; bounded AISC S2. Not a whole-building compliance result.",
+  "solverBuildHash": "2eb9215495d3b604294d52e5a738421a7781c972dfc0df35ae954c4f4685b7e7",
+  "source": "modelNative",
+  "sourceRevision": 2,
+  "currentState": "current"
+}

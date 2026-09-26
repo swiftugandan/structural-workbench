@@ -1,0 +1,53 @@
+{
+  "sourceHash": "2eb9215495d3b604294d52e5a738421a7781c972dfc0df35ae954c4f4685b7e7",
+  "buildHash": "89240a233b9dbf4e6d1730bdb90016805d6f6f6aa3b1109b1fb2bd64a1bb87cd",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "taskId": "M07-G-catalogue-study",
+  "status": "PASS",
+  "observedAt": "2026-09-26T20:26:39.895781+00:00",
+  "nativeTests": 91,
+  "contractTests": 3,
+  "browserTests": 4,
+  "commands": [
+    "cargo test --workspace --locked",
+    "npm run build",
+    "npm run test:contracts",
+    "WORKBENCH_EVIDENCE_DIR=evidence/M07/catalogue-study npx playwright test tests/e2e/steel-study.spec.js tests/e2e/steel-overview.spec.js tests/e2e/native-steel-design.spec.js"
+  ],
+  "liveBrowser": {
+    "browser": "Chrome",
+    "platform": "macOS",
+    "adapter": "AMD WebGPU",
+    "observations": [
+      "Catalogue and study screens in Results drawer at 1440 by 900",
+      "Actual five-candidate comparison returned four PASS and W14X99 UNSUPPORTED for selected B04 load",
+      "Original W18X50 live assignment remains unchanged until Apply"
+    ],
+    "note": "Used Results table to restore the locally hidden drawer before visual inspection"
+  },
+  "scope": "Finite candidate reanalysis and explicit assignment only; existing bounded AISC S2; not global optimality or British concrete design",
+  "artifactHashes": {
+    "live-study-records.png": "0e90cd107b271df462b8c8905e7185bb6d0bd3724d61492fbfc7900e9a8b4bfa",
+    "study.json": "a83e4772ba90a0af77601e8ceba167d711840cbeec0b8ade0ca3610cdcf0293e",
+    "live-catalogue.png": "0955e4bd887fa24ae41bebf1cc41ea0b339ebf007ef1434a3ef42e29f6857b54",
+    "study.png": "ddda8225d84f356e272ca8f68b195bce432d8acde47fb77457f17ef4578f5388",
+    "member-steel-pass.png": "69c33146de47c20819d633046cf92482ebe0ae748d19df25b964044f09570ac7",
+    "live-study.png": "97f7e7b63d6d429dbc23815dbbf3ed733ec6af231effcabc397076183597cd30",
+    "overview.png": "0ac5b305d8e9748154761be377b3a997072a69acff5759a3b57ccb0942b197ed",
+    "playwright-results.json": "bb9f97b3a68b9ff12346bb496469bf40350b1cb785b5e81a6b31fa3cd3a119d6",
+    "design-run.json": "21c4f8e2e2380d145daaa5576fa0a3e1b17f0180bc0f691551e9ebbff226eadb",
+    "review.json": "11ac3794946b22068dfe8408006a0e63df2494e4a60126bf6567185d55523804"
+  }
+}

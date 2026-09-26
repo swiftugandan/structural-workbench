@@ -9,6 +9,6 @@ Model/result/dirty changes mark recorded rows STALE. Undo to an identical engine
 ## Scope and remaining work
 
 - Existing bounded AISC S2 only, selected case only. No aggregate whole-building PASS; no UK profile or full code-compliance claim.
-- Whole-model status colouring, catalogue workspace and candidate study remain later M07-G increments. The current member inspector catalogue is unchanged.
+- Catalogue workspace and finite candidate study are locally verified in the same drawer. Whole-model status colouring remains a later M07-G increment.
 - Candidate study must reanalyse every proposed stiffness/self-weight change in Rust and retain exact candidate provenance before explicit apply/undo.
 - Native regression establishes equality with the selected-member path, complete mixed-readiness membership, nonmutation and rejection of forged result identity/envelope. Browser evidence covers actual WASM review, row selection, filtering, stale/undo and record download.

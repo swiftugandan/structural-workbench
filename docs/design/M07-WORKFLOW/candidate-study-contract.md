@@ -1,6 +1,6 @@
 # Bounded catalogue study contract
 
-This is the next increment, not an implemented capability.
+Implemented and locally verified; evidence/M07/catalogue-study/study-gate.json. In Model steel review, choose Catalogue or Candidate study.
 
 ## Scope
 

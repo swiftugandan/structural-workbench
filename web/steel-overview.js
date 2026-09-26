@@ -1,9 +1,11 @@
+import { steelCatalogueStudy } from "./steel-catalogue-study.js";
 import { escape as esc } from "./reports/report.js";
 import { entityLabel } from "./entity-labels.js";
 
 /** UI orchestration only. Readiness, checks and utilisation are Rust outputs. */
 export function steelOverview({
   gateway,
+  command,
   context,
   onRuns,
   onRunning,
@@ -11,6 +13,28 @@ export function steelOverview({
   onSelect,
   download,
 }) {
+  let screen = "overview";
+  const catalogue = steelCatalogueStudy({
+    gateway,
+    context,
+    command,
+    onRunning,
+    onError,
+    download,
+    onRender: navigation,
+    isCurrent: (mode) => screen === mode && context().active,
+  });
+  function navigation(host) {
+    host.insertAdjacentHTML(
+      "afterbegin",
+      `<nav class="steel-workspace-nav" aria-label="Steel workspace">${["overview", "catalogue", "study"].map((s) => `<button data-steel-screen="${s}" aria-pressed="${screen === s}">${s === "overview" ? "Model review" : s === "catalogue" ? "Catalogue" : "Candidate study"}</button>`).join("")}</nav>`,
+    );
+    for (const b of host.querySelectorAll("[data-steel-screen]"))
+      b.onclick = () => {
+        screen = b.dataset.steelScreen;
+        render(host);
+      };
+  }
   let review = null,
     filter = "all",
     threshold = "",
@@ -23,6 +47,11 @@ export function steelOverview({
       review.resultId !== context().result?.resultId);
   function render(host) {
     if (!context().active) return;
+    catalogue.cancelRender();
+    if (screen !== "overview") {
+      void catalogue.render(host, screen);
+      return;
+    }
     const c = context(),
       isStale = stale();
     const rows = (c.project?.members || []).map((m) => {
@@ -59,6 +88,7 @@ export function steelOverview({
       .join(
         "",
       )}</tbody></table>${selectedRows.length ? "" : "<p>No members match these filters.</p>"}${review ? `<details><summary>Exact review provenance</summary><p>Model ${esc(review.modelHash)}<br>Result ${esc(review.resultId)}<br>Review ${esc(review.reviewId)}</p></details>` : ""}</section>`;
+    navigation(host);
     host.querySelector("#steel-review-filter").onchange = (e) => {
       filter = e.target.value;
       render(host);
@@ -120,6 +150,8 @@ export function steelOverview({
   return {
     render,
     reset() {
+      screen = "overview";
+      catalogue.reset();
       review = null;
       filter = "all";
       threshold = "";

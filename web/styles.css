@@ -3896,3 +3896,26 @@ body.design-workspace {
     grid-template-rows: minmax(220px, 1fr) minmax(320px, 46vh);
   }
 }
+.steel-workspace-nav {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px 0;
+}
+.steel-workspace-nav [aria-pressed="true"] {
+  color: #1456ad;
+  border-color: #9bb9ec;
+  background: #edf3ff;
+}
+.catalogue-study > label {
+  max-width: 260px;
+}
+.catalogue-study [data-testid="candidate-results"] p {
+  overflow-wrap: anywhere;
+}
+.candidate-pool {
+  margin: 8px 0;
+}
+.candidate-pool summary {
+  padding: 6px 0;
+  cursor: pointer;
+}

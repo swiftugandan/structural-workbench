@@ -267,3 +267,65 @@ pub fn overview(p: &Project, input: &Value) -> Result<Value> {
     out["reviewId"] = json!(digest(&serde_json::to_vec(&out).unwrap()));
     Ok(out)
 }
+
+/// Finite catalogue study on disposable projects. Never substitutes a candidate
+/// result for live analysis and never applies a candidate to the committed model.
+pub fn study(p: &Project, input: &Value) -> Result<Value> {
+    let baseline = evaluate(p, input)?;
+    let id = input["memberId"].as_str().unwrap();
+    let case = input["caseId"].as_str().unwrap();
+    let refs = input["sectionRefs"]
+        .as_array()
+        .ok_or_else(|| err("INVALID_SCHEMA", "Select catalogue candidates"))?;
+    if refs.is_empty() || refs.len() > 5 {
+        return Err(err(
+            "INVALID_SCHEMA",
+            "Select between one and five catalogue candidates",
+        ));
+    }
+    let mut seen = std::collections::BTreeSet::new();
+    for r in refs {
+        let sr = r
+            .as_str()
+            .ok_or_else(|| err("INVALID_SCHEMA", "Candidate reference must be text"))?;
+        if !seen.insert(sr) {
+            return Err(err("INVALID_SCHEMA", "Duplicate catalogue candidate"));
+        }
+        native::resolve(sr, native::MATERIAL_ID)?;
+    }
+    let length = native::context(p, id)?.length;
+    let mut rows = Vec::new();
+    for sr in seen {
+        let (section, material, _) = native::resolve(sr, native::MATERIAL_ID)?;
+        let mut value = serde_json::to_value(p).unwrap();
+        apply(
+            &mut value,
+            &json!({"id":format!("study-{sr}"),"type":"AssignSteelCatalogue","args":{"id":id,"sectionRef":sr,"materialRef":native::MATERIAL_ID}}),
+        )?;
+        let mut candidate = Project::parse(&value.to_string())?;
+        candidate.revision = p.revision + 1;
+        candidate.canonicalise();
+        let analysis = workbench_assembly::analyse(&candidate, case)?;
+        if !analysis.converged {
+            return Err(err(
+                "ANALYSIS_FAILED",
+                "Candidate analysis did not converge; study incomplete",
+            ));
+        }
+        let run = evaluate_analysis(&candidate, id, case, &analysis)?;
+        rows.push(json!({"sectionRef":sr,"materialRef":native::MATERIAL_ID,"designation":section.name,"massKg":material.density*section.a*length,"modelHash":candidate.hash(),"resultId":analysis.result_id,"reanalysed":true,"run":run}));
+    }
+    rows.sort_by(|a, b| {
+        a["massKg"]
+            .as_f64()
+            .unwrap()
+            .total_cmp(&b["massKg"].as_f64().unwrap())
+    });
+    let lightest = rows
+        .iter()
+        .find(|r| r["run"]["overall"] == "pass")
+        .map(|r| r["sectionRef"].clone());
+    let mut out = json!({"contractVersion":1,"source":"modelNative","mock":false,"memberId":id,"caseId":case,"modelHash":p.hash(),"resultId":baseline["resultId"],"baselineRun":baseline,"objective":"selectedMemberMassKg","candidates":rows,"complete":true,"lightestPassingSectionRef":lightest,"scope":"Only the selected finite catalogue set and analysis case. No global optimality, serviceability, whole-frame or full-code compliance claim."});
+    out["studyId"] = json!(digest(&serde_json::to_vec(&out).unwrap()));
+    Ok(out)
+}
