@@ -1,3 +1,8 @@
+import {
+  memberDisplayRange,
+  supportMesh,
+  drawSupportMesh,
+} from "./connections.js";
 import { sceneGeometry, drawScene, drawMemberSurface } from "./design-scene.js";
 import { orientationSvg, referenceGrid } from "./orientation.js";
 import {
@@ -199,7 +204,7 @@ export class Viewport {
     return [
       this.width / 2 + this.pan[0] + dot(b[0]) * this.factor,
       this.height * 0.53 + this.pan[1] - dot(b[1]) * this.factor,
-      0.5 + (dot(b[2]) / this.extent) * 0.1,
+      0.5 - (dot(b[2]) / this.extent) * 0.1,
     ];
   }
   async pick(x, y, toggle = false) {
@@ -482,6 +487,15 @@ export class Viewport {
           (p) => this.projectPoint(p),
           triangle,
           line,
+          this.mode === "3d" && frame
+            ? memberDisplayRange(
+                this.project,
+                m,
+                frame,
+                this.localAxes,
+                this.designCatalogue,
+              )
+            : undefined,
         );
       } else line(a, b, 4, ink);
       if (this.hovered === m.id) line(a, b, 8, [0.9, 0.42, 0.08, 0.7]);
@@ -497,6 +511,8 @@ export class Viewport {
       dot(a, 5, orange);
       dot(b, 5, orange);
     }
+    this.canvas.dataset.supportDisplay =
+      this.mode === "3d" ? "illustrative-solid" : "analytical-symbol";
     const supportSymbols = this.project.supports
       .map((support) => ({
         support,
@@ -506,6 +522,24 @@ export class Viewport {
       }))
       .filter((x) => x.symbol);
     for (const { support, symbol } of supportSymbols) {
+      const mesh =
+        this.mode === "3d"
+          ? supportMesh(
+              this.project,
+              support,
+              symbol.kind,
+              this.designCatalogue,
+            )
+          : null;
+      if (mesh) {
+        drawSupportMesh(
+          mesh,
+          (p) => this.projectPoint(p),
+          triangle,
+          this.selection.has(support.id),
+        );
+        continue;
+      }
       const color = this.selection.has(support.id) ? blue : ink;
       for (const [a, b] of symbol.segments)
         line(symbol.transform(a), symbol.transform(b), 1.8, color);
@@ -582,11 +616,20 @@ export class Viewport {
       if (this.hovered === n.id) dot(p, 8, orange);
       dot(
         p,
-        this.selection.has(n.id) ? 6 : 4.5,
+        this.selection.has(n.id)
+          ? 6
+          : this.mode === "3d" && this.solidDesign
+            ? 2
+            : 4.5,
         this.selection.has(n.id) ? blue : ink,
       );
-      dot(p, 2.3, [1, 1, 1, 1]);
-      if (nodes.length <= 100 || this.selection.has(n.id))
+      if (!(this.mode === "3d" && this.solidDesign) || this.selection.has(n.id))
+        dot(p, 2.3, [1, 1, 1, 1]);
+      if (
+        (nodes.length <= 100 && !(this.mode === "3d" && this.solidDesign)) ||
+        this.selection.has(n.id) ||
+        this.hovered === n.id
+      )
         label(entityLabel(this.project, n.id), p);
     }
     entityIndex = 0;
@@ -706,7 +749,11 @@ export class Viewport {
         support.id,
       );
       if (badge) {
-        badge.title = symbol.title;
+        badge.title =
+          symbol.title +
+          (this.mode === "3d"
+            ? " · Illustrative restraint geometry; connection and foundation not designed"
+            : "");
         badge.dataset.supportKind = symbol.kind;
         badge.dataset.supportDirection = symbol.direction.join(",");
         badge.dataset.supportEndOn = String(symbol.endOn);

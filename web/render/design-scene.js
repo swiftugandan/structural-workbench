@@ -222,6 +222,7 @@ export function drawMemberSurface(
   projectPoint,
   triangle,
   line,
+  range = [0, frame?.length],
 ) {
   if (!frame) return;
   const tr = ([x, y, z]) =>
@@ -258,14 +259,14 @@ export function drawMemberSurface(
     : [[0, -depth / 2, -width / 2, frame.length, depth, width]];
   for (const [x, y, z, l, d, w] of boxes) {
     const p = [
-      [x, y, z],
-      [x + l, y, z],
-      [x + l, y + d, z],
-      [x, y + d, z],
-      [x, y, z + w],
-      [x + l, y, z + w],
-      [x + l, y + d, z + w],
-      [x, y + d, z + w],
+      [range[0], y, z],
+      [range[1], y, z],
+      [range[1], y + d, z],
+      [range[0], y + d, z],
+      [range[0], y, z + w],
+      [range[1], y, z + w],
+      [range[1], y + d, z + w],
+      [range[0], y + d, z + w],
     ]
       .map(tr)
       .map(projectPoint);
@@ -279,7 +280,7 @@ export function drawMemberSurface(
     ]) {
       const shade = 0.67 + i * 0.04,
         color = selected
-          ? [0.12, 0.4, 0.88, 1]
+          ? [0.12 * shade, 0.4 * shade, 0.88 * shade, 1]
           : [shade, shade + 0.035, shade + 0.06, 1];
       triangle(p[face[0]], p[face[1]], p[face[2]], color);
       triangle(p[face[0]], p[face[2]], p[face[3]], color);
