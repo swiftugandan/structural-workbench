@@ -10,6 +10,7 @@ const mime = {
   ".json": "application/json",
   ".wgsl": "text/plain",
   ".svg": "image/svg+xml",
+  ".png": "image/png",
 };
 http
   .createServer(async (req, res) => {

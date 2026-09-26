@@ -227,6 +227,7 @@ a:focus-visible {
 }
 
 .hero-visual {
+  margin: 0;
   position: relative;
   min-width: 0;
   background: #f8faf9;
@@ -234,6 +235,15 @@ a:focus-visible {
   box-shadow:
     16px 18px 0 #0d2235,
     0 28px 65px #0d223524;
+}
+.workspace-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.workspace-preview figcaption {
+  line-height: 1.6;
+  padding-block: 12px;
 }
 
 .hero-visual::before {

@@ -205,6 +205,42 @@ small {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
+.landing-capabilities {
+  margin-top: 36px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+#landing > #new-portal {
+  margin-top: 20px;
+}
+.landing-capability-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.landing-capability-grid h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.landing-capability-grid p,
+.landing-scope {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.landing-scope {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin: 8px 0 0;
+}
+@media (max-width: 760px) {
+  .landing-capability-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
 .start-card {
   white-space: normal;
   text-align: left;

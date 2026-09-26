@@ -23,11 +23,11 @@
     <main id="landing">
       <div class="landing-top">
         <div>
-          <p class="eyebrow">STRUCTURAL MODELLING &amp; ANALYSIS</p>
+          <p class="eyebrow">MODEL · ANALYSE · DESIGN</p>
           <h1>A clear view of your structure.</h1>
           <p class="intro">
-            Model, analyse and understand your frames.<br />From the first
-            member to a reproducible calculation record.
+            Build 3D frames, analyse loads and review steel members.<br />Keep
+            model inputs, design decisions and calculation records together.
           </p>
         </div>
         <div class="landing-graphic" aria-hidden="true">
@@ -86,12 +86,46 @@
           <span class="card-icon">▱</span>
           <h2>Worked examples</h2>
           <p>
-            Explore axial, bending, torsion<br />and distributed-load cases.
+            Explore a four-storey residential frame, a 3D warehouse, and focused
+            analysis examples.
           </p>
           <span class="card-link">Explore examples →</span>
         </button>
       </section>
       <button id="new-portal" class="primary">＋ New planar portal</button>
+      <section class="landing-capabilities" aria-labelledby="available-title">
+        <h2 id="available-title">Inside the workbench</h2>
+        <div class="landing-capability-grid">
+          <article>
+            <h3>Model &amp; analyse</h3>
+            <p>
+              Navigate storeys and layers, switch Lines / Solid display, and
+              inspect load cases, reactions and member forces.
+            </p>
+          </article>
+          <article>
+            <h3>Steel design</h3>
+            <p>
+              Use the Design menu for member checks, model review and catalogue
+              comparisons. Bounded AISC 360-22 LRFD checks use your model's
+              analysis.
+            </p>
+          </article>
+          <article>
+            <h3>Concrete previews</h3>
+            <p>
+              Explore beam, slab and footing workflows. Eurocode / UK National
+              Annex checks are not enabled; provisional and synthetic inputs
+              remain labelled.
+            </p>
+          </article>
+        </div>
+        <p class="landing-scope">
+          Changing engineering inputs marks results stale. Review scope and
+          readiness before using a result; previews are not whole-building
+          design approval.
+        </p>
+      </section>
       <section class="recent-section">
         <div class="section-heading">
           <h2>Recent projects</h2>
@@ -192,8 +226,20 @@
             </div>
             <div class="model-display" role="group" aria-label="Model display">
               <span>Display</span>
-              <button id="model-lines" aria-pressed="true" title="Show analytical lines">Lines</button>
-              <button id="model-solids" aria-pressed="false" title="Show elements with their physical dimensions">Solid</button>
+              <button
+                id="model-lines"
+                aria-pressed="true"
+                title="Show analytical lines"
+              >
+                Lines
+              </button>
+              <button
+                id="model-solids"
+                aria-pressed="false"
+                title="Show elements with their physical dimensions"
+              >
+                Solid
+              </button>
             </div>
             <button id="model-loads" aria-pressed="true">Loads</button
             ><button id="model-crossings" aria-pressed="true">Crossings</button>

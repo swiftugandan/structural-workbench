@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0d2235" />
     <meta
       name="description"
-      content="Structural Workbench is an open-source browser application for modelling, analysing, and understanding structural frames."
+      content="Model 3D frames, analyse loads, and review steel members with traceable results. Explore concrete workflow previews in a local browser workspace."
     />
     <title>Structural Workbench — Structural mechanics in your browser</title>
     <link rel="stylesheet" href="./marketing.css" />
@@ -37,13 +37,14 @@
       <section class="hero">
         <div class="hero-copy">
           <div class="release-pill">
-            <span></span> Open-source mechanics preview
+            <span></span> Frame analysis · steel design preview
           </div>
           <h1>See the structure.<br /><em>Trust the trail.</em></h1>
           <p class="hero-intro">
-            Model and analyse structural frames in the browser with a
-            Rust/WebAssembly engineering kernel and a WebGPU viewport. Your
-            project stays local, and every result remains tied to its model.
+            Build and inspect 3D frames, analyse load cases, and check steel
+            members directly from your model. Compare catalogue sections and
+            keep each design result tied to its exact analysis. No account
+            required.
           </p>
           <div class="hero-actions">
             <a class="button" href="./app.html">Open the workbench</a>
@@ -58,124 +59,37 @@
           </div>
         </div>
 
-        <div
-          class="hero-visual"
-          aria-label="Illustrated structural frame analysis"
-        >
+        <figure class="hero-visual workspace-preview">
           <div class="visual-topline">
-            <span>FRAME / PORTAL-01</span>
-            <span class="current"><i></i> ANALYSIS CURRENT</span>
+            <span>THE CURRENT WORKSPACE</span><span>3D · SOLID DISPLAY</span>
           </div>
-          <svg viewBox="0 0 720 500" role="img" aria-labelledby="frame-title">
-            <title id="frame-title">
-              Portal frame with supports, applied loads, and a deformation
-              diagram
-            </title>
-            <defs>
-              <pattern
-                id="minor-grid"
-                width="24"
-                height="24"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M24 0H0V24"
-                  fill="none"
-                  stroke="#b8c6d1"
-                  stroke-opacity=".28"
-                />
-              </pattern>
-              <pattern
-                id="major-grid"
-                width="120"
-                height="120"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect width="120" height="120" fill="url(#minor-grid)" />
-                <path
-                  d="M120 0H0V120"
-                  fill="none"
-                  stroke="#8fa1af"
-                  stroke-opacity=".32"
-                />
-              </pattern>
-              <marker
-                id="arrow"
-                viewBox="0 0 10 10"
-                refX="5"
-                refY="5"
-                markerWidth="6"
-                markerHeight="6"
-                orient="auto-start-reverse"
-              >
-                <path d="M0 0 10 5 0 10Z" fill="#e6783c" />
-              </marker>
-            </defs>
-            <rect width="720" height="500" fill="url(#major-grid)" />
-            <g class="dimensions">
-              <path d="M112 436v25m492-25v25M112 452h492" />
-              <path d="m112 452 12-5v10Zm492 0-12-5v10Z" />
-              <text x="358" y="477">12.000 m</text>
-              <path d="M72 420H46m42-310H46M56 420V110" />
-              <text x="28" y="280" transform="rotate(-90 28 280)">6.000 m</text>
-            </g>
-            <g class="loads">
-              <path
-                d="M180 66v58m85-58v58m85-58v58m85-58v58m85-58v58"
-                marker-end="url(#arrow)"
-              />
-              <text x="350" y="43">24 kN/m</text>
-            </g>
-            <g class="model">
-              <path d="M112 420V130H604V420" />
-              <circle cx="112" cy="420" r="6" />
-              <circle cx="112" cy="130" r="6" />
-              <circle cx="604" cy="130" r="6" />
-              <circle cx="604" cy="420" r="6" />
-            </g>
-            <g class="supports">
-              <path d="m92 440 20-20 20 20Zm492 0 20-20 20 20Z" />
-              <path
-                d="M84 447h56m436 0h56M90 454l12-7m8 7 12-7m462 7 12-7m8 7 12-7"
-              />
-            </g>
-            <path
-              class="deformed"
-              d="M112 420Q116 260 130 134Q348 170 590 134Q601 266 604 420"
-            />
-            <g class="result-labels">
-              <rect x="300" y="174" width="116" height="42" rx="4" />
-              <text x="316" y="191">MAX UZ</text>
-              <text x="316" y="207">−18.42 mm</text>
-            </g>
-            <g class="axis" transform="translate(638 420)">
-              <path d="M0 0h38M0 0v-38M0 0l-20 16" />
-              <text x="42" y="4">X</text>
-              <text x="-4" y="-44">Z</text>
-              <text x="-32" y="25">Y</text>
-            </g>
-          </svg>
-          <div class="visual-footer">
-            <span>Rust / WASM kernel</span>
-            <span>Model hash <b>b35b…1cc2</b></span>
-          </div>
-        </div>
+          <img
+            src="./images/residential-workspace.png"
+            width="2880"
+            height="1800"
+            alt="Structural Workbench showing the four-storey residential frame, Model Explorer, 3D solid view and Selection Inspector"
+          />
+          <figcaption class="visual-footer">
+            Residential reference · preliminary frame model, not a completed
+            concrete design
+          </figcaption>
+        </figure>
       </section>
 
       <section class="proof-strip" aria-label="Current preview scope">
         <div><strong>3D</strong><span>frame formulation</span></div>
-        <div><strong>11</strong><span>worked examples</span></div>
+        <div><strong>Steel</strong><span>model-derived checks</span></div>
         <div><strong>f64</strong><span>engineering precision</span></div>
         <div><strong>0</strong><span>accounts or uploads</span></div>
       </section>
 
       <section class="section capabilities" id="capabilities">
         <div class="section-heading">
-          <p class="eyebrow">A WORKING ANALYSIS PATH</p>
-          <h2>From first member to traceable result.</h2>
+          <p class="eyebrow">MODEL · ANALYSE · REVIEW</p>
+          <h2>From your model to a design decision.</h2>
           <p>
-            The preview joins modelling, calculation, inspection, persistence,
-            and export in one local browser workflow.
+            Model Explorer, a central viewport, Selection Inspector and Results
+            drawer keep modelling, analysis and design in one workspace.
           </p>
         </div>
         <div class="feature-grid">
@@ -185,7 +99,9 @@
               <h3>Model on the canvas</h3>
               <p>
                 Draw members, place supports and loads, snap precisely, edit
-                properties, and keep topology changes atomic and undoable.
+                properties, and undo topology changes. Organise by storey and
+                layer; isolate selections and switch between Lines and Solid
+                display.
               </p>
             </div>
             <div class="mini-canvas" aria-hidden="true">
@@ -221,8 +137,43 @@
             </p>
             <span class="feature-tag">Revision-aware results</span>
           </article>
-          <article class="feature feature-wide">
+          <article class="feature">
             <span class="feature-number">04</span>
+            <h3>Design steel from the model</h3>
+            <p>
+              Assign a recognised section and material, complete member design
+              inputs, and check exact analysis actions. Review all members by
+              status or utilisation, follow governing checks, and inspect design
+              colours with a text legend.
+            </p>
+            <span class="feature-tag">AISC 360-22 LRFD · bounded checks</span>
+          </article>
+          <article class="feature">
+            <span class="feature-number">05</span>
+            <h3>Compare section candidates</h3>
+            <p>
+              Search five verified W-section records and compare candidates
+              through full frame reanalysis. Review checks and selected-member
+              mass before explicitly applying a section. Reanalyse the changed
+              model to refresh its results.
+            </p>
+            <span class="feature-tag"
+              >Finite comparison · explicit apply &amp; undo</span
+            >
+          </article>
+          <article class="feature">
+            <span class="feature-number">06</span>
+            <h3>Explore concrete workflows</h3>
+            <p>
+              Beam, slab and pad-footing previews organise geometry, actions and
+              provenance. The four-storey residential reference includes slabs,
+              return stairs and pad footings. Synthetic inputs are labelled;
+              these previews do not establish a code-compliant design.
+            </p>
+            <span class="feature-tag">Eurocodes with UK NAs · not enabled</span>
+          </article>
+          <article class="feature feature-wide">
+            <span class="feature-number">07</span>
             <div>
               <h3>Keep a portable record</h3>
               <p>
@@ -312,13 +263,18 @@
               weight, prescribed supports, and explicit combinations.
             </p>
             <p>
-              It does not provide buckling, nonlinear, shell, seismic,
-              steel-code, or concrete-code checks. Commercial numerical
-              parity is UNKNOWN. Excluded analysis-MVP domains include
-              shells, solids, plasticity, second-order response,
-              connections, reinforcement detailing, and DWG/native PROKON
-              formats. It is a mechanics preview, not certified design
-              software or a substitute for qualified engineering review.
+              Steel design currently covers a bounded AISC 360-22 LRFD W-section
+              workflow. Lateral-torsional buckling, second-order stability and
+              serviceability checks remain unsupported. A model review is not a
+              whole-building approval.
+            </p>
+            <p>
+              Concrete beam, slab and footing workflows are previews.
+              Eurocode/UK National Annex design checks await verified resources
+              and validation; residential loads and ground properties are
+              provisional. Shell/solid analysis, nonlinear response, seismic
+              design, connections and reinforcement detailing are not provided.
+              Commercial numerical parity is UNKNOWN.
             </p>
           </div>
           <div class="status-actions">
