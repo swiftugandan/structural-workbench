@@ -113,7 +113,13 @@ export class Gateway {
   }
 
   async send(operation, payload = {}) {
-    if (["evaluateModelDesign", "evaluateDesignPreview"].includes(operation))
+    if (
+      [
+        "evaluateModelDesign",
+        "evaluateSteelOverview",
+        "evaluateDesignPreview",
+      ].includes(operation)
+    )
       return this.modelDesign(payload, operation);
     if (operation === "analyse") return this.analyse(payload);
     if (operation === "runStudy") return this.runStudy(payload);

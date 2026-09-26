@@ -202,3 +202,54 @@ fn weak_axis_and_zero_actions_are_fail_closed() {
     req(&mut k, "importProject", json!({"jsonUtf8":p.to_string()}));
     assert_eq!(evaluate(&mut k)["overall"], "indeterminate");
 }
+
+#[test]
+fn overview_keeps_unready_members_and_matches_exact_member_runs() {
+    let mut p: Value =
+        serde_json::from_str(include_str!("../../../fixtures/models/B04.json")).unwrap();
+    p["nodes"].as_array_mut().unwrap().extend([
+        json!({"id":"n3","position":[0.,2.,0.]}),
+        json!({"id":"n4","position":[3.,2.,0.]}),
+    ]);
+    let mut m = p["members"][0].clone();
+    m["id"] = json!("m2");
+    m["start"] = json!("n3");
+    m["end"] = json!("n4");
+    p["members"].as_array_mut().unwrap().push(m);
+    let mut support = p["supports"][0].clone();
+    support["id"] = json!("s2");
+    support["node"] = json!("n3");
+    p["supports"].as_array_mut().unwrap().push(support);
+    let mut k = Kernel::new();
+    let opened = req(&mut k, "importProject", json!({"jsonUtf8":p.to_string()}));
+    assert_eq!(opened["status"], "ok", "{opened}");
+    assign(&mut k, "W18X50");
+    inputs(&mut k, 0.0);
+    let individual = evaluate(&mut k);
+    let input = json!({"modelHash":individual["modelHash"],"caseId":"LC1","resultId":individual["resultId"]});
+    let before = req(&mut k, "getSnapshot", json!({}));
+    let review = req(&mut k, "evaluateSteelOverview", input.clone());
+    assert_eq!(review["status"], "ok", "{review}");
+    let rows = review["payload"]["rows"].as_array().unwrap();
+    assert_eq!(rows.len(), 2);
+    assert_eq!(rows[0]["run"], individual);
+    assert_eq!(rows[1]["status"], "notChecked");
+    assert!(rows[1]["run"].is_null());
+    assert!(rows[1]["utilisation"].is_null());
+    assert_eq!(
+        before["modelHash"],
+        req(&mut k, "getSnapshot", json!({}))["modelHash"]
+    );
+    let mut bad = input.clone();
+    bad["resultId"] = json!("forged");
+    assert_eq!(
+        req(&mut k, "evaluateSteelOverview", bad)["diagnostics"][0]["code"],
+        "STALE_RESULT"
+    );
+    let mut bad = input;
+    bad["caseId"] = json!("__envelope__");
+    assert_eq!(
+        req(&mut k, "evaluateSteelOverview", bad)["diagnostics"][0]["code"],
+        "INVALID_LOAD"
+    );
+}

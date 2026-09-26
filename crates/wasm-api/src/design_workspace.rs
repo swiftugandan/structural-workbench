@@ -52,7 +52,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
     }
     let id = input["memberId"].as_str().unwrap_or("");
     let case = input["caseId"].as_str().unwrap_or("");
-    let context = native::context(p, id)?;
+    native::context(p, id)?;
     if !p.combinations.iter().any(|c| c.id == case) && !p.load_cases.iter().any(|c| c.id == case) {
         return Err(err(
             "INVALID_LOAD",
@@ -69,6 +69,16 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
     if !analysis.converged {
         return Err(err("ANALYSIS_FAILED", "Design requires converged analysis"));
     }
+    evaluate_analysis(p, id, case, &analysis)
+}
+
+fn evaluate_analysis(
+    p: &Project,
+    id: &str,
+    case: &str,
+    analysis: &workbench_results::Analysis,
+) -> Result<Value> {
+    let context = native::context(p, id)?;
     let m = analysis
         .members
         .iter()
@@ -198,5 +208,62 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "serviceability":"notChecked","warnings":["Only the selected case/combination is checked; load completeness is the user's responsibility"],
         "limitations":["Bounded AISC S2 strength checks only", "Tension details, weak-axis actions, LTB and second-order stability remain unsupported", "No serviceability or connection design"]});
     out["designRunId"] = json!(digest(&serde_json::to_vec(&out).unwrap()));
+    Ok(out)
+}
+
+/// All members are represented, including those without design inputs. One exact
+/// simultaneous analysis is shared; no envelope or client-supplied action is accepted.
+pub fn overview(p: &Project, input: &Value) -> Result<Value> {
+    if input["modelHash"] != p.hash() {
+        return Err(err("STALE_RESULT", "Review belongs to another model"));
+    }
+    let case = input["caseId"].as_str().unwrap_or("");
+    if !p.combinations.iter().any(|c| c.id == case) && !p.load_cases.iter().any(|c| c.id == case) {
+        return Err(err(
+            "INVALID_LOAD",
+            "A real case or combination is required",
+        ));
+    }
+    let analysis = workbench_assembly::analyse(p, case)?;
+    if input["resultId"] != analysis.result_id {
+        return Err(err(
+            "STALE_RESULT",
+            "Review result identity does not match analysis",
+        ));
+    }
+    if !analysis.converged {
+        return Err(err("ANALYSIS_FAILED", "Review requires converged analysis"));
+    }
+    let mut rows = Vec::new();
+    for member in &p.members {
+        let ready = native::readiness(p, &member.id)?;
+        let run = if ready["status"] == "ready" {
+            Some(evaluate_analysis(p, &member.id, case, &analysis)?)
+        } else {
+            None
+        };
+        let status = run
+            .as_ref()
+            .map(|r| r["overall"].clone())
+            .unwrap_or_else(|| {
+                json!(if ready["status"] == "unsupported" {
+                    "unsupported"
+                } else {
+                    "notChecked"
+                })
+            });
+        let utilisation = run
+            .as_ref()
+            .and_then(|r| r["checks"].as_array())
+            .and_then(|checks| {
+                checks
+                    .iter()
+                    .filter_map(|c| c["utilisation"].as_f64())
+                    .max_by(f64::total_cmp)
+            });
+        rows.push(json!({"memberId":member.id,"status":status,"utilisation":utilisation,"readiness":ready,"run":run}));
+    }
+    let mut out = json!({"contractVersion":1,"source":"modelNative","mock":false,"modelHash":analysis.model_hash,"sourceRevision":analysis.source_revision,"resultId":analysis.result_id,"caseId":case,"solverBuildHash":analysis.solver_build_hash,"analysisSettingsHash":analysis.settings_hash,"rows":rows,"scope":"All analytical members; selected case only; bounded AISC S2. Not a whole-building compliance result."});
+    out["reviewId"] = json!(digest(&serde_json::to_vec(&out).unwrap()));
     Ok(out)
 }

@@ -1,0 +1,55 @@
+{
+  "sourceHash": "ec585eb2cc020c63d96adbdbdb6ab6c79b8d64b798610c73164e63993c69ccc5",
+  "buildHash": "7278bf3b419349ac0d613f80fa1df698bd0fa3bd8ea75d8d7bb71b17433a34a7",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "taskId": "M07-G-overview",
+  "status": "PASS",
+  "observedAt": "2026-09-26T20:15:49.275795+00:00",
+  "nativeTests": 90,
+  "contractTests": 3,
+  "browserTests": 4,
+  "commands": [
+    "cargo test --workspace --locked",
+    "npm run build",
+    "npm run test:contracts",
+    "WORKBENCH_EVIDENCE_DIR=evidence/M07/overview npx playwright test tests/e2e/steel-overview.spec.js tests/e2e/native-steel-design.spec.js tests/e2e/model-coherence.spec.js"
+  ],
+  "liveBrowser": {
+    "browser": "Chrome",
+    "platform": "macOS",
+    "adapter": "AMD WebGPU",
+    "observed": [
+      "Saved catalogue inputs reopened",
+      "Actual analysis and whole-model review in current build",
+      "PASS row with governing F2-1, explicit selected-case scope",
+      "Review controls and viewport remain visible at 1440 by 900"
+    ]
+  },
+  "limitations": [
+    "Native tests rerun before later UI-only changes; Rust inputs and tests unchanged",
+    "Automated screenshot captured before GPU initialization; live Chrome screenshots are the visual viewport evidence",
+    "No new code profile or whole-building acceptance; catalogue study and colour overlay remain pending"
+  ],
+  "artifactHashes": {
+    "member-steel-pass.png": "37be6b182f45a06b9c3b4b0bf88efda300bdc41313ad59e02c2227d9571532ef",
+    "overview.png": "b5f723471677c5ec3bfd4d05f145b7994c844ac5aced9fd6023f51c13b5e94f4",
+    "live-overview-1440.png": "b539759110b8dd60c4aeb390d018014ba08c9c63b8eb1b4960c10f3631f67971",
+    "playwright-results.json": "74d4ae57217f7b791803094bf3245fbffa58fd5f47c7cdb23877243bd62e1c23",
+    "physical-selection.png": "3eb225e84904abd30a0c89d91af7d3adac1e252c2aef86df09905709fafc3705",
+    "design-run.json": "814adebf38722b66083a374fb7364e855c09b10b99285adbe45cb6cdec204dc6",
+    "review.json": "d2ba77fad138c20ff3478223bb4b32066f92718f3971a5d51e375a9a6f52d579",
+    "live-overview.png": "dd3fad2c7e19c52c9451d8d0283d6a15676feda1e8f60af05b88c59cd10d1196"
+  }
+}

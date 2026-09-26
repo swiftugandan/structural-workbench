@@ -1,3 +1,4 @@
+import { steelOverview } from "./steel-overview.js";
 import { modelVisibility } from "./model-visibility.js";
 import { previewIdentity, structureSelectionIds } from "./selection-context.js";
 import { renderStructureEditor } from "./structure-workspace.js";
@@ -95,6 +96,37 @@ const viewport = new Viewport($("#viewport"), async (query) => {
     message(e.message);
   }
 });
+const memberDesignRuns = new Map();
+const overview = steelOverview({
+  gateway,
+  download,
+  context: () => ({
+    project,
+    modelHash,
+    result,
+    dirty: formDirty,
+    failed,
+    memberId: selected,
+    active: tab === "steel-overview",
+    locked: busy || analysing || readOnly,
+  }),
+  onRuns: (runs) => {
+    for (const run of runs) memberDesignRuns.set(run.memberId, run);
+  },
+  onRunning: (value) => {
+    setAnalysing(value);
+    setBusy(value);
+    if (!value && !$("#steel-design-inspector").hidden)
+      void nativeSteel.render();
+  },
+  onError: message,
+  onSelect: (id) => {
+    if (formDirty) return message("Apply or cancel changes first.");
+    selectEntities([id]);
+    $("[data-inspector-tab=steel]").click();
+    $("[data-tab=steel-design]").click();
+  },
+});
 const nativeSteel = steelDesignWorkspace({
   onCatalogue: (cat) => {
     viewport.designCatalogue = cat;
@@ -107,7 +139,7 @@ const nativeSteel = steelDesignWorkspace({
     modelHash,
     result,
     memberId: viewport.selection.size === 1 ? selected : null,
-    run: lastDesignRun?.source === "modelNative" ? lastDesignRun : null,
+    run: memberDesignRuns.get(selected) || null,
     dirty: formDirty,
     failed,
     locked: busy || readOnly || analysing,
@@ -126,6 +158,7 @@ const nativeSteel = steelDesignWorkspace({
   onError: message,
   onRun: (run) => {
     lastDesignRun = run;
+    memberDesignRuns.set(run.memberId, run);
     renderResults();
   },
   showResults: () => {
@@ -526,6 +559,8 @@ async function open(p, options = {}) {
     modelHash = s.modelHash;
     result = null;
     lastDesignRun = null;
+    memberDesignRuns.clear();
+    overview.reset();
     failed = false;
     selectionContext = null;
     selected = project.members[0]?.id || null;
@@ -703,6 +738,7 @@ function setAnalysing(value) {
   analysing = value;
   $("#analyse").disabled = value || busy || formDirty || !project;
   $("#cancel").hidden = !value;
+  if (project && tab === "steel-overview") renderResults();
 }
 function refresh(snapshot) {
   project.canUndo = snapshot?.canUndo ?? project.canUndo;
@@ -1235,8 +1271,14 @@ function renderResults() {
     concrete.results($("#results-content"));
     return;
   }
+  if (tab === "steel-overview") {
+    $("#export-csv").disabled = true;
+    overview.render($("#results-content"));
+    return;
+  }
   if (tab === "steel-design") {
-    const run = lastDesignRun?.source === "modelNative" ? lastDesignRun : null;
+    const run =
+      viewport.selection.size === 1 ? memberDesignRuns.get(selected) : null;
     const state = designState(run, modelHash, result, formDirty || failed);
     $("#results-content").innerHTML = designResultsHtml(run, state);
     $("#export-csv").disabled = true;
@@ -1693,13 +1735,16 @@ $("#export-report").onclick = () => {
     download(
       project.id + "-report.html",
       report(portable(), result, {
-        designRuns:
-          lastDesignRun &&
-          lastDesignRun.modelHash === modelHash &&
-          (lastDesignRun.source !== "modelNative" ||
-            lastDesignRun.resultId === result.resultId)
+        designRuns: [
+          ...memberDesignRuns.values(),
+          ...(lastDesignRun && lastDesignRun.source !== "modelNative"
             ? [lastDesignRun]
-            : [],
+            : []),
+        ].filter(
+          (run) =>
+            run.modelHash === modelHash &&
+            (run.source !== "modelNative" || run.resultId === result.resultId),
+        ),
       }),
       "text/html",
     );

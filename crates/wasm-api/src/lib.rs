@@ -110,6 +110,9 @@ impl Kernel {
                 self.project.as_ref().unwrap(),
                 payload["memberId"].as_str().unwrap_or(""),
             ),
+            "evaluateSteelOverview" => {
+                design_workspace::overview(self.project.as_ref().unwrap(), payload)
+            }
             "evaluateModelDesign" => {
                 design_workspace::evaluate(self.project.as_ref().unwrap(), payload)
             }

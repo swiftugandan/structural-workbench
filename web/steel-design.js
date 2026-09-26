@@ -36,6 +36,11 @@ export function bindSteelResultViews(host, run) {
   let index = 0;
   const detail = () => {
     const c = run.checks[index];
+    if (!c) {
+      host.querySelector("[data-steel-view=details]").innerHTML =
+        "<p>No nonzero design actions were available. INDETERMINATE.</p>";
+      return;
+    }
     host.querySelector("[data-steel-view=details]").innerHTML =
       `<div class="calculation-layout"><nav aria-label="Steel calculation checks">${run.checks.map((c, i) => `<button data-steel-check="${i}" class="${index === i ? "active" : ""}">${esc(c.checkId)} · ${esc(c.clause)}</button>`).join("")}</nav><article><h3>${esc(c.checkId)} — ${esc(c.clause)}</h3><span class="steel-status steel-status-${esc(c.status)}">${esc(c.status.toUpperCase())}</span><p>${esc(c.message || "")}</p><dl class="design-provenance-grid">${Object.entries(
         {

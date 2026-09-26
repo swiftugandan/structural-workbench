@@ -204,3 +204,9 @@ transient view constraint, never a project mutation or analysis exclusion.
 Malformed sets fail with INVALID_SCHEMA. The UI rejects in-flight view queries
 after visibility changes as well as camera/model changes. View filters do not
 remove any elements from the solver or exported engineering model.
+
+### `evaluateSteelOverview`
+
+Takes `{modelHash, resultId, caseId}` for one actual case/combination. Runs in the disposable analysis worker. Rust reanalyses the captured project once and rejects mismatched model/result identities or nonconvergence. Every analytical member has a row: `memberId`, `status`, nullable `utilisation`, `readiness`, nullable exact model-native `run`. Missing inputs yield `notChecked`; unsupported applicability yields `unsupported`. No whole-building PASS is returned. Envelope actions are rejected.
+
+Review contract v1 includes `reviewId`, `modelHash`, `sourceRevision`, `resultId`, `caseId`, `solverBuildHash`, `analysisSettingsHash`, `source:modelNative`, `mock:false` and scope. Hash/result/dirty changes make the UI review stale. View filtering does not alter review membership. Downloads retain the original record plus presentation `currentState`.

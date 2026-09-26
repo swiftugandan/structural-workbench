@@ -28,6 +28,7 @@
         "steelCatalogue",
         "steelReadiness",
         "evaluateModelDesign",
+        "evaluateSteelOverview",
         "designPreviewTemplates",
         "evaluateDesignPreview"
       ]

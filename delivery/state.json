@@ -2954,6 +2954,15 @@
       "sourceHash": "074bc70e2ab8df0426c9c07ec30a20f15c78bf46e73db23e8bf45e9029c15059",
       "buildHash": "63fed068bb6f31977f4834bef15b045046d3e8c05d0ad9e534d91d3169d9ddbf",
       "evidencePath": "evidence/model-visibility/visibility-gate.json"
+    },
+    "M07-G-overview": {
+      "id": "M07-G-overview",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "useCase": "Whole-model steel readiness and exact member review",
+      "sourceHash": "ec585eb2cc020c63d96adbdbdb6ab6c79b8d64b798610c73164e63993c69ccc5",
+      "buildHash": "7278bf3b419349ac0d613f80fa1df698bd0fa3bd8ea75d8d7bb71b17433a34a7",
+      "evidencePath": "evidence/M07/overview/overview-gate.json",
+      "nextAction": "Dedicated catalogue, candidate study with Rust reanalysis, and design status overlay remain."
     }
   },
   "blockers": [
@@ -2987,9 +2996,9 @@
     }
   ],
   "lastVerifiedSourceRevision": null,
-  "lastVerifiedBuildHash": "63fed068bb6f31977f4834bef15b045046d3e8c05d0ad9e534d91d3169d9ddbf",
-  "nextAction": "Implement M07-G whole-model steel overview, then catalogue/candidate study with exact Rust reanalysis provenance.",
+  "lastVerifiedBuildHash": "7278bf3b419349ac0d613f80fa1df698bd0fa3bd8ea75d8d7bb71b17433a34a7",
+  "nextAction": "Implement dedicated catalogue and finite candidate study with exact Rust reanalysis and explicit apply/undo; then design status overlay and task acceptance.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "074bc70e2ab8df0426c9c07ec30a20f15c78bf46e73db23e8bf45e9029c15059",
-  "lastVerifiedScope": "REVIEW-03: 89 native, 3 contract, 1 unit, 14 browser checks and visible Chrome stair views; no new code profile acceptance"
+  "lastVerifiedSourceHash": "ec585eb2cc020c63d96adbdbdb6ab6c79b8d64b798610c73164e63993c69ccc5",
+  "lastVerifiedScope": "M07-G overview: 90 native, 3 contracts, 4 browser journeys and visible Chrome. Broader M07-G remains open."
 }

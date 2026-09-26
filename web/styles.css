@@ -3855,3 +3855,44 @@ body.design-workspace {
     grid-template-rows: minmax(0, 1fr) 38px;
   }
 }
+
+.steel-overview {
+  padding: 10px 14px;
+}
+.steel-overview header,
+.steel-review-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.steel-overview header > div {
+  flex: 1;
+}
+.steel-overview h3,
+.steel-overview header p {
+  margin: 0 0 5px;
+}
+.steel-review-filters {
+  margin: 10px 0;
+}
+.steel-review-filters label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.steel-review-filters input {
+  width: 90px;
+}
+.steel-overview tr[aria-selected="true"] {
+  background: #edf3ff;
+}
+.steel-overview details p {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1101px) {
+  .work-grid:has(.steel-overview):not(.results-collapsed):not(.hide-results) {
+    grid-template-rows: minmax(220px, 1fr) minmax(320px, 46vh);
+  }
+}
