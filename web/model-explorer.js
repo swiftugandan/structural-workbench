@@ -1,8 +1,9 @@
+import { previewIdentity } from "./selection-context.js";
 import { renderMemberNav } from "./hierarchy.js";
 
 export function renderExplorer(
   project,
-  { selected, label, esc, icon, openState, query = "" },
+  { selected, label, esc, icon, openState, selectionContext, query = "" },
 ) {
   const branch = (key, title, body, count = "", open = true) =>
     `<details class="explorer-branch" data-branch="${esc(key)}" ${(openState.get(key) ?? open) || query ? "open" : ""}><summary><span>${esc(title)}</span>${count !== "" ? `<small>${count}</small>` : ""}</summary><div class="explorer-children">${body || '<p class="explorer-empty">None in this model</p>'}</div></details>`;
@@ -19,7 +20,7 @@ export function renderExplorer(
       open,
     );
   const domainLeaf = (key, x) =>
-    `<button class="explorer-leaf structure-leaf" data-structure-key="${key}" data-structure-id="${esc(x.id)}"><span>${esc(x.name)}</span><small>${esc(x.role || x.kind || "")}</small></button>`;
+    `<button class="explorer-leaf structure-leaf" ${selectionContext?.kind === "structure" && selectionContext.id === x.id ? 'aria-current="true"' : ""} data-structure-key="${key}" data-structure-id="${esc(x.id)}"><span>${esc(x.name)}</span><small>${esc(x.role || x.kind || "")}</small></button>`;
   const add = (key) =>
     `<button class="explorer-manage" data-structure-add="${key}">+ Add ${{ storeys: "storey", grids: "grid", layers: "layer", groups: "group" }[key]}</button>`;
   const structure = project.structure;
@@ -135,7 +136,7 @@ export function renderExplorer(
       items
         .map(
           (d) =>
-            `<button class="explorer-leaf" data-preview="${esc(d.id)}"><span aria-hidden="true">▱</span><span>${esc(d.targetId ? label(d.targetId) : title.slice(0, -1))}</span><small>Mock · ${esc(d.id.slice(-6))}</small></button>`,
+            `<button class="explorer-leaf" data-preview="${esc(d.id)}" ${selectionContext?.kind === "preview" && selectionContext.id === d.id ? 'aria-current="true"' : ""}><span aria-hidden="true">▱</span><span>${esc(previewIdentity(project, d).text)}</span><small>Mock · ${esc(d.id.slice(-6))}</small></button>`,
         )
         .join(""),
       items.length,

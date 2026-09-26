@@ -77,6 +77,15 @@ if (process.argv[1]?.endsWith("/build.mjs")) {
     { stdio: "inherit" },
   );
   await cp("web", "dist", { recursive: true });
+  // Browsers update workers by script bytes, not build.json. Bind every worker
+  // to its source snapshot before hashing output files (no hash recursion).
+  await writeFile(
+    "dist/sw.js",
+    (await readFile("web/sw.js", "utf8")).replace(
+      "__WORKBENCH_SOURCE_HASH__",
+      hash,
+    ),
+  );
   await cp("fixtures/models", "dist/examples", { recursive: true });
   await writeFile(
     "dist/examples/UKR01.json",

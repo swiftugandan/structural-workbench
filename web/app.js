@@ -1,3 +1,4 @@
+import { previewIdentity, structureSelectionIds } from "./selection-context.js";
 import { renderStructureEditor } from "./structure-workspace.js";
 import { renderForceInspector } from "./force-inspector.js";
 import { bindResultPicker } from "./result-picker.js";
@@ -56,6 +57,7 @@ let project,
   modelHash,
   result,
   selected = "m1",
+  selectionContext = null,
   tab = "displacements",
   busy = false,
   analysing = false,
@@ -124,11 +126,20 @@ const nativeSteel = steelDesignWorkspace({
   },
 });
 const concrete = concreteWorkspace({
+  onSelection: (draft) => {
+    selectionContext = { kind: "preview", id: draft.id };
+    viewport.selection = new Set(draft.targetId ? [draft.targetId] : []);
+    selected = draft.targetId || null;
+    renderNav();
+    renderSelectionStatus();
+    viewport.update(project, diagramResult(), selected);
+  },
   viewport,
   gateway,
   command,
   getContext: () => ({
     project,
+    selected,
     modelHash,
     result,
     dirty: formDirty,
@@ -187,6 +198,7 @@ function selectEntities(ids, toggle = false) {
       ...project.loads,
     ].map((x) => x.id),
   );
+  selectionContext = null;
   if (!toggle) viewport.selection.clear();
   for (const id of ids)
     if (available.has(id)) {
@@ -194,9 +206,39 @@ function selectEntities(ids, toggle = false) {
       else viewport.selection.add(id);
     }
   selected = [...viewport.selection].at(-1) || null;
+  if (!$("#concrete-inspector").hidden) concrete.followSelection(selected);
   renderInspector();
   renderNav();
   viewport.update(project, diagramResult(), selected);
+  renderSelectionStatus();
+  renderResults();
+}
+function renderSelectionStatus() {
+  if (
+    selectionContext?.kind === "preview" &&
+    !$("#concrete-inspector").hidden
+  ) {
+    const draft = project.designPreviews.find(
+      (d) => d.id === selectionContext.id,
+    );
+    if (draft) {
+      const text = previewIdentity(project, draft).text;
+      $("#selection-tag").textContent = text;
+      $("#selected-status").textContent = `${text} · design draft selected`;
+      return;
+    }
+  }
+  if (selectionContext?.kind === "structure") {
+    const entity = project.structure[selectionContext.collection]?.find(
+      (x) => x.id === selectionContext.id,
+    );
+    if (entity) {
+      $("#selection-tag").textContent = entity.name;
+      $("#selected-status").textContent =
+        `${entity.name} · ${viewport.selection.size} linked analytical entities`;
+      return;
+    }
+  }
   if (!viewport.selection.size)
     $("#selected-status").textContent = "No entities selected";
   else if (viewport.selection.size === 1) {
@@ -477,6 +519,7 @@ async function open(p, options = {}) {
     result = null;
     lastDesignRun = null;
     failed = false;
+    selectionContext = null;
     selected = project.members[0]?.id || null;
     viewport.selection = new Set(selected ? [selected] : []);
     $("#modal").close();
@@ -798,6 +841,7 @@ function renderNav() {
     esc,
     icon: structuralIcon,
     openState: explorerOpenState,
+    selectionContext,
     query,
   });
   if (selected !== explorerSelection) {
@@ -830,35 +874,12 @@ function renderNav() {
       const collection = b.dataset.structureKey || b.dataset.structureAdd,
         id = b.dataset.structureId;
       const entity = project.structure[collection].find((x) => x.id === id);
-      const ids =
-        entity?.analyticalMemberIds ||
-        (entity?.nodeId
-          ? [entity.nodeId]
-          : entity?.supportId
-            ? [entity.supportId]
-            : []);
-      selectEntities(ids);
+      selectEntities(structureSelectionIds(project, collection, id));
+      selectionContext = { kind: "structure", collection, id };
       $("[data-inspector-tab=properties]").click();
-      $("#selection-tag").textContent = entity?.name || "New structure object";
-      renderStructureEditor({
-        project,
-        collection,
-        id,
-        host: $("#inspector-content"),
-        esc,
-        command,
-        done: renderInspector,
-        dirty: (value) => {
-          formDirty = value;
-        },
-      });
-      const draft = $("#open-structure-draft");
-      if (draft)
-        draft.onclick = () => {
-          if (formDirty) return message("Apply or cancel changes first.");
-          concrete.select(entity.previewId);
-          $("[data-inspector-tab=concrete]").click();
-        };
+      renderInspector();
+      renderNav();
+      renderSelectionStatus();
     };
   for (const b of $("#model-nav").querySelectorAll("[data-structure-ref]"))
     b.onclick = () => {
@@ -995,7 +1016,12 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
       ["steel", "concrete"].includes(kind),
     );
     viewport.solidDesign = ["steel", "concrete"].includes(kind);
-    if (kind !== "concrete") concrete.hide();
+    if (kind !== "concrete") {
+      concrete.hide();
+      if (selectionContext?.kind === "preview") selectionContext = null;
+      renderSelectionStatus();
+    }
+    if (kind === "properties") renderInspector();
     viewport.draw();
     if (kind === "concrete") void concrete.render();
     for (const tab of document.querySelectorAll("[data-inspector-tab]"))
@@ -1003,11 +1029,42 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
     if (kind === "forces") renderSelectionForces();
     if (kind === "steel") void nativeSteel.render();
   };
+function renderStructureSelection() {
+  const { collection, id } = selectionContext;
+  renderStructureEditor({
+    project,
+    collection,
+    id,
+    host: $("#inspector-content"),
+    esc,
+    command,
+    done: () => {
+      renderInspector();
+      renderSelectionStatus();
+    },
+    dirty: (value) => {
+      formDirty = value;
+    },
+  });
+  const entity = project.structure[collection].find((x) => x.id === id);
+  const openDraft = $("#open-structure-draft");
+  if (openDraft)
+    openDraft.onclick = () => {
+      if (formDirty) return message("Apply or cancel changes first.");
+      concrete.select(entity.previewId);
+      $("[data-inspector-tab=concrete]").click();
+    };
+  renderSelectionStatus();
+}
 function renderInspector() {
   renderSelectionForces();
   formDirty = false;
   if (!$("#concrete-inspector").hidden) void concrete.render();
   if (!$("#steel-design-inspector").hidden) void nativeSteel.render();
+  if (selectionContext?.kind === "structure") {
+    renderStructureSelection();
+    return;
+  }
   if (!selected || viewport.selection.size > 1) {
     const count = viewport.selection.size;
     $("#selection-tag").textContent = count ? `${count} selected` : "None";

@@ -1,3 +1,4 @@
+import { previewIdentity } from "./selection-context.js";
 import { previewInspector, previewPane } from "./design-presentation.js";
 /** Workflow illustrations only. Validation, units and action provenance belong to Rust. */
 import { escape as esc } from "./reports/report.js";
@@ -59,12 +60,14 @@ export function concreteWorkspace({
   onRunning,
   showResults,
   download,
+  onSelection,
 }) {
   let active,
     templates,
     generation = 0,
     face = "Top X",
     sourceMode = "synthetic";
+  let projectId;
   let pane = "summary",
     checkIndex = 0,
     displayMode = "both",
@@ -117,8 +120,9 @@ export function concreteWorkspace({
         ? { draft: d, mode: displayMode, face, context: !focusObject }
         : null;
     $("#design-geometry-labels").hidden = !viewport.designPreview;
-    $("#selection-tag").textContent = d.targetId || names[d.kind];
-    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(names[d.kind])}${d.targetId ? " · " + esc(d.targetId) : ""}</strong><span class="design-tag">MOCK WORKFLOW</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
+    onSelection(d);
+    const identity = previewIdentity(getContext().project, d);
+    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(identity.text)}</strong><span class="design-tag">MOCK WORKFLOW</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
       ["concrete", "Concrete"],
       ["reinforcement", "Reinforcement"],
       ["both", "Both"],
@@ -209,7 +213,14 @@ export function concreteWorkspace({
       if (token !== generation) return;
       const ctx = getContext(),
         ds = ctx.project?.designPreviews || [];
-      if (!ds.some((d) => d.id === active)) active = ds[0]?.id;
+      if (projectId !== ctx.project?.id) {
+        projectId = ctx.project?.id;
+        active = ds.find((d) => d.targetId === ctx.selected)?.id || ds[0]?.id;
+        sourceMode = ds.find((d) => d.id === active)?.targetId
+          ? "model"
+          : "synthetic";
+      }
+      if (!ds.some((d) => d.id === active)) active = undefined;
       const d = draft(),
         t = templates.find((t) => t.kind === d?.kind);
       host.innerHTML = previewInspector({
@@ -240,13 +251,14 @@ export function concreteWorkspace({
           fail(e);
         }
       };
-      if (d) {
+      if ($("#preview-active"))
         $("#preview-active").onchange = () => {
           active = $("#preview-active").value;
           pane = "summary";
-          sourceMode = "synthetic";
-          void render();
+          sourceMode = draft()?.targetId ? "model" : "synthetic";
+          void render().then(showResults);
         };
+      if (d) {
         $("#preview-source").value =
           d.kind === "slab" ? "synthetic" : sourceMode;
         const readiness = () => {
@@ -354,9 +366,17 @@ export function concreteWorkspace({
     hide,
     results,
     select: (id) => {
+      projectId = getContext().project?.id;
       active = id;
       pane = "summary";
-      sourceMode = "synthetic";
+      sourceMode = draft()?.targetId ? "model" : "synthetic";
+    },
+    followSelection: (id) => {
+      projectId = getContext().project?.id;
+      active = getContext().project?.designPreviews?.find(
+        (d) => d.targetId === id,
+      )?.id;
+      sourceMode = draft()?.targetId ? "model" : "synthetic";
     },
   };
 }

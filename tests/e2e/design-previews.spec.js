@@ -116,7 +116,9 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
       buffer: Buffer.from(JSON.stringify(saved)),
     });
     await page.locator("[data-inspector-tab=concrete]").click();
-    await expect(page.locator("#preview-active option")).toHaveCount(1);
+    await expect(
+      page.locator('#preview-active option[value]:not([value=""])'),
+    ).toHaveCount(1);
     await expect(page.locator(`#preview-${key}`)).toHaveValue(
       kind === "rcBeam" ? "600" : kind === "slab" ? "225" : "550",
     );

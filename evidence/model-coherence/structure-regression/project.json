@@ -1,0 +1,304 @@
+{
+  "analysisMode": "planarXZ",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "B07",
+  "loadCases": [
+    {
+      "category": "other",
+      "id": "LC1",
+      "name": "Reference load"
+    }
+  ],
+  "loads": [
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -10000
+      ],
+      "id": "teeeef9198cb3513a6b91_l2",
+      "member": "teeeef9198cb3513a6b91_m0",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -10000
+      ],
+      "id": "teeeef9198cb3513a6b91_l3",
+      "member": "teeeef9198cb3513a6b91_m1",
+      "type": "uniform"
+    }
+  ],
+  "materials": [
+    {
+      "E": 200000000000,
+      "density": 7850,
+      "id": "mat1",
+      "name": "Synthetic isotropic material",
+      "nu": 0.25
+    }
+  ],
+  "members": [
+    {
+      "end": "teeeef9198cb3513a6b91_n0",
+      "id": "teeeef9198cb3513a6b91_m0",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "parentMemberId": "m1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "n1",
+      "stationRange": [
+        0,
+        0.5
+      ]
+    },
+    {
+      "end": "n2",
+      "id": "teeeef9198cb3513a6b91_m1",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "parentMemberId": "m1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "teeeef9198cb3513a6b91_n0",
+      "stationRange": [
+        0.5,
+        1
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "Specification package",
+    "description": "Analytical verification only",
+    "entityLabels": {
+      "LC1": "lc1",
+      "l1": "l1",
+      "m1": "m1",
+      "mat1": "mat1",
+      "n1": "n1",
+      "n2": "n2",
+      "s1": "s1",
+      "s2": "s2",
+      "sec1": "sec1",
+      "teeeef9198cb3513a6b91_l2": "l2",
+      "teeeef9198cb3513a6b91_l3": "l3",
+      "teeeef9198cb3513a6b91_m0": "m2",
+      "teeeef9198cb3513a6b91_m1": "m3",
+      "teeeef9198cb3513a6b91_n0": "n3"
+    }
+  },
+  "name": "B07",
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        6,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "teeeef9198cb3513a6b91_n0",
+      "position": [
+        3,
+        0,
+        0
+      ]
+    }
+  ],
+  "revision": 7,
+  "schemaVersion": "1.1.0",
+  "sections": [
+    {
+      "A": 0.01,
+      "Iy": 0.00008,
+      "Iz": 0.00008,
+      "J": 0.00002,
+      "cy": 0.1,
+      "cz": 0.2,
+      "id": "sec1",
+      "name": "Synthetic principal section",
+      "provenance": "Original analytical fixture, not a catalogue section"
+    }
+  ],
+  "structure": {
+    "designObjects": [],
+    "grids": [
+      {
+        "end": [
+          8,
+          0,
+          0
+        ],
+        "id": "sfd1fc9406e224e42ad000ff5bd3bb564",
+        "name": "Grid A",
+        "start": [
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "groups": [],
+    "joints": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt0480a93d2e9b094b89e0",
+        "name": "Joint n2",
+        "nodeId": "n2",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt676b8bb84ce7267dd520",
+        "name": "Joint n1",
+        "nodeId": "n1",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtba5cc837496e39d7e663",
+        "name": "Joint teeeef9198cb3513a6b91_n0",
+        "nodeId": "teeeef9198cb3513a6b91_n0",
+        "storeyId": null
+      }
+    ],
+    "layers": [
+      {
+        "id": "s0e91206d2d854f16b7b1b83fe3998eee",
+        "members": [
+          {
+            "id": "pmca0df2c95aa144c1d0ff",
+            "kind": "physicalMember"
+          }
+        ],
+        "name": "Primary framing"
+      }
+    ],
+    "physicalMembers": [
+      {
+        "analyticalMemberIds": [
+          "teeeef9198cb3513a6b91_m0",
+          "teeeef9198cb3513a6b91_m1"
+        ],
+        "id": "pmca0df2c95aa144c1d0ff",
+        "name": "Beam B01",
+        "role": "beam",
+        "storeyId": "sdf73a1e119f248e1820d3b9125944457"
+      }
+    ],
+    "storeys": [
+      {
+        "elevation": 3,
+        "id": "sdf73a1e119f248e1820d3b9125944457",
+        "name": "Level 1"
+      }
+    ],
+    "supportDetails": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdad328846aa18b32a3358",
+        "name": "Support s2",
+        "supportId": "s2"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sde8bc163c82eee1873328",
+        "name": "Support s1",
+        "supportId": "s1"
+      }
+    ]
+  },
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "id": "s1",
+      "node": "n1",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "id": "s2",
+      "node": "n2",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

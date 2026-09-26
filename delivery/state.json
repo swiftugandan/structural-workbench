@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M07",
-  "activeTask": "M07-G",
+  "activeTask": "REVIEW-03",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2912,6 +2912,45 @@
         "The eight analytical flights already exist and share landing nodes. Thin supplementary outlines do not add stringer beams or alter engineering state.",
         "88 native tests, 3 contracts, 2 browser journeys and visible browser inspection passed."
       ]
+    },
+    "REVIEW-01": {
+      "id": "REVIEW-01",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "useCase": "Consistent physical/analytical/design selection and honest source defaults",
+      "dependencies": [
+        "STRUCTURE-SYNC"
+      ],
+      "ownedPaths": [
+        "web/selection-context.js",
+        "web/app.js",
+        "web/design-previews.js",
+        "web/design-presentation.js",
+        "web/model-explorer.js"
+      ],
+      "acceptanceIds": [
+        "RCX-selection",
+        "RCX-source",
+        "RCX-recovery"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "WORKBENCH_EVIDENCE_DIR=evidence/model-coherence npx playwright test tests/e2e/model-coherence.spec.js tests/e2e/design-previews.spec.js tests/e2e/structure-model.spec.js"
+      ],
+      "evidencePaths": [
+        "evidence/model-coherence/selection-gate.json"
+      ],
+      "nextAction": "Continue REVIEW-02/03: residential representation views and coherent visibility controls.",
+      "sourceHash": "28daa0a5146a9071f14a36e6b9bcccc1f3a82fa7abb71877d7d93c2d9e0c3aa7",
+      "buildHash": "6a00149693f1dfc8ef4201ebabd724a72928226842f114bda2f956c883746c3c"
+    },
+    "REVIEW-03": {
+      "id": "REVIEW-03",
+      "status": "IMPLEMENTING",
+      "useCase": "Readable model views with storey/layer/isolation/fit and consistent hidden-object picking",
+      "dependencies": [
+        "REVIEW-01"
+      ],
+      "nextAction": "Implement storey/layer/isolation/fit views, validate hidden-object picking and inspect residential stairs in plan/side/3D. Then M07-G overview/catalogue/study."
     }
   },
   "blockers": [
@@ -2944,9 +2983,10 @@
       "resumeWhen": "Acquire ACI/concrete standard + examples into resources/private and lock hashes (same human-download pattern as M07 AISC)"
     }
   ],
-  "lastVerifiedSourceRevision": "b6e0bc1d8b0b16b60f6f69f5959365912f0b82fe",
-  "lastVerifiedBuildHash": "2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3",
-  "nextAction": "Continue docs/design/mockup-gap-audit.md: authored storeys/layers, design toolbar, M07-G whole-model overview/full catalogue/section study remain open. Numerical concrete parents remain resource blocked; preserve explicit mock provenance.",
+  "lastVerifiedSourceRevision": null,
+  "lastVerifiedBuildHash": "6a00149693f1dfc8ef4201ebabd724a72928226842f114bda2f956c883746c3c",
+  "nextAction": "Implement storey/layer/isolation/fit views, validate hidden-object picking and inspect residential stairs in plan/side/3D. Then M07-G overview/catalogue/study.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212"
+  "lastVerifiedSourceHash": "28daa0a5146a9071f14a36e6b9bcccc1f3a82fa7abb71877d7d93c2d9e0c3aa7",
+  "lastVerifiedScope": "REVIEW-01 selection/cache: eight browser journeys and three contracts; existing numerical gates historical"
 }
