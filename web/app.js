@@ -41,6 +41,7 @@ import {
   steelDesignWorkspace,
   designResultsHtml,
   designState,
+  bindSteelResultViews,
 } from "./steel-design.js";
 import { concreteWorkspace } from "./design-previews.js";
 const label = (id) => entityLabel(project, id);
@@ -83,6 +84,10 @@ const viewport = new Viewport($("#viewport"), async (query) => {
   }
 });
 const nativeSteel = steelDesignWorkspace({
+  onCatalogue: (cat) => {
+    viewport.designCatalogue = cat;
+    viewport.draw();
+  },
   gateway,
   command,
   getContext: () => ({
@@ -117,6 +122,7 @@ const nativeSteel = steelDesignWorkspace({
   },
 });
 const concrete = concreteWorkspace({
+  viewport,
   gateway,
   command,
   getContext: () => ({
@@ -878,6 +884,13 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
     $("#steel-design-inspector").hidden = kind !== "steel";
     $("#concrete-inspector").hidden = kind !== "concrete";
     $("#design-preview-scene").hidden = kind !== "concrete";
+    document.body.classList.toggle(
+      "design-workspace",
+      ["steel", "concrete"].includes(kind),
+    );
+    viewport.solidDesign = ["steel", "concrete"].includes(kind);
+    if (kind !== "concrete") concrete.hide();
+    viewport.draw();
     if (kind === "concrete") void concrete.render();
     for (const tab of document.querySelectorAll("[data-inspector-tab]"))
       tab.setAttribute("aria-pressed", String(tab === button));
@@ -1055,6 +1068,7 @@ function renderResults() {
     $("#results-content").innerHTML = designResultsHtml(run, state);
     $("#export-csv").disabled = true;
     if (run) {
+      bindSteelResultViews($("#results-content"), run);
       $("#design-download").onclick = () =>
         download(
           `design-${run.memberId}.json`,

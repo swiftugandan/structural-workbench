@@ -31,6 +31,12 @@ export function interactions(view) {
     canvas.focus();
     const p = location(e);
     if (e.button === 2) return;
+    if (view.designPreview && !view.designPreview.context && view.drawing) {
+      view.onDesignNotice?.(
+        "Show model context before editing structural geometry.",
+      );
+      return;
+    }
     if (
       view.drawing &&
       e.button === 0 &&
@@ -51,7 +57,10 @@ export function interactions(view) {
       toggle: e.shiftKey,
       allowed: orbit || pan,
     };
-    if (drag.kind === "box") {
+    if (
+      drag.kind === "box" &&
+      !(view.designPreview && !view.designPreview.context)
+    ) {
       const current = drag;
       Promise.resolve(view.onDragStart?.(p)).then((blank) => {
         if (drag === current) current.allowed = blank;
@@ -62,6 +71,7 @@ export function interactions(view) {
   canvas.addEventListener("pointermove", (e) => {
     const p = location(e);
     if (!drag) {
+      if (view.designPreview && !view.designPreview.context) return;
       if (view.drawing && view.origin) view.onDrawHover?.(view.pointAt(...p));
       else view.onHover?.(p);
       return;

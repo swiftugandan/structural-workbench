@@ -143,8 +143,8 @@ test("DW-F4: fail reaches governing station and clause; LTB stays unsupported", 
   await expect(
     page.locator("[data-testid='design-governing-marker']"),
   ).toContainText("F2-1");
-  await page.locator("[data-check-id='flexure'] summary").click();
-  await expect(page.locator("[data-check-id='flexure']")).toContainText("Mp");
+  await page.locator("[data-steel-pane=details]").click();
+  await expect(page.locator("[data-steel-view=details]")).toContainText("Mp");
   await page.locator("#design-lb").fill("3");
   await page.locator("#design-bracing").selectOption("unbraced");
   await page.locator("#design-save").click();

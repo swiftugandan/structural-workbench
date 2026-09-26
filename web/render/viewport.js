@@ -1,3 +1,4 @@
+import { sceneGeometry, drawScene, drawMemberSurface } from "./design-scene.js";
 import { orientationSvg, referenceGrid } from "./orientation.js";
 import {
   actionComponents,
@@ -202,6 +203,7 @@ export class Viewport {
     ];
   }
   async pick(x, y, toggle = false) {
+    if (this.designPreview && !this.designPreview.context) return;
     if (!this.project || !this.origin || !Number.isFinite(this.factor)) return;
     const b = this.basis(),
       dx = (x - this.width / 2 - this.pan[0]) / this.factor,
@@ -314,16 +316,31 @@ export class Viewport {
       });
     this.viewRevision++;
     const nodes = this.project.nodes;
+    const designScene = this.designPreview
+      ? sceneGeometry(
+          this.designPreview.draft,
+          this.project,
+          this.designPreview.mode,
+          this.designPreview.face,
+          this.axesProject === this.project ? this.localAxes || [] : [],
+        )
+      : null;
+    const fitNodes =
+      designScene && !this.designPreview.context
+        ? designScene.bounds.map((position) => ({ position }))
+        : nodes;
     const min = [0, 1, 2].map((a) =>
-        Math.min(...nodes.map((n) => n.position[a])),
+        Math.min(...fitNodes.map((n) => n.position[a])),
       ),
-      max = [0, 1, 2].map((a) => Math.max(...nodes.map((n) => n.position[a])));
+      max = [0, 1, 2].map((a) =>
+        Math.max(...fitNodes.map((n) => n.position[a])),
+      );
     this.origin = min.map((v, i) => (v + max[i]) / 2);
     this.extent = Math.max(...max.map((v, i) => v - min[i]), 1);
     const basis = this.basis();
     document.querySelector(".axis-widget").innerHTML = orientationSvg(basis);
     const spans = basis.slice(0, 2).map((axis) => {
-      const values = nodes.map((n) =>
+      const values = fitNodes.map((n) =>
         n.position.reduce((s, x, i) => s + (x - this.origin[i]) * axis[i], 0),
       );
       return Math.max(...values) - Math.min(...values);
@@ -448,7 +465,25 @@ export class Viewport {
       entityIndex = i + 1;
       const a = points.get(m.start),
         b = points.get(m.end);
-      line(a, b, 4, ink);
+      if (this.solidDesign && this.axesProject === this.project) {
+        const frame = this.localAxes?.find((f) => f.id === m.id),
+          section = this.project.sections.find((s) => s.id === m.section);
+        const shape = this.designCatalogue?.shapes.find(
+          (s) =>
+            m.steelDesign?.sectionRef ===
+            `${this.designCatalogue.id}:${s.designation}`,
+        );
+        drawMemberSurface(
+          m,
+          section,
+          frame,
+          shape,
+          this.selection.has(m.id),
+          (p) => this.projectPoint(p),
+          triangle,
+          line,
+        );
+      } else line(a, b, 4, ink);
       if (this.hovered === m.id) line(a, b, 8, [0.9, 0.42, 0.08, 0.7]);
       if (this.selection.has(m.id)) {
         line(a, b, 12, [0.16, 0.4, 0.8, 0.22]);
@@ -916,6 +951,20 @@ export class Viewport {
       );
     }
     this.onViewChanged?.();
+    if (designScene) {
+      // Dedicated object focus uses the existing WebGPU pipeline and camera.
+      if (!this.designPreview.context) vertices.length = 0;
+      entityIndex = 0;
+      drawScene(designScene, (p) => this.projectPoint(p), triangle, line);
+      const host = document.querySelector("#design-geometry-labels");
+      if (host)
+        host.innerHTML = designScene.labels
+          .map((l) => {
+            const p = this.projectPoint(l.point);
+            return `<span style="left:${p[0]}px;top:${p[1]}px">${l.text.replaceAll("&", "&amp;").replaceAll("<", "&lt;")}</span>`;
+          })
+          .join("");
+    }
     const data = new Float32Array(vertices);
     this.buffer?.destroy();
     this.buffer = this.device.createBuffer({

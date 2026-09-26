@@ -1,3 +1,4 @@
+import { previewInspector, previewPane } from "./design-presentation.js";
 /** Workflow illustrations only. Validation, units and action provenance belong to Rust. */
 import { escape as esc } from "./reports/report.js";
 const names = { rcBeam: "RC beam", slab: "Slab", padFooting: "Pad footing" };
@@ -50,6 +51,7 @@ function illustration(d, face) {
 }
 export function concreteWorkspace({
   gateway,
+  viewport,
   command,
   getContext,
   onDirty,
@@ -63,22 +65,105 @@ export function concreteWorkspace({
     generation = 0,
     face = "Top X",
     sourceMode = "synthetic";
+  let pane = "summary",
+    checkIndex = 0,
+    displayMode = "both",
+    focusObject = true,
+    savedCamera = null;
+  viewport.onDesignNotice = onError;
   const runs = new Map();
   const draft = () =>
     getContext().project?.designPreviews?.find((d) => d.id === active);
+  function hide() {
+    viewport.designPreview = null;
+    document.querySelector("#design-geometry-labels").hidden = true;
+    document.body.classList.remove("concrete-focus");
+    if (savedCamera) {
+      document.querySelector(`#view-${savedCamera.mode}`)?.click();
+      Object.assign(viewport, savedCamera);
+      savedCamera = null;
+      viewport.draw();
+    }
+  }
   function scene() {
     const host = $("#design-preview-scene"),
       d = draft();
     host.hidden = $("#concrete-inspector").hidden || !d;
-    if (!d) return;
-    host.innerHTML = `<strong>${esc(names[d.kind])} · MOCK WORKFLOW</strong><span class="badge">${previewState(runs.get(active), getContext())}</span><svg viewBox="0 0 300 230" role="img" aria-label="${esc(names[d.kind])} illustrative geometry, not construction details">${illustration(d, face)}</svg><p>Illustration only · no verified reinforcement or code compliance</p>`;
+    if (host.hidden) {
+      hide();
+      return;
+    }
+    if (!savedCamera) {
+      savedCamera = {
+        mode: viewport.mode,
+        zoom: viewport.zoom,
+        pan: [...viewport.pan],
+        yaw: viewport.yaw,
+        pitch: viewport.pitch,
+      };
+      document.querySelector("#view-3d").click();
+      viewport.zoom = 1.1;
+      viewport.pan = [0, 0];
+    }
+    document.body.classList.toggle("concrete-focus", focusObject);
+    viewport.designPreview =
+      focusObject || (d.kind === "rcBeam" && d.targetId)
+        ? { draft: d, mode: displayMode, face, context: !focusObject }
+        : null;
+    $("#design-geometry-labels").hidden = !viewport.designPreview;
+    $("#selection-tag").textContent = d.targetId || names[d.kind];
+    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(names[d.kind])}${d.targetId ? " · " + esc(d.targetId) : ""}</strong><span class="design-tag">MOCK WORKFLOW</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
+      ["concrete", "Concrete"],
+      ["reinforcement", "Reinforcement"],
+      ["both", "Both"],
+    ]
+      .map(
+        ([id, label]) =>
+          `<button data-object-display="${id}" aria-pressed="${displayMode === id}">${label}</button>`,
+      )
+      .join(
+        "",
+      )}<button id="preview-focus" aria-pressed="${focusObject}">${focusObject ? "Show model context" : "Focus design object"}</button></div><small>${d.kind === "slab" ? esc(face) + " · illustrative grid, not FE mesh" : d.kind === "padFooting" ? "Contact INDETERMINATE · no pressure field" : "Illustrative reinforcement · fit and anchorage unverified"}</small>`;
+    for (const b of host.querySelectorAll("[data-object-display]"))
+      b.onclick = () => {
+        displayMode = b.dataset.objectDisplay;
+        scene();
+      };
+    $("#preview-focus").onclick = () => {
+      focusObject = !focusObject;
+      scene();
+    };
+    viewport.draw();
   }
   function results(host) {
     const run = runs.get(active),
       state = previewState(run, getContext());
-    host.innerHTML = run
-      ? `<section data-testid="preview-result"><h3>${esc(names[run.kind])} · <span data-testid="preview-state">${state}</span></h3><p class="notice-small">MOCK WORKFLOW — no code-compliance claim. ${state === "STALE" ? "Recorded inputs or upstream result have changed." : ""}</p><p>Actions: ${run.sourceProvenance.mock ? "SYNTHETIC FIXTURE" : "Actual model analysis"} · Code profile: unavailable</p><table><thead><tr><th>Check</th><th>Status</th><th>Utilisation</th></tr></thead><tbody>${run.checks.map((c) => `<tr><td>${esc(c.name)}</td><td>UNSUPPORTED</td><td>—</td></tr>`).join("")}</tbody></table><p>${esc(run.checks[0].reason)}</p>${run.kind === "padFooting" ? `<p>Contact: INDETERMINATE. Soil bearing input: ${esc(run.soilProvenance.source)}; never computed by Workbench.</p><p>${esc(run.soilProvenance.reference)}</p>` : ""}${run.schedule.length ? `<h4>Illustrative bar preference · not a fabrication schedule</h4><pre>${esc(JSON.stringify(run.schedule, null, 2))}</pre><button id="preview-schedule">Download illustrative schedule CSV</button>` : ""}<button id="preview-record">Download preview record</button><details open><summary>Exact provenance and limitations</summary><pre>${esc(JSON.stringify(run, null, 2))}</pre></details></section>`
-      : '<div class="empty-results"><strong>Concrete workflow · NOT CHECKED</strong><p>Create a draft in Concrete previews, choose its action source, then run the preview.</p></div>';
+    const d = draft();
+    if (!d) {
+      host.innerHTML =
+        '<div class="empty-results"><strong>No concrete design object selected</strong><p>Create or select a draft in the Selection Inspector.</p></div>';
+      return;
+    }
+    const panes = [
+      ["summary", "Design summary"],
+      ["actions", d.kind === "slab" ? "Plate actions" : "Design actions"],
+      ["details", "Calculation details"],
+      ["reinforcement", "Reinforcement"],
+      ["schedule", "Schedule"],
+      ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
+    ];
+    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div><div class="design-pane">${previewPane({ run, state, d, pane, checkIndex, sketch: illustration(d, face) })}</div></section>`;
+    for (const b of host.querySelectorAll("[data-preview-pane]"))
+      b.onclick = () => {
+        pane = b.dataset.previewPane;
+        results(host);
+      };
+    for (const b of host.querySelectorAll("[data-preview-check]"))
+      b.onclick = () => {
+        pane = "details";
+        checkIndex = Number(b.dataset.previewCheck);
+        results(host);
+      };
     if (run) {
       $("#preview-record").onclick = () =>
         download(
@@ -121,7 +206,15 @@ export function concreteWorkspace({
       if (!ds.some((d) => d.id === active)) active = ds[0]?.id;
       const d = draft(),
         t = templates.find((t) => t.kind === d?.kind);
-      host.innerHTML = `<h3>Concrete workflow previews</h3><p class="notice-small">MOCK WORKFLOW · numerical design unavailable. Draft inputs do not change frame stiffness.</p><label>New draft<select id="preview-kind">${templates.map((t) => `<option value="${t.kind}">${t.name}</option>`).join("")}</select></label><button id="preview-create">Create draft</button>${d ? `<label>Active draft<select id="preview-active">${ds.map((d) => `<option value="${d.id}" ${d.id === active ? "selected" : ""}>${names[d.kind]} · ${d.id.slice(-6)}</option>`).join("")}</select></label><h4>${names[d.kind]} inputs</h4><p>Input provenance: ${esc(sourceName(d.inputSource))}</p><form id="preview-form">${t.fields.map((f) => `<label>${esc(f.label)} ${esc(f.unit)}<small>${esc(sourceName(d.inputSources?.[f.key] || d.inputSource))}</small><input name="${f.key}" id="preview-${f.key}" value="${d.inputs[f.key] * f.displayScale}" inputmode="decimal" required></label>`).join("")}${d.kind !== "slab" ? `<label>Model ${d.kind === "rcBeam" ? "member" : "support"}<select id="preview-target"><option value="">No model binding</option>${ctx.project[d.kind === "rcBeam" ? "members" : "supports"].map((e) => `<option value="${e.id}" ${d.targetId === e.id ? "selected" : ""}>${esc(e.id)}</option>`).join("")}</select></label>` : ""}${d.kind === "padFooting" ? `<label>Geotechnical input reference<textarea id="preview-soil" maxlength="512">${esc(d.soilReference)}</textarea></label><p>Bearing pressure is an external input. No soil capacity is computed.</p>` : ""}<button id="preview-save">Save draft inputs</button><button type="button" id="preview-cancel">Cancel edits</button></form><button id="preview-delete">Delete draft</button><label>Upstream actions<select id="preview-source"><option value="synthetic">Synthetic fixture · MOCK</option>${d.kind !== "slab" ? '<option value="model">Current model case / combination</option>' : ""}</select></label>${d.kind === "slab" ? `<label>Reinforcement view<select id="preview-face">${["Top X", "Top Y", "Bottom X", "Bottom Y"].map((f) => `<option ${f === face ? "selected" : ""}>${f}</option>`).join("")}</select></label><p>Raw Mx/My/Mxy fixture only; design transformation and mesh convergence unavailable.</p>` : ""}<button id="preview-run">Run workflow preview</button><p id="preview-readiness"></p>` : ""}<p id="preview-error" role="alert"></p>`;
+      host.innerHTML = previewInspector({
+        d,
+        templates,
+        ds,
+        active,
+        ctx,
+        face,
+        sketch: d ? illustration(d, face) : "",
+      });
       const fail = (e) => {
         $("#preview-error").textContent = e.message;
         onError(e.message);
@@ -144,6 +237,7 @@ export function concreteWorkspace({
       if (d) {
         $("#preview-active").onchange = () => {
           active = $("#preview-active").value;
+          pane = "summary";
           sourceMode = "synthetic";
           void render();
         };
@@ -228,6 +322,7 @@ export function concreteWorkspace({
                 resultId: c.result?.resultId,
               });
             runs.set(d.id, run);
+            pane = "summary";
             showResults();
           } catch (e) {
             fail(e);
@@ -250,9 +345,11 @@ export function concreteWorkspace({
   }
   return {
     render,
+    hide,
     results,
     select: (id) => {
       active = id;
+      pane = "summary";
       sourceMode = "synthetic";
     },
   };
