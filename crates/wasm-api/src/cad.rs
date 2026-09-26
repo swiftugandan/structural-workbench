@@ -112,10 +112,12 @@ fn copy_bay(
         ));
     }
     // bay_maps[0] is identity (original IDs); later entries are each copy generation.
-    let mut bay_maps: Vec<BTreeMap<String, String>> = vec![template_nodes
-        .iter()
-        .map(|n| (n.id.clone(), n.id.clone()))
-        .collect()];
+    let mut bay_maps: Vec<BTreeMap<String, String>> = vec![
+        template_nodes
+            .iter()
+            .map(|n| (n.id.clone(), n.id.clone()))
+            .collect(),
+    ];
     let mut ordinal = 0u64;
     for bay in 1..=count as usize {
         let scale = bay as f64;
@@ -132,6 +134,7 @@ fn copy_bay(
                     n.position[2] + scale * delta[2]
                 ]
             }));
+            super::structure_workspace::copy_attachment(v,p,&n.id,&id,true);
         }
         for m in &template_members {
             let id = format!("{prefix}_{ordinal}");
@@ -143,6 +146,7 @@ fn copy_bay(
             member.as_object_mut().unwrap().remove("parentMemberId");
             member.as_object_mut().unwrap().remove("stationRange");
             v["members"].as_array_mut().unwrap().push(member);
+            super::structure_workspace::copy_member(v, p, &m.id, &id, &format!("{prefix}:{bay}"));
         }
         for s in &template_supports {
             let id = format!("{prefix}_{ordinal}");
@@ -158,6 +162,7 @@ fn copy_bay(
                 "fixed": fixed,
                 "prescribed": s.prescribed
             }));
+            super::structure_workspace::copy_attachment(v,p,&s.id,&id,false);
         }
         bay_maps.push(mapping);
     }
@@ -283,6 +288,7 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                         ordinal += 1;
                         mapping.insert(n.id.clone(), id.clone());
                         v["nodes"].as_array_mut().unwrap().push(json!({"id":id,"position":std::array::from_fn::<_,3,_>(|i|n.position[i]+delta[i])}));
+                        super::structure_workspace::copy_attachment(v,&p,&n.id,&id,true);
                     }
                 }
                 for m in &p.members {
@@ -297,6 +303,7 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                         member.as_object_mut().unwrap().remove("parentMemberId");
                         member.as_object_mut().unwrap().remove("stationRange");
                         v["members"].as_array_mut().unwrap().push(member);
+                        super::structure_workspace::copy_member(v, &p, &m.id, &id, &prefix);
                     }
                 }
                 // Copy geometry only. Attachments are deliberately listed as unchanged in preview.

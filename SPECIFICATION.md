@@ -554,3 +554,26 @@ Do not reduce tolerances, delete fixtures, bless changed expected results or low
 On a clean supported desktop browser, create a three-bay spatial frame from the portal template; assign custom/synthetic sections and physical supports; add dead, live and lateral cases, self-weight and explicit combinations; analyse; inspect a governing member's forces, actual-case envelope provenance, reactions and service deflection; compare a stiffer section variant; generate an elastic stress screen; save/export; restart offline; reopen; reproduce the numerical results and report. Then deliberately remove a stabilising restraint, obtain a meaningful instability diagnosis, restore it with undo, rerun, and export a current result. The original and modified projects remain recoverable.
 
 For analysis MVP, all steps pass without a backend, frontend framework, WebGL replacement or server solver. For design-code MVP, repeat the journey with a supported verified code package and its complete check report. For PROKON parity, add the versioned commercial comparison corpus and every relevant capability row; the MVP alone does not imply that endpoint.
+
+### Authored structure graph — schema 1.1 (2026-09-26)
+
+The current-shell Model Explorer reads saved Rust-owned structure entities. Storeys,
+physical-member roles, grids, layers and groups are authored records. Coordinates
+must not implicitly classify members or manufacture storeys. Every analytical member
+has exactly one physical owner; every node has a joint record and every restraint a
+support-detail record. Concrete preview objects have exact draft/physical/support
+bindings and an explicit unverified status. Unsupported plate/contact/connection
+engineering remains unsupported.
+
+Reference elevations and grid lines organize the model without silently moving its
+analytical geometry. Revisioned commands validate all references atomically. Split,
+copy, merge and delete update ownership and memberships; undo/redo and project export
+preserve the entire graph. Authored joint conflicts block merging rather than discard
+properties. Imports of current documents reject malformed graphs. Migration preserves
+legacy analytical inputs and original bytes and leaves new classifications unassigned.
+
+The analysis hash excludes organization-only metadata; snapshots expose a separate
+structure hash. Geometry/design input edits still invalidate results. See ADR 0010,
+`contracts/project.schema.json`, `contracts/PROTOCOL.md` and
+`evidence/structure-model/` for the contract and verification record. This extension
+does not expand the accepted numerical/code-profile scope.

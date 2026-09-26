@@ -105,6 +105,10 @@ fn split(
         children.push(child_id);
         members.push(child);
     }
+    for owner in v["structure"]["physicalMembers"].as_array_mut().unwrap() {
+        let ids=owner["analyticalMemberIds"].as_array_mut().unwrap();
+        if ids.iter().any(|x|x==id) {ids.retain(|x|x!=id);ids.extend(children.iter().map(|x|json!(x)));}
+    }
     let loads = v["loads"].as_array_mut().unwrap();
     let old = std::mem::take(loads);
     for load in old {
@@ -146,6 +150,7 @@ fn merge(v: &mut Value, sources: &[String], target: &str) -> Result<()> {
             "Select distinct source nodes and a separate target",
         ));
     }
+    super::structure_workspace::merge_joints(v, sources, target)?;
     let target_pos = position(v, target)?;
     for id in sources {
         if distance(position(v, id)?, target_pos) > TOL {

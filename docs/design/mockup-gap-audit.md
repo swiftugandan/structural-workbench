@@ -7,8 +7,8 @@ References directly inspected: M07 approved member design, overview, catalogue a
 | Area visible in references | Previous implementation | Current correction / remaining gap |
 | --- | --- | --- |
 | Left search field | Missing | Search actual entities and definitions; retain parent paths; explicit no-match state. |
-| Expandable Structure → Levels → level → Columns/Beams → element | Flat category buttons and member list | Nested expandable elevation/orientation navigation, stable IDs and selected member highlight. Coordinates organize navigation only; no structural role is assigned. |
-| Named authored storeys, grids, groups/layers | Not in persisted model contract | Still missing. Derived elevation groups are labelled, never advertised as authored storeys. Custom layer/group authoring requires a separate persisted model contract. |
+| Expandable Structure → Levels → level → Columns/Beams → element | Flat category buttons and member list | Schema 1.1 now drives this hierarchy from saved storeys, physical members and authored roles. Legacy imports start unassigned; coordinates do not determine roles. |
+| Named authored storeys, grids, groups/layers | Not in persisted model contract | Implemented in the schema 1.1 structure graph and Rust revisioned commands: authored names, elevations, roles, typed membership and reference lines. Browser verification is tracked in evidence/structure-model; visibility/locking toolbar remains separate. |
 | Slabs/foundations/RC objects in tree | Mixed flat mock-object list | Separate nested RC beams, slabs and foundations, with explicit mock provenance and links to the actual draft inspector. |
 | Material and section definitions under expandable headings | Category buttons only | Actual definition leaves open existing editors; model entity leaves select real objects. Existing category editors remain accessible. |
 | Physical member → analytical segments | Existing lineage implementation | Preserved within the hierarchy, without duplicating or renaming segments. |
@@ -34,3 +34,7 @@ WORKBENCH_EVIDENCE_DIR=evidence/explorer-fidelity npx playwright test tests/e2e/
 ```
 
 The Explorer journey imports a synthetic two-elevation frame through the actual application importer, checks beam/column branches, selection synchronization, collapse-state preservation, search by raw ID as well as displayed text, empty search, expand/collapse, material editor, unchanged model hash and the steel heading's readable label. Existing journeys exercise physical/analytical lineage, authoring, undo, responsive navigation and concrete draft persistence/staleness. Visible Chrome review uses the same imported model and real tree controls; see `evidence/explorer-fidelity/visible-explorer.png` and the build-bound gate record.
+
+## Structure-model follow-up
+
+ADR 0010 replaces derived organization with saved entities. Storeys and grids are reference organization, not implicit analytical constraints. Joints and support details bind exact analytical nodes/restraints and explicitly declare hardware not designed. Concrete object bindings retain their saved drafts and unverified status. This does not close the unrelated design-toolbar, batch-design, catalogue or numerical-resource gaps above.

@@ -3,8 +3,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import Ajv from "ajv/dist/2020.js";
 const schema = JSON.parse(await readFile("contracts/project.schema.json"));
-const validate = new Ajv({ strict: false, allErrors: true }).compile(schema);
-test("B01–B11 conform to Draft 2020-12 contract", async () => {
+const validate = new Ajv({ strict: false, allErrors: true }).compile(
+  JSON.parse(await readFile("contracts/project-v1.0.schema.json")),
+);
+const validateCurrent = new Ajv({ strict: false, allErrors: true }).compile(
+  schema,
+);
+test("B01–B11 preserve their original v1.0 Draft 2020-12 contract", async () => {
   for (let i = 1; i <= 11; i++) {
     const v = JSON.parse(
       await readFile(`fixtures/models/B${String(i).padStart(2, "0")}.json`),
@@ -61,6 +66,11 @@ test("actual WASM request/response envelopes conform to Draft 2020-12", async ()
     assert.ok(request(r), JSON.stringify(request.errors));
     const out = JSON.parse(kernel.request(JSON.stringify(r)));
     assert.ok(response(out), JSON.stringify(response.errors));
+    if (out.payload?.project)
+      assert.ok(
+        validateCurrent(out.payload.project),
+        JSON.stringify(validateCurrent.errors),
+      );
     revision = out.revision;
   }
   kernel.free();

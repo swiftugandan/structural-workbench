@@ -39,7 +39,10 @@ pub fn expand_point_loads(project: &Project) -> Result<(Project, SplitMap)> {
     let mut splits = SplitMap::new();
     let mut point_by_member: BTreeMap<String, Vec<&Load>> = BTreeMap::new();
     for load in &project.loads {
-        if let Load::Point { member, station, .. } = load {
+        if let Load::Point {
+            member, station, ..
+        } = load
+        {
             if *station <= 0.0 || *station >= 1.0 {
                 return Err(err(
                     "INVALID_LOAD",
@@ -103,10 +106,7 @@ pub fn expand_point_loads(project: &Project) -> Result<(Project, SplitMap)> {
                     start.position[1] + t * (end.position[1] - start.position[1]),
                     start.position[2] + t * (end.position[2] - start.position[2]),
                 ];
-                new_nodes.push(Node {
-                    id,
-                    position: pos,
-                });
+                new_nodes.push(Node { id, position: pos });
             }
         }
 
@@ -260,6 +260,32 @@ pub fn expand_point_loads(project: &Project) -> Result<(Project, SplitMap)> {
 
     p.nodes = new_nodes;
     p.members = new_members;
+    // The solver's disposable mesh retains the exact physical owner of each child.
+    for physical in &mut p.structure.physical_members {
+        physical.analytical_member_ids = physical
+            .analytical_member_ids
+            .iter()
+            .flat_map(|id| {
+                splits
+                    .get(id)
+                    .map(|s| s.children.iter().map(|c| c.id.clone()).collect::<Vec<_>>())
+                    .unwrap_or_else(|| vec![id.clone()])
+            })
+            .collect();
+    }
+    for draft in &mut p.design_previews {
+        if draft
+            .target_id
+            .as_ref()
+            .is_some_and(|id| splits.contains_key(id))
+        {
+            draft.target_id = None;
+        }
+    }
+    let mut structure = p.structure.clone();
+    structure.sync_records(&p);
+    p.structure = structure;
+
     p.loads = new_loads;
     Ok((p, splits))
 }
@@ -385,14 +411,13 @@ fn stitch_member(
         });
     }
     key_stations.sort_by(|a, b| {
-        a.station
-            .partial_cmp(&b.station)
-            .unwrap()
-            .then_with(|| match (a.side.as_deref(), b.side.as_deref()) {
+        a.station.partial_cmp(&b.station).unwrap().then_with(|| {
+            match (a.side.as_deref(), b.side.as_deref()) {
                 (Some("left"), Some("right")) => std::cmp::Ordering::Less,
                 (Some("right"), Some("left")) => std::cmp::Ordering::Greater,
                 _ => std::cmp::Ordering::Equal,
-            })
+            }
+        })
     });
 
     Ok(MemberResult {

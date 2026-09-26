@@ -2,6 +2,7 @@ mod cad;
 mod design_workspace;
 mod preview_workspace;
 mod snap;
+mod structure_workspace;
 mod topology;
 mod view;
 use serde_json::{Value, json};
@@ -38,7 +39,7 @@ impl Kernel {
 impl Kernel {
     fn snapshot(&self) -> Value {
         let p = self.project.as_ref().unwrap();
-        json!({"project":p,"modelHash":p.hash(),"canUndo":!self.undo.is_empty(),"canRedo":!self.redo.is_empty()})
+        json!({"project":p,"modelHash":p.hash(),"structureHash":p.structure.hash(),"canUndo":!self.undo.is_empty(),"canRedo":!self.redo.is_empty()})
     }
     fn dispatch(&mut self, r: &Value, op: &str) -> Result<Value> {
         if r["protocolVersion"] != 1 {
@@ -282,7 +283,7 @@ impl Kernel {
                 }
                 if payload["kind"] == "topologyPreview" {
                     let mut v = serde_json::to_value(p).unwrap();
-                    topology::apply(&mut v, &payload["query"]["command"])?;
+                    apply(&mut v, &payload["query"]["command"], false)?;
                     let mut candidate = Project::parse(&v.to_string())?;
                     candidate.canonicalise();
                     return Ok(json!({"project":candidate,"viewRevision":payload["viewRevision"]}));
@@ -466,6 +467,15 @@ impl Kernel {
     }
 }
 fn apply(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
+    if ["SetStructureEntity", "DeleteStructureEntity"].contains(&c["type"].as_str().unwrap_or("")) {
+        return structure_workspace::edit(v, c);
+    }
+    let old: Project =
+        serde_json::from_value(v.clone()).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
+    apply_inner(v, c, nested)?;
+    structure_workspace::reconcile(v, &old)
+}
+fn apply_inner(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     let kind = c["type"].as_str().unwrap_or("");
     if [
         "CreateDesignPreview",
@@ -674,7 +684,7 @@ fn domain_disclosure() -> Value {
 fn capabilities_payload() -> Value {
     json!({
         "protocolVersion": 1,
-        "schemaVersions": ["0.9.0", "1.0.0"],
+        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0"],
         "analysisTypes": ["linearStatic"],
         "designProfiles": workbench_design::default_registry()
             .metadata()

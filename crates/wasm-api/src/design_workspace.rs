@@ -189,7 +189,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
     let settings = native::member(p, id)?.steel_design.as_ref().unwrap();
     let settings_hash = digest(&serde_json::to_vec(settings).unwrap());
     let mut out = json!({"contractVersion":1,"profileId":workbench_design::PROFILE_AISC_360_22_LRFD,"profileVersion":"S2-model-native-1",
-        "source":"modelNative","mock":false,"memberId":id,"combinationId":case,"station":governing.as_ref().map(|g|g["station"].clone()),
+        "source":"modelNative","mock":false,"structureHash":p.structure.hash(),"physicalMemberId":p.structure.physical_members.iter().find(|m|m.analytical_member_ids.iter().any(|x|x==id)).map(|m|&m.id),"memberId":id,"combinationId":case,"station":governing.as_ref().map(|g|g["station"].clone()),
         "overall":overall.as_str(),"checks":summary.values().collect::<Vec<_>>(),"stationChecks":all,"governingAction":governing,"modelHash":analysis.model_hash,"sourceRevision":analysis.source_revision,
         "resultId":analysis.result_id,"solverBuildHash":analysis.solver_build_hash,"analysisSettingsHash":analysis.settings_hash,
         "designSettingsHash":settings_hash,"inputs":settings,"catalogue":native::catalogue()["source"],"catalogueSourceHash":native::catalogue()["sourceSha256"],

@@ -466,6 +466,15 @@ export class Viewport {
       delete this.canvas.dataset.referenceGridZ;
     }
     document.querySelector("#reference-plane").hidden = this.mode !== "3d";
+    // Authored reference geometry is drawn directly from the saved model.
+    for (const g of this.project.structure?.grids || []) {
+      line(
+        this.projectPoint(g.start),
+        this.projectPoint(g.end),
+        1.5,
+        [0.35, 0.55, 0.62, 1],
+      );
+    }
     for (const [i, m] of this.project.members.entries()) {
       entityIndex = i + 1;
       const a = points.get(m.start),
@@ -592,6 +601,13 @@ export class Viewport {
       labels.append(el);
       return el;
     };
+    for (const grid of this.project.structure?.grids || []) {
+      label(
+        `${grid.name} · reference grid`,
+        this.projectPoint(grid.end),
+        "grid-label",
+      );
+    }
     if (this.designMarker?.modelHash === this.currentModelHash) {
       const mark = this.designMarker;
       const member = this.project.members.find((m) => m.id === mark.memberId);

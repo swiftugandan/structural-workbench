@@ -1,6 +1,4 @@
-use workbench_model::{
-    CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, Project, digest, import_project,
-};
+use workbench_model::{CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, Project, digest, import_project};
 
 fn b02() -> String {
     std::fs::read_to_string("../../fixtures/models/B02.json").unwrap()
@@ -48,7 +46,7 @@ fn migrates_0_9_to_1_0_and_matches_current_hash() {
 
 #[test]
 fn current_schema_import_is_identity_migration() {
-    let original = b02();
+    let original = serde_json::to_string(&Project::parse(&b02()).unwrap()).unwrap();
     let (_, report) = import_project(&original).unwrap();
     assert_eq!(report.from, CURRENT_SCHEMA);
     assert_eq!(report.to, CURRENT_SCHEMA);

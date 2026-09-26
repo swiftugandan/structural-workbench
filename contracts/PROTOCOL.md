@@ -149,3 +149,32 @@ See ADR 0009 for input identity, axis mapping and bounded applicability.
 - `evaluateDesignPreview {draftId,modelHash,sourceMode,caseId?,resultId?}` uses the captured project on a disposable worker. `sourceMode` is explicit `synthetic|model`. Model actions require exact current converged case/result identity, re-solved in Rust. Slabs reject frame-model sources. Beam actions are actual member key stations; footing actions negate one simultaneous global support reaction vector. No orientation, contact or code capacities are inferred.
 - Returned records have deterministic `previewRunId`, `inputHash`, model/revision identity, source provenance, null code profile, `mock:true`, `overall:unsupported`, unavailable check utilisations and explicit limitations. A model action source may have `mock:false`; the concrete workflow remains unverified. Footing contact is `indeterminate`, bearing pressure is external input, and `computedByWorkbench:false`.
 - Preview reinforcement pictures/RC CSV rows are illustrative preferences, with unverified fit/quantities/anchorage and null cut lengths. Export adds current/stale presentation state; it never upgrades the recorded design status. See `docs/design/concrete-workflow-previews.md`.
+
+## Structure graph (project schema 1.1)
+
+Snapshots include `structureHash`, the canonical hash of the saved `structure` graph.
+`modelHash` excludes organization metadata; storey, role, group, layer and reference-grid
+edits leave an unchanged analysis current. Model-native steel runs include the structure
+hash and exact physical-member ID alongside their analytical member and result provenance.
+
+`SetStructureEntity {collection, existence: "create"|"update", entity}` edits a typed
+record in `storeys`, `physicalMembers`, `grids`, `layers`, `groups`, `joints`,
+`supportDetails` or `designObjects`. `DeleteStructureEntity {collection,id}` deletes
+an unbound storey, grid, layer or group. These use ordinary expectedRevision, atomic
+validation and undo/redo. Names and classification are editable; analytical ownership,
+node/support/draft bindings and engineering status are controlled by their source
+commands. Storey elevations and grid endpoints accept Rust length quantities.
+
+Every analytical member has exactly one saved physical owner, every node one joint,
+every restraint one support detail, and every concrete preview one design object.
+Collections contain typed references, with no recursive collections. References,
+duplicate ownership and claims of unsupported connection/design acceptance fail closed.
+A geometry deletion prunes its memberships; a split preserves its physical owner;
+a copy inherits classification and collection membership under a distinct physical ID.
+Removed analytical targets unbind preview actions; a split retains the physical object
+binding without arbitrarily choosing one child as the new action source.
+
+Migration 0.9 → 1.0 → 1.1 preserves original import bytes in host storage and creates
+deterministic bindings. Legacy roles are `unassigned`; no storey/role is guessed from
+orientation. Current 1.1 imports must contain a complete valid graph. Legacy files
+containing an unknown `structure` extension are rejected rather than overwritten.

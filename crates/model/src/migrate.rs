@@ -2,7 +2,7 @@ use crate::{Project, Result, digest, err};
 use serde_json::{Value, json};
 
 /// Current engineering project schema written by the application.
-pub const CURRENT_SCHEMA: &str = "1.0.0";
+pub const CURRENT_SCHEMA: &str = "1.1.0";
 /// Oldest schema this binary can migrate into CURRENT_SCHEMA.
 pub const LEGACY_SCHEMA_0_9: &str = "0.9.0";
 
@@ -44,19 +44,49 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
         .unwrap_or("")
         .to_string();
 
-    let (steps, report_from) = match version.as_str() {
+    if raw["members"].as_array().is_some_and(|members| {
+        members.iter().any(|m| {
+            ["releaseStart", "releaseEnd"].iter().any(|k| {
+                m[*k]
+                    .as_object()
+                    .is_some_and(|obj| obj.keys().any(|key| key != "my" && key != "mz"))
+            })
+        })
+    }) {
+        return Err(err(
+            "UNSUPPORTED_FEATURE",
+            "Only My/Mz end releases are supported",
+        ));
+    }
+    let (mut steps, report_from) = match version.as_str() {
         CURRENT_SCHEMA => (Vec::new(), CURRENT_SCHEMA.to_string()),
+        "1.0.0" => (Vec::new(), "1.0.0".to_string()),
         LEGACY_SCHEMA_0_9 => (migrate_0_9_to_1_0(&mut raw)?, LEGACY_SCHEMA_0_9.to_string()),
         _ => {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
                 format!(
-                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, {CURRENT_SCHEMA}"
+                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {CURRENT_SCHEMA}"
                 ),
             ));
         }
     };
 
+    if version != CURRENT_SCHEMA {
+        if raw.get("structure").is_some() {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Legacy project cannot contain a structure extension",
+            ));
+        }
+        raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+        raw["structure"] = serde_json::to_value(crate::Structure::default()).unwrap();
+        let legacy: Project = serde_json::from_value(raw.clone())
+            .map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
+        raw["structure"] = serde_json::to_value(crate::Structure::initialise(&legacy)).unwrap();
+        steps.push("create explicit physical members, joints, support details and draft bindings; preserve unassigned roles".into());
+        steps.push("set schemaVersion 1.1.0".into());
+    }
     let text = serde_json::to_string(&raw).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let project = Project::parse_current(&text)?;
     Ok((
@@ -132,8 +162,8 @@ fn migrate_0_9_to_1_0(raw: &mut Value) -> Result<Vec<String>> {
         steps.push("insert empty metadata".into());
     }
 
-    obj.insert("schemaVersion".into(), json!(CURRENT_SCHEMA));
-    steps.push(format!("set schemaVersion {CURRENT_SCHEMA}"));
+    obj.insert("schemaVersion".into(), json!("1.0.0"));
+    steps.push("set schemaVersion 1.0.0".into());
     Ok(steps)
 }
 
@@ -149,20 +179,6 @@ impl Project {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
                 format!("Only project schema {CURRENT_SCHEMA} is supported after migration"),
-            ));
-        }
-        if raw["members"].as_array().is_some_and(|members| {
-            members.iter().any(|m| {
-                ["releaseStart", "releaseEnd"].iter().any(|k| {
-                    m[*k]
-                        .as_object()
-                        .is_some_and(|obj| obj.keys().any(|key| key != "my" && key != "mz"))
-                })
-            })
-        }) {
-            return Err(err(
-                "UNSUPPORTED_FEATURE",
-                "Only My/Mz end releases are supported",
             ));
         }
         let p: Self = serde_json::from_str(s).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;

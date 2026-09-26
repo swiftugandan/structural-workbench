@@ -1,36 +1,4 @@
-import { renderMemberNav, physicalRootId } from "./hierarchy.js";
-
-// Navigation-only organization of existing coordinates. This neither creates
-// storeys nor assigns structural roles, connectivity, restraints or stiffness.
-export function elevationGroups(project) {
-  const nodes = new Map(project.nodes.map((n) => [n.id, n.position]));
-  const roots = new Map();
-  for (const member of project.members) {
-    const key = physicalRootId(member);
-    if (!roots.has(key)) roots.set(key, []);
-    roots.get(key).push(member);
-  }
-  const levels = new Map();
-  for (const members of roots.values()) {
-    const first = members[0],
-      a = nodes.get(first.start),
-      b = nodes.get(first.end);
-    const z = a && b ? Math.min(a[2], b[2]) : null;
-    const type =
-      !a || !b
-        ? "Other members"
-        : a[2] === b[2]
-          ? "Beams"
-          : a[0] === b[0] && a[1] === b[1]
-            ? "Columns"
-            : "Inclined members";
-    if (!levels.has(z)) levels.set(z, new Map());
-    const types = levels.get(z);
-    if (!types.has(type)) types.set(type, []);
-    types.get(type).push(...members);
-  }
-  return [...levels].sort(([a], [b]) => (b ?? -Infinity) - (a ?? -Infinity));
-}
+import { renderMemberNav } from "./hierarchy.js";
 
 export function renderExplorer(
   project,
@@ -50,26 +18,98 @@ export function renderExplorer(
       project[key].length,
       open,
     );
-  const levels = elevationGroups(project)
-    .map(([z, types]) =>
-      branch(
-        `level:${z}`,
-        z === null
-          ? "Unplaced"
-          : `Elevation ${z.toLocaleString(undefined, { maximumFractionDigits: 8 })} m`,
-        [...types]
-          .map(([type, members]) =>
-            branch(
-              `level:${z}:${type}`,
-              type,
-              renderMemberNav(members, { selected, label, esc }),
-              members.length,
-            ),
+  const domainLeaf = (key, x) =>
+    `<button class="explorer-leaf structure-leaf" data-structure-key="${key}" data-structure-id="${esc(x.id)}"><span>${esc(x.name)}</span><small>${esc(x.role || x.kind || "")}</small></button>`;
+  const add = (key) =>
+    `<button class="explorer-manage" data-structure-add="${key}">+ Add ${{ storeys: "storey", grids: "grid", layers: "layer", groups: "group" }[key]}</button>`;
+  const structure = project.structure;
+  const collectionRefs = (refs) =>
+    refs
+      .map((r) => {
+        const key = {
+          physicalMember: "physicalMembers",
+          designObject: "designObjects",
+          joint: "joints",
+          grid: "grids",
+        }[r.kind];
+        const item = (key ? structure[key] : project.supports).find(
+          (x) => x.id === r.id,
+        );
+        return `<button class="explorer-leaf structure-leaf hierarchy-child" data-structure-ref="${esc(r.id)}" data-ref-kind="${r.kind}"><span>${esc(item?.name || label(r.id))}</span><small>${esc(r.kind)}</small></button>`;
+      })
+      .join("");
+  const levels = [
+    ...[...structure.storeys].sort((a, b) => b.elevation - a.elevation),
+    { id: null, name: "Unassigned storey" },
+  ]
+    .map((level) => {
+      const members = structure.physicalMembers.filter(
+        (m) => m.storeyId === level.id,
+      );
+      const body = ["beam", "column", "brace", "unassigned"]
+        .map((role) => {
+          const items = members
+            .filter((m) => m.role === role)
+            .sort((a, b) =>
+              a.name.localeCompare(b.name, undefined, { numeric: true }),
+            );
+          return items.length
+            ? branch(
+                `storey:${level.id}:${role}`,
+                {
+                  beam: "Beams",
+                  column: "Columns",
+                  brace: "Braces",
+                  unassigned: "Unassigned role",
+                }[role],
+                items
+                  .map(
+                    (m) =>
+                      `<div class="physical-object">${domainLeaf("physicalMembers", m)}${renderMemberNav(
+                        project.members.filter((a) =>
+                          m.analyticalMemberIds.includes(a.id),
+                        ),
+                        { selected, label, esc },
+                      )}</div>`,
+                  )
+                  .join(""),
+                items.length,
+              )
+            : "";
+        })
+        .join("");
+      return branch(
+        `storey:${level.id}`,
+        level.name,
+        (level.id ? domainLeaf("storeys", level) : "") +
+          body +
+          collectionRefs(
+            structure.designObjects
+              .filter((x) => x.storeyId === level.id)
+              .map((x) => ({ kind: "designObject", id: x.id })),
+          ),
+        members.length +
+          structure.designObjects.filter((x) => x.storeyId === level.id).length,
+      );
+    })
+    .join("");
+  const domainGroup = (key, title) =>
+    branch(
+      key,
+      title,
+      (["grids", "layers", "groups"].includes(key) ? add(key) : "") +
+        structure[key]
+          .map(
+            (x) =>
+              domainLeaf(key, x) +
+              (x.members
+                ? `<small class="explorer-note">${x.members.length} assigned objects</small>${collectionRefs(x.members)}`
+                : ""),
           )
           .join(""),
-      ),
-    )
-    .join("");
+      structure[key].length,
+      false,
+    );
   const drafts = (kind, title) => {
     const items = (project.designPreviews || []).filter((d) => d.kind === kind);
     return branch(
@@ -90,13 +130,19 @@ export function renderExplorer(
       "Structure",
       branch(
         "levels",
-        "Levels · derived",
-        `<p class="explorer-note" title="Grouped by endpoint Z. Beam/column names describe orientation only, not authored storeys or structural design roles.">By elevation and orientation ⓘ</p>${levels}`,
+        "Storeys & physical members",
+        add("storeys") + levels,
         "",
         true,
       ) +
         manage("members", "Members") +
-        group("nodes", "Nodes") +
+        domainGroup("grids", "Grids") +
+        domainGroup("layers", "Layers") +
+        domainGroup("groups", "Groups") +
+        domainGroup("joints", "Joints") +
+        domainGroup("supportDetails", "Support details") +
+        domainGroup("designObjects", "Design object bindings") +
+        group("nodes", "Analytical nodes") +
         group("supports", "Supports") +
         branch(
           "drafts",

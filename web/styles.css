@@ -3672,7 +3672,7 @@ body.design-workspace {
 }
 #model-nav summary small {
   margin-left: 5px;
-  color: #6b7d90;
+  color: #53677d;
   font-size: 10px;
 }
 #model-nav .explorer-children {
@@ -3689,7 +3689,7 @@ body.design-workspace {
 #model-nav .explorer-empty {
   margin: 3px 0 6px;
   font-size: 10px;
-  color: #7e8b9a;
+  color: #53677d;
 }
 #model-nav button,
 .design-workspace #model-nav button {
@@ -3705,7 +3705,7 @@ body.design-workspace {
 #model-nav .explorer-leaf small {
   grid-column: 2;
   font-size: 9px;
-  color: #6b7d90;
+  color: #53677d;
   overflow-wrap: anywhere;
 }
 #model-nav button.explorer-manage {
@@ -3727,7 +3727,7 @@ body.design-workspace {
 #explorer-empty {
   font-size: 12px;
   margin: 10px;
-  color: #6b7d90;
+  color: #53677d;
 }
 .design-workspace .project-summary {
   padding: 9px 12px;
@@ -3748,4 +3748,42 @@ body.design-workspace {
 #model-nav .entity.hierarchy-child {
   margin-left: 10px;
   width: calc(100% - 10px);
+}
+
+.structure-members {
+  max-height: 260px;
+  overflow: auto;
+  min-width: 0;
+}
+.structure-members label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.structure-members input {
+  width: auto;
+}
+
+/* Structure forms share the narrow Selection Inspector, not dialog columns. */
+#structure-form {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+#structure-form > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+#structure-form .property-actions {
+  display: flex;
+  flex-wrap: wrap;
+}
+#model-nav button.structure-leaf {
+  grid-template-columns: minmax(0, 1fr);
+}
+#model-nav button.structure-leaf small {
+  grid-column: 1;
+}
+#model-nav button.structure-leaf span {
+  white-space: normal;
+  overflow-wrap: anywhere;
 }

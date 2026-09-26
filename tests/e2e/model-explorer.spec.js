@@ -24,14 +24,32 @@ test("Reference Explorer: nested elements, search, disclosure state and selectio
   });
   await expect(page.locator("#model-count")).toHaveText("4 nodes · 3 members");
   const hash = await page.locator("#hash-status").textContent();
-  await expect(page.locator('[data-branch="level:3"]')).toContainText("Beams");
+  await expect(page.locator('[data-branch="storey:null"]')).toContainText(
+    "Unassigned role",
+  );
+  await page.locator('[data-structure-add="storeys"]').click();
+  await page.locator("#structure-form [name=name]").fill("Roof");
+  await page.locator("#structure-form [name=elevation]").fill("3000 mm");
+  await page.locator("#structure-form button.primary").click();
+  await page
+    .locator('[data-structure-key="physicalMembers"]')
+    .filter({ hasText: "b2" })
+    .click();
+  await page
+    .locator("#structure-form [name=storeyId]")
+    .selectOption({ label: "Roof" });
+  await page.locator("#structure-form [name=role]").selectOption("beam");
+  await page.locator("#structure-form [name=name]").fill("Roof beam");
+  await page.locator("#structure-form button.primary").click();
   await expect(
-    page.locator('[data-branch="level:0:Columns"] [data-member="c1"]'),
+    page
+      .locator('[data-structure-key="physicalMembers"]')
+      .filter({ hasText: "Roof beam" }),
   ).toBeVisible();
-  await page.locator('[data-branch="level:0"] > summary').click();
+  await page.locator('[data-branch="storey:null"] > summary').click();
   await page.locator('[data-member="b2"]').click();
   await expect(page.locator("#selection-tag")).toHaveText("m3");
-  await expect(page.locator('[data-branch="level:0"]')).not.toHaveAttribute(
+  await expect(page.locator('[data-branch="storey:null"]')).not.toHaveAttribute(
     "open",
     "",
   );
@@ -53,6 +71,6 @@ test("Reference Explorer: nested elements, search, disclosure state and selectio
   await page.locator("[data-inspector-tab=steel]").click();
   await expect(page.locator("#steel-design-inspector h2")).toContainText("m2");
   await page.locator("#view-3d").click();
-  await mkdir("evidence/explorer-fidelity", { recursive: true });
-  await page.screenshot({ path: "evidence/explorer-fidelity/hierarchy.png" });
+  await mkdir("evidence/structure-model", { recursive: true });
+  await page.screenshot({ path: "evidence/structure-model/hierarchy.png" });
 });

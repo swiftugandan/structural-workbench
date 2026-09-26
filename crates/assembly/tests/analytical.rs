@@ -272,6 +272,7 @@ fn edits_scaling_and_instability() {
     assert!((a.node_displacements[8] / 2. - b.node_displacements[8]).abs() < 1e-12);
     assert!((a.reactions[4] - b.reactions[4]).abs() < 1e-8);
     p.supports.clear();
+    p.structure.support_details.clear();
     assert_eq!(analyse(&p, "LC1").unwrap_err().code, "UNSTABLE_MODEL");
 }
 #[test]
@@ -369,6 +370,7 @@ fn m01_global_rotation_relabelling_reordering_and_endpoint_reversal() {
     for n in &mut rotated.nodes {
         let old = n.id.clone();
         n.id = format!("renamed_{}", old);
+        for joint in &mut rotated.structure.joints {if joint.node_id==old {joint.node_id=n.id.clone();}}
         for m in &mut rotated.members {
             if m.start == old {
                 m.start = n.id.clone();

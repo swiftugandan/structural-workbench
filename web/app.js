@@ -1,3 +1,4 @@
+import { renderStructureEditor } from "./structure-workspace.js";
 import { renderForceInspector } from "./force-inspector.js";
 import { bindResultPicker } from "./result-picker.js";
 import { actionComponents } from "./render/action-diagrams.js";
@@ -720,8 +721,9 @@ async function command(type, args, commandId) {
         ? "Results are stale. The engineering model changed; analyse again before exporting a report."
         : "",
     );
+    await persist();
+    setBusy(false);
     refresh(s);
-    persist();
   } finally {
     setBusy(false);
   }
@@ -738,13 +740,14 @@ for (const id of ["undo", "redo"])
       project.displayUnits = units;
       modelHash = s.modelHash;
       failed = false;
-      refresh(s);
-      persist();
       message(
         result && result.modelHash !== modelHash
           ? "Results are stale. Analyse the restored model."
           : "",
       );
+      await persist();
+      setBusy(false);
+      refresh(s);
     } catch (e) {
       message(e.message);
     } finally {
@@ -806,6 +809,54 @@ function renderNav() {
     d.ontoggle = () => {
       if (!$("#model-search").value)
         explorerOpenState.set(d.dataset.branch, d.open);
+    };
+  for (const b of $("#model-nav").querySelectorAll(
+    "[data-structure-id], [data-structure-add]",
+  ))
+    b.onclick = () => {
+      if (formDirty) return message("Apply or cancel changes first.");
+      const collection = b.dataset.structureKey || b.dataset.structureAdd,
+        id = b.dataset.structureId;
+      const entity = project.structure[collection].find((x) => x.id === id);
+      const ids =
+        entity?.analyticalMemberIds ||
+        (entity?.nodeId
+          ? [entity.nodeId]
+          : entity?.supportId
+            ? [entity.supportId]
+            : []);
+      selectEntities(ids);
+      $("[data-inspector-tab=properties]").click();
+      $("#selection-tag").textContent = entity?.name || "New structure object";
+      renderStructureEditor({
+        project,
+        collection,
+        id,
+        host: $("#inspector-content"),
+        esc,
+        command,
+        done: renderInspector,
+        dirty: (value) => {
+          formDirty = value;
+        },
+      });
+      const draft = $("#open-structure-draft");
+      if (draft)
+        draft.onclick = () => {
+          if (formDirty) return message("Apply or cancel changes first.");
+          concrete.select(entity.previewId);
+          $("[data-inspector-tab=concrete]").click();
+        };
+    };
+  for (const b of $("#model-nav").querySelectorAll("[data-structure-ref]"))
+    b.onclick = () => {
+      if (formDirty) return message("Apply or cancel changes first.");
+      const id = b.dataset.structureRef;
+      if (b.dataset.refKind === "support") selectEntities([id]);
+      else
+        $("#model-nav")
+          .querySelector(`[data-structure-id="${CSS.escape(id)}"]`)
+          ?.click();
     };
   for (const b of $("#model-nav").querySelectorAll("[data-entity-id]"))
     b.onclick = (e) => {

@@ -6,9 +6,11 @@ use std::collections::BTreeSet;
 mod design_inputs;
 mod migrate;
 mod section_props;
+pub mod structure;
 pub use design_inputs::{DesignPreview, DesignSource, DesignValue, SteelDesign};
 pub use migrate::{CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, import_project};
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
+pub use structure::Structure;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Diagnostic {
     pub code: String,
@@ -168,12 +170,13 @@ pub struct Metadata {
     #[serde(default)]
     pub entity_labels: std::collections::BTreeMap<String, String>,
 }
-record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata,#[serde(default,skip_serializing_if="Vec::is_empty")]design_previews:Vec<DesignPreview>});
+record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata,structure:Structure,#[serde(default,skip_serializing_if="Vec::is_empty")]design_previews:Vec<DesignPreview>});
 impl Project {
     pub fn parse(s: &str) -> Result<Self> {
         Ok(import_project(s)?.0)
     }
     pub fn canonicalise(&mut self) {
+        self.structure.canonicalise();
         // Labels are presentation metadata. Internal IDs and references never change.
         let groups: Vec<(&str, Vec<String>)> = vec![
             ("n", self.nodes.iter().map(|x| x.id.clone()).collect()),
@@ -232,7 +235,14 @@ impl Project {
         let mut p = self.clone();
         p.canonicalise();
         let mut v = serde_json::to_value(p).unwrap();
-        for k in ["id", "name", "revision", "displayUnits", "metadata"] {
+        for k in [
+            "id",
+            "name",
+            "revision",
+            "displayUnits",
+            "metadata",
+            "structure",
+        ] {
             v.as_object_mut().unwrap().remove(k);
         }
         fn clean(v: &mut Value) {
@@ -566,6 +576,7 @@ impl Project {
             }
         }
         finite(&self.gravity)?;
+        self.structure.validate(self)?;
         Ok(())
     }
 }
