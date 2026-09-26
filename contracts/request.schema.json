@@ -28,7 +28,9 @@
         "runStudy",
         "steelCatalogue",
         "steelReadiness",
-        "evaluateModelDesign"
+        "evaluateModelDesign",
+        "designPreviewTemplates",
+        "evaluateDesignPreview"
       ]
     },
     "expectedRevision": {

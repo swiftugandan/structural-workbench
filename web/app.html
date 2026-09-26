@@ -296,6 +296,7 @@
               aria-label="Frame model. Click to select, Shift toggles. Drag a selection box; middle drag or Space pans. Wheel zooms at the cursor."
               tabindex="0"
             ></canvas>
+            <div id="design-preview-scene" hidden></div>
             <div id="selection-box" hidden></div>
             <div id="gpu-notice" hidden></div>
             <div class="view-caption">
@@ -343,6 +344,9 @@
             <button data-inspector-tab="forces" aria-pressed="false">
               Member results
             </button>
+            <button data-inspector-tab="concrete" aria-pressed="false">
+              Concrete previews
+            </button>
             <button data-inspector-tab="steel" aria-pressed="false">
               Steel design
             </button>
@@ -350,6 +354,7 @@
           <div id="inspector-content"></div>
           <div id="force-inspector" hidden></div>
           <div id="steel-design-inspector" hidden></div>
+          <div id="concrete-inspector" hidden></div>
         </aside>
         <section class="results-panel">
           <div class="results-tabs">
@@ -361,6 +366,7 @@
             ><button data-tab="stress" data-testid="tab-stress">
               Elastic stress</button
             ><button data-tab="equilibrium">Equilibrium</button>
+            <button data-tab="design-preview">Design preview</button>
             <button data-tab="steel-design">Steel design</button>
             <div class="spacer"></div>
             <span id="result-status" class="badge">Not analysed</span

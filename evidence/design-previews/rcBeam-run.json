@@ -1,0 +1,158 @@
+{
+  "checks": [
+    {
+      "name": "Flexure",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Shear",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Minimum/maximum reinforcement",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Cover and spacing",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Anchorage",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Serviceability",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    }
+  ],
+  "codeProfile": null,
+  "contactState": "notApplicable",
+  "contractVersion": 1,
+  "draftId": "dp305798260dce5831",
+  "inputHash": "cb8f148291f907c1742fd3a3e3d96d23c54468210c86c68982c313b3ce6cbfe3",
+  "inputs": {
+    "id": "dp305798260dce5831",
+    "inputSource": "syntheticFixture",
+    "inputSources": {
+      "barCount": "syntheticFixture",
+      "barDiameter": "syntheticFixture",
+      "concreteStrength": "syntheticFixture",
+      "cover": "syntheticFixture",
+      "depth": "syntheticFixture",
+      "linkDiameter": "syntheticFixture",
+      "linkSpacing": "syntheticFixture",
+      "rebarStrength": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "barCount": 4,
+      "barDiameter": 0.02,
+      "concreteStrength": 30000000,
+      "cover": 0.035,
+      "depth": 0.6,
+      "linkDiameter": 0.01,
+      "linkSpacing": 0.2,
+      "rebarStrength": 500000000,
+      "width": 0.3
+    },
+    "kind": "rcBeam",
+    "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+    "targetId": "m1"
+  },
+  "kind": "rcBeam",
+  "limitations": [
+    "MOCK WORKFLOW — no code-compliance claim",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"
+  ],
+  "mock": true,
+  "modelHash": "96b59beea9c05c53188360db186436af7cf107a7dec4ba016aa913543455cbca",
+  "overall": "unsupported",
+  "previewRunId": "eb760a84fd13bed7fb5833feb773aa5178184557dad6b55348083853b960b64f",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "schedule": [
+    {
+      "cutLength": null,
+      "diameter": 0.02,
+      "mark": "ILL-01",
+      "quantityPerFace": 4,
+      "region": "Top and bottom preference",
+      "source": "illustrationOnly",
+      "status": "unverified"
+    }
+  ],
+  "soilProvenance": null,
+  "sourceProvenance": {
+    "combinationId": "LC1",
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "96b59beea9c05c53188360db186436af7cf107a7dec4ba016aa913543455cbca",
+    "note": "Actual model actions; preview section is not applied to frame stiffness, and no concrete resistance is calculated",
+    "resultId": "96b59beea9c05c53-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212",
+    "sourceRevision": 2,
+    "stations": [
+      {
+        "actions": [
+          0,
+          -9999.999999999993,
+          0,
+          0,
+          0,
+          -29999.999999999985
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 0
+      },
+      {
+        "actions": [
+          0,
+          -9999.999999999993,
+          0,
+          0,
+          0,
+          -7.275957614183426e-12
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 1
+      }
+    ],
+    "targetId": "m1"
+  },
+  "sourceRevision": 2,
+  "currentState": "UNSUPPORTED"
+}

@@ -152,6 +152,11 @@ export function workspaceUI({
   modelSteel.hidden = false;
   modelSteel.innerHTML = icon("settings") + "<span>Member steel design</span>";
   designCommands.append(modelSteel);
+  const concrete = document.createElement("button");
+  concrete.id = "concrete-previews";
+  concrete.innerHTML = icon("settings") + "<span>Concrete previews</span>";
+  concrete.onclick = () => $("[data-inspector-tab=concrete]").click();
+  designCommands.append(concrete);
   steelCheck.hidden = false;
   steelCheck.innerHTML = icon("settings") + "<span>Reference checks</span>";
   steelCheck.title = "Check a steel member with the enabled AISC profile";

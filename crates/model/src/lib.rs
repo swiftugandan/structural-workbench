@@ -3,13 +3,11 @@ use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 
+mod design_inputs;
 mod migrate;
 mod section_props;
-mod design_inputs;
-pub use design_inputs::{DesignSource, DesignValue, SteelDesign};
-pub use migrate::{
-    CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, import_project,
-};
+pub use design_inputs::{DesignPreview, DesignSource, DesignValue, SteelDesign};
+pub use migrate::{CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, import_project};
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Diagnostic {
@@ -30,7 +28,7 @@ pub fn err(code: &str, message: impl Into<String>) -> Diagnostic {
         details: json!({}),
     }
 }
-macro_rules! record { ($n:ident {$($f:ident:$t:ty),* $(,)?}) => {#[derive(Clone,Debug,Serialize,Deserialize)] #[serde(rename_all="camelCase",deny_unknown_fields)] pub struct $n {$(pub $f:$t),*}}; }
+macro_rules! record { ($n:ident {$($(#[$a:meta])* $f:ident:$t:ty),* $(,)?}) => {#[derive(Clone,Debug,Serialize,Deserialize)] #[serde(rename_all="camelCase",deny_unknown_fields)] pub struct $n {$($(#[$a])* pub $f:$t),*}}; }
 record!(Node {
     id: String,
     position: [f64; 3]
@@ -170,7 +168,7 @@ pub struct Metadata {
     #[serde(default)]
     pub entity_labels: std::collections::BTreeMap<String, String>,
 }
-record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata});
+record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata,#[serde(default,skip_serializing_if="Vec::is_empty")]design_previews:Vec<DesignPreview>});
 impl Project {
     pub fn parse(s: &str) -> Result<Self> {
         Ok(import_project(s)?.0)
@@ -218,6 +216,7 @@ impl Project {
         }
 
         self.nodes.sort_by(|a, b| a.id.cmp(&b.id));
+        self.design_previews.sort_by(|a, b| a.id.cmp(&b.id));
         self.members.sort_by(|a, b| a.id.cmp(&b.id));
         self.materials.sort_by(|a, b| a.id.cmp(&b.id));
         self.sections.sort_by(|a, b| a.id.cmp(&b.id));
@@ -333,6 +332,26 @@ impl Project {
             }
         }
         check_id(&self.id)?;
+        if self.design_previews.len() > 100 {
+            return Err(err("MEMORY_LIMIT", "At most 100 design previews"));
+        }
+        for draft in &self.design_previews {
+            draft.validate()?;
+            check_id(&draft.id)?;
+            if !all.insert(&draft.id) {
+                return Err(err("DUPLICATE_ID", &draft.id));
+            }
+            if let Some(id) = &draft.target_id {
+                let exists = match draft.kind.as_str() {
+                    "rcBeam" => self.members.iter().any(|m| &m.id == id),
+                    "padFooting" => self.supports.iter().any(|s| &s.id == id),
+                    _ => false,
+                };
+                if !exists {
+                    return Err(err("DANGLING_REFERENCE", "Preview target no longer exists"));
+                }
+            }
+        }
         for name in [&self.name, &self.metadata.created_by]
             .into_iter()
             .chain(self.materials.iter().map(|x| &x.name))

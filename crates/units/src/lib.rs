@@ -25,6 +25,7 @@ pub fn parse(input: &str, dimension: &str, default_factor: f64) -> Result<f64, S
         ("inertia", "mm4" | "mm⁴") => 1e-12,
         ("density", "kg/m3" | "kg/m³") => 1.,
         ("stress", "Pa") => 1.,
+        ("stress", "kPa") => 1000.,
         ("stress", "MPa") => 1e6,
         ("stress", "GPa") => 1e9,
         _ => return Err("Unknown or incompatible unit".into()),
@@ -40,5 +41,7 @@ pub fn parse(input: &str, dimension: &str, default_factor: f64) -> Result<f64, S
 fn units() {
     assert_eq!(parse("250 mm", "length", 1.).unwrap(), 0.25);
     assert_eq!(parse("2.1e5 MPa", "stress", 1.).unwrap(), 2.1e11);
+    assert_eq!(parse("200 kPa", "stress", 1.).unwrap(), 200000.);
+    assert!(parse("200 kPa", "length", 1.).is_err());
     assert!(parse("10 kN", "length", 1.).is_err());
 }

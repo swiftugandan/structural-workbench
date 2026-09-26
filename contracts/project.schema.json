@@ -127,6 +127,13 @@
         "createdBy"
       ],
       "additionalProperties": false
+    },
+    "designPreviews": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/designPreview"
+      }
     }
   },
   "required": [
@@ -747,6 +754,60 @@
         "cb"
       ],
       "additionalProperties": false
+    },
+    "designPreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "inputSource",
+        "inputs",
+        "soilReference"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "kind": {
+          "enum": [
+            "rcBeam",
+            "slab",
+            "padFooting"
+          ]
+        },
+        "targetId": {
+          "type": "string"
+        },
+        "inputSource": {
+          "enum": [
+            "syntheticFixture",
+            "user",
+            "mixed"
+          ]
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "soilReference": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "inputSources": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "syntheticFixture",
+              "user"
+            ]
+          }
+        }
+      }
     }
   },
   "$comment": "The invalid domain is an identifier, not a downloadable endpoint."

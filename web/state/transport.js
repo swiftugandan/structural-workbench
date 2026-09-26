@@ -113,7 +113,8 @@ export class Gateway {
   }
 
   async send(operation, payload = {}) {
-    if (operation === "evaluateModelDesign") return this.modelDesign(payload);
+    if (["evaluateModelDesign", "evaluateDesignPreview"].includes(operation))
+      return this.modelDesign(payload, operation);
     if (operation === "analyse") return this.analyse(payload);
     if (operation === "runStudy") return this.runStudy(payload);
     if (operation === "cancelAnalysis") {
@@ -130,7 +131,7 @@ export class Gateway {
     );
   }
 
-  async modelDesign(payload) {
+  async modelDesign(payload, operation) {
     if (this.analysing) throw Error("Analysis or design is already running");
     this.analysing = true;
     try {
@@ -149,7 +150,7 @@ export class Gateway {
       return await this.post(
         this.analysisWorker,
         this.analysisPending,
-        "evaluateModelDesign",
+        operation,
         payload,
         imported.project.revision,
       );

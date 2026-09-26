@@ -141,3 +141,11 @@ warnings, without changing connectivity.
 - `STALE` is a presentation state of an immutable record whose model/result identity is no longer current. Its historical numerical result remains available in the downloadable record but cannot be attached as current design to a new analysis report.
 
 See ADR 0009 for input identity, axis mapping and bounded applicability.
+
+## Concrete workflow previews (no numerical acceptance)
+
+- Optional `Project.designPreviews` contains up to 100 Rust-validated draft records. `CreateDesignPreview {kind,targetId?}`, `SetDesignPreview {id,inputs,targetId?,soilReference}` and `DeleteDesignPreview {id}` are atomic revision-aware commands. Kinds: `rcBeam`, `slab`, `padFooting`. Inputs are complete positive SI maps in storage; edit commands accept dimensioned strings (soil unit weight is numeric N/m³). Input changes conservatively change the model hash. Draft dimensions do not modify frame stiffness.
+- `designPreviewTemplates {}` returns field metadata and conspicuously synthetic default inputs.
+- `evaluateDesignPreview {draftId,modelHash,sourceMode,caseId?,resultId?}` uses the captured project on a disposable worker. `sourceMode` is explicit `synthetic|model`. Model actions require exact current converged case/result identity, re-solved in Rust. Slabs reject frame-model sources. Beam actions are actual member key stations; footing actions negate one simultaneous global support reaction vector. No orientation, contact or code capacities are inferred.
+- Returned records have deterministic `previewRunId`, `inputHash`, model/revision identity, source provenance, null code profile, `mock:true`, `overall:unsupported`, unavailable check utilisations and explicit limitations. A model action source may have `mock:false`; the concrete workflow remains unverified. Footing contact is `indeterminate`, bearing pressure is external input, and `computedByWorkbench:false`.
+- Preview reinforcement pictures/RC CSV rows are illustrative preferences, with unverified fit/quantities/anchorage and null cut lengths. Export adds current/stale presentation state; it never upgrades the recorded design status. See `docs/design/concrete-workflow-previews.md`.

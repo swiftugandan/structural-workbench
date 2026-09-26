@@ -2832,3 +2832,66 @@ body:has(#workspace:not([hidden])) > .appbar {
     grid-template-columns: 1fr;
   }
 }
+
+/* Draft concrete workflows occupy the existing inspector and central viewport. */
+#concrete-inspector {
+  padding: 16px;
+  overflow: auto;
+}
+#concrete-inspector label {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0;
+}
+#concrete-inspector input,
+#concrete-inspector select,
+#concrete-inspector textarea {
+  width: 100%;
+  min-width: 0;
+}
+#concrete-inspector button {
+  margin: 5px 4px 5px 0;
+}
+#design-preview-scene {
+  position: absolute;
+  inset: 62px 25px 38px;
+  z-index: 5;
+  background: #f7fafdee;
+  border: 1px solid #ccd9e5;
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+#design-preview-scene[hidden] {
+  display: none;
+}
+#design-preview-scene svg {
+  width: 100%;
+  min-height: 120px;
+  max-height: 380px;
+  flex: 1;
+}
+#design-preview-scene text {
+  font-size: 9px;
+  fill: #314b62;
+}
+#design-preview-scene p {
+  font-size: 12px;
+  text-align: center;
+}
+#design-preview-scene .badge {
+  margin-top: 8px;
+}
+[data-testid="preview-result"] pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.inspector-tabs {
+  flex-wrap: wrap;
+}
+#model-nav button[data-preview] {
+  grid-template-columns: minmax(0, 1fr) auto;
+}

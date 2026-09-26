@@ -42,6 +42,7 @@ import {
   designResultsHtml,
   designState,
 } from "./steel-design.js";
+import { concreteWorkspace } from "./design-previews.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -114,6 +115,33 @@ const nativeSteel = steelDesignWorkspace({
     $("[data-tab='steel-design']").click();
     $("#show-results").click();
   },
+});
+const concrete = concreteWorkspace({
+  gateway,
+  command,
+  getContext: () => ({
+    project,
+    modelHash,
+    result,
+    dirty: formDirty,
+    locked: busy || readOnly || analysing,
+    failed,
+  }),
+  onDirty: (v) => {
+    formDirty = v;
+    setBusy(busy);
+    renderResults();
+  },
+  onError: message,
+  onRunning: (v) => {
+    setAnalysing(v);
+    setBusy(v);
+  },
+  showResults: () => {
+    $("[data-tab=design-preview]").click();
+    $("#show-results").click();
+  },
+  download,
 });
 const modelTools = modeling({
   getProject: () => project,
@@ -754,6 +782,16 @@ function renderNav() {
         }`,
     )
     .join("");
+  $("#model-nav").insertAdjacentHTML(
+    "beforeend",
+    `<h3 class="nav-section-title">Design previews · mock workflows</h3>${(project.designPreviews || []).map((d) => `<button data-preview="${esc(d.id)}"><span class="nav-label">${esc({ rcBeam: "RC beam", slab: "Slab", padFooting: "Pad footing" }[d.kind])}</span><span class="count">${esc(d.id.slice(-6))}</span></button>`).join("")}`,
+  );
+  for (const b of document.querySelectorAll("[data-preview]"))
+    b.onclick = () => {
+      if (formDirty) return message("Apply or cancel changes first.");
+      concrete.select(b.dataset.preview);
+      $("[data-inspector-tab=concrete]").click();
+    };
   for (const b of document.querySelectorAll("[data-member]"))
     b.onclick = (e) => selectEntities([b.dataset.member], e.shiftKey);
   for (const b of document.querySelectorAll("[data-group]"))
@@ -838,6 +876,9 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
     $("#inspector-content").hidden = kind !== "properties";
     $("#force-inspector").hidden = kind !== "forces";
     $("#steel-design-inspector").hidden = kind !== "steel";
+    $("#concrete-inspector").hidden = kind !== "concrete";
+    $("#design-preview-scene").hidden = kind !== "concrete";
+    if (kind === "concrete") void concrete.render();
     for (const tab of document.querySelectorAll("[data-inspector-tab]"))
       tab.setAttribute("aria-pressed", String(tab === button));
     if (kind === "forces") renderSelectionForces();
@@ -846,6 +887,7 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
 function renderInspector() {
   renderSelectionForces();
   formDirty = false;
+  if (!$("#concrete-inspector").hidden) void concrete.render();
   if (!$("#steel-design-inspector").hidden) void nativeSteel.render();
   if (!selected || viewport.selection.size > 1) {
     const count = viewport.selection.size;
@@ -1002,6 +1044,11 @@ function renderResults() {
     (failed ? "failed" : result ? (current ? "current" : "stale") : "");
   $("#export-report").disabled = !current || failed;
   $("#export-csv").disabled = !current || failed;
+  if (tab === "design-preview") {
+    $("#export-csv").disabled = true;
+    concrete.results($("#results-content"));
+    return;
+  }
   if (tab === "steel-design") {
     const run = lastDesignRun?.source === "modelNative" ? lastDesignRun : null;
     const state = designState(run, modelHash, result, formDirty || failed);
@@ -1272,6 +1319,7 @@ $("#analyse").onclick = async () => {
     message(e.message);
   } finally {
     setAnalysing(false);
+    if (!$("#concrete-inspector").hidden) void concrete.render();
   }
 };
 $("#cancel").onclick = () => {
@@ -1514,6 +1562,7 @@ $("#study-file").onchange = async () => {
     if (!/CANCELLED|TIMEOUT/.test(e.message)) message(e.message);
   } finally {
     setAnalysing(false);
+    if (!$("#concrete-inspector").hidden) void concrete.render();
   }
 };
 

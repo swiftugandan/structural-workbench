@@ -1,0 +1,65 @@
+{
+  "sourceHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212",
+  "buildHash": "2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3",
+  "platform": "macOS",
+  "browser": "visible Chrome via chrome-devtools-axi",
+  "gpuObserved": "WEBGPU \u00b7 amd",
+  "observations": {
+    "rcBeam": {
+      "before": "UNSUPPORTED",
+      "stale": {
+        "state": "STALE",
+        "runDisabled": true
+      },
+      "restored": {
+        "state": "UNSUPPORTED",
+        "gpu": "WEBGPU \u00b7 amd",
+        "build": "\n        Units:\n          \n            m \u00b7 kN \u00b7 mm\n            m \u00b7 N \u00b7 m\n          \u25cf Rust / WASM readyBuild 2e477a37d918Online\n          Analysis & design scope\n        \n      ",
+        "source": "model"
+      }
+    },
+    "slab": {
+      "faces": [
+        "Slab \u00b7 MOCK WORKFLOWNOT CHECKEDTop X \u00b7 direction illustrationIllustration only \u00b7 no verified reinforcement or code compliance",
+        "Slab \u00b7 MOCK WORKFLOWNOT CHECKEDTop Y \u00b7 direction illustrationIllustration only \u00b7 no verified reinforcement or code compliance",
+        "Slab \u00b7 MOCK WORKFLOWNOT CHECKEDBottom X \u00b7 direction illustrationIllustration only \u00b7 no verified reinforcement or code compliance",
+        "Slab \u00b7 MOCK WORKFLOWNOT CHECKEDBottom Y \u00b7 direction illustrationIllustration only \u00b7 no verified reinforcement or code compliance"
+      ],
+      "observed": {
+        "state": "UNSUPPORTED",
+        "sourceChoices": 1,
+        "source": "synthetic",
+        "build": "\n        Units:\n          \n            m \u00b7 kN \u00b7 mm\n            m \u00b7 N \u00b7 m\n          \u25cf Rust / WASM readyBuild 2e477a37d918Online\n          Analysis & design scope\n        \n      "
+      }
+    },
+    "padFooting": {
+      "state": "UNSUPPORTED",
+      "scene": "Pad footing \u00b7 MOCK WORKFLOWUNSUPPORTEDContact INDETERMINATE \u00b7 no pressure fieldIllustration only \u00b7 no verified reinforcement or code compliance",
+      "actualActions": true,
+      "soilUser": true,
+      "pressure": "210",
+      "error": "",
+      "gpu": "WEBGPU \u00b7 amd",
+      "build": "\n        Units:\n          \n            m \u00b7 kN \u00b7 mm\n            m \u00b7 N \u00b7 m\n          \u25cf Rust / WASM readyBuild 2e477a37d918Online\n          Analysis & design scope\n        \n      ",
+      "explorer": [
+        {
+          "label": "RC beam",
+          "truncated": false
+        },
+        {
+          "label": "Slab",
+          "truncated": false
+        },
+        {
+          "label": "Pad footing",
+          "truncated": false
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Local workflow observation only",
+    "Not Windows/Linux hardware acceptance",
+    "No concrete numerical acceptance"
+  ]
+}

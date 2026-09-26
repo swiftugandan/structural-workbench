@@ -1,8 +1,9 @@
 mod cad;
+mod design_workspace;
+mod preview_workspace;
 mod snap;
 mod topology;
 mod view;
-mod design_workspace;
 use serde_json::{Value, json};
 use wasm_bindgen::prelude::*;
 use workbench_model::{Project, Result, err, import_project};
@@ -46,7 +47,12 @@ impl Kernel {
         if op == "capabilities" {
             return Ok(capabilities_payload());
         }
-        if op == "steelCatalogue" { return Ok(workbench_design::native::catalogue()); }
+        if op == "steelCatalogue" {
+            return Ok(workbench_design::native::catalogue());
+        }
+        if op == "designPreviewTemplates" {
+            return Ok(json!({"templates":preview_workspace::templates()}));
+        }
         if op == "computeSection" {
             let payload = &r["payload"];
             let shape = payload["shape"].as_str().unwrap_or("");
@@ -84,13 +90,28 @@ impl Kernel {
                     "Model changed; reload the current snapshot",
                 ));
             }
-        } else if !["createProject", "importProject", "evaluateDesign", "runStudy"].contains(&op) {
+        } else if ![
+            "createProject",
+            "importProject",
+            "evaluateDesign",
+            "runStudy",
+        ]
+        .contains(&op)
+        {
             return Err(err("INVALID_SCHEMA", "Open a project first"));
         }
         let payload = &r["payload"];
         match op {
-            "steelReadiness" => workbench_design::native::readiness(self.project.as_ref().unwrap(),payload["memberId"].as_str().unwrap_or("")),
-            "evaluateModelDesign" => design_workspace::evaluate(self.project.as_ref().unwrap(),payload),
+            "evaluateDesignPreview" => {
+                preview_workspace::evaluate(self.project.as_ref().unwrap(), payload)
+            }
+            "steelReadiness" => workbench_design::native::readiness(
+                self.project.as_ref().unwrap(),
+                payload["memberId"].as_str().unwrap_or(""),
+            ),
+            "evaluateModelDesign" => {
+                design_workspace::evaluate(self.project.as_ref().unwrap(), payload)
+            }
             "createProject" | "importProject" => {
                 let text = if op == "importProject" {
                     payload["jsonUtf8"]
@@ -320,10 +341,7 @@ impl Kernel {
                 if profile_id.is_empty() {
                     return Err(err("INVALID_SCHEMA", "profileId is required"));
                 }
-                let member_ids = payload["memberIds"]
-                    .as_array()
-                    .cloned()
-                    .unwrap_or_default();
+                let member_ids = payload["memberIds"].as_array().cloned().unwrap_or_default();
                 let member_id = member_ids
                     .first()
                     .and_then(|v| v.as_str())
@@ -379,10 +397,7 @@ impl Kernel {
                 let ctx = workbench_design::MemberContext {
                     member_id,
                     // Fail-closed: missing family/flags must not default into S2 applicability.
-                    section_family: inputs["sectionFamily"]
-                        .as_str()
-                        .unwrap_or("")
-                        .into(),
+                    section_family: inputs["sectionFamily"].as_str().unwrap_or("").into(),
                     doubly_symmetric: inputs["doublySymmetric"].as_bool().unwrap_or(false),
                     prismatic: inputs["prismatic"].as_bool().unwrap_or(false),
                     fy: inputs["fy"].as_f64().unwrap_or(0.0),
@@ -452,7 +467,18 @@ impl Kernel {
 }
 fn apply(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     let kind = c["type"].as_str().unwrap_or("");
-    if ["AssignSteelCatalogue", "SetSteelDesign"].contains(&kind) { return design_workspace::apply(v,c); }
+    if [
+        "CreateDesignPreview",
+        "SetDesignPreview",
+        "DeleteDesignPreview",
+    ]
+    .contains(&kind)
+    {
+        return preview_workspace::apply(v, c);
+    }
+    if ["AssignSteelCatalogue", "SetSteelDesign"].contains(&kind) {
+        return design_workspace::apply(v, c);
+    }
     if ["MoveNodes", "CopySelection", "CopyBay", "DeleteGeometry"].contains(&kind) {
         return cad::apply(v, c);
     }
