@@ -55,3 +55,69 @@ test("Support symbols track restraints, orientation, property edits and undo", a
   await page.locator("#undo").click();
   await expect(badge).toHaveAttribute("data-support-kind", "roller");
 });
+
+test("Support labels toggle independently without invalidating analysis", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.locator("#import-file").setInputFiles("fixtures/models/B02.json");
+  await expect(page.locator(".support-label")).toHaveCount(1);
+  await page.locator("#analyse").click();
+  await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  const hash = await page.locator("#hash-status").textContent();
+  await page.locator("#support-labels").click();
+  await expect(page.locator("#support-labels")).toHaveAttribute(
+    "aria-pressed",
+    "false",
+  );
+  for (const view of ["3d", "plan", "elevation"]) {
+    await page.locator(`#view-${view}`).click();
+    await expect(page.locator(".support-label")).toHaveCount(0);
+    await expect(page.locator("#viewport")).toHaveAttribute(
+      "data-support-display",
+      view === "3d" ? "illustrative-solid" : "analytical-symbol",
+    );
+    await expect(page.locator("#result-status")).toHaveText("✓ Current");
+    await expect(page.locator("#hash-status")).toHaveText(hash);
+  }
+  await page.locator("#support-labels").focus();
+  await page.keyboard.press("Space");
+  await expect(page.locator("#support-labels")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.locator(".support-label")).toHaveCount(1);
+  await expect(page.locator("#result-status")).toHaveText("✓ Current");
+});
+
+test("Member label Auto, Show all and Hide are independent of support labels", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.locator("#worked-examples").click();
+  await page.locator("[data-example=UKR01]").click();
+  await expect(page.locator("#model-count")).toHaveText(
+    "447 nodes · 642 members",
+  );
+  const hash = await page.locator("#hash-status").textContent();
+  await expect(page.locator(".member-label")).toHaveCount(1);
+  const selectedLabels = await page.locator(".member-label").count();
+  expect(selectedLabels).toBeLessThan(642);
+  await page.locator("#member-labels").selectOption("show");
+  await expect(page.locator(".member-label")).toHaveCount(642);
+  await expect(page.locator(".support-label")).toHaveCount(12);
+  await page.locator("#support-labels").click();
+  await expect(page.locator(".support-label")).toHaveCount(0);
+  await expect(page.locator(".member-label")).toHaveCount(642);
+  await page.locator("#member-labels").selectOption("hide");
+  for (const view of ["plan", "elevation", "3d"]) {
+    await page.locator(`#view-${view}`).click();
+    await expect(page.locator(".member-label")).toHaveCount(0);
+  }
+  await page.locator("#support-labels").click();
+  await expect(page.locator(".support-label")).toHaveCount(12);
+  await expect(page.locator(".member-label")).toHaveCount(0);
+  await page.locator("#member-labels").selectOption("auto");
+  await expect(page.locator(".member-label")).toHaveCount(selectedLabels);
+  await expect(page.locator("#hash-status")).toHaveText(hash);
+});

@@ -2891,6 +2891,15 @@
       ],
       "sourceHash": "fafd7f858f4701984696a55b3d2dc1e65ce1c7907cdff13a1313c29c71bdf179",
       "buildHash": "c44002e98713992462db5bb59ae655efc809e57e5ebf9f5846e1829e15fff0e3"
+    },
+    "LABEL-VISIBILITY": {
+      "id": "LABEL-VISIBILITY",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "useCase": "Independent member and support label visibility without changing the engineering model",
+      "evidencePath": "evidence/support-labels/label-gate.json",
+      "sourceHash": "904b84df5e62b7d46e3d32eb43717614881c0f3705bf17b42b0a1b7207c71d32",
+      "buildHash": "b21c6a2d188c7e43a2007b07950b004d6daf475dfd251616525f369b0d93bd5c",
+      "verification": "Three focused browser journeys plus visible Chrome/AMD show/hide inspection; no numerical changes."
     }
   },
   "blockers": [

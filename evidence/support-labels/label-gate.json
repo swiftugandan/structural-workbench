@@ -1,0 +1,42 @@
+{
+  "taskId": "LABEL-VISIBILITY",
+  "milestone": "M00",
+  "sourceHash": "904b84df5e62b7d46e3d32eb43717614881c0f3705bf17b42b0a1b7207c71d32",
+  "buildHash": "b21c6a2d188c7e43a2007b07950b004d6daf475dfd251616525f369b0d93bd5c",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "build.json": "b4d4d7d5bdb6942e68a340484a0f3016d8ea59749836633cbc4e0f49103f6139",
+    "build.log": "612f689577ada15012485950cffa483ac999f135193820a1d91ac1df8a32a8b8",
+    "browser.log": "7d26ddc1a2213c6ccb3c4272669a46156e5d5ea6bc8f6271ad86bf7ff1580fb1",
+    "playwright-results.json": "7266d134b0b83416e852e6d26c9f7ec76c265ee841fc61fbe9371aec0b278e1e",
+    "visible-browser.json": "2d313659a6d53687ab8ad349612b511e18ac625fa7be79111fa3ce3493caf338",
+    "labels-shown.png": "b000b4af2210a0f161c03190e1ffdb956a236a4da940fb0efa100ea2f1e8aefd",
+    "labels-hidden.png": "399c4e119ca000a2e2e6e2f6f4ac4b9d4a29df8f85ec09b9937f714cb916f354"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T18:53:09.049Z",
+  "status": "PASS",
+  "browserTests": 3,
+  "visibleBrowser": "macOS Chrome / AMD WebGPU",
+  "scope": "Session presentation controls only. Member Auto/Show all/Hide; independent support labels; geometry and current analysis preserved.",
+  "artifacts": [
+    "build.json",
+    "build.log",
+    "browser.log",
+    "playwright-results.json",
+    "visible-browser.json",
+    "labels-shown.png",
+    "labels-hidden.png"
+  ]
+}

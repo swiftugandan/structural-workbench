@@ -1,0 +1,14 @@
+[
+  {
+    "state": "show",
+    "members": 642,
+    "supports": 12,
+    "build": "Build b21c6a2d188c"
+  },
+  {
+    "state": "hide",
+    "members": 0,
+    "supports": 0,
+    "supportGeometry": "illustrative-solid"
+  }
+]

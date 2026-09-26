@@ -577,6 +577,7 @@ export class Viewport {
     let labelBudget = 200;
     const label = (text, p, cls = "", assignment = null) => {
       if (
+        !(cls === "member-label" && this.memberLabels === "show") &&
         ![
           "axis-summary",
           "axis-label",
@@ -663,7 +664,12 @@ export class Viewport {
     }
     entityIndex = 0;
     for (const m of this.project.members) {
-      if (this.project.members.length > 100 && !this.selection.has(m.id))
+      if (
+        this.memberLabels === "hide" ||
+        (this.memberLabels !== "show" &&
+          this.project.members.length > 100 &&
+          !this.selection.has(m.id))
+      )
         continue;
       const a = points.get(m.start),
         b = points.get(m.end);
@@ -770,6 +776,7 @@ export class Viewport {
       }
     }
     for (const { support, symbol } of supportSymbols) {
+      if (this.showSupportLabels === false) continue;
       const name = entityLabel(this.project, support.id);
       const badge = label(
         `${name} · ${symbol.kind === "custom" ? "Custom " + symbol.constraints : symbol.kind[0].toUpperCase() + symbol.kind.slice(1)}${symbol.endOn ? " (end-on)" : ""}`,

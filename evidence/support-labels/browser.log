@@ -1,0 +1,12 @@
+
+Running 3 tests using 1 worker
+
+(node:83036) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:83036) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/support-symbols.spec.js:3:1 › Support symbols track restraints, orientation, property edits and undo (8.9s)
+  ✓  2 tests/e2e/support-symbols.spec.js:59:1 › Support labels toggle independently without invalidating analysis (3.3s)
+  ✓  3 tests/e2e/support-symbols.spec.js:93:1 › Member label Auto, Show all and Hide are independent of support labels (7.8s)
+
+  3 passed (21.9s)

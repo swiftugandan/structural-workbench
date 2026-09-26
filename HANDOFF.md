@@ -1,3 +1,7 @@
+## Latest: member and support label visibility
+
+Viewport controls now include **Support labels** (show/hide) and **Member labels: Auto / Show all / Hide**. Auto preserves the existing large-model selection rule; Show all deliberately overrides the member label budget. Hiding labels leaves support/member geometry and analysis unchanged. Preferences apply during the session across camera changes. Focused regression and visible-browser evidence: `evidence/support-labels/`.
+
 ## Latest: spatial crossing diagnostic correction
 
 Rust now flags only nonparallel finite centreline contacts within the existing model merge tolerance. Members that merely overlap in a camera projection do not warn. True intersections remain visible in edge-on views. Shared endpoint IDs are already connected. This is diagnostic only; no automatic topology or analysis mutation. ADR 0011 records the explicit correction to the former projection-only contract. Evidence and reproduction: `evidence/spatial-crossings/`.

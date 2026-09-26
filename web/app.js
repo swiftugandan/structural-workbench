@@ -2094,3 +2094,17 @@ $("#model-crossings").onclick = () => {
   $("#geometry-status").hidden = !viewport.showCrossings;
   viewport.draw();
 };
+
+$("#support-labels").onclick = () => {
+  viewport.showSupportLabels = viewport.showSupportLabels === false;
+  $("#support-labels").setAttribute(
+    "aria-pressed",
+    String(viewport.showSupportLabels),
+  );
+  viewport.draw();
+};
+
+$("#member-labels").onchange = (event) => {
+  viewport.memberLabels = event.target.value;
+  viewport.draw();
+};
