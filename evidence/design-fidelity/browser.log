@@ -1,0 +1,21 @@
+
+Running 12 tests using 1 worker
+
+(node:28621) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28621) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout rcBeam: 3D focus, drawings, details, source and preserved model (8.7s)
+  ✓   2 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout slab: 3D focus, drawings, details, source and preserved model (6.5s)
+  ✓   3 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout padFooting: 3D focus, drawings, details, source and preserved model (6.0s)
+  ✓   4 tests/e2e/design-fidelity.spec.js:89:1 › Steel mockup: section card, catalogue, readiness, calculation tree and provenance (6.4s)
+  ✓   5 tests/e2e/design-previews.spec.js:6:3 › Concrete preview rcBeam: source, stale, undo, persistence and export (7.1s)
+  ✓   6 tests/e2e/design-previews.spec.js:6:3 › Concrete preview slab: source, stale, undo, persistence and export (5.6s)
+  ✓   7 tests/e2e/design-previews.spec.js:6:3 › Concrete preview padFooting: source, stale, undo, persistence and export (6.4s)
+  ✓   8 tests/e2e/native-steel-design.spec.js:43:1 › DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen (7.9s)
+  ✓   9 tests/e2e/native-steel-design.spec.js:134:1 › DW-F4: fail reaches governing station and clause; LTB stays unsupported (5.1s)
+  ✓  10 tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes (2.8s)
+  ✓  11 tests/e2e/workspace-ux.spec.js:4:1 › UX ribbon, keyboard context menu and property drafts preserve model state (2.4s)
+  ✓  12 tests/e2e/workspace-ux.spec.js:39:1 › UX responsive panel navigation retains editable properties and results (2.5s)
+
+  12 passed (1.2m)

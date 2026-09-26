@@ -1,0 +1,100 @@
+{
+  "taskId": "DESIGN-FIDELITY",
+  "milestone": "M07",
+  "sourceHash": "fb4c81474d6160572535919e921a793a1ce23c95ec2b922f0c7f10c270b94445",
+  "buildHash": "4f0a7afefc990c3ef47ddb5e4db6d3b55b77649a1bfbf6520ebfad187e39efff",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "browser.log": "7d9b414d8c0ae915af8efefd196b0e0694ef31e4e5b93f070ded73ce3275d61d",
+    "build.json": "d5273597bc7fd4135c25e412220ef15f1f63921fa89e816fa2fb462d1fab4117",
+    "build.log": "dae33661ae885e2f6c61d5be3a904922b92b24369cfa8222043c41db72bf0342",
+    "contracts.log": "d86157a337106da7b634a985db7b95b4ae591a41c8d1a1ab3791b41e56cd6ea2",
+    "footing-visible.png": "13999644c1c892964032a6cd950a45f4226567487744e278032d34eefe8e4d18",
+    "geometry.log": "58b7a5e0496702ff2719bff75876b5ff0b3c30570c6c884d8e69340debb531c9",
+    "padFooting-reinforcement.png": "ba902ac1fdacbb073f8f10264e30cc64784d48d0f1557f469a4d65c300174124",
+    "padFooting-run.json": "1b203fe9c63b97a8f244ccaefb3d8402c9db056a5a21b6abc9b1ee8da0eee85c",
+    "playwright-results.json": "d7e3e7af285e1fc5ba7000c20033c9471d9f2e95eb2c5754f1ea1c3dd1e9e801",
+    "rc-beam-visible.png": "1833ff048531fd22d769e1fc17f55191cd1eff70e93bd3c502e325040552b87d",
+    "rcBeam-reinforcement.png": "9184787cd172b55937ec49456cc9e40a3b7c2d2076dcb6e6557c5041c9f2eb0a",
+    "rcBeam-run.json": "775e9fd3676a822bb11609937a82834fc742072e606a1796d811382b702af101",
+    "slab-reinforcement.png": "5871995223dff00c56582a958270aa810a06d25489f24402c9d9fa8e0b598b13",
+    "slab-run.json": "03e0ab4ebc675fa7c1304e50c2cd48eebecc144038bb9c9bfbd6ebda54c25b91",
+    "slab-visible.png": "36e640e7379092b5a8fcc563331ac3ebdbaf6d665fab01c6f158a7b4026f18cb",
+    "steel-member.png": "8731e5c88d98881087cf9902a671273e3f5b6dc93763b8e4ecbe1abb30ecf8da",
+    "steel-run.json": "7b46ca1884587daa70e4d150357c72dc8298906eaacfa3b9eda17a0ef344bcf6",
+    "steel-visible.png": "b7d544b42d1ba52f86e8b4146cf6ae8816d2b19a35b051d401782c95b4dce2ca",
+    "visible-console.log": "1f88445c33c946c0d08d427af32a8ff7bc30cb356162584f747d40046f819d15"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T15:29:24.187Z",
+  "status": "PASS",
+  "scope": "Local visual/workflow correction; no expanded numerical or platform acceptance",
+  "sourceCommit": "2989fb7",
+  "testCount": 17,
+  "tests": {
+    "browser": 12,
+    "contracts": 3,
+    "geometry": 2
+  },
+  "commands": [
+    "npm run build",
+    "node --test tests/design-scene.test.mjs",
+    "npm run test:contracts",
+    "npx playwright test tests/e2e/design-fidelity.spec.js tests/e2e/design-previews.spec.js tests/e2e/native-steel-design.spec.js tests/e2e/orientation.spec.js tests/e2e/workspace-ux.spec.js"
+  ],
+  "fixtureHashes": {
+    "fixtures/models/B04.json": "aac6bd1c02946a8fb79c55596f804c850dc476516174493179c05cb39dfd0990"
+  },
+  "manual": {
+    "browser": "Visible Chrome",
+    "platform": "macOS",
+    "adapter": "WebGPU AMD",
+    "viewport": "1600x1000 CSS pixels",
+    "observed": [
+      "Compared grouped panels and ribbon to local M07/M08/M11 references; M10 captions only",
+      "Steel actual WASM PASS, clause tree, solid endpoints",
+      "RC concrete/reinforcement/both and model context toggles",
+      "RC longitudinal and cross-section panels",
+      "Slab four layer choices and synthetic action values",
+      "Footing user soil input origin and INDETERMINATE contact"
+    ],
+    "console": "No runtime errors observed; Chrome reports form id/name advisory",
+    "limits": [
+      "No Windows/Linux real-GPU acceptance",
+      "No concrete code profile/resistance/contact/FE validation",
+      "Whole-model overview and section study remain queued"
+    ]
+  },
+  "artifacts": [
+    "browser.log",
+    "build.json",
+    "build.log",
+    "contracts.log",
+    "footing-visible.png",
+    "geometry.log",
+    "padFooting-reinforcement.png",
+    "padFooting-run.json",
+    "playwright-results.json",
+    "rc-beam-visible.png",
+    "rcBeam-reinforcement.png",
+    "rcBeam-run.json",
+    "slab-reinforcement.png",
+    "slab-run.json",
+    "slab-visible.png",
+    "steel-member.png",
+    "steel-run.json",
+    "steel-visible.png",
+    "visible-console.log"
+  ]
+}

@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: member solid spans Rust midpoint frame endpoints: 1,0,0
+ok 1 - member solid spans Rust midpoint frame endpoints: 1,0,0
+  ---
+  duration_ms: 1.196679
+  ...
+# Subtest: member solid spans Rust midpoint frame endpoints: 0,0,1
+ok 2 - member solid spans Rust midpoint frame endpoints: 0,0,1
+  ---
+  duration_ms: 0.364772
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 103.748616

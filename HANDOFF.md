@@ -2,7 +2,11 @@
 
 Read `AGENTS.md`, the repository skills, and root `delivery/state.json` for current priority.
 
-## Current state (2026-09-26)
+## Visual correction (2026-09-26)
+
+User feedback identified a substantial mockup mismatch in the initial workflow UI. Commit `2989fb7` corrects the shell density, grouped inspectors, WebGPU design geometry and structured results/detail/reinforcement panes. See `docs/design/design-fidelity-correction.md` and `evidence/design-fidelity/fidelity-gate.json`. All 12 affected browser journeys, 3 contracts and 2 member-end display checks passed; visible Chrome/macOS AMD screens were compared and recorded. Source `fb4c81474d6160572535919e921a793a1ce23c95ec2b922f0c7f10c270b94445`; build `4f0a7afefc990c3ef47ddb5e4db6d3b55b77649a1bfbf6520ebfad187e39efff`. This supersedes earlier screenshots for visual presentation only. Numerical scope, unsupported concrete checks and queued M07-G features remain unchanged.
+
+## Prior workflow state (2026-09-26)
 
 M00–M07 remain accepted at their existing bounded scope. M07-E and M07-F now deliver model-native steel catalogue/material binding, source-labelled assumptions/readiness, direct Rust/WASM checks of real model stations, richer immutable provenance, and the current Selection Inspector / Results drawer workflow.
 
