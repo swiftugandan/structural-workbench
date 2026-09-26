@@ -2809,6 +2809,15 @@
       "buildHash": "4f0a7afefc990c3ef47ddb5e4db6d3b55b77649a1bfbf6520ebfad187e39efff",
       "evidencePath": "evidence/design-fidelity/fidelity-gate.json",
       "notes": "12 browser journeys, 3 contract tests, 2 display geometry tests and visible macOS AMD Chrome. Numerical parents and M07-G unchanged."
+    },
+    "EXPLORER-FIDELITY": {
+      "id": "EXPLORER-FIDELITY",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "sourceCommit": "c5f22d9",
+      "sourceHash": "de006db9c91efd3188c8c352def272380aa38eaac3481de5c9e19604602bcc36",
+      "buildHash": "0dd9dc2bf59fe7501edfdd21ef8ea8243922e56b90ad87444238a2d2b868c3d1",
+      "evidencePath": "evidence/explorer-fidelity/explorer-gate.json",
+      "notes": "12 browser journeys and visible Chrome review. Searchable collapsible elevation/type hierarchy, entity editors and draft links. Mockup parity remains partial; see gap register."
     }
   },
   "blockers": [
@@ -2843,7 +2852,7 @@
   ],
   "lastVerifiedSourceRevision": "b6e0bc1d8b0b16b60f6f69f5959365912f0b82fe",
   "lastVerifiedBuildHash": "2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3",
-  "nextAction": "M07-G whole-model steel overview/catalogue-study remains queued. Concrete workflow previews are locally verified; acquire locked concrete code/examples and implement validated numerical families before M08/M10/M11 design acceptance.",
+  "nextAction": "Continue docs/design/mockup-gap-audit.md: authored storeys/layers, design toolbar, M07-G whole-model overview/full catalogue/section study remain open. Numerical concrete parents remain resource blocked; preserve explicit mock provenance.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212"
 }

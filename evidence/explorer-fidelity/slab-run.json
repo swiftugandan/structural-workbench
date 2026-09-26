@@ -1,0 +1,107 @@
+{
+  "checks": [
+    {
+      "name": "Plate/shell solution",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Mesh convergence",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Design action transformation",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Top X/Y reinforcement",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Bottom X/Y reinforcement",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Punching",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    }
+  ],
+  "codeProfile": null,
+  "contactState": "notApplicable",
+  "contractVersion": 1,
+  "draftId": "dpfcb6ecfd63d77236",
+  "inputHash": "f6a4d9aae486540263fa53287ef049f57d790be4839301874f2de6fab980f84e",
+  "inputs": {
+    "id": "dpfcb6ecfd63d77236",
+    "inputSource": "syntheticFixture",
+    "inputSources": {
+      "concreteStrength": "syntheticFixture",
+      "cover": "syntheticFixture",
+      "length": "syntheticFixture",
+      "meshSize": "syntheticFixture",
+      "openingLength": "syntheticFixture",
+      "openingWidth": "syntheticFixture",
+      "rebarStrength": "syntheticFixture",
+      "thickness": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "concreteStrength": 30000000,
+      "cover": 0.03,
+      "length": 6,
+      "meshSize": 0.4,
+      "openingLength": 1,
+      "openingWidth": 1,
+      "rebarStrength": 500000000,
+      "thickness": 0.225,
+      "width": 5
+    },
+    "kind": "slab",
+    "soilReference": "Synthetic starter input; replace with a referenced geotechnical report"
+  },
+  "kind": "slab",
+  "limitations": [
+    "MOCK WORKFLOW — no code-compliance claim",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"
+  ],
+  "mock": true,
+  "modelHash": "3d61f5e476f29fe839d286f46a81a4a609cf4dac116d0213209443e8ea241ee4",
+  "overall": "unsupported",
+  "previewRunId": "13e0861a3b10cc0ee6c99db46b0f9b875793430d039debac89fb655aa1280ab9",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "schedule": [],
+  "soilProvenance": null,
+  "sourceProvenance": {
+    "designTransform": "unavailable",
+    "fixtureId": "slab-plate-actions-v1",
+    "kind": "syntheticFixture",
+    "meshConvergence": "notChecked",
+    "mock": true,
+    "note": "No validated plate/shell analysis; never use a frame-member result as a slab action",
+    "rawPlateActions": {
+      "mx": -62000,
+      "mxy": 8500,
+      "my": -31000
+    },
+    "units": "N m/m"
+  },
+  "sourceRevision": 1,
+  "currentState": "UNSUPPORTED"
+}

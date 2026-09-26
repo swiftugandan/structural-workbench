@@ -2,6 +2,12 @@
 
 Read `AGENTS.md`, the repository skills, and root `delivery/state.json` for current priority.
 
+## Explorer correction and open mockup gaps (2026-09-26)
+
+Commit `c5f22d9` adds searchable, collapsible model hierarchy with elevation/orientation groups, physical lineage, concrete draft categories and definition editors. It also synchronizes the steel heading with readable member labels. All 12 browser journeys passed; visible Chrome/macOS AMD evidence is in `evidence/explorer-fidelity/explorer-gate.json`. Build `0dd9dc2bf59fe7501edfdd21ef8ea8243922e56b90ad87444238a2d2b868c3d1`.
+
+The earlier layout-match claim was too broad. Read `docs/design/mockup-gap-audit.md` before continuing. Authored storeys/layers, full design toolbar, whole-model overview, full catalogue drawer, studies and richer concrete detailing are still incomplete. Derived hierarchy is navigation only. Do not claim full mockup acceptance.
+
 ## Visual correction (2026-09-26)
 
 User feedback identified a substantial mockup mismatch in the initial workflow UI. Commit `2989fb7` corrects the shell density, grouped inspectors, WebGPU design geometry and structured results/detail/reinforcement panes. See `docs/design/design-fidelity-correction.md` and `evidence/design-fidelity/fidelity-gate.json`. All 12 affected browser journeys, 3 contracts and 2 member-end display checks passed; visible Chrome/macOS AMD screens were compared and recorded. Source `fb4c81474d6160572535919e921a793a1ce23c95ec2b922f0c7f10c270b94445`; build `4f0a7afefc990c3ef47ddb5e4db6d3b55b77649a1bfbf6520ebfad187e39efff`. This supersedes earlier screenshots for visual presentation only. Numerical scope, unsupported concrete checks and queued M07-G features remain unchanged.

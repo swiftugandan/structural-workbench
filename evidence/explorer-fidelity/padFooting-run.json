@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "name": "Compression-only contact",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Bearing",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Sliding/overturning",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Flexure",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "One-way shear",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Punching",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Detailing",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    }
+  ],
+  "codeProfile": null,
+  "contactState": "indeterminate",
+  "contractVersion": 1,
+  "draftId": "dp0dbfcde46a88fc7c",
+  "inputHash": "bdd7f347f2921e2fd35eeba62ef1bcf117f95a982424e5aec786868f7ad75052",
+  "inputs": {
+    "id": "dp0dbfcde46a88fc7c",
+    "inputSource": "syntheticFixture",
+    "inputSources": {
+      "bearingPressure": "syntheticFixture",
+      "columnDepth": "syntheticFixture",
+      "columnWidth": "syntheticFixture",
+      "concreteStrength": "syntheticFixture",
+      "cover": "syntheticFixture",
+      "embedment": "syntheticFixture",
+      "length": "syntheticFixture",
+      "rebarStrength": "syntheticFixture",
+      "soilUnitWeight": "syntheticFixture",
+      "thickness": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "bearingPressure": 200000,
+      "columnDepth": 0.4,
+      "columnWidth": 0.4,
+      "concreteStrength": 30000000,
+      "cover": 0.05,
+      "embedment": 1.2,
+      "length": 2.4,
+      "rebarStrength": 500000000,
+      "soilUnitWeight": 18000,
+      "thickness": 0.55,
+      "width": 2.1
+    },
+    "kind": "padFooting",
+    "soilReference": "User-entered demonstration bearing input; not a site report",
+    "targetId": "s1"
+  },
+  "kind": "padFooting",
+  "limitations": [
+    "MOCK WORKFLOW — no code-compliance claim",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"
+  ],
+  "mock": true,
+  "modelHash": "d8b8dfc0ea5d50af9428e9769d1b496cc7dfafd7e158ce144da1555a04eaed5e",
+  "overall": "unsupported",
+  "previewRunId": "b15a52801da538585f44ec569abeba84edf1e8d2198def368ad893cc3400e807",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "schedule": [],
+  "soilProvenance": {
+    "bearingPressure": 200000,
+    "computedByWorkbench": false,
+    "reference": "User-entered demonstration bearing input; not a site report",
+    "source": "syntheticFixture"
+  },
+  "sourceProvenance": {
+    "axes": "Global [Fx,Fy,Fz,Mx,My,Mz], SI; foundation actions oppose support-on-structure reactions",
+    "combinationId": "LC1",
+    "foundationActions": [
+      0,
+      -9999.999999999993,
+      0,
+      0,
+      0,
+      -29999.999999999985
+    ],
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "d8b8dfc0ea5d50af9428e9769d1b496cc7dfafd7e158ce144da1555a04eaed5e",
+    "note": "Exact simultaneous support reaction; no soil/contact solution or frame-foundation coupling",
+    "resultId": "d8b8dfc0ea5d50af-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "de006db9c91efd3188c8c352def272380aa38eaac3481de5c9e19604602bcc36",
+    "sourceRevision": 2,
+    "supportReaction": [
+      0,
+      9999.999999999993,
+      0,
+      0,
+      0,
+      29999.999999999985
+    ],
+    "targetId": "s1"
+  },
+  "sourceRevision": 2,
+  "currentState": "UNSUPPORTED"
+}

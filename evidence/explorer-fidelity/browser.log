@@ -1,0 +1,21 @@
+
+Running 12 tests using 1 worker
+
+(node:46757) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46757) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/canvas-first.spec.js:35:1 › Canvas first: place support, draw force, edit assignments and undo without dialogs (10.8s)
+  ✓   2 tests/e2e/canvas-first.spec.js:99:1 › Canvas first: two-click members, distributed loads, measure and nonmodal precision panel (6.1s)
+  ✓   3 tests/e2e/canvas-first.spec.js:139:1 › Canvas first: point-to-point copy and dependency delete stay on canvas (5.2s)
+  ✓   4 tests/e2e/canvas-first.spec.js:164:1 › Canvas first: node placement, split, move and Escape preserve atomic history (7.5s)
+  ✓   5 tests/e2e/canvas-first.spec.js:205:1 › Readable labels hide internal IDs and persist after copy and reopen (4.6s)
+  ✓   6 tests/e2e/design-previews.spec.js:6:3 › Concrete preview rcBeam: source, stale, undo, persistence and export (6.0s)
+  ✓   7 tests/e2e/design-previews.spec.js:6:3 › Concrete preview slab: source, stale, undo, persistence and export (5.0s)
+  ✓   8 tests/e2e/design-previews.spec.js:6:3 › Concrete preview padFooting: source, stale, undo, persistence and export (6.0s)
+  ✓   9 tests/e2e/hierarchy.spec.js:18:1 › M03 hierarchy: split shows physical parent and analytical children (4.1s)
+  ✓  10 tests/e2e/model-explorer.spec.js:3:1 › Reference Explorer: nested elements, search, disclosure state and selection (4.4s)
+  ✓  11 tests/e2e/workspace-ux.spec.js:4:1 › UX ribbon, keyboard context menu and property drafts preserve model state (3.1s)
+  ✓  12 tests/e2e/workspace-ux.spec.js:39:1 › UX responsive panel navigation retains editable properties and results (2.4s)
+
+  12 passed (1.1m)

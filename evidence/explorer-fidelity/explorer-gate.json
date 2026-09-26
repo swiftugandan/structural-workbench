@@ -1,0 +1,73 @@
+{
+  "taskId": "EXPLORER-FIDELITY",
+  "milestone": "M07",
+  "sourceHash": "de006db9c91efd3188c8c352def272380aa38eaac3481de5c9e19604602bcc36",
+  "buildHash": "0dd9dc2bf59fe7501edfdd21ef8ea8243922e56b90ad87444238a2d2b868c3d1",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "browser.log": "e8566261dd3dd584c127a9593344867d4516ab127af0b130d0c016673075ea49",
+    "build.json": "c4f4175eff248eeeb6936948502d230b81d4ea316cae34c0812fd9903a02ede0",
+    "build.log": "0c3a3975fd93fbd1e53442a85535253570b3fe4934e7540e49756345dab2e3ed",
+    "hierarchy-browser.json": "e7f43c88127b226ae95fbb1956c488766e8bccb10b53af7335f203d93a463bea",
+    "hierarchy-project.json": "e33f9135d5edf79845c3f0bcab9dab1242a96432e360880c4273d5f02553695a",
+    "hierarchy.png": "f7ab355c2c0af250616790accf1168389265b31bdb4e7574ee570d67a79643de",
+    "padFooting-run.json": "af275492836d061fbe336c84920e03a7b83eab3423db1033254d029b905d9bc3",
+    "playwright-results.json": "f27add730593fab50f488c41886f1c2209b91ac792a7ba9641eb8652b67610f4",
+    "rcBeam-run.json": "a889991d125b87b71c3f6c6409da4cb0160b7fa04cf749df70f9d76bafbe079d",
+    "review-model.json": "9453e8b071ae59e6971dc349839d7ac3c6fc679a5e4fb92dc0b025b9961d9423",
+    "slab-run.json": "4950c543eda7efbabd354b5544430e0ffa43c6168c61054cb59950b31465367a",
+    "visible-console.log": "33962ebf4f15f69fad5dd17a7d02e9cbb35a23f0bd54eade360769c079232b2c",
+    "visible-explorer.png": "ba193edf7760eae3e141cf11d8485e5128ec617c76558aced197d4db3a4e7f55"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T16:46:31.649Z",
+  "status": "PASS",
+  "scope": "Searchable element hierarchy increment only; mockup gap register remains open",
+  "sourceCommit": "c5f22d9",
+  "testCount": 12,
+  "command": "npx playwright test tests/e2e/model-explorer.spec.js tests/e2e/hierarchy.spec.js tests/e2e/canvas-first.spec.js tests/e2e/workspace-ux.spec.js tests/e2e/design-previews.spec.js",
+  "manual": {
+    "browser": "Visible Chrome on macOS, WebGPU AMD",
+    "viewport": "1600x1000 CSS pixels",
+    "observed": [
+      "Nested elevations, beams and columns",
+      "Raw ID search selects displayed member label",
+      "Definition leaf opens actual material editor",
+      "Selected steel heading and tree use same label",
+      "Expand/collapse and draft navigation"
+    ],
+    "import": "CLI upload command failed its argument schema; standard file-input change handler used with a File/DataTransfer, then all navigation exercised with actual UI clicks",
+    "console": "No runtime errors observed; form name/autocomplete advisories remain"
+  },
+  "limits": [
+    "Derived navigation groups are not authored layers/storeys",
+    "No full mockup parity claim",
+    "No expanded engineering or cross-platform acceptance"
+  ],
+  "artifacts": [
+    "browser.log",
+    "build.json",
+    "build.log",
+    "hierarchy-browser.json",
+    "hierarchy-project.json",
+    "hierarchy.png",
+    "padFooting-run.json",
+    "playwright-results.json",
+    "rcBeam-run.json",
+    "review-model.json",
+    "slab-run.json",
+    "visible-console.log",
+    "visible-explorer.png"
+  ]
+}

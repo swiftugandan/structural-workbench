@@ -1,0 +1,8 @@
+console:
+## Console messages
+Showing 1-2 of 2 (Page 1 of 1).
+msgid=15 [issue] A form field element should have an id or name attribute (count: 6)
+msgid=16 [issue] An element doesn’t have an autocomplete attribute (count: 1)
+help[2]:
+  Run `chrome-devtools-axi console-get <id>` to see a specific message
+  Run `chrome-devtools-axi console --type error` to filter by type
