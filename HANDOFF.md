@@ -8,6 +8,10 @@ M00–M07 remain accepted at their existing bounded scope. M07-E and M07-F now d
 
 Verification: `npm run verify:design-workspace`. Evidence: `evidence/M07/native-inputs/`. The same-build automated gate passed; visible Chrome showed PASS at governing station 0/F2-1 on macOS AMD WebGPU. See ADR 0009 for exact bounded scope. No LTB, serviceability, second-order or general full-code compliance expansion.
 
-Next authorized work: RC beam, slab and pad footing workflow previews with conspicuous synthetic provenance, no fabricated code profile or PASS, and persisted Rust-owned draft data. The current user explicitly permits these before engineering resource gates; ADR 0009 records that clarification to ADR 0008. M08/M10/M11 numerical parents remain blocked as applicable. M07-G whole-model/catalogue-study workflows remain a separate queued slice.
+RC beam, slab and pad footing workflow previews are implemented and locally verified in `b6e0bc1`. Persisted Rust-owned drafts, field-level synthetic/user provenance, exact model-action capture for beam/footing, slab synthetic actions, illustrative geometry, stale/cancel/undo, JSON/RC preference CSV exports and project reopen work in the existing shell. Every concrete check remains UNSUPPORTED; footing contact remains INDETERMINATE. No concrete code profile or verified construction details are emitted.
+
+Final preview gate: `evidence/design-previews/preview-gate.json`; reproduction: `docs/design/concrete-preview-validation.md`. 79 native tests, 6 JS checks, 33 native and 33 WASM analytical checks, 11 browser journeys, plus visible Chrome/macOS AMD WebGPU screenshots for all three previews. Build `2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3`; source `a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212`.
+
+Next: M07-G whole-model overview/catalogue-study remains queued. M08/M10/M11 numerical parents remain blocked as applicable; obtain locked concrete resources and validate resistance/plate/contact families before enabling real design. The user authorized mock workflow previews before those numerical gates; ADR 0009 records the distinction. No Windows/Linux real-GPU acceptance is claimed.
 
 Work directly on main in small coherent commits. Preview: `npm run preview` after a complete build. Do not edit sources while building or validating an evidence snapshot.

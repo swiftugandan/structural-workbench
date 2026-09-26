@@ -14,3 +14,5 @@ Validation caught and corrected: a test menu-helper invocation, Explorer label s
 Visible evidence is local macOS Chrome/AMD WebGPU. Automated browser uses its configured Chromium/SwiftShader runner. Neither proves Windows/Linux real-GPU acceptance. No validated RC resistance, plate/shell solution, compression-only footing contact, construction reinforcement schedule or full-code compliance is claimed.
 
 Reproduction commands and observation checklist: `docs/design/concrete-preview-validation.md`.
+
+Final outcome: **PASS** for the local workflow gate: 79 native tests, 6 JS checks, 33 analytical checks on each native/WASM path, and 11 browser journeys (zero skipped, unexpected or flaky). Source commit `b6e0bc1`; build `2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3`. The separate visible Chrome screenshots use that same build.

@@ -1,0 +1,20 @@
+
+Running 11 tests using 1 worker
+
+(node:10763) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10763) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/capability-ledger.spec.js:11:1 › M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions (4.8s)
+  ✓   2 tests/e2e/design-previews.spec.js:6:3 › Concrete preview rcBeam: source, stale, undo, persistence and export (7.6s)
+  ✓   3 tests/e2e/design-previews.spec.js:6:3 › Concrete preview slab: source, stale, undo, persistence and export (5.2s)
+  ✓   4 tests/e2e/design-previews.spec.js:6:3 › Concrete preview padFooting: source, stale, undo, persistence and export (7.2s)
+  ✓   5 tests/e2e/native-steel-design.spec.js:43:1 › DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen (10.5s)
+  ✓   6 tests/e2e/native-steel-design.spec.js:134:1 › DW-F4: fail reaches governing station and clause; LTB stays unsupported (12.5s)
+  ✓   7 tests/e2e/steel-check.spec.js:43:1 › standalone S2-D1 steel check passes via evaluateDesign UI (8.5s)
+  ✓   8 tests/e2e/steel-check.spec.js:69:1 › complete-member matrix: ≥3 pass and ≥3 fail seeds (18.9s)
+  ✓   9 tests/e2e/steel-check.spec.js:124:1 › steel check remains usable in a narrow viewport (2.5s)
+  ✓  10 tests/e2e/steel-check.spec.js:142:1 › standalone S2-D1 fail seed reports overall fail (5.5s)
+  ✓  11 tests/e2e/steel-check.spec.js:166:1 › model-derived demand check lands in calculation report clause trail (5.3s)
+
+  11 passed (1.6m)

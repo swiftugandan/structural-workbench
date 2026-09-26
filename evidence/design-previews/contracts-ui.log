@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: B01–B11 conform to Draft 2020-12 contract
+ok 1 - B01–B11 conform to Draft 2020-12 contract
+  ---
+  duration_ms: 18.971714
+  ...
+# Subtest: unknown fields and unknown schema rejected
+ok 2 - unknown fields and unknown schema rejected
+  ---
+  duration_ms: 11.9366
+  ...
+# Subtest: actual WASM request/response envelopes conform to Draft 2020-12
+ok 3 - actual WASM request/response envelopes conform to Draft 2020-12
+  ---
+  duration_ms: 75.598435
+  ...
+# Subtest: fail seeds raise demand above published capacity
+ok 4 - fail seeds raise demand above published capacity
+  ---
+  duration_ms: 1.420067
+  ...
+# Subtest: seed catalog has ≥3 pass, ≥3 fail, and unsupported scope cases
+ok 5 - seed catalog has ≥3 pass, ≥3 fail, and unsupported scope cases
+  ---
+  duration_ms: 2.580741
+  ...
+# Subtest: applyAnalysisDemand overlays midspan sample and rejects envelopes
+ok 6 - applyAnalysisDemand overlays midspan sample and rejects envelopes
+  ---
+  duration_ms: 0.873882
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 359.263849

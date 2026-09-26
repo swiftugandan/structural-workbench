@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "DESIGN-PREVIEWS",
-  "activeTask": "RC-BEAM-PREVIEW",
+  "activeMilestone": "M07",
+  "activeTask": "M07-G",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2709,6 +2709,93 @@
         "Used visible File-menu export path in browser test"
       ],
       "nextAction": "Implement separately labelled concrete workflow previews under ADR 0009; M07-G remains scheduled."
+    },
+    "RC-BEAM-PREVIEW": {
+      "id": "RC-BEAM-PREVIEW",
+      "useCase": "RC beam persisted workflow draft with explicit upstream source and fail-closed mock design record",
+      "dependencies": [
+        "M07-F"
+      ],
+      "status": "ACCEPTED",
+      "acceptanceMeaning": "Local workflow preview only under ADR 0009 and explicit user authorization. Does not accept M08/M10/M11 or claim concrete compliance.",
+      "sourceRevision": "b6e0bc1d8b0b16b60f6f69f5959365912f0b82fe",
+      "sourceHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212",
+      "buildHash": "2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3",
+      "outcomes": [
+        {
+          "check": "79 native, 6 contract/UI, 33 native + 33 WASM analytical, 11 browser journeys",
+          "status": "PASS",
+          "evidencePath": "evidence/design-previews/preview-gate.json"
+        },
+        {
+          "check": "Visible Chrome computer-use: mock labels, source choice, central illustration, final screenshots",
+          "status": "PASS",
+          "evidencePath": "evidence/design-previews/live-chrome.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/design-previews"
+      ],
+      "acceptedAt": "2026-09-26T14:17:09.161327+00:00",
+      "nextAction": "Replace unavailable numerical/code resources only through validated Rust engines and independently accepted engineering gates."
+    },
+    "SLAB-PREVIEW": {
+      "id": "SLAB-PREVIEW",
+      "useCase": "Slab persisted workflow draft with explicit upstream source and fail-closed mock design record",
+      "dependencies": [
+        "M07-F"
+      ],
+      "status": "ACCEPTED",
+      "acceptanceMeaning": "Local workflow preview only under ADR 0009 and explicit user authorization. Does not accept M08/M10/M11 or claim concrete compliance.",
+      "sourceRevision": "b6e0bc1d8b0b16b60f6f69f5959365912f0b82fe",
+      "sourceHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212",
+      "buildHash": "2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3",
+      "outcomes": [
+        {
+          "check": "79 native, 6 contract/UI, 33 native + 33 WASM analytical, 11 browser journeys",
+          "status": "PASS",
+          "evidencePath": "evidence/design-previews/preview-gate.json"
+        },
+        {
+          "check": "Visible Chrome computer-use: mock labels, source choice, central illustration, final screenshots",
+          "status": "PASS",
+          "evidencePath": "evidence/design-previews/live-chrome.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/design-previews"
+      ],
+      "acceptedAt": "2026-09-26T14:17:09.161578+00:00",
+      "nextAction": "Replace unavailable numerical/code resources only through validated Rust engines and independently accepted engineering gates."
+    },
+    "FOUNDATION-PREVIEW": {
+      "id": "FOUNDATION-PREVIEW",
+      "useCase": "Pad footing persisted workflow draft with explicit upstream source and fail-closed mock design record",
+      "dependencies": [
+        "M07-F"
+      ],
+      "status": "ACCEPTED",
+      "acceptanceMeaning": "Local workflow preview only under ADR 0009 and explicit user authorization. Does not accept M08/M10/M11 or claim concrete compliance.",
+      "sourceRevision": "b6e0bc1d8b0b16b60f6f69f5959365912f0b82fe",
+      "sourceHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212",
+      "buildHash": "2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3",
+      "outcomes": [
+        {
+          "check": "79 native, 6 contract/UI, 33 native + 33 WASM analytical, 11 browser journeys",
+          "status": "PASS",
+          "evidencePath": "evidence/design-previews/preview-gate.json"
+        },
+        {
+          "check": "Visible Chrome computer-use: mock labels, source choice, central illustration, final screenshots",
+          "status": "PASS",
+          "evidencePath": "evidence/design-previews/live-chrome.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/design-previews"
+      ],
+      "acceptedAt": "2026-09-26T14:17:09.161589+00:00",
+      "nextAction": "Replace unavailable numerical/code resources only through validated Rust engines and independently accepted engineering gates."
     }
   },
   "blockers": [
@@ -2741,9 +2828,9 @@
       "resumeWhen": "Acquire ACI/concrete standard + examples into resources/private and lock hashes (same human-download pattern as M07 AISC)"
     }
   ],
-  "lastVerifiedSourceRevision": "1f3ee6d0295af062c0c380e9e26021b106d3dd8e",
-  "lastVerifiedBuildHash": "4c9a6e48ea589dcb04947d6dbb38596047570798002f13d4085644eb52b49fa4",
-  "nextAction": "Implement RC beam, slab and pad footing workflow previews per current user authorization and ADR 0009. Keep numerical parents resource-blocked. M07-G overview/catalogue-study remains separate queued work.",
+  "lastVerifiedSourceRevision": "b6e0bc1d8b0b16b60f6f69f5959365912f0b82fe",
+  "lastVerifiedBuildHash": "2e477a37d918aa52701cb33c07fdba6b93651d0aa6cbd2c6cd156c24863b77c3",
+  "nextAction": "M07-G whole-model steel overview/catalogue-study remains queued. Concrete workflow previews are locally verified; acquire locked concrete code/examples and implement validated numerical families before M08/M10/M11 design acceptance.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "6daf8735f9b8b37ba22036865f24a4234985adc41b9feb173f0373d6dda99f9d"
+  "lastVerifiedSourceHash": "a72948aea25f23b645497ef93d848ce0675870214d3e5db567cc28c3d0a4f212"
 }
