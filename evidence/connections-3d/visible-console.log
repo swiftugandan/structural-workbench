@@ -1,0 +1,7 @@
+console:
+## Console messages
+Showing 1-1 of 1 (Page 1 of 1).
+msgid=18 [issue] A form field element should have an id or name attribute (count: 5)
+help[2]:
+  Run `chrome-devtools-axi console-get <id>` to see a specific message
+  Run `chrome-devtools-axi console --type error` to filter by type

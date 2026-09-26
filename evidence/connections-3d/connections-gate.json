@@ -1,0 +1,72 @@
+{
+  "taskId": "CONNECTIONS-3D",
+  "milestone": "M07",
+  "sourceHash": "3d9bc1082310dde92fec2c0c34512877f019ae51add642ab81b4a7e27e2a1cd5",
+  "buildHash": "c0acbed940ccc40c2263b1d928f708e546d45de48958e9e2eb29f7ff4caf8481",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "browser.log": "803108060e2db06766c802084e15d253dc846384aa3d323be31680d64acf0a35",
+    "build.json": "333db6fa3210031e9216badc4192c158db64558b6ad37105da7c1600b5db6cc1",
+    "build.log": "c0500325712b6868946198e192009b24db498f027e4cb253b0097ffdc89fe2e8",
+    "playwright-results.json": "ea8efea6ea808072ba48e8e3db5c7885ac6248b78837e5ed752ae2acebbce265",
+    "review-model.json": "14a09daf049c3e455dc34fdf03186e1c46bbecbd4d00989592daac1e0209172b",
+    "three-supports.png": "cb7ca1eaca1a1464304137b59d3a8e094afef9c19b2d398ecbdf29b9d54c6cf0",
+    "unit.log": "ee4f1472bac1a0bacd16a8bfdc0602d2668745d998552927fd41e0dbfe2d6d05",
+    "visible-3d.png": "c736dbd6cf0fb011d9b1b13634cb9818002c78600c7bca64acfa01abad56058f",
+    "visible-console.log": "dfbbd7469279679209d44bba2ef05d35d912727fda9b54922656e5fac2f023f0",
+    "visible-support-detail.png": "81879a056a07bf5d65f937d81f8cad0805cde1a54800c9683514c44c2f7290fb"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T17:00:19.014Z",
+  "status": "PASS",
+  "sourceCommit": "e997900",
+  "scope": "Local 3D display correction, no engineering scope expansion",
+  "testCount": 20,
+  "tests": {
+    "geometryAndSymbols": 10,
+    "browser": 10
+  },
+  "commands": [
+    "node --test tests/connections.test.mjs tests/design-scene.test.mjs tests/support-symbols.test.mjs",
+    "npx playwright test tests/e2e/connections-3d.spec.js tests/e2e/support-symbols.spec.js tests/e2e/orientation.spec.js tests/e2e/workspace-ux.spec.js tests/e2e/canvas-first.spec.js"
+  ],
+  "manual": {
+    "browser": "Visible Chrome/macOS AMD WebGPU",
+    "observed": [
+      "Fixed, pinned and roller bodies inspected in default and zoomed view",
+      "Beam-to-column face fit and correct front/rear occlusion",
+      "Support label selection retains exact pinned restraint mask",
+      "View switching and zoom preserve model hash 7edc577f64a6"
+    ],
+    "import": "Synthetic review-model.json imported through normal file-input change handler using File/DataTransfer; subsequent navigation uses actual UI controls",
+    "console": "No runtime errors observed; form id/name advisory remains"
+  },
+  "limits": [
+    "Illustrative hardware dimensions; no connection/anchor/foundation capacity claim",
+    "Custom restraint masks retain explicit analytical symbol",
+    "No Windows/Linux GPU acceptance"
+  ],
+  "artifacts": [
+    "browser.log",
+    "build.json",
+    "build.log",
+    "playwright-results.json",
+    "review-model.json",
+    "three-supports.png",
+    "unit.log",
+    "visible-3d.png",
+    "visible-console.log",
+    "visible-support-detail.png"
+  ]
+}

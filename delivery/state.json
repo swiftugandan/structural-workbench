@@ -2818,6 +2818,15 @@
       "buildHash": "0dd9dc2bf59fe7501edfdd21ef8ea8243922e56b90ad87444238a2d2b868c3d1",
       "evidencePath": "evidence/explorer-fidelity/explorer-gate.json",
       "notes": "12 browser journeys and visible Chrome review. Searchable collapsible elevation/type hierarchy, entity editors and draft links. Mockup parity remains partial; see gap register."
+    },
+    "CONNECTIONS-3D": {
+      "id": "CONNECTIONS-3D",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "sourceCommit": "e997900",
+      "sourceHash": "3d9bc1082310dde92fec2c0c34512877f019ae51add642ab81b4a7e27e2a1cd5",
+      "buildHash": "c0acbed940ccc40c2263b1d928f708e546d45de48958e9e2eb29f7ff4caf8481",
+      "evidencePath": "evidence/connections-3d/connections-gate.json",
+      "notes": "Shaded illustrative supports, beam/column display fitting, correct depth sign. 10 unit and 10 browser checks plus visible Chrome. Analytical geometry/restraints unchanged."
     }
   },
   "blockers": [

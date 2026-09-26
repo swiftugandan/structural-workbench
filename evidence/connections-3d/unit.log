@@ -1,0 +1,60 @@
+TAP version 13
+# Subtest: Beam terminates at column face while column encloses beam top; model unchanged
+ok 1 - Beam terminates at column face while column encloses beam top; model unchanged
+  ---
+  duration_ms: 1.870235
+  ...
+# Subtest: Fixed seat is behind actual node plane for a column and horizontal cantilever
+ok 2 - Fixed seat is behind actual node plane for a column and horizontal cantilever
+  ---
+  duration_ms: 2.945345
+  ...
+# Subtest: Roller normal follows locked translation, custom restraints are not disguised
+ok 3 - Roller normal follows locked translation, custom restraints are not disguised
+  ---
+  duration_ms: 5.551274
+  ...
+# Subtest: Camera-facing points have smaller WebGPU depth than rear points
+ok 4 - Camera-facing points have smaller WebGPU depth than rear points
+  ---
+  duration_ms: 12.070291
+  ...
+# Subtest: member solid spans Rust midpoint frame endpoints: 1,0,0
+ok 5 - member solid spans Rust midpoint frame endpoints: 1,0,0
+  ---
+  duration_ms: 1.440995
+  ...
+# Subtest: member solid spans Rust midpoint frame endpoints: 0,0,1
+ok 6 - member solid spans Rust midpoint frame endpoints: 0,0,1
+  ---
+  duration_ms: 1.21414
+  ...
+# Subtest: Support classification uses active planar restraints, not any rotational lock
+ok 7 - Support classification uses active planar restraints, not any rotational lock
+  ---
+  duration_ms: 2.165009
+  ...
+# Subtest: Fixed ground faces away from horizontal, vertical and inclined member ends
+ok 8 - Fixed ground faces away from horizontal, vertical and inclined member ends
+  ---
+  duration_ms: 0.774333
+  ...
+# Subtest: Roller ground is normal to the restrained axis and follows camera projection
+ok 9 - Roller ground is normal to the restrained axis and follows camera projection
+  ---
+  duration_ms: 0.417413
+  ...
+# Subtest: Spatial partial and end-on constraints are explicit; imposed motion keeps restraint type
+ok 10 - Spatial partial and end-on constraints are explicit; imposed motion keeps restraint type
+  ---
+  duration_ms: 0.552073
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 156.432867

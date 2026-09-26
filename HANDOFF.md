@@ -2,6 +2,10 @@
 
 Read `AGENTS.md`, the repository skills, and root `delivery/state.json` for current priority.
 
+## 3D joint/support correction (2026-09-26)
+
+Commit `e997900` improves fixed/pinned/roller support bodies, beam-to-column envelope fitting and camera-depth occlusion. Actual analytical endpoints, lengths and restraint masks are unchanged. Evidence: `evidence/connections-3d/connections-gate.json`; 10 geometry/symbol tests and 10 browser journeys passed, with visible Chrome/macOS AMD inspection. These are illustrative support/connection views, not verified hardware or foundation designs. Build `c0acbed940ccc40c2263b1d928f708e546d45de48958e9e2eb29f7ff4caf8481`.
+
 ## Explorer correction and open mockup gaps (2026-09-26)
 
 Commit `c5f22d9` adds searchable, collapsible model hierarchy with elevation/orientation groups, physical lineage, concrete draft categories and definition editors. It also synchronizes the steel heading with readable member labels. All 12 browser journeys passed; visible Chrome/macOS AMD evidence is in `evidence/explorer-fidelity/explorer-gate.json`. Build `0dd9dc2bf59fe7501edfdd21ef8ea8243922e56b90ad87444238a2d2b868c3d1`.
