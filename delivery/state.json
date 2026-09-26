@@ -2827,6 +2827,20 @@
       "buildHash": "c0acbed940ccc40c2263b1d928f708e546d45de48958e9e2eb29f7ff4caf8481",
       "evidencePath": "evidence/connections-3d/connections-gate.json",
       "notes": "Shaded illustrative supports, beam/column display fitting, correct depth sign. 10 unit and 10 browser checks plus visible Chrome. Analytical geometry/restraints unchanged."
+    },
+    "STRUCTURE-SYNC": {
+      "id": "STRUCTURE-SYNC",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "description": "User-requested Rust-owned structure graph and current-shell synchronization; schema 1.1, migration, authored hierarchy, topology and persistence",
+      "evidencePaths": [
+        "evidence/structure-model"
+      ],
+      "nextAction": "Resume separate deferred M07-G/design-toolbar work. Numerical profiles and platform acceptance retain existing resource gates.",
+      "verificationStatus": "PASS",
+      "sourceHash": "80f6ea0b8ddc095041a294e4e6164c84e51e41dec2816e44914c949b9e726bd9",
+      "buildHash": "f8d2dfe1e71515de140c89bfddf09fd4307b57ef07a5066635893354dba06671",
+      "acceptanceMeaning": "Saved schema 1.1 graph, authored current-shell hierarchy, exact bindings, migration, atomic topology/copy/delete/undo, persistence and local browser verification. No new numerical/code-compliance acceptance.",
+      "sourceRevision": "616ccba372da6757b87a8bc99508cb8756dec152"
     }
   },
   "blockers": [

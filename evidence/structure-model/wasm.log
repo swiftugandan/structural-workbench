@@ -1,0 +1,16 @@
+
+> structural-workbench@0.1.0 test:wasm
+> node tools/numerical.mjs --wasm
+
+B01: 2 checks PASS
+B02: 4 checks PASS
+B03: 2 checks PASS
+B04: 3 checks PASS
+B05: 4 checks PASS
+B06: 3 checks PASS
+B07: 3 checks PASS
+B08: 4 checks PASS
+B09: 3 checks PASS
+B10: 3 checks PASS
+B11: 2 checks PASS
+33 signed analytical checks passed with native/WASM comparisons

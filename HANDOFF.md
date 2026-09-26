@@ -2,6 +2,12 @@
 
 Read `AGENTS.md`, the repository skills, and root `delivery/state.json` for current priority.
 
+## Authoritative structure synchronization (2026-09-26)
+
+Commit `616ccba`: schema 1.1 replaces coordinate-derived hierarchy with saved Rust-owned storeys, physical members/roles, grids, layers/groups, joints, support details and concrete object bindings. Refer to ADR 0010. Imports of 0.9/1.0 migrate with original-byte backup and explicit unassigned roles. The inspector edits real graph records; topology commands synchronize ownership and membership atomically. Connection hardware and concrete previews remain explicitly unverified/not designed.
+
+Verification: 83 native tests, 3 contracts, 33 native and 33 WASM signed analytical checks, 17 browser journeys, plus visible Chrome/macOS AMD computer use passed. Hash-bound evidence: `evidence/structure-model/structure-gate.json`. Build `f8d2dfe1e71515de140c89bfddf09fd4307b57ef07a5066635893354dba06671`. Earlier Explorer screenshots below describe the superseded derived hierarchy. Organization-only changes preserve current analysis; snapshots and steel runs include exact structure provenance.
+
 ## 3D joint/support correction (2026-09-26)
 
 Commit `e997900` improves fixed/pinned/roller support bodies, beam-to-column envelope fitting and camera-depth occlusion. Actual analytical endpoints, lengths and restraint masks are unchanged. Evidence: `evidence/connections-3d/connections-gate.json`; 10 geometry/symbol tests and 10 browser journeys passed, with visible Chrome/macOS AMD inspection. These are illustrative support/connection views, not verified hardware or foundation designs. Build `c0acbed940ccc40c2263b1d928f708e546d45de48958e9e2eb29f7ff4caf8481`.

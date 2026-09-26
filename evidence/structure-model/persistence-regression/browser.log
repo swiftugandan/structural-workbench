@@ -1,0 +1,118 @@
+
+Running 17 tests using 1 worker
+
+(node:61310) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61310) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/canvas-first.spec.js:35:1 › Canvas first: place support, draw force, edit assignments and undo without dialogs (11.4s)
+  ✓   2 tests/e2e/canvas-first.spec.js:99:1 › Canvas first: two-click members, distributed loads, measure and nonmodal precision panel (6.5s)
+  ✓   3 tests/e2e/canvas-first.spec.js:139:1 › Canvas first: point-to-point copy and dependency delete stay on canvas (5.5s)
+  ✓   4 tests/e2e/canvas-first.spec.js:164:1 › Canvas first: node placement, split, move and Escape preserve atomic history (7.9s)
+  ✓   5 tests/e2e/canvas-first.spec.js:205:1 › Readable labels hide internal IDs and persist after copy and reopen (5.5s)
+  ✓   6 tests/e2e/design-previews.spec.js:6:3 › Concrete preview rcBeam: source, stale, undo, persistence and export (5.5s)
+  ✓   7 tests/e2e/design-previews.spec.js:6:3 › Concrete preview slab: source, stale, undo, persistence and export (5.0s)
+  ✓   8 tests/e2e/design-previews.spec.js:6:3 › Concrete preview padFooting: source, stale, undo, persistence and export (6.3s)
+  ✓   9 tests/e2e/hierarchy.spec.js:18:1 › M03 hierarchy: split shows physical parent and analytical children (3.0s)
+  ✓  10 tests/e2e/m04-record.spec.js:12:1 › M04 record: export/import equivalence and report matches displayed results (3.6s)
+  ✓  11 tests/e2e/migrations.spec.js:12:1 › M04 migration: 0.9.0 imports, retains original, unknown schema refused (3.8s)
+  ✓  12 tests/e2e/model-explorer.spec.js:3:1 › Reference Explorer: nested elements, search, disclosure state and selection (5.4s)
+  ✘  13 tests/e2e/native-steel-design.spec.js:43:1 › DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen (6.3s)
+(node:61700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  14 tests/e2e/native-steel-design.spec.js:134:1 › DW-F4: fail reaches governing station and clause; LTB stays unsupported (8.1s)
+(node:61747) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61747) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  15 tests/e2e/structure-model.spec.js:9:1 › Authored structure survives save, undo, topology and reopen; invalid bindings fail closed (11.3s)
+  ✓  16 tests/e2e/topology.spec.js:31:1 › M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen (10.0s)
+  ✓  17 tests/e2e/topology.spec.js:131:1 › M01 topology: crossing stays disconnected, connect and merge are previewed and atomic (4.8s)
+
+
+  1) tests/e2e/native-steel-design.spec.js:43:1 › DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen 
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  locator('#design-save')
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" locator('#design-save') with timeout 5000ms
+      - waiting for locator('#design-save')
+        13 × locator resolved to <button disabled id="design-save">Save design inputs</button>
+           - unexpected value "disabled"
+
+
+      22 |     .selectOption("aisc-shapes-v16.0-subset-1:W18X50");
+      23 |   await page.locator("#design-assign").click();
+    > 24 |   await expect(page.locator("#design-save")).toBeEnabled();
+         |                                              ^
+      25 |   for (const [key, value] of Object.entries({
+      26 |     ky: "1",
+      27 |     kz: "1",
+        at openModel (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:24:46)
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:48:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/native-steel-design.spec.js:134:1 › DW-F4: fail reaches governing station and clause; LTB stays unsupported 
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  locator('#design-save')
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" locator('#design-save') with timeout 5000ms
+      - waiting for locator('#design-save')
+        14 × locator resolved to <button disabled id="design-save">Save design inputs</button>
+           - unexpected value "disabled"
+
+
+      22 |     .selectOption("aisc-shapes-v16.0-subset-1:W18X50");
+      23 |   await page.locator("#design-assign").click();
+    > 24 |   await expect(page.locator("#design-save")).toBeEnabled();
+         |                                              ^
+      25 |   for (const [key, value] of Object.entries({
+      26 |     ky: "1",
+      27 |     kz: "1",
+        at openModel (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:24:46)
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:137:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/e2e/native-steel-design.spec.js:43:1 › DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen 
+    tests/e2e/native-steel-design.spec.js:134:1 › DW-F4: fail reaches governing station and clause; LTB stays unsupported 
+  15 passed (2.0m)

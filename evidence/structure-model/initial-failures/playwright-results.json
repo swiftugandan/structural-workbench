@@ -1,0 +1,819 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/e2e/structure-model.spec.js",
+      "tests/e2e/model-explorer.spec.js",
+      "tests/e2e/hierarchy.spec.js",
+      "tests/e2e/native-steel-design.spec.js",
+      "tests/e2e/design-previews.spec.js",
+      "tests/e2e/canvas-first.spec.js",
+      "tests/e2e/topology.spec.js"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/structure-model/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e/canvas-first.spec.js",
+      "file": "e2e/canvas-first.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas first: place support, draw force, edit assignments and undo without dialogs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13362,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:28:32.907Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-d07ca-ts-and-undo-without-dialogs/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-055bf972a48002c0cb04",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 35,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: two-click members, distributed loads, measure and nonmodal precision panel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6606,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:28:46.890Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-a5a08-nd-nonmodal-precision-panel/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-858dff4e570d3d4d02f0",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 99,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: point-to-point copy and dependency delete stay on canvas",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5591,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:28:53.623Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-d2d963df1c4d0369371a",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 139,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: node placement, split, move and Escape preserve atomic history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8440,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:28:59.324Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-4ade85ca546fbe223ecc",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "Readable labels hide internal IDs and persist after copy and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6766,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:07.914Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-de89dcd8e924d6f4333b",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 205,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/design-previews.spec.js",
+      "file": "e2e/design-previews.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Concrete preview rcBeam: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6412,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:14.809Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-7a78f-undo-persistence-and-export/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-09f43fa081fcc1a6ac9b",
+          "file": "e2e/design-previews.spec.js",
+          "line": 6,
+          "column": 3
+        },
+        {
+          "title": "Concrete preview slab: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5281,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:21.367Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-8cf41-undo-persistence-and-export/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-f1cdb8647810d372f1c3",
+          "file": "e2e/design-previews.spec.js",
+          "line": 6,
+          "column": 3
+        },
+        {
+          "title": "Concrete preview padFooting: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6440,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:26.850Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-c7057-undo-persistence-and-export/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-4cb4173f09d60386c561",
+          "file": "e2e/design-previews.spec.js",
+          "line": 6,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "e2e/hierarchy.spec.js",
+      "file": "e2e/hierarchy.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 hierarchy: split shows physical parent and analytical children",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3873,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:33.481Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-hierarchy-M03-hierarch-9d9d7-ent-and-analytical-children/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0f92d2632f5c64f63d83-808af6c090a418cc38cc",
+          "file": "e2e/hierarchy.spec.js",
+          "line": 18,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/model-explorer.spec.js",
+      "file": "e2e/model-explorer.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Reference Explorer: nested elements, search, disclosure state and selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6096,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:37.503Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-model-explorer-Referen-5d154-closure-state-and-selection/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cd87f790a20ceafd53bb-05fd10168fc44db7263a",
+          "file": "e2e/model-explorer.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/native-steel-design.spec.js",
+      "file": "e2e/native-steel-design.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8439,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:43.720Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "native-design-record",
+                      "contentType": "application/json",
+                      "body": "eyJhbmFseXNpc1NldHRpbmdzSGFzaCI6IjcxNzkwYWEyNmM2ZDhlZDc4ODg2MmNhYzBlMDE4ZWNlNDQ5NDMwOGZhMzc5YTQ1NTE1MzQ3NWM0NzZmYjUyZGEiLCJicmFjaW5nU2VnbWVudHMiOlt7ImVuZCI6MSwia2luZCI6ImNvbnRpbnVvdXMiLCJzb3VyY2UiOiJ1c2VyIiwic3RhcnQiOjB9XSwiY2F0YWxvZ3VlIjoiQUlTQyBTaGFwZXMgRGF0YWJhc2UgdjE2LjAsIERhdGFiYXNlIHYxNi4wIHdvcmtzaGVldDsgVVMgY3VzdG9tYXJ5IGNvbHVtbnMiLCJjYXRhbG9ndWVTb3VyY2VIYXNoIjoiODJkMGNlYjk2YTBkOTM4YWUxYTZiZDk2MzdjYjEwYTFlMjY5MjI1YjVkNjY4ZGNlNWIwYmRjOGQ4NjAxMzQ5NiIsImNoZWNrcyI6W3siYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDMwMDAwLjAwMDAwMDAwMDA0XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjozMDAwMC4wMDAwMDAwMDAwNCwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDU4NDIwNzY0Mjk5MTg5NDE2fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwzMDAwMC4wMDAwMDAwMDAwNF0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9XSwiY29tYmluYXRpb25JZCI6IkxDMSIsImNvbnRyYWN0VmVyc2lvbiI6MSwiZGVzaWduUnVuSWQiOiI4ZDc2ODM3MTI2MmQyODQzM2JmNzIwZGExZmU0NjA2NWUwNDBjOTJjNDFjMDc1N2U5Y2M1ODM5MzhiZTc3OTUyIiwiZGVzaWduU2V0dGluZ3NIYXNoIjoiYmI2MWMwZjZhNTFlMTRhYjIwNWQyNDkzYWFhMjg4MmMzYTdiZGMyY2M5NTZiNDYwNmZhZjNkMTM0NjViNjAwOCIsImdvdmVybmluZ0FjdGlvbiI6eyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMzAwMDAuMDAwMDAwMDAwMDRdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjMwMDAwLjAwMDAwMDAwMDA0LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wNTg0MjA3NjQyOTkxODk0MTZ9LCJpbnB1dHMiOnsiYnJhY2luZyI6ImNvbnRpbnVvdXMiLCJjYiI6eyJzb3VyY2UiOiJ1c2VyIiwidmFsdWUiOjF9LCJreSI6eyJzb3VyY2UiOiJ1c2VyIiwidmFsdWUiOjF9LCJreiI6eyJzb3VyY2UiOiJ1c2VyIiwidmFsdWUiOjF9LCJsYiI6eyJzb3VyY2UiOiJ1c2VyIiwidmFsdWUiOjB9LCJtYXRlcmlhbFJlZiI6ImFzdG0tYTk5Mi01MC02NS12MSIsInByb2ZpbGVJZCI6ImFpc2MtMzYwLTIyLWxyZmQiLCJzZWN0aW9uUmVmIjoiYWlzYy1zaGFwZXMtdjE2LjAtc3Vic2V0LTE6VzE4WDUwIiwic3RhYmlsaXR5QmFzaXMiOiJmaXJzdE9yZGVyVXNlckVmZmVjdGl2ZUxlbmd0aCJ9LCJsaW1pdGF0aW9ucyI6WyJCb3VuZGVkIEFJU0MgUzIgc3RyZW5ndGggY2hlY2tzIG9ubHkiLCJUZW5zaW9uIGRldGFpbHMsIHdlYWstYXhpcyBhY3Rpb25zLCBMVEIgYW5kIHNlY29uZC1vcmRlciBzdGFiaWxpdHkgcmVtYWluIHVuc3VwcG9ydGVkIiwiTm8gc2VydmljZWFiaWxpdHkgb3IgY29ubmVjdGlvbiBkZXNpZ24iXSwibWVtYmVySWQiOiJtMSIsIm1vY2siOmZhbHNlLCJtb2RlbEhhc2giOiJhMGYwNDFkZGM2ZTg3Y2M5MjU4ZTRlYzA0NjU1ODQ5ZWQ0NzlhZmEwMTU4ZTQxNjVlOTE0YTU3MjAzNTIxMjY5Iiwib3ZlcmFsbCI6InBhc3MiLCJwaHlzaWNhbE1lbWJlcklkIjoicG1jYTBkZjJjOTVhYTE0NGMxZDBmZiIsInByb2ZpbGVJZCI6ImFpc2MtMzYwLTIyLWxyZmQiLCJwcm9maWxlVmVyc2lvbiI6IlMyLW1vZGVsLW5hdGl2ZS0xIiwicmVzdWx0SWQiOiJhMGYwNDFkZGM2ZTg3Y2M5LUxDMSIsInNlcnZpY2VhYmlsaXR5Ijoibm90Q2hlY2tlZCIsInNvbHZlckJ1aWxkSGFzaCI6IjJjYWE2MWRmMjJmNDgxMmIwYTZhYjVlNmI0ZjkzMzE3OTA1ODg4ZWNjYTFjZjMyYzAxNDUwNjkxZTA3N2ZjY2YiLCJzb3VyY2UiOiJtb2RlbE5hdGl2ZSIsInNvdXJjZVJldmlzaW9uIjoyLCJzdGFiaWxpdHlCYXNpcyI6IkZpcnN0LW9yZGVyIGFuYWx5c2lzIHdpdGggdXNlciBlZmZlY3RpdmUtbGVuZ3RoIGZhY3RvcnM7IG5vIHNlY29uZC1vcmRlciAvIGRpcmVjdC1hbmFseXNpcyBjb21wbGlhbmNlIGNsYWltIiwic3RhdGlvbiI6MCwic3RhdGlvbkNoZWNrcyI6W3siYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDMwMDAwLjAwMDAwMDAwMDA0XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjozMDAwMC4wMDAwMDAwMDAwNCwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDU4NDIwNzY0Mjk5MTg5NDE2fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwzMDAwMC4wMDAwMDAwMDAwNF0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI5MjUwLjAwMDAwMDAwMDA0XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoyOTI1MC4wMDAwMDAwMDAwNCwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjAyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjA1Njk2MDI0NTE5MTcwOTY4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwyOTI1MC4wMDAwMDAwMDAwNF0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuMDI1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwyODUwMC4wMDAwMDAwMDAwMzZdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjI4NTAwLjAwMDAwMDAwMDAzNiwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjA1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDU1NDk5NzI2MDg0MjI5OTR9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI4NTAwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuMDUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI3NzUwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6Mjc3NTAuMDAwMDAwMDAwMDM2LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuMDc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDU0MDM5MjA2OTc2NzUwMjF9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI3NzUwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuMDc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwyNzAwMC4wMDAwMDAwMDAwMzZdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjI3MDAwLjAwMDAwMDAwMDAzNiwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjEsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wNTI1Nzg2ODc4NjkyNzA0NzR9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI3MDAwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuMSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTiIsInV0aWxpc2F0aW9uIjowLjAxMTcyNzEyMjc0OTA3MjAyOH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMjYyNTAuMDAwMDAwMDAwMDM2XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoyNjI1MC4wMDAwMDAwMDAwMzYsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4xMjUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wNTExMTgxNjg3NjE3OTA3NH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMjYyNTAuMDAwMDAwMDAwMDM2XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4xMjUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI1NTAwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MjU1MDAuMDAwMDAwMDAwMDM2LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuMTUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wNDk2NTc2NDk2NTQzMTEwMDZ9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI1NTAwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuMTUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI0NzUwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MjQ3NTAuMDAwMDAwMDAwMDM2LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuMTc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDQ4MTk3MTMwNTQ2ODMxMjd9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDI0NzUwLjAwMDAwMDAwMDAzNl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuMTc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwyNDAwMC4wMDAwMDAwMDAwMzNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjI0MDAwLjAwMDAwMDAwMDAzMywiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjIsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wNDY3MzY2MTE0MzkzNTE1M30seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMjQwMDAuMDAwMDAwMDAwMDMzXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4yLCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwyMzI1MC4wMDAwMDAwMDAwMzNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjIzMjUwLjAwMDAwMDAwMDAzMywiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjIyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjA0NTI3NjA5MjMzMTg3MTgwNX0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMjMyNTAuMDAwMDAwMDAwMDMzXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4yMjUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDIyNTAwLjAwMDAwMDAwMDAzM10sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MjI1MDAuMDAwMDAwMDAwMDMzLCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuMjUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wNDM4MTU1NzMyMjQzOTIwN30seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMjI1MDAuMDAwMDAwMDAwMDMzXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4yNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTiIsInV0aWxpc2F0aW9uIjowLjAxMTcyNzEyMjc0OTA3MjAyOH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMjE3NTAuMDAwMDAwMDAwMDNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjIxNzUwLjAwMDAwMDAwMDAzLCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuMjc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDQyMzU1MDU0MTE2OTEyMzN9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDIxNzUwLjAwMDAwMDAwMDAzXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4yNzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDIxMDAwLjAwMDAwMDAwMDAzXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoyMTAwMC4wMDAwMDAwMDAwMywiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjMsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wNDA4OTQ1MzUwMDk0MzI1OTZ9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDIxMDAwLjAwMDAwMDAwMDAzXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4zLCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwyMDI1MC4wMDAwMDAwMDAwM10sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MjAyNTAuMDAwMDAwMDAwMDMsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4zMjUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMzk0MzQwMTU5MDE5NTI4Nn0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMjAyNTAuMDAwMDAwMDAwMDNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjMyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTiIsInV0aWxpc2F0aW9uIjowLjAxMTcyNzEyMjc0OTA3MjAyOH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTk1MDAuMDAwMDAwMDAwMDNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjE5NTAwLjAwMDAwMDAwMDAzLCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuMzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMzc5NzM0OTY3OTQ0NzMxM30seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTk1MDAuMDAwMDAwMDAwMDNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjM1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxODc1MC4wMDAwMDAwMDAwM10sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTg3NTAuMDAwMDAwMDAwMDMsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4zNzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMzY1MTI5Nzc2ODY5OTMzOTV9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDE4NzUwLjAwMDAwMDAwMDAzXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC4zNzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDE4MDAwLjAwMDAwMDAwMDAyNV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTgwMDAuMDAwMDAwMDAwMDI1LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuNCwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAzNTA1MjQ1ODU3OTUxMzY1NH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTgwMDAuMDAwMDAwMDAwMDI1XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC40LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxNzI1MC4wMDAwMDAwMDAwM10sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTcyNTAuMDAwMDAwMDAwMDMsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC40MjUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMzM1OTE5Mzk0NzIwMzM5M30seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTcyNTAuMDAwMDAwMDAwMDNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjQyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTiIsInV0aWxpc2F0aW9uIjowLjAxMTcyNzEyMjc0OTA3MjAyOH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTY1MDAuMDAwMDAwMDAwMDIyXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxNjUwMC4wMDAwMDAwMDAwMjIsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC40NSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAzMjEzMTQyMDM2NDU1NDE4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxNjUwMC4wMDAwMDAwMDAwMjJdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjQ1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxNTc1MC4wMDAwMDAwMDAwMjVdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjE1NzUwLjAwMDAwMDAwMDAyNSwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjQ3NSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAzMDY3MDkwMTI1NzA3NDQ1Mn0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTU3NTAuMDAwMDAwMDAwMDI1XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC40NzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDE1MDAwLjAwMDAwMDAwMDAyNF0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTUwMDAuMDAwMDAwMDAwMDI0LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAyOTIxMDM4MjE0OTU5NDcxNX0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTUwMDAuMDAwMDAwMDAwMDI0XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC41LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxNDI1MC4wMDAwMDAwMDAwMjJdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjE0MjUwLjAwMDAwMDAwMDAyMiwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjUyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAyNzc0OTg2MzA0MjExNDk3OH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTQyNTAuMDAwMDAwMDAwMDIyXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC41MjUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDEzNTAwLjAwMDAwMDAwMDAyMl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTM1MDAuMDAwMDAwMDAwMDIyLCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuNTUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMjYyODkzNDM5MzQ2MzUyNDR9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDEzNTAwLjAwMDAwMDAwMDAyMl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuNTUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDEyNzUwLjAwMDAwMDAwMDAyMl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTI3NTAuMDAwMDAwMDAwMDIyLCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuNTc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDI0ODI4ODI0ODI3MTU1NTF9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDEyNzUwLjAwMDAwMDAwMDAyMl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuNTc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxMjAwMC4wMDAwMDAwMDAwMjJdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEyMDAwLjAwMDAwMDAwMDAyMiwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjYsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMjMzNjgzMDU3MTk2NzU3OH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTIwMDAuMDAwMDAwMDAwMDIyXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC42LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxMTI1MC4wMDAwMDAwMDAwMThdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjExMjUwLjAwMDAwMDAwMDAxOCwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjYyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAyMTkwNzc4NjYxMjE5NjA0fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxMTI1MC4wMDAwMDAwMDAwMThdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjYyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTiIsInV0aWxpc2F0aW9uIjowLjAxMTcyNzEyMjc0OTA3MjAyOH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTA1MDAuMDAwMDAwMDAwMDE4XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDUwMC4wMDAwMDAwMDAwMTgsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC42NSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAyMDQ0NzI2NzUwNDcxNjMwNX0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTA1MDAuMDAwMDAwMDAwMDE4XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC42NSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTiIsInV0aWxpc2F0aW9uIjowLjAxMTcyNzEyMjc0OTA3MjAyOH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsOTc1MC4wMDAwMDAwMDAwMTVdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjk3NTAuMDAwMDAwMDAwMDE1LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuNjc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDE4OTg2NzQ4Mzk3MjM2NTY0fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw5NzUwLjAwMDAwMDAwMDAxNV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuNjc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw5MDAwLjAwMDAwMDAwMDAyMl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6OTAwMC4wMDAwMDAwMDAwMjIsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC43LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDE3NTI2MjI5Mjg5NzU2ODQ0fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw5MDAwLjAwMDAwMDAwMDAyMl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuNywic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTiIsInV0aWxpc2F0aW9uIjowLjAxMTcyNzEyMjc0OTA3MjAyOH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsODI1MC4wMDAwMDAwMDAwMThdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjgyNTAuMDAwMDAwMDAwMDE4LCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuNzI1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjAuMDE2MDY1NzEwMTgyMjc3MTA0fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw4MjUwLjAwMDAwMDAwMDAxOF0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuNzI1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw3NTAwLjAwMDAwMDAwMDAxNV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6NzUwMC4wMDAwMDAwMDAwMTUsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC43NSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAxNDYwNTE5MTA3NDc5NzM2M30seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsNzUwMC4wMDAwMDAwMDAwMTVdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw2NzUwLjAwMDAwMDAwMDAxNV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6Njc1MC4wMDAwMDAwMDAwMTUsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC43NzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMTMxNDQ2NzE5NjczMTc2Mjl9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDY3NTAuMDAwMDAwMDAwMDE1XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC43NzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDYwMDAuMDAwMDAwMDAwMDExXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjo2MDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjgsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMTE2ODQxNTI4NTk4Mzc4OX0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsNjAwMC4wMDAwMDAwMDAwMTFdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjgsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDUyNTAuMDAwMDAwMDAwMDE4XSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoiZmxleHVyZSIsImNsYXVzZSI6IkYyLTEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjo1MjUwLjAwMDAwMDAwMDAxOCwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjgyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAxMDIyMzYzMzc1MjM1ODE3fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw1MjUwLjAwMDAwMDAwMDAxOF0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuODI1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw0NTAwLjAwMDAwMDAwMDAxNV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6NDUwMC4wMDAwMDAwMDAwMTUsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC44NSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAwODc2MzExNDY0NDg3ODQyOX0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsNDUwMC4wMDAwMDAwMDAwMTVdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjg1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwzNzUwLjAwMDAwMDAwMDAxMV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6Mzc1MC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC44NzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMDczMDI1OTU1MzczOTg2ODh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDM3NTAuMDAwMDAwMDAwMDExXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC44NzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDMwMDAuMDAwMDAwMDAwMDA3M10sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MzAwMC4wMDAwMDAwMDAwMDczLCJmb3JtdWxhSWQiOiJGMi0xIiwiaW50ZXJtZWRpYXRlcyI6eyJMYiI6MCwiTW4iOjU3MDU3My4zODY1ODk0NjQzLCJNcCI6NTcwNTczLjM4NjU4OTQ2NDMsImxpbWl0U3RhdGUiOiJ5aWVsZGluZyIsInBoaV9iIjowLjl9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBmbGV4dXJhbCB5aWVsZGluZyAoY29udGludW91c2x5IGJyYWNlZCBjb21wYWN0IFcpIiwicmVzaXN0YW5jZSI6NTEzNTE2LjA0NzkzMDUxNzksInNpZGUiOm51bGwsInN0YXRpb24iOjAuOSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAwNTg0MjA3NjQyOTkxODk0OH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMzAwMC4wMDAwMDAwMDAwMDczXSwiYXNzdW1wdGlvbnMiOltdLCJjaGVja0lkIjoic2hlYXIiLCJjbGF1c2UiOiJHMi4xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTAwMDAuMDAwMDAwMDAwMDExLCJmb3JtdWxhSWQiOiJHMi4xIiwiaW50ZXJtZWRpYXRlcyI6eyJBdyI6MC4wMDQxMjI1NzI0LCJDdjEiOjEsIlZuIjo4NTI3MjQuMDgzNjQ1NDM3NywicGhpX3YiOjF9LCJtZXNzYWdlIjoiTWFqb3ItYXhpcyBzaGVhciB3aXRoIEN2MSA9IDEuMCAoRzIuMShhKSkiLCJyZXNpc3RhbmNlIjo4NTI3MjQuMDgzNjQ1NDM3Nywic2lkZSI6bnVsbCwic3RhdGlvbiI6MC45LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwyMjUwLjAwMDAwMDAwMDAwNzNdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjIyNTAuMDAwMDAwMDAwMDA3MywiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjkyNSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAwNDM4MTU1NzMyMjQzOTIxNDZ9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDIyNTAuMDAwMDAwMDAwMDA3M10sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuOTI1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCwxNTAwLjAwMDAwMDAwMDAxMV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6MTUwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC45NSwic3RhdHVzIjoicGFzcyIsInVuaXRzIjoiTsK3bSIsInV0aWxpc2F0aW9uIjowLjAwMjkyMTAzODIxNDk1OTQ4OH0seyJhY3Rpb25zIjpbMCwxMDAwMC4wMDAwMDAwMDAwMTEsMCwwLDAsMTUwMC4wMDAwMDAwMDAwMTFdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJzaGVhciIsImNsYXVzZSI6IkcyLjEiLCJjb21iaW5hdGlvbklkIjoiTEMxIiwiZGVtYW5kIjoxMDAwMC4wMDAwMDAwMDAwMTEsImZvcm11bGFJZCI6IkcyLjEiLCJpbnRlcm1lZGlhdGVzIjp7IkF3IjowLjAwNDEyMjU3MjQsIkN2MSI6MSwiVm4iOjg1MjcyNC4wODM2NDU0Mzc3LCJwaGlfdiI6MX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIHNoZWFyIHdpdGggQ3YxID0gMS4wIChHMi4xKGEpKSIsInJlc2lzdGFuY2UiOjg1MjcyNC4wODM2NDU0Mzc3LCJzaWRlIjpudWxsLCJzdGF0aW9uIjowLjk1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw3NTAuMDAwMDAwMDAwMDEwOV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6ImZsZXh1cmUiLCJjbGF1c2UiOiJGMi0xIiwiY29tYmluYXRpb25JZCI6IkxDMSIsImRlbWFuZCI6NzUwLjAwMDAwMDAwMDAxMDksImZvcm11bGFJZCI6IkYyLTEiLCJpbnRlcm1lZGlhdGVzIjp7IkxiIjowLCJNbiI6NTcwNTczLjM4NjU4OTQ2NDMsIk1wIjo1NzA1NzMuMzg2NTg5NDY0MywibGltaXRTdGF0ZSI6InlpZWxkaW5nIiwicGhpX2IiOjAuOX0sIm1lc3NhZ2UiOiJNYWpvci1heGlzIGZsZXh1cmFsIHlpZWxkaW5nIChjb250aW51b3VzbHkgYnJhY2VkIGNvbXBhY3QgVykiLCJyZXNpc3RhbmNlIjo1MTM1MTYuMDQ3OTMwNTE3OSwic2lkZSI6bnVsbCwic3RhdGlvbiI6MC45NzUsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik7Ct20iLCJ1dGlsaXNhdGlvbiI6MC4wMDE0NjA1MTkxMDc0Nzk3NTQ3fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw3NTAuMDAwMDAwMDAwMDEwOV0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjAuOTc1LCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOIiwidXRpbGlzYXRpb24iOjAuMDExNzI3MTIyNzQ5MDcyMDI4fSx7ImFjdGlvbnMiOlswLDEwMDAwLjAwMDAwMDAwMDAxMSwwLDAsMCw3LjI3NTk1NzYxNDE4MzQyNmUtMTJdLCJhc3N1bXB0aW9ucyI6W10sImNoZWNrSWQiOiJmbGV4dXJlIiwiY2xhdXNlIjoiRjItMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjcuMjc1OTU3NjE0MTgzNDI2ZS0xMiwiZm9ybXVsYUlkIjoiRjItMSIsImludGVybWVkaWF0ZXMiOnsiTGIiOjAsIk1uIjo1NzA1NzMuMzg2NTg5NDY0MywiTXAiOjU3MDU3My4zODY1ODk0NjQzLCJsaW1pdFN0YXRlIjoieWllbGRpbmciLCJwaGlfYiI6MC45fSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgZmxleHVyYWwgeWllbGRpbmcgKGNvbnRpbnVvdXNseSBicmFjZWQgY29tcGFjdCBXKSIsInJlc2lzdGFuY2UiOjUxMzUxNi4wNDc5MzA1MTc5LCJzaWRlIjpudWxsLCJzdGF0aW9uIjoxLCJzdGF0dXMiOiJwYXNzIiwidW5pdHMiOiJOwrdtIiwidXRpbGlzYXRpb24iOjEuNDE2ODkwMDE2MDk3MDA2NWUtMTd9LHsiYWN0aW9ucyI6WzAsMTAwMDAuMDAwMDAwMDAwMDExLDAsMCwwLDcuMjc1OTU3NjE0MTgzNDI2ZS0xMl0sImFzc3VtcHRpb25zIjpbXSwiY2hlY2tJZCI6InNoZWFyIiwiY2xhdXNlIjoiRzIuMSIsImNvbWJpbmF0aW9uSWQiOiJMQzEiLCJkZW1hbmQiOjEwMDAwLjAwMDAwMDAwMDAxMSwiZm9ybXVsYUlkIjoiRzIuMSIsImludGVybWVkaWF0ZXMiOnsiQXciOjAuMDA0MTIyNTcyNCwiQ3YxIjoxLCJWbiI6ODUyNzI0LjA4MzY0NTQzNzcsInBoaV92IjoxfSwibWVzc2FnZSI6Ik1ham9yLWF4aXMgc2hlYXIgd2l0aCBDdjEgPSAxLjAgKEcyLjEoYSkpIiwicmVzaXN0YW5jZSI6ODUyNzI0LjA4MzY0NTQzNzcsInNpZGUiOm51bGwsInN0YXRpb24iOjEsInN0YXR1cyI6InBhc3MiLCJ1bml0cyI6Ik4iLCJ1dGlsaXNhdGlvbiI6MC4wMTE3MjcxMjI3NDkwNzIwMjh9XSwic3RydWN0dXJlSGFzaCI6ImFiYjAwYTA0ODE0ZDg2M2UwMmZmOGMxZTYxZTNjNzgyMDU1YjM5MmU0YmQ3NjI2MzljZDEzMTA3NzcxZGVkMjEiLCJ3YXJuaW5ncyI6WyJPbmx5IHRoZSBzZWxlY3RlZCBjYXNlL2NvbWJpbmF0aW9uIGlzIGNoZWNrZWQ7IGxvYWQgY29tcGxldGVuZXNzIGlzIHRoZSB1c2VyJ3MgcmVzcG9uc2liaWxpdHkiXSwiY3VycmVudFN0YXRlIjoicGFzcyJ9"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2f1b84a4ac2c0f5cdc15-c26e19f462722abf7ebb",
+          "file": "e2e/native-steel-design.spec.js",
+          "line": 43,
+          "column": 1
+        },
+        {
+          "title": "DW-F4: fail reaches governing station and clause; LTB stays unsupported",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6240,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:52.457Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2f1b84a4ac2c0f5cdc15-3d092a31d085f4fabd50",
+          "file": "e2e/native-steel-design.spec.js",
+          "line": 134,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/structure-model.spec.js",
+      "file": "e2e/structure-model.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Authored structure survives save, undo, topology and reopen; invalid bindings fail closed",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13135,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#model-count')\nExpected: \u001b[32m\"\u001b[7m3\u001b[27m nodes · \u001b[7m2\u001b[27m members\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m2\u001b[27m nodes · \u001b[7m1\u001b[27m members\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('#model-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#model-count')\u001b[22m\n\u001b[2m    2 × locator resolved to <small id=\"model-count\"></small>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\u001b[2m    12 × locator resolved to <small id=\"model-count\">2 nodes · 1 members</small>\u001b[22m\n\u001b[2m       - unexpected value \"2 nodes · 1 members\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#model-count')\nExpected: \u001b[32m\"\u001b[7m3\u001b[27m nodes · \u001b[7m2\u001b[27m members\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m2\u001b[27m nodes · \u001b[7m1\u001b[27m members\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('#model-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#model-count')\u001b[22m\n\u001b[2m    2 × locator resolved to <small id=\"model-count\"></small>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\u001b[2m    12 × locator resolved to <small id=\"model-count\">2 nodes · 1 members</small>\u001b[22m\n\u001b[2m       - unexpected value \"2 nodes · 1 members\"\u001b[22m\n\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/structure-model.spec.js:79:46",
+                    "location": {
+                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/structure-model.spec.js",
+                      "column": 46,
+                      "line": 79
+                    },
+                    "snippet": "  77 |   await page.reload();\n  78 |   await page.locator(\"#recent-projects .recent-row\").first().click();\n> 79 |   await expect(page.locator(\"#model-count\")).toHaveText(\"3 nodes · 2 members\");\n     |                                              ^\n  80 |   expect((await exported(page)).structure).toEqual(split.structure);\n  81 |   await page.locator(\"#explorer-expand\").click();\n  82 |   await page.locator(`[data-structure-id=\"${owner.id}\"]`).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/structure-model.spec.js",
+                        "column": 46,
+                        "line": 79
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#model-count')\nExpected: \u001b[32m\"\u001b[7m3\u001b[27m nodes · \u001b[7m2\u001b[27m members\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m2\u001b[27m nodes · \u001b[7m1\u001b[27m members\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('#model-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#model-count')\u001b[22m\n\u001b[2m    2 × locator resolved to <small id=\"model-count\"></small>\u001b[22m\n\u001b[2m      - unexpected value \"\"\u001b[22m\n\u001b[2m    12 × locator resolved to <small id=\"model-count\">2 nodes · 1 members</small>\u001b[22m\n\u001b[2m       - unexpected value \"2 nodes · 1 members\"\u001b[22m\n\n\n  77 |   await page.reload();\n  78 |   await page.locator(\"#recent-projects .recent-row\").first().click();\n> 79 |   await expect(page.locator(\"#model-count\")).toHaveText(\"3 nodes · 2 members\");\n     |                                              ^\n  80 |   expect((await exported(page)).structure).toEqual(split.structure);\n  81 |   await page.locator(\"#explorer-expand\").click();\n  82 |   await page.locator(`[data-structure-id=\"${owner.id}\"]`).click();\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/structure-model.spec.js:79:46"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:29:58.868Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-structure-model-Author-b4343-nvalid-bindings-fail-closed/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-structure-model-Author-b4343-nvalid-bindings-fail-closed/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-structure-model-Author-b4343-nvalid-bindings-fail-closed/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/structure-model.spec.js",
+                    "column": 46,
+                    "line": 79
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "163e77e9070fbde82038-1cdbaa8a0f562a0d33c2",
+          "file": "e2e/structure-model.spec.js",
+          "line": 9,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/topology.spec.js",
+      "file": "e2e/topology.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8103,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -   1\u001b[39m\n\u001b[31m+ Received  + 338\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds\",\u001b[39m\n\u001b[31m+     \"help\": \"Elements must meet minimum color contrast ratio thresholds\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>unassigned</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-structure-key=\\\"physicalMembers\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>n1</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-id=\\\"s1\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>n2</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-id=\\\"s2\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"rcBeam\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"slab\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"padFooting\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Reference load</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"loadCases\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Synthetic isotropic material</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"materials\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Synthetic principal section</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"sections\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.color\",\u001b[39m\n\u001b[31m+       \"wcag2aa\",\u001b[39m\n\u001b[31m+       \"wcag143\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT13.c\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.1.4.3\",\u001b[39m\n\u001b[31m+       \"ACT\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-3.2.1\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -   1\u001b[39m\n\u001b[31m+ Received  + 338\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds\",\u001b[39m\n\u001b[31m+     \"help\": \"Elements must meet minimum color contrast ratio thresholds\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>unassigned</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-structure-key=\\\"physicalMembers\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>n1</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-id=\\\"s1\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>n2</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-id=\\\"s2\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"rcBeam\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"slab\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"padFooting\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Reference load</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"loadCases\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Synthetic isotropic material</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"materials\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Synthetic principal section</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"sections\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.color\",\u001b[39m\n\u001b[31m+       \"wcag2aa\",\u001b[39m\n\u001b[31m+       \"wcag143\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT13.c\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.1.4.3\",\u001b[39m\n\u001b[31m+       \"ACT\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-3.2.1\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/topology.spec.js:67:27",
+                    "location": {
+                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/topology.spec.js",
+                      "column": 27,
+                      "line": 67
+                    },
+                    "snippet": "  65 |     .withTags([\"wcag2a\", \"wcag2aa\", \"wcag21aa\"])\n  66 |     .analyze();\n> 67 |   expect(scan.violations).toEqual([]);\n     |                           ^\n  68 |   await page.screenshot({\n  69 |     path: `${folder}/split-preview.png`,\n  70 |     fullPage: true,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/topology.spec.js",
+                        "column": 27,
+                        "line": 67
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -   1\u001b[39m\n\u001b[31m+ Received  + 338\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds\",\u001b[39m\n\u001b[31m+     \"help\": \"Elements must meet minimum color contrast ratio thresholds\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>unassigned</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-structure-key=\\\"physicalMembers\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>n1</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-id=\\\"s1\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>n2</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-id=\\\"s2\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"rcBeam\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"slab\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 3.47,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#7e8b9a\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"7.5pt (10px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 3.47 (foreground color: #7e8b9a, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<p class=\\\"explorer-empty\\\">None in this model</p>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"details[data-branch=\\\"padFooting\\\"] > .explorer-children > .explorer-empty\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Reference load</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"loadCases\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Synthetic isotropic material</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"materials\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"bgColor\": \"#ffffff\",\u001b[39m\n\u001b[31m+               \"contrastRatio\": 4.23,\u001b[39m\n\u001b[31m+               \"expectedContrastRatio\": \"4.5:1\",\u001b[39m\n\u001b[31m+               \"fgColor\": \"#6b7d90\",\u001b[39m\n\u001b[31m+               \"fontSize\": \"6.8pt (9px)\",\u001b[39m\n\u001b[31m+               \"fontWeight\": \"normal\",\u001b[39m\n\u001b[31m+               \"messageKey\": null,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"color-contrast\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<aside class=\\\"model-panel\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".model-panel\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element has insufficient color contrast of 4.23 (foreground color: #6b7d90, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1\",\u001b[39m\n\u001b[31m+         \"html\": \"<small>Synthetic principal section</small>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"button[data-entity-key=\\\"sections\\\"] > small\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.color\",\u001b[39m\n\u001b[31m+       \"wcag2aa\",\u001b[39m\n\u001b[31m+       \"wcag143\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT13.c\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.1.4.3\",\u001b[39m\n\u001b[31m+       \"ACT\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-3.2.1\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  65 |     .withTags([\"wcag2a\", \"wcag2aa\", \"wcag21aa\"])\n  66 |     .analyze();\n> 67 |   expect(scan.violations).toEqual([]);\n     |                           ^\n  68 |   await page.screenshot({\n  69 |     path: `${folder}/split-preview.png`,\n  70 |     fullPage: true,\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/topology.spec.js:67:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:30:13.168Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/topology.spec.js",
+                    "column": 27,
+                    "line": 67
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d4c439445d305c34d2f8-58136303081eb6ca83e8",
+          "file": "e2e/topology.spec.js",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "M01 topology: crossing stays disconnected, connect and merge are previewed and atomic",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6782,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T17:30:22.703Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--2ceef-ge-are-previewed-and-atomic/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d4c439445d305c34d2f8-08daf682ecb9c44b7c19",
+          "file": "e2e/topology.spec.js",
+          "line": 131,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-26T17:28:31.177Z",
+    "duration": 118864.951,
+    "expected": 13,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}
