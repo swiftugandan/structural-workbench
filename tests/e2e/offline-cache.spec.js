@@ -9,13 +9,21 @@ process.env.WORKBENCH_MILESTONE ||= "M04";
 const evidence = () => evidenceDir("evidence/M04/offline-cache");
 
 async function waitForServiceWorker(page) {
-  await page.waitForFunction(async () => {
-    if (!("serviceWorker" in navigator)) return false;
-    const reg = await navigator.serviceWorker.getRegistration();
-    if (!reg?.active) return false;
-    const keys = await caches.keys();
-    return keys.some((k) => k.startsWith("workbench-build-"));
-  });
+  await expect
+    .poll(() =>
+      page.evaluate(async () => {
+        if (!("serviceWorker" in navigator)) return false;
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (
+          reg?.active?.state !== "activated" ||
+          !navigator.serviceWorker.controller
+        )
+          return false;
+        const keys = await caches.keys();
+        return keys.some((k) => k.startsWith("workbench-build-"));
+      }),
+    )
+    .toBe(true);
 }
 
 test.describe("M04 offline build-ID cache", () => {
@@ -35,12 +43,14 @@ test.describe("M04 offline build-ID cache", () => {
       await readFile("fixtures/models/B02.json", "utf8"),
     );
     await page.goto("/");
-    await expect(page.locator("#build-status")).toContainText(/Build [a-f0-9]{12}/);
+    await expect(page.locator("#build-status")).toContainText(
+      /Build [a-f0-9]{12}/,
+    );
     await waitForServiceWorker(page);
 
-    const buildHash = await page.locator("#build-status").getAttribute(
-      "data-build-hash",
-    );
+    const buildHash = await page
+      .locator("#build-status")
+      .getAttribute("data-build-hash");
     expect(buildHash).toMatch(/^[a-f0-9]{64}$/);
 
     await page.locator("#import-file").setInputFiles({

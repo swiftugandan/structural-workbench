@@ -75,9 +75,14 @@ test("A real waiting build installs, preserves the saved model, and reloads atom
     await page.evaluate(async () =>
       (await navigator.serviceWorker.getRegistration()).update(),
     );
-    await page.waitForFunction(
-      async () => !!(await navigator.serviceWorker.getRegistration())?.waiting,
-    );
+    await expect
+      .poll(() =>
+        page.evaluate(
+          async () =>
+            !!(await navigator.serviceWorker.getRegistration())?.waiting,
+        ),
+      )
+      .toBe(true);
     // The active tab must still fetch assets only from A, even while B is cached.
     expect(
       await page.evaluate(() =>

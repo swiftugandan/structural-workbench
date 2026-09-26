@@ -58,4 +58,5 @@ test("Large Explorer defers closed branches and exposes every member on expansio
   await expect(page.locator("#structure-form [name=name]")).toHaveValue(
     "m1499",
   );
+  await expect(page.locator(`[data-structure-id="${owner}"]`)).toHaveCount(1);
 });

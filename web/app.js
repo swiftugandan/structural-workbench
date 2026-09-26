@@ -906,15 +906,11 @@ function renderNav() {
   if (explorerProjectId !== project.id) {
     explorerOpenState.clear();
     explorerProjectId = project.id;
-    explorerSelection = null;
+    explorerSelection = project.members.length > 1000 ? selected : null;
     $("#model-search").value = "";
   }
   // Reveal explicit selections even when their large-model branch is deferred.
-  if (
-    project.members.length > 1000 &&
-    selected !== explorerSelection &&
-    explorerSelection != null
-  ) {
+  if (project.members.length > 1000 && selected !== explorerSelection) {
     const owner = project.structure.physicalMembers.find((m) =>
       m.analyticalMemberIds.includes(selected),
     );

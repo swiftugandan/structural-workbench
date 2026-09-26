@@ -129,6 +129,9 @@ test("M03 dual Workers: edit during blocked analysis never marks stale solve Cur
   await page.goto("/");
   await page.locator("#new-project").click();
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
+  await expect(page.locator("#hash-status")).toHaveText(
+    /^[0-9a-f]{12} · f64$/i,
+  );
   const hash = await page.locator("#hash-status").textContent();
   await page.locator("#analyse").click();
   await expect(page.locator("#cancel")).toBeVisible();

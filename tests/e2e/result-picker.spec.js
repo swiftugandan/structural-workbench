@@ -6,14 +6,15 @@ test("Grouped results expose all six actions and retain component across analysi
   const p = JSON.parse(await readFile("fixtures/models/B03.json", "utf8"));
   p.loads[0].values = [10000, 5000, -10000, 1000, 0, 0];
   await page.goto("/");
-  await page
-    .locator("#import-file")
-    .setInputFiles({
-      name: "components.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(p)),
-    });
+  await page.locator("#import-file").setInputFiles({
+    name: "components.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(p)),
+  });
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
+  await expect(page.locator("#hash-status")).toHaveText(
+    /^[0-9a-f]{12} · f64$/i,
+  );
   const hash = await page.locator("#hash-status").textContent();
   await page.locator("#result-family").selectOption("moments");
   await page.locator("#display-result").selectOption("momentZ");
