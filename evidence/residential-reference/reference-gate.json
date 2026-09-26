@@ -1,0 +1,102 @@
+{
+  "taskId": "UKR01",
+  "milestone": "reference",
+  "sourceHash": "266da972257e255742a3edecae2b0ced3a3dcba3005d0da6cca787200d2ea1f1",
+  "buildHash": "d877aa70d28c66d5c96d19c4d8b6bde8da895b11f7dbdcfe33948303a049a3af",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "build.json": "b7e626fd6ee3e117d1bf9dbf0ef6c0c2c3fcdf03eae3b41000c5361aeccdca17",
+    "native-tests.log": "ad375b1a8f909e4dc90d0ed97ea62cf64f760516401f23463e9b0b9f29a9965f",
+    "contracts.log": "09fc58cb78f387d10883602a430ca0e3ea71d5c92abf53ff7941ad5d62d37f85",
+    "browser.log": "45a14e5101c5f7ce1805d11eda2ce2c6bc7a3a9aff2179a1c5cf26fd8adfcbf1",
+    "playwright-results.json": "7fc1e12faae0f15e03374de719d2a76aa1e2b67cf6d6d32f9865dd728cc6ec1f",
+    "reference-numerical.json": "f7fc3c4b078821eadaa11ab12d4d5fad4492aa8a18d640bc64a9b9094c34a238",
+    "numerical.json": "c4360580963de974e0922bfbbb4e513a0c3c0e72435a69edfe8c7ac4ed4bc21b",
+    "wasm.json": "56d18b141d34b0f7035a68df899f53326ac03d9bb3fa5e34f217f8d0d63248ef",
+    "UKR01-generated.json": "524e47041e04c2f3b1db72d085401b6f0f61e556468dd6047670b0f4ad59040b",
+    "design-demand-review.json": "5386f2751b648af17df87032fe1cdb4606c0032dd3a58134dde87f21d4380aa9",
+    "footing-review.json": "c94b6ef49ec755741e209fb2c3c2aa72044f0791657b08e18070693af8402804",
+    "raw-solutions.tar.gz": "d2944c1b0fcdf55d891c4ea6964539032f59a763d8f01f4a4bb972589e6af394",
+    "visible-browser.json": "5905087cec06cf3591d578bfc99ae0332dfea3b7857c6504a7290ddeddce9fce",
+    "visible-frame.png": "f8adad2cdc61ec7215b4c44a50ab217051036c325139279489019e1768bbf7e3",
+    "visible-footing-review.png": "2b9914a1d606a7cb6838ff52e9c73f0cd8e730cd9de46c9d17cdd54408c2d03f",
+    "residential-review.html": "8fc74b4039d5550d76da23345ce892a31e8d1f99a2db41fd678fc77123a3d806"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T18:13:21.499Z",
+  "status": "PASS",
+  "scope": "Preliminary synthetic-input one-way strip/frame reference analysis and current-shell workflow",
+  "designStatus": "UNSUPPORTED",
+  "contactStatus": "INDETERMINATE",
+  "nativeTests": 85,
+  "contractTests": 3,
+  "analyticalRegressionChecks": 66,
+  "browserTests": 8,
+  "referenceComparisons": 102048,
+  "referenceCases": [
+    "G",
+    "Q",
+    "WX",
+    "WY",
+    "SLS",
+    "ULS",
+    "LX",
+    "LY"
+  ],
+  "visibleBrowser": {
+    "browser": "Chrome",
+    "os": "macOS",
+    "adapter": "AMD WebGPU",
+    "observations": [
+      "Four-storey frame, slab openings, tread geometry and bound pads visible",
+      "Physical stair selected through saved hierarchy",
+      "SLS solved in actual UI; Current status",
+      "Load/crossing overlays off and independently reversible",
+      "Foundation workflow uses actual model analysis; UNSUPPORTED and contact INDETERMINATE visible"
+    ]
+  },
+  "limitations": [
+    "No concrete code resistance or detailing accepted",
+    "No plate/diaphragm or soil/contact model",
+    "Gross uncracked small-displacement frame idealisation",
+    "Synthetic loads and soil inputs; site, code editions and UK NAs not confirmed",
+    "No Windows/Linux real-GPU acceptance"
+  ],
+  "command": [
+    "cargo test --workspace --locked",
+    "npm run test:contracts",
+    "npm run test:numerical",
+    "npm run test:wasm",
+    "node evidence/residential-reference/verify-reference.mjs",
+    "playwright: residential-reference, structure-model, design-previews, cad"
+  ],
+  "artifacts": [
+    "build.json",
+    "native-tests.log",
+    "contracts.log",
+    "browser.log",
+    "playwright-results.json",
+    "reference-numerical.json",
+    "numerical.json",
+    "wasm.json",
+    "UKR01-generated.json",
+    "design-demand-review.json",
+    "footing-review.json",
+    "raw-solutions.tar.gz",
+    "visible-browser.json",
+    "visible-frame.png",
+    "visible-footing-review.png",
+    "residential-review.html"
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "taskId": "UKR01",
+  "milestone": "M00",
+  "sourceHash": "266da972257e255742a3edecae2b0ced3a3dcba3005d0da6cca787200d2ea1f1",
+  "buildHash": "d877aa70d28c66d5c96d19c4d8b6bde8da895b11f7dbdcfe33948303a049a3af",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "UKR01-generated.json": "524e47041e04c2f3b1db72d085401b6f0f61e556468dd6047670b0f4ad59040b",
+    "design-demand-review.json": "5386f2751b648af17df87032fe1cdb4606c0032dd3a58134dde87f21d4380aa9"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T18:09:40.615Z",
+  "status": "PASS",
+  "testCount": 102048,
+  "testIds": [
+    "G",
+    "Q",
+    "WX",
+    "WY",
+    "SLS",
+    "ULS",
+    "LX",
+    "LY"
+  ],
+  "cases": [
+    {
+      "caseId": "G",
+      "resultId": "bd63289d4636ab94-G",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          2.2886524675413966e-8,
+          2.6874658942688257e-8,
+          -1.9512663129717112e-7,
+          -0.0000011311494745314121,
+          0.000001424406946171075,
+          -1.6864123608684167e-7
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.5023869594880839e-16
+      }
+    },
+    {
+      "caseId": "Q",
+      "resultId": "bd63289d4636ab94-Q",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          4.743924364447594e-9,
+          5.533365765586495e-9,
+          -3.351306077092886e-8,
+          -2.1455343812704086e-7,
+          2.7031637728214264e-7,
+          -3.2852767617441714e-8
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.8374201365676402e-16
+      }
+    },
+    {
+      "caseId": "WX",
+      "resultId": "bd63289d4636ab94-WX",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          1.3331555237527937e-7,
+          -8.12747202871833e-10,
+          1.949956640601158e-9,
+          2.0983861759305e-8,
+          0.0000013613898772746325,
+          -0.00000108750828076154
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.0980289947603605e-16
+      }
+    },
+    {
+      "caseId": "WY",
+      "resultId": "bd63289d4636ab94-WY",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          -1.2582631825353019e-8,
+          4.1363819036632776e-8,
+          1.114131009671837e-9,
+          -3.231980372220278e-7,
+          -1.5903060557320714e-7,
+          4.232279025018215e-7
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.8778061263539464e-16
+      }
+    },
+    {
+      "caseId": "SLS",
+      "resultId": "bd63289d4636ab94-SLS",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          2.7575879357755184e-8,
+          3.223976818844676e-8,
+          -2.2579479264095426e-7,
+          -0.0000013519238564185798,
+          0.0000016732592484913766,
+          -2.0292645785957575e-7
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.643772098321268e-16
+      }
+    },
+    {
+      "caseId": "ULS",
+      "resultId": "bd63289d4636ab94-ULS",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          3.786408342421055e-8,
+          4.43833414465189e-8,
+          -3.2989100873237476e-7,
+          -0.0000019542931113392115,
+          0.0000024586988729424775,
+          -2.7575879357755184e-7
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.877950928035427e-16
+      }
+    },
+    {
+      "caseId": "LX",
+      "resultId": "bd63289d4636ab94-LX",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          1.608059392310679e-7,
+          3.134118742309511e-8,
+          -2.2236054064705968e-7,
+          -0.0000012951131793670356,
+          0.000003020883013959974,
+          -0.0000012883101589977741
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.6353022464434867e-16
+      }
+    },
+    {
+      "caseId": "LY",
+      "resultId": "bd63289d4636ab94-LY",
+      "numericalChecks": {
+        "factorNnzEstimate": 863904,
+        "forcePass": true,
+        "globalBalance": [
+          1.5308614820241928e-8,
+          7.342168828472495e-8,
+          -2.273081918247044e-7,
+          -0.0000016769554349593818,
+          0.0000015121404430828989,
+          2.1758023649454117e-7
+        ],
+        "matrixNnz": 17998,
+        "minScaledPivot": 0.0102512116452962,
+        "momentPass": true,
+        "origin": [
+          0,
+          0,
+          0
+        ],
+        "scaledResidual": 1.646349099244974e-16
+      }
+    }
+  ],
+  "command": [
+    "node",
+    "evidence/residential-reference/verify-reference.mjs"
+  ],
+  "artifacts": [
+    "UKR01-generated.json",
+    "design-demand-review.json"
+  ]
+}

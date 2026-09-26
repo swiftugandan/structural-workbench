@@ -577,3 +577,7 @@ structure hash. Geometry/design input edits still invalidate results. See ADR 00
 `contracts/project.schema.json`, `contracts/PROTOCOL.md` and
 `evidence/structure-model/` for the contract and verification record. This extension
 does not expand the accepted numerical/code-profile scope.
+
+### UKR01 concrete residential reference (2026-09-26)
+
+The worked examples include a Rust-generated four-storey British-basis residential frame with physical slab-strip panels, explicit stair openings, connected flights/intermediate landings and bound pad-footing drafts. `docs/design/uk-residential-reference.md` pins the preliminary model assumptions, interpretation and validation. Structure roles include slab/stair/landing; optional stair riser metadata is display-only and requires a single flight. Resistance remains UNSUPPORTED and soil contact INDETERMINATE. This reference does not accept M08/M10/M11/M12 or claim British code compliance.

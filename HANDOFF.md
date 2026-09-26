@@ -1,3 +1,9 @@
+## Latest user reference: UKR01 (2026-09-26)
+
+User requested a four-storey concrete residential 3D frame with slabs, stairs, flat roof, pad footings and firm ground; specified British. Open Worked examples → **UK residential · four storeys**. Rust generator and eight actual load cases/combination analyses are locally verified. Trial dimensions/loads/ground inputs are synthetic; concrete resistance remains UNSUPPORTED and contact INDETERMINATE. This is a usable preliminary reference, **not completed construction design**. See `docs/design/uk-residential-reference.md`, downloadable `evidence/residential-reference/UKR01-generated.json`, `residential-review.html` and exact demand JSON. Final gate `evidence/residential-reference/reference-gate.json` records tests/hashes.
+
+Next numerical design work needs the agreed British code edition and UK NA resource package, validated concrete examples, site wind/snow and ground investigation. Do not reclassify this model's linear solver convergence as design acceptance. Ground floor is suspended; floors are connected one-way strips, not shells or rigid diaphragms. Gross centreline self weight includes junction/slab-beam overlap, and all construction checks are still listed in the review. Viewer toggles for solid geometry, load glyphs and projected crossings are reversible; opening UKR01 starts with clear solid geometry and SLS selected.
+
 # Structural Workbench handoff
 
 Read `AGENTS.md`, the repository skills, and root `delivery/state.json` for current priority.

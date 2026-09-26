@@ -1,0 +1,35 @@
+{
+  "taskId": "M00-A",
+  "milestone": "M00",
+  "sourceHash": "266da972257e255742a3edecae2b0ced3a3dcba3005d0da6cca787200d2ea1f1",
+  "buildHash": "d877aa70d28c66d5c96d19c4d8b6bde8da895b11f7dbdcfe33948303a049a3af",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T18:09:24.390Z",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "M01-draw-snap-crossings",
+    "M01-multiselect-atomic-edit",
+    "M01-working-planes-camera"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/cad.spec.js"
+  ],
+  "browser": "153.0.8010.12"
+}

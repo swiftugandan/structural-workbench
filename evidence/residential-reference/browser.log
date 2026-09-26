@@ -1,0 +1,17 @@
+
+Running 8 tests using 1 worker
+
+(node:70456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:70456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/cad.spec.js:43:1 › M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect (10.6s)
+  ✓  2 tests/e2e/cad.spec.js:89:1 › M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts (15.8s)
+  ✓  3 tests/e2e/cad.spec.js:154:1 › M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance (10.6s)
+  ✓  4 tests/e2e/design-previews.spec.js:6:3 › Concrete preview rcBeam: source, stale, undo, persistence and export (7.8s)
+  ✓  5 tests/e2e/design-previews.spec.js:6:3 › Concrete preview slab: source, stale, undo, persistence and export (5.6s)
+  ✓  6 tests/e2e/design-previews.spec.js:6:3 › Concrete preview padFooting: source, stale, undo, persistence and export (6.4s)
+  ✓  7 tests/e2e/residential-reference.spec.js:5:1 › UK residential reference: actual WASM analysis, hierarchy, model-sourced footing review and stale edits (16.4s)
+  ✓  8 tests/e2e/structure-model.spec.js:9:1 › Authored structure survives save, undo, topology and reopen; invalid bindings fail closed (12.0s)
+
+  8 passed (1.5m)
