@@ -1,3 +1,4 @@
+import { designStatusPalette } from "./design-status.js";
 import { steelOverview } from "./steel-overview.js";
 import { modelVisibility } from "./model-visibility.js";
 import { previewIdentity, structureSelectionIds } from "./selection-context.js";
@@ -111,6 +112,26 @@ const overview = steelOverview({
     active: tab === "steel-overview",
     locked: busy || analysing || readOnly,
   }),
+  onOverlay: (data) => {
+    viewport.designStatuses = data?.states || null;
+    const legend = $("#steel-review-legend");
+    legend.hidden = !data;
+    legend.replaceChildren();
+    if (data) {
+      legend.append(`Design · ${data.caseId} · `);
+      for (const [state, palette] of Object.entries(designStatusPalette)) {
+        const count = Object.values(data.states).filter(
+          (x) => x === state,
+        ).length;
+        if (!count) continue;
+        const span = document.createElement("span");
+        span.textContent = `${palette.label} ${count}`;
+        span.style.borderColor = palette.css;
+        legend.append(span);
+      }
+    }
+    viewport.draw();
+  },
   onRuns: (runs) => {
     for (const run of runs) memberDesignRuns.set(run.memberId, run);
   },
@@ -1254,6 +1275,7 @@ function format(n) {
     : "—";
 }
 function renderResults() {
+  overview.syncOverlay();
   const current = result && result.modelHash === modelHash && !formDirty;
   $("#result-status").textContent = failed
     ? "Analysis failed"

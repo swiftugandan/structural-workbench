@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M07",
-  "activeTask": "M07-G",
+  "activeTask": "REVIEW-02",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2971,6 +2971,33 @@
       "buildHash": "89240a233b9dbf4e6d1730bdb90016805d6f6f6aa3b1109b1fb2bd64a1bb87cd",
       "evidencePath": "evidence/M07/catalogue-study/study-gate.json",
       "useCase": "Search catalogue, compare reanalysed candidates, apply and undo"
+    },
+    "M07-G-task-journey": {
+      "id": "M07-G-task-journey",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "sourceHash": "b6ed570e0b1dbca8924f6b1a2ac14dfcb7a74cd0551025594b903f6a51f09049",
+      "buildHash": "b48dd604a1d3092f6e09d3beb64f8125d2505d92832cc774c1bd92d02bc14d20",
+      "evidencePath": "evidence/M07/task-journey/task-gate.json",
+      "useCase": "Find failing member, inspect governing check, compare candidate, apply, reanalyse and export; stale status colours"
+    },
+    "M07-G": {
+      "id": "M07-G",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "dependencies": [
+        "REVIEW-03"
+      ],
+      "evidencePaths": [
+        "evidence/M07/overview/overview-gate.json",
+        "evidence/M07/catalogue-study/study-gate.json",
+        "evidence/M07/task-journey/task-gate.json"
+      ],
+      "acceptanceMeaning": "Bounded selected-case AISC S2 overview, five-record catalogue, finite mass candidate study, status overlay and local task journey. No full-code or global-optimality acceptance."
+    },
+    "REVIEW-02": {
+      "id": "REVIEW-02",
+      "status": "AUDIT_IMPLEMENTED_ACCEPTANCE_OPEN",
+      "evidencePath": "evidence/model-visibility/visibility-gate.json",
+      "nextAction": "Resolve physical geometry datums, floor/beam offsets and stair junction/headroom/detailing before physical/construction acceptance."
     }
   },
   "blockers": [
@@ -3001,12 +3028,27 @@
       ],
       "status": "BLOCKED_RESOURCE",
       "resumeWhen": "Acquire ACI/concrete standard + examples into resources/private and lock hashes (same human-download pattern as M07 AISC)"
+    },
+    {
+      "id": "UKR01-EC-resources",
+      "affects": [
+        "UKR01",
+        "M08-UK",
+        "M09-UK",
+        "M11-UK"
+      ],
+      "resourceIds": [
+        "R-EC2-UK-STANDARDS",
+        "R-EC2-JRC-EXAMPLES"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "resumeWhen": "Acquire edition-specific authoritative standards and UK NAs; extract/reconcile JRC examples and validate bounded Rust/WASM profiles. Eurocodes with UK NAs confirmed by user; no legacy BS 8110."
     }
   ],
   "lastVerifiedSourceRevision": null,
-  "lastVerifiedBuildHash": "89240a233b9dbf4e6d1730bdb90016805d6f6f6aa3b1109b1fb2bd64a1bb87cd",
-  "nextAction": "Implement design status overlay and integrated task acceptance. British concrete code profiles remain blocked on exact licensed standards and UK NA resources.",
+  "lastVerifiedBuildHash": "b48dd604a1d3092f6e09d3beb64f8125d2505d92832cc774c1bd92d02bc14d20",
+  "nextAction": "Resolve residential physical geometry/detailing acceptance and acquire exact Eurocode/UK NA resources for concrete numerical/code profiles. See docs/design/current-capability-review.md.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "2eb9215495d3b604294d52e5a738421a7781c972dfc0df35ae954c4f4685b7e7",
-  "lastVerifiedScope": "M07-G catalogue/study: 91 native, 3 contracts, 4 browser journeys and visible Chrome. Status overlay and broader product acceptance remain."
+  "lastVerifiedSourceHash": "b6ed570e0b1dbca8924f6b1a2ac14dfcb7a74cd0551025594b903f6a51f09049",
+  "lastVerifiedScope": "Final 3 contracts + 7 real WASM/browser journeys and visible Chrome solid PASS/STALE states; unchanged Rust regression reused from 91-test catalogue slice."
 }

@@ -1,0 +1,71 @@
+{
+  "sourceHash": "b6ed570e0b1dbca8924f6b1a2ac14dfcb7a74cd0551025594b903f6a51f09049",
+  "buildHash": "b48dd604a1d3092f6e09d3beb64f8125d2505d92832cc774c1bd92d02bc14d20",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "taskId": "M07-G-task-journey",
+  "status": "PASS",
+  "observedAt": "2026-09-26T20:41:40.584363+00:00",
+  "contractTests": 3,
+  "browserTests": 7,
+  "nativeEvidence": {
+    "testCount": 91,
+    "gate": "evidence/M07/catalogue-study/study-gate.json",
+    "baselineCommit": "20dfb16",
+    "unchangedDependencies": [
+      "crates",
+      "Cargo.lock",
+      "Cargo.toml",
+      "rust-toolchain.toml"
+    ],
+    "scope": "Reused unchanged Rust numerical regression; final actual WASM journeys recheck 900 kN m and candidate self-weight demands"
+  },
+  "commands": [
+    "npm run build",
+    "npm run test:contracts",
+    "WORKBENCH_EVIDENCE_DIR=evidence/M07/task-journey npx playwright test tests/e2e/steel-task-journey.spec.js tests/e2e/steel-study.spec.js tests/e2e/steel-overview.spec.js tests/e2e/native-steel-design.spec.js tests/e2e/model-visibility.spec.js"
+  ],
+  "liveBrowser": {
+    "browser": "Chrome",
+    "platform": "macOS",
+    "adapter": "AMD WebGPU",
+    "viewport": "1440 x 900 CSS pixels",
+    "observations": [
+      "Current build b48dd604a1d3",
+      "Solid physical member visibly green with PASS row and legend",
+      "Unsaved Ky edit visibly greys solid member and marks table/legend STALE",
+      "Cancel restores current state"
+    ]
+  },
+  "scope": "Local bounded steel task and view regressions; no new code profile, construction design or cross-platform acceptance",
+  "resourceLockHash": "1adc3bb8d75a01b4d3f553d673e56e172b8b90670cb6070d5e6778206e526915",
+  "artifactHashes": {
+    "stair-plan.png": "174611022218776ff340ca9184ccc5b39cda78f252388be254a4c8ea9c0279d8",
+    "study-regression.json": "553fdcdde92e28e696ecc1bdc9c09b77f277182053255af17e1560eb78cc80e1",
+    "live-pass-colours.png": "ec6a4cf7f6b015460a4e017fa37e8401bb7233c405e2d2b4b222b803cece95e5",
+    "overview-regression.png": "042bf90bf30ef804f280becdfc1fc104d992efc122aa9f2e19175b0dad6a2b50",
+    "restored-model.png": "1288d39fb6d6fdfcb4a060911faf9d0c0defe047eb5498f797c52990d9c500c2",
+    "playwright-results.json": "c003a38a000a3c759f671cad89ec7ec1d44c2f373f56c2f2ae930294f8ee261b",
+    "review-pass.png": "0f5534ba0a294785915e72d95b3ff8d309d58e3fc7707f4c5bc67c089a18ab7c",
+    "native-regression-design.json": "879da78008bf8f98861470b10d704911c7b6b410d8b537889ff6626b4eead94d",
+    "native-regression.png": "6498f43e1da651cbf3bf8ff65356864fa21d1d4dd67283fc18edfdf6bbfb718a",
+    "live-stale-colours.png": "ea008eea5bd736126258400c8a4dbfb073378315f12f22ed020af0511c391b4f",
+    "study-regression.png": "24cd782f52953e2e4fc66b091c4a6cd9f1fe1a4e2dbc6886537223826ff232e3",
+    "design-run.json": "8861e36819a7b68e6e6a79cda3a969d00a0bcd46ba260da1ef37e6b755bbba3f",
+    "overview-regression.json": "c55973a7dbbfd6226d9ebfce698df5ee4ba22609a9678b50f06f248aac5ea565",
+    "stair-side.png": "91f57135579452c311a906e8f9d9c99b317bf570b276f0d4d6635efd37a2c785",
+    "stair-3d.png": "9289ca87d3078b8259c2c237d1801b9aed2854309da9b6c364ad070f87fe0505",
+    "report.html": "9613015782803171a22f668646af17ea1153104bcfefc0c37ff802068c362ca6"
+  }
+}

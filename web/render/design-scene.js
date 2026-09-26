@@ -243,6 +243,7 @@ export function drawMemberSurface(
   triangle,
   line,
   range = [0, frame?.length],
+  statusColour = null,
 ) {
   if (!frame) return;
   const tr = ([x, y, z]) =>
@@ -299,9 +300,11 @@ export function drawMemberSurface(
       [5, [4, 5, 6, 7]],
     ]) {
       const shade = 0.67 + i * 0.04,
-        color = selected
-          ? [0.12 * shade, 0.4 * shade, 0.88 * shade, 1]
-          : [shade, shade + 0.035, shade + 0.06, 1];
+        color = statusColour
+          ? statusColour.map((v, index) => (index === 3 ? v : v * shade))
+          : selected
+            ? [0.12 * shade, 0.4 * shade, 0.88 * shade, 1]
+            : [shade, shade + 0.035, shade + 0.06, 1];
       triangle(p[face[0]], p[face[1]], p[face[2]], color);
       triangle(p[face[0]], p[face[2]], p[face[3]], color);
     }

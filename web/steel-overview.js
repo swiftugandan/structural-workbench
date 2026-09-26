@@ -8,12 +8,14 @@ export function steelOverview({
   command,
   context,
   onRuns,
+  onOverlay,
   onRunning,
   onError,
   onSelect,
   download,
 }) {
-  let screen = "overview";
+  let screen = "overview",
+    overlay = false;
   const catalogue = steelCatalogueStudy({
     gateway,
     context,
@@ -27,8 +29,12 @@ export function steelOverview({
   function navigation(host) {
     host.insertAdjacentHTML(
       "afterbegin",
-      `<nav class="steel-workspace-nav" aria-label="Steel workspace">${["overview", "catalogue", "study"].map((s) => `<button data-steel-screen="${s}" aria-pressed="${screen === s}">${s === "overview" ? "Model review" : s === "catalogue" ? "Catalogue" : "Candidate study"}</button>`).join("")}</nav>`,
+      `<nav class="steel-workspace-nav" aria-label="Steel workspace">${["overview", "catalogue", "study"].map((s) => `<button data-steel-screen="${s}" aria-pressed="${screen === s}">${s === "overview" ? "Model review" : s === "catalogue" ? "Catalogue" : "Candidate study"}</button>`).join("")}<label class="steel-colour-toggle"><input id="steel-colour-toggle" type="checkbox" ${overlay ? "checked" : ""}>Design colours</label></nav>`,
     );
+    host.querySelector("#steel-colour-toggle").onchange = (e) => {
+      overlay = e.target.checked;
+      syncOverlay();
+    };
     for (const b of host.querySelectorAll("[data-steel-screen]"))
       b.onclick = () => {
         screen = b.dataset.steelScreen;
@@ -45,6 +51,26 @@ export function steelOverview({
       context().failed ||
       review.modelHash !== context().modelHash ||
       review.resultId !== context().result?.resultId);
+  function syncOverlay() {
+    const c = context();
+    const isStale = stale();
+    onOverlay(
+      overlay
+        ? {
+            caseId: review?.caseId || "Not checked",
+            states: Object.fromEntries(
+              (c.project?.members || []).map((m) => {
+                const row = review?.rows.find((r) => r.memberId === m.id);
+                return [
+                  m.id,
+                  row ? (isStale ? "stale" : row.status) : "notChecked",
+                ];
+              }),
+            ),
+          }
+        : null,
+    );
+  }
   function render(host) {
     if (!context().active) return;
     catalogue.cancelRender();
@@ -137,6 +163,7 @@ export function steelOverview({
         )
           throw Error("Model or analysis changed during review");
         review = report;
+        syncOverlay();
         onRuns(report.rows.flatMap((r) => (r.run ? [r.run] : [])));
       } catch (e) {
         onError(e.message);
@@ -149,7 +176,9 @@ export function steelOverview({
   }
   return {
     render,
+    syncOverlay,
     reset() {
+      overlay = false;
       screen = "overview";
       catalogue.reset();
       review = null;

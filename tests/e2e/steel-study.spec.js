@@ -13,13 +13,11 @@ test("M07-G catalogue study reanalyses self weight, applies explicitly and undoe
     { id: "l1", case: "LC1", type: "selfWeight", members: ["m1"], factor: 1 },
   ];
   await page.goto("/");
-  await page
-    .locator("#import-file")
-    .setInputFiles({
-      name: "study.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(p)),
-    });
+  await page.locator("#import-file").setInputFiles({
+    name: "study.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(p)),
+  });
   await page.locator("[data-inspector-tab=steel]").click();
   await expect(page.locator("#design-assign")).toBeVisible();
   await page.locator("[data-tab=steel-overview]").click();
@@ -41,12 +39,7 @@ test("M07-G catalogue study reanalyses self weight, applies explicitly and undoe
   await expect(page.locator("#candidate-run")).toBeDisabled();
   await page.locator("#catalogue-search").fill("");
   await page.locator("#catalogue-search").press("Tab");
-  for (const s of ["W14X99", "W14X145", "W12X65"]) {
-    const el = page.locator(
-      `[data-candidate-ref="aisc-shapes-v16.0-subset-1:${s}"]`,
-    );
-    if (await el.count()) await el.uncheck();
-  }
+  await expect(page.locator("[data-candidate-ref]")).toHaveCount(5);
   // Select exactly the two published sections regardless of catalogue ordering.
   for (const el of await page.locator("[data-candidate-ref]").all()) {
     const ref = await el.getAttribute("data-candidate-ref");

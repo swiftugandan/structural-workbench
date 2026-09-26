@@ -1,3 +1,4 @@
+import { designStatusPalette } from "../design-status.js";
 import {
   memberDisplayRange,
   supportMesh,
@@ -567,6 +568,8 @@ export class Viewport {
       entityIndex = i + 1;
       const a = points.get(m.start),
         b = points.get(m.end);
+      const designColour =
+        designStatusPalette[this.designStatuses?.[m.id]]?.ink;
       if (
         (this.solidDesign || this.modelSolids) &&
         this.axesProject === this.project
@@ -602,6 +605,7 @@ export class Viewport {
                 this.designCatalogue,
               )
             : undefined,
+          designColour,
         );
       } else {
         line(a, b, 4, ink);
@@ -621,12 +625,22 @@ export class Viewport {
             );
         }
       }
+      if (designColour) line(a, b, 10, designColour);
       if (this.hovered === m.id) line(a, b, 8, [0.9, 0.42, 0.08, 0.7]);
       if (this.selection.has(m.id)) {
         line(a, b, 12, [0.16, 0.4, 0.8, 0.22]);
         line(a, b, 4, blue);
       }
     }
+    this.canvas.dataset.designStatuses = JSON.stringify(
+      this.designStatuses
+        ? Object.fromEntries(
+            this.project.members
+              .filter((m) => this.isVisible(m.id))
+              .map((m) => [m.id, this.designStatuses[m.id]]),
+          )
+        : {},
+    );
     this.canvas.dataset.stairOutlines = String(stairOutlines);
     document.querySelector("#stair-outline-legend").hidden =
       stairOutlines === 0;
