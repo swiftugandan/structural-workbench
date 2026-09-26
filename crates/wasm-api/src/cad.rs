@@ -217,7 +217,7 @@ fn copy_bay(
 }
 
 pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
-    let p = Project::parse(&v.to_string())?;
+    let p = Project::parse_current(&v.to_string())?;
     let a = &c["args"];
     let selected = ids(&a["ids"])?;
     let known: BTreeSet<_> = p

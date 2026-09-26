@@ -3,6 +3,9 @@ import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { frame } from "./helpers/frame.js";
 import { evidenceDir, record } from "../tools/evidence.mjs";
+// Capturing the 10,000-member DOM after every orbit gesture distorts the
+// performance measurement. Keep action/network traces and screenshots.
+test.use({ trace: { mode: "on", snapshots: false, screenshots: true } });
 const p95 = (values) =>
   [...values].sort((a, b) => a - b)[Math.ceil(values.length * 0.95) - 1];
 test("M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export", async ({

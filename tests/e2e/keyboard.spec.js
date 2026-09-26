@@ -46,7 +46,10 @@ test("M01 keyboard-only portal creation, numeric drawing, table editing and solv
   );
   await expect(page.locator("#model-count")).toHaveText("4 nodes · 4 members");
   await page.keyboard.press("Escape");
-  await activate(page, page.getByRole("button", { name: /Nodes 4/ }));
+  await activate(
+    page,
+    page.getByRole("button", { name: "Analytical nodes 4", exact: true }),
+  );
   await activate(
     page,
     page.getByRole("button", { name: "Edit n3", exact: true }),

@@ -1,12 +1,27 @@
 import { previewIdentity } from "./selection-context.js";
 import { renderMemberNav } from "./hierarchy.js";
+const nameOrder = new Intl.Collator(undefined, { numeric: true });
 
 export function renderExplorer(
   project,
-  { selected, label, esc, icon, openState, selectionContext, query = "" },
+  {
+    selected,
+    label,
+    esc,
+    icon,
+    openState,
+    selectionContext,
+    query = "",
+    lazyBranches,
+  },
 ) {
-  const branch = (key, title, body, count = "", open = true) =>
-    `<details class="explorer-branch" data-branch="${esc(key)}" ${(openState.get(key) ?? open) || query ? "open" : ""}><summary><span>${esc(title)}</span>${count !== "" ? `<small>${count}</small>` : ""}</summary><div class="explorer-children">${body || '<p class="explorer-empty">None in this model</p>'}</div></details>`;
+  const analyticalById = new Map(project.members.map((m) => [m.id, m]));
+  const branch = (key, title, body, count = "", open = true) => {
+    const expanded = (openState.get(key) ?? open) || !!query;
+    const deferred = project.members.length > 1000 && !expanded && lazyBranches;
+    if (deferred) lazyBranches.set(key, body);
+    return `<details class="explorer-branch" data-branch="${esc(key)}" ${expanded ? "open" : ""} ${deferred ? 'data-lazy="true"' : ""}><summary><span>${esc(title)}</span>${count !== "" ? `<small>${count}</small>` : ""}</summary><div class="explorer-children">${deferred ? "" : body || '<p class="explorer-empty">None in this model</p>'}</div></details>`;
+  };
   const leaf = (key, e) =>
     `<button class="explorer-leaf ${selected === e.id ? "active" : ""}" data-entity-key="${key}" data-entity-id="${esc(e.id)}" ${selected === e.id ? 'aria-current="true"' : ""}><span class="nav-icon">${icon({ nodes: "node", supports: "support", loads: "load", materials: "material", sections: "section", loadCases: "loadCase", combinations: "combination" }[key])}</span><span>${esc(label(e.id))}</span><small>${esc(e.name || e.node || "")}</small></button>`;
   const manage = (key, title) =>
@@ -59,9 +74,7 @@ export function renderExplorer(
         .map((role) => {
           const items = members
             .filter((m) => m.role === role)
-            .sort((a, b) =>
-              a.name.localeCompare(b.name, undefined, { numeric: true }),
-            );
+            .sort((a, b) => nameOrder.compare(a.name, b.name));
           return items.length
             ? branch(
                 `storey:${level.id}:${role}`,
@@ -81,8 +94,8 @@ export function renderExplorer(
                         `analytical:${m.id}`,
                         "Analytical members",
                         renderMemberNav(
-                          project.members.filter((a) =>
-                            m.analyticalMemberIds.includes(a.id),
+                          m.analyticalMemberIds.map((id) =>
+                            analyticalById.get(id),
                           ),
                           { selected, label, esc },
                         ),
@@ -185,6 +198,9 @@ export function renderExplorer(
 
 export function filterExplorer(host, query) {
   const needle = query.trim().toLocaleLowerCase();
+  // renderNav creates a fresh, unfiltered tree; avoid walking every branch
+  // when there is no search to apply.
+  if (!needle) return host.querySelectorAll("button").length;
   for (const leaf of host.querySelectorAll("button"))
     leaf.hidden =
       !!needle &&

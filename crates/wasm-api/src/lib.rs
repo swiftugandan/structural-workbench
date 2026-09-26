@@ -14,6 +14,7 @@ pub struct Kernel {
     undo: Vec<Project>,
     redo: Vec<Project>,
     view_index: Option<view::Index>,
+    model_hash: Option<(u64, String)>,
 }
 #[wasm_bindgen]
 impl Kernel {
@@ -24,6 +25,7 @@ impl Kernel {
             undo: vec![],
             redo: vec![],
             view_index: None,
+            model_hash: None,
         }
     }
     pub fn request(&mut self, input: &str) -> String {
@@ -32,14 +34,24 @@ impl Kernel {
         let id = r["requestId"].clone();
         let result = self.dispatch(&r, op);
         let revision = self.project.as_ref().map(|p| p.revision);
-        let hash = self.project.as_ref().map(|p| p.hash());
+        let hash = self.current_hash();
         match result{Ok(payload)=>json!({"protocolVersion":1,"requestId":id,"operation":op,"status":"ok","revision":revision,"modelHash":hash,"payload":payload,"diagnostics":[]}).to_string(),Err(d)=>json!({"protocolVersion":1,"requestId":id,"operation":op,"status":"error","revision":revision,"modelHash":hash,"payload":null,"diagnostics":[d]}).to_string()}
     }
 }
 impl Kernel {
-    fn snapshot(&self) -> Value {
+    // Every successful replacement/edit/undo advances revision; rejected commands
+    // leave it unchanged. Cache only the immutable engineering hash for that revision.
+    fn current_hash(&mut self) -> Option<String> {
+        let p = self.project.as_ref()?;
+        if self.model_hash.as_ref().map(|(revision, _)| *revision) != Some(p.revision) {
+            self.model_hash = Some((p.revision, p.hash()));
+        }
+        self.model_hash.as_ref().map(|(_, hash)| hash.clone())
+    }
+    fn snapshot(&mut self) -> Value {
+        let hash = self.current_hash();
         let p = self.project.as_ref().unwrap();
-        json!({"project":p,"modelHash":p.hash(),"structureHash":p.structure.hash(),"canUndo":!self.undo.is_empty(),"canRedo":!self.redo.is_empty()})
+        json!({"project":p,"modelHash":hash,"structureHash":p.structure.hash(),"canUndo":!self.undo.is_empty(),"canRedo":!self.redo.is_empty()})
     }
     fn dispatch(&mut self, r: &Value, op: &str) -> Result<Value> {
         if r["protocolVersion"] != 1 {
@@ -179,7 +191,7 @@ impl Kernel {
                 let old = self.project.as_ref().unwrap().clone();
                 let mut v = serde_json::to_value(&old).unwrap();
                 apply(&mut v, &payload["command"], false)?;
-                let mut p = Project::parse(&v.to_string())?;
+                let mut p = Project::parse_current(&v.to_string())?;
                 p.revision = old.revision + 1;
                 p.canonicalise();
                 self.undo.push(old);
@@ -247,7 +259,7 @@ impl Kernel {
                 if payload["kind"] == "commandPreview" {
                     let mut v = serde_json::to_value(p).unwrap();
                     apply(&mut v, &payload["query"]["command"], false)?;
-                    let mut candidate = Project::parse(&v.to_string())?;
+                    let mut candidate = Project::parse_current(&v.to_string())?;
                     candidate.canonicalise();
                     return Ok(json!({"project":candidate,"viewRevision":payload["viewRevision"]}));
                 }
@@ -290,7 +302,7 @@ impl Kernel {
                 if payload["kind"] == "topologyPreview" {
                     let mut v = serde_json::to_value(p).unwrap();
                     apply(&mut v, &payload["query"]["command"], false)?;
-                    let mut candidate = Project::parse(&v.to_string())?;
+                    let mut candidate = Project::parse_current(&v.to_string())?;
                     candidate.canonicalise();
                     return Ok(json!({"project":candidate,"viewRevision":payload["viewRevision"]}));
                 }
@@ -476,10 +488,13 @@ fn apply(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     if ["SetStructureEntity", "DeleteStructureEntity"].contains(&c["type"].as_str().unwrap_or("")) {
         return structure_workspace::edit(v, c);
     }
-    let old: Project =
-        serde_json::from_value(v.clone()).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     apply_inner(v, c, nested)?;
-    structure_workspace::reconcile(v, &old)
+    // Coordinate-only commands cannot add/remove references. The complete typed
+    // candidate is still validated before commit; authored bindings stay exact.
+    if ["MoveNodes", "SetNodePosition"].contains(&c["type"].as_str().unwrap_or("")) {
+        return Ok(());
+    }
+    structure_workspace::reconcile(v)
 }
 fn apply_inner(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     let kind = c["type"].as_str().unwrap_or("");

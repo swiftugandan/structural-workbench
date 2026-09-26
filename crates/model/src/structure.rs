@@ -130,10 +130,12 @@ impl Structure {
         digest(&serde_json::to_vec(&s).unwrap())
     }
     pub fn sync_records(&mut self, p: &Project) {
+        let node_ids: BTreeSet<_> = p.nodes.iter().map(|n| n.id.as_str()).collect();
         self.joints
-            .retain(|j| p.nodes.iter().any(|n| n.id == j.node_id));
+            .retain(|j| node_ids.contains(j.node_id.as_str()));
+        let mut joint_nodes: BTreeSet<_> = self.joints.iter().map(|j| j.node_id.clone()).collect();
         for n in &p.nodes {
-            if !self.joints.iter().any(|j| j.node_id == n.id) {
+            if joint_nodes.insert(n.id.clone()) {
                 self.joints.push(Joint {
                     id: structure_id("jt", &n.id),
                     name: format!("Joint {}", n.id),
@@ -143,10 +145,16 @@ impl Structure {
                 });
             }
         }
+        let support_ids: BTreeSet<_> = p.supports.iter().map(|s| s.id.as_str()).collect();
         self.support_details
-            .retain(|d| p.supports.iter().any(|s| s.id == d.support_id));
+            .retain(|d| support_ids.contains(d.support_id.as_str()));
+        let mut detailed_supports: BTreeSet<_> = self
+            .support_details
+            .iter()
+            .map(|d| d.support_id.clone())
+            .collect();
         for x in &p.supports {
-            if !self.support_details.iter().any(|d| d.support_id == x.id) {
+            if detailed_supports.insert(x.id.clone()) {
                 self.support_details.push(SupportDetail {
                     id: structure_id("sd", &x.id),
                     name: format!("Support {}", x.id),
@@ -228,6 +236,9 @@ impl Structure {
         refs
     }
     pub fn validate(&self, p: &Project) -> Result<()> {
+        let analytical_ids: BTreeSet<_> = p.members.iter().map(|m| m.id.as_str()).collect();
+        let node_ids: BTreeSet<_> = p.nodes.iter().map(|n| n.id.as_str()).collect();
+        let support_ids: BTreeSet<_> = p.supports.iter().map(|s| s.id.as_str()).collect();
         if [
             self.storeys.len(),
             self.physical_members.len(),
@@ -319,7 +330,7 @@ impl Structure {
                 ));
             }
             for id in &x.analytical_member_ids {
-                if !p.members.iter().any(|m| &m.id == id) {
+                if !analytical_ids.contains(id.as_str()) {
                     return Err(err("DANGLING_REFERENCE", "Unknown analytical member"));
                 }
                 if !owned.insert(id) {
@@ -362,7 +373,7 @@ impl Structure {
         for x in &self.joints {
             check(&x.id, &x.name)?;
             level(&x.storey_id)?;
-            if !p.nodes.iter().any(|n| n.id == x.node_id) || !nodes.insert(&x.node_id) {
+            if !node_ids.contains(x.node_id.as_str()) || !nodes.insert(&x.node_id) {
                 return Err(err(
                     "DANGLING_REFERENCE",
                     "Joint must identify one unique node",
@@ -381,7 +392,7 @@ impl Structure {
         let mut supports = BTreeSet::new();
         for x in &self.support_details {
             check(&x.id, &x.name)?;
-            if !p.supports.iter().any(|s| s.id == x.support_id) || !supports.insert(&x.support_id) {
+            if !support_ids.contains(x.support_id.as_str()) || !supports.insert(&x.support_id) {
                 return Err(err(
                     "DANGLING_REFERENCE",
                     "Support detail must identify one unique restraint",

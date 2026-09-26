@@ -38,7 +38,11 @@ pub fn solid_rectangle_j(a: f64, b: f64) -> f64 {
 
 /// Compute properties for a solid rectangle of width (along local y) and depth
 /// (along local z). Optional `custom_j` replaces the Saint-Venant estimate.
-pub fn solid_rectangle(width: f64, depth: f64, custom_j: Option<f64>) -> Result<RectangularSection> {
+pub fn solid_rectangle(
+    width: f64,
+    depth: f64,
+    custom_j: Option<f64>,
+) -> Result<RectangularSection> {
     if !(width.is_finite() && depth.is_finite() && width > 0.0 && depth > 0.0) {
         return Err(err(
             "INVALID_SECTION",

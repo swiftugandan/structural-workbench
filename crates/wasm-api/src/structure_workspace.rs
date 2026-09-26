@@ -97,15 +97,19 @@ pub fn edit(v: &mut Value, c: &Value) -> Result<()> {
     Ok(())
 }
 
-pub fn reconcile(v: &mut Value, _old: &Project) -> Result<()> {
+pub fn reconcile(v: &mut Value) -> Result<()> {
     let mut p: Project =
         serde_json::from_value(v.clone()).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let mut s = p.structure.clone();
+    let analytical_ids: std::collections::BTreeSet<_> =
+        p.members.iter().map(|m| m.id.as_str()).collect();
+    let mut owned: std::collections::BTreeSet<_> = s
+        .physical_members
+        .iter()
+        .flat_map(|m| m.analytical_member_ids.iter().cloned())
+        .collect();
     for m in &p.members {
-        if s.physical_members
-            .iter()
-            .any(|x| x.analytical_member_ids.contains(&m.id))
-        {
+        if !owned.insert(m.id.clone()) {
             continue;
         }
         s.physical_members.push(PhysicalMember {
@@ -119,7 +123,7 @@ pub fn reconcile(v: &mut Value, _old: &Project) -> Result<()> {
     }
     for x in &mut s.physical_members {
         x.analytical_member_ids
-            .retain(|id| p.members.iter().any(|m| &m.id == id));
+            .retain(|id| analytical_ids.contains(id.as_str()));
     }
     s.physical_members
         .retain(|x| !x.analytical_member_ids.is_empty());

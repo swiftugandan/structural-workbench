@@ -122,18 +122,17 @@ test("Guided forms are accessible and fit desktop and phone widths", async ({
 }) => {
   await start(page);
   await mkdir(evidence, { recursive: true });
-  await expect(page.locator("#model-nav .nav-section-title")).toHaveText([
+  await expect(
+    page.locator("#model-nav > details > summary > span"),
+  ).toHaveText([
     "Structure",
-    "Member properties",
-    "Loading",
+    "Load cases & combinations",
+    "Materials",
+    "Sections",
   ]);
-  expect(
-    await page
-      .locator("#model-nav .count")
-      .evaluateAll((els) =>
-        els.every((el) => el.getBoundingClientRect().height === 22),
-      ),
-  ).toBe(true);
+  const counts = page.locator("#model-nav > details > summary > small");
+  expect(await counts.count()).toBeGreaterThan(0);
+  expect(await counts.allTextContents()).toEqual(expect.arrayContaining(["1"]));
   await page
     .locator(".model-panel")
     .screenshot({ path: `${evidence}/explorer.png` });

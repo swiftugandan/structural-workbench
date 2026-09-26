@@ -236,6 +236,10 @@ impl Project {
     pub fn hash(&self) -> String {
         let mut p = self.clone();
         p.canonicalise();
+        // These presentation fields are excluded from the engineering digest.
+        // Avoid serializing their potentially large trees only to discard them.
+        p.structure = Structure::default();
+        p.metadata.entity_labels.clear();
         let mut v = serde_json::to_value(p).unwrap();
         for k in [
             "id",
@@ -422,6 +426,8 @@ impl Project {
                 return Err(err("INVALID_SECTION", s.id.clone()));
             }
         }
+        let nodes_by_id: std::collections::BTreeMap<_, _> =
+            self.nodes.iter().map(|n| (n.id.as_str(), n)).collect();
         for m in &self.members {
             if let Some(design) = &m.steel_design {
                 design.validate()?;
@@ -440,15 +446,11 @@ impl Project {
                     ));
                 }
             }
-            let a = self
-                .nodes
-                .iter()
-                .find(|n| n.id == m.start)
+            let a = nodes_by_id
+                .get(m.start.as_str())
                 .ok_or_else(|| err("DANGLING_REFERENCE", &m.start))?;
-            let b = self
-                .nodes
-                .iter()
-                .find(|n| n.id == m.end)
+            let b = nodes_by_id
+                .get(m.end.as_str())
                 .ok_or_else(|| err("DANGLING_REFERENCE", &m.end))?;
             if !self.materials.iter().any(|x| x.id == m.material)
                 || !self.sections.iter().any(|x| x.id == m.section)
@@ -468,7 +470,7 @@ impl Project {
         }
         let mut supported = BTreeSet::new();
         for s in &self.supports {
-            if !self.nodes.iter().any(|n| n.id == s.node) {
+            if !nodes_by_id.contains_key(s.node.as_str()) {
                 return Err(err("DANGLING_REFERENCE", &s.node));
             }
             if !supported.insert(&s.node) {

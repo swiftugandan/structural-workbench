@@ -1,5 +1,8 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
+
+// Worker fault injection must intercept fresh workers, including repeat analyses.
+test.use({ serviceWorkers: "block" });
 import { readFile } from "node:fs/promises";
 import { record } from "../../tools/evidence.mjs";
 test("storage quota failure is explicit and downloads survive", async ({

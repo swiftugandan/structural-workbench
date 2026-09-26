@@ -221,7 +221,8 @@ export class Viewport {
     return [
       this.width / 2 + this.pan[0] + dot(b[0]) * this.factor,
       this.height * 0.53 + this.pan[1] - dot(b[1]) * this.factor,
-      0.5 - (dot(b[2]) / this.extent) * 0.1,
+      // The picking ray travels along basis[2], so smaller depth is nearer.
+      0.5 + (dot(b[2]) / this.extent) * 0.1,
     ];
   }
   async pick(x, y, toggle = false) {
@@ -338,6 +339,7 @@ export class Viewport {
       });
     this.viewRevision++;
     const nodes = this.project.nodes;
+    const framesById = new Map((this.localAxes || []).map((f) => [f.id, f]));
     const designScene = this.designPreview
       ? sceneGeometry(
           this.designPreview.draft,
@@ -364,7 +366,7 @@ export class Viewport {
     const fitBounds = scopedNodes.map((n) => n.position);
     if (this.axesProject === this.project) {
       for (const m of scopeMembers) {
-        const frame = this.localAxes?.find((f) => f.id === m.id);
+        const frame = framesById.get(m.id);
         if (this.solidDesign || this.modelSolids) {
           const section = this.project.sections.find((s) => s.id === m.section);
           const shape = this.designCatalogue?.shapes.find(
@@ -574,7 +576,7 @@ export class Viewport {
         (this.solidDesign || this.modelSolids) &&
         this.axesProject === this.project
       ) {
-        const frame = this.localAxes?.find((f) => f.id === m.id),
+        const frame = framesById.get(m.id),
           section = this.project.sections.find((s) => s.id === m.section);
         const shape = this.designCatalogue?.shapes.find(
           (s) =>
@@ -611,7 +613,7 @@ export class Viewport {
         line(a, b, 4, ink);
         const outline =
           this.axesProject === this.project
-            ? this.localAxes?.find((f) => f.id === m.id)?.stripOutline
+            ? framesById.get(m.id)?.stripOutline
             : null;
         if (outline?.length === 4) {
           stairOutlines++;
@@ -842,7 +844,7 @@ export class Viewport {
       }
     }
     if (this.showAxes && this.localAxes) {
-      const frame = this.localAxes.find((m) => m.id === this.selected);
+      const frame = framesById.get(this.selected);
       if (frame && this.isVisible(frame.id)) {
         const colors = [
           [0.75, 0.12, 0.12, 1],
@@ -987,7 +989,7 @@ export class Viewport {
         const a = nodes.find((n) => n.id === member.start)?.position,
           b = nodes.find((n) => n.id === member.end)?.position;
         if (!a || !b) continue;
-        const axes = this.localAxes?.find((m) => m.id === member.id)?.axes;
+        const axes = framesById.get(member.id)?.axes;
         const vector =
           load.axes === "global"
             ? load.forcePerLength

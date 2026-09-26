@@ -167,16 +167,25 @@ export class Gateway {
   }
 
   /** Import into an empty session after respawn — never send a stale expectedRevision. */
-  async importFresh(payload) {
-    await this.ready;
-    this.revision = null;
-    return this.post(
-      this.modelWorker,
-      this.pending,
-      "importProject",
-      payload,
-      null,
-    );
+  importFresh(payload) {
+    const workerReady = this.ready;
+    const restored = (async () => {
+      await workerReady;
+      this.revision = null;
+      return this.post(
+        this.modelWorker,
+        this.pending,
+        "importProject",
+        payload,
+        null,
+      );
+    })();
+    // Queries triggered by viewport recovery must wait for the restored revision,
+    // not just the new Worker's WASM startup. Install the barrier synchronously.
+    this.ready = restored.then(() => {});
+    // The caller reports restore failures even when no query is waiting.
+    void this.ready.catch(() => {});
+    return restored;
   }
 
   async analyse(payload) {

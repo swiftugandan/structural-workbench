@@ -169,18 +169,12 @@ fn migrate_0_9_to_1_0(raw: &mut Value) -> Result<Vec<String>> {
 
 impl Project {
     /// Parse a current-schema document only (no migration). Used after migration and by commands.
-    pub(crate) fn parse_current(s: &str) -> Result<Self> {
+    pub fn parse_current(s: &str) -> Result<Self> {
         if s.len() > 50 * 1024 * 1024 {
             return Err(err("MEMORY_LIMIT", "Project exceeds 50 MiB"));
         }
-        let raw: Value =
-            serde_json::from_str(s).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
-        if raw["schemaVersion"] != CURRENT_SCHEMA {
-            return Err(err(
-                "UNSUPPORTED_SCHEMA",
-                format!("Only project schema {CURRENT_SCHEMA} is supported after migration"),
-            ));
-        }
+        // Import migration already checks the version. Commands operate on the
+        // current typed project; validate() checks its schema and every reference.
         let p: Self = serde_json::from_str(s).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
         p.validate()?;
         Ok(p)

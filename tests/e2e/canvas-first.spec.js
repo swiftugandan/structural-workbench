@@ -140,6 +140,7 @@ test("Canvas first: point-to-point copy and dependency delete stay on canvas", a
   page,
 }) => {
   await start(page);
+  await page.locator("#explorer-expand").click();
   await page.locator('[data-member="m2"]').click();
   await page.locator("#canvas-copy").click();
   await clickNode(page, "n2");
@@ -151,6 +152,7 @@ test("Canvas first: point-to-point copy and dependency delete stay on canvas", a
   await page.locator("#placement-cancel").click();
   await page.locator("#undo").click();
   await expect(page.locator("#model-count")).toHaveText("4 nodes · 3 members");
+  await page.locator("#explorer-expand").click();
   await page.locator('[data-member="m2"]').click();
   await page.locator("#canvas-delete").click();
   await expect(page.locator("#placement-confirm")).toBeVisible();
@@ -182,6 +184,7 @@ test("Canvas first: node placement, split, move and Escape preserve atomic histo
   await page.locator("#placement-cancel").click();
   await page.locator("#undo").click();
   expect((await model(page)).members).toEqual(initial.members);
+  await page.locator("#explorer-expand").click();
   await page.locator('[data-member="m2"]').click();
   await page.locator("#canvas-move").click();
   await clickNode(page, "n2");
@@ -206,6 +209,7 @@ test("Readable labels hide internal IDs and persist after copy and reopen", asyn
   page,
 }) => {
   await start(page);
+  await page.locator("#explorer-expand").click();
   await page.locator('[data-member="m1"]').click();
   await page.locator("#canvas-copy").click();
   await clickNode(page, "n1");
@@ -216,6 +220,7 @@ test("Readable labels hide internal IDs and persist after copy and reopen", asyn
   expect(added.id).not.toBe("m4");
   expect(saved.metadata.entityLabels[added.id]).toBe("m4");
   await page.keyboard.press("Escape");
+  await page.locator("#explorer-expand").click();
   await page.locator(`[data-member="${added.id}"]`).click();
   await expect(page.locator("#selection-tag")).toHaveText("m4");
   await expect(page.locator("#inspector-content")).not.toContainText(added.id);

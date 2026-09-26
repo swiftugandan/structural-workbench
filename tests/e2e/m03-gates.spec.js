@@ -1,5 +1,8 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
+
+// Worker fault injection must intercept fresh workers, including repeat analyses.
+test.use({ serviceWorkers: "block" });
 import { mkdir } from "node:fs/promises";
 import { evidenceDir, record } from "../../tools/evidence.mjs";
 
@@ -74,6 +77,8 @@ test("M03 analyse click keeps UI event-loop gaps ≤100ms", async ({ page }) => 
   await page.goto("/");
   await page.locator("#new-project").click();
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
+  // GPU startup can finish before the model is ready; DOM click does not auto-wait.
+  await expect(page.locator("#analyse")).toBeEnabled();
   const gap = await page.evaluate(async () => {
     let maxGap = 0;
     let last = performance.now();

@@ -486,9 +486,14 @@ async function persist() {
     sessionStorage.setItem("wb-persist-warned", "1");
     try {
       const durable = await navigator.storage.persist();
-      if (!durable && !$("#message").textContent) {
+      if (!durable) {
         message(
-          "Browser persistence was not granted. Local snapshots may be evicted; download a project backup.",
+          [
+            $("#message").textContent,
+            "Browser persistence was not granted. Local snapshots may be evicted; download a project backup.",
+          ]
+            .filter(Boolean)
+            .join(" "),
         );
       }
     } catch {
@@ -895,20 +900,43 @@ $("#units").onchange = () => {
   persist();
 };
 const explorerOpenState = new Map();
+const explorerLazyBranches = new Map();
 let explorerProjectId, explorerSelection;
 function renderNav() {
   if (explorerProjectId !== project.id) {
     explorerOpenState.clear();
     explorerProjectId = project.id;
+    explorerSelection = null;
     $("#model-search").value = "";
   }
+  // Reveal explicit selections even when their large-model branch is deferred.
+  if (
+    project.members.length > 1000 &&
+    selected !== explorerSelection &&
+    explorerSelection != null
+  ) {
+    const owner = project.structure.physicalMembers.find((m) =>
+      m.analyticalMemberIds.includes(selected),
+    );
+    if (owner)
+      for (const key of [
+        "structure",
+        "levels",
+        `storey:${owner.storeyId}`,
+        `storey:${owner.storeyId}:${owner.role}`,
+        `analytical:${owner.id}`,
+      ])
+        explorerOpenState.set(key, true);
+  }
   const query = $("#model-search").value;
+  explorerLazyBranches.clear();
   $("#model-nav").innerHTML = renderExplorer(project, {
     selected,
     label,
     esc,
     icon: structuralIcon,
     openState: explorerOpenState,
+    lazyBranches: explorerLazyBranches,
     selectionContext,
     query,
   });
@@ -929,8 +957,29 @@ function renderNav() {
   }
   const count = filterExplorer($("#model-nav"), query);
   $("#explorer-empty").hidden = !query || count > 0;
+  bindExplorer();
+}
+function hydrateExplorerBranch(d) {
+  if (!d.hasAttribute("data-lazy")) return false;
+  d.querySelector(":scope > .explorer-children").innerHTML =
+    explorerLazyBranches.get(d.dataset.branch) ||
+    '<p class="explorer-empty">None in this model</p>';
+  d.removeAttribute("data-lazy");
+  return true;
+}
+function selectStructureObject(collection, id) {
+  selectEntities(structureSelectionIds(project, collection, id));
+  selectionContext = { kind: "structure", collection, id };
+  $("[data-inspector-tab=properties]").click();
+  renderInspector();
+  renderNav();
+  renderSelectionStatus();
+}
+function bindExplorer() {
   for (const d of $("#model-nav").querySelectorAll("details"))
     d.ontoggle = () => {
+      if (!d.isConnected) return;
+      if (d.open && hydrateExplorerBranch(d)) bindExplorer();
       if (!$("#model-search").value)
         explorerOpenState.set(d.dataset.branch, d.open);
     };
@@ -939,25 +988,25 @@ function renderNav() {
   ))
     b.onclick = () => {
       if (formDirty) return message("Apply or cancel changes first.");
-      const collection = b.dataset.structureKey || b.dataset.structureAdd,
-        id = b.dataset.structureId;
-      const entity = project.structure[collection].find((x) => x.id === id);
-      selectEntities(structureSelectionIds(project, collection, id));
-      selectionContext = { kind: "structure", collection, id };
-      $("[data-inspector-tab=properties]").click();
-      renderInspector();
-      renderNav();
-      renderSelectionStatus();
+      selectStructureObject(
+        b.dataset.structureKey || b.dataset.structureAdd,
+        b.dataset.structureId,
+      );
     };
   for (const b of $("#model-nav").querySelectorAll("[data-structure-ref]"))
     b.onclick = () => {
       if (formDirty) return message("Apply or cancel changes first.");
       const id = b.dataset.structureRef;
       if (b.dataset.refKind === "support") selectEntities([id]);
-      else
-        $("#model-nav")
-          .querySelector(`[data-structure-id="${CSS.escape(id)}"]`)
-          ?.click();
+      else {
+        const collection = {
+          physicalMember: "physicalMembers",
+          designObject: "designObjects",
+          joint: "joints",
+          grid: "grids",
+        }[b.dataset.refKind];
+        if (collection) selectStructureObject(collection, id);
+      }
     };
   for (const b of $("#model-nav").querySelectorAll("[data-entity-id]"))
     b.onclick = (e) => {
@@ -995,6 +1044,11 @@ function renderNav() {
 }
 $("#model-search").oninput = renderNav;
 $("#explorer-expand").onclick = () => {
+  // Expand all includes every deferred descendant, never just the mounted rows.
+  while ($("#model-nav details[data-lazy]"))
+    for (const d of $("#model-nav").querySelectorAll("details[data-lazy]"))
+      hydrateExplorerBranch(d);
+  bindExplorer();
   for (const d of $("#model-nav").querySelectorAll("details")) {
     explorerOpenState.set(d.dataset.branch, true);
     d.open = true;

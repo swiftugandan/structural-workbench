@@ -268,11 +268,13 @@ fn analyse_multiple_ids_returns_envelope_with_provenance() {
     assert_eq!(out["status"], "ok", "{out}");
     let payload = &out["payload"];
     assert_eq!(payload["analysisType"], "envelope");
-    assert!(payload["diagnostics"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .any(|d| d["code"] == "ENVELOPE_NOT_SIMULTANEOUS"));
+    assert!(
+        payload["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|d| d["code"] == "ENVELOPE_NOT_SIMULTANEOUS")
+    );
     let my = payload["members"][0]["actions"]
         .as_array()
         .unwrap()
@@ -289,11 +291,68 @@ fn force_replace_import_with_null_revision() {
     let p: Value =
         serde_json::from_str(&std::fs::read_to_string("../../fixtures/models/B02.json").unwrap())
             .unwrap();
-    let a = request(&mut k, "createProject", Value::Null, json!({"project": p.clone()}));
+    let a = request(
+        &mut k,
+        "createProject",
+        Value::Null,
+        json!({"project": p.clone()}),
+    );
     assert_eq!(a["status"], "ok");
     let mut p2 = p.clone();
     p2["name"] = json!("Recovered");
-    let b = request(&mut k, "importProject", Value::Null, json!({"jsonUtf8": p2.to_string(), "replaceCurrent": false}));
+    let b = request(
+        &mut k,
+        "importProject",
+        Value::Null,
+        json!({"jsonUtf8": p2.to_string(), "replaceCurrent": false}),
+    );
     assert_eq!(b["status"], "ok", "{b}");
     assert_eq!(b["payload"]["project"]["name"], "Recovered");
+}
+
+#[test]
+fn cached_hash_tracks_replacements_history_and_read_only_queries() {
+    let mut k = Kernel::new();
+    let mut p: Value =
+        serde_json::from_str(include_str!("../../../fixtures/models/B02.json")).unwrap();
+    let mut response = request(&mut k, "createProject", Value::Null, json!({"project":p}));
+    for step in 0..6 {
+        let snapshot = request(
+            &mut k,
+            "getSnapshot",
+            response["revision"].clone(),
+            json!({}),
+        );
+        let project =
+            workbench_model::Project::parse(&snapshot["payload"]["project"].to_string()).unwrap();
+        assert_eq!(snapshot["modelHash"], project.hash());
+        assert_eq!(snapshot["payload"]["modelHash"], snapshot["modelHash"]);
+        assert_eq!(response["modelHash"], snapshot["modelHash"]);
+        response = match step {
+            0 => request(
+                &mut k,
+                "applyCommand",
+                snapshot["revision"].clone(),
+                json!({"command":{"type":"SetNodePosition","args":{"id":"n2","position":[4,0,0]}}}),
+            ),
+            1 => request(&mut k, "undo", snapshot["revision"].clone(), json!({})),
+            2 => request(&mut k, "redo", snapshot["revision"].clone(), json!({})),
+            3 => request(
+                &mut k,
+                "applyCommand",
+                snapshot["revision"].clone(),
+                json!({"command":{"type":"SetNodePosition","args":{"id":"n2","position":[0,0,0]}}}),
+            ),
+            4 => {
+                p["nodes"][1]["position"] = json!([5, 0, 0]);
+                request(
+                    &mut k,
+                    "importProject",
+                    Value::Null,
+                    json!({"jsonUtf8":p.to_string()}),
+                )
+            }
+            _ => snapshot,
+        };
+    }
 }

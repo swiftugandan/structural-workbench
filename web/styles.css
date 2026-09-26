@@ -4013,3 +4013,9 @@ body.design-workspace {
 .concrete-focus #steel-review-legend {
   display: none;
 }
+
+/* Keep the complete Explorer accessible while avoiding layout of offscreen rows. */
+.physical-object {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 64px;
+}
