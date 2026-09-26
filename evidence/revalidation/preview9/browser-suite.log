@@ -1,0 +1,771 @@
+
+Running 111 tests using 1 worker
+
+  ✓    1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (6.5s)
+  ✓    2 tests/e2e/application-menu.spec.js:5:1 › Header is aligned and Design menu opens the existing design workflows (5.8s)
+  ✓    3 tests/e2e/application-menu.spec.js:26:1 › Application menus share commands, keyboard navigation and disabled states (6.5s)
+  ✓    4 tests/e2e/application-menu.spec.js:93:1 › Shortcuts respect text fields, preserve focus mode and use actual analysis (2.9s)
+  ✓    5 tests/e2e/bay-copy.spec.js:19:1 › M03 copy portal into bays, analyse and inspect My Mz torsion (8.2s)
+  ✓    6 tests/e2e/cad.spec.js:43:1 › M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect (7.8s)
+  ✓    7 tests/e2e/cad.spec.js:89:1 › M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts (12.6s)
+  ✓    8 tests/e2e/cad.spec.js:154:1 › M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance (9.8s)
+  ✓    9 tests/e2e/canvas-first.spec.js:35:1 › Canvas first: place support, draw force, edit assignments and undo without dialogs (11.5s)
+  ✓   10 tests/e2e/canvas-first.spec.js:99:1 › Canvas first: two-click members, distributed loads, measure and nonmodal precision panel (6.9s)
+  ✘   11 tests/e2e/canvas-first.spec.js:139:1 › Canvas first: point-to-point copy and dependency delete stay on canvas (45.4s)
+  ✘   12 tests/e2e/canvas-first.spec.js:164:1 › Canvas first: node placement, split, move and Escape preserve atomic history (45.4s)
+  ✘   13 tests/e2e/canvas-first.spec.js:205:1 › Readable labels hide internal IDs and persist after copy and reopen (45.4s)
+  ✓   14 tests/e2e/capability-ledger.spec.js:11:1 › M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions (3.9s)
+  ✓   15 tests/e2e/connections-3d.spec.js:3:1 › 3D joint/support presentation preserves restraints, picking and view switching (3.8s)
+  ✓   16 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout rcBeam: 3D focus, drawings, details, source and preserved model (6.1s)
+  ✓   17 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout slab: 3D focus, drawings, details, source and preserved model (6.7s)
+  ✓   18 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout padFooting: 3D focus, drawings, details, source and preserved model (6.4s)
+  ✓   19 tests/e2e/design-fidelity.spec.js:89:1 › Steel mockup: section card, catalogue, readiness, calculation tree and provenance (5.0s)
+  ✓   20 tests/e2e/design-previews.spec.js:6:3 › Concrete preview rcBeam: source, stale, undo, persistence and export (6.3s)
+  ✓   21 tests/e2e/design-previews.spec.js:6:3 › Concrete preview slab: source, stale, undo, persistence and export (5.3s)
+  ✓   22 tests/e2e/design-previews.spec.js:6:3 › Concrete preview padFooting: source, stale, undo, persistence and export (7.2s)
+  ✓   23 tests/e2e/dimensions.spec.js:2:1 › Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation (3.2s)
+  ✘   24 tests/e2e/dual-workers.spec.js:9:1 › M03 dual Workers: cancel leaves model intact; superseded solve stays stale (45.4s)
+  ✓   25 tests/e2e/force-inspector.spec.js:2:1 › Selected member force diagram station, units and stale state (5.1s)
+  ✓   26 tests/e2e/graph-scale.spec.js:2:1 › Canvas exaggeration controls preserve model and independent factors (2.8s)
+  ✓   27 tests/e2e/guided-inputs.spec.js:32:1 › Guided inputs preserve exact properties and references, edit units, and undo (14.2s)
+  ✓   28 tests/e2e/guided-inputs.spec.js:69:1 › Support presets, directional loads, load types and combinations save through real kernel (9.3s)
+  ✘   29 tests/e2e/guided-inputs.spec.js:120:1 › Guided forms are accessible and fit desktop and phone widths (6.3s)
+  ✓   30 tests/e2e/guided-inputs.spec.js:156:1 › Section templates use published properties, preserve identity, and save custom edits honestly (15.3s)
+  ✓   31 tests/e2e/guided-inputs.spec.js:194:1 › Material and load templates save editable defaults through the real kernel (15.4s)
+  ✓   32 tests/e2e/guided-inputs.spec.js:241:1 › Template galleries have accessible diagrams and fit a phone editor (6.7s)
+  ✓   33 tests/e2e/hierarchy.spec.js:18:1 › M03 hierarchy: split shows physical parent and analytical children (3.5s)
+  ✘   34 tests/e2e/keyboard.spec.js:20:1 › M01 keyboard-only portal creation, numeric drawing, table editing and solve (45.3s)
+  ✓   35 tests/e2e/layout-panels.spec.js:4:1 › Layout controls reclaim canvas space and restore drafts and results (5.8s)
+  ✓   36 tests/e2e/m03-gates.spec.js:23:1 › M03 cancel timing: cancelled ≤250ms and editing restored ≤1s (1.6s)
+  ✘   37 tests/e2e/m03-gates.spec.js:72:1 › M03 analyse click keeps UI event-loop gaps ≤100ms (45.3s)
+  ✘   38 tests/e2e/m03-gates.spec.js:103:1 › M03 GPU loss during blocked analysis preserves model hash (45.4s)
+  ✓   39 tests/e2e/m04-record.spec.js:12:1 › M04 record: export/import equivalence and report matches displayed results (5.0s)
+  ✓   40 tests/e2e/m06-release-tour.spec.js:12:1 › M06 release tour: analyse, stress screen, ledger, save and report (3.3s)
+  ✓   41 tests/e2e/migrations.spec.js:12:1 › M04 migration: 0.9.0 imports, retains original, unknown schema refused (3.9s)
+  ✓   42 tests/e2e/model-coherence.spec.js:3:1 › One selection identity follows a bound footing, its support and physical members (16.5s)
+  ✓   43 tests/e2e/model-explorer.spec.js:3:1 › Reference Explorer: nested elements, search, disclosure state and selection (5.1s)
+  ✓   44 tests/e2e/model-visibility.spec.js:6:1 › Inspect one storey's return stairs in plan, side and 3D without changing engineering data (10.3s)
+  ✓   45 tests/e2e/model-visibility.spec.js:87:1 › Hidden members cannot be picked and view changes preserve current results (2.6s)
+  ✓   46 tests/e2e/native-steel-design.spec.js:43:1 › DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen (7.0s)
+  ✓   47 tests/e2e/native-steel-design.spec.js:134:1 › DW-F4: fail reaches governing station and clause; LTB stays unsupported (5.6s)
+  ✓   48 tests/e2e/offline-cache.spec.js:26:3 › M04 offline build-ID cache › precaches atomic build and reopens offline from IndexedDB (2.7s)
+  ✓   49 tests/e2e/offline-cache.spec.js:101:3 › M04 offline build-ID cache › prompts reload after save when a waiting build update is ready (1.5s)
+  ✓   50 tests/e2e/offline-update.spec.js:8:1 › A real waiting build installs, preserves the saved model, and reloads atomically (4.2s)
+  ✓   51 tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes (2.9s)
+  ✓   52 tests/e2e/portal-templates.spec.js:11:1 › M05 portal templates: save dimensions and reuse on a new portal (4.6s)
+  ✘   53 tests/e2e/portal.spec.js:20:1 › M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen (45.3s)
+  ✓   54 tests/e2e/portal.spec.js:146:1 › M01 drawing Escape does not mutate and compact controls do not overflow (5.7s)
+  ✓   55 tests/e2e/prescribed.spec.js:36:1 › M02 prescribed: B09 analyse, edit settlement, reject free-DOF prescription (7.1s)
+  ✓   56 tests/e2e/recovery.spec.js:12:1 › M04 recovery: restore committed revision; refuse while form dirty (4.2s)
+  ✓   57 tests/e2e/reliability.spec.js:12:3 › M04 reliability matrix › corrupt latest snapshot recovers verified history revision (3.0s)
+  ✓   58 tests/e2e/reliability.spec.js:89:1 › M04 reliability matrix › model Worker crash restores last confirmed in-memory model (3.3s)
+  ✘   59 tests/e2e/reliability.spec.js:127:3 › M04 reliability matrix › persistence denied warns without blocking export (6.0s)
+  ✓   60 tests/e2e/residential-reference.spec.js:5:1 › UK residential reference: actual WASM analysis, hierarchy, model-sourced footing review and stale edits (21.3s)
+  ✓   61 tests/e2e/result-picker.spec.js:3:1 › Grouped results expose all six actions and retain component across analysis (3.8s)
+  ✓   62 tests/e2e/robustness.spec.js:5:1 › storage quota failure is explicit and downloads survive (1.8s)
+  ✓   63 tests/e2e/robustness.spec.js:27:1 › single writer lock protects the second tab (2.4s)
+  ✓   64 tests/e2e/robustness.spec.js:46:1 › GPU device destruction recovers model and current result (2.8s)
+  ✓   65 tests/e2e/robustness.spec.js:77:1 › unknown engineering fields rejected atomically (2.1s)
+  ✘   66 tests/e2e/robustness.spec.js:90:1 › cancel terminates a blocked Worker and restores the model (45.3s)
+  ✘   67 tests/e2e/robustness.spec.js:115:1 › M03 dual Workers: edit during blocked analysis never marks stale solve Current (8.6s)
+  ✓   68 tests/e2e/scenarios.spec.js:44:1 › M02 scenarios: B11 combination factors tip load and reaction (3.8s)
+  ✓   69 tests/e2e/scenarios.spec.js:79:1 › M02 scenarios: dead/live/wind cases, strength combination and envelope provenance (9.4s)
+  ✓   70 tests/e2e/section-axis.spec.js:32:1 › M03 section-axis: edit localY roll swaps My/Mz end actions (5.0s)
+  ✓   71 tests/e2e/section-calculator.spec.js:33:1 › M05 section calculator: rectangle stiffens tip deflection and clears stale result (4.4s)
+  ✓   72 tests/e2e/self-weight.spec.js:29:1 › M02 self-weight: B10 analyse, duplicate rejected, case delete keeps combinations valid (7.7s)
+  ✓   73 tests/e2e/shear-diagrams.spec.js:18:1 › Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving (3.7s)
+  ✓   74 tests/e2e/shear-diagrams.spec.js:60:1 › Uniform-load shear shows both signs and the unused component reports zero (2.4s)
+  ✓   75 tests/e2e/shear-diagrams.spec.js:84:1 › Member forces table exposes signed shear at every station and exports it (3.4s)
+  ✓   76 tests/e2e/spatial-crossings.spec.js:5:1 › Crossing diagnostics distinguish spatial separation from disconnected intersections (8.9s)
+  ✓   77 tests/e2e/stair-outlines.spec.js:5:1 › Residential stair widths remain visible in analytical view without changing the model (8.5s)
+  ✓   78 tests/e2e/steel-check.spec.js:43:1 › standalone S2-D1 steel check passes via evaluateDesign UI (5.3s)
+  ✓   79 tests/e2e/steel-check.spec.js:69:1 › complete-member matrix: ≥3 pass and ≥3 fail seeds (18.0s)
+  ✓   80 tests/e2e/steel-check.spec.js:124:1 › steel check remains usable in a narrow viewport (2.6s)
+  ✓   81 tests/e2e/steel-check.spec.js:142:1 › standalone S2-D1 fail seed reports overall fail (5.3s)
+  ✓   82 tests/e2e/steel-check.spec.js:166:1 › model-derived demand check lands in calculation report clause trail (4.9s)
+  ✓   83 tests/e2e/steel-overview.spec.js:4:1 › M07-G overview: complete membership, exact records, row selection, stale and export (5.9s)
+  ✓   84 tests/e2e/steel-study.spec.js:5:1 › M07-G catalogue study reanalyses self weight, applies explicitly and undoes (8.0s)
+  ✓   85 tests/e2e/steel-task-journey.spec.js:5:1 › Steel task: find failure, compare, apply, reanalyse, review colours and export (8.0s)
+  ✓   86 tests/e2e/stress-screen.spec.js:11:1 › M06 stress screen: B02 shows elastic fibre stresses with disclaimer (2.3s)
+  ✓   87 tests/e2e/structure-model.spec.js:9:1 › Authored structure survives save, undo, topology and reopen; invalid bindings fail closed (9.9s)
+  ✓   88 tests/e2e/study.spec.js:7:1 › M22-B: load study JSON, compare variants, download report (2.3s)
+  ✓   89 tests/e2e/support-symbols.spec.js:3:1 › Support symbols track restraints, orientation, property edits and undo (6.8s)
+  ✓   90 tests/e2e/support-symbols.spec.js:59:1 › Support labels toggle independently without invalidating analysis (3.5s)
+  ✓   91 tests/e2e/support-symbols.spec.js:97:1 › Member label Auto, Show all and Hide are independent of support labels (7.7s)
+  ✓   92 tests/e2e/topology.spec.js:31:1 › M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen (9.7s)
+  ✓   93 tests/e2e/topology.spec.js:133:1 › M01 topology: crossing stays disconnected, connect and merge are previewed and atomic (4.8s)
+  ✓   94 tests/e2e/variants.spec.js:27:1 › M05 variants: duplicate, stiffen, compare retains both hashes and reports (6.7s)
+  ✓   95 tests/e2e/warehouse.spec.js:2:1 › Warehouse example opens in 3D and solves spatial gravity and lateral loads (3.9s)
+  ✓   96 tests/e2e/workbench.spec.js:14:1 › M00-tour: edit, solve, stale, select, export, reopen, instability (7.8s)
+  ✓   97 tests/e2e/workbench.spec.js:118:1 › GPU unavailable retains analysis and exports (2.0s)
+  ✓   98 tests/e2e/workbench.spec.js:129:1 › invalid import preserves current model and results (2.9s)
+  ✓   99 tests/e2e/workbench.spec.js:148:1 › undo restores model hash and redo re-applies edit (2.8s)
+  ✓  100 tests/e2e/workbench.spec.js:162:1 › narrow screen retains tables and portable export (1.6s)
+  ✓  101 tests/e2e/workbench.spec.js:184:1 › unit-suffixed inputs are converted by Rust; incompatible units preserve model (2.7s)
+  ✓  102 tests/e2e/workspace-ux.spec.js:4:1 › UX ribbon, keyboard context menu and property drafts preserve model state (2.8s)
+  ✓  103 tests/e2e/workspace-ux.spec.js:39:1 › UX responsive panel navigation retains editable properties and results (2.9s)
+  ✓  104 tests/marketing.spec.js:3:1 › marketing page presents the product and launches the workbench (3.5s)
+  ✘  105 tests/performance-cad.spec.js:8:1 › M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export (4.2m)
+  ✓  106 tests/performance.spec.js:3:1 › local warm startup and repeated cantilever solve baseline (8.7s)
+  ✓  107 tests/startup.spec.js:5:1 › M01 startup: cached controls and viewport, cold network and compressed payload (10.9s)
+  ✓  108 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (2.9s)
+  ✓  109 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (2.6s)
+  ✓  110 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (4.0s)
+  ✘  111 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (6.9s)
+
+
+  1) tests/e2e/canvas-first.spec.js:139:1 › Canvas first: point-to-point copy and dependency delete stay on canvas 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-member="m2"]')
+        - locator resolved to <button class="entity  " data-member="m2">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        83 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      141 | }) => {
+      142 |   await start(page);
+    > 143 |   await page.locator('[data-member="m2"]').click();
+          |                                            ^
+      144 |   await page.locator("#canvas-copy").click();
+      145 |   await clickNode(page, "n2");
+      146 |   await expect(page.locator("#placement-help")).toContainText("destination");
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/canvas-first.spec.js:143:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/canvas-first.spec.js:164:1 › Canvas first: node placement, split, move and Escape preserve atomic history 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-member="m2"]')
+        - locator resolved to <button class="entity  " data-member="m2">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        75 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      183 |   await page.locator("#undo").click();
+      184 |   expect((await model(page)).members).toEqual(initial.members);
+    > 185 |   await page.locator('[data-member="m2"]').click();
+          |                                            ^
+      186 |   await page.locator("#canvas-move").click();
+      187 |   await clickNode(page, "n2");
+      188 |   await expect(page.locator("#placement-help")).toContainText("destination");
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/canvas-first.spec.js:185:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/e2e/canvas-first.spec.js:205:1 › Readable labels hide internal IDs and persist after copy and reopen 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-member="c9c7f79ae5056899faa8c_2"]')
+        - locator resolved to <button class="entity  " data-member="c9c7f79ae5056899faa8c_2">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        78 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      217 |   expect(saved.metadata.entityLabels[added.id]).toBe("m4");
+      218 |   await page.keyboard.press("Escape");
+    > 219 |   await page.locator(`[data-member="${added.id}"]`).click();
+          |                                                     ^
+      220 |   await expect(page.locator("#selection-tag")).toHaveText("m4");
+      221 |   await expect(page.locator("#inspector-content")).not.toContainText(added.id);
+      222 |   await expect(
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/canvas-first.spec.js:219:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/e2e/dual-workers.spec.js:9:1 › M03 dual Workers: cancel leaves model intact; superseded solve stays stale 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('#cancel')
+        - locator resolved to <button id="cancel">Cancel analysis</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is not stable
+      - retrying click action
+        - waiting for element to be visible, enabled and stable
+        - element is not visible
+      - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        84 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      26 |   await page.locator("#analyse").click();
+      27 |   await expect(page.locator("#cancel")).toBeVisible();
+    > 28 |   await page.locator("#cancel").click();
+         |                                 ^
+      29 |   await expect(page.locator("#message")).toContainText("CANCELLED");
+      30 |   await expect(page.locator("#hash-status")).toHaveText(hash);
+      31 |   await expect(page.locator("#analyse")).toBeEnabled();
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/dual-workers.spec.js:28:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/e2e/guided-inputs.spec.js:120:1 › Guided forms are accessible and fit desktop and phone widths 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('#model-nav .nav-section-title')
+    Timeout: 5000ms
+    - Expected  - 5
+    + Received  + 1
+
+    - Array [
+    -   "Structure",
+    -   "Member properties",
+    -   "Loading",
+    - ]
+    + Array []
+
+    Call log:
+      - Expect "toHaveText" locator('#model-nav .nav-section-title') with timeout 5000ms
+      - waiting for locator('#model-nav .nav-section-title')
+        12 × locator resolved to 0 elements
+
+
+      123 |   await start(page);
+      124 |   await mkdir(evidence, { recursive: true });
+    > 125 |   await expect(page.locator("#model-nav .nav-section-title")).toHaveText([
+          |                                                               ^
+      126 |     "Structure",
+      127 |     "Member properties",
+      128 |     "Loading",
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/guided-inputs.spec.js:125:63
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-guided-inputs-Guided-f-0555c-it-desktop-and-phone-widths/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-guided-inputs-Guided-f-0555c-it-desktop-and-phone-widths/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-guided-inputs-Guided-f-0555c-it-desktop-and-phone-widths/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-guided-inputs-Guided-f-0555c-it-desktop-and-phone-widths/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/e2e/keyboard.spec.js:20:1 › M01 keyboard-only portal creation, numeric drawing, table editing and solve 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.evaluate: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /Nodes 4/ })
+
+
+      4 | async function reach(page, target) {
+      5 |   for (let i = 0; i < 100; i++) {
+    > 6 |     if (await target.evaluate((el) => el === document.activeElement)) return;
+        |                      ^
+      7 |     await page.keyboard.press("Tab");
+      8 |   }
+      9 |   throw Error("Control is not reachable with Tab: " + target);
+        at reach (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:6:22)
+        at activate (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:12:9)
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:49:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests/e2e/m03-gates.spec.js:72:1 › M03 analyse click keeps UI event-loop gaps ≤100ms ──────────
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('#cancel')
+        - locator resolved to <button hidden="" id="cancel">Cancel analysis</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        83 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      89 |   });
+      90 |   expect(gap).toBeLessThanOrEqual(100);
+    > 91 |   await page.locator("#cancel").click();
+         |                                 ^
+      92 |   await expect(page.locator("#message")).toContainText("CANCELLED");
+      93 |
+      94 |   await mkdir(evidence(), { recursive: true });
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/m03-gates.spec.js:91:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests/e2e/m03-gates.spec.js:103:1 › M03 GPU loss during blocked analysis preserves model hash ─
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('#cancel')
+        - locator resolved to <button hidden="" id="cancel">Cancel analysis</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        80 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      122 |   );
+      123 |
+    > 124 |   await page.locator("#cancel").click();
+          |                                 ^
+      125 |   await expect(page.locator("#message")).toContainText("CANCELLED");
+      126 |   await expect(page.locator("#hash-status")).toHaveText(hash);
+      127 |
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/m03-gates.spec.js:124:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) tests/e2e/portal.spec.js:20:1 › M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /Nodes 4/ })
+
+
+      60 |     Number(await rows.nth(2).locator("td").first().textContent()),
+      61 |   ).toBeGreaterThan(0);
+    > 62 |   await page.getByRole("button", { name: /Nodes 4/ }).click();
+         |                                                       ^
+      63 |   await page.getByRole("button", { name: "Edit n3", exact: true }).click();
+      64 |   await page.getByLabel("X m", { exact: true }).fill("4500 mm");
+      65 |   await page.getByRole("button", { name: "Save entity", exact: true }).click();
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/portal.spec.js:62:55
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) tests/e2e/reliability.spec.js:127:3 › M04 reliability matrix › persistence denied warns without blocking export 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('#message')
+    Expected pattern: /persistence was not granted|download a project backup/i
+    Received string:  "Migrated schema 1.0.0 → 1.1.0. Original file retained locally (4e8539e47051…)."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('#message') with timeout 5000ms
+      - waiting for locator('#message')
+        2 × locator resolved to <div hidden="" id="message" role="status" aria-live="polite"></div>
+          - unexpected value ""
+        12 × locator resolved to <div id="message" role="status" aria-live="polite">Migrated schema 1.0.0 → 1.1.0. Original file reta…</div>
+           - unexpected value "Migrated schema 1.0.0 → 1.1.0. Original file retained locally (4e8539e47051…)."
+
+
+      137 |     await page.goto("/");
+      138 |     await page.locator("#new-project").click();
+    > 139 |     await expect(page.locator("#message")).toContainText(
+          |                                            ^
+      140 |       /persistence was not granted|download a project backup/i,
+      141 |     );
+      142 |     await expect(page.locator("#export-project")).toBeEnabled();
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/reliability.spec.js:139:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) tests/e2e/robustness.spec.js:90:1 › cancel terminates a blocked Worker and restores the model 
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for locator('#cancel')
+        - locator resolved to <button id="cancel">Cancel analysis</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is not stable
+      - retrying click action
+        - waiting for element to be visible, enabled and stable
+        - element is not visible
+      - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        85 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      104 |   const hash = await page.locator("#hash-status").textContent();
+      105 |   await page.locator("#analyse").click();
+    > 106 |   await page.locator("#cancel").click();
+          |                                 ^
+      107 |   await expect(page.locator("#message")).toContainText("CANCELLED");
+      108 |   await expect(page.locator("#analyse")).toBeEnabled();
+      109 |   await expect(page.locator("#hash-status")).toHaveText(hash);
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/robustness.spec.js:106:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) tests/e2e/robustness.spec.js:115:1 › M03 dual Workers: edit during blocked analysis never marks stale solve Current 
+
+    Error: expect(locator).not.toHaveText(expected) failed
+
+    Locator:  locator('#hash-status')
+    Expected: not "8ad1dd3428a2 · f64"
+    Received: "8ad1dd3428a2 · f64"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toHaveText" locator('#hash-status') with timeout 5000ms
+      - waiting for locator('#hash-status')
+        14 × locator resolved to <span id="hash-status">8ad1dd3428a2 · f64</span>
+           - unexpected value "8ad1dd3428a2 · f64"
+
+
+      136 |     .getByRole("button", { name: "Apply changes", exact: true })
+      137 |     .click();
+    > 138 |   await expect(page.locator("#hash-status")).not.toHaveText(hash);
+          |                                                  ^
+      139 |   await expect(page.locator("#message")).toContainText("stale", {
+      140 |     timeout: 10000,
+      141 |   });
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/robustness.spec.js:138:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-robustness-M03-dual-Wo-6474f-r-marks-stale-solve-Current/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-robustness-M03-dual-Wo-6474f-r-marks-stale-solve-Current/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-robustness-M03-dual-Wo-6474f-r-marks-stale-solve-Current/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-robustness-M03-dual-Wo-6474f-r-marks-stale-solve-Current/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) tests/performance-cad.spec.js:8:1 › M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export 
+
+    Test timeout of 240000ms exceeded.
+
+    Error: page.evaluate: Test timeout of 240000ms exceeded.
+
+      74 |   // Picking has a separate kernel round-trip probe against an actual WASM instance.
+      75 |   // This isolates kernel latency from Playwright polling, and does not mock data.
+    > 76 |   const kernelTimes = await page.evaluate(async (p) => {
+         |                                  ^
+      77 |     const api = await import("/pkg/workbench_wasm_api.js");
+      78 |     await api.default();
+      79 |     const k = new api.Kernel();
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:76:34
+
+    Error Context: test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#viewport')
+    Expected: "m2"
+    Received: "m1"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#viewport') with timeout 5000ms
+      - waiting for locator('#viewport')
+        14 × locator resolved to <canvas width="950" tabindex="0" height="468" id="viewport" data-hovered="m2" title="member m2" data-grid-spacing="0.5" data-stair-outlines="0" data-last-cpu-pick="m2" data-last-gpu-pick="m1" data-visible-members="2" data-design-statuses="{}" data-device-generation="1" data-disconnected-crossings="0" data-support-display="analytical-symbol" data-fit-bounds="[85.5,248.04000000000002,864.5,248.04000000000002]" aria-label="Frame model. Click to select, Shift toggles. Drag a selection box; middle drag or …></canvas>
+           - unexpected value "m1"
+
+
+      84 |     "m2",
+      85 |   );
+    > 86 |   await expect(page.locator("#viewport")).toHaveAttribute(
+         |                                           ^
+      87 |     "data-last-gpu-pick",
+      88 |     "m2",
+      89 |   );
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/visual/m01-graphics.spec.js:86:43
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14 failed
+    tests/e2e/canvas-first.spec.js:139:1 › Canvas first: point-to-point copy and dependency delete stay on canvas 
+    tests/e2e/canvas-first.spec.js:164:1 › Canvas first: node placement, split, move and Escape preserve atomic history 
+    tests/e2e/canvas-first.spec.js:205:1 › Readable labels hide internal IDs and persist after copy and reopen 
+    tests/e2e/dual-workers.spec.js:9:1 › M03 dual Workers: cancel leaves model intact; superseded solve stays stale 
+    tests/e2e/guided-inputs.spec.js:120:1 › Guided forms are accessible and fit desktop and phone widths 
+    tests/e2e/keyboard.spec.js:20:1 › M01 keyboard-only portal creation, numeric drawing, table editing and solve 
+    tests/e2e/m03-gates.spec.js:72:1 › M03 analyse click keeps UI event-loop gaps ≤100ms ───────────
+    tests/e2e/m03-gates.spec.js:103:1 › M03 GPU loss during blocked analysis preserves model hash ──
+    tests/e2e/portal.spec.js:20:1 › M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen 
+    tests/e2e/reliability.spec.js:127:3 › M04 reliability matrix › persistence denied warns without blocking export 
+    tests/e2e/robustness.spec.js:90:1 › cancel terminates a blocked Worker and restores the model ──
+    tests/e2e/robustness.spec.js:115:1 › M03 dual Workers: edit during blocked analysis never marks stale solve Current 
+    tests/performance-cad.spec.js:8:1 › M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export 
+    tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection 
+  97 passed (21.6m)
+(node:26778) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26778) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27386) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27386) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27641) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27641) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27845) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27845) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28443) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28443) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28823) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28823) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29041) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29041) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29735) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29735) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30203) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30203) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30250) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30250) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32094) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32094) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

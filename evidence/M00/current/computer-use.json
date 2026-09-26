@@ -1,0 +1,52 @@
+{
+  "taskId": "REVALIDATION-01",
+  "milestone": "M00",
+  "sourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
+  "buildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "stale-edit.png": "2263b6ac40df24137a6a4defc799957a86164ce26ed30a376c6c5490a91b83db",
+    "current-after-reanalysis.png": "ecfec754b14121301856ce50485339ac2a2b3d4105817b8618f50a173dfd709f"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T22:54:42.732Z",
+  "status": "PASS",
+  "testCount": 1,
+  "testIds": [
+    "visible-Chrome-cantilever-current-edit-stale-reanalyse-current"
+  ],
+  "command": [
+    "chrome-devtools-axi",
+    "run"
+  ],
+  "tool": "chrome-devtools-axi",
+  "gpu": "AMD WebGPU",
+  "artifacts": [
+    "stale-edit.png",
+    "current-after-reanalysis.png"
+  ],
+  "observations": {
+    "spanBefore": 3,
+    "spanAfter": 3.5,
+    "unit": "m",
+    "initial": "Current",
+    "afterEdit": "Stale results",
+    "afterReanalysis": "Current",
+    "tipDisplacementBeforeMm": -45,
+    "tipDisplacementAfterDisplayedMm": -71.458333
+  },
+  "limitations": [
+    "Desktop Chrome on macOS laboratory; not cross-platform evidence"
+  ]
+}

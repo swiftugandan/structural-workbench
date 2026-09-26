@@ -1,0 +1,1 @@
+Diagnostic real-GPU run: 28 passed, 3 failed. GPU depth regression passed. Remaining failures: early DOM Analyse click before enabled, recovery query/import race, capacity trace timeout. Subsequent repairs require fresh build and rerun. Tests were edited during the tail of this diagnostic run; this report is not acceptance evidence.

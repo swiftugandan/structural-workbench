@@ -1,0 +1,26 @@
+{
+  "milestone": "release",
+  "status": "BLOCKED",
+  "sourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
+  "buildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
+  "required": [
+    "build",
+    "native",
+    "contracts",
+    "numerical",
+    "wasm",
+    "oracle",
+    "e2e-tour",
+    "browser-suite",
+    "accessibility",
+    "security",
+    "performance",
+    "graphics",
+    "robustness",
+    "hardware-windows-linux"
+  ],
+  "issues": [
+    "release: remaining milestone-specific gates are not implemented"
+  ],
+  "observedAt": "2026-09-26T22:56:17.063Z"
+}

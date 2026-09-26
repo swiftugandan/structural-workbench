@@ -1,0 +1,36 @@
+{
+  "taskId": "M03-B",
+  "milestone": "M03",
+  "sourceHash": "5b8ebd32c0daaee4f3609a8994fe96f91d0a4007e9636081ca91f4450455bef0",
+  "buildHash": "7f02a278abf09227248e85c8f7325dadcce24a0761ded9dac8889e93f8cc1097",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T22:02:10.883Z",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "M01-far-origin-dpr1",
+    "M01-far-origin-dpr2",
+    "M01-depth-and-stale-pick"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/visual/m01-graphics.spec.js"
+  ],
+  "browser": "153.0.8010.53",
+  "limitations": "Actual GPU/platform performance acceptance is separate."
+}

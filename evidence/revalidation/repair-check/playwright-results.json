@@ -1,0 +1,433 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/performance-cad.spec.js",
+      "tests/e2e/m03-gates.spec.js",
+      "tests/e2e/reliability.spec.js"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/revalidation/repair-check/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e/m03-gates.spec.js",
+      "file": "e2e/m03-gates.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 cancel timing: cancelled ≤250ms and editing restored ≤1s",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1621,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T22:03:50.543Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-cancel-t-80009-ms-and-editing-restored-≤1s/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-85c34e8e58e73d4bfeb3",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "M03 analyse click keeps UI event-loop gaps ≤100ms",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1468,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T22:03:53.060Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-cdddef79c11ac7d7c8b9",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 75,
+          "column": 1
+        },
+        {
+          "title": "M03 GPU loss during blocked analysis preserves model hash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1626,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T22:03:54.656Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-3d80ead95457bd2762c7",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 108,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/reliability.spec.js",
+      "file": "e2e/reliability.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M04 reliability matrix",
+          "file": "e2e/reliability.spec.js",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "corrupt latest snapshot recovers verified history revision",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1893,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-26T22:03:56.534Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-reliability-M04-reliab-14628-s-verified-history-revision/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "848db213a9975958428b-7d1334f48b140ef6f315",
+              "file": "e2e/reliability.spec.js",
+              "line": 12,
+              "column": 3
+            },
+            {
+              "title": "model Worker crash restores last confirmed in-memory model",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1713,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-26T22:03:58.614Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-reliability-M04-reliab-2083e-t-confirmed-in-memory-model/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "848db213a9975958428b-ef60a70f6505bce9282b",
+              "file": "e2e/reliability.spec.js",
+              "line": 89,
+              "column": 1
+            },
+            {
+              "title": "persistence denied warns without blocking export",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1340,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-26T22:04:00.480Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "848db213a9975958428b-c8625b5e55d84d7c6759",
+              "file": "e2e/reliability.spec.js",
+              "line": 127,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "performance-cad.spec.js",
+      "file": "performance-cad.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 108245,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m216\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m216\u001b[39m\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:254:27",
+                    "location": {
+                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                      "column": 27,
+                      "line": 254
+                    },
+                    "snippet": "  252 |         : \"Actual runner measurements; required platform identity must also pass.\",\n  253 |   });\n> 254 |   expect(metrics.editP95).toBeLessThanOrEqual(thresholds.editP95);\n      |                           ^\n  255 |   expect(metrics.pickP95).toBeLessThanOrEqual(thresholds.pickP95);\n  256 |   expect(metrics.snapP95).toBeLessThanOrEqual(thresholds.snapP95);\n  257 |   expect(importMs).toBeLessThanOrEqual(thresholds.importMs);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                        "column": 27,
+                        "line": 254
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m216\u001b[39m\n\n  252 |         : \"Actual runner measurements; required platform identity must also pass.\",\n  253 |   });\n> 254 |   expect(metrics.editP95).toBeLessThanOrEqual(thresholds.editP95);\n      |                           ^\n  255 |   expect(metrics.pickP95).toBeLessThanOrEqual(thresholds.pickP95);\n  256 |   expect(metrics.snapP95).toBeLessThanOrEqual(thresholds.snapP95);\n  257 |   expect(importMs).toBeLessThanOrEqual(thresholds.importMs);\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:254:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T22:04:03.014Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                    "column": 27,
+                    "line": 254
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "10c540ae4ae910fd101e-33815042c97838e1f8c3",
+          "file": "performance-cad.spec.js",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-26T22:03:49.690Z",
+    "duration": 122800.61,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

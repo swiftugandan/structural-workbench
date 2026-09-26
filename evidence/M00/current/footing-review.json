@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "name": "Compression-only contact",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Bearing",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Sliding/overturning",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Flexure",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "One-way shear",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Punching",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Detailing",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    }
+  ],
+  "codeProfile": null,
+  "contactState": "indeterminate",
+  "contractVersion": 1,
+  "draftId": "footingbase1",
+  "inputHash": "0aec3dc91903f985e7e7c7041c448fc70db2c683a110f92e36c531636b0aa93f",
+  "inputs": {
+    "id": "footingbase1",
+    "inputSource": "syntheticFixture",
+    "inputs": {
+      "bearingPressure": 200000,
+      "columnDepth": 0.4,
+      "columnWidth": 0.4,
+      "concreteStrength": 30000000,
+      "cover": 0.075,
+      "embedment": 1.6,
+      "length": 2.4,
+      "rebarStrength": 500000000,
+      "soilUnitWeight": 18000,
+      "thickness": 0.6,
+      "width": 2.4
+    },
+    "kind": "padFooting",
+    "soilReference": "Firm ground requested; 200 kPa is a SYNTHETIC assumption, not a ground investigation. Contact and settlement unverified.",
+    "targetId": "base1"
+  },
+  "kind": "padFooting",
+  "limitations": [
+    "MOCK WORKFLOW — no code-compliance claim",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"
+  ],
+  "mock": true,
+  "modelHash": "ec6d4a34238b8ed55d73910f1003bd2fb741ecfb076f5a6a44fff87e42fa0f83",
+  "overall": "unsupported",
+  "previewRunId": "da8c9024f39e53742929e0433eb8847190001c56eb342ff43da2f9eca387997c",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "schedule": [],
+  "soilProvenance": {
+    "bearingPressure": 200000,
+    "computedByWorkbench": false,
+    "reference": "Firm ground requested; 200 kPa is a SYNTHETIC assumption, not a ground investigation. Contact and settlement unverified.",
+    "source": "syntheticFixture"
+  },
+  "sourceProvenance": {
+    "axes": "Global [Fx,Fy,Fz,Mx,My,Mz], SI; foundation actions oppose support-on-structure reactions",
+    "combinationId": "SLS",
+    "foundationActions": [
+      -33188.95090448441,
+      -34196.09482842022,
+      -481050.79152727,
+      10372.511962507466,
+      -8737.282731699133,
+      -740.2052951090604
+    ],
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "ec6d4a34238b8ed55d73910f1003bd2fb741ecfb076f5a6a44fff87e42fa0f83",
+    "note": "Exact simultaneous support reaction; no soil/contact solution or frame-foundation coupling",
+    "resultId": "ec6d4a34238b8ed5-SLS",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
+    "sourceRevision": 0,
+    "supportReaction": [
+      33188.95090448441,
+      34196.09482842022,
+      481050.79152727,
+      -10372.511962507466,
+      8737.282731699133,
+      740.2052951090604
+    ],
+    "targetId": "base1"
+  },
+  "sourceRevision": 0,
+  "currentState": "UNSUPPORTED"
+}

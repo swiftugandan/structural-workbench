@@ -1,0 +1,218 @@
+
+Running 112 tests using 1 worker
+
+  ✓    1 tests/accessibility/a11y.spec.js:4:1 › landing and solved workspace accessibility (4.5s)
+  ✓    2 tests/e2e/application-menu.spec.js:5:1 › Header is aligned and Design menu opens the existing design workflows (2.3s)
+  ✓    3 tests/e2e/application-menu.spec.js:26:1 › Application menus share commands, keyboard navigation and disabled states (2.5s)
+  ✓    4 tests/e2e/application-menu.spec.js:93:1 › Shortcuts respect text fields, preserve focus mode and use actual analysis (1.5s)
+  ✓    5 tests/e2e/bay-copy.spec.js:19:1 › M03 copy portal into bays, analyse and inspect My Mz torsion (3.2s)
+  ✓    6 tests/e2e/cad.spec.js:43:1 › M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect (2.5s)
+  ✓    7 tests/e2e/cad.spec.js:89:1 › M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts (3.7s)
+  ✓    8 tests/e2e/cad.spec.js:154:1 › M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance (4.9s)
+  ✓    9 tests/e2e/canvas-first.spec.js:35:1 › Canvas first: place support, draw force, edit assignments and undo without dialogs (3.6s)
+  ✓   10 tests/e2e/canvas-first.spec.js:99:1 › Canvas first: two-click members, distributed loads, measure and nonmodal precision panel (2.4s)
+  ✓   11 tests/e2e/canvas-first.spec.js:139:1 › Canvas first: point-to-point copy and dependency delete stay on canvas (2.3s)
+  ✓   12 tests/e2e/canvas-first.spec.js:166:1 › Canvas first: node placement, split, move and Escape preserve atomic history (3.1s)
+  ✓   13 tests/e2e/canvas-first.spec.js:208:1 › Readable labels hide internal IDs and persist after copy and reopen (2.2s)
+  ✓   14 tests/e2e/capability-ledger.spec.js:11:1 › M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions (1.4s)
+  ✓   15 tests/e2e/connections-3d.spec.js:3:1 › 3D joint/support presentation preserves restraints, picking and view switching (1.8s)
+  ✓   16 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout rcBeam: 3D focus, drawings, details, source and preserved model (2.7s)
+  ✓   17 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout slab: 3D focus, drawings, details, source and preserved model (2.7s)
+  ✓   18 tests/e2e/design-fidelity.spec.js:17:3 › Mockup layout padFooting: 3D focus, drawings, details, source and preserved model (2.7s)
+  ✓   19 tests/e2e/design-fidelity.spec.js:89:1 › Steel mockup: section card, catalogue, readiness, calculation tree and provenance (3.2s)
+  ✓   20 tests/e2e/design-previews.spec.js:6:3 › Concrete preview rcBeam: source, stale, undo, persistence and export (3.6s)
+  ✓   21 tests/e2e/design-previews.spec.js:6:3 › Concrete preview slab: source, stale, undo, persistence and export (2.9s)
+  ✓   22 tests/e2e/design-previews.spec.js:6:3 › Concrete preview padFooting: source, stale, undo, persistence and export (3.7s)
+  ✓   23 tests/e2e/dimensions.spec.js:2:1 › Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation (2.0s)
+  ✓   24 tests/e2e/dual-workers.spec.js:12:1 › M03 dual Workers: cancel leaves model intact; superseded solve stays stale (7.1s)
+  ✓   25 tests/e2e/force-inspector.spec.js:2:1 › Selected member force diagram station, units and stale state (2.3s)
+  ✓   26 tests/e2e/graph-scale.spec.js:2:1 › Canvas exaggeration controls preserve model and independent factors (1.6s)
+  ✓   27 tests/e2e/guided-inputs.spec.js:32:1 › Guided inputs preserve exact properties and references, edit units, and undo (5.7s)
+  ✓   28 tests/e2e/guided-inputs.spec.js:69:1 › Support presets, directional loads, load types and combinations save through real kernel (3.8s)
+  ✓   29 tests/e2e/guided-inputs.spec.js:120:1 › Guided forms are accessible and fit desktop and phone widths (3.7s)
+  ✓   30 tests/e2e/guided-inputs.spec.js:155:1 › Section templates use published properties, preserve identity, and save custom edits honestly (5.8s)
+  ✓   31 tests/e2e/guided-inputs.spec.js:193:1 › Material and load templates save editable defaults through the real kernel (6.6s)
+  ✓   32 tests/e2e/guided-inputs.spec.js:240:1 › Template galleries have accessible diagrams and fit a phone editor (4.5s)
+  ✓   33 tests/e2e/hierarchy.spec.js:18:1 › M03 hierarchy: split shows physical parent and analytical children (2.2s)
+  ✓   34 tests/e2e/keyboard.spec.js:20:1 › M01 keyboard-only portal creation, numeric drawing, table editing and solve (8.5s)
+  ✓   35 tests/e2e/layout-panels.spec.js:4:1 › Layout controls reclaim canvas space and restore drafts and results (2.7s)
+  ✓   36 tests/e2e/m03-gates.spec.js:26:1 › M03 cancel timing: cancelled ≤250ms and editing restored ≤1s (1.3s)
+  ✓   37 tests/e2e/m03-gates.spec.js:75:1 › M03 analyse click keeps UI event-loop gaps ≤100ms (1.6s)
+  ✓   38 tests/e2e/m03-gates.spec.js:108:1 › M03 GPU loss during blocked analysis preserves model hash (1.4s)
+  ✓   39 tests/e2e/m04-record.spec.js:12:1 › M04 record: export/import equivalence and report matches displayed results (2.2s)
+  ✓   40 tests/e2e/m06-release-tour.spec.js:12:1 › M06 release tour: analyse, stress screen, ledger, save and report (2.0s)
+  ✓   41 tests/e2e/migrations.spec.js:12:1 › M04 migration: 0.9.0 imports, retains original, unknown schema refused (1.9s)
+  ✓   42 tests/e2e/model-coherence.spec.js:3:1 › One selection identity follows a bound footing, its support and physical members (16.4s)
+  ✓   43 tests/e2e/model-explorer.spec.js:3:1 › Reference Explorer: nested elements, search, disclosure state and selection (2.7s)
+  ✓   44 tests/e2e/model-visibility.spec.js:6:1 › Inspect one storey's return stairs in plan, side and 3D without changing engineering data (8.8s)
+  ✓   45 tests/e2e/model-visibility.spec.js:87:1 › Hidden members cannot be picked and view changes preserve current results (1.9s)
+  ✓   46 tests/e2e/native-steel-design.spec.js:43:1 › DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen (3.6s)
+  ✓   47 tests/e2e/native-steel-design.spec.js:134:1 › DW-F4: fail reaches governing station and clause; LTB stays unsupported (3.0s)
+  ✓   48 tests/e2e/offline-cache.spec.js:26:3 › M04 offline build-ID cache › precaches atomic build and reopens offline from IndexedDB (1.9s)
+  ✓   49 tests/e2e/offline-cache.spec.js:101:3 › M04 offline build-ID cache › prompts reload after save when a waiting build update is ready (1.3s)
+  ✘   50 tests/e2e/offline-update.spec.js:8:1 › A real waiting build installs, preserves the saved model, and reloads atomically (6.6s)
+  ✓   51 tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes (2.2s)
+  ✓   52 tests/e2e/portal-templates.spec.js:11:1 › M05 portal templates: save dimensions and reuse on a new portal (1.8s)
+  ✓   53 tests/e2e/portal.spec.js:20:1 › M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen (5.8s)
+  ✓   54 tests/e2e/portal.spec.js:146:1 › M01 drawing Escape does not mutate and compact controls do not overflow (3.4s)
+  ✓   55 tests/e2e/prescribed.spec.js:36:1 › M02 prescribed: B09 analyse, edit settlement, reject free-DOF prescription (3.0s)
+  ✓   56 tests/e2e/recovery.spec.js:12:1 › M04 recovery: restore committed revision; refuse while form dirty (1.9s)
+  ✓   57 tests/e2e/reliability.spec.js:12:3 › M04 reliability matrix › corrupt latest snapshot recovers verified history revision (1.8s)
+  ✓   58 tests/e2e/reliability.spec.js:89:1 › M04 reliability matrix › model Worker crash restores last confirmed in-memory model (2.0s)
+  ✓   59 tests/e2e/reliability.spec.js:127:3 › M04 reliability matrix › persistence denied warns without blocking export (1.2s)
+  ✓   60 tests/e2e/residential-reference.spec.js:5:1 › UK residential reference: actual WASM analysis, hierarchy, model-sourced footing review and stale edits (22.7s)
+  ✘   61 tests/e2e/result-picker.spec.js:3:1 › Grouped results expose all six actions and retain component across analysis (7.3s)
+  ✓   62 tests/e2e/robustness.spec.js:8:1 › storage quota failure is explicit and downloads survive (1.6s)
+  ✓   63 tests/e2e/robustness.spec.js:30:1 › single writer lock protects the second tab (2.0s)
+  ✓   64 tests/e2e/robustness.spec.js:49:1 › GPU device destruction recovers model and current result (1.4s)
+  ✓   65 tests/e2e/robustness.spec.js:80:1 › unknown engineering fields rejected atomically (945ms)
+  ✓   66 tests/e2e/robustness.spec.js:93:1 › cancel terminates a blocked Worker and restores the model (3.9s)
+  ✓   67 tests/e2e/robustness.spec.js:118:1 › M03 dual Workers: edit during blocked analysis never marks stale solve Current (6.7s)
+  ✓   68 tests/e2e/scenarios.spec.js:44:1 › M02 scenarios: B11 combination factors tip load and reaction (1.8s)
+  ✓   69 tests/e2e/scenarios.spec.js:79:1 › M02 scenarios: dead/live/wind cases, strength combination and envelope provenance (3.5s)
+  ✓   70 tests/e2e/section-axis.spec.js:32:1 › M03 section-axis: edit localY roll swaps My/Mz end actions (2.4s)
+  ✓   71 tests/e2e/section-calculator.spec.js:33:1 › M05 section calculator: rectangle stiffens tip deflection and clears stale result (2.1s)
+  ✓   72 tests/e2e/self-weight.spec.js:29:1 › M02 self-weight: B10 analyse, duplicate rejected, case delete keeps combinations valid (2.9s)
+  ✓   73 tests/e2e/shear-diagrams.spec.js:18:1 › Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving (1.9s)
+  ✓   74 tests/e2e/shear-diagrams.spec.js:60:1 › Uniform-load shear shows both signs and the unused component reports zero (1.6s)
+  ✓   75 tests/e2e/shear-diagrams.spec.js:84:1 › Member forces table exposes signed shear at every station and exports it (1.7s)
+  ✓   76 tests/e2e/spatial-crossings.spec.js:5:1 › Crossing diagnostics distinguish spatial separation from disconnected intersections (5.9s)
+  ✓   77 tests/e2e/stair-outlines.spec.js:5:1 › Residential stair widths remain visible in analytical view without changing the model (6.6s)
+  ✓   78 tests/e2e/steel-check.spec.js:43:1 › standalone S2-D1 steel check passes via evaluateDesign UI (1.6s)
+  ✓   79 tests/e2e/steel-check.spec.js:69:1 › complete-member matrix: ≥3 pass and ≥3 fail seeds (3.0s)
+  ✓   80 tests/e2e/steel-check.spec.js:124:1 › steel check remains usable in a narrow viewport (1.5s)
+  ✓   81 tests/e2e/steel-check.spec.js:142:1 › standalone S2-D1 fail seed reports overall fail (1.6s)
+  ✓   82 tests/e2e/steel-check.spec.js:166:1 › model-derived demand check lands in calculation report clause trail (2.0s)
+  ✓   83 tests/e2e/steel-overview.spec.js:4:1 › M07-G overview: complete membership, exact records, row selection, stale and export (3.5s)
+  ✓   84 tests/e2e/steel-study.spec.js:5:1 › M07-G catalogue study reanalyses self weight, applies explicitly and undoes (4.0s)
+  ✓   85 tests/e2e/steel-task-journey.spec.js:5:1 › Steel task: find failure, compare, apply, reanalyse, review colours and export (4.2s)
+  ✓   86 tests/e2e/stress-screen.spec.js:11:1 › M06 stress screen: B02 shows elastic fibre stresses with disclaimer (1.4s)
+  ✓   87 tests/e2e/structure-model.spec.js:9:1 › Authored structure survives save, undo, topology and reopen; invalid bindings fail closed (4.8s)
+  ✓   88 tests/e2e/study.spec.js:7:1 › M22-B: load study JSON, compare variants, download report (1.3s)
+  ✓   89 tests/e2e/support-symbols.spec.js:3:1 › Support symbols track restraints, orientation, property edits and undo (2.1s)
+  ✓   90 tests/e2e/support-symbols.spec.js:59:1 › Support labels toggle independently without invalidating analysis (1.9s)
+  ✓   91 tests/e2e/support-symbols.spec.js:97:1 › Member label Auto, Show all and Hide are independent of support labels (6.7s)
+  ✓   92 tests/e2e/topology.spec.js:31:1 › M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen (5.6s)
+  ✓   93 tests/e2e/topology.spec.js:133:1 › M01 topology: crossing stays disconnected, connect and merge are previewed and atomic (2.9s)
+  ✓   94 tests/e2e/variants.spec.js:27:1 › M05 variants: duplicate, stiffen, compare retains both hashes and reports (2.2s)
+  ✓   95 tests/e2e/warehouse.spec.js:2:1 › Warehouse example opens in 3D and solves spatial gravity and lateral loads (2.0s)
+  ✓   96 tests/e2e/workbench.spec.js:14:1 › M00-tour: edit, solve, stale, select, export, reopen, instability (4.1s)
+  ✓   97 tests/e2e/workbench.spec.js:118:1 › GPU unavailable retains analysis and exports (1.4s)
+  ✓   98 tests/e2e/workbench.spec.js:129:1 › invalid import preserves current model and results (1.6s)
+  ✓   99 tests/e2e/workbench.spec.js:148:1 › undo restores model hash and redo re-applies edit (1.6s)
+  ✓  100 tests/e2e/workbench.spec.js:162:1 › narrow screen retains tables and portable export (1.5s)
+  ✓  101 tests/e2e/workbench.spec.js:184:1 › unit-suffixed inputs are converted by Rust; incompatible units preserve model (1.7s)
+  ✓  102 tests/e2e/workspace-ux.spec.js:4:1 › UX ribbon, keyboard context menu and property drafts preserve model state (1.9s)
+  ✓  103 tests/e2e/workspace-ux.spec.js:39:1 › UX responsive panel navigation retains editable properties and results (2.1s)
+  ✓  104 tests/marketing.spec.js:3:1 › marketing page presents the product and launches the workbench (2.8s)
+  ✓  105 tests/performance.spec.js:3:1 › local warm startup and repeated cantilever solve baseline (4.5s)
+  ✓  106 tests/startup.spec.js:5:1 › M01 startup: cached controls and viewport, cold network and compressed payload (4.0s)
+  ✓  107 tests/visual/graphics.spec.js:3:1 › GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash (1.5s)
+  ✓  108 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping (1.8s)
+  ✓  109 tests/visual/m01-graphics.spec.js:5:3 › M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping (1.9s)
+  ✓  110 tests/visual/m01-graphics.spec.js:63:1 › M01 graphics: depth occlusion and changing camera during asynchronous selection (1.6s)
+  ✓  111 tests/e2e/large-explorer.spec.js:7:1 › Large Explorer defers closed branches and exposes every member on expansion and search (9.0s)
+  ✓  112 tests/performance-cad.spec.js:11:1 › M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export (1.2m)
+
+
+  1) tests/e2e/offline-update.spec.js:8:1 › A real waiting build installs, preserves the saved model, and reloads atomically 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('#update-banner')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" locator('#update-banner') with timeout 5000ms
+      - waiting for locator('#update-banner')
+        14 × locator resolved to <div hidden="" role="status" id="update-banner" aria-live="polite">…</div>
+           - unexpected value "hidden"
+
+
+      89 |     await page.locator("#span").fill("7");
+      90 |     await page.locator("#member-form button.primary").click();
+    > 91 |     await expect(page.locator("#update-banner")).toBeVisible();
+         |                                                  ^
+      92 |     await page.locator("#reload-update").click();
+      93 |     await page.waitForFunction(() => window.deploymentMarker === "B");
+      94 |     await expect(page.locator("#build-status")).toHaveAttribute(
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/offline-update.spec.js:91:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-offline-update-A-real--cd89a-odel-and-reloads-atomically/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-offline-update-A-real--cd89a-odel-and-reloads-atomically/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-offline-update-A-real--cd89a-odel-and-reloads-atomically/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-offline-update-A-real--cd89a-odel-and-reloads-atomically/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/result-picker.spec.js:3:1 › Grouped results expose all six actions and retain component across analysis 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('#hash-status')
+    Expected: "SI geometry · f64 precision"
+    Received: "550959d365b5 · f64"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" locator('#hash-status') with timeout 5000ms
+      - waiting for locator('#hash-status')
+        14 × locator resolved to <span id="hash-status">550959d365b5 · f64</span>
+           - unexpected value "550959d365b5 · f64"
+
+
+      54 |   await expect(page.locator("#result-status")).toHaveText("✓ Current");
+      55 |   await expect(page.locator("#display-result")).toHaveValue("torsion");
+    > 56 |   await expect(page.locator("#hash-status")).toHaveText(hash);
+         |                                              ^
+      57 | });
+      58 |
+        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/result-picker.spec.js:56:46
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/e2e/offline-update.spec.js:8:1 › A real waiting build installs, preserves the saved model, and reloads atomically 
+    tests/e2e/result-picker.spec.js:3:1 › Grouped results expose all six actions and retain component across analysis 
+  110 passed (8.0m)
+(node:44836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:44836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:45855) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:45855) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46909) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46909) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46975) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46975) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

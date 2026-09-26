@@ -2998,6 +2998,50 @@
       "status": "AUDIT_IMPLEMENTED_ACCEPTANCE_OPEN",
       "evidencePath": "evidence/model-visibility/visibility-gate.json",
       "nextAction": "Resolve physical geometry datums, floor/beam offsets and stair junction/headroom/detailing before physical/construction acceptance."
+    },
+    "REVALIDATION-01": {
+      "id": "REVALIDATION-01",
+      "useCase": "Refresh stale release evidence against the current application and repair regressions found during revalidation",
+      "dependencies": [],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "web",
+        "crates/model",
+        "crates/wasm-api",
+        "tests",
+        "evidence/revalidation"
+      ],
+      "acceptanceIds": [
+        "same-source-build-evidence",
+        "current-shell-regressions",
+        "real-gpu-capacity",
+        "stale-result-recompute"
+      ],
+      "requiredCommands": [
+        "npm run build",
+        "cargo test --workspace --locked",
+        "npm run test:contracts",
+        "npm run test:numerical",
+        "npm run test:wasm",
+        "npm run test:oracle",
+        "node tools/run-hardware.mjs",
+        "npm run verify:release"
+      ],
+      "evidencePaths": [
+        "evidence/revalidation/release-current",
+        "evidence/M00/current",
+        "evidence/revalidation"
+      ],
+      "nextAction": "Publish preview. Full-release gate and UK EC2 numerical design remain outside this accepted revalidation scope.",
+      "sourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
+      "buildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
+      "outcomes": [
+        "92 native tests; 3 contracts; 2 security tests PASS",
+        "33 native and 33 WASM numerical benchmarks; 1440 oracle comparisons PASS",
+        "112 real AMD GPU browser tests PASS, no skipped/flaky/unexpected tests",
+        "18 engineering hashes unchanged; visible Chrome current/edit/stale/reanalysis/current PASS",
+        "Common M00 gate PASS; release gate has no stale evidence and remains BLOCKED only on unimplemented remaining milestone gates"
+      ]
     }
   },
   "blockers": [
@@ -3045,10 +3089,10 @@
       "resumeWhen": "Acquire edition-specific authoritative standards and UK NAs; extract/reconcile JRC examples and validate bounded Rust/WASM profiles. Eurocodes with UK NAs confirmed by user; no legacy BS 8110."
     }
   ],
-  "lastVerifiedSourceRevision": null,
-  "lastVerifiedBuildHash": "b48dd604a1d3092f6e09d3beb64f8125d2505d92832cc774c1bd92d02bc14d20",
+  "lastVerifiedSourceRevision": "90067de",
+  "lastVerifiedBuildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
   "nextAction": "Resolve residential physical geometry/detailing acceptance and acquire exact Eurocode/UK NA resources for concrete numerical/code profiles. See docs/design/current-capability-review.md.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "b6ed570e0b1dbca8924f6b1a2ac14dfcb7a74cd0551025594b903f6a51f09049",
-  "lastVerifiedScope": "Final 3 contracts + 7 real WASM/browser journeys and visible Chrome solid PASS/STALE states; unchanged Rust regression reused from 91-test catalogue slice."
+  "lastVerifiedSourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
+  "lastVerifiedScope": "Fresh same-build native/contracts/security/numerical/WASM/oracle and complete 112-test real-GPU browser corpus; no stale release evidence. Preview scope only."
 }

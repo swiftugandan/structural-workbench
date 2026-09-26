@@ -1,0 +1,26 @@
+{
+  "taskId": "REVALIDATION-01",
+  "milestone": "M03",
+  "sourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
+  "buildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T22:50:45.799Z",
+  "status": "PASS",
+  "test": "M04 migration: 0.9.0 imports, retains original, unknown schema refused",
+  "legacySha256": "904c6cd9d24bfdd56a64d2800ff2f5bc6f275951369aa92f03f4b9eeb8573c21",
+  "migratedHashPrefix": "8ad1dd3428a2",
+  "originalRetained": true
+}

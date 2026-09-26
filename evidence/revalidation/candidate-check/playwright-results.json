@@ -1,0 +1,166 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/performance-cad.spec.js"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/revalidation/candidate-check/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "performance-cad.spec.js",
+      "file": "performance-cad.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 80711,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m126.89999997615814\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m126.89999997615814\u001b[39m\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:254:27",
+                    "location": {
+                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                      "column": 27,
+                      "line": 254
+                    },
+                    "snippet": "  252 |         : \"Actual runner measurements; required platform identity must also pass.\",\n  253 |   });\n> 254 |   expect(metrics.editP95).toBeLessThanOrEqual(thresholds.editP95);\n      |                           ^\n  255 |   expect(metrics.pickP95).toBeLessThanOrEqual(thresholds.pickP95);\n  256 |   expect(metrics.snapP95).toBeLessThanOrEqual(thresholds.snapP95);\n  257 |   expect(importMs).toBeLessThanOrEqual(thresholds.importMs);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                        "column": 27,
+                        "line": 254
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m126.89999997615814\u001b[39m\n\n  252 |         : \"Actual runner measurements; required platform identity must also pass.\",\n  253 |   });\n> 254 |   expect(metrics.editP95).toBeLessThanOrEqual(thresholds.editP95);\n      |                           ^\n  255 |   expect(metrics.pickP95).toBeLessThanOrEqual(thresholds.pickP95);\n  256 |   expect(metrics.snapP95).toBeLessThanOrEqual(thresholds.snapP95);\n  257 |   expect(importMs).toBeLessThanOrEqual(thresholds.importMs);\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:254:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T22:16:06.942Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                    "column": 27,
+                    "line": 254
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "10c540ae4ae910fd101e-33815042c97838e1f8c3",
+          "file": "performance-cad.spec.js",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-26T22:16:06.246Z",
+    "duration": 83170.24200000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

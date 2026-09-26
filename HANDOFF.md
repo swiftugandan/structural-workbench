@@ -1,3 +1,7 @@
+## Latest: refreshed validation and Preview 10
+
+Current source `90067de` passed 112 real AMD GPU browser tests and the complete native/WASM/oracle corpus. Default release evidence is fresh; the only release-verifier issue is the unimplemented remaining milestone gates. See `evidence/revalidation/README.md` and `evidence/revalidation/release-current/`. Preserve engineering STALE semantics. UK Eurocode/NA concrete resources and physical detailing remain blocked.
+
 ## Latest: stair widths in analytical line view
 
 UKR01-v2 already contains both returning flights per storey. The user screenshot revealed that a single centreline per wide flight looked like a missing side. The analytical view now draws Rust-generated thin outlines of both stair sides and landing strips, with a legend separating physical width from analytical beams. Model geometry, loads and numerical results are unchanged. Evidence: `evidence/stair-outlines/`.

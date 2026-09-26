@@ -1,0 +1,2814 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "--list"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/M00/current/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "accessibility/a11y.spec.js",
+      "file": "accessibility/a11y.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "landing and solved workspace accessibility",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "1c2357ba4171646c54ab-f4b5e68bcd440c0e2c90",
+          "file": "accessibility/a11y.spec.js",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/application-menu.spec.js",
+      "file": "e2e/application-menu.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Header is aligned and Design menu opens the existing design workflows",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8522709c8597d6d19898-8a9ff7bd0301cbad4c1b",
+          "file": "e2e/application-menu.spec.js",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "Application menus share commands, keyboard navigation and disabled states",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8522709c8597d6d19898-24154ab80d0209c5c20e",
+          "file": "e2e/application-menu.spec.js",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "Shortcuts respect text fields, preserve focus mode and use actual analysis",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8522709c8597d6d19898-ea55c31360d716a4e309",
+          "file": "e2e/application-menu.spec.js",
+          "line": 93,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/bay-copy.spec.js",
+      "file": "e2e/bay-copy.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 copy portal into bays, analyse and inspect My Mz torsion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "43ff70d730d535be037d-38c8147a809edc89c121",
+          "file": "e2e/bay-copy.spec.js",
+          "line": 19,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/cad.spec.js",
+      "file": "e2e/cad.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "1d50d27f02553b204281-71809e7bc587d641dfe2",
+          "file": "e2e/cad.spec.js",
+          "line": 43,
+          "column": 1
+        },
+        {
+          "title": "M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "1d50d27f02553b204281-79ab7ba953abedc5fdc3",
+          "file": "e2e/cad.spec.js",
+          "line": 89,
+          "column": 1
+        },
+        {
+          "title": "M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "1d50d27f02553b204281-70b1e2b34628ce025582",
+          "file": "e2e/cad.spec.js",
+          "line": 154,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/canvas-first.spec.js",
+      "file": "e2e/canvas-first.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas first: place support, draw force, edit assignments and undo without dialogs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-055bf972a48002c0cb04",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 35,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: two-click members, distributed loads, measure and nonmodal precision panel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-858dff4e570d3d4d02f0",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 99,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: point-to-point copy and dependency delete stay on canvas",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-d2d963df1c4d0369371a",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 139,
+          "column": 1
+        },
+        {
+          "title": "Canvas first: node placement, split, move and Escape preserve atomic history",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-4ade85ca546fbe223ecc",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "Readable labels hide internal IDs and persist after copy and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c52ce176cb06044e4e60-de89dcd8e924d6f4333b",
+          "file": "e2e/canvas-first.spec.js",
+          "line": 205,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/capability-ledger.spec.js",
+      "file": "e2e/capability-ledger.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6495f811da1e1b026d63-e03b805e2a6853e6bdb6",
+          "file": "e2e/capability-ledger.spec.js",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/connections-3d.spec.js",
+      "file": "e2e/connections-3d.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "3D joint/support presentation preserves restraints, picking and view switching",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f179946b207caf137b82-ab093de69ca21f14c8ed",
+          "file": "e2e/connections-3d.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/design-fidelity.spec.js",
+      "file": "e2e/design-fidelity.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Mockup layout rcBeam: 3D focus, drawings, details, source and preserved model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-46d21348be2754f2f922",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 17,
+          "column": 3
+        },
+        {
+          "title": "Mockup layout slab: 3D focus, drawings, details, source and preserved model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-5438b70cb55aef0e2bfc",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 17,
+          "column": 3
+        },
+        {
+          "title": "Mockup layout padFooting: 3D focus, drawings, details, source and preserved model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-6ad60ee221585066acdb",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 17,
+          "column": 3
+        },
+        {
+          "title": "Steel mockup: section card, catalogue, readiness, calculation tree and provenance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-53fd93fb63f5472c254b",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 89,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/design-previews.spec.js",
+      "file": "e2e/design-previews.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Concrete preview rcBeam: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-09f43fa081fcc1a6ac9b",
+          "file": "e2e/design-previews.spec.js",
+          "line": 6,
+          "column": 3
+        },
+        {
+          "title": "Concrete preview slab: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-f1cdb8647810d372f1c3",
+          "file": "e2e/design-previews.spec.js",
+          "line": 6,
+          "column": 3
+        },
+        {
+          "title": "Concrete preview padFooting: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-4cb4173f09d60386c561",
+          "file": "e2e/design-previews.spec.js",
+          "line": 6,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "e2e/dimensions.spec.js",
+      "file": "e2e/dimensions.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b59962eb4c8ce9dd2375-350531f86bab2027b8e8",
+          "file": "e2e/dimensions.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/dual-workers.spec.js",
+      "file": "e2e/dual-workers.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 dual Workers: cancel leaves model intact; superseded solve stays stale",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "904c0a01dd53dc04daa3-57ff540c538dc8193d46",
+          "file": "e2e/dual-workers.spec.js",
+          "line": 9,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/force-inspector.spec.js",
+      "file": "e2e/force-inspector.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Selected member force diagram station, units and stale state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c4c2e0c8155373d91b60-0e48af1492cc6bb3b5ec",
+          "file": "e2e/force-inspector.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/graph-scale.spec.js",
+      "file": "e2e/graph-scale.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas exaggeration controls preserve model and independent factors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "956e7770843baf4ebeed-51309f874dcfd69cedff",
+          "file": "e2e/graph-scale.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/guided-inputs.spec.js",
+      "file": "e2e/guided-inputs.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Guided inputs preserve exact properties and references, edit units, and undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-0f7da767256f1e9376b8",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "Support presets, directional loads, load types and combinations save through real kernel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-cbf5fd46431d3d1c1ea5",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 69,
+          "column": 1
+        },
+        {
+          "title": "Guided forms are accessible and fit desktop and phone widths",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-0ea0a2bf9218adcd8d2a",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 120,
+          "column": 1
+        },
+        {
+          "title": "Section templates use published properties, preserve identity, and save custom edits honestly",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-eb439cc4def2ee7295ec",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 156,
+          "column": 1
+        },
+        {
+          "title": "Material and load templates save editable defaults through the real kernel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-a7eb839f660cf940da18",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 194,
+          "column": 1
+        },
+        {
+          "title": "Template galleries have accessible diagrams and fit a phone editor",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "50f00317ac7dcc53605e-437041bfedb3e52efd52",
+          "file": "e2e/guided-inputs.spec.js",
+          "line": 241,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/hierarchy.spec.js",
+      "file": "e2e/hierarchy.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 hierarchy: split shows physical parent and analytical children",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "0f92d2632f5c64f63d83-808af6c090a418cc38cc",
+          "file": "e2e/hierarchy.spec.js",
+          "line": 18,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/keyboard.spec.js",
+      "file": "e2e/keyboard.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 keyboard-only portal creation, numeric drawing, table editing and solve",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c4e9259111cfadf83b9b-c43da883f3558016507a",
+          "file": "e2e/keyboard.spec.js",
+          "line": 20,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/layout-panels.spec.js",
+      "file": "e2e/layout-panels.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Layout controls reclaim canvas space and restore drafts and results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "04d9dfbc6874b8b621df-0e53d93e5852549fd8f6",
+          "file": "e2e/layout-panels.spec.js",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/m03-gates.spec.js",
+      "file": "e2e/m03-gates.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 cancel timing: cancelled ≤250ms and editing restored ≤1s",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-85c34e8e58e73d4bfeb3",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "M03 analyse click keeps UI event-loop gaps ≤100ms",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-cdddef79c11ac7d7c8b9",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 72,
+          "column": 1
+        },
+        {
+          "title": "M03 GPU loss during blocked analysis preserves model hash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "fe020761822e041e8fc0-3d80ead95457bd2762c7",
+          "file": "e2e/m03-gates.spec.js",
+          "line": 103,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/m04-record.spec.js",
+      "file": "e2e/m04-record.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M04 record: export/import equivalence and report matches displayed results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "1a0c6ddc4b2f5bdee80f-8abe7f92609cfe5e7e7b",
+          "file": "e2e/m04-record.spec.js",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/m06-release-tour.spec.js",
+      "file": "e2e/m06-release-tour.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M06 release tour: analyse, stress screen, ledger, save and report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "2a91e65c2d5d06f202ec-845270387be979a44fc4",
+          "file": "e2e/m06-release-tour.spec.js",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/migrations.spec.js",
+      "file": "e2e/migrations.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M04 migration: 0.9.0 imports, retains original, unknown schema refused",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "259153a38a9c796436ad-001fd61242bb87ae420c",
+          "file": "e2e/migrations.spec.js",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/model-coherence.spec.js",
+      "file": "e2e/model-coherence.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "One selection identity follows a bound footing, its support and physical members",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "2f12f07b090f2a2250c4-8abbea0c3bd29c1b411a",
+          "file": "e2e/model-coherence.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/model-explorer.spec.js",
+      "file": "e2e/model-explorer.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Reference Explorer: nested elements, search, disclosure state and selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "cd87f790a20ceafd53bb-05fd10168fc44db7263a",
+          "file": "e2e/model-explorer.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/model-visibility.spec.js",
+      "file": "e2e/model-visibility.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Inspect one storey's return stairs in plan, side and 3D without changing engineering data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "0acdfa071b01b43cbca1-427863c8621ba759ca1d",
+          "file": "e2e/model-visibility.spec.js",
+          "line": 6,
+          "column": 1
+        },
+        {
+          "title": "Hidden members cannot be picked and view changes preserve current results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "0acdfa071b01b43cbca1-7552fef71e1a3809a900",
+          "file": "e2e/model-visibility.spec.js",
+          "line": 87,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/native-steel-design.spec.js",
+      "file": "e2e/native-steel-design.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "2f1b84a4ac2c0f5cdc15-c26e19f462722abf7ebb",
+          "file": "e2e/native-steel-design.spec.js",
+          "line": 43,
+          "column": 1
+        },
+        {
+          "title": "DW-F4: fail reaches governing station and clause; LTB stays unsupported",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "2f1b84a4ac2c0f5cdc15-3d092a31d085f4fabd50",
+          "file": "e2e/native-steel-design.spec.js",
+          "line": 134,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/offline-cache.spec.js",
+      "file": "e2e/offline-cache.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M04 offline build-ID cache",
+          "file": "e2e/offline-cache.spec.js",
+          "line": 21,
+          "column": 6,
+          "specs": [
+            {
+              "title": "precaches atomic build and reopens offline from IndexedDB",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "04d72d0c898d24ad7b96-3bb1a27ba237c590b304",
+              "file": "e2e/offline-cache.spec.js",
+              "line": 26,
+              "column": 3
+            },
+            {
+              "title": "prompts reload after save when a waiting build update is ready",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "04d72d0c898d24ad7b96-bab2fe80b8b191601a24",
+              "file": "e2e/offline-cache.spec.js",
+              "line": 101,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "e2e/offline-update.spec.js",
+      "file": "e2e/offline-update.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "A real waiting build installs, preserves the saved model, and reloads atomically",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "fcfbb1870d6e6a71df72-eac35500bf66e9e5202f",
+          "file": "e2e/offline-update.spec.js",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/orientation.spec.js",
+      "file": "e2e/orientation.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "3D exposes Y direction and reference grid; orbit updates compass without model changes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611",
+          "file": "e2e/orientation.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/portal-templates.spec.js",
+      "file": "e2e/portal-templates.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M05 portal templates: save dimensions and reuse on a new portal",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c387960dd45576c6ce08-b1675860f1ddfa851ea5",
+          "file": "e2e/portal-templates.spec.js",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/portal.spec.js",
+      "file": "e2e/portal.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 portal: setup, sway, edit coordinates, undo, draw, reject, save and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "ac99bdd4c8a1ab9b01d7-640c0bf91e3d79602394",
+          "file": "e2e/portal.spec.js",
+          "line": 20,
+          "column": 1
+        },
+        {
+          "title": "M01 drawing Escape does not mutate and compact controls do not overflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "ac99bdd4c8a1ab9b01d7-c4e781ecbc563940a245",
+          "file": "e2e/portal.spec.js",
+          "line": 146,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/prescribed.spec.js",
+      "file": "e2e/prescribed.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M02 prescribed: B09 analyse, edit settlement, reject free-DOF prescription",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8cc5e36bb218a25ef27d-1a315ff9c08bc8fd3255",
+          "file": "e2e/prescribed.spec.js",
+          "line": 36,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/recovery.spec.js",
+      "file": "e2e/recovery.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M04 recovery: restore committed revision; refuse while form dirty",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "dcce2ecfc44e33f0ace4-507c984100505474c66c",
+          "file": "e2e/recovery.spec.js",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/reliability.spec.js",
+      "file": "e2e/reliability.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M04 reliability matrix",
+          "file": "e2e/reliability.spec.js",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "corrupt latest snapshot recovers verified history revision",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "848db213a9975958428b-7d1334f48b140ef6f315",
+              "file": "e2e/reliability.spec.js",
+              "line": 12,
+              "column": 3
+            },
+            {
+              "title": "model Worker crash restores last confirmed in-memory model",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "848db213a9975958428b-ef60a70f6505bce9282b",
+              "file": "e2e/reliability.spec.js",
+              "line": 89,
+              "column": 1
+            },
+            {
+              "title": "persistence denied warns without blocking export",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "848db213a9975958428b-c8625b5e55d84d7c6759",
+              "file": "e2e/reliability.spec.js",
+              "line": 127,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "e2e/residential-reference.spec.js",
+      "file": "e2e/residential-reference.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "UK residential reference: actual WASM analysis, hierarchy, model-sourced footing review and stale edits",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "95aee54bf55f36f42132-74f53f3afbf0ed3a9eda",
+          "file": "e2e/residential-reference.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/result-picker.spec.js",
+      "file": "e2e/result-picker.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Grouped results expose all six actions and retain component across analysis",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6839f378fef507f4e766-361eecee7b9475cecec6",
+          "file": "e2e/result-picker.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/robustness.spec.js",
+      "file": "e2e/robustness.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "storage quota failure is explicit and downloads survive",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f977963720ef671db443-4aa2e7d89bb49acc9420",
+          "file": "e2e/robustness.spec.js",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "single writer lock protects the second tab",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f977963720ef671db443-117b83fc6ce3e45694c6",
+          "file": "e2e/robustness.spec.js",
+          "line": 27,
+          "column": 1
+        },
+        {
+          "title": "GPU device destruction recovers model and current result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f977963720ef671db443-ef0c5f9677c540eab881",
+          "file": "e2e/robustness.spec.js",
+          "line": 46,
+          "column": 1
+        },
+        {
+          "title": "unknown engineering fields rejected atomically",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f977963720ef671db443-956dd18f967d863832ec",
+          "file": "e2e/robustness.spec.js",
+          "line": 77,
+          "column": 1
+        },
+        {
+          "title": "cancel terminates a blocked Worker and restores the model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f977963720ef671db443-d8eb96ff8ab2b4d486e9",
+          "file": "e2e/robustness.spec.js",
+          "line": 90,
+          "column": 1
+        },
+        {
+          "title": "M03 dual Workers: edit during blocked analysis never marks stale solve Current",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f977963720ef671db443-d9f1f7acb8a6917070e8",
+          "file": "e2e/robustness.spec.js",
+          "line": 115,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/scenarios.spec.js",
+      "file": "e2e/scenarios.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M02 scenarios: B11 combination factors tip load and reaction",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "44a49f2122548fb1e331-09a4a28ea187dcdfea19",
+          "file": "e2e/scenarios.spec.js",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "M02 scenarios: dead/live/wind cases, strength combination and envelope provenance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "44a49f2122548fb1e331-cd9fa5c58a1e790fb0ac",
+          "file": "e2e/scenarios.spec.js",
+          "line": 79,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/section-axis.spec.js",
+      "file": "e2e/section-axis.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M03 section-axis: edit localY roll swaps My/Mz end actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "2755c1b82590d4747dc5-0bf76314a24920b79141",
+          "file": "e2e/section-axis.spec.js",
+          "line": 32,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/section-calculator.spec.js",
+      "file": "e2e/section-calculator.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M05 section calculator: rectangle stiffens tip deflection and clears stale result",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "d126287dae41bcaa2ddd-569e986408f52b542b93",
+          "file": "e2e/section-calculator.spec.js",
+          "line": 33,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/self-weight.spec.js",
+      "file": "e2e/self-weight.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M02 self-weight: B10 analyse, duplicate rejected, case delete keeps combinations valid",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "de6ff6ae0581f3cfb82a-79dfe475699d5877f34b",
+          "file": "e2e/self-weight.spec.js",
+          "line": 29,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/shear-diagrams.spec.js",
+      "file": "e2e/shear-diagrams.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas exposes signed Vy and Vz, units, stale protection and retained selection after solving",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "49c57edd978718691409-095afe3f7a405796f6d4",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 18,
+          "column": 1
+        },
+        {
+          "title": "Uniform-load shear shows both signs and the unused component reports zero",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "49c57edd978718691409-8b8cfac157c2240dfffd",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 60,
+          "column": 1
+        },
+        {
+          "title": "Member forces table exposes signed shear at every station and exports it",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "49c57edd978718691409-5623b6099fa2260e2e2d",
+          "file": "e2e/shear-diagrams.spec.js",
+          "line": 84,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/spatial-crossings.spec.js",
+      "file": "e2e/spatial-crossings.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Crossing diagnostics distinguish spatial separation from disconnected intersections",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "cdf8dafe1aff9f526a37-c540f5f9e52e8abdac61",
+          "file": "e2e/spatial-crossings.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/stair-outlines.spec.js",
+      "file": "e2e/stair-outlines.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Residential stair widths remain visible in analytical view without changing the model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "381da4576e33fe6a1198-25e112b7ac3200197989",
+          "file": "e2e/stair-outlines.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/steel-check.spec.js",
+      "file": "e2e/steel-check.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "standalone S2-D1 steel check passes via evaluateDesign UI",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "a7f9f3524b22b69adcb5-1dca2bea07b81ea19dd6",
+          "file": "e2e/steel-check.spec.js",
+          "line": 43,
+          "column": 1
+        },
+        {
+          "title": "complete-member matrix: ≥3 pass and ≥3 fail seeds",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "a7f9f3524b22b69adcb5-c638569669ad407ff935",
+          "file": "e2e/steel-check.spec.js",
+          "line": 69,
+          "column": 1
+        },
+        {
+          "title": "steel check remains usable in a narrow viewport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "a7f9f3524b22b69adcb5-c9bf9f5cf31ff145116a",
+          "file": "e2e/steel-check.spec.js",
+          "line": 124,
+          "column": 1
+        },
+        {
+          "title": "standalone S2-D1 fail seed reports overall fail",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "a7f9f3524b22b69adcb5-18af81555ad0276b7d5e",
+          "file": "e2e/steel-check.spec.js",
+          "line": 142,
+          "column": 1
+        },
+        {
+          "title": "model-derived demand check lands in calculation report clause trail",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "a7f9f3524b22b69adcb5-6bcb428e1c111d79d80d",
+          "file": "e2e/steel-check.spec.js",
+          "line": 166,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/steel-overview.spec.js",
+      "file": "e2e/steel-overview.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M07-G overview: complete membership, exact records, row selection, stale and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "d1d132082be72e05a264-1237372f1a0021d7ddee",
+          "file": "e2e/steel-overview.spec.js",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/steel-study.spec.js",
+      "file": "e2e/steel-study.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M07-G catalogue study reanalyses self weight, applies explicitly and undoes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "7602e46d3497f565d19a-37541ed2eb843307a3a2",
+          "file": "e2e/steel-study.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/steel-task-journey.spec.js",
+      "file": "e2e/steel-task-journey.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Steel task: find failure, compare, apply, reanalyse, review colours and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "67d64286c01bd5465a1a-a97bf8dc22b3d19b98a4",
+          "file": "e2e/steel-task-journey.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/stress-screen.spec.js",
+      "file": "e2e/stress-screen.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M06 stress screen: B02 shows elastic fibre stresses with disclaimer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "7ef7cc985fc0cd9281c5-f26b24f1bb8187a90939",
+          "file": "e2e/stress-screen.spec.js",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/structure-model.spec.js",
+      "file": "e2e/structure-model.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Authored structure survives save, undo, topology and reopen; invalid bindings fail closed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "163e77e9070fbde82038-1cdbaa8a0f562a0d33c2",
+          "file": "e2e/structure-model.spec.js",
+          "line": 9,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/study.spec.js",
+      "file": "e2e/study.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M22-B: load study JSON, compare variants, download report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "74237f2aac40f7d8f078-e768f7cad5b514d6795d",
+          "file": "e2e/study.spec.js",
+          "line": 7,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/support-symbols.spec.js",
+      "file": "e2e/support-symbols.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Support symbols track restraints, orientation, property edits and undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-50bb9196b001f540d601",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "Support labels toggle independently without invalidating analysis",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-2d7f94d02a232699261f",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 59,
+          "column": 1
+        },
+        {
+          "title": "Member label Auto, Show all and Hide are independent of support labels",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-68742f451c9fe5f703a9",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 97,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/topology.spec.js",
+      "file": "e2e/topology.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "d4c439445d305c34d2f8-58136303081eb6ca83e8",
+          "file": "e2e/topology.spec.js",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "M01 topology: crossing stays disconnected, connect and merge are previewed and atomic",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "d4c439445d305c34d2f8-08daf682ecb9c44b7c19",
+          "file": "e2e/topology.spec.js",
+          "line": 133,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/variants.spec.js",
+      "file": "e2e/variants.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M05 variants: duplicate, stiffen, compare retains both hashes and reports",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "277222f177e24aca208e-3aa36409c15a1ff60bc3",
+          "file": "e2e/variants.spec.js",
+          "line": 27,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/warehouse.spec.js",
+      "file": "e2e/warehouse.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Warehouse example opens in 3D and solves spatial gravity and lateral loads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "718243a0c92837cd20a2-9d86d409646115c6f38f",
+          "file": "e2e/warehouse.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/workbench.spec.js",
+      "file": "e2e/workbench.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M00-tour: edit, solve, stale, select, export, reopen, instability",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b31ec34b4df6c1b8b94b-f4c1b67d1ca7b7010add",
+          "file": "e2e/workbench.spec.js",
+          "line": 14,
+          "column": 1
+        },
+        {
+          "title": "GPU unavailable retains analysis and exports",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b31ec34b4df6c1b8b94b-76448ee4d188eb143dbd",
+          "file": "e2e/workbench.spec.js",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "invalid import preserves current model and results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b31ec34b4df6c1b8b94b-2c74c8784aac93559b37",
+          "file": "e2e/workbench.spec.js",
+          "line": 129,
+          "column": 1
+        },
+        {
+          "title": "undo restores model hash and redo re-applies edit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b31ec34b4df6c1b8b94b-abe9c3aa6dbe4133853f",
+          "file": "e2e/workbench.spec.js",
+          "line": 148,
+          "column": 1
+        },
+        {
+          "title": "narrow screen retains tables and portable export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b31ec34b4df6c1b8b94b-08140615f557daade9d6",
+          "file": "e2e/workbench.spec.js",
+          "line": 162,
+          "column": 1
+        },
+        {
+          "title": "unit-suffixed inputs are converted by Rust; incompatible units preserve model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "b31ec34b4df6c1b8b94b-fffecf2de0b0281e4353",
+          "file": "e2e/workbench.spec.js",
+          "line": 184,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/workspace-ux.spec.js",
+      "file": "e2e/workspace-ux.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "UX ribbon, keyboard context menu and property drafts preserve model state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-83e65a7ad3f2b6c886e2",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "UX responsive panel navigation retains editable properties and results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8b9f3f45fd514780ef29-e44db34fb2e098f39f25",
+          "file": "e2e/workspace-ux.spec.js",
+          "line": 39,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "marketing.spec.js",
+      "file": "marketing.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "marketing page presents the product and launches the workbench",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "ee2db27c83a0a6c8b4d6-29004cdc7765d8a33aef",
+          "file": "marketing.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "performance-cad.spec.js",
+      "file": "performance-cad.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 CAD capacity: 1000-member editing, 10000-member import picking orbit and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "10c540ae4ae910fd101e-33815042c97838e1f8c3",
+          "file": "performance-cad.spec.js",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "performance.spec.js",
+      "file": "performance.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "local warm startup and repeated cantilever solve baseline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "0395ec5c307b4a8c0388-c353a7c5e213ed9996bc",
+          "file": "performance.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "startup.spec.js",
+      "file": "startup.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 startup: cached controls and viewport, cold network and compressed payload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "9e7331b9882a41abd01a-48a8728a55c29e86a142",
+          "file": "startup.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "visual/graphics.spec.js",
+      "file": "visual/graphics.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "GPU ID attachment agrees with authoritative CPU ray; zoom/resize preserve engineering hash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "e5e117cc67153d047ad8-6c782177619b7436369d",
+          "file": "visual/graphics.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "visual/m01-graphics.spec.js",
+      "file": "visual/m01-graphics.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 graphics: DPR 1, far-origin rebase, near-coincident warning, resize and clipping",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "472221e2415d7a30649b-bdaff5c7cdfd94292a12",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "M01 graphics: DPR 2, far-origin rebase, near-coincident warning, resize and clipping",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "472221e2415d7a30649b-ec00560d8221aca9b0fb",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "M01 graphics: depth occlusion and changing camera during asynchronous selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "472221e2415d7a30649b-cc9f6d92a3ce18b4d125",
+          "file": "visual/m01-graphics.spec.js",
+          "line": 63,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-26T21:25:43.239Z",
+    "duration": 899.481,
+    "expected": 0,
+    "skipped": 111,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

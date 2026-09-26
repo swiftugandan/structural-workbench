@@ -1,0 +1,55 @@
+{
+  "taskId": "M00-A",
+  "milestone": "M00",
+  "sourceHash": "4161152091526b4c0ce8c3af6a74a6d267b3bb5abbfa5856d5d136e74e246db0",
+  "buildHash": "73faf025fc1480cf997c8ad9f866f20c9ed561fe009c3c71ef3ed297ee7c1776",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "hash-compatibility.mjs": "f414f6f9cce23b09a5d72bf585ba8a82e71eab0f20de8ab431dcdce2e992f37a",
+    "engineering-hash-baseline.json": "c6da867b694ea3a134a55ac0c39c9947b3e70e7a3f600f104a4e8050157a4033"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T22:32:02.235Z",
+  "status": "PASS",
+  "testCount": 18,
+  "testIds": [
+    "B01.json",
+    "B02.json",
+    "B03.json",
+    "B04.json",
+    "B05.json",
+    "B06.json",
+    "B07.json",
+    "B08.json",
+    "B09.json",
+    "B10.json",
+    "B11.json",
+    "LEGACY09-B02.json",
+    "P01.json",
+    "R01.json",
+    "S01.json",
+    "S02.json",
+    "V01.json",
+    "W01.json"
+  ],
+  "command": [
+    "node",
+    "evidence/revalidation/release-current/hash-compatibility.mjs"
+  ],
+  "artifacts": [
+    "hash-compatibility.mjs",
+    "engineering-hash-baseline.json"
+  ],
+  "baselineBuildHash": "032731917f71ec476aba083a85671f6ea2e203053311615d64a4ecd93dea5ef0"
+}
