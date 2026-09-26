@@ -190,8 +190,12 @@
               ><button id="view-elevation" class="active">Elevation</button
               ><button id="view-3d">3D</button>
             </div>
-            <button id="model-solids" aria-pressed="false">Solid model</button
-            ><button id="model-loads" aria-pressed="true">Loads</button
+            <div class="model-display" role="group" aria-label="Model display">
+              <span>Display</span>
+              <button id="model-lines" aria-pressed="true" title="Show analytical lines">Lines</button>
+              <button id="model-solids" aria-pressed="false" title="Show elements with their physical dimensions">Solid</button>
+            </div>
+            <button id="model-loads" aria-pressed="true">Loads</button
             ><button id="model-crossings" aria-pressed="true">Crossings</button>
             <button
               id="support-labels"

@@ -22,7 +22,10 @@ test("Residential stair widths remain visible in analytical view without changin
     "0",
   );
   const hash = await page.locator("#hash-status").textContent();
-  await page.locator("#model-solids").click();
+  await page.locator("#model-lines").click();
+  await expect(page.locator("#model-lines")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#model-solids")).toHaveAttribute("aria-pressed", "false");
+  await page.locator("#model-lines").click();
   if ((await page.locator("#view-options").getAttribute("open")) === null)
     await page.locator("#view-options > summary").click();
   await page.locator("#support-labels").click();
@@ -41,6 +44,9 @@ test("Residential stair widths remain visible in analytical view without changin
   await mkdir(evidenceDir(), { recursive: true });
   await page.screenshot({ path: `${evidenceDir()}/analytical-stairs.png` });
   await page.locator("#model-solids").click();
+  await page.locator("#model-solids").click();
+  await expect(page.locator("#model-lines")).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator("#model-solids")).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-stair-outlines",
     "0",

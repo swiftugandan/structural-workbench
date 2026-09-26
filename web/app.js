@@ -1083,7 +1083,6 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
       "design-workspace",
       ["steel", "concrete"].includes(kind),
     );
-    viewport.solidDesign = ["steel", "concrete"].includes(kind);
     if (kind !== "concrete") {
       concrete.hide();
       if (selectionContext?.kind === "preview") selectionContext = null;
@@ -2207,12 +2206,15 @@ gateway.ready.catch((e) =>
   modal("Kernel unavailable", `<p>${esc(e.message)}</p>`),
 );
 
-$("#model-solids").onclick = () => {
-  viewport.modelSolids = !viewport.modelSolids;
+function setModelDisplay(solid) {
+  viewport.modelSolids = solid;
   viewport.visibilityRevision = (viewport.visibilityRevision || 0) + 1;
-  $("#model-solids").setAttribute("aria-pressed", String(viewport.modelSolids));
+  $("#model-solids").setAttribute("aria-pressed", String(solid));
+  $("#model-lines").setAttribute("aria-pressed", String(!solid));
   viewport.draw();
-};
+}
+$("#model-solids").onclick = () => setModelDisplay(true);
+$("#model-lines").onclick = () => setModelDisplay(false);
 $("#model-assumptions").onclick = () =>
   modal(
     "Model assumptions",

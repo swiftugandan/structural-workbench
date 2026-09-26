@@ -91,9 +91,6 @@ export function modelVisibility({ viewport, getProject, canChange, onChange }) {
     viewport.draw();
   };
   menus.lastElementChild.append(nodeToggle);
-  $("#model-solids").textContent = "Physical envelopes";
-  $("#model-solids").title =
-    "Physical section envelopes or analytical centrelines; engineering model unchanged";
   // A side elevation is essential for return stairs; the renderer already supports it.
   const side = document.createElement("button");
   side.id = "view-side";

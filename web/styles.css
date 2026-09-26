@@ -3790,6 +3790,31 @@ body.design-workspace {
 }
 
 /* REVIEW-03: scoped model inspection in the existing four-panel shell. */
+.model-display {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+.model-display > span {
+  margin-right: 7px;
+  color: var(--muted);
+}
+.model-display > button {
+  border-radius: 0;
+}
+.model-display > button:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+.model-display > button:last-child {
+  margin-left: -1px;
+  border-radius: 0 4px 4px 0;
+}
+.model-display > button[aria-pressed="true"] {
+  background: #eaf1ff;
+  border-color: #afc5e7;
+  color: #174e9f;
+  position: relative;
+}
 .model-view-scope {
   display: flex;
   flex-wrap: wrap;
