@@ -78,6 +78,10 @@ if (process.argv[1]?.endsWith("/build.mjs")) {
   );
   await cp("web", "dist", { recursive: true });
   await cp("fixtures/models", "dist/examples", { recursive: true });
+  await writeFile(
+    "dist/examples/UKR01.json",
+    execFileSync("target/release/workbench-cli", ["reference-residential"]),
+  );
   await cp("capabilities.json", "dist/capabilities.json");
   for (const name of ["project", "request", "response"]) {
     const schema = JSON.parse(await readFile(`contracts/${name}.schema.json`));

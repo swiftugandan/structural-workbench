@@ -9,8 +9,38 @@ use workbench_model::{Project, Result, err};
 fn main() {
     let args: Vec<_> = env::args().collect();
     let code = match args.get(1).map(String::as_str) {
+        Some("reference-residential") => match workbench_model::residential_reference() {
+            Ok(p) => {
+                println!("{}", serde_json::to_string_pretty(&p).unwrap());
+                0
+            }
+            Err(e) => {
+                eprintln!("{e:?}");
+                1
+            }
+        },
+        Some("residential-review") => {
+            let result = args
+                .get(2)
+                .ok_or_else(|| err("INVALID_SCHEMA", "project path required"))
+                .and_then(|path| {
+                    fs::read_to_string(path).map_err(|e| err("INVALID_SCHEMA", e.to_string()))
+                })
+                .and_then(|s| Project::parse(&s))
+                .and_then(|p| workbench_assembly::residential_review(&p));
+            match result {
+                Ok(v) => {
+                    println!("{}", serde_json::to_string_pretty(&v).unwrap());
+                    0
+                }
+                Err(e) => {
+                    eprintln!("{e:?}");
+                    1
+                }
+            }
+        }
         Some("study") => run_study(args.get(2).map(String::as_str)),
-        Some(path) if !path.starts_with('-') && args.get(2).map(|s| s.as_str()) != Some("study") => {
+        Some(path) if !path.starts_with('-') => {
             run_analyse(path, args.get(2).map(String::as_str).unwrap_or("LC1"))
         }
         _ => {
@@ -58,18 +88,10 @@ fn run_study(path: Option<&str>) -> i32 {
 }
 
 fn execute_study_file(study_path: &Path) -> Result<Value> {
-    let study_text = fs::read_to_string(study_path).map_err(|e| {
-        err(
-            "INVALID_SCHEMA",
-            &format!("Unable to read study: {e}"),
-        )
-    })?;
-    let study: Value = serde_json::from_str(&study_text).map_err(|e| {
-        err(
-            "INVALID_SCHEMA",
-            &format!("Study JSON parse failed: {e}"),
-        )
-    })?;
+    let study_text = fs::read_to_string(study_path)
+        .map_err(|e| err("INVALID_SCHEMA", &format!("Unable to read study: {e}")))?;
+    let study: Value = serde_json::from_str(&study_text)
+        .map_err(|e| err("INVALID_SCHEMA", &format!("Study JSON parse failed: {e}")))?;
     let base_rel = study["baseProject"]
         .as_str()
         .ok_or_else(|| err("INVALID_SCHEMA", "baseProject required"))?;

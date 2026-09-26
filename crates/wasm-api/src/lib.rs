@@ -255,7 +255,7 @@ impl Kernel {
                         let a = positions[m.start.as_str()];
                         let b = positions[m.end.as_str()];
                         let (length, axes) = workbench_geometry::axes(a, b, m.local_y);
-                        json!({"id":m.id,"origin":std::array::from_fn::<_,3,_>(|i| (a[i]+b[i])*0.5),"length":length,"axes":axes})
+                        json!({"id":m.id,"origin":std::array::from_fn::<_,3,_>(|i| (a[i]+b[i])*0.5),"length":length,"axes":axes,"treads":stair_treads(p,m,a,b,axes)})
                     }).collect();
                     let mut nodes: Vec<_> = p.nodes.iter().collect();
                     nodes.sort_by(|a, b| a.position[0].total_cmp(&b.position[0]));
@@ -716,4 +716,57 @@ fn capabilities_payload() -> Value {
             "Elastic stress screen is mechanics-v1 only — not stability or building-code checks"
         ]
     })
+}
+
+// Display-only wedges; analysis includes the reference step weight as an explicit load.
+fn stair_treads(
+    p: &Project,
+    m: &workbench_model::Member,
+    a: [f64; 3],
+    b: [f64; 3],
+    axes: [[f64; 3]; 3],
+) -> Vec<Vec<[f64; 3]>> {
+    let Some(count) = p
+        .structure
+        .physical_members
+        .iter()
+        .find(|x| x.analytical_member_ids.contains(&m.id))
+        .and_then(|x| x.stair_risers)
+    else {
+        return vec![];
+    };
+    if b[2] <= a[2] {
+        return vec![];
+    }
+    let section = p.sections.iter().find(|s| s.id == m.section).unwrap();
+    let top = if axes[2][2] >= 0. {
+        section.cz
+    } else {
+        -section.cz
+    };
+    let at = |t: f64, side: f64| {
+        std::array::from_fn::<_, 3, _>(|i| {
+            a[i] + t * (b[i] - a[i]) + side * section.cy * axes[1][i] + top * axes[2][i]
+        })
+    };
+    let mut faces = vec![];
+    for i in 0..count {
+        let t = i as f64 / count as f64;
+        let u = (i + 1) as f64 / count as f64;
+        let mut l = at(t, -1.);
+        let mut r = at(t, 1.);
+        let bl = l;
+        let br = r;
+        let e = at(u, -1.);
+        let f = at(u, 1.);
+        l[2] = e[2];
+        r[2] = f[2];
+        faces.extend([
+            vec![l, r, f, e],
+            vec![bl, br, r, l],
+            vec![bl, l, e, e],
+            vec![br, f, r, r],
+        ]);
+    }
+    faces
 }

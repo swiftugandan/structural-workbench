@@ -182,6 +182,26 @@ export function sceneGeometry(
       text: `${l.toFixed(2)} × ${w.toFixed(2)} m · ${t * 1000} mm`,
     });
   }
+  // A bound footing is located at its actual support; its top is the support plane.
+  if (draft.kind === "padFooting" && draft.targetId) {
+    const support = project.supports.find((s) => s.id === draft.targetId);
+    const node = project.nodes.find((n) => n.id === support?.node);
+    if (node) {
+      const place = (p) =>
+        p.map(
+          (v, i) =>
+            v + node.position[i] - (i === 2 ? draft.inputs.thickness : 0),
+        );
+      for (const f of faces) f.points = f.points.map(place);
+      for (let i = 0; i < edges.length; i++) edges[i] = edges[i].map(place);
+      for (const b of bars) {
+        b.a = place(b.a);
+        b.b = place(b.b);
+      }
+      for (const l of labels) l.point = place(l.point);
+      for (let i = 0; i < bounds.length; i++) bounds[i] = place(bounds[i]);
+    }
+  }
   return {
     faces: mode === "reinforcement" ? [] : faces,
     edges,

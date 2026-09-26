@@ -538,11 +538,23 @@ async function example(id, name) {
   p.id = "p" + crypto.randomUUID().replaceAll("-", "");
   p.name = name;
   await open(p);
-  if (id === "W01") $("#view-3d").click();
+  if (["W01", "UKR01"].includes(id)) $("#view-3d").click();
+  if (id === "UKR01") {
+    if (!viewport.modelSolids) $("#model-solids").click();
+    if (viewport.showLoads !== false) $("#model-loads").click();
+    if (viewport.showCrossings !== false) $("#model-crossings").click();
+    $("#result-case").value = "SLS";
+    $("#result-case").dispatchEvent(new Event("change"));
+  }
 }
 $("#new-project").onclick = () => example("B02", "Untitled cantilever");
 $("#worked-examples").onclick = () => {
   const examples = [
+    [
+      "UKR01",
+      "UK residential · four storeys",
+      "12 × 12 m · concrete slabs + stairs + 12 pads · preliminary strip/frame model",
+    ],
     [
       "W01",
       "3D warehouse frame",
@@ -2056,3 +2068,29 @@ window.__workbenchTest = {
 gateway.ready.catch((e) =>
   modal("Kernel unavailable", `<p>${esc(e.message)}</p>`),
 );
+
+$("#model-solids").onclick = () => {
+  viewport.modelSolids = !viewport.modelSolids;
+  $("#model-solids").setAttribute("aria-pressed", String(viewport.modelSolids));
+  viewport.draw();
+};
+$("#model-assumptions").onclick = () =>
+  modal(
+    "Model assumptions",
+    `<p>${esc(project.metadata.description || "No assumptions recorded.")}</p><p>Solid shapes show assigned dimensions. Concrete resistance and ground contact require separate verified design checks.</p>`,
+  );
+
+$("#model-loads").onclick = () => {
+  viewport.showLoads = viewport.showLoads === false;
+  $("#model-loads").setAttribute("aria-pressed", String(viewport.showLoads));
+  viewport.draw();
+};
+$("#model-crossings").onclick = () => {
+  viewport.showCrossings = viewport.showCrossings === false;
+  $("#model-crossings").setAttribute(
+    "aria-pressed",
+    String(viewport.showCrossings),
+  );
+  $("#geometry-status").hidden = !viewport.showCrossings;
+  viewport.draw();
+};

@@ -204,7 +204,10 @@
                   "unassigned",
                   "beam",
                   "column",
-                  "brace"
+                  "brace",
+                  "slab",
+                  "stair",
+                  "landing"
                 ]
               },
               "storeyId": {
@@ -226,6 +229,11 @@
                   "type": "string",
                   "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
                 }
+              },
+              "stairRisers": {
+                "type": "integer",
+                "minimum": 2,
+                "maximum": 30
               }
             }
           }

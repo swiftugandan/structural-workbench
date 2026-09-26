@@ -46,7 +46,15 @@ export function renderExplorer(
       const members = structure.physicalMembers.filter(
         (m) => m.storeyId === level.id,
       );
-      const body = ["beam", "column", "brace", "unassigned"]
+      const body = [
+        "beam",
+        "column",
+        "slab",
+        "stair",
+        "landing",
+        "brace",
+        "unassigned",
+      ]
         .map((role) => {
           const items = members
             .filter((m) => m.role === role)
@@ -58,6 +66,9 @@ export function renderExplorer(
                 `storey:${level.id}:${role}`,
                 {
                   beam: "Beams",
+                  slab: "Slab panels",
+                  stair: "Stair flights",
+                  landing: "Landings",
                   column: "Columns",
                   brace: "Braces",
                   unassigned: "Unassigned role",
@@ -65,11 +76,17 @@ export function renderExplorer(
                 items
                   .map(
                     (m) =>
-                      `<div class="physical-object">${domainLeaf("physicalMembers", m)}${renderMemberNav(
-                        project.members.filter((a) =>
-                          m.analyticalMemberIds.includes(a.id),
+                      `<div class="physical-object">${domainLeaf("physicalMembers", m)}${branch(
+                        `analytical:${m.id}`,
+                        "Analytical members",
+                        renderMemberNav(
+                          project.members.filter((a) =>
+                            m.analyticalMemberIds.includes(a.id),
+                          ),
+                          { selected, label, esc },
                         ),
-                        { selected, label, esc },
+                        m.analyticalMemberIds.length,
+                        m.analyticalMemberIds.includes(selected),
                       )}</div>`,
                   )
                   .join(""),

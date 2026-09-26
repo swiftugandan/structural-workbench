@@ -479,7 +479,10 @@ export class Viewport {
       entityIndex = i + 1;
       const a = points.get(m.start),
         b = points.get(m.end);
-      if (this.solidDesign && this.axesProject === this.project) {
+      if (
+        (this.solidDesign || this.modelSolids) &&
+        this.axesProject === this.project
+      ) {
         const frame = this.localAxes?.find((f) => f.id === m.id),
           section = this.project.sections.find((s) => s.id === m.section);
         const shape = this.designCatalogue?.shapes.find(
@@ -487,6 +490,12 @@ export class Viewport {
             m.steelDesign?.sectionRef ===
             `${this.designCatalogue.id}:${s.designation}`,
         );
+        for (const face of frame?.treads || []) {
+          const ps = face.map((p) => this.projectPoint(p));
+          triangle(ps[0], ps[1], ps[2], [0.74, 0.77, 0.79, 1]);
+          triangle(ps[0], ps[2], ps[3], [0.74, 0.77, 0.79, 1]);
+          line(ps[0], ps[1], 1, [0.35, 0.39, 0.43, 1]);
+        }
         drawMemberSurface(
           m,
           section,
@@ -634,15 +643,19 @@ export class Viewport {
         p,
         this.selection.has(n.id)
           ? 6
-          : this.mode === "3d" && this.solidDesign
+          : this.mode === "3d" && (this.solidDesign || this.modelSolids)
             ? 2
             : 4.5,
         this.selection.has(n.id) ? blue : ink,
       );
-      if (!(this.mode === "3d" && this.solidDesign) || this.selection.has(n.id))
+      if (
+        !(this.mode === "3d" && (this.solidDesign || this.modelSolids)) ||
+        this.selection.has(n.id)
+      )
         dot(p, 2.3, [1, 1, 1, 1]);
       if (
-        (nodes.length <= 100 && !(this.mode === "3d" && this.solidDesign)) ||
+        (nodes.length <= 100 &&
+          !(this.mode === "3d" && (this.solidDesign || this.modelSolids))) ||
         this.selection.has(n.id) ||
         this.hovered === n.id
       )
@@ -811,7 +824,7 @@ export class Viewport {
         );
       return start;
     };
-    for (const load of this.project.loads) {
+    for (const load of this.showLoads === false ? [] : this.project.loads) {
       if (load.type === "nodal") {
         const node = nodes.find((n) => n.id === load.node);
         if (!node) continue;
@@ -998,7 +1011,7 @@ export class Viewport {
         "snap-label",
       );
     }
-    if (this.crossingData) {
+    if (this.crossingData && this.showCrossings !== false) {
       for (const crossing of this.crossingData.crossings) {
         const [x, y] = crossing.point;
         if (x < 0 || x > w || y < 0 || y > h) continue;
@@ -1014,6 +1027,23 @@ export class Viewport {
       );
     }
     this.onViewChanged?.();
+    if (this.mode === "3d" && (this.solidDesign || this.modelSolids)) {
+      for (const d of this.project.designPreviews || []) {
+        if (d.kind !== "padFooting" || !d.targetId) continue;
+        const support = this.project.supports.find((s) => s.id === d.targetId);
+        const base = this.project.nodes.find(
+          (n) => n.id === support?.node,
+        )?.position;
+        if (!base) continue;
+        const scene = sceneGeometry(d, this.project, "concrete");
+        drawScene(
+          { ...scene, labels: [] },
+          (p) => this.projectPoint(p),
+          triangle,
+          line,
+        );
+      }
+    }
     if (designScene) {
       // Dedicated object focus uses the existing WebGPU pipeline and camera.
       if (!this.designPreview.context) vertices.length = 0;

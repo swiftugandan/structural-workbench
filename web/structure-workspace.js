@@ -41,7 +41,7 @@ export function renderStructureEditor({
   if ("storeyId" in entity)
     fields += `<label>Storey<select name="storeyId"><option value="">Unassigned</option>${project.structure.storeys.map((x) => `<option value="${esc(x.id)}" ${x.id === entity.storeyId ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select></label>`;
   if (collection === "physicalMembers")
-    fields += `<label>Structural role<select name="role">${["unassigned", "beam", "column", "brace"].map((x) => `<option ${x === entity.role ? "selected" : ""}>${x}</option>`).join("")}</select></label><p>Analytical members: ${entity.analyticalMemberIds.map(esc).join(", ")}</p><p class="form-help">Role records design intent. It does not change the analytical formulation.</p>`;
+    fields += `<label>Structural role<select name="role">${["unassigned", "beam", "column", "brace", "slab", "stair", "landing"].map((x) => `<option ${x === entity.role ? "selected" : ""}>${x}</option>`).join("")}</select></label><p>Analytical members: ${entity.analyticalMemberIds.map(esc).join(", ")}</p><p class="form-help">Role records design intent. It does not change the analytical formulation.</p>`;
   if (collection === "grids") {
     for (const end of ["start", "end"])
       for (let i = 0; i < 3; i++)
@@ -87,7 +87,10 @@ export function renderStructureEditor({
     const data = new FormData(form);
     entity.name = data.get("name");
     if ("storeyId" in entity) entity.storeyId = data.get("storeyId") || null;
-    if ("role" in entity) entity.role = data.get("role");
+    if ("role" in entity) {
+      entity.role = data.get("role");
+      if (entity.role !== "stair") delete entity.stairRisers;
+    }
     if (collection === "storeys") entity.elevation = data.get("elevation");
     if (collection === "grids")
       for (const end of ["start", "end"])

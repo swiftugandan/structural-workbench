@@ -112,6 +112,7 @@ pub fn reconcile(v: &mut Value, _old: &Project) -> Result<()> {
             id: structure_id("pm", &m.id),
             name: m.id.clone(),
             role: "unassigned".into(),
+            stair_risers: None,
             storey_id: None,
             analytical_member_ids: vec![m.id.clone()],
         });

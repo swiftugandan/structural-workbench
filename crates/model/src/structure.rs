@@ -27,6 +27,8 @@ pub struct PhysicalMember {
     pub id: String,
     pub name: String,
     pub role: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stair_risers: Option<u32>,
     pub storey_id: Option<String>,
     pub analytical_member_ids: Vec<String>,
 }
@@ -98,6 +100,7 @@ impl Structure {
                 id: structure_id("pm", &root),
                 name: root,
                 role: "unassigned".into(),
+                stair_risers: None,
                 storey_id: None,
                 analytical_member_ids: ids,
             });
@@ -290,12 +293,29 @@ impl Structure {
         for x in &self.physical_members {
             check(&x.id, &x.name)?;
             level(&x.storey_id)?;
-            if !["unassigned", "beam", "column", "brace"].contains(&x.role.as_str())
+            if ![
+                "unassigned",
+                "beam",
+                "column",
+                "brace",
+                "slab",
+                "stair",
+                "landing",
+            ]
+            .contains(&x.role.as_str())
                 || x.analytical_member_ids.is_empty()
             {
                 return Err(err(
                     "INVALID_SCHEMA",
                     "Physical member needs valid role and analytical members",
+                ));
+            }
+            if x.stair_risers.is_some_and(|n| {
+                !(2..=30).contains(&n) || x.role != "stair" || x.analytical_member_ids.len() != 1
+            }) {
+                return Err(err(
+                    "UNSUPPORTED_FEATURE",
+                    "Stair tread display needs one flight with 2 to 30 risers; clear tread metadata before splitting or reclassifying",
                 ));
             }
             for id in &x.analytical_member_ids {
