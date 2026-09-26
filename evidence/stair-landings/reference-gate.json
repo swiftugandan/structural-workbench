@@ -1,0 +1,76 @@
+{
+  "taskId": "UKR01-LANDINGS",
+  "milestone": "reference",
+  "sourceHash": "802a6ea4d5c4c9620e05a2712ea9929bf6e7326b3f57fc4bada9ed139784d7b4",
+  "buildHash": "c0012b5fc75712da60552daf122cad362bce2f0e00606179b925115d9d24caef",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "build.json": "27d80e36ed478f32eef8d3eb6404bcb424a68f15f2daa2007365f793a024b185",
+    "native-tests.log": "a492781dd916a722a231c5f0f8bbae0bb705b1f474194591181680015500cd34",
+    "contracts.log": "15e9fa8acbf909c8ae3bc56dc86e0acf783629d7a59372ae1d2771cf28cdd3dc",
+    "browser.log": "19a11a1e24f2234ba24b7eedde48f3d44ff8fa1d9b8e881443966b759ee4b0c7",
+    "reference-numerical.json": "65374af2b6b769def30cdc980ccfa82e4db184520aa66cd7cb7b1cbba7945e4a",
+    "UKR01-generated.json": "15ed98f8c58e0d384e37b71c4e05f843ef09ef72311f872db268e8ef2bbfc7c7",
+    "design-demand-review.json": "1ca7291cd1ddf4958363bf2a362bf9432cd51bb105465c342653a1d3ba260aca",
+    "footing-review.json": "f140538f4307785fab7fc22980eeda507a31d02c3f6ef083d0c1808036a6bd03",
+    "raw-solutions.tar.gz": "65c9026c13a08bd1d0fe7705b246a5b2ced628ed949f63871a21d465d9185fe0",
+    "visible-browser.json": "df4cb2aa8b803924ff28d6681124ed42b550d800acdf0af818cedd27abb1ae35",
+    "visible-frame.png": "13ca633433eb0fb70efcb3018c9f35b581bee1490c1965836c7bfb09870a725b",
+    "stair-plan.svg": "469e638b0f9c4a9c52074f229780cb36ae5d0e21b35ef78fa41d09ab29faa9a5",
+    "stair-plan.png": "4464bb08f10205abbc63fc4bae55a3423386bae3fdfc28cdff3a0cd8ae606c89",
+    "residential-review.html": "fdd094c502eef6069e51a16730d12f3945d23844eaffb36b58a5550162554236"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T18:28:05.174Z",
+  "status": "PASS",
+  "scope": "Corrected nominal stair circulation, persisted flight/landing connectivity, load accounting and elastic reference analysis",
+  "constructionGeometryStatus": "INDETERMINATE",
+  "designStatus": "UNSUPPORTED",
+  "nativeTests": 86,
+  "contractTests": 3,
+  "browserJourneys": 1,
+  "referenceComparisons": 105696,
+  "caseIds": [
+    "G",
+    "Q",
+    "WX",
+    "WY",
+    "SLS",
+    "ULS",
+    "LX",
+    "LY"
+  ],
+  "visibleBrowser": "Chrome/macOS AMD WebGPU; corrected solid model and Floor landing / Intermediate landing hierarchy inspected; SLS Current",
+  "limitations": [
+    "Physical beam offsets and finished floor/waist/tread junction levels are not resolved by the centreline idealisation",
+    "Headroom, guarding/handrail space, fire/accessibility and construction detailing remain unverified",
+    "Synthetic loads and soil inputs; no concrete resistance or soil-contact acceptance"
+  ],
+  "artifacts": [
+    "build.json",
+    "native-tests.log",
+    "contracts.log",
+    "browser.log",
+    "reference-numerical.json",
+    "UKR01-generated.json",
+    "design-demand-review.json",
+    "footing-review.json",
+    "raw-solutions.tar.gz",
+    "visible-browser.json",
+    "visible-frame.png",
+    "stair-plan.svg",
+    "stair-plan.png",
+    "residential-review.html"
+  ]
+}

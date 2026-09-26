@@ -7,8 +7,8 @@ pub fn residential_reference() -> Result<Project> {
     let mut p = Project::parse(include_str!("../../../fixtures/models/B02.json"))?;
     p.id = "UKR01".into();
     p.name = "UK residential reference · four storeys".into();
-    p.metadata.description = "PRELIMINARY / SYNTHETIC INPUTS. British basis: intended BS EN 1990/1991/1992/1997 with UK National Annexes; no validated concrete code profile. 12 × 12 m, ground + 3 upper floors at 0/3/6/9 m, flat roof 12 m. One-way 200 mm slab strips spanning 6 m, explicit 2 × 6 m stair openings; four pairs of 1.2 m wide flights and intermediate landings. Gross uncracked elastic stiffness; gross member/slab self weight includes overlapping junction volumes (conservative centreline idealisation); no plate action, rigid diaphragm, cracking, creep, P-delta, soil springs, settlement or reinforcement design. Fixed bases at -1 m are an analysis assumption, not verified soil contact. Concrete density 2500 kg/m³, E 30 GPa; finishes/partitions 2 kPa, residential imposed 2 kPa, stairs 3 kPa, roof 0.75 kPa. Nominal 0.5 kPa lateral pressure sensitivity only, not site wind. Gravity examples 1.35G+1.5Q and G+Q are not a complete UK combination set. Firm ground: assumed 200 kPa allowable bearing, no geotechnical report. Pad dimensions 2.4 × 2.4 × 0.6 m are trial sizes. Every resistance check remains UNSUPPORTED; contact INDETERMINATE.".into();
-    p.metadata.created_by = "Structural Workbench · Rust reference generator UKR01-v1".into();
+    p.metadata.description = "PRELIMINARY / SYNTHETIC INPUTS. British basis: intended BS EN 1990/1991/1992/1997 with UK National Annexes; no validated concrete code profile. 12 × 12 m, ground + 3 upper floors at 0/3/6/9 m, flat roof 12 m. One-way 200 mm slab strips spanning 6 m, explicit 4 × 3.9 m stair openings; four pairs of returning 1.2 m wide flights, 4 × 1.5 m floor and intermediate landings. Gross uncracked elastic stiffness; gross member/slab self weight includes overlapping junction volumes (conservative centreline idealisation); no plate action, rigid diaphragm, cracking, creep, P-delta, soil springs, settlement or reinforcement design. Fixed bases at -1 m are an analysis assumption, not verified soil contact. Concrete density 2500 kg/m³, E 30 GPa; finishes/partitions 2 kPa, residential imposed 2 kPa, stairs 3 kPa, roof 0.75 kPa. Nominal 0.5 kPa lateral pressure sensitivity only, not site wind. Gravity examples 1.35G+1.5Q and G+Q are not a complete UK combination set. Firm ground: assumed 200 kPa allowable bearing, no geotechnical report. Pad dimensions 2.4 × 2.4 × 0.6 m are trial sizes. Every resistance check remains UNSUPPORTED; contact INDETERMINATE.".into();
+    p.metadata.created_by = "Structural Workbench · Rust reference generator UKR01-v2".into();
     p.metadata.entity_labels.clear();
     p.nodes.clear();
     p.members.clear();
@@ -27,7 +27,8 @@ pub fn residential_reference() -> Result<Project> {
         ("beam", 0.3, 0.6),
         ("slab", 1., 0.2),
         ("flight", 1.2, 0.2),
-        ("landing", 1.2, 0.2),
+        ("landing", 2., 0.2),
+        ("wideSlab", 2., 0.2),
     ] {
         let r = solid_rectangle(w, d, None)?;
         p.sections.push(Section {
@@ -137,8 +138,8 @@ pub fn residential_reference() -> Result<Project> {
         }
         for i in 0..12 {
             for bay in 0..2 {
-                // Opening occupies x=0..2, y=0..6 at all suspended levels.
-                if level > 0 && bay == 0 && i < 2 {
+                // First bay is authored below with explicit floor landings and a return-stair opening.
+                if bay == 0 && i < 4 {
                     continue;
                 }
                 let x = i as f64 + 0.5;
@@ -148,34 +149,59 @@ pub fn residential_reference() -> Result<Project> {
                 udl(&mut p, &id, "Q", if level == 4 { 750. } else { 2000. });
             }
         }
+        // Full-width floor landing connects both flights and the adjoining floor.
+        // The first bay uses two 2 m wide strips with shared flight endpoint nodes.
+        for x in [1., 3.] {
+            for (a, b, section) in [(0., 1.5, "landing"), (5.4, 6., "wideSlab")] {
+                let id = member(&mut p, [x, a, z], [x, b, z], section, section, None);
+                udl(&mut p, &id, "G", 4000.);
+                udl(
+                    &mut p,
+                    &id,
+                    "Q",
+                    if section == "landing" {
+                        6000.
+                    } else if level == 4 {
+                        1500.
+                    } else {
+                        4000.
+                    },
+                );
+            }
+            if level == 0 {
+                let id = member(&mut p, [x, 1.5, z], [x, 5.4, z], "wideSlab", "slab", None);
+                udl(&mut p, &id, "G", 4000.);
+                udl(&mut p, &id, "Q", 4000.);
+            }
+        }
     }
     for level in 0..4 {
         let z = level as f64 * 3.;
         let mid = z + 1.5;
         // Intermediate landing support frame terminates at split column nodes.
         for x in [0., 4.] {
-            for y in [0., 3.] {
-                member(&mut p, [x, y, mid], [x, y + 3., mid], "beam", "beam", None);
+            for (a, b) in [(0., 5.4), (5.4, 6.)] {
+                member(&mut p, [x, a, mid], [x, b, mid], "beam", "beam", None);
             }
         }
-        for (a, b) in [(0., 1.), (1., 4.)] {
-            member(&mut p, [a, 3., mid], [b, 3., mid], "beam", "beam", None);
+        for (a, b) in [(0., 1.), (1., 3.), (3., 4.)] {
+            member(&mut p, [a, 5.4, mid], [b, 5.4, mid], "beam", "beam", None);
         }
-        for (a, b) in [(2.4, 3.), (3., 3.6)] {
+        for x in [1., 3.] {
             let id = member(
                 &mut p,
-                [1., a, mid],
-                [1., b, mid],
+                [x, 3.9, mid],
+                [x, 5.4, mid],
                 "landing",
                 "landing",
                 None,
             );
-            udl(&mut p, &id, "G", 1200.);
-            udl(&mut p, &id, "Q", 3600.);
+            udl(&mut p, &id, "G", 2000.);
+            udl(&mut p, &id, "Q", 6000.);
         }
         for (a, b) in [
-            ([1., 0., z], [1., 2.4, mid]),
-            ([1., 3.6, mid], [1., 6., z + 3.]),
+            ([1., 1.5, z], [1., 3.9, mid]),
+            ([3., 3.9, mid], [3., 1.5, z + 3.]),
         ] {
             let id = member(&mut p, a, b, "flight", "stair", Some(9));
             // Step wedges: mean height half a riser over horizontal projection.
@@ -228,6 +254,7 @@ pub fn residential_reference() -> Result<Project> {
         let a = p.nodes.iter().find(|n| n.id == m.start).unwrap().position;
         let b = p.nodes.iter().find(|n| n.id == m.end).unwrap().position;
         let key = match m.section.as_str() {
+            "wideSlab" => format!("slab-{}-0-0", a[2]),
             "slab" => format!("slab-{}-{}-{}", a[2], (a[0] / 4.).floor(), a[1]),
             "column" => format!("column-{}-{}-{}", a[0], a[1], (b[2] / 3.).ceil()),
             "beam" if a[0] != b[0] => format!("beamX-{}-{}-{}", a[2], a[1], (a[0] / 4.).floor()),
@@ -266,6 +293,7 @@ pub fn residential_reference() -> Result<Project> {
             .unwrap();
         pm.role = match m.section.as_str() {
             "flight" => "stair",
+            "wideSlab" => "slab",
             x => x,
         }
         .into();
@@ -280,7 +308,12 @@ pub fn residential_reference() -> Result<Project> {
             match pm.role.as_str() {
                 "slab" => "One-way slab panel",
                 "stair" => "Stair flight · 9 risers",
-                "landing" => "Intermediate landing",
+                "landing" =>
+                    if b[2] % 3. == 0. {
+                        "Floor landing"
+                    } else {
+                        "Intermediate landing"
+                    },
                 "column" => "Concrete column",
                 _ => "Concrete beam",
             },
@@ -373,6 +406,66 @@ fn udl(p: &mut Project, member: &str, case: &str, q: f64) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn return_stairs_have_connected_floor_and_turning_landings() {
+        let p = residential_reference().unwrap();
+        let pos = |id: &str| p.nodes.iter().find(|n| n.id == id).unwrap().position;
+        let flights: Vec<_> = p.members.iter().filter(|m| m.section == "flight").collect();
+        for level in 0..4 {
+            let z = level as f64 * 3.;
+            let lower = flights
+                .iter()
+                .find(|m| pos(&m.start) == [1., 1.5, z])
+                .unwrap();
+            let upper = flights
+                .iter()
+                .find(|m| pos(&m.end) == [3., 1.5, z + 3.])
+                .unwrap();
+            assert_eq!(pos(&lower.end), [1., 3.9, z + 1.5]);
+            assert_eq!(pos(&upper.start), [3., 3.9, z + 1.5]);
+            // All four ends share actual identities with landing members.
+            for id in [&lower.start, &lower.end, &upper.start, &upper.end] {
+                assert!(
+                    p.members
+                        .iter()
+                        .any(|m| m.section == "landing" && (&m.start == id || &m.end == id))
+                );
+            }
+            let middle: Vec<_> = p
+                .members
+                .iter()
+                .filter(|m| m.section == "landing" && pos(&m.start)[2] == z + 1.5)
+                .collect();
+            assert_eq!(middle.len(), 2);
+            let width = p.sections.iter().find(|s| s.id == "landing").unwrap().cy * 2.;
+            assert_eq!(width, 2.); // two adjoining strips cover x=0..4, permitting the turn
+            for m in middle {
+                assert_eq!(pos(&m.start)[1], 3.9);
+                assert_eq!(pos(&m.end)[1], 5.4);
+                assert!(
+                    p.members
+                        .iter()
+                        .any(|b| b.section == "beam" && (b.start == m.end || b.end == m.end))
+                );
+            }
+            // Nominal landing depth retains at least flight width after an edge beam.
+            assert!(1.5 - 0.3 / 2. >= 1.2);
+        }
+        for level in 1..=4 {
+            // No floor strip fills the actual flight opening.
+            for m in p
+                .members
+                .iter()
+                .filter(|m| ["slab", "wideSlab", "landing"].contains(&m.section.as_str()))
+            {
+                let a = pos(&m.start);
+                let b = pos(&m.end);
+                if a[2] == level as f64 * 3. && a[0] < 4. {
+                    assert!(b[1] <= 1.5 || a[1] >= 5.4);
+                }
+            }
+        }
+    }
     #[test]
     fn reference_has_real_connected_concepts() {
         let p = residential_reference().unwrap();

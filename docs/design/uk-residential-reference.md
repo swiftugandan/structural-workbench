@@ -1,5 +1,7 @@
 # UKR01 — four-storey concrete residential reference
 
+**Latest: v2 return-stair landing correction.** See `stair-landing-audit.md` and `evidence/stair-landings/`. Earlier v1 evidence below is historical and does not validate the revised model.
+
 ## Open and inspect
 
 Worked examples → **UK residential · four storeys**. The existing Explorer, viewport, Inspector and Results drawer remain the workflow. **Solid model** switches between assigned physical envelopes and analytical lines; **Assumptions** exposes the model's durable basis. Floors, beams, columns, slab panels, stair flights, landings and foundation drafts are saved entities, not an image. Expand a physical panel/beam to see its actual analytical discretisation. Pad envelopes follow their bound support nodes, including in focused design views.
@@ -12,7 +14,7 @@ This is a **preliminary reference analysis**, not a completed British concrete d
 - Four occupied storeys: ground 0 m, upper floors 3/6/9 m; flat roof 12 m. Fixed foundation reaction planes at -1 m.
 - Trial columns 400 × 400 mm; beams 300 × 600 mm; one-way slabs 200 mm.
 - Ground slab is **suspended** in this reference, not a ground-bearing slab or Winkler plate.
-- Suspended levels each have a 2 × 6 m opening in the first bay. Four flights pairs climb to the roof. Each flight is 1.2 m wide, 2.4 m horizontal run and 1.5 m rise, nine illustrative risers. Intermediate landings have their own concrete beams terminating at column nodes. No stair accessibility, fire, guard, headroom or approved-document compliance is claimed.
+- Suspended levels each have a 4 × 3.9 m opening in the first bay. Four returning flight pairs climb to the roof, with 4 × 1.5 m floor landings and 4 × 1.5 m intermediate turning landings. Each flight is 1.2 m wide, 2.4 m horizontal run and 1.5 m rise, nine illustrative risers. Intermediate landings have their own concrete beams terminating at column nodes. No stair accessibility, fire, guard, headroom or approved-document compliance is claimed.
 - Twelve trial 2.4 × 2.4 × 0.6 m pads; their tops coincide with support planes. Fixed restraints do **not** model footing rotation, soil/contact or settlement.
 - Concrete E 30 GPa, ν 0.2, density 2500 kg/m³; provisional strengths 30 MPa and 500 MPa in foundation drafts only.
 - “Firm ground” is user intent. 200 kPa allowable bearing, 18 kN/m³ soil and 1.6 m embedment are synthetic starter assumptions, not site data.
@@ -23,7 +25,7 @@ The established Rust 3D Euler–Bernoulli formulation, six DOFs per node, SI/f64
 
 Slab strips span 6 m to actual subdivided frame beams. They have axial/torsional/frame flexural stiffness; **no two-way plate action, transverse slab compatibility, rigid diaphragm or plate result is asserted**. These are a preliminary one-way frame/grillage idealisation. Monolithic joints are rigid; no release shortcut/artificial stiffness is used. Gross member and slab volumes include intersecting joint/slab-beam regions in the gravity take-off, a disclosed conservative centreline allowance; this is not a net concrete quantity schedule. Refined offsets, cracked stiffness and mesh studies remain necessary for real design.
 
-Global Z is vertical. Gravity is -9.80665 m/s². Rectangles use width along local y and depth along local z. The generator assigns a horizontal transverse local-y hint, including inclined stairs. Each flight carries waist-slab self weight along its actual inclined length. Step wedges contribute density × g × half-riser × width × horizontal run; finishes/imposed load use horizontal projected area, converted to load per actual length in Rust. Landing/floor holes are omitted from area loading. Ground is a full suspended floor; four elevated panels each lose 12 m². Total horizontal slab area 672 m².
+Global Z is vertical. Gravity is -9.80665 m/s². Rectangles use width along local y and depth along local z. The generator assigns a horizontal transverse local-y hint, including inclined stairs. Each flight carries waist-slab self weight along its actual inclined length. Step wedges contribute density × g × half-riser × width × horizontal run; finishes/imposed load use horizontal projected area, converted to load per actual length in Rust. Landing/floor holes are omitted from area loading. Ground is a full suspended floor; four elevated panels each lose 15.6 m². Total horizontal floor/roof slab area including floor landings is 657.6 m². Five 6 m² floor landings carry 3 kPa imposed load, replacing (not adding to) the floor/roof imposed load on their area; four intermediate 6 m² landings carry 3 kPa imposed and 1 kPa finishes.
 
 Provisional actions:
 
@@ -52,7 +54,7 @@ Native reference regression independently calculates permanent/imposed quantitie
 
 Final run evidence, numerical comparisons, visible browser images and build hashes are recorded in `evidence/residential-reference/`. Tests prove the stated strip/frame model, not plate behaviour, soil response or code compliance. See the gate record for final outcomes.
 
-### Verified local outcome
+### Historical v1 verified local outcome (superseded for geometry)
 
 Final build `d877aa70d28c66d5c96d19c4d8b6bde8da895b11f7dbdcfe33948303a049a3af`, source `266da972257e255742a3edecae2b0ced3a3dcba3005d0da6cca787200d2ea1f1`: 85 native tests; 3 contract tests; 33 native and 33 native/WASM analytical regression checks; eight browser journeys; 102,048 reference comparisons across eight cases (native/WASM/OpenSees). Visible Chrome/macOS AMD WebGPU confirmed the actual solid building, stairs, hierarchy and real-reaction footing workflow. The reference contains 423 nodes, 628 analytical members and 207 physical objects. This is local correctness evidence, not Windows/Linux hardware acceptance or British design compliance.
 

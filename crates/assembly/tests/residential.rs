@@ -4,17 +4,25 @@ use workbench_model::residential_reference;
 fn residential_load_path_balances_independent_quantity_takeoff() {
     let p = residential_reference().unwrap();
     // Independent dimensional take-off, not a sum of the generated load records.
-    let q =
-        (144. + 3. * 132.) * 2000. + 132. * 750. + 8. * 1.2 * 2.4 * 3000. + 4. * 1.2 * 1.2 * 3000.;
+    // 4 x 3.9 m opening at four elevated floors; five 4 x 1.5 m floor
+    // landings are part of floor area, with 3 kPa stair loading (no double count).
+    let floor_area = 144. + 4. * 128.4;
+    let q = (144. + 3. * 128.4 - 4. * 6.) * 2000.
+        + (128.4 - 6.) * 750.
+        + 5. * 6. * 3000.
+        + 8. * 1.2 * 2.4 * 3000.
+        + 4. * 4. * 1.5 * 3000.;
     let volume = 12. * 13. * 0.4 * 0.4
         + 5. * (3. * 12. + 4. * 12.) * 0.3 * 0.6
         + 4. * 16. * 0.3 * 0.6
-        + 112. * 6. * 0.2
+        + floor_area * 0.2
         + 8. * 2.4_f64.hypot(1.5) * 1.2 * 0.2
-        + 4. * 1.2 * 1.2 * 0.2
+        + 4. * 4. * 1.5 * 0.2
         + 8. * 1.2 * 2.4 * (1.5 / 9.) / 2.;
-    let g =
-        volume * 2500. * 9.80665 + 672. * 2000. + 8. * 1.2 * 2.4 * 1000. + 4. * 1.2 * 1.2 * 1000.;
+    let g = volume * 2500. * 9.80665
+        + floor_area * 2000.
+        + 8. * 1.2 * 2.4 * 1000.
+        + 4. * 4. * 1.5 * 1000.;
     for (case, expected, axis) in [
         ("G", g, 2),
         ("Q", q, 2),

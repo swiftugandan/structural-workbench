@@ -1,0 +1,10 @@
+
+Running 1 test using 1 worker
+
+(node:74923) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:74923) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/residential-reference.spec.js:5:1 › UK residential reference: actual WASM analysis, hierarchy, model-sourced footing review and stale edits (22.2s)
+
+  1 passed (24.4s)

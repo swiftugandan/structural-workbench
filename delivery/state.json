@@ -2862,7 +2862,23 @@
         "npm run test:contracts",
         "WORKBENCH_EVIDENCE_DIR=evidence/residential-reference node evidence/residential-reference/verify-reference.mjs",
         "WORKBENCH_EVIDENCE_DIR=evidence/residential-reference npx playwright test tests/e2e/residential-reference.spec.js tests/e2e/structure-model.spec.js tests/e2e/design-previews.spec.js tests/e2e/cad.spec.js"
-      ]
+      ],
+      "latestRevision": "UKR01-v2 / UKR01-LANDINGS"
+    },
+    "UKR01-LANDINGS": {
+      "id": "UKR01-LANDINGS",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "useCase": "Correct missing floor landing and awkward stair circulation with a connected return stair",
+      "dependencies": [
+        "UKR01"
+      ],
+      "evidencePath": "evidence/stair-landings/reference-gate.json",
+      "notes": [
+        "V2 has 4 x 1.5 m floor and intermediate landings and opposing 1.2 m flights; 447 nodes, 642 members, 212 physical objects.",
+        "86 native tests, 3 contracts, one full reference browser journey and eight native/WASM/OpenSees case comparisons passed.",
+        "Nominal circulation and load paths verified; finished levels, physical beam offsets, headroom, guarding and construction detailing remain unverified."
+      ],
+      "nextAction": "Resolve physical floor/beam offsets and detailed stair junction/headroom/guarding in the physical geometry model before construction acceptance."
     }
   },
   "blockers": [

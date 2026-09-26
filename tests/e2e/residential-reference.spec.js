@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
-const dir = "evidence/residential-reference";
+const dir = process.env.WORKBENCH_EVIDENCE_DIR || "evidence/residential-reference";
 test("UK residential reference: actual WASM analysis, hierarchy, model-sourced footing review and stale edits", async ({
   page,
 }) => {
@@ -12,7 +12,7 @@ test("UK residential reference: actual WASM analysis, hierarchy, model-sourced f
   await page.locator("#worked-examples").click();
   await page.locator("[data-example=UKR01]").click();
   await expect(page.locator("#model-count")).toHaveText(
-    "423 nodes · 628 members",
+    "447 nodes · 642 members",
   );
   await expect(page.locator("#model-solids")).toHaveAttribute(
     "aria-pressed",
@@ -70,7 +70,7 @@ test("UK residential reference: actual WASM analysis, hierarchy, model-sourced f
     .first()
     .click();
   await expect(page.locator("#model-count")).toHaveText(
-    "423 nodes · 628 members",
+    "447 nodes · 642 members",
   );
   expect(errors).toEqual([]);
 });

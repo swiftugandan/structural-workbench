@@ -1,3 +1,9 @@
+## Latest: stair landing correction (UKR01-v2)
+
+V1 lacked a proper floor landing at the start of each storey. Corrected to returning flights with 4 x 1.5 m floor and intermediate platforms. `docs/design/stair-landing-audit.md` records the actual defect, new connected geometry, changed quantities and remaining finished-level/offset/headroom/detailing limitations. New worked examples produce v2; saved v1 projects are preserved. Latest downloadable model/report/plan and gate: `evidence/stair-landings/`. Build `c0012b5fc75712da60552daf122cad362bce2f0e00606179b925115d9d24caef`.
+
+V2: 447 nodes, 642 analytical members, 212 physical objects; 86 native tests, 3 contracts, one full browser journey, eight independent native/WASM/OpenSees comparisons (105,696 assertions), visible Chrome/AMD 3D inspection. This verifies nominal circulation and the preliminary strip/frame load path only. Physical beam offsets, finished levels, headroom and guarding are explicitly still unverified; do not claim complete stair/code acceptance.
+
 ## Latest user reference: UKR01 (2026-09-26)
 
 User requested a four-storey concrete residential 3D frame with slabs, stairs, flat roof, pad footings and firm ground; specified British. Open Worked examples → **UK residential · four storeys**. Rust generator and eight actual load cases/combination analyses are locally verified. Trial dimensions/loads/ground inputs are synthetic; concrete resistance remains UNSUPPORTED and contact INDETERMINATE. This is a usable preliminary reference, **not completed construction design**. See `docs/design/uk-residential-reference.md`, downloadable `evidence/residential-reference/UKR01-generated.json`, `residential-review.html` and exact demand JSON. Final gate `evidence/residential-reference/reference-gate.json` records tests/hashes.
