@@ -296,6 +296,32 @@
         "resources.lock.json#R-STEEL-EXAMPLES"
       ],
       "retrievedAt": "2026-09-23T14:57:10.648Z"
+    },
+    {
+      "id": "R-EC2-UK-STANDARDS",
+      "status": "not_acquired",
+      "requiredBy": [
+        "UKR01-design"
+      ],
+      "definition": "docs/design/british-reference-basis.md",
+      "sourceEdition": "Eurocodes + UK National Annexes; first-generation EC2 candidate BS EN 1992-1-1:2004+A1:2014 and NA+A2:2014, not yet locked",
+      "sourceHash": null,
+      "rightsStatus": "licensed_source_required",
+      "localPath": null,
+      "validationEvidence": []
+    },
+    {
+      "id": "R-EC2-JRC-EXAMPLES",
+      "status": "acquired_pending_validation",
+      "requiredBy": [
+        "UKR01-design"
+      ],
+      "definition": "docs/design/british-reference-basis.md",
+      "sourceEdition": "2014 / JRC89037",
+      "sourceHash": "06f6106355fb737bee2cb98870d2f3b7d80c3cded5b37400c8eb81dfbbbe954a",
+      "rightsStatus": "public_official_download_local_reference_only_not_redistributed",
+      "localPath": "resources/private/jrc-ec2-worked-examples-2014.pdf",
+      "validationEvidence": []
     }
   ]
 }

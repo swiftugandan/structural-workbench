@@ -19,6 +19,8 @@ export function cad({
       getProject()?.id,
       getProject()?.revision,
       viewport.camera(),
+      viewport.visibilityRevision,
+      viewport.nodesVisible(),
     ]);
   viewport.onViewChanged = async () => {
     if (!getProject() || viewBusy || !viewport.origin) return;
@@ -51,7 +53,11 @@ export function cad({
     try {
       const data = await gateway.send("queryGeometry", {
         kind: "screenPick",
-        query: { camera: viewport.camera(), point },
+        query: {
+          camera: viewport.camera(),
+          point,
+          excludedIds: viewport.excludedIds(),
+        },
         viewRevision: viewport.viewRevision,
       });
       return !data.entityId;
@@ -64,7 +70,11 @@ export function cad({
     try {
       const data = await gateway.send("queryGeometry", {
         kind: "boxSelect",
-        query: { camera: viewport.camera(), rect },
+        query: {
+          camera: viewport.camera(),
+          rect,
+          excludedIds: viewport.excludedIds(),
+        },
         viewRevision: viewport.viewRevision,
       });
       if (key === cameraKey()) selectEntities(data.entityIds, toggle);
@@ -79,7 +89,11 @@ export function cad({
     try {
       const data = await gateway.send("queryGeometry", {
         kind: "screenPick",
-        query: { camera: viewport.camera(), point },
+        query: {
+          camera: viewport.camera(),
+          point,
+          excludedIds: viewport.excludedIds(),
+        },
         viewRevision: viewport.viewRevision,
       });
       if (key === cameraKey()) {

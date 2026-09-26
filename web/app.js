@@ -1,3 +1,4 @@
+import { modelVisibility } from "./model-visibility.js";
 import { previewIdentity, structureSelectionIds } from "./selection-context.js";
 import { renderStructureEditor } from "./structure-workspace.js";
 import { renderForceInspector } from "./force-inspector.js";
@@ -55,6 +56,7 @@ const diagramResult = () =>
   result && result.analysisType !== "envelope" ? result : null;
 let project,
   modelHash,
+  viewControls,
   result,
   selected = "m1",
   selectionContext = null,
@@ -71,15 +73,21 @@ let project,
 const viewport = new Viewport($("#viewport"), async (query) => {
   try {
     const cameraKey = JSON.stringify(query.camera),
-      revision = project.revision;
+      revision = project.revision,
+      visibilityRevision = viewport.visibilityRevision;
     const v = await gateway.send("queryGeometry", {
       kind: "screenPick",
-      query: { camera: query.camera, point: query.point },
+      query: {
+        camera: query.camera,
+        point: query.point,
+        excludedIds: viewport.excludedIds(),
+      },
       viewRevision: query.viewRevision,
     });
     $("#viewport").dataset.lastCpuPick = v.entityId || "";
     if (
       project.revision === revision &&
+      visibilityRevision === viewport.visibilityRevision &&
       JSON.stringify(viewport.camera()) === cameraKey
     )
       selectEntities(v.entityId ? [v.entityId] : [], query.toggle);
@@ -551,6 +559,7 @@ async function open(p, options = {}) {
     message(status);
     refresh(s);
     viewport.fit();
+    if (!$("#results-content").hidden) $("#toggle-results")?.click();
     await persist();
     if (options.recoveryNote) message(options.recoveryNote);
   } catch (e) {
@@ -743,6 +752,7 @@ function refresh(snapshot) {
   renderNav();
   renderInspector();
   renderResults();
+  viewControls?.refresh();
   viewport.currentModelHash = modelHash;
   viewport.update(project, diagramResult(), selected);
   topologyTools.refresh();
@@ -1451,6 +1461,7 @@ function renderResults() {
 for (const b of document.querySelectorAll("[data-tab]"))
   b.onclick = () => {
     tab = b.dataset.tab;
+    if ($("#results-content").hidden) $("#toggle-results")?.click();
     document
       .querySelectorAll("[data-tab]")
       .forEach((x) => x.classList.toggle("active", x === b));
@@ -1463,6 +1474,7 @@ $("#analyse").onclick = async () => {
     message("Analysing the current model…");
     const response = await gateway.send("analyse", analysisPayload());
     result = response;
+    if ($("#results-content").hidden) $("#toggle-results")?.click();
     failed = false;
     if (result.modelHash !== modelHash) {
       message(
@@ -1800,6 +1812,7 @@ for (const mode of ["plan", "elevation", "3d"])
     $("#view-plan").classList.toggle("active", mode === "plan");
     $("#view-elevation").classList.toggle("active", mode === "elevation");
     $("#view-3d").classList.toggle("active", mode === "3d");
+    $("#view-side")?.classList.remove("active");
     viewport.fit();
   };
 for (const [id, key] of [
@@ -2128,6 +2141,7 @@ gateway.ready.catch((e) =>
 
 $("#model-solids").onclick = () => {
   viewport.modelSolids = !viewport.modelSolids;
+  viewport.visibilityRevision = (viewport.visibilityRevision || 0) + 1;
   $("#model-solids").setAttribute("aria-pressed", String(viewport.modelSolids));
   viewport.draw();
 };
@@ -2165,3 +2179,21 @@ $("#member-labels").onchange = (event) => {
   viewport.memberLabels = event.target.value;
   viewport.draw();
 };
+
+viewControls = modelVisibility({
+  viewport,
+  getProject: () => project,
+  canChange: () => {
+    if (formDirty) {
+      message("Apply or cancel edits before changing the view.");
+      return false;
+    }
+    return !!project;
+  },
+  onChange: () => {
+    modelTools.cancel();
+    directTools?.finish();
+    if (viewport.designPreview && !viewport.designPreview.context)
+      $("#preview-focus")?.click();
+  },
+});

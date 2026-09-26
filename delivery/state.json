@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M07",
-  "activeTask": "REVIEW-03",
+  "activeTask": "M07-G",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2945,12 +2945,15 @@
     },
     "REVIEW-03": {
       "id": "REVIEW-03",
-      "status": "IMPLEMENTING",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
       "useCase": "Readable model views with storey/layer/isolation/fit and consistent hidden-object picking",
       "dependencies": [
         "REVIEW-01"
       ],
-      "nextAction": "Implement storey/layer/isolation/fit views, validate hidden-object picking and inspect residential stairs in plan/side/3D. Then M07-G overview/catalogue/study."
+      "nextAction": "Continue M07-G overview, catalogue and candidate study.",
+      "sourceHash": "074bc70e2ab8df0426c9c07ec30a20f15c78bf46e73db23e8bf45e9029c15059",
+      "buildHash": "63fed068bb6f31977f4834bef15b045046d3e8c05d0ad9e534d91d3169d9ddbf",
+      "evidencePath": "evidence/model-visibility/visibility-gate.json"
     }
   },
   "blockers": [
@@ -2984,9 +2987,9 @@
     }
   ],
   "lastVerifiedSourceRevision": null,
-  "lastVerifiedBuildHash": "6a00149693f1dfc8ef4201ebabd724a72928226842f114bda2f956c883746c3c",
-  "nextAction": "Implement storey/layer/isolation/fit views, validate hidden-object picking and inspect residential stairs in plan/side/3D. Then M07-G overview/catalogue/study.",
+  "lastVerifiedBuildHash": "63fed068bb6f31977f4834bef15b045046d3e8c05d0ad9e534d91d3169d9ddbf",
+  "nextAction": "Implement M07-G whole-model steel overview, then catalogue/candidate study with exact Rust reanalysis provenance.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "28daa0a5146a9071f14a36e6b9bcccc1f3a82fa7abb71877d7d93c2d9e0c3aa7",
-  "lastVerifiedScope": "REVIEW-01 selection/cache: eight browser journeys and three contracts; existing numerical gates historical"
+  "lastVerifiedSourceHash": "074bc70e2ab8df0426c9c07ec30a20f15c78bf46e73db23e8bf45e9029c15059",
+  "lastVerifiedScope": "REVIEW-03: 89 native, 3 contract, 1 unit, 14 browser checks and visible Chrome stair views; no new code profile acceptance"
 }

@@ -1,0 +1,69 @@
+{
+  "sourceHash": "074bc70e2ab8df0426c9c07ec30a20f15c78bf46e73db23e8bf45e9029c15059",
+  "buildHash": "63fed068bb6f31977f4834bef15b045046d3e8c05d0ad9e534d91d3169d9ddbf",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "taskId": "REVIEW-03",
+  "status": "PASS",
+  "observedAt": "2026-09-26T19:58:05.100788+00:00",
+  "nativeTests": 89,
+  "contractTests": 3,
+  "unitTests": 1,
+  "browserTests": 14,
+  "commands": [
+    "cargo test --workspace --locked",
+    "npm run build",
+    "npm run test:contracts",
+    "node --test tests/model-visibility.test.mjs",
+    "WORKBENCH_EVIDENCE_DIR=evidence/model-visibility npx playwright test tests/e2e/model-visibility.spec.js tests/e2e/cad.spec.js tests/e2e/support-symbols.spec.js tests/e2e/stair-outlines.spec.js tests/e2e/spatial-crossings.spec.js tests/e2e/dimensions.spec.js tests/e2e/topology.spec.js tests/e2e/model-coherence.spec.js"
+  ],
+  "liveBrowser": {
+    "browser": "Chrome",
+    "platform": "macOS",
+    "adapter": "AMD WebGPU visible indicator",
+    "observations": [
+      "Floor 1 + Concrete stair displays 2 / 642 members",
+      "Side and 3D physical flight bounds fully visible",
+      "Storey context restored by clearing layer filter"
+    ],
+    "method": "Actual DOM selects dispatched change; view buttons clicked through browser automation"
+  },
+  "scope": "View-only model inspection and picking; no numerical formulation or code acceptance",
+  "limitations": [
+    "Physical offsets, stair junctions, headroom and guarding remain unverified",
+    "Local macOS and Chromium evidence only"
+  ],
+  "artifactHashes": {
+    "stair-plan.png": "2c329275d45a16e1517d46edce66ddb0dbbfa74a00dbcebf94d8fc4652bf174f",
+    "live-stair-3d.png": "4381d09f4acbeefed8d42c5356f6575306a7fa4c924f5859de56eae638c35f31",
+    "split-preview.png": "871a106aff3106b8c230ee045dd1501253bcb1bff71b71543ebed4c1eae0c2dd",
+    "restored-model.png": "d7108006fc187d7fe664900d521d2493df588bd2bc20c5a23b70af9f52832013",
+    "split-project.json": "09e01098105161fa1c5b5c171cd7704ac8fdd24687548de23af74be47a7b02a6",
+    "playwright-results.json": "8861ec64c0e058f6c3a5073c53272f8b314f55d67221cc93d6cde754499a0e2c",
+    "m01-cad.json": "344147152a2408c9207ce9a9b4c1e88a98c60471aaf9bb13165871d1e5f7be89",
+    "live-stair-side.png": "4ec846e0cd8debf65291b73aeb2b9970493f7718ec2293766b0c6be66fd529a9",
+    "reference-crossings.png": "eb480e2c953f01e67a791466ff32e4ae68cbdecdb959b477935eeea3a0a958f8",
+    "physical-selection.png": "c6eefdedf3c4ad1b108dc1499af11fac1cde013cd50953d3fe11a9b9012c0bca",
+    "cad-mobile.png": "70b35e5679821a8d83d65668ed0e48d2ce46a3d8ce520ab16ea3ab78f6000939",
+    "stair-side.png": "1326cfbe90fe1ccaf3da7a3bb06d7376a4654821b8eff83b3247fc226320a77e",
+    "stair-3d.png": "9bfb31818a7562b8913ecb74bb990e126b3a1e47a7c74355f2583dc5ddb7e64f",
+    "merge-mobile.png": "13e168f98ffd32ffd4f5f085cdff683ca5c879e230afbe46e49d15f81d1afdc8",
+    "live-storey-context.png": "26dca4dc1db7d3e5c0108af97df390bcef93ad225a60a8c84e10493f1f33f710",
+    "axes.png": "a07b68e9f50ff3ed227f96ab4f8b30f8b2398b5b4b20caddca8f2214c8bdc9dc",
+    "analytical-stairs.png": "6720d1db4b6f43374e0465e6bdfac15a41da9a31686d80a85b7941d66f1b1aef",
+    "split-opensees.json": "2684a196c9957865267f2231f5b5c63fa8d0a3051408e4d44e7a7cbfa6a7643c",
+    "cad-crossings.png": "67f183c0b26511dbc60ab146aed0f116c03e921c89ca7f7804f48f9a7d031c7d",
+    "connected-project.json": "4d418eb43abe50431e51934b84bbbb510000d65fc1c18c9b498f2e95cb243646"
+  }
+}

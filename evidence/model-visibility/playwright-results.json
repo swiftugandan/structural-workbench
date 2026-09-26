@@ -1,0 +1,715 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/e2e/model-visibility.spec.js",
+      "tests/e2e/cad.spec.js",
+      "tests/e2e/support-symbols.spec.js",
+      "tests/e2e/stair-outlines.spec.js",
+      "tests/e2e/spatial-crossings.spec.js",
+      "tests/e2e/dimensions.spec.js",
+      "tests/e2e/topology.spec.js",
+      "tests/e2e/model-coherence.spec.js"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/model-visibility/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e/cad.spec.js",
+      "file": "e2e/cad.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 CAD pointer drawing, snap feedback, disconnected crossing and explicit connect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9430,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:50:22.141Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-pointer-dr-8389c-ossing-and-explicit-connect/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d50d27f02553b204281-71809e7bc587d641dfe2",
+          "file": "e2e/cad.spec.js",
+          "line": 43,
+          "column": 1
+        },
+        {
+          "title": "M01 CAD multi-selection, move copy delete previews, measure and scoped shortcuts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10311,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:50:32.099Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-multi-sele-b69f2-easure-and-scoped-shortcuts/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d50d27f02553b204281-79ab7ba953abedc5fdc3",
+          "file": "e2e/cad.spec.js",
+          "line": 89,
+          "column": 1
+        },
+        {
+          "title": "M01 CAD working planes, aligned grid, cursor zoom, box selection and camera invariance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8117,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:50:42.626Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-working-pl-f0c31-ction-and-camera-invariance/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d50d27f02553b204281-70b1e2b34628ce025582",
+          "file": "e2e/cad.spec.js",
+          "line": 154,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/dimensions.spec.js",
+      "file": "e2e/dimensions.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Canvas dimensions show true lengths, update after edits and undo, and toggle without mutation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4466,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:50:51.111Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-dimensions-Canvas-dime-8a7d7-and-toggle-without-mutation/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b59962eb4c8ce9dd2375-350531f86bab2027b8e8",
+          "file": "e2e/dimensions.spec.js",
+          "line": 2,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/model-coherence.spec.js",
+      "file": "e2e/model-coherence.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "One selection identity follows a bound footing, its support and physical members",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19065,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:50:55.698Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-model-coherence-One-se-4e917-upport-and-physical-members/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2f12f07b090f2a2250c4-8abbea0c3bd29c1b411a",
+          "file": "e2e/model-coherence.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/model-visibility.spec.js",
+      "file": "e2e/model-visibility.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Inspect one storey's return stairs in plan, side and 3D without changing engineering data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12886,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:51:15.139Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-model-visibility-Inspe-0cba5-t-changing-engineering-data/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0acdfa071b01b43cbca1-427863c8621ba759ca1d",
+          "file": "e2e/model-visibility.spec.js",
+          "line": 6,
+          "column": 1
+        },
+        {
+          "title": "Hidden members cannot be picked and view changes preserve current results",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3541,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:51:28.292Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-model-visibility-Hidde-082af-es-preserve-current-results/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0acdfa071b01b43cbca1-7552fef71e1a3809a900",
+          "file": "e2e/model-visibility.spec.js",
+          "line": 87,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/spatial-crossings.spec.js",
+      "file": "e2e/spatial-crossings.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Crossing diagnostics distinguish spatial separation from disconnected intersections",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10086,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:51:31.935Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-spatial-crossings-Cros-ddb9d--disconnected-intersections/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cdf8dafe1aff9f526a37-c540f5f9e52e8abdac61",
+          "file": "e2e/spatial-crossings.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/stair-outlines.spec.js",
+      "file": "e2e/stair-outlines.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Residential stair widths remain visible in analytical view without changing the model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7805,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:51:42.214Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-stair-outlines-Residen-0dff6--without-changing-the-model/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "381da4576e33fe6a1198-25e112b7ac3200197989",
+          "file": "e2e/stair-outlines.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/support-symbols.spec.js",
+      "file": "e2e/support-symbols.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Support symbols track restraints, orientation, property edits and undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7043,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:51:50.249Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-support-symbols-Suppor-482f7-ion-property-edits-and-undo/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-50bb9196b001f540d601",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "Support labels toggle independently without invalidating analysis",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3688,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:51:57.419Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-support-symbols-Suppor-52b41-thout-invalidating-analysis/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-2d7f94d02a232699261f",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 59,
+          "column": 1
+        },
+        {
+          "title": "Member label Auto, Show all and Hide are independent of support labels",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9498,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:52:01.237Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-support-symbols-Member-5c757-dependent-of-support-labels/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2f863bf26ea81dd3321-68742f451c9fe5f703a9",
+          "file": "e2e/support-symbols.spec.js",
+          "line": 97,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/topology.spec.js",
+      "file": "e2e/topology.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M01 topology: axes, loaded split preview, undo, redo, oracle, save and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11962,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:52:10.932Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d4c439445d305c34d2f8-58136303081eb6ca83e8",
+          "file": "e2e/topology.spec.js",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "M01 topology: crossing stays disconnected, connect and merge are previewed and atomic",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7254,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-26T19:52:23.269Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--2ceef-ge-are-previewed-and-atomic/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d4c439445d305c34d2f8-08daf682ecb9c44b7c19",
+          "file": "e2e/topology.spec.js",
+          "line": 133,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-26T19:50:20.606Z",
+    "duration": 130314.2,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

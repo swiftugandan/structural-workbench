@@ -419,6 +419,16 @@
       "localPath": "resources/private/aisc-shapes-database-v16.xlsx",
       "retrievedAt": "2026-09-23T14:57:10.648Z",
       "validationUse": "M07 aisc-360-22-lrfd S2 clause dossier and fixtures"
+    },
+    {
+      "id": "R-EC2-JRC-EXAMPLES",
+      "version": "2014 / JRC89037",
+      "authoritativeOrigin": "https://eurocodes.jrc.ec.europa.eu/sites/default/files/2022-06/1110_WS_EC2.pdf",
+      "sourceHash": "06f6106355fb737bee2cb98870d2f3b7d80c3cded5b37400c8eb81dfbbbe954a",
+      "localPath": "resources/private/jrc-ec2-worked-examples-2014.pdf",
+      "rightsStatus": "public_official_download_local_reference_only_not_redistributed",
+      "retrievedAt": "2026-09-26T19:44:48.554240+00:00",
+      "validationUse": "Candidate independent EC2 examples; extraction and comparison to the selected UK NA profile still required; no numerical acceptance"
     }
   ],
   "unresolved": [

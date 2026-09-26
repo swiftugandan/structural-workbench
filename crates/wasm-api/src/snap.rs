@@ -4,6 +4,7 @@ use workbench_model::{Project, Result, err};
 // Coordinates and distances remain f64. The caller converts the 8 CSS-pixel
 // aperture into model units for the orthographic XZ working plane.
 pub fn snap(p: &Project, q: &Value) -> Result<Value> {
+    let excluded = super::view::excluded_ids(q)?;
     let mut value = q["position"].clone();
     for v in value
         .as_array_mut()
@@ -47,11 +48,17 @@ pub fn snap(p: &Project, q: &Value) -> Result<Value> {
         }
     };
     for node in &p.nodes {
+        if excluded.contains(&node.id) {
+            continue;
+        }
         add(0, node.id.clone(), node.position, "node");
     }
     if q["features"].as_bool().unwrap_or(false) {
         let mut nearby = vec![];
         for m in &p.members {
+            if excluded.contains(&m.id) {
+                continue;
+            }
             let a = positions[m.start.as_str()];
             let b = positions[m.end.as_str()];
             add(

@@ -8,9 +8,13 @@ test("Canvas dimensions show true lengths, update after edits and undo, and togg
   const dim = page.locator('[data-dimension-member="m1"]');
   await expect(dim).toHaveText("3 m");
   const original = await page.locator("#hash-status").textContent();
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#dimensions-toggle").click();
   await expect(dim).toHaveCount(0);
   await expect(page.locator("#hash-status")).toHaveText(original);
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#dimensions-toggle").click();
   await expect(dim).toHaveText("3 m");
   await page.locator("#span").fill("4.5");

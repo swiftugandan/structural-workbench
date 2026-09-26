@@ -108,6 +108,7 @@ export function renderExplorer(
           ),
         members.length +
           structure.designObjects.filter((x) => x.storeyId === level.id).length,
+        project.members.length < 50,
       );
     })
     .join("");
@@ -160,8 +161,8 @@ export function renderExplorer(
         domainGroup("joints", "Joints") +
         domainGroup("supportDetails", "Support details") +
         domainGroup("designObjects", "Design object bindings") +
-        group("nodes", "Analytical nodes") +
-        group("supports", "Supports") +
+        group("nodes", "Analytical nodes", project.nodes.length < 50) +
+        group("supports", "Supports", project.members.length < 50) +
         branch(
           "drafts",
           "Design objects · mock",

@@ -1,9 +1,6 @@
 import { entityLabel } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
-import {
-  listPortalTemplates,
-  savePortalTemplate,
-} from "./state/storage.js";
+import { listPortalTemplates, savePortalTemplate } from "./state/storage.js";
 const $ = (s) => document.querySelector(s);
 const uid = (prefix) =>
   prefix + crypto.randomUUID().replaceAll("-", "").slice(0, 12);
@@ -183,6 +180,7 @@ export function modeling({
         position,
         tolerance: features ? 8 / viewport.factor : 1e-6,
         features,
+        excludedIds: viewport.excludedIds(),
         grid: viewport.gridSpacing,
         plane: viewport.plane,
       },
@@ -426,7 +424,8 @@ export function modeling({
         )
           return;
         const after = result.project;
-        $("#bay-preview").innerHTML = `<p>Validated preview. One undo restores the planar portal. No model changes yet.</p>
+        $("#bay-preview").innerHTML =
+          `<p>Validated preview. One undo restores the planar portal. No model changes yet.</p>
           <ul>
             <li>Mode · ${esc(p.analysisMode)} → ${esc(after.analysisMode)}</li>
             <li>Nodes · ${p.nodes.length} → ${after.nodes.length}</li>

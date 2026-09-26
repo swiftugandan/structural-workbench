@@ -194,3 +194,13 @@ along local y at the analytical reference plane. It is supplementary display
 geometry, not new analytical members/nodes, a stringer design or finished-level
 geometry. The analytical line view draws these edges thinly with an explanatory
 legend; solid view retains the existing section envelopes and treads.
+
+### View-only exclusion set
+
+`screenPick`, `boxSelect` and `snap` accept optional `excludedIds: string[]`.
+Exclusions are applied in Rust before hit priority/feature selection, so an
+invisible foreground item cannot mask a visible item behind it. The set is a
+transient view constraint, never a project mutation or analysis exclusion.
+Malformed sets fail with INVALID_SCHEMA. The UI rejects in-flight view queries
+after visibility changes as well as camera/model changes. View filters do not
+remove any elements from the solver or exported engineering model.

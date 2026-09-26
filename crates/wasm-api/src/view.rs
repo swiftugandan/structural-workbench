@@ -1,5 +1,17 @@
 use serde_json::{Value, json};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
+
+pub fn excluded_ids(q: &Value) -> Result<BTreeSet<String>> {
+    match q.get("excludedIds") {
+        None => Ok(BTreeSet::new()),
+        Some(value) => serde_json::from_value(value.clone()).map_err(|_| {
+            err(
+                "INVALID_SCHEMA",
+                "excludedIds must be an array of entity IDs",
+            )
+        }),
+    }
+}
 use workbench_model::{Project, Result, err};
 type Point = [f64; 3];
 #[derive(Clone)]
@@ -166,6 +178,7 @@ impl Index {
         })
     }
     pub fn pick(&self, q: &Value) -> Result<Value> {
+        let excluded = excluded_ids(q)?;
         let point: [f64; 2] = serde_json::from_value(q["point"].clone())
             .map_err(|_| err("INVALID_SCHEMA", "Screen point"))?;
         if point.iter().any(|x| !x.is_finite()) {
@@ -174,6 +187,9 @@ impl Index {
         let tolerance = 8.;
         let mut hits = vec![];
         for (id, p) in &self.nodes {
+            if excluded.contains(id) {
+                continue;
+            }
             let d = (p[0] - point[0]).hypot(p[1] - point[1]);
             if d <= tolerance {
                 hits.push((0, p[2], d, id));
@@ -189,6 +205,9 @@ impl Index {
         );
         for i in found {
             let (id, _, _, a, b) = &self.members[i];
+            if excluded.contains(id) {
+                continue;
+            }
             let dx = b[0] - a[0];
             let dy = b[1] - a[1];
             let l = dx * dx + dy * dy;
@@ -213,6 +232,7 @@ impl Index {
         )
     }
     pub fn select(&self, q: &Value) -> Result<Value> {
+        let excluded = excluded_ids(q)?;
         let rect: [f64; 4] = serde_json::from_value(q["rect"].clone())
             .map_err(|_| err("INVALID_SCHEMA", "Selection rectangle"))?;
         if rect.iter().any(|x| !x.is_finite()) {
@@ -227,13 +247,13 @@ impl Index {
         let mut ids: Vec<_> = self
             .nodes
             .iter()
-            .filter(|(_, p)| contains(*p))
+            .filter(|(id, p)| !excluded.contains(id) && contains(*p))
             .map(|(id, _)| id)
             .collect();
         ids.extend(
             self.members
                 .iter()
-                .filter(|m| contains(m.3) && contains(m.4))
+                .filter(|m| !excluded.contains(&m.0) && contains(m.3) && contains(m.4))
                 .map(|m| &m.0),
         );
         ids.sort();

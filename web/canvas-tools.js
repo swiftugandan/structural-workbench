@@ -183,7 +183,11 @@ export function canvasTools({
   const pick = (point) =>
     gateway.send("queryGeometry", {
       kind: "screenPick",
-      query: { camera: viewport.camera(), point },
+      query: {
+        camera: viewport.camera(),
+        point,
+        excludedIds: viewport.excludedIds(),
+      },
       viewRevision: viewport.viewRevision,
     });
   const snap = (point) =>
@@ -193,6 +197,7 @@ export function canvasTools({
         position: viewport.pointAt(...point),
         tolerance: 8 / viewport.factor,
         features: true,
+        excludedIds: viewport.excludedIds(),
         grid: viewport.gridSpacing,
         plane: viewport.plane,
       },

@@ -3787,3 +3787,71 @@ body.design-workspace {
   white-space: normal;
   overflow-wrap: anywhere;
 }
+
+/* REVIEW-03: scoped model inspection in the existing four-panel shell. */
+.model-view-scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  padding: 5px 9px;
+  border-bottom: 1px solid #d9e2ec;
+  background: #f5f8fc;
+  font-size: 11px;
+}
+.model-view-scope label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.model-view-scope select {
+  max-width: 145px;
+}
+.model-view-scope button,
+.model-view-scope select {
+  font-size: 11px;
+  padding: 5px 7px;
+  min-height: 28px;
+}
+#view-scope-status {
+  color: #475d73;
+  margin-left: auto;
+}
+.view-options {
+  position: relative;
+  font-size: 12px;
+}
+.view-options > summary {
+  cursor: pointer;
+  padding: 7px 9px;
+  border: 1px solid #cbd6e2;
+  border-radius: 4px;
+  background: white;
+}
+.view-options-content {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 30;
+  min-width: 225px;
+  display: grid;
+  gap: 5px;
+  padding: 10px;
+  background: white;
+  border: 1px solid #cbd6e2;
+  box-shadow: 0 8px 22px #142b4933;
+}
+#model-nav [aria-current="true"] {
+  background: #e8f0ff;
+  color: #175cbd;
+  border-color: #adc7eb;
+}
+@media (min-width: 1101px) {
+  .design-workspace .work-grid {
+    grid-template-columns: 240px minmax(0, 1fr) 340px;
+    grid-template-rows: minmax(0, 1fr) 240px;
+  }
+  .design-workspace .work-grid.results-collapsed {
+    grid-template-rows: minmax(0, 1fr) 38px;
+  }
+}

@@ -23,7 +23,11 @@ test("Residential stair widths remain visible in analytical view without changin
   );
   const hash = await page.locator("#hash-status").textContent();
   await page.locator("#model-solids").click();
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#support-labels").click();
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#member-labels").selectOption("hide");
   for (const view of ["plan", "elevation", "3d"]) {
     await page.locator(`#view-${view}`).click();

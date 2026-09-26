@@ -41,6 +41,8 @@ test("M01 topology: axes, loaded split preview, undo, redo, oracle, save and reo
     hash = await page.locator("#hash-status").textContent();
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#axes-toggle").click();
   await expect(page.locator(".axis-summary")).toContainText("m1 local axes");
   await page.screenshot({ path: `${folder}/axes.png`, fullPage: true });

@@ -65,6 +65,8 @@ test("Support labels toggle independently without invalidating analysis", async 
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
   const hash = await page.locator("#hash-status").textContent();
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#support-labels").click();
   await expect(page.locator("#support-labels")).toHaveAttribute(
     "aria-pressed",
@@ -80,6 +82,8 @@ test("Support labels toggle independently without invalidating analysis", async 
     await expect(page.locator("#result-status")).toHaveText("✓ Current");
     await expect(page.locator("#hash-status")).toHaveText(hash);
   }
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#support-labels").focus();
   await page.keyboard.press("Space");
   await expect(page.locator("#support-labels")).toHaveAttribute(
@@ -103,20 +107,30 @@ test("Member label Auto, Show all and Hide are independent of support labels", a
   await expect(page.locator(".member-label")).toHaveCount(1);
   const selectedLabels = await page.locator(".member-label").count();
   expect(selectedLabels).toBeLessThan(642);
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#member-labels").selectOption("show");
   await expect(page.locator(".member-label")).toHaveCount(642);
   await expect(page.locator(".support-label")).toHaveCount(12);
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#support-labels").click();
   await expect(page.locator(".support-label")).toHaveCount(0);
   await expect(page.locator(".member-label")).toHaveCount(642);
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#member-labels").selectOption("hide");
   for (const view of ["plan", "elevation", "3d"]) {
     await page.locator(`#view-${view}`).click();
     await expect(page.locator(".member-label")).toHaveCount(0);
   }
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#support-labels").click();
   await expect(page.locator(".support-label")).toHaveCount(12);
   await expect(page.locator(".member-label")).toHaveCount(0);
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#member-labels").selectOption("auto");
   await expect(page.locator(".member-label")).toHaveCount(selectedLabels);
   await expect(page.locator("#hash-status")).toHaveText(hash);

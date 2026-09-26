@@ -29,8 +29,11 @@ test("Crossing diagnostics distinguish spatial separation from disconnected inte
     if (
       (await page.locator("#model-crossings").getAttribute("aria-pressed")) !==
       "true"
-    )
+    ) {
+      if ((await page.locator("#view-options").getAttribute("open")) === null)
+        await page.locator("#view-options > summary").click();
       await page.locator("#model-crossings").click();
+    }
     const hash = await page.locator("#hash-status").textContent();
     for (const view of ["elevation", "plan", "3d"]) {
       await page.locator(`#view-${view}`).click();
@@ -54,6 +57,8 @@ test("Crossing diagnostics distinguish spatial separation from disconnected inte
   await expect(page.locator("#model-count")).toHaveText(
     "447 nodes · 642 members",
   );
+  if ((await page.locator("#view-options").getAttribute("open")) === null)
+    await page.locator("#view-options > summary").click();
   await page.locator("#model-crossings").click();
   await expect(page.locator("#model-crossings")).toHaveAttribute(
     "aria-pressed",

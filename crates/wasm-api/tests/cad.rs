@@ -360,3 +360,42 @@ fn stair_outlines_show_both_sides_of_each_return_flight_without_new_members() {
     assert_eq!(flights, 8);
     assert_eq!(out["modelHash"], original["modelHash"]);
 }
+
+#[test]
+fn hidden_entities_are_excluded_before_pick_priority_box_selection_and_snap() {
+    let (mut k, original) = open(fixture());
+    let camera =
+        json!({"origin":[0,0,0],"basis":[[1,0,0],[0,0,1],[0,-1,0]],"factor":100,"center":[0,0]});
+    let pick = |k: &mut Kernel, excluded: Value| {
+        req(
+            k,
+            "queryGeometry",
+            0,
+            json!({"kind":"screenPick","query":{"camera":camera,"point":[0,0],"excludedIds":excluded}}),
+        )
+    };
+    assert_eq!(pick(&mut k, json!([]))["payload"]["entityId"], "n1");
+    assert_eq!(pick(&mut k, json!(["n1"]))["payload"]["entityId"], "m1");
+    assert!(pick(&mut k, json!(["n1", "m1"]))["payload"]["entityId"].is_null());
+    let boxed = req(
+        &mut k,
+        "queryGeometry",
+        0,
+        json!({"kind":"boxSelect","query":{"camera":camera,"rect":[-10,-10,1000,1000],"excludedIds":["m1","n1"]}}),
+    );
+    assert!(
+        !boxed["payload"]["entityIds"]
+            .as_array()
+            .unwrap()
+            .contains(&json!("m1"))
+    );
+    let snapped = req(
+        &mut k,
+        "queryGeometry",
+        0,
+        json!({"kind":"snap","query":{"position":[0,0,0],"tolerance":0.01,"excludedIds":["n1","m1"],"features":true}}),
+    );
+    assert_eq!(snapped["payload"]["kind"], "free");
+    assert_eq!(snapped["modelHash"], original["modelHash"]);
+    assert_eq!(pick(&mut k, json!("invalid"))["status"], "error");
+}

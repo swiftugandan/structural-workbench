@@ -135,7 +135,23 @@ export class Viewport {
     n.textContent = text;
     n.hidden = false;
   }
+  isVisible(id) {
+    return !this.visibleIds || this.visibleIds.has(id);
+  }
+  nodesVisible() {
+    return this.showNodes ?? !(this.modelSolids || this.solidDesign);
+  }
+  excludedIds() {
+    if (!this.project) return [];
+    return [
+      ...this.project.members.filter((m) => !this.isVisible(m.id)),
+      ...this.project.nodes.filter(
+        (n) => !this.isVisible(n.id) || !this.nodesVisible(),
+      ),
+    ].map((x) => x.id);
+  }
   fit() {
+    this.fitIds = null;
     this.zoom = 1;
     this.pan = [0, 0];
     this.draw();
@@ -330,10 +346,67 @@ export class Viewport {
           this.axesProject === this.project ? this.localAxes || [] : [],
         )
       : null;
+    const scopeMembers = this.project.members.filter((m) =>
+      this.fitIds ? this.fitIds.has(m.id) : this.isVisible(m.id),
+    );
+    const scopeNodeIds = new Set(scopeMembers.flatMap((m) => [m.start, m.end]));
+    for (const s of this.project.supports)
+      if (this.fitIds?.has(s.id)) scopeNodeIds.add(s.node);
+    const scopedNodes = nodes.filter((n) =>
+      this.fitIds
+        ? this.fitIds.has(n.id) || scopeNodeIds.has(n.id)
+        : this.isVisible(n.id),
+    );
+    this.canvas.dataset.visibleMembers = String(
+      this.project.members.filter((m) => this.isVisible(m.id)).length,
+    );
+    const fitBounds = scopedNodes.map((n) => n.position);
+    if (this.axesProject === this.project) {
+      for (const m of scopeMembers) {
+        const frame = this.localAxes?.find((f) => f.id === m.id);
+        if (this.solidDesign || this.modelSolids) {
+          const section = this.project.sections.find((s) => s.id === m.section);
+          const shape = this.designCatalogue?.shapes.find(
+            (s) =>
+              m.steelDesign?.sectionRef ===
+              `${this.designCatalogue.id}:${s.designation}`,
+          );
+          // Reuse display vertices, including stair treads. These bounds only
+          // frame the camera; no saved geometry or engineering values change.
+          drawMemberSurface(
+            m,
+            section,
+            frame,
+            shape,
+            false,
+            (p) => {
+              fitBounds.push(p);
+              return p;
+            },
+            () => {},
+            () => {},
+          );
+          fitBounds.push(...(frame?.treads || []).flat());
+        } else fitBounds.push(...(frame?.stripOutline || []));
+      }
+    }
+    if (this.modelSolids || this.solidDesign)
+      for (const d of this.project.designPreviews || []) {
+        if (
+          d.kind === "padFooting" &&
+          d.targetId &&
+          (this.fitIds
+            ? this.fitIds.has(d.targetId)
+            : this.isVisible(d.targetId))
+        )
+          fitBounds.push(...sceneGeometry(d, this.project, "concrete").bounds);
+      }
     const fitNodes =
       designScene && !this.designPreview.context
         ? designScene.bounds.map((position) => ({ position }))
-        : nodes;
+        : fitBounds.length
+          ? fitBounds.map((position) => ({ position }))
+          : nodes;
     const min = [0, 1, 2].map((a) =>
         Math.min(...fitNodes.map((n) => n.position[a])),
       ),
@@ -344,17 +417,30 @@ export class Viewport {
     this.extent = Math.max(...max.map((v, i) => v - min[i]), 1);
     const basis = this.basis();
     document.querySelector(".axis-widget").innerHTML = orientationSvg(basis);
-    const spans = basis.slice(0, 2).map((axis) => {
+    const ranges = basis.slice(0, 2).map((axis) => {
       const values = fitNodes.map((n) =>
         n.position.reduce((s, x, i) => s + (x - this.origin[i]) * axis[i], 0),
       );
-      return Math.max(...values) - Math.min(...values);
+      return [Math.min(...values), Math.max(...values)];
     });
+    const spans = ranges.map(([a, b]) => b - a);
+    // Centre projected bounds, including asymmetric return flights.
+    this.origin = this.origin.map(
+      (v, i) =>
+        v + ranges.reduce((s, [a, b], j) => s + ((a + b) / 2) * basis[j][i], 0),
+    );
     this.factor =
       Math.min(
-        (w * 0.68) / Math.max(spans[0], this.extent * 0.15),
-        (h * 0.55) / Math.max(spans[1], this.extent * 0.15),
+        (w * 0.82) / Math.max(spans[0], this.extent * 0.15),
+        (h * 0.76) / Math.max(spans[1], this.extent * 0.15),
       ) * this.zoom;
+    const projectedBounds = fitNodes.map((n) => this.projectPoint(n.position));
+    this.canvas.dataset.fitBounds = JSON.stringify([
+      Math.min(...projectedBounds.map((p) => p[0])),
+      Math.min(...projectedBounds.map((p) => p[1])),
+      Math.max(...projectedBounds.map((p) => p[0])),
+      Math.max(...projectedBounds.map((p) => p[1])),
+    ]);
     const points = new Map(
       nodes.map((n) => [n.id, this.projectPoint(n.position)]),
     );
@@ -477,6 +563,7 @@ export class Viewport {
     }
     let stairOutlines = 0;
     for (const [i, m] of this.project.members.entries()) {
+      if (!this.isVisible(m.id)) continue;
       entityIndex = i + 1;
       const a = points.get(m.start),
         b = points.get(m.end);
@@ -553,6 +640,7 @@ export class Viewport {
     this.canvas.dataset.supportDisplay =
       this.mode === "3d" ? "illustrative-solid" : "analytical-symbol";
     const supportSymbols = this.project.supports
+      .filter((s) => this.isVisible(s.id))
       .map((support) => ({
         support,
         symbol: supportSymbol(this.project, support, (p) =>
@@ -644,7 +732,7 @@ export class Viewport {
       const member = this.project.members.find((m) => m.id === mark.memberId);
       const a = member && nodes.find((n) => n.id === member.start)?.position;
       const b = member && nodes.find((n) => n.id === member.end)?.position;
-      if (a && b) {
+      if (a && b && this.isVisible(mark.memberId)) {
         const p = this.projectPoint(
           a.map((v, i) => v + (b[i] - v) * mark.station),
         );
@@ -658,6 +746,7 @@ export class Viewport {
       }
     }
     for (const [i, n] of nodes.entries()) {
+      if (!this.isVisible(n.id) || !this.nodesVisible()) continue;
       const p = points.get(n.id);
       entityIndex = this.project.members.length + i + 1;
       if (this.hovered === n.id) dot(p, 8, orange);
@@ -685,6 +774,7 @@ export class Viewport {
     }
     entityIndex = 0;
     for (const m of this.project.members) {
+      if (!this.isVisible(m.id)) continue;
       if (
         this.memberLabels === "hide" ||
         (this.memberLabels !== "show" &&
@@ -712,6 +802,7 @@ export class Viewport {
       const dimensionColor = [0.35, 0.43, 0.52, 1];
       let count = 0;
       for (const member of this.project.members) {
+        if (!this.isVisible(member.id)) continue;
         if (this.project.members.length > 100 && !this.selection.has(member.id))
           continue;
         if (count++ >= 100) break;
@@ -738,7 +829,7 @@ export class Viewport {
     }
     if (this.showAxes && this.localAxes) {
       const frame = this.localAxes.find((m) => m.id === this.selected);
-      if (frame) {
+      if (frame && this.isVisible(frame.id)) {
         const colors = [
           [0.75, 0.12, 0.12, 1],
           [0.08, 0.45, 0.2, 1],
@@ -853,6 +944,11 @@ export class Viewport {
       return start;
     };
     for (const load of this.showLoads === false ? [] : this.project.loads) {
+      if (
+        (load.node && !this.isVisible(load.node)) ||
+        (load.member && !this.isVisible(load.member))
+      )
+        continue;
       if (load.type === "nodal") {
         const node = nodes.find((n) => n.id === load.node);
         if (!node) continue;
@@ -963,6 +1059,7 @@ export class Viewport {
           ),
         );
         for (const member of this.result.members) {
+          if (!this.isVisible(member.id)) continue;
           if (!member.samples?.length) continue;
           const plot = actionProjection(
             member.samples,
@@ -1017,6 +1114,7 @@ export class Viewport {
       }
     } else if (current && this.resultView === "deformed") {
       for (const member of this.result.members) {
+        if (!this.isVisible(member.id)) continue;
         if (!member.samples?.length) continue;
         const curve = deformationProjection(
           member.samples,
@@ -1041,6 +1139,7 @@ export class Viewport {
     }
     if (this.crossingData && this.showCrossings !== false) {
       for (const crossing of this.crossingData.crossings) {
+        if (!crossing.memberIds.every((id) => this.isVisible(id))) continue;
         const [x, y] = crossing.point;
         if (x < 0 || x > w || y < 0 || y > h) continue;
         const p = [x, y, 0.08];
@@ -1057,7 +1156,12 @@ export class Viewport {
     this.onViewChanged?.();
     if (this.mode === "3d" && (this.solidDesign || this.modelSolids)) {
       for (const d of this.project.designPreviews || []) {
-        if (d.kind !== "padFooting" || !d.targetId) continue;
+        if (
+          d.kind !== "padFooting" ||
+          !d.targetId ||
+          !this.isVisible(d.targetId)
+        )
+          continue;
         const support = this.project.supports.find((s) => s.id === d.targetId);
         const base = this.project.nodes.find(
           (n) => n.id === support?.node,
