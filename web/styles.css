@@ -3793,7 +3793,7 @@ body.design-workspace {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  align-items: center;
+  align-items: flex-end;
   padding: 5px 9px;
   border-bottom: 1px solid #d9e2ec;
   background: #f5f8fc;
@@ -3801,17 +3801,19 @@ body.design-workspace {
 }
 .model-view-scope label {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 4px;
 }
 .model-view-scope select {
   max-width: 145px;
+  width: 100%;
 }
 .model-view-scope button,
 .model-view-scope select {
   font-size: 11px;
   padding: 5px 7px;
   min-height: 28px;
+  height: 28px;
 }
 #view-scope-status {
   color: #475d73;
