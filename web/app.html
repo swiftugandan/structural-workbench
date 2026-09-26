@@ -153,7 +153,22 @@
               <strong>Frame model</strong><small id="model-count"></small>
             </div>
           </div>
+          <div class="explorer-tools">
+            <input
+              id="model-search"
+              type="search"
+              aria-label="Search model"
+              placeholder="Search model…"
+            />
+            <div>
+              <button id="explorer-expand" title="Expand all">Expand all</button
+              ><button id="explorer-collapse" title="Collapse all">
+                Collapse all
+              </button>
+            </div>
+          </div>
           <nav id="model-nav" aria-label="Model entities"></nav>
+          <p id="explorer-empty" role="status" hidden>No matching elements</p>
           <div class="model-bottom">
             <p class="eyebrow">ANALYSIS MODEL</p>
             <label

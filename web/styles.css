@@ -3632,3 +3632,120 @@ body.design-workspace {
 .design-workspace .projectbar #save-status {
   color: #c6d7e5;
 }
+
+/* Model Explorer follows the reference's nested, searchable structure. */
+.explorer-tools {
+  padding: 8px 10px;
+}
+.explorer-tools input {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 8px;
+}
+.explorer-tools > div {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+.explorer-tools button {
+  padding: 3px;
+  border: 0;
+  background: transparent;
+  font-size: 10px;
+  color: #546981;
+}
+#model-nav {
+  padding: 0 8px 12px;
+}
+#model-nav details {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+#model-nav summary {
+  display: list-item;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px 2px;
+  white-space: nowrap;
+  color: #243e59;
+}
+#model-nav summary small {
+  margin-left: 5px;
+  color: #6b7d90;
+  font-size: 10px;
+}
+#model-nav .explorer-children {
+  margin-left: 9px;
+  padding-left: 5px;
+  border-left: 1px solid #e2e9f0;
+}
+#model-nav .explorer-note {
+  font-size: 10px;
+  color: #657a91;
+  line-height: 1.4;
+  margin: 4px 0 7px;
+}
+#model-nav .explorer-empty {
+  margin: 3px 0 6px;
+  font-size: 10px;
+  color: #7e8b9a;
+}
+#model-nav button,
+.design-workspace #model-nav button {
+  min-height: 26px;
+  padding: 4px;
+  gap: 4px;
+  font-size: 11px;
+  border-radius: 3px;
+}
+#model-nav button.explorer-leaf {
+  grid-template-columns: 14px minmax(0, 1fr);
+}
+#model-nav .explorer-leaf small {
+  grid-column: 2;
+  font-size: 9px;
+  color: #6b7d90;
+  overflow-wrap: anywhere;
+}
+#model-nav button.explorer-manage {
+  grid-template-columns: 1fr auto 12px;
+  font-weight: 600;
+}
+#model-nav .entity {
+  margin: 1px 0;
+  width: 100%;
+  grid-template-columns: 12px minmax(0, 1fr);
+}
+#model-nav .entity small {
+  grid-column: 2;
+  font-size: 9px;
+}
+#model-nav [hidden] {
+  display: none !important;
+}
+#explorer-empty {
+  font-size: 12px;
+  margin: 10px;
+  color: #6b7d90;
+}
+.design-workspace .project-summary {
+  padding: 9px 12px;
+}
+@media (min-width: 1101px) {
+  .design-workspace .work-grid {
+    grid-template-columns: 245px minmax(0, 1fr) 410px;
+  }
+}
+
+#model-nav .entity {
+  grid-template-columns: minmax(0, 1fr);
+}
+#model-nav .entity small {
+  grid-column: 1;
+  white-space: normal;
+}
+#model-nav .entity.hierarchy-child {
+  margin-left: 10px;
+  width: calc(100% - 10px);
+}

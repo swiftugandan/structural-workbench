@@ -17,7 +17,8 @@ import { workspaceUI } from "./workspace-ui.js";
 import { cad } from "./cad.js";
 import { topology } from "./topology.js";
 import { modeling } from "./modeling.js";
-import { lineageSummary, renderMemberNav } from "./hierarchy.js";
+import { lineageSummary } from "./hierarchy.js";
+import { renderExplorer, filterExplorer } from "./model-explorer.js";
 import { Gateway } from "./state/transport.js";
 import { duplicateAsVariant, buildComparison } from "./variants.js";
 import {
@@ -767,31 +768,60 @@ $("#units").onchange = () => {
   viewport.draw();
   persist();
 };
+const explorerOpenState = new Map();
+let explorerProjectId, explorerSelection;
 function renderNav() {
-  const groups = [
-    ["nodes", "Nodes", "node"],
-    ["members", "Members", "member"],
-    ["supports", "Supports", "support"],
-    ["sections", "Sections", "section"],
-    ["materials", "Materials", "material"],
-    ["loadCases", "Load cases", "loadCase"],
-    ["loads", "Loads", "load"],
-    ["combinations", "Combinations", "combination"],
-  ];
-  $("#model-nav").innerHTML = groups
-    .map(
-      ([key, groupLabel, icon]) =>
-        `${{ nodes: "Structure", sections: "Member properties", loadCases: "Loading" }[key] ? `<h3 class="nav-section-title">${{ nodes: "Structure", sections: "Member properties", loadCases: "Loading" }[key]}</h3>` : ""}<button aria-label="${groupLabel} ${project[key].length}" data-group="${key}"><span class="nav-icon" aria-hidden="true">${structuralIcon(icon)}</span><span class="nav-label">${groupLabel}</span><span class="count">${project[key].length}</span></button>${
-          key === "members"
-            ? renderMemberNav(project.members, { selected, label, esc })
-            : ""
-        }`,
-    )
-    .join("");
-  $("#model-nav").insertAdjacentHTML(
-    "beforeend",
-    `<h3 class="nav-section-title">Design previews · mock workflows</h3>${(project.designPreviews || []).map((d) => `<button data-preview="${esc(d.id)}"><span class="nav-label">${esc({ rcBeam: "RC beam", slab: "Slab", padFooting: "Pad footing" }[d.kind])}</span><span class="count">${esc(d.id.slice(-6))}</span></button>`).join("")}`,
-  );
+  if (explorerProjectId !== project.id) {
+    explorerOpenState.clear();
+    explorerProjectId = project.id;
+    $("#model-search").value = "";
+  }
+  const query = $("#model-search").value;
+  $("#model-nav").innerHTML = renderExplorer(project, {
+    selected,
+    label,
+    esc,
+    icon: structuralIcon,
+    openState: explorerOpenState,
+    query,
+  });
+  if (selected !== explorerSelection) {
+    for (const leaf of $("#model-nav").querySelectorAll(
+      '[aria-current="true"]',
+    )) {
+      for (
+        let d = leaf.closest("details");
+        d;
+        d = d.parentElement.closest("details")
+      ) {
+        d.open = true;
+        explorerOpenState.set(d.dataset.branch, true);
+      }
+    }
+    explorerSelection = selected;
+  }
+  const count = filterExplorer($("#model-nav"), query);
+  $("#explorer-empty").hidden = !query || count > 0;
+  for (const d of $("#model-nav").querySelectorAll("details"))
+    d.ontoggle = () => {
+      if (!$("#model-search").value)
+        explorerOpenState.set(d.dataset.branch, d.open);
+    };
+  for (const b of $("#model-nav").querySelectorAll("[data-entity-id]"))
+    b.onclick = (e) => {
+      if (formDirty) return message("Apply or cancel changes first.");
+      const key = b.dataset.entityKey,
+        id = b.dataset.entityId;
+      if (["nodes", "supports", "loads"].includes(key))
+        selectEntities([id], e.shiftKey);
+      else {
+        modal("Edit " + entityGuides[key][0].toLowerCase(), "");
+        editEntity(
+          key,
+          project[key].find((x) => x.id === id),
+        );
+      }
+    };
   for (const b of document.querySelectorAll("[data-preview]"))
     b.onclick = () => {
       if (formDirty) return message("Apply or cancel changes first.");
@@ -811,6 +841,19 @@ function renderNav() {
       entityList(b.dataset.group);
     };
 }
+$("#model-search").oninput = renderNav;
+$("#explorer-expand").onclick = () => {
+  for (const d of $("#model-nav").querySelectorAll("details")) {
+    explorerOpenState.set(d.dataset.branch, true);
+    d.open = true;
+  }
+};
+$("#explorer-collapse").onclick = () => {
+  for (const d of $("#model-nav").querySelectorAll("details")) {
+    explorerOpenState.set(d.dataset.branch, false);
+    d.open = false;
+  }
+};
 const input = (id, label, value, attrs = "") =>
   `<label>${label}<input id="${id}" name="${id}" type="text" inputmode="decimal" value="${value}" ${attrs}></label>`;
 function renderDirectProperties(key, entity) {

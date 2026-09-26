@@ -89,6 +89,12 @@ export function concreteWorkspace({
     const host = $("#design-preview-scene"),
       d = draft();
     host.hidden = $("#concrete-inspector").hidden || !d;
+    for (const b of document.querySelectorAll("#model-nav [data-preview]")) {
+      const current = !host.hidden && b.dataset.preview === d?.id;
+      b.classList.toggle("active", current);
+      if (current) b.setAttribute("aria-current", "true");
+      else b.removeAttribute("aria-current");
+    }
     if (host.hidden) {
       hide();
       return;
