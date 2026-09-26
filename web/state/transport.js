@@ -81,7 +81,11 @@ export class Gateway {
     const requestId = `request-${++this.count}`;
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
-        if (operation === "analyse" || operation === "runStudy" || pending === this.analysisPending) {
+        if (
+          operation === "analyse" ||
+          operation === "runStudy" ||
+          pending === this.analysisPending
+        ) {
           this.cancelAnalysis(
             "TIMEOUT: operation exceeded its configured time limit",
           );
@@ -109,6 +113,7 @@ export class Gateway {
   }
 
   async send(operation, payload = {}) {
+    if (operation === "evaluateModelDesign") return this.modelDesign(payload);
     if (operation === "analyse") return this.analyse(payload);
     if (operation === "runStudy") return this.runStudy(payload);
     if (operation === "cancelAnalysis") {
@@ -123,6 +128,34 @@ export class Gateway {
       payload,
       this.revision,
     );
+  }
+
+  async modelDesign(payload) {
+    if (this.analysing) throw Error("Analysis or design is already running");
+    this.analysing = true;
+    try {
+      const snap = await this.send("exportProject", { includeResults: false });
+      if (snap.modelHash !== payload.modelHash)
+        throw Error("STALE: analyse the current model first");
+      this.resetAnalysisWorker();
+      await this.analysisReady;
+      const imported = await this.post(
+        this.analysisWorker,
+        this.analysisPending,
+        "importProject",
+        { jsonUtf8: JSON.stringify(snap.project) },
+        null,
+      );
+      return await this.post(
+        this.analysisWorker,
+        this.analysisPending,
+        "evaluateModelDesign",
+        payload,
+        imported.project.revision,
+      );
+    } finally {
+      this.analysing = false;
+    }
   }
 
   /** Import into an empty session after respawn — never send a stale expectedRevision. */
@@ -140,7 +173,9 @@ export class Gateway {
 
   async analyse(payload) {
     if (this.analysing)
-      throw Error("Analysis already running; cancel it before starting another");
+      throw Error(
+        "Analysis already running; cancel it before starting another",
+      );
     this.analysing = true;
     try {
       await this.ready;
@@ -188,7 +223,9 @@ export class Gateway {
   /** Run a declarative study on the analysis Worker (cancelable via cancelAnalysis). */
   async runStudy(payload) {
     if (this.analysing)
-      throw Error("Analysis already running; cancel it before starting another");
+      throw Error(
+        "Analysis already running; cancel it before starting another",
+      );
     this.analysing = true;
     try {
       let baseProjectJson = payload.baseProjectJson;

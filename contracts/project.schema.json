@@ -339,6 +339,9 @@
             "minimum": 0,
             "maximum": 1
           }
+        },
+        "steelDesign": {
+          "$ref": "#/$defs/steelDesign"
         }
       },
       "required": [
@@ -662,6 +665,86 @@
         "mergeTolerance",
         "timeoutMs",
         "memoryLimitMiB"
+      ],
+      "additionalProperties": false
+    },
+    "designValue": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "source": {
+          "enum": [
+            "catalogue",
+            "projectDefault",
+            "groupDefault",
+            "derived",
+            "user",
+            "imported",
+            "notProvided"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "steelDesign": {
+      "type": "object",
+      "properties": {
+        "sectionRef": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "materialRef": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "profileId": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "stabilityBasis": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "bracing": {
+          "enum": [
+            "notProvided",
+            "continuous",
+            "unbraced"
+          ]
+        },
+        "ky": {
+          "$ref": "#/$defs/designValue"
+        },
+        "kz": {
+          "$ref": "#/$defs/designValue"
+        },
+        "lb": {
+          "$ref": "#/$defs/designValue"
+        },
+        "cb": {
+          "$ref": "#/$defs/designValue"
+        }
+      },
+      "required": [
+        "sectionRef",
+        "materialRef",
+        "profileId",
+        "stabilityBasis",
+        "bracing",
+        "ky",
+        "kz",
+        "lb",
+        "cb"
       ],
       "additionalProperties": false
     }

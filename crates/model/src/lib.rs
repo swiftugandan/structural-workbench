@@ -5,6 +5,8 @@ use std::collections::BTreeSet;
 
 mod migrate;
 mod section_props;
+mod design_inputs;
+pub use design_inputs::{DesignSource, DesignValue, SteelDesign};
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, import_project,
 };
@@ -77,6 +79,8 @@ pub struct Member {
     pub parent_member_id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub station_range: Option<[f64; 2]>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub steel_design: Option<SteelDesign>,
 }
 record!(Support {
     id: String,
@@ -388,6 +392,9 @@ impl Project {
             }
         }
         for m in &self.members {
+            if let Some(design) = &m.steel_design {
+                design.validate()?;
+            }
             match (&m.parent_member_id, m.station_range) {
                 (Some(parent), Some([a, b]))
                     if a.is_finite() && b.is_finite() && a >= 0. && b <= 1. && a < b =>

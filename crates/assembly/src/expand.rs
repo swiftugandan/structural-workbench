@@ -162,6 +162,7 @@ pub fn expand_point_loads(project: &Project) -> Result<(Project, SplitMap)> {
                 release_end,
                 parent_member_id: Some(m.id.clone()),
                 station_range: Some([t0, t1]),
+                steel_design: m.steel_design.clone(),
             });
             children.push(ChildSpan {
                 id: child_id,

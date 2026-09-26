@@ -27,7 +27,8 @@
     "setup": "node tools/bootstrap.mjs",
     "test:graphics": "playwright test tests/visual",
     "format": "cargo fmt --all && prettier --write web tools/*.mjs tests playwright.config.js",
-    "test:browser": "node tools/run-browser.mjs"
+    "test:browser": "node tools/run-browser.mjs",
+    "verify:design-workspace": "node tools/verify-design-workspace.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

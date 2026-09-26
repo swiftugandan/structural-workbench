@@ -5,6 +5,7 @@
 //! lock and clause corpus verify. Until then evaluateDesign returns UNSUPPORTED.
 
 mod profile;
+pub mod native;
 
 pub use profile::{
     CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,

@@ -85,6 +85,12 @@ fn split(
     let mut children = vec![];
     for pair in points.windows(2) {
         let mut child = original.clone();
+        // A split changes the physical restraint/length interpretation. Reconfirm
+        // design assumptions on each child rather than inherit a claimed brace.
+        if let Some(d) = child.get_mut("steelDesign") {
+            d["stabilityBasis"] = json!("notProvided");
+            d["bracing"] = json!("notProvided");
+        }
         let child_id = generated(c, "m", *ordinal)?;
         *ordinal += 1;
         child["id"] = json!(child_id);

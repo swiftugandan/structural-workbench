@@ -2,6 +2,7 @@ mod cad;
 mod snap;
 mod topology;
 mod view;
+mod design_workspace;
 use serde_json::{Value, json};
 use wasm_bindgen::prelude::*;
 use workbench_model::{Project, Result, err, import_project};
@@ -45,6 +46,7 @@ impl Kernel {
         if op == "capabilities" {
             return Ok(capabilities_payload());
         }
+        if op == "steelCatalogue" { return Ok(workbench_design::native::catalogue()); }
         if op == "computeSection" {
             let payload = &r["payload"];
             let shape = payload["shape"].as_str().unwrap_or("");
@@ -87,6 +89,8 @@ impl Kernel {
         }
         let payload = &r["payload"];
         match op {
+            "steelReadiness" => workbench_design::native::readiness(self.project.as_ref().unwrap(),payload["memberId"].as_str().unwrap_or("")),
+            "evaluateModelDesign" => design_workspace::evaluate(self.project.as_ref().unwrap(),payload),
             "createProject" | "importProject" => {
                 let text = if op == "importProject" {
                     payload["jsonUtf8"]
@@ -448,6 +452,7 @@ impl Kernel {
 }
 fn apply(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
     let kind = c["type"].as_str().unwrap_or("");
+    if ["AssignSteelCatalogue", "SetSteelDesign"].contains(&kind) { return design_workspace::apply(v,c); }
     if ["MoveNodes", "CopySelection", "CopyBay", "DeleteGeometry"].contains(&kind) {
         return cad::apply(v, c);
     }

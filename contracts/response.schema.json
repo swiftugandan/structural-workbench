@@ -24,7 +24,10 @@
         "getResults",
         "exportProject",
         "evaluateDesign",
-        "runStudy"
+        "runStudy",
+        "steelCatalogue",
+        "steelReadiness",
+        "evaluateModelDesign"
       ]
     },
     "status": {

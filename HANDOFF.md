@@ -1,19 +1,13 @@
 # Structural Workbench handoff
 
-**Authoritative next work:** read root `delivery/state.json` (`activeMilestone`, `activeTask`, `nextAction`). Do not treat older diary notes, nested historical `nextAction` fields inside accepted task records, or `docs/agent/archive/` as current priority.
+Read `AGENTS.md`, the repository skills, and root `delivery/state.json` for current priority.
 
-## Current state (2026-09-24)
+## Current state (2026-09-26)
 
-- **Accepted parents:** M00–M07 (bounded AISC 360-22 LRFD S2). Analysis MVP complete; Screen-04 modal is the accepted M07 harness, not the target primary UX.
-- **Next slice:** [M07-E](agent-tasks/M07-E.md) — model-native steel identity, settings/provenance/readiness, demand path (steel pack phases 1–3). Binding: [ADR 0008](docs/adr/0008-integrated-design-workspace.md).
-- **Then:** M07-F (mockups 01–02) → M07-G (03–05). Deferred: M07-S (serviceability), M07-LTB (strength expansion). Program index: [agent-tasks/DESIGN-WORKFLOW.md](agent-tasks/DESIGN-WORKFLOW.md).
-- **Blocked:** M08 on concrete code/example resources (`delivery/state.json` blockers). SHELL UI slices wait on engineering parents.
-- **Layout refs only:** `docs/design/M0*-WORKFLOW/` — mockup Eurocode labels are not the code pin (SPEC/`SOURCES.md`).
+M00–M07 remain accepted at their existing bounded scope. M07-E and M07-F now deliver model-native steel catalogue/material binding, source-labelled assumptions/readiness, direct Rust/WASM checks of real model stations, richer immutable provenance, and the current Selection Inspector / Results drawer workflow.
 
-## Do not reopen
+Verification: `npm run verify:design-workspace`. Evidence: `evidence/M07/native-inputs/`. The same-build automated gate passed; visible Chrome showed PASS at governing station 0/F2-1 on macOS AMD WebGPU. See ADR 0009 for exact bounded scope. No LTB, serviceability, second-order or general full-code compliance expansion.
 
-Parent M07 numerical acceptance; M00–M06 analysis gates. Design packs do not change pinned codes or S2 breadth.
+Next authorized work: RC beam, slab and pad footing workflow previews with conspicuous synthetic provenance, no fabricated code profile or PASS, and persisted Rust-owned draft data. The current user explicitly permits these before engineering resource gates; ADR 0009 records that clarification to ADR 0008. M08/M10/M11 numerical parents remain blocked as applicable. M07-G whole-model/catalogue-study workflows remain a separate queued slice.
 
-## Session start
-
-`AGENTS.md` → `skills/prokon-session` → `delivery/state.json` → active agent-task. Preview: `npm run preview` after build.
+Work directly on main in small coherent commits. Preview: `npm run preview` after a complete build. Do not edit sources while building or validating an evidence snapshot.

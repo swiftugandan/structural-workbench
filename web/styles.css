@@ -2495,6 +2495,48 @@ body:has(#workspace:not([hidden])) > .appbar {
   flex-shrink: 0;
 }
 
+/* Native design uses the existing inspector and results drawer. */
+#steel-design-inspector {
+  padding: 16px;
+  overflow-wrap: anywhere;
+}
+#steel-design-inspector label {
+  display: block;
+  margin-block: 10px;
+}
+#steel-design-inspector input:not([type="checkbox"]),
+#steel-design-inspector select {
+  width: 100%;
+}
+#steel-design-inspector small {
+  display: block;
+  color: var(--muted, #526173);
+}
+#steel-design-inspector button {
+  margin: 5px 5px 5px 0;
+}
+.design-provenance dd {
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+.design-provenance pre,
+[data-testid="native-design-result"] pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.design-marker {
+  background: #fff4d8;
+  color: #723f00;
+  border: 1px solid #c47a0a;
+  border-radius: 5px;
+  padding: 4px 8px;
+}
+.inspector-tabs {
+  flex-wrap: wrap;
+}
+.steel-result-stale {
+  border: 2px solid #bb7900;
+}
 /* Steel design: setup, provenance, and clause results stay visible together. */
 #modal.steel-dialog {
   width: min(1140px, calc(100vw - 32px));

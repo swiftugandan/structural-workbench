@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M07-E",
-  "activeTask": "M07-E",
+  "activeMilestone": "DESIGN-PREVIEWS",
+  "activeTask": "RC-BEAM-PREVIEW",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -2632,6 +2632,83 @@
       "acceptedAt": "2026-09-23T17:05:24Z",
       "nextAction": "Investigate hosted versus local WASM byte difference before claiming reproducible artifacts. M08 remains blocked on concrete code/examples resources.",
       "acceptanceMeaning": "UI clarity refinement for existing bounded AISC S2 check. No new design scope or model-section assignment."
+    },
+    "M07-E": {
+      "id": "M07-E",
+      "useCase": "Model-native catalogue steel inputs and selected-member inspector/results workflow",
+      "dependencies": [
+        "M07-parent"
+      ],
+      "status": "ACCEPTED",
+      "acceptanceMeaning": "Local functional slice acceptance under bounded AISC S2. No new code breadth, serviceability, LTB, Windows/Linux hardware or commercial parity claim.",
+      "acceptanceIds": [
+        "DW-E1",
+        "DW-E2",
+        "DW-E3",
+        "DW-E4",
+        "DW-E5",
+        "DW-E6"
+      ],
+      "requiredCommands": [
+        "npm run verify:design-workspace"
+      ],
+      "outcomes": [
+        {
+          "check": "same-build native/WASM/browser gate",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/native-inputs/native-steel-gate.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M07/native-inputs"
+      ],
+      "sourceHash": "6daf8735f9b8b37ba22036865f24a4234985adc41b9feb173f0373d6dda99f9d",
+      "buildHash": "4c9a6e48ea589dcb04947d6dbb38596047570798002f13d4085644eb52b49fa4",
+      "acceptedAt": "2026-09-26T13:48:48.870381+00:00",
+      "attempts": [
+        "Corrected JSON representation-level binding comparison",
+        "Corrected async UI lock snapshot",
+        "Used visible File-menu export path in browser test"
+      ],
+      "nextAction": "Implement separately labelled concrete workflow previews under ADR 0009; M07-G remains scheduled."
+    },
+    "M07-F": {
+      "id": "M07-F",
+      "useCase": "Model-native catalogue steel inputs and selected-member inspector/results workflow",
+      "dependencies": [
+        "M07-E"
+      ],
+      "status": "ACCEPTED",
+      "acceptanceMeaning": "Local functional slice acceptance under bounded AISC S2. No new code breadth, serviceability, LTB, Windows/Linux hardware or commercial parity claim.",
+      "acceptanceIds": [
+        "DW-F1",
+        "DW-F2",
+        "DW-F3",
+        "DW-F4",
+        "DW-F5"
+      ],
+      "requiredCommands": [
+        "npm run verify:design-workspace"
+      ],
+      "outcomes": [
+        {
+          "check": "same-build native/WASM/browser gate",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/native-inputs/native-steel-gate.json"
+        }
+      ],
+      "evidencePaths": [
+        "evidence/M07/native-inputs"
+      ],
+      "sourceHash": "6daf8735f9b8b37ba22036865f24a4234985adc41b9feb173f0373d6dda99f9d",
+      "buildHash": "4c9a6e48ea589dcb04947d6dbb38596047570798002f13d4085644eb52b49fa4",
+      "acceptedAt": "2026-09-26T13:48:48.870381+00:00",
+      "attempts": [
+        "Corrected JSON representation-level binding comparison",
+        "Corrected async UI lock snapshot",
+        "Used visible File-menu export path in browser test"
+      ],
+      "nextAction": "Implement separately labelled concrete workflow previews under ADR 0009; M07-G remains scheduled."
     }
   },
   "blockers": [
@@ -2665,8 +2742,8 @@
     }
   ],
   "lastVerifiedSourceRevision": "1f3ee6d0295af062c0c380e9e26021b106d3dd8e",
-  "lastVerifiedBuildHash": "4a4152c285e90912c6629b09748e6ed9988db193c06c8410f72a2c724126dea7",
-  "nextAction": "Execute M07-E per agent-tasks/M07-E.md (ADR 0008: pack phases 1–3 only). Then M07-F (01–02), then M07-G (03–05). M07-S/LTB deferred. Layout refs: docs/design/M07-WORKFLOW. M08 resources remain blocked.",
+  "lastVerifiedBuildHash": "4c9a6e48ea589dcb04947d6dbb38596047570798002f13d4085644eb52b49fa4",
+  "nextAction": "Implement RC beam, slab and pad footing workflow previews per current user authorization and ADR 0009. Keep numerical parents resource-blocked. M07-G overview/catalogue-study remains separate queued work.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "87355d586145a0b5cc95e38a1a44e485d0317d10129b351a3fcb044b8e8c624b"
+  "lastVerifiedSourceHash": "6daf8735f9b8b37ba22036865f24a4234985adc41b9feb173f0373d6dda99f9d"
 }

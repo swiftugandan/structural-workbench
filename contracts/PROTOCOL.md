@@ -130,3 +130,14 @@ requires at least one node and member. Failed commands preserve the model and
 history. `measure({start,end})` takes node IDs and returns f64 distance and
 global delta in metres. `axes` also returns up to 100 near-coincident node-pair
 warnings, without changing connectivity.
+
+## Model-native steel workspace (M07-E/F)
+
+- `steelCatalogue {}` returns the versioned five-shape AISC v16 subset in source units, source workbook digest, and A992 identity. JS uses catalogue labels only; Rust converts properties.
+- `steelReadiness {memberId}` returns `ready|incomplete|unsupported`, exact input records and missing/unsupported reasons. READY is input readiness, never a strength PASS.
+- `AssignSteelCatalogue {id,sectionRef,materialRef}` and `SetSteelDesign {id,design}` are atomic `applyCommand` types. The latter uses the `steelDesign` schema record. Undo restores the prior binding and inputs.
+- `evaluateModelDesign {memberId,caseId,resultId,modelHash}` runs only for complete inputs and an exact current real case/combination. It re-solves the immutable capture in Rust on the disposable worker. Envelopes/caller-supplied demands/capacities are not an input path. It returns contractVersion, designRunId, profileId/version, overall, summary checks, full stationChecks, governingAction, result/model/build/settings/catalogue identities, explicit input provenance, warnings and limitations.
+- A check's `station`, `side`, `combinationId` and `actions` always describe one actual simultaneous recovered action set. `checks` summarizes each rule's governing record; it is not a synthetic action envelope.
+- `STALE` is a presentation state of an immutable record whose model/result identity is no longer current. Its historical numerical result remains available in the downloadable record but cannot be attached as current design to a new analysis report.
+
+See ADR 0009 for input identity, axis mapping and bounded applicability.

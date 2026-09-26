@@ -471,7 +471,7 @@ function renderInputSummary(payload, source, modelHash, exampleLabel = "") {
   </div>`;
 }
 
-function renderResult(run) {
+export function renderResult(run) {
   const checks = run.checks || [];
   let governing = null;
   for (const c of checks) {
@@ -496,7 +496,7 @@ function renderResult(run) {
       <td>${formatCheckValue(c.demand, c.units)}</td>
       <td>${formatCheckValue(c.resistance, c.units)}</td>
       <td><strong>${formatUtil(c.utilisation)}</strong>${c.utilisation != null && Number.isFinite(c.utilisation) ? `<span class="steel-meter"><span style="width:${Math.min(100, Math.max(0, c.utilisation * 100))}%"></span></span>` : ""}</td>
-      <td><details><summary>Details</summary><p>${esc(c.message || "No additional note.")}</p>${assumptions ? `<ul>${assumptions}</ul>` : ""}${detail ? `<dl>${detail}</dl>` : ""}</details></td>
+      <td><details><summary>Details</summary><p>${esc(c.message || "No additional note.")}</p>${c.actions ? `<p>${esc(c.combinationId)} · x/L ${esc(c.station)} ${esc(c.side || "")} · local [N, Vy, Vz, T, My, Mz] in N and N·m</p><code>${esc(JSON.stringify(c.actions))}</code>` : ""}${assumptions ? `<ul>${assumptions}</ul>` : ""}${detail ? `<dl>${detail}</dl>` : ""}</details></td>
     </tr>`;
     })
     .join("");
@@ -504,7 +504,7 @@ function renderResult(run) {
     ? `<p data-testid="steel-governing">Governing check <strong>${esc(checkNames[governing.checkId] || governing.checkId)}</strong> · ${esc(governing.clause)} · ${formatUtil(governing.utilisation)}</p>`
     : `<p data-testid="steel-governing">No numeric governing ratio for this check.</p>`;
   return `<div class="steel-result-hero steel-result-${esc(run.overall)}">
-    <div><span class="steel-eyebrow">Overall result</span><strong data-testid="steel-overall">${esc(run.overall)}</strong><small>${esc(run.memberId)} · ${esc(run.combinationId)} · x/L ${Number(run.station).toFixed(3)}</small></div>
+    <div><span class="steel-eyebrow">Overall result</span><strong data-testid="steel-overall">${esc(run.overall)}</strong><small>${esc(run.memberId)} · ${esc(run.combinationId)} · x/L ${run.station == null ? "—" : Number(run.station).toFixed(3)}</small></div>
     <div>${gov}<small>Highest reported ratio is shown; an unsupported check still limits the overall result.</small></div>
   </div>
   <div class="steel-check-table-wrap"><table data-testid="steel-check-table">

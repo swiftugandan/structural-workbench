@@ -50,7 +50,8 @@ export function csv(result, project) {
     };
     for (const m of result.members || []) {
       for (const a of m.actions || []) push(entityLabel(project, m.id), a);
-      for (const d of m.displacements || []) push(entityLabel(project, m.id), d);
+      for (const d of m.displacements || [])
+        push(entityLabel(project, m.id), d);
     }
     for (const n of result.nodes || [])
       for (const d of n.displacements || [])
@@ -139,6 +140,7 @@ function designRunsHtml(designRuns, e) {
       return `<section data-testid="report-design-run"><h2>Steel design checks</h2>
 <p>Profile ${e(run.profileId)} · member ${e(run.memberId)} · ${e(run.combinationId)} · station ${e(run.station)} · overall <strong data-testid="report-design-overall">${e(run.overall)}</strong></p>
 <p>Demands are from one real case or combination (not envelope maxima). Clause trail and intermediates below.</p>
+${run.source === "modelNative" ? `<p>${e(run.stabilityBasis)}. Serviceability: NOT CHECKED.</p><p>Design run ${e(run.designRunId)} · result ${e(run.resultId)} · model ${e(run.modelHash)} · profile ${e(run.profileVersion)} · settings ${e(run.designSettingsHash)} · catalogue ${e(run.catalogueSourceHash)}</p><details><summary>Complete input and station provenance</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details>` : ""}
 <table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>φRn</th><th>Util.</th><th>Intermediates</th></tr></thead><tbody>${rows}</tbody></table></section>`;
     })
     .join("");
@@ -161,7 +163,8 @@ export function report(project, result, { designRuns } = {}) {
     };
     for (const m of result.members || []) {
       for (const a of m.actions || []) push(entityLabel(project, m.id), a);
-      for (const d of m.displacements || []) push(entityLabel(project, m.id), d);
+      for (const d of m.displacements || [])
+        push(entityLabel(project, m.id), d);
     }
     for (const n of result.nodes || [])
       for (const d of n.displacements || [])

@@ -523,6 +523,24 @@ export class Viewport {
       labels.append(el);
       return el;
     };
+    if (this.designMarker?.modelHash === this.currentModelHash) {
+      const mark = this.designMarker;
+      const member = this.project.members.find((m) => m.id === mark.memberId);
+      const a = member && nodes.find((n) => n.id === member.start)?.position;
+      const b = member && nodes.find((n) => n.id === member.end)?.position;
+      if (a && b) {
+        const p = this.projectPoint(
+          a.map((v, i) => v + (b[i] - v) * mark.station),
+        );
+        dot(p, 8, orange);
+        const el = label(
+          `Design · ${mark.combinationId} · x/L ${Number(mark.station).toFixed(3)}${mark.side ? ` ${mark.side}` : ""} · ${mark.clause}`,
+          p,
+          "design-marker",
+        );
+        if (el) el.dataset.testid = "design-governing-marker";
+      }
+    }
     for (const [i, n] of nodes.entries()) {
       const p = points.get(n.id);
       entityIndex = this.project.members.length + i + 1;

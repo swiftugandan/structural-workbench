@@ -260,7 +260,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Priority raised: unrestricted steel beam-column design beyond declared effective-length workflows depends on this milestone (see PARITY_ROADMAP.md §3.1)."
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Priority raised: unrestricted steel beam-column design beyond declared effective-length workflows depends on this milestone (see PARITY_ROADMAP.md \u00a73.1)."
     },
     {
       "id": "M10",
@@ -312,7 +312,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Footing UI follows M11-SHELL (reaction → soil/contact → geometry → structural → detailing).",
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Footing UI follows M11-SHELL (reaction \u2192 soil/contact \u2192 geometry \u2192 structural \u2192 detailing).",
       "experienceFollowOns": [
         "M11-SHELL"
       ]
@@ -645,16 +645,32 @@
     ],
     "steelSpec": "docs/design/M07-WORKFLOW/structural-workbench-steel-design-spec.md",
     "steelSpecPhaseMap": {
-      "M07-E": ["1", "2", "3"],
-      "M07-F": ["4", "5"],
-      "M07-G": ["7", "9"],
-      "M07-S": ["8"],
-      "M07-LTB": ["6"],
-      "M09": ["10"]
+      "M07-E": [
+        "1",
+        "2",
+        "3"
+      ],
+      "M07-F": [
+        "4",
+        "5"
+      ],
+      "M07-G": [
+        "7",
+        "9"
+      ],
+      "M07-S": [
+        "8"
+      ],
+      "M07-LTB": [
+        "6"
+      ],
+      "M09": [
+        "10"
+      ]
     },
     "approvedSteelScreens": "docs/design/M07-WORKFLOW/screens/approved",
     "paritySection": "PARITY_ROADMAP.md#31-integrated-design-workspace-post-m07-experience-target",
-    "shellInvariant": "top menu/status; left Model Explorer; central WebGPU viewport; right Selection inspector; bottom Results drawer; footer — no parallel design chrome",
+    "shellInvariant": "top menu/status; left Model Explorer; central WebGPU viewport; right Selection inspector; bottom Results drawer; footer \u2014 no parallel design chrome",
     "mockupsAreLayoutOnly": true,
     "codePinsRemainSpec": true,
     "targetLoop": [
@@ -718,8 +734,8 @@
       "id": "M07-E",
       "parentMilestone": "M07",
       "name": "Model-native steel identity, settings, and demand path",
-      "state": "planned",
-      "priority": "next",
+      "state": "accepted",
+      "priority": "complete",
       "dependsOn": [
         "M07"
       ],
@@ -756,14 +772,15 @@
         "section-study",
         "serviceability-checks",
         "ltb-expansion"
-      ]
+      ],
+      "evidence": "evidence/M07/native-inputs/native-steel-gate.json"
     },
     {
       "id": "M07-F",
       "parentMilestone": "M07",
       "name": "Selected-member steel design in the existing shell",
-      "state": "planned",
-      "priority": "queued",
+      "state": "accepted",
+      "priority": "complete",
       "dependsOn": [
         "M07-E"
       ],
@@ -806,7 +823,8 @@
         "section-study",
         "serviceability-pass-fail",
         "candidate-what-changed"
-      ]
+      ],
+      "evidence": "evidence/M07/native-inputs/native-steel-gate.json"
     },
     {
       "id": "M07-G",

@@ -25,7 +25,10 @@
         "exportProject",
         "evaluateDesign",
         "computeSection",
-        "runStudy"
+        "runStudy",
+        "steelCatalogue",
+        "steelReadiness",
+        "evaluateModelDesign"
       ]
     },
     "expectedRevision": {

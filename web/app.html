@@ -343,9 +343,13 @@
             <button data-inspector-tab="forces" aria-pressed="false">
               Member results
             </button>
+            <button data-inspector-tab="steel" aria-pressed="false">
+              Steel design
+            </button>
           </div>
           <div id="inspector-content"></div>
           <div id="force-inspector" hidden></div>
+          <div id="steel-design-inspector" hidden></div>
         </aside>
         <section class="results-panel">
           <div class="results-tabs">
@@ -357,6 +361,7 @@
             ><button data-tab="stress" data-testid="tab-stress">
               Elastic stress</button
             ><button data-tab="equilibrium">Equilibrium</button>
+            <button data-tab="steel-design">Steel design</button>
             <div class="spacer"></div>
             <span id="result-status" class="badge">Not analysed</span
             ><button id="export-csv">↓ CSV</button>
@@ -397,6 +402,9 @@
       hidden
       data-testid="study-file"
     />
+    <button id="model-steel-design" type="button" hidden>
+      Member steel design
+    </button>
     <button
       id="steel-check"
       type="button"

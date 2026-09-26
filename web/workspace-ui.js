@@ -148,8 +148,12 @@ export function workspaceUI({
   const designCommands = document.createElement("div");
   designCommands.className = "ribbon-commands";
   const steelCheck = $("#steel-check");
+  const modelSteel = $("#model-steel-design");
+  modelSteel.hidden = false;
+  modelSteel.innerHTML = icon("settings") + "<span>Member steel design</span>";
+  designCommands.append(modelSteel);
   steelCheck.hidden = false;
-  steelCheck.innerHTML = icon("settings") + "<span>Steel check</span>";
+  steelCheck.innerHTML = icon("settings") + "<span>Reference checks</span>";
   steelCheck.title = "Check a steel member with the enabled AISC profile";
   designCommands.append(steelCheck);
   designGroup.append(designCommands);

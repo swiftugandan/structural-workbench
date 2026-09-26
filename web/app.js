@@ -37,6 +37,11 @@ import {
   renderCapabilitiesModalHtml,
 } from "./capabilities-ledger.js";
 import { openSteelCheckDialog } from "./steel-check.js";
+import {
+  steelDesignWorkspace,
+  designResultsHtml,
+  designState,
+} from "./steel-design.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -75,6 +80,40 @@ const viewport = new Viewport($("#viewport"), async (query) => {
   } catch (e) {
     message(e.message);
   }
+});
+const nativeSteel = steelDesignWorkspace({
+  gateway,
+  command,
+  getContext: () => ({
+    project,
+    modelHash,
+    result,
+    memberId: viewport.selection.size === 1 ? selected : null,
+    run: lastDesignRun?.source === "modelNative" ? lastDesignRun : null,
+    dirty: formDirty,
+    failed,
+    locked: busy || readOnly || analysing,
+  }),
+  onDirty: (dirty = true) => {
+    formDirty = dirty;
+    viewport.designMarker = null;
+    viewport.draw();
+    setBusy(busy);
+    renderResults();
+  },
+  onRunning: (value) => {
+    setAnalysing(value);
+    setBusy(value);
+  },
+  onError: message,
+  onRun: (run) => {
+    lastDesignRun = run;
+    renderResults();
+  },
+  showResults: () => {
+    $("[data-tab='steel-design']").click();
+    $("#show-results").click();
+  },
 });
 const modelTools = modeling({
   getProject: () => project,
@@ -204,6 +243,10 @@ const scope = async () => {
 $("#help").onclick = () => void scope();
 $("#scope").onclick = () => void scope();
 $("#footer-scope").onclick = () => void scope();
+$("#model-steel-design").onclick = () => {
+  $("[data-inspector-tab='steel']").click();
+  workspace.panel("properties");
+};
 $("#steel-check").onclick = () =>
   void openSteelCheckDialog({
     gateway,
@@ -787,16 +830,23 @@ function renderSelectionForces() {
 }
 for (const button of document.querySelectorAll("[data-inspector-tab]"))
   button.onclick = () => {
-    const forces = button.dataset.inspectorTab === "forces";
-    $("#inspector-content").hidden = forces;
-    $("#force-inspector").hidden = !forces;
+    if (formDirty) {
+      message("Apply or cancel changes before switching inspector tabs.");
+      return;
+    }
+    const kind = button.dataset.inspectorTab;
+    $("#inspector-content").hidden = kind !== "properties";
+    $("#force-inspector").hidden = kind !== "forces";
+    $("#steel-design-inspector").hidden = kind !== "steel";
     for (const tab of document.querySelectorAll("[data-inspector-tab]"))
       tab.setAttribute("aria-pressed", String(tab === button));
-    if (forces) renderSelectionForces();
+    if (kind === "forces") renderSelectionForces();
+    if (kind === "steel") void nativeSteel.render();
   };
 function renderInspector() {
   renderSelectionForces();
   formDirty = false;
+  if (!$("#steel-design-inspector").hidden) void nativeSteel.render();
   if (!selected || viewport.selection.size > 1) {
     const count = viewport.selection.size;
     $("#selection-tag").textContent = count ? `${count} selected` : "None";
@@ -952,6 +1002,31 @@ function renderResults() {
     (failed ? "failed" : result ? (current ? "current" : "stale") : "");
   $("#export-report").disabled = !current || failed;
   $("#export-csv").disabled = !current || failed;
+  if (tab === "steel-design") {
+    const run = lastDesignRun?.source === "modelNative" ? lastDesignRun : null;
+    const state = designState(run, modelHash, result, formDirty || failed);
+    $("#results-content").innerHTML = designResultsHtml(run, state);
+    $("#export-csv").disabled = true;
+    if (run) {
+      $("#design-download").onclick = () =>
+        download(
+          `design-${run.memberId}.json`,
+          JSON.stringify({ ...run, currentState: state }, null, 2),
+          "application/json",
+        );
+      $("#design-why").disabled = state === "stale" || !run.governingAction;
+      $("#design-why").onclick = () => {
+        selectEntities([run.memberId]);
+        viewport.designMarker = {
+          ...run.governingAction,
+          memberId: run.memberId,
+          modelHash: run.modelHash,
+        };
+        viewport.draw();
+      };
+    }
+    return;
+  }
   if (!result) {
     $("#results-content").innerHTML =
       `<div class="empty-results"><span>${failed ? "!" : "⌁"}</span><strong>${failed ? "No numerical result" : "Your results start here"}</strong><p>${failed ? "Resolve the diagnostic above, then analyse again." : "Review your model, then run an analysis."}</p></div>`;
@@ -1191,6 +1266,7 @@ $("#analyse").onclick = async () => {
       failed = true;
       renderSelectionForces();
       renderResults();
+      if (!$("#steel-design-inspector").hidden) void nativeSteel.render();
       viewport.update(project, null, selected);
     }
     message(e.message);
@@ -1380,7 +1456,13 @@ $("#export-report").onclick = () => {
     download(
       project.id + "-report.html",
       report(portable(), result, {
-        designRuns: lastDesignRun ? [lastDesignRun] : [],
+        designRuns:
+          lastDesignRun &&
+          lastDesignRun.modelHash === modelHash &&
+          (lastDesignRun.source !== "modelNative" ||
+            lastDesignRun.resultId === result.resultId)
+            ? [lastDesignRun]
+            : [],
       }),
       "text/html",
     );

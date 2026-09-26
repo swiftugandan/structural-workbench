@@ -1,0 +1,122 @@
+{
+  "taskId": "M07-E-F",
+  "milestone": "M07",
+  "sourceHash": "6daf8735f9b8b37ba22036865f24a4234985adc41b9feb173f0373d6dda99f9d",
+  "buildHash": "4c9a6e48ea589dcb04947d6dbb38596047570798002f13d4085644eb52b49fa4",
+  "lockHashes": {
+    "Cargo.lock": "b92375ebc7c8c3673ccc6fc2ff0074ab60d2dfc1af39e8023a431ad1ba8ea5a2",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "playwright-results.json": "81f951e6abb6d63dfdf615fbaa610c6973d0a092e9817a0f9582a50bffea86c0",
+    "design-run.json": "93cb5c03356ce8b77fc4990661b8ca5beadc65a90f009e4d6fc5d35b91485a42",
+    "member-steel-pass.png": "3592799104194c43052f3d83aca9a3cc7cc6bf5d9ad76f4e0a04244f1aca9faf"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-26T13:46:58.191Z",
+  "status": "PASS",
+  "scope": "Local model-native steel integration and S2 regression; no new numerical-code breadth",
+  "testCount": 90,
+  "nativeTestCount": 76,
+  "browserStats": {
+    "startTime": "2026-09-26T13:46:05.077Z",
+    "duration": 53047.1,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "outcomes": [
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "native",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--locked"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "contracts-ui",
+      "command": [
+        "node",
+        "--test",
+        "tests/contracts.test.mjs",
+        "tests/steel-check.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "analytical-native",
+      "command": [
+        "npm",
+        "run",
+        "test:numerical"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "analytical-wasm",
+      "command": [
+        "npm",
+        "run",
+        "test:wasm"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "browser",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "tests/e2e/native-steel-design.spec.js",
+        "tests/e2e/steel-check.spec.js",
+        "tests/e2e/capability-ledger.spec.js"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "acceptanceIds": [
+    "DW-E1",
+    "DW-E2",
+    "DW-E3",
+    "DW-E4",
+    "DW-E5",
+    "DW-E6",
+    "DW-F1",
+    "DW-F2",
+    "DW-F3",
+    "DW-F4",
+    "DW-F5"
+  ],
+  "command": [
+    "npm",
+    "run",
+    "verify:design-workspace"
+  ],
+  "artifacts": [
+    "playwright-results.json",
+    "design-run.json",
+    "member-steel-pass.png"
+  ],
+  "platformLimits": "Playwright uses Chromium/SwiftShader. A separate visible Chrome observation is recorded independently. No Windows/Linux hardware claim."
+}
