@@ -1,6 +1,6 @@
 {
   "taskId": "REVALIDATION-01",
-  "milestone": "M03",
+  "milestone": "M04",
   "sourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
   "buildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
   "lockHashes": {
@@ -10,9 +10,9 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "exported-project.json": "168fc81f4e56d9b5c5ff7af56c399db99b8e0a8f69d1f05d7983778dd7a29e76",
-    "calculation-report.html": "09ebcbaad75bc49b187024c9c2fc53d4368cce1e179306158eb1285844cced8b",
-    "results.csv": "bb1044009812f5087e4b5ed17c52514f0d362fa195bef5aa9e9b7c9b9853ae0a"
+    "m04-isolated/exported-project.json": "189bf65193a30a1ce4bb1281a6374339bda977f3b12ca8ba3e7f98bb46d4b2aa",
+    "m04-isolated/calculation-report.html": "e0d1066c74ea6e2d3b47f605dde13a76550b6a820e8b57abf709c9ee412179bc",
+    "m04-isolated/results.csv": "bb1044009812f5087e4b5ed17c52514f0d362fa195bef5aa9e9b7c9b9853ae0a"
   },
   "runner": {
     "platform": "darwin",
@@ -21,7 +21,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-26T22:50:41.668Z",
+  "observedAt": "2026-09-26T22:57:40.037Z",
   "status": "PASS",
   "test": "M04 record: export/import equivalence and report matches displayed results",
   "testIds": [
@@ -38,8 +38,9 @@
   ],
   "hashPrefix": "8ad1dd3428a2",
   "artifacts": [
-    "exported-project.json",
-    "calculation-report.html",
-    "results.csv"
-  ]
+    "m04-isolated/exported-project.json",
+    "m04-isolated/calculation-report.html",
+    "m04-isolated/results.csv"
+  ],
+  "artifactRelocation": "Isolated rerun after full-suite filename collision; hashes unchanged."
 }

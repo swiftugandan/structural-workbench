@@ -10,9 +10,9 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "m04-isolated/exported-project.json": "189bf65193a30a1ce4bb1281a6374339bda977f3b12ca8ba3e7f98bb46d4b2aa",
-    "m04-isolated/calculation-report.html": "e0d1066c74ea6e2d3b47f605dde13a76550b6a820e8b57abf709c9ee412179bc",
-    "m04-isolated/results.csv": "bb1044009812f5087e4b5ed17c52514f0d362fa195bef5aa9e9b7c9b9853ae0a"
+    "exported-project.json": "189bf65193a30a1ce4bb1281a6374339bda977f3b12ca8ba3e7f98bb46d4b2aa",
+    "calculation-report.html": "e0d1066c74ea6e2d3b47f605dde13a76550b6a820e8b57abf709c9ee412179bc",
+    "results.csv": "bb1044009812f5087e4b5ed17c52514f0d362fa195bef5aa9e9b7c9b9853ae0a"
   },
   "runner": {
     "platform": "darwin",
@@ -38,9 +38,8 @@
   ],
   "hashPrefix": "8ad1dd3428a2",
   "artifacts": [
-    "m04-isolated/exported-project.json",
-    "m04-isolated/calculation-report.html",
-    "m04-isolated/results.csv"
-  ],
-  "artifactRelocation": "Isolated rerun after full-suite filename collision; hashes unchanged."
+    "exported-project.json",
+    "calculation-report.html",
+    "results.csv"
+  ]
 }

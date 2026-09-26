@@ -11,3 +11,5 @@ Default `evidence/M00/current` contains the freshly executed records, not relabe
 `node tools/verify.mjs M00`: PASS. `npm run verify:release`: BLOCKED solely because remaining milestone-specific gates are not implemented; zero stale input/build/evidence findings. No verifier or engineering tolerance was relaxed. Concrete/UK NA resources and physical construction/detailing acceptance remain blocked as documented.
 
 Repairs include worker recovery ordering, GPU picking depth, storage warning visibility, indexed model validation and hashing, deferred Explorer branches with complete expansion/search/selection, and actual offline readiness polling in tests. No engineering formula or fixture golden changed.
+
+Artifact collision audit: M04 and later journeys shared two export names. M04 was rerun into `release-current/m04-isolated`; its top-level record now references those exact hashed outputs. All final record attachment hashes were independently checked after relocation.
