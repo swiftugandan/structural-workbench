@@ -1,5 +1,5 @@
 {
-  "sourceHash": "4a7a470aad1a241b2cfb2c8bb297d1c71420688905b5fa1b5755f6e3d0e3207b",
+  "sourceHash": "5d87008174f8a7aae2c8fc24e8c240a7dc005e2bdbc4b78d41b95030e28bf28a",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -12,13 +12,13 @@
     "release-manifest.json"
   ],
   "files": {
-    "app.html": "4b2a552d0790bd8af3ea73b5f2def36f88f02819ecd67c9d4d694d92d4cf9e57",
+    "app.html": "79e079e723653adeb902dfa867ce9c2c4f76a1a24203a1b2fe9588526574682e",
     "app.js": "484a23571cfa9907633722c30e209d30e3ff150b4df965966430703841e08d58",
     "cad.js": "820cc8d27d9909e83bbc30b59c90330e46447336e3e81636ebf51b77c73ff68a",
     "canvas-tools.js": "521b224d56358812afb68b9349b6b66f6b05e67612bd42914102ea40a6f8d8e3",
     "capabilities-ledger.js": "15e95c50ae42d86966a805b5d2a0510e693f2d00d5f5865451a17502b63a305d",
     "capabilities.json": "debd0872fdfb474230268a99f30c5e0feea1601a119bf61d9773bfb2364aa57a",
-    "command-menu.js": "319208b34898157a5708fcb04c82b550f9ed79acc8e46af48957c2ce43a03fe9",
+    "command-menu.js": "987e1fd567fe92218bfddc177fa1a974137f87426041028604f6fe8c43aae912",
     "design-presentation.js": "863af3fbc5315073b6371e8fef0e9a1065d2b0afe1abac4e3a70cde2e133e91b",
     "design-previews.js": "3e7c628c4a0df8b7243513d37023d3da7e51c90f3357fa9f0342a2908cc065b2",
     "design-status.js": "7340adcc42821fa6cc7fb6c70e365b51242b29f0662c487cec97445abb450fbf",
@@ -56,7 +56,7 @@
     "offline.js": "bcccfca2f33f5df48ae12b262aa2d7d3441113ba09b29394de42ef726a594834",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "5b545760c8d8df640816c2a24d113d324b013949576c35d818265db990ef143c",
+    "pkg/workbench_wasm_api_bg.wasm": "90adfd089db0e829cbb740a004bc51fd2de2b4e1accc9944babef253eb1a9b09",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/connections.js": "718307212938168507007eb994bdf7fde2f71d6fe4d5bdbfd1696c44f550c0ba",
@@ -80,13 +80,13 @@
     "steel-overview.js": "f643eb200841b813992220118c1769ed78323c4b435a39d6c63a3c1e1db7b303",
     "structural-icons.js": "8d4dde99cf08ad51a162d1c412f507fb33dc06063e4287eed8cd4df4c7f2aedf",
     "structure-workspace.js": "8abe0db3dd1667d67ef9aa154b9c109f4a7d2636e33f418da5443a8030fb8de8",
-    "styles.css": "eecdadc45fce5cebde17bdc195e37ec17e3ac5ccdf2c312573bc280588d7ef3c",
-    "sw.js": "fd68db703f38df7ce63f808f9560e67822a2970e44877b6d42312fce3d534f94",
+    "styles.css": "70cc5169aa252e12f8db15fd3ff7dc6ec3db73d9b89ac6a894fa6389dd946e4c",
+    "sw.js": "e6fe73760d4e212d271fb3bb4a76a6bd731ba9ed38cf676a2342f8695f57a74a",
     "topology.js": "6ee06278fcd9301a51c72ef58ba6226a4ea85df4d5b6773d4f7b31cd8f264b29",
     "variants.js": "e7be206d5557d058a6364b1c78706ccc3cf92852e6ab5ef8f49a010a700d243b",
     "worker.js": "caf71a0c60f5a4a42a3f4cdfe52e4826268883f39743bf23a0e6e444046f9bfd",
     "workspace-ui.js": "3d9c8a9f0b73c688de5c994a6d56ce80fac92b7a11ec04b4878db61630cd6ef6"
   },
-  "buildHash": "f9a719668b51d5b90dec5fb7ff0e3bec355edaa86263cf1109be2f63fd5d035e",
+  "buildHash": "999e90abf22d54b83bbd75a5f49a2e05c3a77eb45f684c196bee2b9a5863ee48",
   "releaseStatus": "working-preview-not-accepted"
 }

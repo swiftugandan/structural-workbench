@@ -2,6 +2,27 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { menuCommand } from "../menu-helpers.js";
 
+test("Header is aligned and Design menu opens the existing design workflows", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#new-project").click();
+  await expect(page.locator("#save-status")).toBeHidden();
+  const centres = await page.locator("#project-name, #menu-design").evaluateAll(
+    (elements) => elements.map((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.y + rect.height / 2;
+    }),
+  );
+  expect(Math.abs(centres[0] - centres[1])).toBeLessThanOrEqual(1);
+  await menuCommand(page, "Design", "Member steel design");
+  await expect(page.locator("#steel-design-inspector")).toBeVisible();
+  await menuCommand(page, "Design", "Model steel review");
+  await expect(page.locator('[data-testid="steel-overview"]')).toBeVisible();
+  await menuCommand(page, "Design", "Concrete previews");
+  await expect(page.locator("#concrete-inspector")).toBeVisible();
+  await menuCommand(page, "Design", "Reference checks…");
+  await expect(page.locator("dialog[open]")).toBeVisible();
+});
+
 test("Application menus share commands, keyboard navigation and disabled states", async ({
   page,
 }) => {

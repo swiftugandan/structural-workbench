@@ -225,8 +225,29 @@ export function commandMenu({
         null,
         cmd("Export calculation report", "#export-report"),
         cmd("Export results CSV", "#export-csv"),
+      ],
+    ],
+    [
+      "Design",
+      [
+        cmd("Member steel design", "#model-steel-design"),
+        {
+          label: "Model steel review",
+          action: () => {
+            panel("results");
+            $('[data-tab="steel-overview"]').click();
+          },
+        },
+        {
+          label: "Concrete previews",
+          action: () => {
+            panel("properties");
+            $('[data-inspector-tab="concrete"]').click();
+          },
+        },
         null,
-        cmd("Steel member check…", "#steel-check"),
+        cmd("Reference checks…", "#steel-check"),
+        cmd("Export calculation report", "#export-report"),
       ],
     ],
     [
