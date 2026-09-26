@@ -2900,6 +2900,18 @@
       "sourceHash": "904b84df5e62b7d46e3d32eb43717614881c0f3705bf17b42b0a1b7207c71d32",
       "buildHash": "b21c6a2d188c7e43a2007b07950b004d6daf475dfd251616525f369b0d93bd5c",
       "verification": "Three focused browser journeys plus visible Chrome/AMD show/hide inspection; no numerical changes."
+    },
+    "STAIR-OUTLINES": {
+      "id": "STAIR-OUTLINES",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "useCase": "Show both physical edges of stair flights and landing widths in analytical view",
+      "evidencePath": "evidence/stair-outlines/stair-outline-gate.json",
+      "sourceHash": "7778021c8e301cc6b0d1c84b4a17cc5abbb526fc82bb2d1377df6e64ce43b9ad",
+      "buildHash": "7cfbf22225720db293d32b23bc1999d178cdbd088a2664f3abe4113398bec91c",
+      "notes": [
+        "The eight analytical flights already exist and share landing nodes. Thin supplementary outlines do not add stringer beams or alter engineering state.",
+        "88 native tests, 3 contracts, 2 browser journeys and visible browser inspection passed."
+      ]
     }
   },
   "blockers": [

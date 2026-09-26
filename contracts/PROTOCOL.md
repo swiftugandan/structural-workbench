@@ -184,3 +184,13 @@ Migration 0.9 → 1.0 → 1.1 preserves original import bytes in host storage an
 deterministic bindings. Legacy roles are `unassigned`; no storey/role is guessed from
 orientation. Current 1.1 imports must contain a complete valid graph. Legacy files
 containing an unknown `structure` extension are rejected rather than overwritten.
+
+### Stair strip display outline
+
+The `axes` query includes `stripOutline` on each member frame: four world-space
+points for members explicitly owned by a `stair` or `landing` physical object,
+or an empty array otherwise. The rectangle uses the actual section half-width
+along local y at the analytical reference plane. It is supplementary display
+geometry, not new analytical members/nodes, a stringer design or finished-level
+geometry. The analytical line view draws these edges thinly with an explanatory
+legend; solid view retains the existing section envelopes and treads.

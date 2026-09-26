@@ -317,3 +317,46 @@ fn crossing_is_a_world_space_test_including_edge_on_views() {
         assert_eq!(out["payload"]["crossings"], json!([]), "{out}");
     }
 }
+
+#[test]
+fn stair_outlines_show_both_sides_of_each_return_flight_without_new_members() {
+    let p = workbench_model::residential_reference().unwrap();
+    let (mut k, original) = open(serde_json::to_value(&p).unwrap());
+    let out = req(
+        &mut k,
+        "queryGeometry",
+        0,
+        json!({"kind":"axes","query":{}}),
+    );
+    let frames = out["payload"]["members"].as_array().unwrap();
+    let mut flights = 0;
+    for m in &p.members {
+        let frame = frames.iter().find(|f| f["id"] == m.id).unwrap();
+        let outline: Vec<[f64; 3]> = serde_json::from_value(frame["stripOutline"].clone()).unwrap();
+        if m.section != "flight" && m.section != "landing" {
+            assert!(outline.is_empty());
+            continue;
+        }
+        assert_eq!(outline.len(), 4);
+        let a = p.nodes.iter().find(|n| n.id == m.start).unwrap().position;
+        let b = p.nodes.iter().find(|n| n.id == m.end).unwrap().position;
+        let cy = p.sections.iter().find(|s| s.id == m.section).unwrap().cy;
+        for axis in 0..3 {
+            assert!(((outline[0][axis] + outline[3][axis]) / 2. - a[axis]).abs() < 1e-12);
+            assert!(((outline[1][axis] + outline[2][axis]) / 2. - b[axis]).abs() < 1e-12);
+        }
+        let width = (0..3)
+            .map(|i| (outline[0][i] - outline[3][i]).powi(2))
+            .sum::<f64>()
+            .sqrt();
+        assert!((width - 2. * cy).abs() < 1e-12);
+        if m.section == "flight" {
+            flights += 1;
+            assert!((width - 1.2).abs() < 1e-12);
+            assert_eq!(outline[0][1], a[1]);
+            assert_eq!(outline[1][1], b[1]);
+        }
+    }
+    assert_eq!(flights, 8);
+    assert_eq!(out["modelHash"], original["modelHash"]);
+}

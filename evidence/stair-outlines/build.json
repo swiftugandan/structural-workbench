@@ -82,6 +82,5 @@
     "worker.js": "caf71a0c60f5a4a42a3f4cdfe52e4826268883f39743bf23a0e6e444046f9bfd",
     "workspace-ui.js": "3d9c8a9f0b73c688de5c994a6d56ce80fac92b7a11ec04b4878db61630cd6ef6"
   },
-  "buildHash": "7cfbf22225720db293d32b23bc1999d178cdbd088a2664f3abe4113398bec91c",
-  "releaseStatus": "working-preview-not-accepted"
+  "buildHash": "7cfbf22225720db293d32b23bc1999d178cdbd088a2664f3abe4113398bec91c"
 }

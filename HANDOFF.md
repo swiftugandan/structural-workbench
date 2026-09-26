@@ -1,3 +1,7 @@
+## Latest: stair widths in analytical line view
+
+UKR01-v2 already contains both returning flights per storey. The user screenshot revealed that a single centreline per wide flight looked like a missing side. The analytical view now draws Rust-generated thin outlines of both stair sides and landing strips, with a legend separating physical width from analytical beams. Model geometry, loads and numerical results are unchanged. Evidence: `evidence/stair-outlines/`.
+
 ## Latest: member and support label visibility
 
 Viewport controls now include **Support labels** (show/hide) and **Member labels: Auto / Show all / Hide**. Auto preserves the existing large-model selection rule; Show all deliberately overrides the member label budget. Hiding labels leaves support/member geometry and analysis unchanged. Preferences apply during the session across camera changes. Focused regression and visible-browser evidence: `evidence/support-labels/`.

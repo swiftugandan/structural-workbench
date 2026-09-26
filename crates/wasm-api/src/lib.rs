@@ -255,7 +255,7 @@ impl Kernel {
                         let a = positions[m.start.as_str()];
                         let b = positions[m.end.as_str()];
                         let (length, axes) = workbench_geometry::axes(a, b, m.local_y);
-                        json!({"id":m.id,"origin":std::array::from_fn::<_,3,_>(|i| (a[i]+b[i])*0.5),"length":length,"axes":axes,"treads":stair_treads(p,m,a,b,axes)})
+                        json!({"id":m.id,"origin":std::array::from_fn::<_,3,_>(|i| (a[i]+b[i])*0.5),"length":length,"axes":axes,"treads":stair_treads(p,m,a,b,axes),"stripOutline":stair_strip_outline(p,m,a,b,axes)})
                     }).collect();
                     let mut nodes: Vec<_> = p.nodes.iter().collect();
                     nodes.sort_by(|a, b| a.position[0].total_cmp(&b.position[0]));
@@ -719,6 +719,28 @@ fn capabilities_payload() -> Value {
 }
 
 // Display-only wedges; analysis includes the reference step weight as an explicit load.
+// Physical strip width at the analytical reference plane. These edges are
+// display geometry only, not additional analytical beams or topology nodes.
+fn stair_strip_outline(
+    p: &Project,
+    m: &workbench_model::Member,
+    a: [f64; 3],
+    b: [f64; 3],
+    axes: [[f64; 3]; 3],
+) -> Vec<[f64; 3]> {
+    if !p.structure.physical_members.iter().any(|owner| {
+        matches!(owner.role.as_str(), "stair" | "landing")
+            && owner.analytical_member_ids.contains(&m.id)
+    }) {
+        return vec![];
+    }
+    let section = p.sections.iter().find(|s| s.id == m.section).unwrap();
+    [(a, -1.), (b, -1.), (b, 1.), (a, 1.)]
+        .into_iter()
+        .map(|(point, side)| std::array::from_fn(|i| point[i] + side * section.cy * axes[1][i]))
+        .collect()
+}
+
 fn stair_treads(
     p: &Project,
     m: &workbench_model::Member,

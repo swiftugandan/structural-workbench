@@ -1,0 +1,11 @@
+
+Running 2 tests using 1 worker
+
+(node:86241) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:86241) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/spatial-crossings.spec.js:5:1 › Crossing diagnostics distinguish spatial separation from disconnected intersections (12.6s)
+  ✓  2 tests/e2e/stair-outlines.spec.js:5:1 › Residential stair widths remain visible in analytical view without changing the model (7.8s)
+
+  2 passed (22.2s)

@@ -475,6 +475,7 @@ export class Viewport {
         [0.35, 0.55, 0.62, 1],
       );
     }
+    let stairOutlines = 0;
     for (const [i, m] of this.project.members.entries()) {
       entityIndex = i + 1;
       const a = points.get(m.start),
@@ -515,13 +516,33 @@ export class Viewport {
               )
             : undefined,
         );
-      } else line(a, b, 4, ink);
+      } else {
+        line(a, b, 4, ink);
+        const outline =
+          this.axesProject === this.project
+            ? this.localAxes?.find((f) => f.id === m.id)?.stripOutline
+            : null;
+        if (outline?.length === 4) {
+          stairOutlines++;
+          const corners = outline.map((p) => this.projectPoint(p));
+          for (let edge = 0; edge < 4; edge++)
+            line(
+              corners[edge],
+              corners[(edge + 1) % 4],
+              1.3,
+              [0.32, 0.52, 0.62, 1],
+            );
+        }
+      }
       if (this.hovered === m.id) line(a, b, 8, [0.9, 0.42, 0.08, 0.7]);
       if (this.selection.has(m.id)) {
         line(a, b, 12, [0.16, 0.4, 0.8, 0.22]);
         line(a, b, 4, blue);
       }
     }
+    this.canvas.dataset.stairOutlines = String(stairOutlines);
+    document.querySelector("#stair-outline-legend").hidden =
+      stairOutlines === 0;
     entityIndex = 0;
     if (this.preview) {
       const [a, b] = this.preview.map((p) => this.projectPoint(p));
