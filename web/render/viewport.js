@@ -294,7 +294,20 @@ export class Viewport {
       return;
     this.canvas.dataset.lastGpuPick = gpuEntityId || "";
   }
+  /**
+   * Request a frame. Every subsystem that changes view state asks for one;
+   * requests within a task collapse into a single render at that task's
+   * microtask checkpoint, before the browser paints.
+   */
   draw() {
+    if (this.drawPending) return;
+    this.drawPending = true;
+    queueMicrotask(() => {
+      this.drawPending = false;
+      this.render();
+    });
+  }
+  render() {
     if (!this.project || !this.ready || this.canvas.clientWidth === 0) return;
     const w = this.canvas.clientWidth,
       h = this.canvas.clientHeight;

@@ -189,13 +189,24 @@ const nativeSteel = steelDesignWorkspace({
   },
 });
 const concrete = concreteWorkspace({
+  // Idempotent: the scene re-asserts its draft on every render, but only a
+  // change of draft or target touches the explorer. The caller draws.
   onSelection: (draft) => {
+    const target = draft.targetId || null;
+    if (
+      selectionContext?.kind === "preview" &&
+      selectionContext.id === draft.id &&
+      selected === target &&
+      viewport.selection.size === (target ? 1 : 0) &&
+      (!target || viewport.selection.has(target))
+    )
+      return;
     selectionContext = { kind: "preview", id: draft.id };
-    viewport.selection = new Set(draft.targetId ? [draft.targetId] : []);
-    selected = draft.targetId || null;
+    viewport.selection = new Set(target ? [target] : []);
+    selected = target;
+    viewport.selected = target;
     renderNav();
     renderSelectionStatus();
-    viewport.update(project, diagramResult(), selected);
   },
   viewport,
   gateway,
