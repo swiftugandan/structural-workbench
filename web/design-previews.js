@@ -406,6 +406,8 @@ export function concreteWorkspace({
     render,
     hide,
     results,
+    /** Recorded preview runs, one per draft; callers filter by model/result. */
+    records: () => [...runs.values()],
     select: (id) => {
       projectId = getContext().project?.id;
       active = id;

@@ -1817,6 +1817,16 @@ $("#export-report").onclick = () => {
             run.modelHash === modelHash &&
             (run.source !== "modelNative" || run.resultId === result.resultId),
         ),
+        // Current model-sourced RC beam previews bound to this exact result.
+        previewRuns: concrete
+          .records()
+          .filter(
+            (run) =>
+              run.kind === "rcBeam" &&
+              run.modelHash === modelHash &&
+              run.sourceProvenance.kind === "modelAnalysis" &&
+              run.sourceProvenance.resultId === result.resultId,
+          ),
       }),
       "text/html",
     );

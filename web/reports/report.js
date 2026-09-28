@@ -146,9 +146,59 @@ ${run.source === "modelNative" ? `<p>${e(run.stabilityBasis)}. Serviceability: N
     .join("");
 }
 
-export function report(project, result, { designRuns } = {}) {
+/** RC beam preview runs (ADR 0012/0014, M08-A5): code-agnostic section
+ * mechanics beside the bound member's governing model moments, with
+ * cracked-section service stresses. Never a code check; values in SI are
+ * also carried exactly in data-si attributes and the embedded run record. */
+function concretePreviewsHtml(project, previewRuns, e) {
+  if (!previewRuns?.length) return "";
+  const si = (v, scale, unit) =>
+    typeof v === "number"
+      ? `<span data-si="${v}">${(v / scale).toPrecision(6)} ${unit}</span>`
+      : "—";
+  const runs = previewRuns.map((run) => {
+    const sm = run.sectionMechanics,
+      fd = run.flexuralDemand,
+      src = run.sourceProvenance;
+    const state = (key) => {
+      const st = sm?.[key],
+        g = fd?.status === "evaluated" ? fd[key] : null;
+      if (st?.status !== "evaluated")
+        return `<tr data-testid="report-rc-state" data-state="${key}"><th scope="row">${key}</th><td colspan="6">${e(sm?.status === "evaluated" ? st?.reason || "Unsupported" : sm?.reason || "Not evaluated")}</td></tr>`;
+      const sv = st.serviceMoment;
+      return `<tr data-testid="report-rc-state" data-state="${key}"><th scope="row">${key} · ${e(st.compressionFace)} face in compression</th><td data-testid="report-rc-capacity">${si(st.ultimate.moment, 1e3, "kN·m")}</td><td data-testid="report-rc-demand">${g ? si(g.moment, 1e3, "kN·m") : "None"}</td><td>${g ? `x/L ${g.station}${g.side ? ` (${e(g.side)})` : ""} · ${e(g.kind)}` : "—"}</td><td data-testid="report-rc-service-concrete">${sv ? si(st.elastic.serviceConcreteStress, 1e6, "MPa") : "—"}</td><td data-testid="report-rc-service-steel">${sv ? st.elastic.serviceSteelStress.map((v) => si(v, 1e6, "MPa")).join(" / ") : "—"}</td><td>${sv ? (sv.belowCrackingMoment ? "Yes — cracked stresses overstate" : "No") : "—"}</td></tr>`;
+    };
+    const v = run.inputs?.inputs || {},
+      fits = sm?.rowFits;
+    const face = (name) =>
+      `<tr><th scope="row">${name}</th><td>${v[`${name}BarCount`]} × ${v[`${name}BarDiameter`]} m</td><td>${fits ? fits[name].area : "—"}</td><td>${fits ? fits[name].depthFromFace : "—"}</td><td>${fits ? (fits[name].clearSpacing ?? "single bar") : "—"}</td><td>${fits ? (fits[name].fits ? "Yes" : "No") : "—"}</td></tr>`;
+    const geometry = `<h4>Section and bar rows (SI)</h4><p data-testid="report-rc-section">b ${v.width} m × h ${v.depth} m · cover to link ${v.cover} m · link ${v.linkDiameter} m</p><table><thead><tr><th>Face</th><th>Bars</th><th>Area (m²)</th><th>Depth from its face (m)</th><th>Clear spacing (m)</th><th>Fits</th></tr></thead><tbody>${face("top")}${face("bottom")}</tbody></table>`;
+    const inputs = sm?.inputs
+      ? Object.entries(sm.inputs)
+          .map(
+            ([k, v]) =>
+              `<tr><th scope="row">${e(k)}</th><td>${v}</td><td>${e(sm.inputSources?.[k] || "")}</td></tr>`,
+          )
+          .join("")
+      : "";
+    return `<section data-testid="report-rc-preview" data-draft-id="${e(run.draftId)}"><h3>RC beam draft ${e(run.draftId)} · member ${e(entityLabel(project, fd?.memberId || src.targetId))}</h3>
+<p>Overall <strong data-testid="report-rc-overall">${e(String(run.overall).toUpperCase())}</strong> · code profile unavailable · ${e(sm?.law || "no mechanics law")}</p>
+<p>Preview run ${e(run.previewRunId)} · input ${e(run.inputHash)} · result ${e(src.resultId)} · combination ${e(src.combinationId)} · model ${e(run.modelHash)} · solver ${e(src.solverBuildHash)}</p>
+${fd?.status === "evaluated" ? `<p>${e(fd.convention)}. Top face direction ${e(fd.topFaceDirection.join(", "))} (${e(fd.topFaceOrientation)}).${fd.topFaceOrientation === "up" ? "" : ` <strong data-testid="report-rc-orientation-warning">The draft top face is not uppermost in this member: draft sagging and hogging are not the physical ones. Correct the member localY to align them.</strong>`}</p>` : ""}
+${geometry}
+<table><thead><tr><th>State</th><th>Mechanics capacity</th><th>Governing model moment</th><th>Location</th><th>Service σc (cracked)</th><th>Service σs per row (compression +)</th><th>Below M_cr</th></tr></thead><tbody>${state("sagging")}${state("hogging")}</tbody></table>
+${inputs ? `<h4>Material-law inputs (SI)</h4><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody>${inputs}</tbody></table>` : ""}
+<ul>${[...(sm?.limitations || []), ...(fd?.limitations || [])].map((l) => `<li>${e(l)}</li>`).join("")}</ul>
+<details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
+  });
+  return `<section data-testid="report-concrete-previews"><h2>RC beam section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. Not a code resistance: no partial factors, code limits or code checks are applied, and no utilisation ratio is given. Overall design remains UNSUPPORTED until a concrete code profile is available (ADR 0012).</p>${runs.join("")}</section>`;
+}
+
+export function report(project, result, { designRuns, previewRuns } = {}) {
   const e = escape;
-  const designSection = designRunsHtml(designRuns, e);
+  const designSection =
+    designRunsHtml(designRuns, e) +
+    concretePreviewsHtml(project, previewRuns, e);
   if (result.analysisType === "envelope") {
     const ids = (result.caseOrCombinationIds || []).join(", ");
     const rows = [];

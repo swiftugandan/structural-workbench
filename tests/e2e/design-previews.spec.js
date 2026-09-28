@@ -323,6 +323,70 @@ for (const [localY, orientation, sagging, hogging] of [
     expect(await states.evaluate((e) => e.scrollWidth <= e.clientWidth)).toBe(
       true,
     );
+    // M08-A6: the calculation record carries the same values exactly (SI in
+    // data-si), with provenance; a synthetic re-run is never reported.
+    const exportRecord = async () => {
+      const download = page.waitForEvent("download");
+      await menuCommand(page, "File", "Export calculation report");
+      const html = await readFile(await (await download).path(), "utf8");
+      expect(html).not.toContain("<script>");
+      const doc = await page.context().newPage();
+      await doc.setContent(html);
+      return { html, doc };
+    };
+    const { html, doc } = await exportRecord();
+    const section = doc.locator("[data-testid=report-rc-preview]");
+    await expect(section).toHaveCount(1);
+    await expect(section).toContainText("LC1");
+    await expect(section.locator("[data-testid=report-rc-overall]")).toHaveText(
+      "UNSUPPORTED",
+    );
+    const exact = async (locator, want) => {
+      const got = Number(
+        await locator.locator("[data-si]").first().getAttribute("data-si"),
+      );
+      expect(Math.abs(got - want)).toBeLessThanOrEqual(1e-9 * Math.abs(want));
+    };
+    for (const [state, moment] of [
+      ["sagging", sagging],
+      ["hogging", hogging],
+    ]) {
+      const want = cases.find((c) => c.id === B08_SERVICE[moment]).expected
+        .elastic;
+      const row = section.locator(`[data-state=${state}]`);
+      await exact(
+        row.locator("[data-testid=report-rc-demand]"),
+        Number.parseFloat(moment) * 1000,
+      );
+      await exact(
+        row.locator("[data-testid=report-rc-service-concrete]"),
+        want.serviceConcreteStress,
+      );
+      const steel = row.locator(
+        "[data-testid=report-rc-service-steel] [data-si]",
+      );
+      await expect(steel).toHaveCount(2);
+      for (const i of [0, 1])
+        expect(
+          Math.abs(
+            Number(await steel.nth(i).getAttribute("data-si")) -
+              want.serviceSteelStress[i],
+          ),
+        ).toBeLessThanOrEqual(1e-9 * Math.abs(want.serviceSteelStress[i]));
+    }
+    expect(html).toContain("MECHANICS ONLY");
+    await expect(section.locator("[data-testid=report-rc-section]")).toHaveText(
+      "b 0.3 m × h 0.6 m · cover to link 0.035 m · link 0.01 m",
+    );
+    await expect(
+      section.locator("[data-testid=report-rc-orientation-warning]"),
+    ).toHaveCount(localY[1] > 0 ? 0 : 1);
+    await mkdir(dir, { recursive: true });
+    await writeFile(
+      `${dir}/rcBeam-mechanics-record-${localY[1] > 0 ? "up" : "down"}.html`,
+      html,
+    );
+    await doc.close();
     await expect(pane).toContainText("MECHANICS ONLY");
     const capacity = await page
       .locator("[data-testid=mechanics-moment-sagging]")
@@ -332,5 +396,15 @@ for (const [localY, orientation, sagging, hogging] of [
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
       "UNSUPPORTED",
     );
+    await page.locator("#preview-source").selectOption("synthetic");
+    await page.locator("#preview-run").click();
+    await expect(page.locator("[data-testid=preview-result]")).toContainText(
+      "SYNTHETIC FIXTURE",
+    );
+    const synthetic = await exportRecord();
+    await expect(
+      synthetic.doc.locator("[data-testid=report-rc-preview]"),
+    ).toHaveCount(0);
+    await synthetic.doc.close();
     expect(errors).toEqual([]);
   });
