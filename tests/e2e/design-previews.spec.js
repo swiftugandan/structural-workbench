@@ -239,6 +239,11 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   await page.screenshot({ path: `${dir}/rcBeam-mechanics.png` });
   expect(errors).toEqual([]);
 });
+// Oracle case whose service moment each state carries (symmetric default draft).
+const B08_SERVICE = {
+  "15 kN·m": "RC-PREVIEW-B08-SAGGING-SERVICE",
+  "30 kN·m": "RC-PREVIEW-B08-HOGGING-SERVICE",
+};
 for (const [localY, orientation, sagging, hogging] of [
   [[0, 1, 0], "points up", "15 kN·m", "30 kN·m"],
   [[0, -1, 0], "points DOWN", "30 kN·m", "15 kN·m"],
@@ -290,6 +295,34 @@ for (const [localY, orientation, sagging, hogging] of [
     ).toContainText(orientation);
     await expect(pane).toContainText("Model design moments · LC1");
     await expect(pane).toContainText("No utilisation ratio");
+    // M08-A5: cracked-section service stresses equal the independent oracle.
+    const cases = JSON.parse(
+      await readFile("fixtures/design/rc-section-mechanics/cases.json", "utf8"),
+    ).cases;
+    const mpa = (v) =>
+      `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 2 }).format(v / 1e6)} MPa`;
+    for (const [state, moment] of [
+      ["sagging", sagging],
+      ["hogging", hogging],
+    ]) {
+      const want = cases.find((c) => c.id === B08_SERVICE[moment]).expected
+        .elastic;
+      await expect(
+        page.locator(`[data-testid=service-concrete-${state}]`),
+      ).toHaveText(mpa(want.serviceConcreteStress));
+      for (const i of [0, 1])
+        await expect(
+          page.locator(`[data-testid=service-steel-${state}-${i}]`),
+        ).toHaveText(mpa(want.serviceSteelStress[i]));
+      await expect(
+        page.locator(`[data-testid=service-uncracked-${state}]`),
+      ).toBeVisible();
+    }
+    // Both state cards fit side by side; wide layer tables scroll in-card.
+    const states = page.locator(".mechanics-states");
+    expect(await states.evaluate((e) => e.scrollWidth <= e.clientWidth)).toBe(
+      true,
+    );
     await expect(pane).toContainText("MECHANICS ONLY");
     const capacity = await page
       .locator("[data-testid=mechanics-moment-sagging]")

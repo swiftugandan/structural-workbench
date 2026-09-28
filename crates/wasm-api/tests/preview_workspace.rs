@@ -390,7 +390,7 @@ fn model_demand(local_y: [f64; 3]) -> Value {
     );
     assert_eq!(r["status"], "ok", "{r}");
     assert_eq!(r["payload"]["overall"], "unsupported");
-    r["payload"]["flexuralDemand"].clone()
+    r["payload"].clone()
 }
 #[test]
 fn rc_beam_model_demand_matches_closed_form_and_reports_face_orientation() {
@@ -398,7 +398,7 @@ fn rc_beam_model_demand_matches_closed_form_and_reports_face_orientation() {
         let v = v.as_f64().unwrap();
         assert!((v - expected).abs() <= 1e-6 * expected.abs(), "{v} vs {expected}");
     };
-    let up = model_demand([0., 1., 0.]);
+    let up = model_demand([0., 1., 0.])["flexuralDemand"].clone();
     assert_eq!(up["status"], "evaluated");
     assert_eq!(up["combinationId"], "LC1");
     assert_eq!(up["topFaceOrientation"], "up");
@@ -409,7 +409,7 @@ fn rc_beam_model_demand_matches_closed_form_and_reports_face_orientation() {
     close(&up["hogging"]["moment"], 30000.);
     assert_eq!(up["hogging"]["station"], 0.);
     close(&up["hogging"]["actions"][4], 30000.);
-    let down = model_demand([0., -1., 0.]);
+    let down = model_demand([0., -1., 0.])["flexuralDemand"].clone();
     assert_eq!(down["topFaceOrientation"], "down");
     assert_eq!(down["topFaceDirection"], json!([0., 0., -1.]));
     close(&down["sagging"]["moment"], 30000.);
@@ -423,4 +423,65 @@ fn rc_beam_synthetic_run_has_no_model_demand() {
     let c = req(&mut k, "getSnapshot", json!({}));
     let run = rc_run(&mut k, &draft["payload"]["project"]["designPreviews"][0]["id"], &c["modelHash"]);
     assert_eq!(run["flexuralDemand"]["status"], "unavailable");
+}
+/// M08-A5: each state's governing model moment drives the cracked-section
+/// service stresses; expected values come from the independent oracle cases
+/// RC-PREVIEW-B08-*-SERVICE (default draft, B08 closed-form moments).
+#[test]
+fn rc_beam_service_stresses_under_model_moments_match_oracle() {
+    let fixture: Value = serde_json::from_str(include_str!(
+        "../../../fixtures/design/rc-section-mechanics/cases.json"
+    ))
+    .unwrap();
+    let expected = |id: &str| {
+        fixture["cases"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|c| c["id"] == id)
+            .unwrap()["expected"]["elastic"]
+            .clone()
+    };
+    let close = |got: &Value, want: &Value| {
+        let (g, w) = (got.as_f64().unwrap(), want.as_f64().unwrap());
+        assert!((g - w).abs() <= 1e-9 * w.abs(), "{g} vs {w}");
+    };
+    let run = model_demand([0., 1., 0.]);
+    let sm = &run["sectionMechanics"];
+    assert_eq!(sm["status"], "evaluated");
+    for (state, id, moment, station) in [
+        ("sagging", "RC-PREVIEW-B08-SAGGING-SERVICE", 15000., 0.5),
+        ("hogging", "RC-PREVIEW-B08-HOGGING-SERVICE", 30000., 0.),
+    ] {
+        let want = expected(id);
+        let st = &sm[state];
+        close(&st["serviceMoment"]["moment"], &json!(moment));
+        close(&st["serviceMoment"]["station"], &json!(station));
+        assert_eq!(st["serviceMoment"]["combinationId"], "LC1");
+        assert_eq!(st["serviceMoment"]["stressBasis"], "crackedSection");
+        // Both closed-form moments are below M_cr = 58.4 kN m for this draft.
+        assert_eq!(st["serviceMoment"]["belowCrackingMoment"], true);
+        close(&st["elastic"]["serviceConcreteStress"], &want["serviceConcreteStress"]);
+        for (g, w) in st["elastic"]["serviceSteelStress"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(want["serviceSteelStress"].as_array().unwrap())
+        {
+            close(g, w);
+        }
+    }
+    assert_eq!(run["overall"], "unsupported");
+}
+#[test]
+fn rc_beam_synthetic_run_has_no_service_stresses() {
+    let mut k = open();
+    let draft = create(&mut k, "rcBeam");
+    let c = req(&mut k, "getSnapshot", json!({}));
+    let run = rc_run(&mut k, &draft["payload"]["project"]["designPreviews"][0]["id"], &c["modelHash"]);
+    for state in ["sagging", "hogging"] {
+        let st = &run["sectionMechanics"][state];
+        assert_eq!(st["serviceMoment"], Value::Null);
+        assert_eq!(st["elastic"].get("serviceConcreteStress"), None, "{st}");
+    }
 }

@@ -3342,7 +3342,8 @@ body.design-workspace {
   margin-left: 15px;
 }
 .design-notes h4,
-.reinforcement-layout h4 {
+.reinforcement-layout h4,
+.mechanics-states h4 {
   margin: 4px 0 9px;
   font-size: 12px;
 }
@@ -3435,6 +3436,19 @@ body.design-workspace {
   border: 1px solid #dbe4ed;
   padding: 9px;
 }
+/* Sagging and hogging section-mechanics states side by side, equal width;
+   wide layer tables scroll inside their card. */
+.mechanics-states {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.mechanics-states article {
+  border: 1px solid #dbe4ed;
+  padding: 9px;
+  min-width: 0;
+  overflow-x: auto;
+}
 .design-drawing {
   width: 100%;
   max-height: 210px;
@@ -3525,7 +3539,8 @@ body.design-workspace {
   .design-section-sketch svg {
     width: 65px;
   }
-  .reinforcement-layout {
+  .reinforcement-layout,
+  .mechanics-states {
     grid-template-columns: 1fr;
   }
 }

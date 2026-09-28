@@ -298,9 +298,11 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
 }
 /// Code-agnostic section mechanics for an rcBeam draft (ADR 0012). Each face
 /// has one row of its own bars; `cover` is taken to the link. Sagging puts
-/// the top face in compression, hogging the bottom. Results are mechanics only
-/// and never feed a check status.
-fn section_mechanics(d: &DesignPreview) -> Value {
+/// the top face in compression, hogging the bottom. When `demand` is an
+/// evaluated model demand (ADR 0014), each state's governing moment is its
+/// cracked-section service moment. Results are mechanics only and never feed
+/// a check status.
+fn section_mechanics(d: &DesignPreview, demand: &Value) -> Value {
     let Some(m) = &d.mechanics else {
         return json!({"status":"notConfigured","reason":"No explicit section-mechanics material law is recorded for this draft"});
     };
@@ -316,7 +318,7 @@ fn section_mechanics(d: &DesignPreview) -> Value {
     };
     let base = json!({"basis":"mechanics","codeProfile":null,"law":m.law,"inputs":mi,"inputSources":m.input_sources,
         "arrangement":"One row per face (top and bottom bar inputs); cover measured to the link; layer depths from the compression face",
-        "limitations":["Mechanics only — not a code resistance; no partial factors or code limits applied","Pure flexure (N = 0) about the width axis; concrete tension ignored at ultimate and in the cracked state","Material-law parameters are explicit inputs with recorded provenance"]});
+        "limitations":["Mechanics only — not a code resistance; no partial factors or code limits applied","Pure flexure (N = 0) about the width axis; concrete tension ignored at ultimate and in the cracked state","Material-law parameters are explicit inputs with recorded provenance","Service stresses use the cracked transformed section under the governing model moment of the one bound case/combination, which is not classified as a serviceability combination; no stress limits applied"]});
     let (top, bottom) = match (rc_section::row_fit(&row("top")), rc_section::row_fit(&row("bottom"))) {
         (Ok(t), Ok(b)) => (t, b),
         (Err(e), _) | (_, Err(e)) => return merge(base, json!({"status":"unsupported","reason":e.message})),
@@ -346,14 +348,15 @@ fn section_mechanics(d: &DesignPreview) -> Value {
             exponent: mi["parabolaExponent"],
         }
     };
-    let elastic_inputs = ElasticInputs {
-        concrete_modulus: mi["concreteModulus"],
-        tensile_strength: Some(mi["concreteTensileStrength"]),
-        service_moment: None,
-    };
     // Layers are ordered [compression-face row, opposite row] with depths from
     // the compression face.
-    let state = |compression: &str, near: &rc_section::RowFit, far: &rc_section::RowFit| -> Value {
+    let state = |name: &str, compression: &str, near: &rc_section::RowFit, far: &rc_section::RowFit| -> Value {
+        let governing = &demand[name];
+        let elastic_inputs = ElasticInputs {
+            concrete_modulus: mi["concreteModulus"],
+            tensile_strength: Some(mi["concreteTensileStrength"]),
+            service_moment: governing["moment"].as_f64(),
+        };
         let layers = [
             BarLayer { depth: near.depth_from_face, area: near.area },
             BarLayer { depth: v["depth"] - far.depth_from_face, area: far.area },
@@ -362,12 +365,18 @@ fn section_mechanics(d: &DesignPreview) -> Value {
             rc_section::ultimate(&section, &layers, &steel, &law),
             rc_section::elastic(&section, &layers, &steel, &elastic_inputs),
         ) {
-            (Ok(u), Ok(e)) => json!({"status":"evaluated","compressionFace":compression,"layers":layers,"ultimate":u,"elastic":e}),
+            (Ok(u), Ok(e)) => {
+                let service = governing["moment"].as_f64().map_or(Value::Null, |m| {
+                    json!({"moment":m,"combinationId":demand["combinationId"],"station":governing["station"],"side":governing["side"],
+                        "stressBasis":"crackedSection","belowCrackingMoment":e.cracking_moment.map(|mcr| m < mcr)})
+                });
+                json!({"status":"evaluated","compressionFace":compression,"layers":layers,"ultimate":u,"elastic":e,"serviceMoment":service})
+            }
             (Err(e), _) | (_, Err(e)) => json!({"status":"unsupported","compressionFace":compression,"reason":e.message}),
         }
     };
-    let sagging = state("top", &top, &bottom);
-    let hogging = state("bottom", &bottom, &top);
+    let sagging = state("sagging", "top", &top, &bottom);
+    let hogging = state("hogging", "bottom", &bottom, &top);
     let status = if sagging["status"] == "evaluated" && hogging["status"] == "evaluated" {
         "evaluated"
     } else {
@@ -533,7 +542,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "contactState":if draft.kind=="padFooting"{"indeterminate"}else{"notApplicable"},
         "reinforcementFields":["Top X","Top Y","Bottom X","Bottom Y"],
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
-        "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft)}else{Value::Null},
+        "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
     run["previewRunId"] = json!(digest(&serde_json::to_vec(&run).unwrap()));

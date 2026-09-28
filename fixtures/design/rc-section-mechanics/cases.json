@@ -2,7 +2,7 @@
   "fixtureVersion": 1,
   "formulation": "docs/formulations/rc-section.md",
   "oracle": "tools/oracles/rc_section_oracle.py",
-  "oracleSha256": "51996510593ec1765fac8b240c677c613b134a7b773b3a6125d89b1290816b6e",
+  "oracleSha256": "51b11c6c55f417412ced4af2b97c69247db2016beef3c7f72c871ff09b68d2d2",
   "python": "3.14.6",
   "units": "SI (N, m, Pa); compression positive; depths from compression face",
   "tolerance": {
@@ -478,6 +478,148 @@
           "crackingMoment": 55540.33576744522,
           "crackedNeutralAxis": 0.08109555341287246,
           "crackedInertia": 0.0006414457395995797
+        }
+      }
+    },
+    {
+      "id": "RC-PREVIEW-B08-SAGGING-SERVICE",
+      "note": "Default preview draft under the B08 fixed-fixed UDL midspan moment qL^2/24 = 15 kN m (ADR 0014); cracked service stresses",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.05500000000000001,
+          "area": 0.0012566370614359175
+        },
+        {
+          "depth": 0.5449999999999999,
+          "area": 0.0012566370614359175
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0,
+        "serviceMoment": 15000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.08069263989798448,
+          "moment": 292229.5996717784,
+          "concreteForce": 363116.8795409303,
+          "curvature": 0.03717811195411062,
+          "classification": "tensionYielded",
+          "depthRatio": 0.14805988972107245,
+          "layers": [
+            {
+              "strain": 0.0009552038425239158,
+              "steelStress": 191040768.50478315,
+              "force": 214936.16871959172,
+              "yielded": false
+            },
+            {
+              "strain": -0.017262071014990284,
+              "steelStress": -460000000.0,
+              "force": -578053.0482605221,
+              "yielded": true
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.19424188669627374,
+          "uncrackedCentroid": 0.3,
+          "uncrackedInertia": 0.006254869248943829,
+          "crackingMoment": 58378.77965680907,
+          "crackedNeutralAxis": 0.13733161566715438,
+          "crackedInertia": 0.0016995758369982416,
+          "serviceConcreteStress": 1212051.9662397665,
+          "serviceSteelStress": [
+            4844244.891864719,
+            -23986478.005762998
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-PREVIEW-B08-HOGGING-SERVICE",
+      "note": "Default preview draft under the B08 fixed-fixed UDL end moment qL^2/12 = 30 kN m (ADR 0014); cracked service stresses",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.05500000000000001,
+          "area": 0.0012566370614359175
+        },
+        {
+          "depth": 0.5449999999999999,
+          "area": 0.0012566370614359175
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0,
+        "serviceMoment": 30000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.08069263989798448,
+          "moment": 292229.5996717784,
+          "concreteForce": 363116.8795409303,
+          "curvature": 0.03717811195411062,
+          "classification": "tensionYielded",
+          "depthRatio": 0.14805988972107245,
+          "layers": [
+            {
+              "strain": 0.0009552038425239158,
+              "steelStress": 191040768.50478315,
+              "force": 214936.16871959172,
+              "yielded": false
+            },
+            {
+              "strain": -0.017262071014990284,
+              "steelStress": -460000000.0,
+              "force": -578053.0482605221,
+              "yielded": true
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.19424188669627374,
+          "uncrackedCentroid": 0.3,
+          "uncrackedInertia": 0.006254869248943829,
+          "crackingMoment": 58378.77965680907,
+          "crackedNeutralAxis": 0.13733161566715438,
+          "crackedInertia": 0.0016995758369982416,
+          "serviceConcreteStress": 2424103.932479533,
+          "serviceSteelStress": [
+            9688489.783729438,
+            -47972956.011525996
+          ]
         }
       }
     },

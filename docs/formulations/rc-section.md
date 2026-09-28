@@ -50,6 +50,7 @@ The neutral axis `x` solves `S(x) = b x²/2 + Σ_i k_i A_i (x − d_i) = 0`. Her
 
 - `I_cr = b x³/3 + Σ_i k_i A_i (x − d_i)²`
 - **Service stresses for moment M:** `σ_c,top = M x / I_cr`, `σ_s,i = m M (x − d_i) / I_cr` (compression positive)
+- In the rcBeam preview, `M` is the governing model moment of each state from the bound case or combination (ADR 0014, M08-A5). The cracked section is used even when `M < M_cr`. The record flags that case, because the cracked stresses then overstate an uncracked section. No stress limits are applied.
 
 ## Bar-row geometry (fit only, no code spacing rule)
 

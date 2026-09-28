@@ -15,9 +15,11 @@ const sourceLabel = (s) =>
   })[s] || s;
 export const pretty = (v, digits = 2) =>
   typeof v === "number"
-    ? new Intl.NumberFormat("en-GB", { maximumFractionDigits: digits }).format(
-        v,
-      )
+    ? // signDisplay "negative": a value that rounds to zero shows no sign.
+      new Intl.NumberFormat("en-GB", {
+        maximumFractionDigits: digits,
+        signDisplay: "negative",
+      }).format(v)
     : "—";
 /** Display text for an SI value; strips float noise from the unit scaling.
  * Untouched inputs submit `data-si` exactly (see submittedValue). */
@@ -132,15 +134,21 @@ function mechanicsState(label, st, testid) {
   if (st.status !== "evaluated")
     return `<article><h4>${label}</h4><p role="status">Unsupported · ${esc(st.reason || "")}</p></article>`;
   const u = st.ultimate,
-    e = st.elastic;
+    e = st.elastic,
+    sv = st.serviceMoment,
+    key = label.toLowerCase();
+  // M08-A5: cracked-section stresses under the governing model moment; no limits.
+  const service = sv
+    ? `<dt>Service moment (model)</dt><dd>${pretty(sv.moment / 1000, 2)} kN·m · ${esc(sv.combinationId)} · x/L = ${pretty(sv.station, 3)}${sv.side ? ` (${esc(sv.side)})` : ""}</dd><dt>Cracked-section concrete stress</dt><dd data-testid="service-concrete-${key}">${pretty(e.serviceConcreteStress / 1e6, 2)} MPa</dd>${sv.belowCrackingMoment ? `<dt>Cracking</dt><dd data-testid="service-uncracked-${key}">M below the cracking moment: the cracked-section stresses overstate an uncracked section</dd>` : ""}`
+    : "";
   const rows = u.layers
     .map(
       (l, i) =>
-        `<tr><td>${i === 0 ? "Compression-face row" : "Opposite-face row"}</td><td>${pretty(st.layers[i].depth * 1000, 1)} mm</td><td>${strainText(l.strain)}</td><td>${pretty(l.steelStress / 1e6, 1)} MPa${l.yielded ? " · yielded" : ""}</td><td>${pretty(l.force / 1000, 1)} kN</td></tr>`,
+        `<tr><td>${i === 0 ? "Compression-face row" : "Opposite-face row"}</td><td>${pretty(st.layers[i].depth * 1000, 1)} mm</td><td>${strainText(l.strain)}</td><td>${pretty(l.steelStress / 1e6, 1)} MPa${l.yielded ? " · yielded" : ""}</td><td>${pretty(l.force / 1000, 1)} kN</td>${sv ? `<td data-testid="service-steel-${key}-${i}">${pretty(e.serviceSteelStress[i] / 1e6, 2)} MPa</td>` : ""}</tr>`,
     )
     .join("");
-  return `<article><h4>${label} · ${esc(st.compressionFace)} face in compression</h4><dl class="design-provenance-grid"><dt>Mechanical moment capacity</dt><dd data-testid="${testid}">${pretty(u.moment / 1000, 2)} kN·m</dd><dt>Neutral-axis depth x</dt><dd>${pretty(u.neutralAxisDepth * 1000, 1)} mm</dd><dt>x / deepest layer</dt><dd>${pretty(u.depthRatio, 3)}</dd><dt>Extreme tension steel</dt><dd>${u.classification === "tensionYielded" ? "Yielded" : "Elastic"}</dd><dt>Cracking moment</dt><dd>${pretty(e.crackingMoment / 1000, 2)} kN·m</dd><dt>Cracked I</dt><dd>${pretty((e.crackedInertia * 1e12) / 1e6, 1)} × 10⁶ mm⁴</dd></dl>
- <table><thead><tr><th>Layer</th><th>Depth from compression face</th><th>Strain</th><th>Steel stress</th><th>Net force</th></tr></thead><tbody>${rows}</tbody></table></article>`;
+  return `<article><h4>${label} · ${esc(st.compressionFace)} face in compression</h4><dl class="design-provenance-grid"><dt>Mechanical moment capacity</dt><dd data-testid="${testid}">${pretty(u.moment / 1000, 2)} kN·m</dd><dt>Neutral-axis depth x</dt><dd>${pretty(u.neutralAxisDepth * 1000, 1)} mm</dd><dt>x / deepest layer</dt><dd>${pretty(u.depthRatio, 3)}</dd><dt>Extreme tension steel</dt><dd>${u.classification === "tensionYielded" ? "Yielded" : "Elastic"}</dd><dt>Cracking moment</dt><dd>${pretty(e.crackingMoment / 1000, 2)} kN·m</dd><dt>Cracked I</dt><dd>${pretty((e.crackedInertia * 1e12) / 1e6, 1)} × 10⁶ mm⁴</dd>${service}</dl>
+ <table><thead><tr><th>Layer</th><th>Depth from compression face</th><th>Ultimate strain</th><th>Ultimate steel stress</th><th>Ultimate net force</th>${sv ? "<th>Service stress (cracked, compression +)</th>" : ""}</tr></thead><tbody>${rows}</tbody></table></article>`;
 }
 const orientationText = {
   up: "Top face (local +z) points up.",
@@ -180,7 +188,7 @@ export function mechanicsPane(run) {
   if (sm.status !== "evaluated")
     return `<h4>Section mechanics</h4>${banner}${fit}<p role="status" data-testid="mechanics-status">${esc(sm.status === "rowDoesNotFit" ? "Row does not fit" : "Unsupported")} · ${esc(sm.reason || "")}</p>${demandTable(run)}`;
   return `<h4>Section mechanics · ${esc(sm.law === "rectangularBlock" ? "rectangular stress block" : "parabola-rectangle")}</h4>${banner}${demandTable(run)}${fit}
- <div class="reinforcement-layout">${mechanicsState("Sagging", sm.sagging, "mechanics-moment-sagging")}${mechanicsState("Hogging", sm.hogging, "mechanics-moment-hogging")}</div>
+ <div class="mechanics-states">${mechanicsState("Sagging", sm.sagging, "mechanics-moment-sagging")}${mechanicsState("Hogging", sm.hogging, "mechanics-moment-hogging")}</div>
  <ul class="design-note">${sm.limitations.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`;
 }
 export function previewPane({ run, state, d, pane, checkIndex, sketch }) {
