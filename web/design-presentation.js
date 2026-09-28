@@ -142,6 +142,28 @@ function mechanicsState(label, st, testid) {
   return `<article><h4>${label} · ${esc(st.compressionFace)} face in compression</h4><dl class="design-provenance-grid"><dt>Mechanical moment capacity</dt><dd data-testid="${testid}">${pretty(u.moment / 1000, 2)} kN·m</dd><dt>Neutral-axis depth x</dt><dd>${pretty(u.neutralAxisDepth * 1000, 1)} mm</dd><dt>x / deepest layer</dt><dd>${pretty(u.depthRatio, 3)}</dd><dt>Extreme tension steel</dt><dd>${u.classification === "tensionYielded" ? "Yielded" : "Elastic"}</dd><dt>Cracking moment</dt><dd>${pretty(e.crackingMoment / 1000, 2)} kN·m</dd><dt>Cracked I</dt><dd>${pretty((e.crackedInertia * 1e12) / 1e6, 1)} × 10⁶ mm⁴</dd></dl>
  <table><thead><tr><th>Layer</th><th>Depth from compression face</th><th>Strain</th><th>Steel stress</th><th>Net force</th></tr></thead><tbody>${rows}</tbody></table></article>`;
 }
+const orientationText = {
+  up: "Top face (local +z) points up.",
+  down: "Top face (local +z) points DOWN in this member: draft sagging is physical hogging. Change the member localY to align them.",
+  horizontal:
+    "Top face (local +z) is horizontal in this member; sagging and hogging are not vertical.",
+};
+/** Model moments beside the mechanics capacities (ADR 0014). No ratio or
+ * status: the capacity is mechanics, not a code resistance. */
+export function demandTable(run) {
+  const fd = run?.flexuralDemand;
+  if (!fd) return "";
+  if (fd.status !== "evaluated")
+    return `<h4>Model design moments</h4><p data-testid="demand-status">${esc(fd.reason)}</p>`;
+  const sm = run.sectionMechanics;
+  const row = (label, key) => {
+    const s = fd[key],
+      capacity =
+        sm?.status === "evaluated" ? sm[key].ultimate.moment : undefined;
+    return `<tr><td>${label}</td><td>${capacity === undefined ? "—" : `${pretty(capacity / 1000, 2)} kN·m`}</td><td data-testid="demand-moment-${key}">${s ? `${pretty(s.moment / 1000, 2)} kN·m` : "None"}</td><td>${s ? `x/L = ${pretty(s.station, 3)}${s.side ? ` (${esc(s.side)})` : ""} · ${esc(s.kind)}` : `No ${key} My`}</td><td>${s ? `${pretty(s.actions[0] / 1000, 1)} kN · ${pretty(s.actions[5] / 1000, 2)} kN·m` : "—"}</td></tr>`;
+  };
+  return `<h4>Model design moments · ${esc(fd.combinationId)}</h4><p class="design-note" data-testid="demand-orientation">${esc(orientationText[fd.topFaceOrientation])} Draft width along local y, depth along local z; My &lt; 0 is sagging.</p><table><thead><tr><th>State</th><th>Mechanics capacity</th><th>Governing model moment</th><th>Location</th><th>Simultaneous N · Mz (not considered)</th></tr></thead><tbody>${row("Sagging", "sagging")}${row("Hogging", "hogging")}</tbody></table><p class="source-key">Governing key stations of ${esc(fd.memberId)} for this one case/combination. No utilisation ratio: the capacity is not a code resistance.</p>`;
+}
 export function mechanicsPane(run) {
   const sm = run?.sectionMechanics;
   const banner =
@@ -149,15 +171,15 @@ export function mechanicsPane(run) {
   if (!sm)
     return `<h4>Section mechanics</h4>${banner}<p>Run the preview to evaluate section mechanics.</p>`;
   if (sm.status === "notConfigured")
-    return `<h4>Section mechanics</h4>${banner}<p>${esc(sm.reason)}. Save the section-mechanics law in the inspector to evaluate it.</p>`;
+    return `<h4>Section mechanics</h4>${banner}<p>${esc(sm.reason)}. Save the section-mechanics law in the inspector to evaluate it.</p>${demandTable(run)}`;
   const fitRow = (face, f) =>
     `<tr><td>${face}</td><td>${pretty(f.area * 1e6, 0)} mm²</td><td>${f.clearSpacing == null ? "Single bar" : pretty(f.clearSpacing * 1000, 1) + " mm"}</td><td data-testid="mechanics-fit-${face.toLowerCase()}">${f.fits ? "Yes" : "No"}</td></tr>`;
   const fit = sm.rowFits
     ? `<table><thead><tr><th>Row</th><th>Area</th><th>Clear spacing</th><th>Fits</th></tr></thead><tbody>${fitRow("Top", sm.rowFits.top)}${fitRow("Bottom", sm.rowFits.bottom)}</tbody></table><p class="source-key">Minimum clear spacing input ${pretty(sm.inputs.minimumClearSpacing * 1000, 1)} mm · ${esc(sm.inputSources.minimumClearSpacing === "user" ? "User input" : "Synthetic fixture")}. Cover is measured to the link.</p>`
     : "";
   if (sm.status !== "evaluated")
-    return `<h4>Section mechanics</h4>${banner}${fit}<p role="status" data-testid="mechanics-status">${esc(sm.status === "rowDoesNotFit" ? "Row does not fit" : "Unsupported")} · ${esc(sm.reason || "")}</p>`;
-  return `<h4>Section mechanics · ${esc(sm.law === "rectangularBlock" ? "rectangular stress block" : "parabola-rectangle")}</h4>${banner}${fit}
+    return `<h4>Section mechanics</h4>${banner}${fit}<p role="status" data-testid="mechanics-status">${esc(sm.status === "rowDoesNotFit" ? "Row does not fit" : "Unsupported")} · ${esc(sm.reason || "")}</p>${demandTable(run)}`;
+  return `<h4>Section mechanics · ${esc(sm.law === "rectangularBlock" ? "rectangular stress block" : "parabola-rectangle")}</h4>${banner}${demandTable(run)}${fit}
  <div class="reinforcement-layout">${mechanicsState("Sagging", sm.sagging, "mechanics-moment-sagging")}${mechanicsState("Hogging", sm.hogging, "mechanics-moment-hogging")}</div>
  <ul class="design-note">${sm.limitations.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`;
 }

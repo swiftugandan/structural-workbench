@@ -5,7 +5,7 @@ Code-agnostic. No coefficient here comes from a design standard; every material 
 ## Domain
 
 - Solid rectangle, width `b`, depth `h` (m). Uniaxial bending about the width axis. Axial force `N = 0` (beam flexure).
-- Reinforcement is given as layers `{d_i, A_i}`. `d_i` is the depth of the layer centroid from the **compression face** (m), with `0 < d_i < h`. `A_i > 0` is the area (m²). The caller maps sagging or hogging to the compression face.
+- Reinforcement is given as layers `{d_i, A_i}`. `d_i` is the depth of the layer centroid from the **compression face** (m), with `0 < d_i < h`. `A_i > 0` is the area (m²). The caller maps sagging or hogging to the compression face. For rcBeam drafts, the width runs along member local y and the top face is local +z. Sagging (My < 0) compresses the top face (ADR 0014).
 - The compression zone is plane sections, perfect bond and ignored concrete tension (ultimate and cracked states). Bars in compression displace concrete: net layer force `A_i (σ_s,i − σ_c(ε_i))` when `ε_i > 0`.
 - Strain sign: compression positive. Units: SI (N, m, Pa). Moments are positive when they compress the compression face.
 

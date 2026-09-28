@@ -371,3 +371,56 @@ fn schema_1_1_rc_beam_drafts_migrate_to_equal_top_and_bottom_rows() {
     let bad = req(&mut Kernel::new(), "importProject", json!({"jsonUtf8":legacy.to_string()}));
     assert_eq!(bad["status"], "error", "{bad}");
 }
+/// ADR 0014: fixed-fixed UDL (B08, q = 10 kN/m, L = 6 m) has closed-form
+/// hogging qL²/12 = 30 kN·m at both ends and sagging qL²/24 = 15 kN·m at
+/// midspan. Reversing localY flips local z, so the draft faces swap.
+fn model_demand(local_y: [f64; 3]) -> Value {
+    let mut k = Kernel::new();
+    let mut p: Value =
+        serde_json::from_str(include_str!("../../../fixtures/models/B08.json")).unwrap();
+    p["members"][0]["localY"] = json!(local_y);
+    assert_eq!(req(&mut k, "createProject", json!({"project":p}))["status"], "ok");
+    let c = create(&mut k, "rcBeam");
+    let a = req(&mut k, "analyse", json!({"caseIds":["LC1"]}));
+    assert_eq!(a["status"], "ok", "{a}");
+    let r = req(
+        &mut k,
+        "evaluateDesignPreview",
+        json!({"draftId":c["payload"]["project"]["designPreviews"][0]["id"],"modelHash":a["modelHash"],"caseId":"LC1","resultId":a["payload"]["resultId"],"sourceMode":"model"}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    assert_eq!(r["payload"]["overall"], "unsupported");
+    r["payload"]["flexuralDemand"].clone()
+}
+#[test]
+fn rc_beam_model_demand_matches_closed_form_and_reports_face_orientation() {
+    let close = |v: &Value, expected: f64| {
+        let v = v.as_f64().unwrap();
+        assert!((v - expected).abs() <= 1e-6 * expected.abs(), "{v} vs {expected}");
+    };
+    let up = model_demand([0., 1., 0.]);
+    assert_eq!(up["status"], "evaluated");
+    assert_eq!(up["combinationId"], "LC1");
+    assert_eq!(up["topFaceOrientation"], "up");
+    assert_eq!(up["utilisation"], Value::Null);
+    close(&up["sagging"]["moment"], 15000.);
+    close(&up["sagging"]["station"], 0.5);
+    close(&up["sagging"]["actions"][4], -15000.);
+    close(&up["hogging"]["moment"], 30000.);
+    assert_eq!(up["hogging"]["station"], 0.);
+    close(&up["hogging"]["actions"][4], 30000.);
+    let down = model_demand([0., -1., 0.]);
+    assert_eq!(down["topFaceOrientation"], "down");
+    assert_eq!(down["topFaceDirection"], json!([0., 0., -1.]));
+    close(&down["sagging"]["moment"], 30000.);
+    close(&down["hogging"]["moment"], 15000.);
+    close(&down["hogging"]["station"], 0.5);
+}
+#[test]
+fn rc_beam_synthetic_run_has_no_model_demand() {
+    let mut k = open();
+    let draft = create(&mut k, "rcBeam");
+    let c = req(&mut k, "getSnapshot", json!({}));
+    let run = rc_run(&mut k, &draft["payload"]["project"]["designPreviews"][0]["id"], &c["modelHash"]);
+    assert_eq!(run["flexuralDemand"]["status"], "unavailable");
+}

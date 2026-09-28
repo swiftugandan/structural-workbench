@@ -76,10 +76,11 @@ export function sceneGeometry(
     const frame = frames.find((f) => f.id === m?.id);
     const axis = frame?.axes[0] || unit(end.map((n, i) => n - start[i])),
       length = frame?.length || Math.hypot(...end.map((n, i) => n - start[i])),
+      // ADR 0014: draft width along local y, depth along local z (top = +z).
       side =
-        frame?.axes[2] ||
+        frame?.axes[1] ||
         unit(cross(Math.abs(axis[2]) < 0.9 ? [0, 0, 1] : [0, 1, 0], axis)),
-      up = frame?.axes[1] || cross(axis, side);
+      up = frame?.axes[2] || cross(axis, side);
     const tr = ([x, y, z]) =>
       add(start, add(mul(axis, x), add(mul(side, y), mul(up, z))));
     box(

@@ -239,3 +239,65 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   await page.screenshot({ path: `${dir}/rcBeam-mechanics.png` });
   expect(errors).toEqual([]);
 });
+for (const [localY, orientation, sagging, hogging] of [
+  [[0, 1, 0], "points up", "15 kN·m", "30 kN·m"],
+  [[0, -1, 0], "points DOWN", "30 kN·m", "15 kN·m"],
+])
+  test(`RC beam model design moments beside mechanics capacities (top face ${orientation})`, async ({
+    page,
+  }) => {
+    // ADR 0014: B08 fixed-fixed UDL, closed-form qL²/24 = 15 kN·m sagging at
+    // midspan and qL²/12 = 30 kN·m hogging at the ends; reversing localY
+    // points the draft top face (local +z) down and swaps the faces.
+    const errors = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    const model = JSON.parse(
+      await readFile("fixtures/models/B08.json", "utf8"),
+    );
+    model.id = "preview-demand";
+    model.members[0].localY = localY;
+    await page.goto("/");
+    await page.locator("#import-file").setInputFiles({
+      name: "preview.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(JSON.stringify(model)),
+    });
+    await expect(page.locator("#kernel-status")).toContainText("ready");
+    await page.locator("[data-inspector-tab=concrete]").click();
+    await page.locator("#preview-kind").selectOption("rcBeam");
+    await page.locator("#preview-create").click();
+    await page.locator("#preview-run").click();
+    await page.locator('[data-preview-pane="mechanics"]').click();
+    const pane = page.locator("[data-testid=preview-result]");
+    await expect(page.locator("[data-testid=demand-status]")).toContainText(
+      "synthetic actions are illustrative",
+    );
+    await page.locator("#preview-target").selectOption("m1");
+    await page.locator("#preview-save").click();
+    await page.locator("#preview-source").selectOption("model");
+    await page.locator("#analyse").click();
+    await expect(page.locator("#preview-run")).toBeEnabled();
+    await page.locator("#preview-run").click();
+    await page.locator('[data-preview-pane="mechanics"]').click();
+    await expect(
+      page.locator("[data-testid=demand-moment-sagging]"),
+    ).toHaveText(sagging);
+    await expect(
+      page.locator("[data-testid=demand-moment-hogging]"),
+    ).toHaveText(hogging);
+    await expect(
+      page.locator("[data-testid=demand-orientation]"),
+    ).toContainText(orientation);
+    await expect(pane).toContainText("Model design moments · LC1");
+    await expect(pane).toContainText("No utilisation ratio");
+    await expect(pane).toContainText("MECHANICS ONLY");
+    const capacity = await page
+      .locator("[data-testid=mechanics-moment-sagging]")
+      .textContent();
+    await expect(pane.locator("tbody tr").first()).toContainText(capacity);
+    await page.locator('[data-preview-pane="summary"]').click();
+    await expect(page.locator("[data-testid=preview-state]")).toHaveText(
+      "UNSUPPORTED",
+    );
+    expect(errors).toEqual([]);
+  });

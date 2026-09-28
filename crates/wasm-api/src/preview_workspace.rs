@@ -6,6 +6,7 @@ use workbench_design::rc_section::{
 use workbench_model::{
     DesignPreview, MECHANICS_COMMON_KEYS, Project, Result, SectionMechanicsInputs, digest, err,
 };
+use workbench_results::KeyStation;
 
 fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64)> {
     let mut f = match kind {
@@ -374,6 +375,46 @@ fn section_mechanics(d: &DesignPreview) -> Value {
     };
     merge(base, json!({"status":status,"rowFits":fits,"sagging":sagging,"hogging":hogging}))
 }
+/// Governing flexural demand about the draft width axis (ADR 0014). The draft
+/// width runs along member local y and its depth along local z; the top face is
+/// local +z. With σ = N/A + My z/Iy, My < 0 compresses the top face (sagging)
+/// and My > 0 the bottom face (hogging). One bound combination only; no ratio.
+fn flexural_demand(p: &Project, member_id: &str, stations: &[KeyStation], combination: &str) -> Result<Value> {
+    let m = p
+        .members
+        .iter()
+        .find(|m| m.id == member_id)
+        .ok_or_else(|| err("DANGLING_REFERENCE", "Bound member is not in the model"))?;
+    let position = |id: &str| {
+        p.nodes
+            .iter()
+            .find(|n| n.id == id)
+            .map(|n| n.position)
+            .ok_or_else(|| err("DANGLING_REFERENCE", "Bound member node is not in the model"))
+    };
+    let (_, axes) = workbench_geometry::axes(position(&m.start)?, position(&m.end)?, m.local_y);
+    let top = axes[2];
+    // `sign` is the My sign that compresses the face; ties keep the first station.
+    let governing = |sign: f64| {
+        stations
+            .iter()
+            .filter(|s| sign * s.actions[4] > 0.)
+            .fold(None, |best: Option<&KeyStation>, s| match best {
+                Some(b) if sign * b.actions[4] >= sign * s.actions[4] => Some(b),
+                _ => Some(s),
+            })
+            .map_or(Value::Null, |s| {
+                json!({"moment":sign * s.actions[4],"station":s.station,"kind":s.kind,"side":s.side,"actions":s.actions})
+            })
+    };
+    Ok(json!({"status":"evaluated","basis":"modelKeyStations","combinationId":combination,"memberId":member_id,
+        "component":"My","actionOrder":["N","Vy","Vz","T","My","Mz"],
+        "convention":"Draft width along local y, depth along local z; top face = local +z. My < 0 compresses the top face (sagging), My > 0 the bottom face (hogging)",
+        "topFaceDirection":top,
+        "topFaceOrientation":if top[2] > 0. {"up"} else if top[2] < 0. {"down"} else {"horizontal"},
+        "sagging":governing(-1.),"hogging":governing(1.),"utilisation":null,
+        "limitations":["Governing key stations of the one bound case/combination; no envelope across combinations","Axial force, shear, torsion and Mz at these stations are not considered by the pure-flexure mechanics","No utilisation ratio or status: the capacity is mechanics, not a code resistance"]}))
+}
 fn merge(mut a: Value, b: Value) -> Value {
     for (k, v) in b.as_object().unwrap() {
         a[k] = v.clone();
@@ -400,6 +441,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
     if draft.kind == "slab" {
         source = json!({"kind":"syntheticFixture","mock":true,"fixtureId":"slab-plate-actions-v1","units":"N m/m","rawPlateActions":{"mx":-62000,"my":-31000,"mxy":8500},"designTransform":"unavailable","meshConvergence":"notChecked","note":"No validated plate/shell analysis; never use a frame-member result as a slab action"});
     }
+    let mut demand = json!({"status":"unavailable","reason":"Model flexural demand needs a bound member and the current model case/combination; synthetic actions are illustrative"});
     if input["sourceMode"] == "model" {
         if draft.kind == "slab" {
             return Err(err(
@@ -427,6 +469,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
                 .find(|m| &m.id == target)
                 .ok_or_else(|| err("DANGLING_REFERENCE", "Member result unavailable"))?;
             source["stations"] = serde_json::to_value(&m.key_stations).unwrap();
+            demand = flexural_demand(p, target, &m.key_stations, case)?;
             source["note"] = json!(
                 "Actual model actions; preview section is not applied to frame stiffness, and no concrete resistance is calculated"
             );
@@ -491,6 +534,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "reinforcementFields":["Top X","Top Y","Bottom X","Bottom Y"],
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft)}else{Value::Null},
+        "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
     run["previewRunId"] = json!(digest(&serde_json::to_vec(&run).unwrap()));
     Ok(run)
