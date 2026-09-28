@@ -45,7 +45,7 @@ impl Default for StabilitySettings {
 /// reference state, not compression, and are set to zero.
 const AXIAL_NOISE: f64 = 1e-9;
 
-fn reject_releases(p: &Project) -> Result<()> {
+pub(crate) fn reject_releases(p: &Project) -> Result<()> {
     let released = |r: &Release| r.my || r.mz;
     if let Some(m) = p
         .members
@@ -64,15 +64,15 @@ fn reject_releases(p: &Project) -> Result<()> {
 }
 
 /// Every member split into `n` equal elements.
-struct Mesh {
-    project: Project,
+pub(crate) struct Mesh {
+    pub(crate) project: Project,
     /// Per input member: (station 0..1, node id) at every mesh node, in order.
-    stations: BTreeMap<String, Vec<(f64, String)>>,
+    pub(crate) stations: BTreeMap<String, Vec<(f64, String)>>,
     /// Per input member: its element ids, in order.
-    elements: BTreeMap<String, Vec<String>>,
+    pub(crate) elements: BTreeMap<String, Vec<String>>,
 }
 
-fn subdivide(p: &Project, n: usize) -> Result<Mesh> {
+pub(crate) fn subdivide(p: &Project, n: usize) -> Result<Mesh> {
     let position: BTreeMap<&str, [f64; 3]> = p
         .nodes
         .iter()
@@ -195,13 +195,15 @@ fn subdivide(p: &Project, n: usize) -> Result<Mesh> {
 
 /// Free-DOF numbering with the same constraints as the linear analysis:
 /// fixed support components and, in planar XZ mode, uy, rx and rz everywhere.
-struct Dofs {
-    node: BTreeMap<String, usize>,
-    free: Vec<Option<usize>>,
-    count: usize,
+pub(crate) struct Dofs {
+    pub(crate) node: BTreeMap<String, usize>,
+    pub(crate) free: Vec<Option<usize>>,
+    pub(crate) count: usize,
+    /// Prescribed values at constrained DOFs (zero where free).
+    pub(crate) prescribed: Vec<f64>,
 }
 
-fn dofs(p: &Project) -> Dofs {
+pub(crate) fn dofs(p: &Project) -> Dofs {
     let node: BTreeMap<String, usize> = p
         .nodes
         .iter()
@@ -209,9 +211,13 @@ fn dofs(p: &Project) -> Dofs {
         .map(|(i, n)| (n.id.clone(), i))
         .collect();
     let mut fixed = vec![false; p.nodes.len() * 6];
+    let mut prescribed = vec![0.; p.nodes.len() * 6];
     for s in &p.supports {
         for a in 0..6 {
             fixed[node[&s.node] * 6 + a] |= s.fixed[a];
+            if s.fixed[a] {
+                prescribed[node[&s.node] * 6 + a] = s.prescribed[a];
+            }
         }
     }
     if p.analysis_mode == "planarXZ" {
@@ -231,7 +237,12 @@ fn dofs(p: &Project) -> Dofs {
             })
         })
         .collect();
-    Dofs { node, free, count }
+    Dofs {
+        node,
+        free,
+        count,
+        prescribed,
+    }
 }
 
 fn assemble(p: &Project, d: &Dofs, local: impl Fn(&Member, f64) -> Matrix) -> CsMat<f64> {

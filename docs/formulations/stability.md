@@ -136,9 +136,20 @@ buffers when:
   iterations (`DIVERGING`).
 
 Element end actions are q = (K + K_G(N)) d − f_eq, so reported actions include
-second-order moments. Interior section moments add the P-δ term
-N·(v(x) − v_chord(x)) from the Hermite shape, and results state
-`analysisType: secondOrder` with the converged N field.
+second-order moments. Interior section actions follow from equilibrium of the
+deformed left segment: the mechanics-v1 statics plus N·(v(x) − v_i) on Mz and
+−N·(w(x) − w_i) on My, with v and w the Hermite (plus uniform-load) shape.
+With the transverse end shears of K + K_G this makes the section moment at the
+element's far end equal its end action, so moments are continuous across
+unloaded mesh nodes. Results state `analysisType: secondOrder` with the
+converged N field.
+
+Global balance is checked in the deformed geometry (moments of the applied
+loads and reactions about the origin at x + u). The consistent K_G contributes
+q₅ + q₁₁ + L·q₇ = N(v_j − v_i), which cancels the moment of the axial end force
+at its offset, so the balance is exact for nodal loads up to the iteration
+tolerance; axial member loads are averaged per element and leave a small
+residual that is reported, not hidden.
 
 ## Imperfections
 

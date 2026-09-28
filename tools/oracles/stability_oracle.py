@@ -195,14 +195,16 @@ def portal_exact(P, F, EIc=EIC, EIb=EIB, h=H, b=B):
     A_ = (EIc * D * k * k * s - kb * (Bc + D * k * c)) / (k * (EIc * k * c + kb * s))
     sway = A_ * (1 - c) + Bc * h + D * s
     base_moment = EIc * A_ * k * k  # internal moment EI v''(0)
-    return sway, base_moment
+    # Column moment shape EI v''(x) / EI v''(0) = (A k^2 cos kx - D k^2 sin kx) / (A k^2).
+    ratios = {f"{t:g}": (A_ * math.cos(k * t * h) - D * math.sin(k * t * h)) / A_ for t in (0.25, 0.5, 0.75, 1.0)}
+    return sway, base_moment, ratios
 
 
 H_LATERAL = 1.0e3  # N: small drift, so large-rotation effects stay minor
 lin = opensees_portal(0.0, H_LATERAL, "Linear")
 sway_lin = 0.5 * (lin["swayTopLeft"] + lin["swayTopRight"])
 # The P -> 0 limit of the exact solution is the first-order frame.
-sway0, _ = portal_exact(1e-9 * pcr, H_LATERAL / 2)
+sway0, _, _ = portal_exact(1e-9 * pcr, H_LATERAL / 2)
 # Columns have A = 1 m2, not infinite: overturning axial strain differs from
 # the rigid-axis ODE by about I/(A h^2) ~ 1e-5.
 check(abs(sway0 / sway_lin - 1) < 1e-4, f"exact P->0 limit {sway0} vs first order {sway_lin}")
@@ -212,7 +214,7 @@ for ratio in (0.2, 0.5, 0.8, 0.99):
     cor = opensees_portal(P, H_LATERAL, "Corotational")
     pd = opensees_portal(P, H_LATERAL, "PDelta")
     pd2 = opensees_portal(P, H_LATERAL, "PDelta", 2 * SUB)
-    sway, base_m = portal_exact(P, H_LATERAL / 2)
+    sway, base_m, ratios = portal_exact(P, H_LATERAL / 2)
     cid = "S-NEAR" if ratio == 0.99 else f"S-POR-PD-{int(round(ratio * 100)):03d}"
     case = {
         "id": cid,
@@ -220,6 +222,7 @@ for ratio in (0.2, 0.5, 0.8, 0.99):
         "PPerColumn": P,
         "HAtTopLeft": H_LATERAL,
         "exact": {"sway": sway, "baseMomentMagnitude": abs(base_m),
+                  "columnMomentOverBase": ratios,
                   "amplification": sway / sway_lin},
         "opensees": {"pDelta": pd, "corotational": cor,
                      "momentSign": "reaction about global Y = -OpenSees 2D reaction (2D rotation axis X x Z = -Y)"},

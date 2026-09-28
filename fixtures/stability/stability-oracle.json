@@ -1,7 +1,7 @@
 {
   "formulation": "docs/formulations/stability.md (stability-v1)",
   "generator": "tools/oracles/stability_oracle.py",
-  "generatorSha256": "9193b95a334886d0dd0be11fd1f7b5217521ddb42d6b94d08e8804f04a740fdd",
+  "generatorSha256": "58ab5af508b9911a3012a954643be4518128f433703e8a6ae06c4dc7e6db50fc",
   "opensees": {
     "package": "openseespy",
     "version": "3.4.0",
@@ -130,6 +130,12 @@
       "exact": {
         "sway": 0.00010089916142439707,
         "baseMomentMagnitude": 981.6263098673198,
+        "columnMomentOverBase": {
+          "0.25": 0.5733522902031466,
+          "0.5": 0.08803154136092788,
+          "0.75": -0.40629776670700435,
+          "1": -0.8590492784752157
+        },
         "amplification": 1.2473275047473966
       },
       "opensees": {
@@ -175,6 +181,12 @@
       "exact": {
         "sway": 0.0001609027692531934,
         "baseMomentMagnitude": 1476.9565728375035,
+        "columnMomentOverBase": {
+          "0.25": 0.6306072176498243,
+          "0.5": 0.10195849147049503,
+          "0.75": -0.4524392197125978,
+          "1": -0.8925762105233672
+        },
         "amplification": 1.9890992833465082
       },
       "opensees": {
@@ -220,6 +232,12 @@
       "exact": {
         "sway": 0.000400827837437092,
         "baseMomentMagnitude": 3447.2925454302936,
+        "columnMomentOverBase": {
+          "0.25": 0.6991208384495851,
+          "0.5": 0.11938954026105673,
+          "0.75": -0.5079616064044077,
+          "1": -0.9327066061981507
+        },
         "amplification": 4.955081680022898
       },
       "opensees": {
@@ -265,6 +283,12 @@
       "exact": {
         "sway": 0.007997435971855345,
         "baseMomentMagnitude": 65713.40347408672,
+        "columnMomentOverBase": {
+          "0.25": 0.7499957746631098,
+          "0.5": 0.13283665622025626,
+          "0.75": -0.5493516663364596,
+          "1": -0.9626089373523243
+        },
         "amplification": 98.86526026904497
       },
       "opensees": {

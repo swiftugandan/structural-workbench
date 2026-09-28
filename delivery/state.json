@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M09",
-  "activeTask": "M09-C",
+  "activeTask": "M09-D",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -3634,8 +3634,35 @@
       "dependencies": [
         "M09-B"
       ],
-      "status": "READY",
-      "nextAction": "secondOrder in crates/assembly: Picard iteration on element N with (K + K_G) factor per iteration, convergence record, TANGENT_NOT_POSITIVE_DEFINITE/DIVERGING/NONCONVERGED without buffers, explicit sway imperfection; P-delta interior moments; tests S-POR-PD (1e-3), S-NEAR (1e-2), S-OVER"
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "nextAction": "None",
+      "ownedPaths": [
+        "crates/assembly/src/second_order.rs",
+        "crates/assembly/src/stability.rs",
+        "crates/assembly/src/lib.rs",
+        "crates/assembly/tests/second_order.rs",
+        "crates/assembly/tests/stability.rs",
+        "crates/assembly/tests/common/mod.rs",
+        "tools/oracles/stability_oracle.py",
+        "fixtures/stability/stability-oracle.json",
+        "docs/formulations/stability.md"
+      ],
+      "requiredCommands": [
+        "cargo test --workspace",
+        "cargo build -p workbench-wasm-api --target wasm32-unknown-unknown --release",
+        "tools/oracle-env/bin/python tools/oracles/stability_oracle.py"
+      ],
+      "actualOutcomes": [
+        "assembly::second_order: Picard iteration on element N with a checked sparse solve of K + K_G(N_k) per iteration, prescribed displacements partitioned, convergence on translations, rotations and axial change (1e-10), history recorded; failures return NONCONVERGED with reason TANGENT_NOT_POSITIVE_DEFINITE / DIVERGING / ITERATION_LIMIT, iteration and history, and no response",
+        "shared load semantics: case_factors and member_load_density extracted from analyse_assembled (no behaviour change; analytical corpus passes)",
+        "explicit sway imperfection H = ratio x V listed per node; invalid ratio/direction refused; imperfection enters the settings hash",
+        "physical-member recovery: samples at mesh nodes and element midpoints, key stations at ends, mesh nodes and one-sided at point-load jumps; interior moments by deformed-segment equilibrium (+N(v-v_i) on Mz, -N(w-w_i) on My)",
+        "oracle extended with the exact column moment shape M(x)/M(0) at x/h 0.25-1.0 (other fixture values unchanged)",
+        "kernel vs exact beam-column solution at 8 elements: sway error 5.0e-5, 6.9e-5, 1.26e-4 at 0.2/0.5/0.8 Pcr (base moment 2.3e-5, 4.4e-5, 1.06e-4) in 3-4 iterations; S-NEAR 1.75e-3 in 9 iterations with amplification >= 10; S-OVER TANGENT_NOT_POSITIVE_DEFINITE; column moment shape within 1e-3 (1e-2 at S-NEAR)",
+        "no-axial-force cantilever equals the linear analysis to 1e-12; deformed-geometry force and moment balance close to 1e-8 of scale for nodal loads",
+        "mutations: removing the interior P-delta term fails the moment-shape test; dropping K_G from the tangent fails 7 of 9",
+        "cargo test --workspace 156 passed; wasm32 release build ok; new files rustfmt-clean"
+      ]
     },
     "M09-D": {
       "id": "M09-D",
@@ -3643,7 +3670,8 @@
       "dependencies": [
         "M09-C"
       ],
-      "status": "PLANNED"
+      "status": "READY",
+      "nextAction": "Expose elasticBuckling and secondOrder through wasm-api and the Worker protocol (PROTOCOL.md): request settings, result headers, failed analyses without buffers, capability analysisTypes, stale/revision rules; contract tests"
     },
     "M09-E": {
       "id": "M09-E",
@@ -3703,7 +3731,7 @@
   ],
   "lastVerifiedSourceRevision": "90067de",
   "lastVerifiedBuildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
-  "nextAction": "M09-C: secondOrder analysis against fixtures/stability/stability-oracle.json (S-POR-PD, S-NEAR, S-OVER). M08-B enablement stays BLOCKED_RESOURCE on A1:2014 and NA+A2:2014.",
+  "nextAction": "M09-D: protocol, WASM and Worker operations for elasticBuckling and secondOrder. M08-B enablement stays BLOCKED_RESOURCE on A1:2014 and NA+A2:2014.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
   "lastVerifiedScope": "Fresh same-build native/contracts/security/numerical/WASM/oracle and complete 112-test real-GPU browser corpus; no stale release evidence. Preview scope only."

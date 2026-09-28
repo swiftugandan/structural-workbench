@@ -4,6 +4,7 @@ mod expand;
 mod envelope;
 mod study;
 mod stability;
+mod second_order;
 
 use serde_json::json;
 use sprs::TriMat;
@@ -18,6 +19,7 @@ use expand::{expand_point_loads, remap_to_physical};
 
 pub use envelope::envelope;
 pub use study::{apply_pointer, execute_study_document};
+pub use second_order::{Imperfection, SecondOrderSettings, second_order};
 pub use stability::{StabilitySettings, elastic_buckling};
 
 fn section_actions(end: &[f64], q: [f64; 3], x: f64) -> [f64; 6] {
@@ -61,6 +63,59 @@ fn moment_extrema_stations(end: &[f64], q: [f64; 3], length: f64) -> Vec<(f64, V
     out
 }
 
+/// Load-case factors of one real case or explicit combination.
+fn case_factors(p: &Project, case: &str) -> Result<BTreeMap<String, f64>> {
+    if let Some(c) = p.combinations.iter().find(|c| c.id == case) {
+        Ok(c.terms.iter().map(|t| (t.case.clone(), t.factor)).collect())
+    } else if p.load_cases.iter().any(|c| c.id == case) {
+        Ok([(case.into(), 1.)].into())
+    } else {
+        Err(err("INVALID_LOAD", "Unknown case or combination"))
+    }
+}
+
+/// Factored uniform load density on a member in its local axes (uniform
+/// member loads and self weight).
+fn member_load_density(
+    p: &Project,
+    m: &workbench_model::Member,
+    r: [[f64; 3]; 3],
+    factors: &BTreeMap<String, f64>,
+) -> [f64; 3] {
+    let mat = p.materials.iter().find(|v| v.id == m.material).unwrap();
+    let sec = p.sections.iter().find(|v| v.id == m.section).unwrap();
+    let mut q = [0.; 3];
+    for load in &p.loads {
+        let factor = *factors.get(load.case()).unwrap_or(&0.);
+        let add = match load {
+            Load::Uniform {
+                member,
+                axes,
+                force_per_length,
+                ..
+            } if *member == m.id => {
+                if axes == "local" {
+                    *force_per_length
+                } else {
+                    local(r, *force_per_length)
+                }
+            }
+            Load::SelfWeight {
+                members,
+                factor: sw,
+                ..
+            } if members.contains(&m.id) => {
+                local(r, p.gravity.map(|g| g * mat.density * sec.a * sw))
+            }
+            _ => [0.; 3],
+        };
+        for d in 0..3 {
+            q[d] += add[d] * factor;
+        }
+    }
+    q
+}
+
 pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
     project.validate()?;
     let mut original = project.clone();
@@ -86,14 +141,7 @@ pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
 fn analyse_assembled(project: &Project, case: &str) -> Result<Analysis> {
     let mut p = project.clone();
     p.canonicalise();
-    let factors: BTreeMap<String, f64> =
-        if let Some(c) = p.combinations.iter().find(|c| c.id == case) {
-            c.terms.iter().map(|t| (t.case.clone(), t.factor)).collect()
-        } else if p.load_cases.iter().any(|c| c.id == case) {
-            [(case.into(), 1.)].into()
-        } else {
-            return Err(err("INVALID_LOAD", "Unknown case or combination"));
-        };
+    let factors = case_factors(&p, case)?;
     let ni: BTreeMap<_, _> = p
         .nodes
         .iter()
@@ -139,35 +187,7 @@ fn analyse_assembled(project: &Project, case: &str) -> Result<Analysis> {
         let (l, r) = axes(a, b, m.local_y);
         let mat = p.materials.iter().find(|v| v.id == m.material).unwrap();
         let sec = p.sections.iter().find(|v| v.id == m.section).unwrap();
-        let mut q = [0.; 3];
-        for load in &p.loads {
-            let factor = *factors.get(load.case()).unwrap_or(&0.);
-            let add = match load {
-                Load::Uniform {
-                    member,
-                    axes,
-                    force_per_length,
-                    ..
-                } if *member == m.id => {
-                    if axes == "local" {
-                        *force_per_length
-                    } else {
-                        local(r, *force_per_length)
-                    }
-                }
-                Load::SelfWeight {
-                    members,
-                    factor: sw,
-                    ..
-                } if members.contains(&m.id) => {
-                    local(r, p.gravity.map(|g| g * mat.density * sec.a * sw))
-                }
-                _ => [0.; 3],
-            };
-            for d in 0..3 {
-                q[d] += add[d] * factor;
-            }
-        }
+        let q = member_load_density(&p, m, r, &factors);
         let k_full = stiffness(l, mat, sec);
         let fe_full = uniform(l, q);
         let released = released_dofs(&m.release_start, &m.release_end);
