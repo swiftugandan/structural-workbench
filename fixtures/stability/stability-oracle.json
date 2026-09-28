@@ -1,0 +1,313 @@
+{
+  "formulation": "docs/formulations/stability.md (stability-v1)",
+  "generator": "tools/oracles/stability_oracle.py",
+  "generatorSha256": "9193b95a334886d0dd0be11fd1f7b5217521ddb42d6b94d08e8804f04a740fdd",
+  "opensees": {
+    "package": "openseespy",
+    "version": "3.4.0",
+    "elementsPerMember": [
+      32,
+      64
+    ],
+    "transformations": [
+      "Corotational",
+      "PDelta"
+    ],
+    "extrapolation": "Richardson (4 f_2n - f_n)/3 on PDelta",
+    "solution": "LoadControl 100 steps, Newton, NormDispIncr 1e-12"
+  },
+  "units": "SI (N, m, Pa)",
+  "euler": [
+    {
+      "id": "S-EUL-1",
+      "ends": "pinnedPinned",
+      "L": 5.0,
+      "E": 210000000000.0,
+      "nu": 0.3,
+      "A": 0.005381,
+      "Iy": 6.038e-06,
+      "Iz": 8.356e-05,
+      "J": 2.01e-07,
+      "bendingPlane": "weak (Iy) and strong (Iz) both reported",
+      "kL": 3.141592653589793,
+      "PcrWeak": 500578.4395397313,
+      "PcrStrong": 6927514.807542225,
+      "effectiveLengthFactor": 1.0
+    },
+    {
+      "id": "S-EUL-2",
+      "ends": "fixedFree",
+      "L": 5.0,
+      "E": 210000000000.0,
+      "nu": 0.3,
+      "A": 0.005381,
+      "Iy": 6.038e-06,
+      "Iz": 8.356e-05,
+      "J": 2.01e-07,
+      "bendingPlane": "weak (Iy) and strong (Iz) both reported",
+      "kL": 1.5707963267948966,
+      "PcrWeak": 125144.60988493283,
+      "PcrStrong": 1731878.7018855563,
+      "effectiveLengthFactor": 2.0
+    },
+    {
+      "id": "S-EUL-3",
+      "ends": "fixedFixed",
+      "L": 5.0,
+      "E": 210000000000.0,
+      "nu": 0.3,
+      "A": 0.005381,
+      "Iy": 6.038e-06,
+      "Iz": 8.356e-05,
+      "J": 2.01e-07,
+      "bendingPlane": "weak (Iy) and strong (Iz) both reported",
+      "kL": 6.283185307179586,
+      "PcrWeak": 2002313.7581589252,
+      "PcrStrong": 27710059.2301689,
+      "effectiveLengthFactor": 0.5
+    },
+    {
+      "id": "S-EUL-4",
+      "ends": "fixedPinned",
+      "L": 5.0,
+      "E": 210000000000.0,
+      "nu": 0.3,
+      "A": 0.005381,
+      "Iy": 6.038e-06,
+      "Iz": 8.356e-05,
+      "J": 2.01e-07,
+      "bendingPlane": "weak (Iy) and strong (Iz) both reported",
+      "kL": 4.493409457909065,
+      "PcrWeak": 1024057.5997991138,
+      "PcrStrong": 14171953.136670085,
+      "effectiveLengthFactor": 0.699155659642841
+    }
+  ],
+  "portalBuckling": {
+    "id": "S-POR-BUCK",
+    "geometry": {
+      "h": 3.0,
+      "b": 4.0,
+      "base": "fixed",
+      "mode": "planar XZ"
+    },
+    "material": {
+      "E": 210000000000.0,
+      "nu": 0.3
+    },
+    "column": {
+      "A": 1.0,
+      "I": 8.356e-05,
+      "note": "axially near-rigid, matching the ODE"
+    },
+    "beam": {
+      "A": 1.0,
+      "I": 0.0001943
+    },
+    "load": "equal vertical point loads P at both column tops (-Z)",
+    "kh": 2.8735774864518624,
+    "PcrPerColumn": 16099820.776735019,
+    "effectiveLengthFactor": 1.0932688150577283
+  },
+  "firstOrderSwayUnderH": {
+    "H": 1000.0,
+    "sway": 8.089227651949416e-05,
+    "opensees": {
+      "swayTopLeft": 8.089703821227801e-05,
+      "swayTopRight": 8.088751482671032e-05,
+      "baseMomentLeft": 815.4775616372639,
+      "baseMomentRight": 815.3959101198369,
+      "baseShearLeft": -500.02225769642246,
+      "baseShearRight": -499.9777423035739
+    }
+  },
+  "secondOrder": [
+    {
+      "id": "S-POR-PD-020",
+      "loadRatio": 0.2,
+      "PPerColumn": 3219964.155347004,
+      "HAtTopLeft": 1000.0,
+      "exact": {
+        "sway": 0.00010089916142439707,
+        "baseMomentMagnitude": 981.6263098673198,
+        "amplification": 1.2473275047473966
+      },
+      "opensees": {
+        "pDelta": {
+          "swayTopLeft": 0.00010089529030120829,
+          "swayTopRight": 0.00010088576710999173,
+          "baseMomentLeft": 981.6788455089355,
+          "baseMomentRight": 981.592338950269,
+          "baseShearLeft": -500.0324611310051,
+          "baseShearRight": -499.9675388689925
+        },
+        "corotational": {
+          "swayTopLeft": 0.00010089185072713962,
+          "swayTopRight": 0.00010088225198625764,
+          "baseMomentLeft": 981.6609222313191,
+          "baseMomentRight": 981.5738025276794,
+          "baseShearLeft": -500.0325900338521,
+          "baseShearRight": -499.96740996614426
+        },
+        "momentSign": "reaction about global Y = -OpenSees 2D reaction (2D rotation axis X x Z = -Y)",
+        "pDelta2n": {
+          "swayTopLeft": 0.00010090562886692702,
+          "swayTopRight": 0.00010089610567582056,
+          "baseMomentLeft": 981.6892213339381,
+          "baseMomentRight": 981.6027000059448,
+          "baseShearLeft": -500.0324669110144,
+          "baseShearRight": -499.9675330889976
+        },
+        "pDeltaRichardson": {
+          "sway": 0.00010090431345996505,
+          "baseMomentMagnitude": 981.6494168167213
+        },
+        "pDeltaVsExact": 5.1061232771987264e-05,
+        "baseMomentPDeltaVsExact": 2.3539456073251586e-05,
+        "corotationalVsExact": -0.00012002149004497475
+      }
+    },
+    {
+      "id": "S-POR-PD-050",
+      "loadRatio": 0.5,
+      "PPerColumn": 8049910.3883675095,
+      "HAtTopLeft": 1000.0,
+      "exact": {
+        "sway": 0.0001609027692531934,
+        "baseMomentMagnitude": 1476.9565728375035,
+        "amplification": 1.9890992833465082
+      },
+      "opensees": {
+        "pDelta": {
+          "swayTopLeft": 0.00016083149578845739,
+          "swayTopRight": 0.0001608219728894163,
+          "baseMomentLeft": 1476.7380039402562,
+          "baseMomentRight": 1476.6436922044675,
+          "baseShearLeft": -500.0478003440349,
+          "baseShearRight": -499.9521996559668
+        },
+        "corotational": {
+          "swayTopLeft": 0.00016081313490903598,
+          "swayTopRight": 0.00016080342746622897,
+          "baseMomentLeft": 1476.6316303234823,
+          "baseMomentRight": 1476.5359488364259,
+          "baseShearLeft": -500.0479427185146,
+          "baseShearRight": -499.95205728141445
+        },
+        "momentSign": "reaction about global Y = -OpenSees 2D reaction (2D rotation axis X x Z = -Y)",
+        "pDelta2n": {
+          "swayTopLeft": 0.0001608979509290562,
+          "swayTopRight": 0.00016088842803067355,
+          "baseMomentLeft": 1476.9898786786243,
+          "baseMomentRight": 1476.8955199160728,
+          "baseShearLeft": -500.04783491248594,
+          "baseShearRight": -499.95216508753737
+        },
+        "pDeltaRichardson": {
+          "sway": 0.00016091534119350753,
+          "baseMomentMagnitude": 1477.0266497056775
+        },
+        "pDeltaVsExact": 7.813377216847606e-05,
+        "baseMomentPDeltaVsExact": 4.7446803421946626e-05,
+        "corotationalVsExact": -0.0005872370376189817
+      }
+    },
+    {
+      "id": "S-POR-PD-080",
+      "loadRatio": 0.8,
+      "PPerColumn": 12879856.621388016,
+      "HAtTopLeft": 1000.0,
+      "exact": {
+        "sway": 0.000400827837437092,
+        "baseMomentMagnitude": 3447.2925454302936,
+        "amplification": 4.955081680022898
+      },
+      "opensees": {
+        "pDelta": {
+          "swayTopLeft": 0.00040001616213620436,
+          "swayTopRight": 0.00040000664295210416,
+          "baseMomentLeft": 3442.1548379779533,
+          "baseMomentRight": 3441.94378652424,
+          "baseShearLeft": -500.2428347403673,
+          "baseShearRight": -499.757165259658
+        },
+        "corotational": {
+          "swayTopLeft": 0.0003998700251534287,
+          "swayTopRight": 0.00039985941167480614,
+          "baseMomentLeft": 3441.146106969493,
+          "baseMomentRight": 3440.9278267846908,
+          "baseShearLeft": -500.242559337632,
+          "baseShearRight": -499.7574406623535
+        },
+        "momentSign": "reaction about global Y = -OpenSees 2D reaction (2D rotation axis X x Z = -Y)",
+        "pDelta2n": {
+          "swayTopLeft": 0.0004006842249313105,
+          "swayTopRight": 0.00040067470576262863,
+          "baseMomentLeft": 3446.477744707857,
+          "baseMomentRight": 3446.265989684093,
+          "baseShearLeft": -500.24364420110817,
+          "baseShearRight": -499.7563557987912
+        },
+        "pDeltaRichardson": {
+          "sway": 0.00040090215294790794,
+          "baseMomentMagnitude": 3447.812718844268
+        },
+        "pDeltaVsExact": 0.0001854050639076288,
+        "baseMomentPDeltaVsExact": 0.0001508933190668138,
+        "corotationalVsExact": -0.002402824686860039
+      }
+    },
+    {
+      "id": "S-NEAR",
+      "loadRatio": 0.99,
+      "PPerColumn": 15938822.568967668,
+      "HAtTopLeft": 1000.0,
+      "exact": {
+        "sway": 0.007997435971855345,
+        "baseMomentMagnitude": 65713.40347408672,
+        "amplification": 98.86526026904497
+      },
+      "opensees": {
+        "pDelta": {
+          "swayTopLeft": 0.007602275837411126,
+          "swayTopRight": 0.007602267974619868,
+          "baseMomentLeft": 62535.767950313326,
+          "baseMomentRight": 62481.68295653898,
+          "baseShearLeft": -587.2034589317404,
+          "baseShearRight": -412.7965410683664
+        },
+        "corotational": {
+          "swayTopLeft": 0.007546175474261584,
+          "swayTopRight": 0.007545788579510761,
+          "baseMomentLeft": 62079.713858914554,
+          "baseMomentRight": 62024.077648215505,
+          "baseShearLeft": -585.6647284652572,
+          "baseShearRight": -414.33527152927127
+        },
+        "momentSign": "reaction about global Y = -OpenSees 2D reaction (2D rotation axis X x Z = -Y)",
+        "pDelta2n": {
+          "swayTopLeft": 0.007916023018706779,
+          "swayTopRight": 0.007916015295698322,
+          "baseMomentLeft": 65082.93789952264,
+          "baseMomentRight": 65024.21839177574,
+          "baseShearLeft": -594.5420560030716,
+          "baseShearRight": -405.45794399638135
+        },
+        "pDeltaRichardson": {
+          "sway": 0.0080206015742649,
+          "baseMomentMagnitude": 65901.86237639021
+        },
+        "pDeltaVsExact": 0.0028966286808771446,
+        "baseMomentPDeltaVsExact": 0.0028678913637125714,
+        "corotationalVsExact": -0.056449835492016986
+      }
+    }
+  ],
+  "overCritical": {
+    "id": "S-OVER",
+    "loadRatio": 1.01,
+    "PPerColumn": 16260818.98450237,
+    "expected": "NONCONVERGED / TANGENT_NOT_POSITIVE_DEFINITE, no buffers"
+  },
+  "failures": []
+}
