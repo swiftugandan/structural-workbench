@@ -34,6 +34,7 @@ export function topology({
     generation++;
   };
   $("#modal").addEventListener("close", clear);
+  $("#modal").addEventListener("replace", clear);
   $("#topology").onclick = () => {
     if (!canEdit()) return;
     const p = getProject();

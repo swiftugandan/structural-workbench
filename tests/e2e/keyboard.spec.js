@@ -59,7 +59,17 @@ test("M01 keyboard-only portal creation, numeric drawing, table editing and solv
     page,
     page.getByRole("button", { name: "Save entity", exact: true }),
   );
+  // Like a keyboard user, wait for the save to finish before moving on.
+  await expect
+    .poll(() => page.evaluate(() => window.__studyReady()))
+    .toBe(true);
+  // The refreshed table keeps focus inside the dock.
+  await expect(page.locator("#close-modal")).toBeFocused();
   await activate(page, page.locator("#close-modal"));
+  // Closing returns focus to the control that opened the dock.
+  await expect(
+    page.getByRole("button", { name: "Analytical nodes 4", exact: true }),
+  ).toBeFocused();
   await activate(page, page.locator("#analyse"));
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
   await expect(page.locator("#save-status")).toHaveText("Saved locally");

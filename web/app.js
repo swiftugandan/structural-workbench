@@ -336,9 +336,37 @@ const cadTools = cad({
   canEdit: () => !!project && !busy && !readOnly && !formDirty,
   selectEntities,
 });
+/**
+ * Replace the dialog body. Consumers holding state tied to the previous
+ * content listen for "replace". Keyboard focus that was in the replaced
+ * content (or dropped to the body while it was busy) stays in the dialog:
+ * on the first form field, otherwise on the close button.
+ */
+function setModalContent(html) {
+  const dialog = $("#modal"),
+    content = $("#modal-content"),
+    active = document.activeElement,
+    hadFocus = content.contains(active) || !active || active === document.body;
+  content.innerHTML = html;
+  dialog.dispatchEvent(new Event("replace"));
+  if (dialog.open && hadFocus)
+    (
+      content.querySelector(
+        "form :is(input:not([type=hidden]),select,textarea):not(:disabled)",
+      ) || $("#close-modal")
+    ).focus();
+}
+// The control that opened the dialog, and a selector for its replacement:
+// explorer and toolbar controls are rebuilt by commands run in the dialog.
+let modalOpener = null;
+function openerSelector(el) {
+  if (el.id) return `#${CSS.escape(el.id)}`;
+  for (const key of ["group", "member", "preview", "branch"])
+    if (el.dataset?.[key] != null)
+      return `[data-${key}="${CSS.escape(el.dataset[key])}"]`;
+  return null;
+}
 function modal(title, html) {
-  $("#modal-title").textContent = title;
-  $("#modal-content").innerHTML = html;
   const blocking = [
     "Create a planar portal",
     "Worked examples",
@@ -350,16 +378,27 @@ function modal(title, html) {
     "Kernel unavailable",
   ].includes(title);
   const dialog = $("#modal");
-  if (dialog.open) dialog.close();
+  const opener = document.activeElement;
+  if (!dialog.open)
+    modalOpener =
+      opener && opener !== document.body
+        ? { element: opener, selector: openerSelector(opener) }
+        : null;
+  // An open dialog of the same kind only swaps its content; closing it would
+  // tell listeners the dialog was dismissed.
+  const reuse = dialog.open && dialog.matches(":modal") === blocking;
+  if (dialog.open && !reuse) dialog.close();
+  $("#modal-title").textContent = title;
+  setModalContent(html);
   dialog.classList.toggle("steel-dialog", title === "Steel member check");
   dialog.classList.toggle("command-dock", !blocking);
   document.body.classList.toggle("command-dock-open", !blocking);
-  if (blocking) dialog.showModal();
-  else {
+  if (!blocking)
     dialog.style.top =
       Math.max(0, $(".work-grid").getBoundingClientRect().top) + "px";
-    dialog.show();
-  }
+  if (reuse) return;
+  if (blocking) dialog.showModal();
+  else dialog.show();
 }
 $("#close-modal").onclick = () => $("#modal").close();
 window.addEventListener("keydown", (e) => {
@@ -373,7 +412,23 @@ window.addEventListener("keydown", (e) => {
   }
 });
 $("#modal").addEventListener("close", () => {
-  if (!$("#modal").open) document.body.classList.remove("command-dock-open");
+  const dialog = $("#modal");
+  if (dialog.open) return;
+  document.body.classList.remove("command-dock-open");
+  const opener = modalOpener;
+  modalOpener = null;
+  // Return focus to the opener unless something already took it deliberately
+  // (the browser's own restore fails when the opener was re-rendered).
+  const active = document.activeElement;
+  if (
+    !opener ||
+    (active && active !== document.body && !dialog.contains(active))
+  )
+    return;
+  const target = opener.element.isConnected
+    ? opener.element
+    : opener.selector && document.querySelector(opener.selector);
+  target?.focus();
 });
 $("#modal").addEventListener("click", (e) => {
   if (e.target === $("#modal")) $("#modal").close();
@@ -2088,13 +2143,15 @@ function editEntity(key, old, draft) {
   $("#modal-title").textContent =
     (old ? "Edit " : "Add ") + entityGuides[key][0].toLowerCase();
   if (missing.length) {
-    $("#modal-content").innerHTML =
-      `<p>First add ${missing.map((x) => x[2]).join(" and ")}. Then return here to add this ${entityGuides[key][0].toLowerCase()}.</p><button id="setup-required" class="primary">Add ${missing[0][2]}</button>`;
+    setModalContent(
+      `<p>First add ${missing.map((x) => x[2]).join(" and ")}. Then return here to add this ${entityGuides[key][0].toLowerCase()}.</p><button id="setup-required" class="primary">Add ${missing[0][2]}</button>`,
+    );
     $("#setup-required").onclick = () => editEntity(missing[0][0], null);
     return;
   }
-  $("#modal-content").innerHTML =
-    `<form id="entity-form" class="entity-form">${entityFields(key, entity, project)}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`;
+  setModalContent(
+    `<form id="entity-form" class="entity-form">${entityFields(key, entity, project)}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`,
+  );
   bindEntityFields($("#entity-form"), key, project);
   if (key === "sections") {
     bindSectionCalculator(
