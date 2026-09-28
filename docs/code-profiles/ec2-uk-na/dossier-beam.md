@@ -110,7 +110,7 @@ Items 5–7 are why a complete-design PASS cannot follow from this dossier alone
 
 1. **A1:2014 / NA+A2:2014.** Which of the rows above changed? The texts are not held.
 2. **UK V_Rd,max cap.** Table NA.1 for 6.2.3(3) says ν1 and αcw should not give V_Rd,max above 200·bw² at sections more than d from a support. It states no units, so this must not be implemented until the units are confirmed from the NA text or its amendment.
-3. **αcc for shear under the UK NA.** 1.0 applies to "other phenomena", with 0.85 permitted for all. This is a profile decision to record in an ADR (conservative 0.85, or 1.0 for shear).
+3. ~~**αcc for shear under the UK NA.**~~ Resolved by ADR 0015: the profile uses the permitted 0.85 for all phenomena (one parameter, `alpha_cc_shear`).
 4. **UK Cmax shear note.** Limiting shear strength of classes above C50/60 to C50/60 needs a decision on how fck enters (6.2.a), (6.2.b) and ν.
 
 ## Unsupported in the first profile

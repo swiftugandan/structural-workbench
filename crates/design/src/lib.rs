@@ -11,10 +11,11 @@ pub mod rc_section;
 pub use profile::aisc36022::{
     Aisc36022LrfdProfile, aisc_s2_resources_verified, verify_vault_pdfs_if_present,
 };
+pub use profile::ec2uk::{Ec2Ndp, Ec2UkNaProfile};
 pub use profile::{
     CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,
-    PROFILE_AISC_360_22_LRFD, ProfileApplicability, ProfileMetadata, ProfileRegistry,
-    TensionEndProps, WSectionProps,
+    PROFILE_AISC_360_22_LRFD, PROFILE_EC2_UK_NA, ProfileApplicability, ProfileMetadata,
+    ProfileRegistry, RcBarRow, RcBeamContext, RcFace, RcLinks, TensionEndProps, WSectionProps,
 };
 
 use workbench_model::Section;
@@ -41,6 +42,7 @@ pub fn corner_stress_extrema(n: f64, my: f64, mz: f64, s: &Section) -> (f64, f64
 pub fn default_registry() -> ProfileRegistry {
     let mut registry = ProfileRegistry::new();
     registry.register(Box::new(Aisc36022LrfdProfile::default()));
+    registry.register(Box::new(Ec2UkNaProfile::default()));
     registry
 }
 
@@ -83,9 +85,12 @@ mod tests {
         assert!(aisc_s2_resources_verified());
         let registry = default_registry();
         let meta = registry.metadata();
-        assert_eq!(meta.len(), 1);
+        assert_eq!(meta.len(), 2);
         assert_eq!(meta[0].id, PROFILE_AISC_360_22_LRFD);
         assert!(meta[0].enabled);
+        // EC2 is registered for capabilities but stays disabled (ADR 0015).
+        assert_eq!(meta[1].id, PROFILE_EC2_UK_NA);
+        assert!(!meta[1].enabled);
         assert_eq!(registry.enabled_profiles().len(), 1);
 
         let demand = DesignDemand {
@@ -123,6 +128,16 @@ mod tests {
                 .iter()
                 .any(|c| c.check_id == "profile.section" || c.check_id == "profile.demand")
         );
+    }
+
+    #[test]
+    fn disabled_ec2_profile_returns_only_the_resource_gate() {
+        let run = default_registry()
+            .evaluate(PROFILE_EC2_UK_NA, &DesignDemand::default(), &MemberContext::default())
+            .unwrap();
+        assert_eq!(run.overall, CheckStatus::Unsupported);
+        assert_eq!(run.checks.len(), 1);
+        assert_eq!(run.checks[0].check_id, "profile.resources");
     }
 
     #[test]

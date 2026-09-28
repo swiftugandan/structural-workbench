@@ -4,11 +4,15 @@
 //! packages (AISC, Eurocode, …) live in submodules and register themselves.
 
 pub mod aisc36022;
+pub mod ec2uk;
 
 use serde_json::{json, Value};
 
 /// Stable profile id for ANSI/AISC 360-22 LRFD (M07 first pin).
 pub const PROFILE_AISC_360_22_LRFD: &str = "aisc-360-22-lrfd";
+
+/// Stable profile id for EN 1992-1-1 with the UK National Annex (M08-B, disabled).
+pub const PROFILE_EC2_UK_NA: &str = "ec2-uk-na";
 
 /// Outcome of one mandatory or optional check.
 #[derive(Debug, Clone, PartialEq)]
@@ -82,6 +86,52 @@ pub struct TensionEndProps {
     pub hole_deduction_width: f64,
 }
 
+/// Face of a rectangular RC beam. Top is the member local +z face (ADR 0014).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RcFace {
+    Top,
+    Bottom,
+}
+
+/// One longitudinal bar row: total area (m²) and its centroid distance from
+/// its own face (m).
+#[derive(Debug, Clone, PartialEq)]
+pub struct RcBarRow {
+    pub face: RcFace,
+    pub area: f64,
+    pub centroid_from_face: f64,
+}
+
+/// Vertical links: legs per set, bar diameter (m), spacing along the member (m)
+/// and characteristic yield strength (Pa).
+#[derive(Debug, Clone, PartialEq)]
+pub struct RcLinks {
+    pub legs: u32,
+    pub diameter: f64,
+    pub spacing: f64,
+    pub fyk: f64,
+}
+
+/// Code-agnostic rectangular reinforced concrete beam description (SI).
+#[derive(Debug, Clone, PartialEq)]
+pub struct RcBeamContext {
+    /// Width along member local y (m).
+    pub width: f64,
+    /// Depth along member local z (m).
+    pub depth: f64,
+    /// Cover measured to the link (m).
+    pub cover_to_link: f64,
+    /// Characteristic concrete cylinder strength (Pa).
+    pub fck: f64,
+    /// Characteristic yield strength of longitudinal steel (Pa).
+    pub fyk: f64,
+    pub rows: Vec<RcBarRow>,
+    pub links: Option<RcLinks>,
+    /// Whether the tension steel is confirmed to extend at least l_bd + d
+    /// beyond the section. `None` means not confirmed.
+    pub tension_steel_anchored: Option<bool>,
+}
+
 /// Geometry/material/restraint inputs required by member checks.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MemberContext {
@@ -107,6 +157,8 @@ pub struct MemberContext {
     pub phi_b_mnx: Option<f64>,
     /// Optional φbMny (N·m) weak-axis flexural resistance for H1.
     pub phi_b_mny: Option<f64>,
+    /// Rectangular RC beam description for concrete profiles.
+    pub rc_beam: Option<RcBeamContext>,
 }
 
 impl Default for MemberContext {
@@ -129,6 +181,7 @@ impl Default for MemberContext {
             phi_c_pn: None,
             phi_b_mnx: None,
             phi_b_mny: None,
+            rc_beam: None,
         }
     }
 }

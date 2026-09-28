@@ -433,6 +433,8 @@ impl Kernel {
                     phi_c_pn: inputs["phiCPn"].as_f64(),
                     phi_b_mnx: inputs["phiBMnx"].as_f64(),
                     phi_b_mny: inputs["phiBMny"].as_f64(),
+                    // RC beam inputs are not accepted on this request yet (ADR 0015).
+                    rc_beam: None,
                 };
                 let registry = workbench_design::default_registry();
                 match registry.evaluate(profile_id, &demand, &ctx) {

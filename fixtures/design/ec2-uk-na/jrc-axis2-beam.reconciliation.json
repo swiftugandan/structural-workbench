@@ -3,7 +3,7 @@
   "published": "fixtures/design/ec2-uk-na/jrc-axis2-beam.published.json",
   "publishedSha256": "1d2cc28432b849fc8ccaa52524cd795f7679d35edf45a69b763f5468f7f6192d",
   "oracle": "tools/oracles/ec2_beam_oracle.py",
-  "oracleSha256": "8243ac7936120c0ed8d17276df40e157b809923fe70ea6b610f11934096c31b7",
+  "oracleSha256": "eca123167d5742f3fe5689f0987bbc1d9daf36b52f9874cc1a6f1b12d529fc4f",
   "python": "3.14.6",
   "dossier": "docs/code-profiles/ec2-uk-na/dossier-beam.md",
   "tolerancePolicy": "max(0.5% relative, half a unit in the last published decimal)",
@@ -238,6 +238,82 @@
         "slMax_mm": 279.0,
         "nu": 0.54,
         "VRdMax_kN": 259.7586206896552
+      }
+    }
+  },
+  "designCheckTargets": {
+    "independence": "oracle-only; recomputed from dossier-beam.md, used as M08-B2 profile test targets",
+    "section": "rectangle bw x h (web) for limits; JRC support A links",
+    "values": {
+      "EU": {
+        "fcdFlexure_MPa": 16.666666666666668,
+        "flexureSinglyReinforced": {
+          "JRC-A2-FLEX-MIDSPAN": {
+            "MRdAtJrcAs_kNm": 89.25556627376848,
+            "xOverD": 0.018664877416604792
+          },
+          "JRC-A2-FLEX-SUPPORT-B": {
+            "MRdAtJrcAs_kNm": 132.8234631379962,
+            "xOverD": 0.33204768583450206
+          }
+        },
+        "fcdShear_MPa": 16.666666666666668,
+        "fywd_MPa": 434.7826086956522,
+        "linksProvided": {
+          "aswProv_mm2PerM": 323.13524436923586,
+          "VRd_kN": 117.59313023350018,
+          "cotTheta": 2.5,
+          "VRds_kN": 117.59313023350018,
+          "VRdMax_kN": 259.7586206896552
+        },
+        "linksHeavy2x10at100": {
+          "aswProv_mm2PerM": 1570.7963267948965,
+          "VRd_kN": 346.3554576520156,
+          "cotTheta": 1.5147625,
+          "VRds_kN": 346.3554576520156,
+          "VRdMax_kN": 346.3556564127251
+        },
+        "AsMin_mm2": 124.04165517192759,
+        "fctm_MPa": 2.564963920015045,
+        "AsMax_mm2": 4000.0,
+        "rhoWMin": 0.0008,
+        "slMax_mm": 279.0,
+        "stMax_mm": 279.0
+      },
+      "UK-NA-2009": {
+        "fcdFlexure_MPa": 14.166666666666666,
+        "flexureSinglyReinforced": {
+          "JRC-A2-FLEX-MIDSPAN": {
+            "MRdAtJrcAs_kNm": 89.13708564177367,
+            "xOverD": 0.0219586793136527
+          },
+          "JRC-A2-FLEX-SUPPORT-B": {
+            "MRdAtJrcAs_kNm": 129.2334348938063,
+            "xOverD": 0.3906443362758848
+          }
+        },
+        "fcdShear_MPa": 14.166666666666666,
+        "fywd_MPa": 434.7826086956522,
+        "linksProvided": {
+          "aswProv_mm2PerM": 323.13524436923586,
+          "VRd_kN": 117.59313023350018,
+          "cotTheta": 2.5,
+          "VRds_kN": 117.59313023350018,
+          "VRdMax_kN": 220.7948275862069
+        },
+        "linksHeavy2x10at100": {
+          "aswProv_mm2PerM": 1570.7963267948965,
+          "VRd_kN": 306.79861434935606,
+          "cotTheta": 1.3417675,
+          "VRds_kN": 306.799578498346,
+          "VRdMax_kN": 306.79861434935606
+        },
+        "AsMin_mm2": 124.04165517192759,
+        "fctm_MPa": 2.564963920015045,
+        "AsMax_mm2": 4000.0,
+        "rhoWMin": 0.0008,
+        "slMax_mm": 279.0,
+        "stMax_mm": 279.0
       }
     }
   },

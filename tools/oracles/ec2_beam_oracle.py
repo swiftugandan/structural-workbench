@@ -87,6 +87,29 @@ def shear(inp, sec, mat, ndp, fyd_links):
     }
 
 
+def shear_resistance_with_links(asw_per_m_mm2, bw, d, fck, fywd, fcd, nu1, z_over_d=0.9,
+                                cot_min=1.0, cot_max=2.5, alpha_cw=1.0):
+    """6.2.3(3) vertical links: V_Rd = min(V_Rd,s, V_Rd,max) at the admissible cot(theta)
+    that maximises it. Searched on a dense grid (independent of any closed form)."""
+    z = z_over_d * d
+    best = None
+    n = 200000
+    for i in range(n + 1):
+        cot = cot_min + (cot_max - cot_min) * i / n
+        vrds = asw_per_m_mm2 / 1000 * z * fywd * cot / 1000          # kN
+        vrdmax = alpha_cw * bw * z * nu1 * fcd / (cot + 1 / cot) / 1000  # kN
+        v = min(vrds, vrdmax)
+        if best is None or v > best[0]:
+            best = (v, cot, vrds, vrdmax)
+    return {"VRd_kN": best[0], "cotTheta": best[1], "VRds_kN": best[2], "VRdMax_kN": best[3]}
+
+
+def as_min(fck, fyk, bt, d):
+    """9.2.1.1(1): 0.26 fctm/fyk bt d >= 0.0013 bt d; fctm = 0.30 fck^(2/3) (Table 3.1, <= C50/60)."""
+    fctm = 0.30 * fck ** (2 / 3)
+    return max(0.26 * fctm / fyk * bt * d, 0.0013 * bt * d), fctm
+
+
 def tolerance(pub):
     return max(0.005 * abs(pub["value"]), 0.5 * 10 ** (-pub["decimals"]))
 
@@ -156,6 +179,39 @@ def main():
         else:
             uk_variant[c["id"]] = shear(c["inputs"], sec, mat, uk, fyd_exact)
 
+    # Design-check values for the provided links and reinforcement limits (oracle-only; M08-B2 targets).
+    shear_in = [c for c in fx["cases"] if c["id"] == "JRC-A2-SHEAR-SUPPORT-A"][0]["inputs"]
+    asw_prov = derived["JRC-A2-SHEAR-SUPPORT-A"]["aswProv_mm2PerM"]
+    nu = 0.6 * (1 - mat["fck_MPa"] / 250)
+    checks_targets = {}
+    # Profile targets use fyd = fyk/gamma_s exactly (the JRC reconciliation above keeps its rounded 435).
+    for name, ndp, fyd_l in (("EU", eu, fyd_exact), ("UK-NA-2009", uk, fyd_exact)):
+        # UK profile decision (ADR 0015): alpha_cc = 0.85 for shear as well as flexure.
+        fcd_shear = (ndp["alphaCC_flexure"] if name == "UK-NA-2009" else ndp["alphaCC_other"]) * mat["fck_MPa"] / ndp["gammaC"]
+        r = shear_resistance_with_links(asw_prov, sec["bw_mm"], sec["d_mm"], mat["fck_MPa"], fyd_l, fcd_shear, nu)
+        amin, fctm = as_min(mat["fck_MPa"], mat["fyk_MPa"], sec["bw_mm"], sec["d_mm"])
+        heavy_asw = 2 * math.pi * 10 ** 2 / 4 / 100 * 1000  # 2 legs x 10 mm at 100 mm (interior optimum)
+        rh = shear_resistance_with_links(heavy_asw, sec["bw_mm"], sec["d_mm"], mat["fck_MPa"], fyd_l, fcd_shear, nu)
+        flex = {}
+        fcd_flex = ndp["alphaCC_flexure"] * mat["fck_MPa"] / ndp["gammaC"]
+        for c in fx["cases"]:
+            if c["id"].startswith("JRC-A2-FLEX"):
+                MRd, xd = flexure_capacity(c["published"]["AsReq_mm2"]["value"], c["inputs"]["b_mm"],
+                                           c["inputs"]["d_mm"], fcd_flex, fyd_l, lam, eta)
+                flex[c["id"]] = {"MRdAtJrcAs_kNm": MRd / 1e6, "xOverD": xd}
+        checks_targets[name] = {
+            "fcdFlexure_MPa": fcd_flex,
+            "flexureSinglyReinforced": flex,
+            "fcdShear_MPa": fcd_shear, "fywd_MPa": fyd_l,
+            "linksProvided": {"aswProv_mm2PerM": asw_prov, **r},
+            "linksHeavy2x10at100": {"aswProv_mm2PerM": heavy_asw, **rh},
+            "AsMin_mm2": amin, "fctm_MPa": fctm,
+            "AsMax_mm2": 0.04 * sec["bw_mm"] * sec["h_mm"],
+            "rhoWMin": 0.08 * math.sqrt(mat["fck_MPa"]) / mat["fyk_MPa"],
+            "slMax_mm": 0.75 * sec["d_mm"],
+            "stMax_mm": min(0.75 * sec["d_mm"], 600.0),
+        }
+
     src = open(os.path.abspath(__file__), "rb").read()
     doc = {
         "fixtureVersion": 1,
@@ -172,6 +228,9 @@ def main():
                           "midspanBlockDepth_mm": mid["blockDepth_mm"], "hf_mm": sec["hf_mm"]},
         "ukNa2009Variant": {"independence": "oracle-only (no independent publication)",
                             "ndp": uk, "values": uk_variant},
+        "designCheckTargets": {"independence": "oracle-only; recomputed from dossier-beam.md, used as M08-B2 profile test targets",
+                               "section": "rectangle bw x h (web) for limits; JRC support A links",
+                               "values": checks_targets},
         "failures": failures,
     }
     with open(OUT, "w") as fh:
