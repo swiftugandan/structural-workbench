@@ -30,7 +30,7 @@ test("M04 migration: 0.9.0 imports, retains original, unknown schema refused", a
   });
   await expect(page.locator("#workspace")).toBeVisible();
   await expect(page.locator("#message")).toContainText(
-    /Migrated schema 0\.9\.0 → 1\.2\.0/i,
+    /Migrated schema 0\.9\.0 → 1\.3\.0/i,
   );
   await expect(page.locator("#message")).toContainText(legacySha.slice(0, 12));
   await expect(page.locator("#save-status")).toHaveText("Saved locally", {
@@ -55,7 +55,7 @@ test("M04 migration: 0.9.0 imports, retains original, unknown schema refused", a
   expect(originalRecord).toBeTruthy();
   expect(originalRecord.sha256).toBe(legacySha);
   expect(originalRecord.fromSchema).toBe("0.9.0");
-  expect(originalRecord.toSchema).toBe("1.2.0");
+  expect(originalRecord.toSchema).toBe("1.3.0");
   expect(originalRecord.originalUtf8).toBe(legacy);
 
   await page.goto("/");

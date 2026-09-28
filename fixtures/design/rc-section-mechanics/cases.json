@@ -2,7 +2,7 @@
   "fixtureVersion": 1,
   "formulation": "docs/formulations/rc-section.md",
   "oracle": "tools/oracles/rc_section_oracle.py",
-  "oracleSha256": "51b11c6c55f417412ced4af2b97c69247db2016beef3c7f72c871ff09b68d2d2",
+  "oracleSha256": "aed941b7252e482c919e11cf1187c6c687715370e6a9b84ca7968e6a858b14e9",
   "python": "3.14.6",
   "units": "SI (N, m, Pa); compression positive; depths from compression face",
   "tolerance": {
@@ -619,6 +619,58 @@
           "serviceSteelStress": [
             9688489.783729438,
             -47972956.011525996
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-PREVIEW-EC2-UK-DEFAULT",
+      "note": "Default preview draft with EC2 UK NA (2009) parameters (ADR 0016): block intensity eta alpha_cc fck/gamma_c = 0.85 x 30/1.5 MPa, lambda 0.8, eps_cu3 0.0035; fyd = 500/1.15 MPa",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 434782608.6956522,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 17000000.0,
+        "depthRatio": 0.8,
+        "ultimateStrain": 0.0035
+      },
+      "layers": [
+        {
+          "depth": 0.05500000000000001,
+          "area": 0.0012566370614359175
+        },
+        {
+          "depth": 0.5449999999999999,
+          "area": 0.0012566370614359175
+        }
+      ],
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.07718324436278144,
+          "moment": 275316.01327551866,
+          "concreteForce": 314907.63700014865,
+          "curvature": 0.04534662968492338,
+          "classification": "tensionYielded",
+          "depthRatio": 0.14162063185831458,
+          "layers": [
+            {
+              "strain": 0.0010059353673292136,
+              "steelStress": 201187073.46584272,
+              "force": 231456.30275459806,
+              "yielded": false
+            },
+            {
+              "strain": -0.02121391317828324,
+              "steelStress": -434782608.6956522,
+              "force": -546363.9397547467,
+              "yielded": true
+            }
           ]
         }
       }

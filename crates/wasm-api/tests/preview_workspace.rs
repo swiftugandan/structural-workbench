@@ -342,6 +342,8 @@ fn schema_1_1_rc_beam_drafts_migrate_to_equal_top_and_bottom_rows() {
     d.as_object_mut().unwrap().remove("mechanics");
     for map in ["inputs", "inputSources"] {
         let obj = d[map].as_object_mut().unwrap();
+        // A faithful 1.1.0 draft: no link legs (introduced in 1.3.0).
+        obj.remove("linkLegs");
         let (dia, count) = (obj["topBarDiameter"].clone(), obj["topBarCount"].clone());
         for key in ["topBarDiameter", "topBarCount", "bottomBarDiameter", "bottomBarCount"] {
             obj.remove(key);
@@ -355,8 +357,9 @@ fn schema_1_1_rc_beam_drafts_migrate_to_equal_top_and_bottom_rows() {
     let r = req(&mut reopened, "importProject", json!({"jsonUtf8":legacy.to_string()}));
     assert_eq!(r["status"], "ok", "{r}");
     let migrated = &r["payload"]["project"];
-    assert_eq!(migrated["schemaVersion"], "1.2.0");
+    assert_eq!(migrated["schemaVersion"], "1.3.0");
     let m = &migrated["designPreviews"][0];
+    assert_eq!(m["inputs"]["linkLegs"], 2.0);
     for face in ["top", "bottom"] {
         assert_eq!(m["inputs"][format!("{face}BarCount")], 3.0);
         assert_eq!(m["inputs"][format!("{face}BarDiameter")], 0.02);
@@ -484,4 +487,173 @@ fn rc_beam_synthetic_run_has_no_service_stresses() {
         assert_eq!(st["serviceMoment"], Value::Null);
         assert_eq!(st["elastic"].get("serviceConcreteStress"), None, "{st}");
     }
+}
+/// M08-B3 (ADR 0016): the disabled EC2 profile runs at the governing sagging,
+/// hogging and shear key stations of the bound combination. Expected values
+/// come from the independent oracles: RC-PREVIEW-EC2-UK-DEFAULT (rc_section
+/// oracle) and designCheckTargets.previewDefaultDraftUk (EC2 beam oracle).
+#[test]
+fn rc_beam_ec2_preview_runs_disabled_profile_at_governing_stations() {
+    let rc: Value = serde_json::from_str(include_str!(
+        "../../../fixtures/design/rc-section-mechanics/cases.json"
+    ))
+    .unwrap();
+    let mu = rc["cases"].as_array().unwrap().iter()
+        .find(|c| c["id"] == "RC-PREVIEW-EC2-UK-DEFAULT").unwrap()["expected"]["ultimate"]["moment"]
+        .as_f64().unwrap();
+    let ec2: Value = serde_json::from_str(include_str!(
+        "../../../fixtures/design/ec2-uk-na/jrc-axis2-beam.reconciliation.json"
+    ))
+    .unwrap();
+    let t = &ec2["designCheckTargets"]["previewDefaultDraftUk"];
+    let close = |got: &Value, want: f64, rel: f64, what: &str| {
+        let g = got.as_f64().unwrap_or_else(|| panic!("{what} missing: {got}"));
+        assert!((g - want).abs() <= rel * want.abs(), "{what}: {g} vs {want}");
+    };
+    let run = model_demand([0., 1., 0.]);
+    let code = &run["codeProfilePreview"];
+    assert_eq!(code["status"], "evaluated", "{code}");
+    assert_eq!(code["profileId"], "ec2-uk-na");
+    assert_eq!(code["profileEnabled"], false);
+    assert_eq!(code["basis"], "disabledProfilePreview");
+    assert_eq!(code["tensionAnchorageConfirmed"], false);
+    // The preview never changes the checks or the overall status.
+    assert_eq!(run["overall"], "unsupported");
+    assert!(run["checks"].as_array().unwrap().iter().all(|c| c["status"] == "unsupported"));
+    let governing = code["governing"].as_array().unwrap();
+    // B08: hogging and shear both govern at the fixed end x/L = 0, so they share one entry.
+    let roles: Vec<Vec<&str>> = governing.iter().map(|g| g["roles"].as_array().unwrap().iter().map(|r| r.as_str().unwrap()).collect()).collect();
+    assert_eq!(roles, vec![vec!["sagging"], vec!["hogging", "shear"]]);
+    let has = |g: &Value, role: &str| g["roles"].as_array().unwrap().iter().any(|r| r == role);
+    let check = |role: &str, id: &str| -> Value {
+        let g = governing.iter().find(|g| has(g, role)).unwrap();
+        g["checks"].as_array().unwrap().iter().find(|c| c["checkId"] == id).cloned()
+            .unwrap_or_else(|| panic!("{role} {id} missing: {g}"))
+    };
+    // Symmetric default draft: sagging and hogging M_Rd equal the oracle, B08 moments pass.
+    for (role, med) in [("sagging", 15000.), ("hogging", 30000.)] {
+        let fl = check(role, "ec2.flexure");
+        close(&fl["resistance"], mu, 1e-9, &format!("{role} M_Rd"));
+        close(&fl["demand"], med, 1e-6, &format!("{role} M_Ed"));
+        assert_eq!(fl["status"], "pass");
+        close(&check(role, "ec2.as-min")["demand"], f(&t["AsMin_mm2"]) / 1e6, 1e-9, "As,min");
+    }
+    // Governing shear is the first end (station 0), Vz = qL/2 = 30 kN.
+    let sh_station = governing.iter().find(|g| has(g, "shear")).unwrap();
+    assert_eq!(sh_station["station"], 0.0);
+    let sh = check("shear", "ec2.shear");
+    close(&sh["demand"], 30000., 1e-6, "V_Ed");
+    close(&sh["resistance"], f(&t["shearWithLinks"]["VRd_kN"]) * 1e3, 1e-5, "V_Rd");
+    close(&sh["intermediates"]["cotTheta"], f(&t["shearWithLinks"]["cotTheta"]), 1e-4, "cot theta");
+    assert_eq!(sh["intermediates"]["rhoL"], 0.0, "unconfirmed anchorage excludes Asl");
+    let sp = check("shear", "ec2.links-spacing");
+    close(&sp["intermediates"]["st"], f(&t["st_mm"]) / 1e3, 1e-9, "s_t");
+    close(&sp["intermediates"]["slMax"], f(&t["slMax_mm"]) / 1e3, 1e-9, "s_l,max");
+    close(&check("shear", "ec2.links-min")["resistance"], f(&t["rhoW"]), 1e-9, "rho_w");
+    // Companions keep every station from passing overall.
+    for g in governing {
+        assert_eq!(g["overall"], "unsupported", "{}", g["roles"]);
+    }
+}
+fn f(v: &Value) -> f64 {
+    v.as_f64().unwrap()
+}
+#[test]
+fn rc_beam_ec2_preview_is_unavailable_without_model_actions() {
+    let mut k = open();
+    let draft = create(&mut k, "rcBeam");
+    let c = req(&mut k, "getSnapshot", json!({}));
+    let run = rc_run(&mut k, &draft["payload"]["project"]["designPreviews"][0]["id"], &c["modelHash"]);
+    assert_eq!(run["codeProfilePreview"]["status"], "unavailable");
+}
+#[test]
+fn rc_beam_anchorage_confirmation_is_explicit_and_rc_only() {
+    let mut k = open();
+    let c = create(&mut k, "rcBeam");
+    let d = c["payload"]["project"]["designPreviews"][0].clone();
+    assert!(d.get("tensionAnchorageConfirmed").is_none());
+    assert_eq!(d["inputs"]["linkLegs"], 2.0);
+    let set = |k: &mut Kernel, extra: Value| {
+        let mut args = json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","targetId":"m1"});
+        for (key, v) in extra.as_object().unwrap() {
+            args[key] = v.clone();
+        }
+        cmd(k, "SetDesignPreview", args)
+    };
+    let on = set(&mut k, json!({"tensionAnchorageConfirmed": true}));
+    assert_eq!(on["status"], "ok", "{on}");
+    assert_eq!(on["payload"]["project"]["designPreviews"][0]["tensionAnchorageConfirmed"], true);
+    let off = set(&mut k, json!({}));
+    assert!(off["payload"]["project"]["designPreviews"][0].get("tensionAnchorageConfirmed").is_none());
+    let mut bad = d["inputs"].clone();
+    bad["linkLegs"] = json!("3.5");
+    let r = cmd(&mut k, "SetDesignPreview", json!({"id":d["id"],"inputs":bad,"soilReference":""}));
+    assert_eq!(r["status"], "error", "fractional link legs must be refused");
+    let footing = create(&mut k, "padFooting");
+    let fd = footing["payload"]["project"]["designPreviews"].as_array().unwrap().iter()
+        .find(|x| x["kind"] == "padFooting").unwrap().clone();
+    let r = cmd(&mut k, "SetDesignPreview", json!({"id":fd["id"],"inputs":fd["inputs"],"soilReference":"x","targetId":"s1","tensionAnchorageConfirmed":true}));
+    assert_eq!(r["status"], "error");
+}
+
+/// ADR 0016: 1.2.0 → 1.3.0 records 2 link legs with synthetic provenance,
+/// keeps every other value and source, never adds an anchorage confirmation,
+/// and refuses 1.2.0 drafts that already carry 1.3.0 fields.
+#[test]
+fn schema_1_2_rc_beam_drafts_gain_two_synthetic_link_legs() {
+    let mut k = open();
+    let c = create(&mut k, "rcBeam");
+    let mut legacy = c["payload"]["project"].clone();
+    legacy["schemaVersion"] = json!("1.2.0");
+    for map in ["inputs", "inputSources"] {
+        legacy["designPreviews"][0][map].as_object_mut().unwrap().remove("linkLegs");
+    }
+    legacy["designPreviews"][0]["inputs"]["linkSpacing"] = json!(0.15);
+    legacy["designPreviews"][0]["inputSources"]["linkSpacing"] = json!("user");
+    let r = req(&mut Kernel::new(), "importProject", json!({"jsonUtf8":legacy.to_string()}));
+    assert_eq!(r["status"], "ok", "{r}");
+    let m = &r["payload"]["project"]["designPreviews"][0];
+    assert_eq!(r["payload"]["project"]["schemaVersion"], "1.3.0");
+    assert_eq!(m["inputs"]["linkLegs"], 2.0);
+    assert_eq!(m["inputSources"]["linkLegs"], "syntheticFixture");
+    assert_eq!(m["inputs"]["linkSpacing"], 0.15);
+    assert_eq!(m["inputSources"]["linkSpacing"], "user");
+    assert!(m.get("tensionAnchorageConfirmed").is_none());
+    let steps = r["payload"]["migrationReport"]["steps"].to_string();
+    assert!(steps.contains("2 link legs"), "{steps}");
+
+    let mut with_legs = legacy.clone();
+    with_legs["designPreviews"][0]["inputs"]["linkLegs"] = json!(4.0);
+    assert_eq!(req(&mut Kernel::new(), "importProject", json!({"jsonUtf8":with_legs.to_string()}))["status"], "error");
+    let mut with_anchorage = legacy.clone();
+    with_anchorage["designPreviews"][0]["tensionAnchorageConfirmed"] = json!(true);
+    assert_eq!(req(&mut Kernel::new(), "importProject", json!({"jsonUtf8":with_anchorage.to_string()}))["status"], "error");
+}
+/// Governing shear must be the largest |Vz|: a propped cantilever (B08 with
+/// the far end free to rotate) has closed-form end shears 5qL/8 = 37.5 kN at
+/// the fixed end and 3qL/8 = 22.5 kN at the pin; hogging qL²/8 = 45 kN·m.
+#[test]
+fn rc_beam_ec2_preview_picks_the_largest_shear_station() {
+    let mut k = Kernel::new();
+    let mut p: Value =
+        serde_json::from_str(include_str!("../../../fixtures/models/B08.json")).unwrap();
+    p["supports"][1]["fixed"][4] = json!(false);
+    assert_eq!(req(&mut k, "createProject", json!({"project":p}))["status"], "ok");
+    let c = create(&mut k, "rcBeam");
+    let a = req(&mut k, "analyse", json!({"caseIds":["LC1"]}));
+    let r = req(
+        &mut k,
+        "evaluateDesignPreview",
+        json!({"draftId":c["payload"]["project"]["designPreviews"][0]["id"],"modelHash":a["modelHash"],"caseId":"LC1","resultId":a["payload"]["resultId"],"sourceMode":"model"}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let g = r["payload"]["codeProfilePreview"]["governing"].as_array().unwrap().clone();
+    let has = |x: &Value, role: &str| x["roles"].as_array().unwrap().iter().any(|r| r == role);
+    let shear = g.iter().find(|x| has(x, "shear")).unwrap();
+    assert_eq!(shear["station"], 0.0);
+    let v = shear["actions"][2].as_f64().unwrap().abs();
+    assert!((v - 37500.).abs() <= 1e-6 * 37500., "governing |Vz| {v}");
+    let hog = g.iter().find(|x| has(x, "hogging")).unwrap();
+    let m = hog["actions"][4].as_f64().unwrap();
+    assert!((m - 45000.).abs() <= 1e-6 * 45000., "hogging My {m}");
 }

@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.3.0"
+      "const": "1.2.0"
     },
     "id": {
       "type": "string",
@@ -1243,10 +1243,6 @@
               }
             }
           }
-        },
-        "tensionAnchorageConfirmed": {
-          "description": "rcBeam only. User confirmation that longitudinal tension steel extends at least l_bd + d beyond the checked sections (EN 1992-1-1 Fig. 6.3). Absent means not confirmed (ADR 0016).",
-          "type": "boolean"
         }
       }
     }

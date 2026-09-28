@@ -3388,6 +3388,23 @@ body.design-workspace {
 .status-text.unsupported {
   color: #aa721a;
 }
+/* EC2 disabled-profile preview statuses (ADR 0016); same palette as badges. */
+.status-text.pass {
+  color: #247044;
+}
+.status-text.fail {
+  color: #9d3e2c;
+}
+.status-text.indeterminate {
+  color: #86541c;
+}
+.design-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  margin: 8px 0 2px;
+}
 .design-provenance-grid {
   display: grid;
   grid-template-columns: 130px minmax(0, 1fr);

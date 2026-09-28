@@ -17,7 +17,7 @@ test("Authored structure survives save, undo, topology and reopen; invalid bindi
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
   const original = await exported(page);
-  expect(original.schemaVersion).toBe("1.2.0");
+  expect(original.schemaVersion).toBe("1.3.0");
   const owner = original.structure.physicalMembers[0];
   await page.locator("[data-structure-add=storeys]").click();
   await page.locator("#structure-form [name=name]").fill("Level 1");

@@ -17,6 +17,11 @@ pub struct DesignPreview {
     /// rcBeam only: explicit section-mechanics material law (ADR 0012). Never a code value.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mechanics: Option<SectionMechanicsInputs>,
+    /// rcBeam only: the user confirms longitudinal tension steel extends at
+    /// least l_bd + d beyond the checked sections (ADR 0016). Absent means not
+    /// confirmed; it is never defaulted by the application.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tension_anchorage_confirmed: Option<bool>,
 }
 
 /// Material law and fit inputs for code-agnostic RC section mechanics. Keys are
@@ -105,6 +110,12 @@ impl DesignPreview {
             }
             m.validate()?;
         }
+        if self.tension_anchorage_confirmed.is_some() && self.kind != "rcBeam" {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Tension anchorage confirmation applies only to RC beam drafts",
+            ));
+        }
         let keys: &[&str] = match self.kind.as_str() {
             "rcBeam" => &[
                 "width",
@@ -118,6 +129,7 @@ impl DesignPreview {
                 "bottomBarCount",
                 "linkDiameter",
                 "linkSpacing",
+                "linkLegs",
             ],
             "slab" => &[
                 "length",
@@ -180,6 +192,15 @@ impl DesignPreview {
             return Err(err(
                 "INVALID_SCHEMA",
                 "Bar count per face must be an integer from 1 to 20",
+            ));
+        }
+        if self.kind == "rcBeam"
+            && (self.inputs["linkLegs"].fract() != 0.0
+                || !(2.0..=8.0).contains(&self.inputs["linkLegs"]))
+        {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Link legs must be an integer from 2 to 8",
             ));
         }
         let depth = if self.kind == "rcBeam" {

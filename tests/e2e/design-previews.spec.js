@@ -219,7 +219,7 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   const p = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
-  expect(saved.schemaVersion).toBe("1.2.0");
+  expect(saved.schemaVersion).toBe("1.3.0");
   expect(saved.designPreviews[0].inputs.topBarCount).toBe(2);
   expect(saved.designPreviews[0].inputs.bottomBarDiameter).toBe(0.025);
   expect(saved.designPreviews[0].mechanics.law).toBe("parabolaRectangle");
@@ -408,3 +408,104 @@ for (const [localY, orientation, sagging, hogging] of [
     await synthetic.doc.close();
     expect(errors).toEqual([]);
   });
+test("RC beam EC2 checks: disabled-profile preview at governing stations, explicit anchorage, overall unsupported", async ({
+  page,
+}) => {
+  // ADR 0016: the disabled ec2-uk-na profile runs at the governing sagging,
+  // hogging and shear stations of B08 (fixed-fixed UDL). Expected values come
+  // from the independent oracles (RC-PREVIEW-EC2-UK-DEFAULT, previewDefaultDraftUk).
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  const rc = JSON.parse(
+    await readFile("fixtures/design/rc-section-mechanics/cases.json", "utf8"),
+  ).cases;
+  const ec2 = JSON.parse(
+    await readFile(
+      "fixtures/design/ec2-uk-na/jrc-axis2-beam.reconciliation.json",
+      "utf8",
+    ),
+  ).designCheckTargets.previewDefaultDraftUk;
+  const fmt = (v) =>
+    new Intl.NumberFormat("en-GB", {
+      maximumFractionDigits: 3,
+      signDisplay: "negative",
+    }).format(v);
+  const mu =
+    rc.find((c) => c.id === "RC-PREVIEW-EC2-UK-DEFAULT").expected.ultimate
+      .moment / 1000;
+  const model = JSON.parse(await readFile("fixtures/models/B08.json", "utf8"));
+  model.id = "preview-ec2";
+  await page.goto("/");
+  await page.locator("#import-file").setInputFiles({
+    name: "preview.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(model)),
+  });
+  await expect(page.locator("#kernel-status")).toContainText("ready");
+  await page.locator("[data-inspector-tab=concrete]").click();
+  await page.locator("#preview-kind").selectOption("rcBeam");
+  await page.locator("#preview-create").click();
+  await expect(page.locator("#preview-linkLegs")).toHaveValue("2");
+  await expect(page.locator("#preview-anchorage")).not.toBeChecked();
+  await page.locator("#preview-run").click();
+  await page.locator('[data-preview-pane="ec2"]').click();
+  await expect(page.locator("[data-testid=ec2-status]")).toContainText(
+    "Unavailable",
+  );
+  await page.locator("#preview-target").selectOption("m1");
+  await page.locator("#preview-save").click();
+  await page.locator("#preview-source").selectOption("model");
+  await page.locator("#analyse").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  await page.locator("#preview-run").click();
+  await page.locator('[data-preview-pane="ec2"]').click();
+  await expect(page.locator("[data-testid=ec2-banner]")).toContainText(
+    "DISABLED PROFILE PREVIEW",
+  );
+  const stations = page.locator("[data-testid=ec2-station]");
+  // B08: hogging and shear govern at the same fixed end, so two station tables.
+  await expect(stations).toHaveCount(2);
+  await expect(stations.nth(1)).toContainText("Governing hogging and shear");
+  const row = (role, id) =>
+    page.locator(
+      `[data-testid=ec2-check][data-roles~="${role}"][data-check-id="${id}"]`,
+    );
+  for (const role of ["sagging", "hogging"]) {
+    await expect(
+      row(role, "ec2.flexure").locator("[data-testid=ec2-resistance]"),
+    ).toHaveText(`${fmt(mu)} kN·m`);
+    await expect(row(role, "ec2.flexure")).toContainText("PASS");
+  }
+  await expect(
+    row("shear", "ec2.shear").locator("[data-testid=ec2-resistance]"),
+  ).toHaveText(`${fmt(ec2.shearWithLinks.VRd_kN)} kN`);
+  await expect(page.locator("[data-testid=ec2-anchorage]")).toHaveText(
+    "not confirmed (ρl = 0)",
+  );
+  for (const overall of await page.locator("[data-testid=ec2-overall]").all())
+    await expect(overall).toHaveText("UNSUPPORTED");
+  await expect(row("shear", "ec2.anchorage")).toContainText("UNSUPPORTED");
+  // Confirming anchorage is an explicit, persisted user choice.
+  await page.locator("#preview-anchorage").check();
+  await page.locator("#preview-save").click();
+  await page.locator("#analyse").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  await page.locator("#preview-run").click();
+  await page.locator('[data-preview-pane="ec2"]').click();
+  await expect(page.locator("[data-testid=ec2-anchorage]")).toHaveText(
+    "confirmed by you",
+  );
+  await page.locator('[data-preview-pane="summary"]').click();
+  await expect(page.locator("[data-testid=preview-state]")).toHaveText(
+    "UNSUPPORTED",
+  );
+  const download = page.waitForEvent("download");
+  await menuCommand(page, "File", "Download project");
+  const saved = JSON.parse(
+    await readFile(await (await download).path(), "utf8"),
+  );
+  expect(saved.schemaVersion).toBe("1.3.0");
+  expect(saved.designPreviews[0].tensionAnchorageConfirmed).toBe(true);
+  expect(saved.designPreviews[0].inputs.linkLegs).toBe(2);
+  expect(errors).toEqual([]);
+});

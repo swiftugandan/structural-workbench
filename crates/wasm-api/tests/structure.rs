@@ -30,7 +30,7 @@ fn set(k: &mut Kernel, rev: u64, key: &str, entity: Value, mode: &str) -> Value 
 fn migration_authorship_hashes_and_atomic_references() {
     let (mut k, r) = open();
     let original = &r["payload"]["project"];
-    assert_eq!(original["schemaVersion"], "1.2.0");
+    assert_eq!(original["schemaVersion"], "1.3.0");
     assert_eq!(
         original["structure"]["physicalMembers"][0]["role"],
         "unassigned"

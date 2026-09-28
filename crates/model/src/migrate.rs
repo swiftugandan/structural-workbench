@@ -2,8 +2,10 @@ use crate::{Project, Result, digest, err};
 use serde_json::{Value, json};
 
 /// Current engineering project schema written by the application.
-pub const CURRENT_SCHEMA: &str = "1.2.0";
-/// Previous current schema (explicit structure, single rcBeam bar preference).
+pub const CURRENT_SCHEMA: &str = "1.3.0";
+/// Previous current schema (per-face rcBeam bar rows; no link legs, ADR 0013).
+pub const SCHEMA_1_2: &str = "1.2.0";
+/// Explicit structure, single rcBeam bar preference.
 pub const SCHEMA_1_1: &str = "1.1.0";
 /// Oldest schema this binary can migrate into CURRENT_SCHEMA.
 pub const LEGACY_SCHEMA_0_9: &str = "0.9.0";
@@ -62,6 +64,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
     }
     let (mut steps, report_from) = match version.as_str() {
         CURRENT_SCHEMA => (Vec::new(), CURRENT_SCHEMA.to_string()),
+        SCHEMA_1_2 => (Vec::new(), SCHEMA_1_2.to_string()),
         SCHEMA_1_1 => (Vec::new(), SCHEMA_1_1.to_string()),
         "1.0.0" => (Vec::new(), "1.0.0".to_string()),
         LEGACY_SCHEMA_0_9 => (migrate_0_9_to_1_0(&mut raw)?, LEGACY_SCHEMA_0_9.to_string()),
@@ -69,7 +72,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
                 format!(
-                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {CURRENT_SCHEMA}"
+                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {SCHEMA_1_2}, {CURRENT_SCHEMA}"
                 ),
             ));
         }
@@ -90,8 +93,11 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
         steps.push("create explicit physical members, joints, support details and draft bindings; preserve unassigned roles".into());
         steps.push("set schemaVersion 1.1.0".into());
     }
-    if version != CURRENT_SCHEMA {
+    if version != CURRENT_SCHEMA && version != SCHEMA_1_2 {
         steps.extend(migrate_1_1_to_1_2(&mut raw)?);
+    }
+    if version != CURRENT_SCHEMA {
+        steps.extend(migrate_1_2_to_1_3(&mut raw)?);
     }
     let text = serde_json::to_string(&raw).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let project = Project::parse_current(&text)?;
@@ -139,7 +145,7 @@ fn migrate_1_1_to_1_2(raw: &mut Value) -> Result<Vec<String>> {
             split += 1;
         }
     }
-    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    raw["schemaVersion"] = json!(SCHEMA_1_2);
     let mut steps = Vec::new();
     if split > 0 {
         steps.push(format!(
@@ -147,6 +153,50 @@ fn migrate_1_1_to_1_2(raw: &mut Value) -> Result<Vec<String>> {
         ));
     }
     steps.push("set schemaVersion 1.2.0".into());
+    Ok(steps)
+}
+
+/// 1.2.0 → 1.3.0: rcBeam drafts gain an explicit link-leg count (ADR 0016).
+/// Earlier drafts described one closed link per set, as their illustrations
+/// draw it, so the count is 2 with synthetic provenance. The anchorage
+/// confirmation is never added: absent means not confirmed.
+fn migrate_1_2_to_1_3(raw: &mut Value) -> Result<Vec<String>> {
+    let mut added = 0;
+    if let Some(drafts) = raw.get_mut("designPreviews").and_then(|v| v.as_array_mut()) {
+        for d in drafts.iter_mut().filter(|d| d["kind"] == "rcBeam") {
+            if d.get("tensionAnchorageConfirmed").is_some() {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Schema 1.2.0 RC beam drafts cannot carry an anchorage confirmation",
+                ));
+            }
+            let inputs = d
+                .get_mut("inputs")
+                .and_then(|v| v.as_object_mut())
+                .ok_or_else(|| err("INVALID_SCHEMA", "RC beam draft is missing inputs"))?;
+            if inputs.contains_key("linkLegs") {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Schema 1.2.0 RC beam drafts cannot already define link legs",
+                ));
+            }
+            inputs.insert("linkLegs".into(), json!(2.0));
+            if let Some(sources) = d.get_mut("inputSources").and_then(|v| v.as_object_mut())
+                && !sources.is_empty()
+            {
+                sources.insert("linkLegs".into(), json!("syntheticFixture"));
+            }
+            added += 1;
+        }
+    }
+    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    let mut steps = Vec::new();
+    if added > 0 {
+        steps.push(format!(
+            "record 2 link legs (one closed link per set, synthetic) on {added} RC beam draft(s)"
+        ));
+    }
+    steps.push("set schemaVersion 1.3.0".into());
     Ok(steps)
 }
 

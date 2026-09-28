@@ -6,6 +6,10 @@ use workbench_design::rc_section::{
 use workbench_model::{
     DesignPreview, MECHANICS_COMMON_KEYS, Project, Result, SectionMechanicsInputs, digest, err,
 };
+use workbench_design::{
+    CodeProfile, DesignDemand, DesignRun, Ec2UkNaProfile, MemberContext, ProfileApplicability,
+    RcBarRow, RcBeamContext, RcFace, RcLinks,
+};
 use workbench_results::KeyStation;
 
 fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64)> {
@@ -20,6 +24,7 @@ fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64
             ("bottomBarCount", "Bottom bars", 4., "", 1.),
             ("linkDiameter", "Link diameter", 0.01, "mm", 1000.),
             ("linkSpacing", "Link spacing", 0.2, "mm", 1000.),
+            ("linkLegs", "Link legs", 2., "", 1.),
         ],
         "slab" => vec![
             ("length", "Length X", 6., "m", 1.),
@@ -205,6 +210,8 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
             soil_reference:
                 "Synthetic starter input; replace with a referenced geotechnical report".into(),
             mechanics: (kind == "rcBeam").then(default_mechanics),
+            // Never defaulted: only the user can confirm anchorage (ADR 0016).
+            tension_anchorage_confirmed: None,
         };
         v["designPreviews"]
             .as_array_mut()
@@ -282,6 +289,25 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                 "INVALID_SCHEMA",
                 "Section mechanics apply only to RC beam drafts",
             ));
+        }
+        // Only an explicit `true` records the user's anchorage confirmation;
+        // anything else leaves it unconfirmed (ADR 0016).
+        match (kind.as_str(), a["tensionAnchorageConfirmed"].as_bool()) {
+            ("rcBeam", Some(true)) => {
+                v["designPreviews"][index]["tensionAnchorageConfirmed"] = json!(true);
+            }
+            (_, Some(true)) => {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Tension anchorage confirmation applies only to RC beam drafts",
+                ));
+            }
+            _ => {
+                v["designPreviews"][index]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove("tensionAnchorageConfirmed");
+            }
         }
         v["designPreviews"][index]["soilReference"] =
             json!(a["soilReference"].as_str().unwrap_or(""));
@@ -424,6 +450,106 @@ fn flexural_demand(p: &Project, member_id: &str, stations: &[KeyStation], combin
         "sagging":governing(-1.),"hogging":governing(1.),"utilisation":null,
         "limitations":["Governing key stations of the one bound case/combination; no envelope across combinations","Axial force, shear, torsion and Mz at these stations are not considered by the pure-flexure mechanics","No utilisation ratio or status: the capacity is mechanics, not a code resistance"]}))
 }
+/// EC2 UK NA beam checks for an rcBeam draft at the governing sagging,
+/// hogging and shear key stations of the one bound combination (ADR 0016).
+/// The profile is disabled: its checks run for review only, are labelled as a
+/// disabled-profile preview and never change the preview's checks or overall.
+fn code_profile_preview(d: &DesignPreview, demand: &Value, stations: &[KeyStation], combination: &str) -> Value {
+    let profile = Ec2UkNaProfile::default();
+    let meta = profile.metadata();
+    let v = &d.inputs;
+    let base = json!({"profileId":meta.id,"profileEnabled":meta.enabled,"basis":"disabledProfilePreview",
+        "resourceGate":meta.resource_gate,"ndp":profile.ndp.label,
+        "interpretation":{"concreteStrength":"fck (characteristic cylinder strength)","rebarStrength":"fyk for longitudinal bars and links"},
+        "tensionAnchorageConfirmed":d.tension_anchorage_confirmed == Some(true),
+        "limitations":meta.limitations});
+    let Some(m) = &d.mechanics else {
+        return merge(base, json!({"status":"unavailable","reason":"The draft has no section-mechanics inputs (minimum clear spacing)"}));
+    };
+    let fit = |face: &str| {
+        rc_section::row_fit(&BarRow {
+            width: v["width"],
+            side_cover: v["cover"],
+            link_diameter: v["linkDiameter"],
+            bar_diameter: v[&format!("{face}BarDiameter")],
+            count: v[&format!("{face}BarCount")] as u32,
+            minimum_clear_spacing: m.inputs["minimumClearSpacing"],
+        })
+    };
+    let (top, bottom) = match (fit("top"), fit("bottom")) {
+        (Ok(t), Ok(b)) if t.fits && b.fits => (t, b),
+        (Ok(_), Ok(_)) => return merge(base, json!({"status":"unavailable","reason":"A bar row does not fit the width; code checks not evaluated"})),
+        (Err(e), _) | (_, Err(e)) => return merge(base, json!({"status":"unavailable","reason":e.message})),
+    };
+    let ctx = MemberContext {
+        member_id: demand["memberId"].as_str().unwrap_or("").into(),
+        section_family: "RC rectangle".into(),
+        rc_beam: Some(RcBeamContext {
+            width: v["width"],
+            depth: v["depth"],
+            cover_to_link: v["cover"],
+            fck: v["concreteStrength"],
+            fyk: v["rebarStrength"],
+            rows: vec![
+                RcBarRow { face: RcFace::Top, area: top.area, centroid_from_face: top.depth_from_face },
+                RcBarRow { face: RcFace::Bottom, area: bottom.area, centroid_from_face: bottom.depth_from_face },
+            ],
+            links: Some(RcLinks {
+                legs: v["linkLegs"] as u32,
+                diameter: v["linkDiameter"],
+                spacing: v["linkSpacing"],
+                fyk: v["rebarStrength"],
+            }),
+            tension_steel_anchored: d.tension_anchorage_confirmed,
+        }),
+        ..Default::default()
+    };
+    if let ProfileApplicability::Unsupported(reason) = profile.applicability(&ctx) {
+        return merge(base, json!({"status":"unsupported","reason":reason}));
+    }
+    // Governing shear: the key station with the largest |Vz|; ties keep the first.
+    let shear = stations
+        .iter()
+        .filter(|s| s.actions[2] != 0.)
+        .fold(None, |best: Option<&KeyStation>, s| match best {
+            Some(b) if b.actions[2].abs() >= s.actions[2].abs() => Some(b),
+            _ => Some(s),
+        })
+        .map_or(Value::Null, |s| json!({"station":s.station,"kind":s.kind,"side":s.side,"actions":s.actions}));
+    // One entry per distinct key station: a station that governs several roles
+    // (e.g. hogging and shear at a fixed end) is checked once, listing its roles.
+    let mut stations_by_role: Vec<(Vec<&str>, &Value)> = Vec::new();
+    for (role, g) in [("sagging", &demand["sagging"]), ("hogging", &demand["hogging"]), ("shear", &shear)] {
+        if g.is_null() {
+            continue;
+        }
+        match stations_by_role.iter_mut().find(|(_, h)| h["station"] == g["station"] && h["side"] == g["side"]) {
+            Some((roles, _)) => roles.push(role),
+            None => stations_by_role.push((vec![role], g)),
+        }
+    }
+    let governing: Vec<Value> = stations_by_role
+        .into_iter()
+        .map(|(roles, g)| {
+            let a: Vec<f64> = g["actions"].as_array().unwrap().iter().map(|x| x.as_f64().unwrap()).collect();
+            let station = DesignDemand {
+                n: a[0],
+                vy: a[1],
+                vz: a[2],
+                t: a[3],
+                my: a[4],
+                mz: a[5],
+                combination_id: combination.into(),
+                station: g["station"].as_f64().unwrap(),
+            };
+            let checks = profile.run_checks(&station, &ctx);
+            json!({"roles":roles,"station":g["station"],"kind":g["kind"],"side":g["side"],"actions":a,
+                "overall":DesignRun::overall_from_checks(&checks).as_str(),
+                "checks":checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()})
+        })
+        .collect();
+    merge(base, json!({"status":"evaluated","combinationId":combination,"governing":governing}))
+}
 fn merge(mut a: Value, b: Value) -> Value {
     for (k, v) in b.as_object().unwrap() {
         a[k] = v.clone();
@@ -451,6 +577,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         source = json!({"kind":"syntheticFixture","mock":true,"fixtureId":"slab-plate-actions-v1","units":"N m/m","rawPlateActions":{"mx":-62000,"my":-31000,"mxy":8500},"designTransform":"unavailable","meshConvergence":"notChecked","note":"No validated plate/shell analysis; never use a frame-member result as a slab action"});
     }
     let mut demand = json!({"status":"unavailable","reason":"Model flexural demand needs a bound member and the current model case/combination; synthetic actions are illustrative"});
+    let mut code = json!({"status":"unavailable","basis":"disabledProfilePreview","reason":"EC2 checks need actual model actions from a bound member and the current case/combination"});
     if input["sourceMode"] == "model" {
         if draft.kind == "slab" {
             return Err(err(
@@ -479,6 +606,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
                 .ok_or_else(|| err("DANGLING_REFERENCE", "Member result unavailable"))?;
             source["stations"] = serde_json::to_value(&m.key_stations).unwrap();
             demand = flexural_demand(p, target, &m.key_stations, case)?;
+            code = code_profile_preview(draft, &demand, &m.key_stations, case);
             source["note"] = json!(
                 "Actual model actions; preview section is not applied to frame stiffness, and no concrete resistance is calculated"
             );
@@ -544,6 +672,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
+        "codeProfilePreview":if draft.kind=="rcBeam"{code}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
     run["previewRunId"] = json!(digest(&serde_json::to_vec(&run).unwrap()));
     Ok(run)

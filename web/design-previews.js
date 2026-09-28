@@ -173,7 +173,12 @@ export function concreteWorkspace({
       ["actions", d.kind === "slab" ? "Plate actions" : "Design actions"],
       ["details", "Calculation details"],
       ["reinforcement", "Reinforcement"],
-      ...(d.kind === "rcBeam" ? [["mechanics", "Section mechanics"]] : []),
+      ...(d.kind === "rcBeam"
+        ? [
+            ["mechanics", "Section mechanics"],
+            ["ec2", "EC2 checks · disabled"],
+          ]
+        : []),
       ["schedule", "Schedule"],
       ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
     ];
@@ -320,6 +325,9 @@ export function concreteWorkspace({
               inputs,
               targetId: $("#preview-target")?.value,
               soilReference: $("#preview-soil")?.value ?? d.soilReference,
+              ...(d.kind === "rcBeam" && {
+                tensionAnchorageConfirmed: $("#preview-anchorage").checked,
+              }),
               ...(t.mechanics && {
                 mechanics: {
                   law: mechanicsLaw,

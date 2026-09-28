@@ -3,7 +3,7 @@
   "published": "fixtures/design/ec2-uk-na/jrc-axis2-beam.published.json",
   "publishedSha256": "1d2cc28432b849fc8ccaa52524cd795f7679d35edf45a69b763f5468f7f6192d",
   "oracle": "tools/oracles/ec2_beam_oracle.py",
-  "oracleSha256": "eca123167d5742f3fe5689f0987bbc1d9daf36b52f9874cc1a6f1b12d529fc4f",
+  "oracleSha256": "355c392ef74bcb88e85cc2fa41e73bdefcdde4fd52679290cafd317bf5dfe439",
   "python": "3.14.6",
   "dossier": "docs/code-profiles/ec2-uk-na/dossier-beam.md",
   "tolerancePolicy": "max(0.5% relative, half a unit in the last published decimal)",
@@ -315,6 +315,24 @@
         "slMax_mm": 279.0,
         "stMax_mm": 279.0
       }
+    },
+    "previewDefaultDraftUk": {
+      "d_mm": 545.0,
+      "AsFace_mm2": 1256.6370614359173,
+      "shearWithLinks": {
+        "VRd_kN": 418.7367382026613,
+        "cotTheta": 2.5,
+        "VRds_kN": 418.7367382026613,
+        "VRdMax_kN": 455.45462068965514
+      },
+      "AsMin_mm2": 246.25772243751192,
+      "fctm_MPa": 2.896468153816889,
+      "AsMax_mm2": 7200.0,
+      "rhoW": 0.002617993877991494,
+      "rhoWMin": 0.0008763560920082658,
+      "slMax_mm": 408.75,
+      "st_mm": 220.0,
+      "stMax_mm": 408.75
     }
   },
   "failures": []

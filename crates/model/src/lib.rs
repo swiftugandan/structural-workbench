@@ -13,7 +13,7 @@ pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, MECHANICS_COMMON_KEYS, SectionMechanicsInputs,
     SteelDesign,
 };
-pub use migrate::{CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, import_project};
+pub use migrate::{CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, import_project};
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;
 #[derive(Debug, Clone, Serialize, Deserialize)]

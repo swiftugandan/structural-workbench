@@ -65,7 +65,7 @@ test("M06 release tour: analyse, stress screen, ledger, save and report", async 
   await menuCommand(page, "File", "Download project");
   const projectFile = await projectDownload;
   const projectJson = await readFile(await projectFile.path(), "utf8");
-  expect(JSON.parse(projectJson).schemaVersion).toBe("1.2.0");
+  expect(JSON.parse(projectJson).schemaVersion).toBe("1.3.0");
   await writeFile(`${evidence()}/exported-project.json`, projectJson);
 
   expect(errors).toEqual([]);

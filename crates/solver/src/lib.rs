@@ -65,13 +65,21 @@ impl LinearSolver for SparseLdl {
         }
         let scaled = tri.to_csc();
         let f: Vec<_> = b.iter().zip(&scale).map(|(v, s)| v * s).collect();
-        let factor = sprs_ldl::Ldl::new().numeric(scaled.view()).map_err(|e| {
-            err(
-                "UNSTABLE_MODEL",
-                format!("Sparse factorisation failed: {e:?}"),
-            )
-        })?;
-        let min = factor.d().iter().copied().fold(f64::INFINITY, f64::min);
+        // sprs-ldl's fill-reducing ordering asserts n > 1, so a single active
+        // DOF is factorised directly: the scaled 1×1 matrix is its own D.
+        let (y, min) = if n == 1 {
+            let d = *scaled.get(0, 0).unwrap_or(&0.);
+            (vec![f[0] / d], d)
+        } else {
+            let factor = sprs_ldl::Ldl::new().numeric(scaled.view()).map_err(|e| {
+                err(
+                    "UNSTABLE_MODEL",
+                    format!("Sparse factorisation failed: {e:?}"),
+                )
+            })?;
+            let min = factor.d().iter().copied().fold(f64::INFINITY, f64::min);
+            (factor.solve(&f), min)
+        };
         if min < 1e-12 || !min.is_finite() {
             return Err(err(
                 "UNSTABLE_MODEL",
@@ -80,7 +88,6 @@ impl LinearSolver for SparseLdl {
                 ),
             ));
         }
-        let y = factor.solve(&f);
         let mut residual = f.iter().map(|v| -v).collect::<Vec<_>>();
         let mut rows = vec![0.; n];
         for (col, vec) in scaled.outer_iterator().enumerate() {
@@ -110,6 +117,33 @@ impl LinearSolver for SparseLdl {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn matrix(n: usize, entries: &[(usize, usize, f64)]) -> CsMat<f64> {
+        let mut t = TriMat::new((n, n));
+        for &(r, c, v) in entries {
+            t.add_triplet(r, c, v);
+        }
+        t.to_csc()
+    }
+
+    #[test]
+    fn single_active_dof_solves_without_the_sparse_ordering() {
+        // k = 4e6, f = -2e3  →  u = -5e-4 exactly representable path.
+        let s = SparseLdl.solve(&matrix(1, &[(0, 0, 4e6)]), &[-2e3], usize::MAX).unwrap();
+        assert!((s.values[0] - -5e-4).abs() <= 1e-18, "{}", s.values[0]);
+        assert!(s.residual <= 1e-15);
+        assert!((s.min_pivot - 1.).abs() <= 1e-15);
+        // The same safety checks still apply to one DOF.
+        assert!(SparseLdl.solve(&matrix(1, &[(0, 0, 0.)]), &[1.], usize::MAX).is_err());
+    }
+
+    #[test]
+    fn two_dof_path_is_unchanged() {
+        // [[2, -1], [-1, 2]] u = [1, 0]  →  u = [2/3, 1/3].
+        let a = matrix(2, &[(0, 0, 2.), (0, 1, -1.), (1, 0, -1.), (1, 1, 2.)]);
+        let s = SparseLdl.solve(&a, &[1., 0.], usize::MAX).unwrap();
+        assert!((s.values[0] - 2. / 3.).abs() <= 1e-15 && (s.values[1] - 1. / 3.).abs() <= 1e-15);
+    }
     #[test]
     fn sparse_budget_allows_framed_scale_but_rejects_near_dense() {
         // ~27k free DOFs with a few hundred thousand matrix entries stays under 512 MiB / 2.

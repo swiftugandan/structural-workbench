@@ -212,6 +212,25 @@ def main():
             "stMax_mm": min(0.75 * sec["d_mm"], 600.0),
         }
 
+    # M08-B3 wiring targets: default rcBeam preview draft (300 x 600, cover 35 to 10 mm links,
+    # 4 x 20 per face, 2 legs of 10 mm at 200 mm, C30, B500) under the UK NA 2009 set, with the
+    # profile's alpha_cc = 0.85 for shear (ADR 0015). Oracle-only.
+    dd = {"bw": 300.0, "h": 600.0, "cover": 35.0, "link": 10.0, "bar": 20.0, "n": 4, "fck": 30.0, "fyk": 500.0}
+    d_def = dd["h"] - (dd["cover"] + dd["link"] + dd["bar"] / 2)
+    asw_def = 2 * math.pi * dd["link"] ** 2 / 4 / 200.0 * 1000
+    nu_def = 0.6 * (1 - dd["fck"] / 250)
+    fcd_def = uk["alphaCC_flexure"] * dd["fck"] / uk["gammaC"]
+    amin_def, fctm_def = as_min(dd["fck"], dd["fyk"], dd["bw"], d_def)
+    preview_default = {
+        "d_mm": d_def, "AsFace_mm2": dd["n"] * math.pi * dd["bar"] ** 2 / 4,
+        "shearWithLinks": shear_resistance_with_links(asw_def, dd["bw"], d_def, dd["fck"], dd["fyk"] / uk["gammaS"], fcd_def, nu_def),
+        "AsMin_mm2": amin_def, "fctm_MPa": fctm_def,
+        "AsMax_mm2": 0.04 * dd["bw"] * dd["h"],
+        "rhoW": asw_def / 1000 / dd["bw"], "rhoWMin": 0.08 * math.sqrt(dd["fck"]) / dd["fyk"],
+        "slMax_mm": 0.75 * d_def, "st_mm": (dd["bw"] - 2 * dd["cover"] - dd["link"]) / (2 - 1),
+        "stMax_mm": min(0.75 * d_def, 600.0),
+    }
+
     src = open(os.path.abspath(__file__), "rb").read()
     doc = {
         "fixtureVersion": 1,
@@ -230,7 +249,8 @@ def main():
                             "ndp": uk, "values": uk_variant},
         "designCheckTargets": {"independence": "oracle-only; recomputed from dossier-beam.md, used as M08-B2 profile test targets",
                                "section": "rectangle bw x h (web) for limits; JRC support A links",
-                               "values": checks_targets},
+                               "values": checks_targets,
+                               "previewDefaultDraftUk": preview_default},
         "failures": failures,
     }
     with open(OUT, "w") as fh:
