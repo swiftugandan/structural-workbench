@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M09",
-  "activeTask": "M09-B",
+  "activeTask": "M09-C",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -3598,8 +3598,35 @@
       "dependencies": [
         "M09-A"
       ],
-      "status": "READY",
-      "nextAction": "Add K_G to crates/frame with symmetry, rigid-body and P-Delta couple unit tests; then assembly of K_G from linear N and the subspace eigen solver in crates/solver"
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "nextAction": "None",
+      "ownedPaths": [
+        "crates/frame/src/lib.rs",
+        "crates/frame/tests/geometric.rs",
+        "crates/solver/src/lib.rs",
+        "crates/solver/src/eigen.rs",
+        "crates/solver/tests/eigen.rs",
+        "crates/results/src/lib.rs",
+        "crates/assembly/src/lib.rs",
+        "crates/assembly/src/stability.rs",
+        "crates/assembly/tests/stability.rs",
+        "docs/formulations/stability.md"
+      ],
+      "requiredCommands": [
+        "cargo test --workspace",
+        "cargo build -p workbench-wasm-api --target wasm32-unknown-unknown --release",
+        "tools/oracle-env/bin/python tools/oracles/stability_oracle.py"
+      ],
+      "actualOutcomes": [
+        "frame::geometric: symmetry, zero axial/torsion rows, rigid translation force-free, rigid chord rotation gives the P-Delta couple (-N s, +N s), one-element pinned strut buckles at 12EI/L^2 in both planes; dropping the local-z sign flip fails the couple test",
+        "solver: reusable scaled LDLt Factor (positive or indefinite, inertia by Sylvester), SparseLdl::solve refactored onto it with unchanged codes/messages; eigen::buckling by block subspace iteration on K^-1(-K_G) with MGS-twice K-orthonormal Rayleigh-Ritz, residual-based acceptance, Sturm count just below lambda_q with zero-pivot shift retry, block doubling when compression exists but no positive factor is isolated",
+        "solver tests 9: closed-form chain spectrum 1e-10, fully repeated spectrum, tension-only reversal, sign reversal, low-rank mixed-sign vs dense reference, inertia count, weak compressive mode behind strong tension modes (fails if block enlargement is removed)",
+        "defects found and fixed while testing: Sturm shift above lambda_q miscounted repeated factors; value-only convergence let residuals stay 1e-6; ill-conditioned projection made a small Ritz value wander 1e-7 (test took 74 s, now 0.17 s)",
+        "assembly::elastic_buckling on expanded + subdivided model, releases rejected, axial noise floor 1e-9 of the largest; kernel vs oracle: pinned strut errors +21.6%, +0.75%, +0.051%, +3.3e-5, +2.1e-6 at 1/2/4/8/16 elements (h^4); all four struts <= 1e-4 at 16; both planes <= 1e-4 with half-sine MAC >= 0.999; portal sway <= 1e-4 at 8; reversal, tension, envelope/settings/release rejection and settings identity",
+        "amendment before comparison: strut tolerance stated per half-wave (16 elements); fixed-fixed single element correctly reports no factor",
+        "flipping the reference axial sign fails 6 of 8 kernel tests",
+        "cargo test --workspace 147 passed; wasm32 release build ok; new files rustfmt-clean (repo-wide cargo fmt would reformat 20 unrelated files, so it was not applied); clippy not installed for toolchain 1.96.0"
+      ]
     },
     "M09-C": {
       "id": "M09-C",
@@ -3607,7 +3634,8 @@
       "dependencies": [
         "M09-B"
       ],
-      "status": "PLANNED"
+      "status": "READY",
+      "nextAction": "secondOrder in crates/assembly: Picard iteration on element N with (K + K_G) factor per iteration, convergence record, TANGENT_NOT_POSITIVE_DEFINITE/DIVERGING/NONCONVERGED without buffers, explicit sway imperfection; P-delta interior moments; tests S-POR-PD (1e-3), S-NEAR (1e-2), S-OVER"
     },
     "M09-D": {
       "id": "M09-D",
@@ -3675,7 +3703,7 @@
   ],
   "lastVerifiedSourceRevision": "90067de",
   "lastVerifiedBuildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
-  "nextAction": "M09-B: element geometric stiffness in crates/frame with unit tests, then elasticBuckling (subspace iteration + Sturm check) against fixtures/stability/stability-oracle.json. M08-B enablement stays BLOCKED_RESOURCE on A1:2014 and NA+A2:2014.",
+  "nextAction": "M09-C: secondOrder analysis against fixtures/stability/stability-oracle.json (S-POR-PD, S-NEAR, S-OVER). M08-B enablement stays BLOCKED_RESOURCE on A1:2014 and NA+A2:2014.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
   "lastVerifiedScope": "Fresh same-build native/contracts/security/numerical/WASM/oracle and complete 112-test real-GPU browser corpus; no stale release evidence. Preview scope only."

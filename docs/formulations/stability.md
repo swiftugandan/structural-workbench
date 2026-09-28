@@ -55,6 +55,11 @@ translation–rotation coupling terms negated, because w′ = −ry (as for the
 elastic block in `frame.md`). Axial and torsional rows and columns are zero.
 All other entries of the 12×12 matrix are zero. K_G,global = Tᵗ K_G,local T.
 
+Axial forces of the reference state below 1e-9 of the largest are rounding
+(for example a beam between identical columns) and are set to zero, so that
+numerical noise is neither treated as compression nor reported as a critical
+factor near 1e15.
+
 Checks carried by unit tests: symmetry; rigid-body translation produces zero
 force; rigid chord rotation θ produces transverse end shears ∓Nθ (the P-Δ
 couple N·Lθ); a compressed member (N < 0) lowers the stiffness.
@@ -84,16 +89,22 @@ subspace iteration reusing the sparse LDLᵗ factor of K_ff:
    seed), K-orthonormalised.
 2. Iterate X ← K⁻¹(−K_G X); Rayleigh–Ritz on the p-dimensional pencil
    (Xᵗ(−K_G)X, XᵗKX): Cholesky-reduce the SPD projected K, then cyclic Jacobi.
-3. Convergence per requested positive mode: relative change of λ below 1e-10
-   and residual ‖Kφ + λK_Gφ‖ / ‖Kφ‖ below 1e-8. At most 200 iterations; else
-   `NONCONVERGED` and no critical factor is reported.
-4. Sturm check: factor K + σK_G with σ = λ_q(1 + 1e-6). Its negative pivot
-   count must equal the number of reported positive factors ≤ σ. A mismatch
-   means a mode was missed: the result is withheld (`STURM_MISMATCH`).
-5. If the converged subspace holds no positive λ, report
-   `NO_POSITIVE_CRITICAL_FACTOR` together with the smallest |λ| of negative
-   factors (buckling would need the reference load reversed). Never report a
-   negative value as a critical factor.
+3. Convergence: the leading q positive and q negative values change by less
+   than 1e-10 relative between iterations, and every reported mode has
+   residual ‖Kφ + λK_Gφ‖∞ / ‖Kφ‖∞ ≤ 1e-8 (values settle faster than vectors,
+   so both are required). At most 200 iterations; else `NONCONVERGED` and no
+   critical factor is reported.
+4. Sturm check: factor K + σK_G with σ = λ_q(1 − 1e-6), just below the
+   highest reported factor. Its negative pivot count must equal the number of
+   reported positive factors below σ. A shift above λ_q would also count
+   repeats of λ_q beyond the q requested, which are not missed modes. On a
+   mismatch the block size doubles and the solve repeats; if the block already
+   spans the free DOFs the result is withheld (`STURM_MISMATCH`).
+5. `NO_POSITIVE_CRITICAL_FACTOR` is reported only when proven: no element is
+   in compression (K_G is then positive semidefinite), or the block has grown
+   to span every free DOF and still holds no positive λ. It is reported with
+   the smallest |λ| of the negative factors (buckling would need the reference
+   load reversed). A negative value is never reported as a critical factor.
 
 Mode shapes are normalised so the largest absolute translation is 1 and that
 component is positive. Mode comparison never depends on sign or scale:
@@ -149,7 +160,7 @@ result exists.
 
 | ID | Case | Reference | Acceptance |
 | --- | --- | --- | --- |
-| S-EUL-1..4 | Pinned–pinned, fixed–free, fixed–fixed, fixed–pinned struts | π²EI/(KL)² closed form | 8 elements: \|λ/λ_ref − 1\| ≤ 1e-4; refinement 1→2→4→8 decreases monotonically to the reference |
+| S-EUL-1..4 | Pinned–pinned, fixed–free, fixed–fixed, fixed–pinned struts | π²EI/(KL)² closed form | 16 elements: \|λ/λ_ref − 1\| ≤ 1e-4; refinement 1→2→4→8→16 (from 2 for fixed–fixed, whose single element has no free transverse DOF and correctly reports no factor) decreases monotonically from above, with an 8→16 error ratio ≥ 8 |
 | S-EUL-PLANE | Strut with Iy ≠ Iz | Two closed forms | First two λ equal the two plane loads (≤ 1e-4), mode MAC ≥ 0.999 against the analytical plane shapes |
 | S-POR-BUCK | Fixed-base portal, sway mode | Beam-column characteristic equation EI k cos kh + k_b sin kh = 0, k_b = 6EI_b/b | ≤ 1e-4 at 8 elements per member |
 | S-POR-PD | Fixed-base portal, gravity + lateral at 0.2, 0.5, 0.8 λ_cr | Exact small-rotation beam-column solution (antisymmetric half-portal, axially rigid beam) | Sway and base moment ≤ 1e-3 relative |
@@ -159,6 +170,15 @@ result exists.
 | S-OVER | Portal at 1.01 λ_cr | — | `NONCONVERGED` with `TANGENT_NOT_POSITIVE_DEFINITE`; no numerical buffers |
 
 Eigenvector sign and scale are irrelevant to every comparison (MAC pairing).
+
+Why the strut tolerance is stated per half-wave (amended in M09-B before any
+kernel result was compared): the consistent K_G converges about as h⁴ (1, 2, 4
+and 8 elements per half-wave give +21.6 %, +0.75 %, +0.05 % and +0.003 %).
+A fixed–fixed strut buckles in a full wave, so 8 elements over L are only 4 per
+half-wave (about 5e-4). All four struts are therefore held to 1e-4 at 16
+elements (at least 8 per half-wave), and the refinement ratio confirms the
+order. The portal sway shape is about one half-wave per column, so 8 elements
+per member keep S-POR-BUCK at 1e-4.
 
 Why the portal references and tolerances are what they are:
 

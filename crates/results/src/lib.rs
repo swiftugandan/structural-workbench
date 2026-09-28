@@ -138,3 +138,79 @@ pub struct Envelope {
     pub supports: Vec<SupportEnvelope>,
     pub diagnostics: Vec<serde_json::Value>,
 }
+
+/// Elastic buckling result (stability-v1). A critical factor is an elastic load
+/// multiplier of the idealised model, never a member resistance or code verdict.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BucklingAnalysis {
+    pub result_id: String,
+    pub schema_version: String,
+    /// Always "elasticBuckling".
+    pub analysis_type: String,
+    pub converged: bool,
+    pub case_or_combination_id: String,
+    pub model_hash: String,
+    pub settings_hash: String,
+    pub solver_build_hash: String,
+    pub source_revision: u64,
+    pub subdivisions: usize,
+    pub requested_modes: usize,
+    /// Positive critical factors, ascending, with normalised shapes.
+    pub modes: Vec<BucklingMode>,
+    /// Negative factors found (buckling under the reversed reference load),
+    /// ascending in magnitude. Never critical factors.
+    pub negative_factors: Vec<f64>,
+    /// Axial force of the linear reference state per physical member segment.
+    pub reference_axial_forces: Vec<MemberAxialForces>,
+    pub numerical_checks: serde_json::Value,
+    /// e.g. FLEXURAL_ONLY, NOT_A_RESISTANCE_CHECK.
+    pub disclosures: Vec<String>,
+    pub diagnostics: Vec<serde_json::Value>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BucklingMode {
+    pub factor: f64,
+    /// Relative residual ‖Kφ + λK_Gφ‖∞ / ‖Kφ‖∞.
+    pub residual: f64,
+    /// Physical node ids, in project order, with six components each.
+    pub node_ids: Vec<String>,
+    /// Shape normalised so the largest absolute translation over the whole
+    /// analysis mesh is 1 and positive. Rotations share that scale.
+    pub node_displacements: Vec<f64>,
+    /// Translations along each physical member at every analysis node.
+    pub members: Vec<MemberModeShape>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MemberModeShape {
+    pub id: String,
+    pub stations: Vec<ModeStation>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ModeStation {
+    pub station: f64,
+    pub position: [f64; 3],
+    pub displacement: [f64; 3],
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MemberAxialForces {
+    pub id: String,
+    /// Constant axial force per analysis segment [t0, t1] (tension positive, N).
+    pub segments: Vec<AxialSegment>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AxialSegment {
+    pub t0: f64,
+    pub t1: f64,
+    pub n: f64,
+}

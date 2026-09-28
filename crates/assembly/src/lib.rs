@@ -3,6 +3,7 @@ pub use residential_review::residential_review;
 mod expand;
 mod envelope;
 mod study;
+mod stability;
 
 use serde_json::json;
 use sprs::TriMat;
@@ -17,6 +18,7 @@ use expand::{expand_point_loads, remap_to_physical};
 
 pub use envelope::envelope;
 pub use study::{apply_pointer, execute_study_document};
+pub use stability::{StabilitySettings, elastic_buckling};
 
 fn section_actions(end: &[f64], q: [f64; 3], x: f64) -> [f64; 6] {
     [

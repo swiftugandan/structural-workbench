@@ -1,5 +1,7 @@
 use sprs::{CsMat, TriMat};
 use workbench_model::{Result, err};
+
+pub mod eigen;
 pub struct Solution {
     pub values: Vec<f64>,
     pub residual: f64,
@@ -22,6 +24,133 @@ fn sparse_budget_bytes(n: usize, nnz: usize) -> Option<usize> {
         .checked_mul(16)?
         .checked_add(n.checked_mul(64)?)
 }
+/// Symmetric sparse matrix–vector product (CSC storage of the full matrix).
+pub fn matvec(a: &CsMat<f64>, x: &[f64]) -> Vec<f64> {
+    let mut y = vec![0.; a.rows()];
+    for (col, vec) in a.outer_iterator().enumerate() {
+        let xc = x[col];
+        if xc != 0. {
+            for (row, v) in vec.iter() {
+                y[row] += v * xc;
+            }
+        }
+    }
+    y
+}
+
+/// A reusable diagonally scaled LDLᵗ factor of a symmetric matrix.
+///
+/// `positive` factors a stiffness that must be positive definite: a
+/// non-positive diagonal or pivot is an unstable model. Otherwise the matrix
+/// may be indefinite (a shifted pencil K + σK_G) and its inertia is available.
+pub struct Factor {
+    scale: Vec<f64>,
+    scaled: CsMat<f64>,
+    ldl: Option<sprs_ldl::LdlNumeric<f64, usize>>,
+    single: f64,
+    pub min_pivot: f64,
+}
+
+impl Factor {
+    pub fn new(a: &CsMat<f64>, budget: usize, positive: bool) -> Result<Factor> {
+        let n = a.rows();
+        let estimate = sparse_budget_bytes(n, a.nnz()).unwrap_or(usize::MAX);
+        if n > 0 && estimate > budget {
+            return Err(err(
+                "MEMORY_LIMIT",
+                "Conservative sparse fill estimate exceeds memory budget",
+            ));
+        }
+        let mut scale = vec![0.; n];
+        for i in 0..n {
+            let d = *a.get(i, i).unwrap_or(&0.);
+            if positive && (d <= 0. || !d.is_finite()) {
+                return Err(err(
+                    "UNSTABLE_MODEL",
+                    format!("Unrestrained active DOF {i}"),
+                ));
+            }
+            if !positive && (d == 0. || !d.is_finite()) {
+                return Err(err(
+                    "SINGULAR_SHIFT",
+                    format!("Zero or nonfinite diagonal at active DOF {i}"),
+                ));
+            }
+            scale[i] = 1. / d.abs().sqrt();
+        }
+        let mut tri = TriMat::new((n, n));
+        for (col, vec) in a.outer_iterator().enumerate() {
+            for (row, v) in vec.iter() {
+                tri.add_triplet(row, col, v * (scale[row] * scale[col]));
+            }
+        }
+        let scaled = tri.to_csc();
+        // sprs-ldl's fill-reducing ordering asserts n > 1, so a single active
+        // DOF is factorised directly: the scaled 1×1 matrix is its own D.
+        let (ldl, single, min_pivot) = if n == 0 {
+            (None, 1., 1.)
+        } else if n == 1 {
+            let d = *scaled.get(0, 0).unwrap_or(&0.);
+            (None, d, d)
+        } else {
+            let ldl = sprs_ldl::Ldl::new().numeric(scaled.view()).map_err(|e| {
+                err(
+                    if positive {
+                        "UNSTABLE_MODEL"
+                    } else {
+                        "SINGULAR_SHIFT"
+                    },
+                    format!("Sparse factorisation failed: {e:?}"),
+                )
+            })?;
+            let min = ldl.d().iter().copied().fold(f64::INFINITY, f64::min);
+            (Some(ldl), 0., min)
+        };
+        if positive && (min_pivot < 1e-12 || !min_pivot.is_finite()) {
+            return Err(err(
+                "UNSTABLE_MODEL",
+                format!(
+                    "Nonpositive or near-zero scaled pivot {min_pivot:e}; check supports and connectivity"
+                ),
+            ));
+        }
+        Ok(Factor {
+            scale,
+            scaled,
+            ldl,
+            single,
+            min_pivot,
+        })
+    }
+
+    fn solve_scaled(&self, f: &[f64]) -> Vec<f64> {
+        match &self.ldl {
+            Some(ldl) => ldl.solve(f),
+            None if f.is_empty() => vec![],
+            None => vec![f[0] / self.single],
+        }
+    }
+
+    /// Solve A x = b with the stored factor.
+    pub fn solve(&self, b: &[f64]) -> Vec<f64> {
+        let f: Vec<_> = b.iter().zip(&self.scale).map(|(v, s)| v * s).collect();
+        self.solve_scaled(&f)
+            .iter()
+            .zip(&self.scale)
+            .map(|(v, s)| v * s)
+            .collect()
+    }
+
+    /// Number of negative pivots: by Sylvester's law of inertia, the number of
+    /// negative eigenvalues of the factored matrix.
+    pub fn negative_pivots(&self) -> usize {
+        match &self.ldl {
+            Some(ldl) => ldl.d().iter().filter(|&&d| d < 0.).count(),
+            None => usize::from(self.scale.len() == 1 && self.single < 0.),
+        }
+    }
+}
+
 pub struct SparseLdl;
 impl LinearSolver for SparseLdl {
     fn solve(&self, a: &CsMat<f64>, b: &[f64], budget: usize) -> Result<Solution> {
@@ -39,58 +168,12 @@ impl LinearSolver for SparseLdl {
             .nnz()
             .saturating_mul(48)
             .min(n.saturating_mul(n.saturating_add(1) / 2));
-        let estimate = sparse_budget_bytes(n, a.nnz()).unwrap_or(usize::MAX);
-        if estimate > budget {
-            return Err(err(
-                "MEMORY_LIMIT",
-                "Conservative sparse fill estimate exceeds memory budget",
-            ));
-        }
-        let mut scale = vec![0.; n];
-        for i in 0..n {
-            let d = *a.get(i, i).unwrap_or(&0.);
-            if d <= 0. || !d.is_finite() {
-                return Err(err(
-                    "UNSTABLE_MODEL",
-                    format!("Unrestrained active DOF {i}"),
-                ));
-            }
-            scale[i] = 1. / d.sqrt();
-        }
-        let mut tri = TriMat::new((n, n));
-        for (col, vec) in a.outer_iterator().enumerate() {
-            for (row, v) in vec.iter() {
-                tri.add_triplet(row, col, v * (scale[row] * scale[col]));
-            }
-        }
-        let scaled = tri.to_csc();
-        let f: Vec<_> = b.iter().zip(&scale).map(|(v, s)| v * s).collect();
-        // sprs-ldl's fill-reducing ordering asserts n > 1, so a single active
-        // DOF is factorised directly: the scaled 1×1 matrix is its own D.
-        let (y, min) = if n == 1 {
-            let d = *scaled.get(0, 0).unwrap_or(&0.);
-            (vec![f[0] / d], d)
-        } else {
-            let factor = sprs_ldl::Ldl::new().numeric(scaled.view()).map_err(|e| {
-                err(
-                    "UNSTABLE_MODEL",
-                    format!("Sparse factorisation failed: {e:?}"),
-                )
-            })?;
-            let min = factor.d().iter().copied().fold(f64::INFINITY, f64::min);
-            (factor.solve(&f), min)
-        };
-        if min < 1e-12 || !min.is_finite() {
-            return Err(err(
-                "UNSTABLE_MODEL",
-                format!(
-                    "Nonpositive or near-zero scaled pivot {min:e}; check supports and connectivity"
-                ),
-            ));
-        }
+        let factor = Factor::new(a, budget, true)?;
+        let f: Vec<_> = b.iter().zip(&factor.scale).map(|(v, s)| v * s).collect();
+        let y = factor.solve_scaled(&f);
         let mut residual = f.iter().map(|v| -v).collect::<Vec<_>>();
         let mut rows = vec![0.; n];
-        for (col, vec) in scaled.outer_iterator().enumerate() {
+        for (col, vec) in factor.scaled.outer_iterator().enumerate() {
             for (row, v) in vec.iter() {
                 residual[row] += v * y[col];
                 rows[row] += v.abs();
@@ -102,12 +185,12 @@ impl LinearSolver for SparseLdl {
         if !eta.is_finite() || eta > 1e-8 {
             return Err(err("RESIDUAL_FAILURE", format!("Scaled residual {eta:e}")));
         }
-        let values: Vec<_> = y.iter().zip(scale).map(|(v, s)| v * s).collect();
+        let values: Vec<_> = y.iter().zip(&factor.scale).map(|(v, s)| v * s).collect();
         workbench_model::finite(&values)?;
         Ok(Solution {
             values,
             residual: eta,
-            min_pivot: min,
+            min_pivot: factor.min_pivot,
             nnz: a.nnz(),
             factor_nnz_estimate,
         })

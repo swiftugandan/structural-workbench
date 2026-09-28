@@ -29,6 +29,30 @@ pub fn stiffness(l: f64, m: &Material, s: &Section) -> Matrix {
     }
     k
 }
+/// Consistent geometric stiffness of a prismatic member under constant axial
+/// force `n` (tension positive), stability-v1 (`docs/formulations/stability.md`).
+/// Flexural terms only: axial and torsional rows are zero. The local-z block
+/// flips the translation–rotation coupling because w' = -ry, as in `stiffness`.
+pub fn geometric(l: f64, n: f64) -> Matrix {
+    let mut k = [[0.; 12]; 12];
+    let b = [
+        [6. / 5., l / 10., -6. / 5., l / 10.],
+        [l / 10., 2. * l * l / 15., -l / 10., -l * l / 30.],
+        [-6. / 5., -l / 10., 6. / 5., -l / 10.],
+        [l / 10., -l * l / 30., -l / 10., 2. * l * l / 15.],
+    ];
+    for (ids, signs) in [
+        ([1, 5, 7, 11], [1., 1., 1., 1.]),
+        ([2, 4, 8, 10], [1., -1., 1., -1.]),
+    ] {
+        for i in 0..4 {
+            for j in 0..4 {
+                k[ids[i]][ids[j]] = n / l * b[i][j] * signs[i] * signs[j];
+            }
+        }
+    }
+    k
+}
 pub fn transform(k: &Matrix, r: [[f64; 3]; 3]) -> Matrix {
     let mut g = [[0.; 12]; 12];
     for i in 0..12 {
