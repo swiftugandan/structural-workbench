@@ -156,6 +156,27 @@ function concretePreviewsHtml(project, previewRuns, e) {
     typeof v === "number"
       ? `<span data-si="${v}">${(v / scale).toPrecision(6)} ${unit}</span>`
       : "—";
+  // Disabled EC2 profile checks (ADR 0016): review only, never a design result.
+  const units = {
+    N: [1e3, "kN"],
+    "N m": [1e3, "kN·m"],
+    m2: [1e-6, "mm²"],
+    "-": [1, ""],
+  };
+  const val = (v, u) => {
+    if (typeof v !== "number") return "—";
+    const [scale, unit] = units[u] || [1, u];
+    return `<span data-si="${v}">${(v / scale).toPrecision(6)}${unit ? ` ${unit}` : ""}</span>`;
+  };
+  const ec2Html = (cp) => {
+    if (!cp) return "";
+    const head = `<h4>EC2 checks · disabled profile preview</h4><p class="banner" data-testid="report-ec2-banner">DISABLED PROFILE PREVIEW. ${e(cp.profileId || "ec2-uk-na")} (${e(cp.ndp || "")}) is registered but not enabled: A1:2014 and NA+A2:2014 are not reconciled. These checks are for review only and are not a design result. Overall design remains UNSUPPORTED.</p>`;
+    if (cp.status !== "evaluated")
+      return `${head}<p data-testid="report-ec2-status">${e(cp.status)} · ${e(cp.reason || "")}</p>`;
+    const station = (g) =>
+      `<h5>Governing ${e(g.roles.join(" and "))} · x/L ${g.station}${g.side ? ` (${e(g.side)})` : ""} · ${e(cp.combinationId)} · station overall <strong>${e(g.overall.toUpperCase())}</strong></h5><p>Actions [N, Vy, Vz, T, My, Mz] = [${g.actions.map((a) => `<span data-si="${a}">${a}</span>`).join(", ")}] (N, N m)</p><table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody>${g.checks.map((c) => `<tr data-testid="report-ec2-check" data-roles="${e(g.roles.join(" "))}" data-check-id="${e(c.checkId)}"><th scope="row">${e(c.checkId)}</th><td>${e(c.clause)}</td><td>${e(c.status.toUpperCase())}</td><td data-testid="report-ec2-demand">${val(c.demand, c.units)}</td><td data-testid="report-ec2-resistance">${val(c.resistance, c.units)}</td><td>${c.utilisation == null ? "—" : c.utilisation.toPrecision(4)}</td><td>${e(c.message)}</td></tr>`).join("")}</tbody></table>`;
+    return `${head}<p>Concrete strength used as fck; reinforcement strength as fyk for bars and links. Tension anchorage: <strong data-testid="report-ec2-anchorage">${cp.tensionAnchorageConfirmed ? "confirmed by the user" : "not confirmed (rho_l = 0)"}</strong>.</p>${cp.governing.map(station).join("")}<ul>${(cp.limitations || []).map((l) => `<li>${e(l)}</li>`).join("")}</ul>`;
+  };
   const runs = previewRuns.map((run) => {
     const sm = run.sectionMechanics,
       fd = run.flexuralDemand,
@@ -189,9 +210,10 @@ ${geometry}
 <table><thead><tr><th>State</th><th>Mechanics capacity</th><th>Governing model moment</th><th>Location</th><th>Service σc (cracked)</th><th>Service σs per row (compression +)</th><th>Below M_cr</th></tr></thead><tbody>${state("sagging")}${state("hogging")}</tbody></table>
 ${inputs ? `<h4>Material-law inputs (SI)</h4><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody>${inputs}</tbody></table>` : ""}
 <ul>${[...(sm?.limitations || []), ...(fd?.limitations || [])].map((l) => `<li>${e(l)}</li>`).join("")}</ul>
+${ec2Html(run.codeProfilePreview)}
 <details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
   });
-  return `<section data-testid="report-concrete-previews"><h2>RC beam section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. Not a code resistance: no partial factors, code limits or code checks are applied, and no utilisation ratio is given. Overall design remains UNSUPPORTED until a concrete code profile is available (ADR 0012).</p>${runs.join("")}</section>`;
+  return `<section data-testid="report-concrete-previews"><h2>RC beam section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. The section mechanics are not a code resistance: no partial factors or code limits are applied to them, and they carry no utilisation ratio. Any EC2 checks shown come from a disabled profile, for review only (ADR 0016). Overall design remains UNSUPPORTED until a concrete code profile is enabled (ADR 0012).</p>${runs.join("")}</section>`;
 }
 
 export function report(project, result, { designRuns, previewRuns } = {}) {

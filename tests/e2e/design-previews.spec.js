@@ -495,6 +495,43 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   await expect(page.locator("[data-testid=ec2-anchorage]")).toHaveText(
     "confirmed by you",
   );
+  // M08-B4: the calculation record carries the same checks, labelled as a
+  // disabled-profile preview, with exact SI values.
+  const reportDownload = page.waitForEvent("download");
+  await menuCommand(page, "File", "Export calculation report");
+  const html = await readFile(await (await reportDownload).path(), "utf8");
+  expect(html).not.toContain("<script>");
+  const doc = await page.context().newPage();
+  await doc.setContent(html);
+  await expect(doc.locator("[data-testid=report-ec2-banner]")).toContainText(
+    "DISABLED PROFILE PREVIEW",
+  );
+  await expect(doc.locator("[data-testid=report-ec2-anchorage]")).toHaveText(
+    "confirmed by the user",
+  );
+  const si = async (role, id, field) =>
+    Number(
+      await doc
+        .locator(
+          `[data-testid=report-ec2-check][data-roles~="${role}"][data-check-id="${id}"] [data-testid=report-ec2-${field}] [data-si]`,
+        )
+        .getAttribute("data-si"),
+    );
+  for (const role of ["sagging", "hogging"])
+    expect(
+      Math.abs((await si(role, "ec2.flexure", "resistance")) - mu * 1000),
+    ).toBeLessThanOrEqual(1e-9 * mu * 1000);
+  const vrd = ec2.shearWithLinks.VRd_kN * 1000;
+  expect(
+    Math.abs((await si("shear", "ec2.shear", "resistance")) - vrd),
+  ).toBeLessThanOrEqual(1e-5 * vrd);
+  expect(await si("shear", "ec2.shear", "demand")).toBeCloseTo(30000, 6);
+  await expect(
+    doc
+      .locator('[data-testid=report-ec2-check][data-check-id="ec2.amendments"]')
+      .first(),
+  ).toContainText("UNSUPPORTED");
+  await doc.close();
   await page.locator('[data-preview-pane="summary"]').click();
   await expect(page.locator("[data-testid=preview-state]")).toHaveText(
     "UNSUPPORTED",
