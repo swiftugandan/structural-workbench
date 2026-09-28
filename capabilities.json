@@ -4,8 +4,12 @@
   "comparisonStatus": "UNKNOWN",
   "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
   "supportedDomain": {
-    "summary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1).",
-    "analysisTypes": ["linearStatic"],
+    "summary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1). Elastic flexural buckling factors and linearised P-Δ-δ second-order analysis of one case or combination (stability-v1).",
+    "analysisTypes": [
+      "linearStatic",
+      "elasticBuckling",
+      "secondOrder"
+    ],
     "formulation": "eulerBernoulli3D / isotropic / prismatic / SI",
     "limits": {
       "nodes": 5000,
@@ -21,7 +25,8 @@
     "solids",
     "arbitrary CAD solids",
     "plasticity",
-    "second-order response",
+    "geometrically nonlinear (large-displacement) response",
+    "torsional and lateral-torsional instability",
     "cable/tension-only members",
     "soil contact",
     "code-generated wind/seismic loads",
@@ -43,7 +48,7 @@
       "resourceBlockers": [],
       "limitations": [
         "Axial/shear/torsion releases rejected; My/Mz end releases only",
-        "No shear deformation, buckling or geometric nonlinearity",
+        "No shear deformation; buckling and second-order effects are the separate stability-v1 analysis types",
         "Memory guard may refuse large models under tight budgets"
       ],
       "evidenceReferences": [
@@ -123,6 +128,51 @@
       ],
       "evidenceReferences": [
         "evidence/M06/stress-screen/stress-screen-browser.json"
+      ]
+    },
+    {
+      "capabilityId": "elastic-buckling",
+      "scopeKey": "stability-v1 / consistent flexural K_G / subspace iteration with Sturm check",
+      "implementationStatus": "partial",
+      "verificationStatus": "native-oracle",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "A critical factor is an elastic load multiplier of the idealised model, not a member resistance, effective length or code verdict",
+        "Flexural instability only: torsional, flexural-torsional and lateral-torsional modes are excluded",
+        "Member end moment releases are rejected until hinge DOFs exist",
+        "One real load case or combination; envelopes are not valid inputs",
+        "Browser user journey and M09 parent acceptance pending (M09-E)"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/stability.md",
+        "docs/adr/0017-elastic-stability-analysis-types.md",
+        "fixtures/stability/stability-oracle.json",
+        "crates/assembly/tests/stability.rs",
+        "crates/solver/tests/eigen.rs"
+      ]
+    },
+    {
+      "capabilityId": "second-order-p-delta",
+      "scopeKey": "stability-v1 / linearised P-Δ-δ / Picard iteration / explicit imperfection",
+      "implementationStatus": "partial",
+      "verificationStatus": "native-oracle",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Small rotations about the undeformed geometry; large-displacement response is excluded",
+        "Proportional loading only; no construction staging",
+        "Loads at or beyond the elastic critical state fail with no response",
+        "Flexural instability only: torsional, flexural-torsional and lateral-torsional modes are excluded",
+        "Member end moment releases are rejected until hinge DOFs exist",
+        "One real load case or combination; envelopes are not valid inputs",
+        "Browser user journey and M09 parent acceptance pending (M09-E)"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/stability.md",
+        "docs/adr/0017-elastic-stability-analysis-types.md",
+        "fixtures/stability/stability-oracle.json",
+        "crates/assembly/tests/second_order.rs"
       ]
     },
     {

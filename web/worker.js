@@ -102,7 +102,11 @@ self.onmessage = ({ data: r }) => {
         response.status === "ok" ? "analysisCompleted" : "analysisFailed";
       response.jobId = r.requestId;
       response.sourceRevision = revision;
-      if (response.status === "ok") {
+      // Buckling results carry per-mode shapes, not response buffers.
+      if (
+        response.status === "ok" &&
+        response.payload.analysisType !== "elasticBuckling"
+      ) {
         const p = response.payload;
         p.nodeDisplacements = new Float64Array(p.nodeDisplacements);
         p.reactions = new Float64Array(p.reactions);

@@ -14,7 +14,7 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 | applyCommand | {command: CommandV1} | new revision, modelHash, affected IDs, undo availability and render delta |
 | undo / redo | {} | same shape as command acknowledgement |
 | validateModel | {} | diagnostics[], canAnalyse and estimated memory |
-| analyse | {caseIds: string[], combinationIds: string[]} | jobId and accepted snapshot hash; completion arrives as an event |
+| analyse | {caseIds: string[], combinationIds: string[], analysisType?: "linearStatic" \| "elasticBuckling" \| "secondOrder", stability?: {…}} | jobId and accepted snapshot hash; completion arrives as an event. Stability types: see "Stability analyses (stability-v1)" |
 | cancelAnalysis | {jobId: string} | job status cancelled or alreadyFinished |
 | getSnapshot | {includeView: boolean} | ProjectV1 plus separate optional view state |
 | queryGeometry | {kind: ray or snap or measure, query: object, viewRevision: integer} | entity IDs, f64 positions/distances and matching viewRevision |
@@ -215,3 +215,46 @@ Review contract v1 includes `reviewId`, `modelHash`, `sourceRevision`, `resultId
 ### `studySteelCatalogue`
 
 Extends exact model-native input `{memberId,modelHash,resultId,caseId}` with one to five unique `sectionRefs` from the verified subset. Rust rejects missing readiness/stale/envelope inputs, clones each candidate through normal catalogue assignment and project validation, reanalyses the full model and returns exact DesignRuns, masses in kg, candidate model/result IDs and baseline record. `complete:true` means the requested finite set completed, never global optimality. Any analysis failure rejects the study without a partial optimum. Explicit Apply is a separate ordinary `AssignSteelCatalogue` command; candidate results never replace live analysis.
+
+## Stability analyses (stability-v1, M09)
+
+Formulation: `docs/formulations/stability.md`; decisions: ADR 0017. Both types
+use the `analyse` job lifecycle unchanged (disposable analysis Worker,
+revision check, progress, exactly one terminal event, cancel and timeout).
+
+Request. `analysisType` defaults to `linearStatic`, which refuses a `stability`
+object. The stability types take exactly one id in `caseIds` ∪
+`combinationIds` (`INVALID_LOAD` otherwise; envelopes are not inputs).
+
+- `elasticBuckling`: `stability` is optional, `{subdivisions?: 1–32 (default
+  8), modes?: 1–20 (default 5)}`.
+- `secondOrder`: `stability` is required, `{subdivisions?: 1–32 (default 8),
+  imperfection: {kind: "none"} | {kind: "sway", ratio: (0, 0.1], direction:
+  [x, y]}}`. The imperfection is never implied.
+
+Unknown fields or types are `INVALID_SCHEMA`; out-of-range values are
+`INVALID_SETTINGS`. Models with member end moment releases are refused with
+`STABILITY_RELEASES_UNSUPPORTED`.
+
+`elasticBuckling` result: ResultHeader fields plus `subdivisions`,
+`requestedModes`, `modes[]` (`factor`, `residual`, `nodeIds`,
+`nodeDisplacements` normalised so the largest translation over the analysis
+mesh is +1, `members[].stations[]` of `{station, position, displacement}`),
+`negativeFactors[]`, `referenceAxialForces[]` per physical member segment, and
+`disclosures` (`FLEXURAL_ONLY`, `NOT_A_RESISTANCE_CHECK`,
+`LINEAR_REFERENCE_STATE`). No mode is not a failure: it carries the
+`NO_POSITIVE_CRITICAL_FACTOR` diagnostic, and negative factors are never
+critical factors. It has no response buffers, so `bufferDescriptors` is absent.
+
+`secondOrder` result: the linear result layout with `analysisType:
+"secondOrder"`, actions and reactions including second-order effects, and
+`numericalChecks` carrying `iterations`, per-iteration `history`,
+`globalBalanceDeformed`, `axialForces` and the `imperfection` with its listed
+equivalent nodal forces. A second-order analysis that does not converge ends
+in `analysisFailed` with diagnostic `NONCONVERGED` whose `details.reason` is
+`TANGENT_NOT_POSITIVE_DEFINITE`, `DIVERGING` or `ITERATION_LIMIT`, with the
+iteration and history, and no numerical payload.
+
+A critical factor or a second-order response is never a member resistance or a
+code stability verdict, and it never changes a design record's declared
+first-order basis.

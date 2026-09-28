@@ -2,6 +2,7 @@ mod cad;
 mod design_workspace;
 mod preview_workspace;
 mod snap;
+mod stability_request;
 mod structure_workspace;
 mod topology;
 mod view;
@@ -225,12 +226,30 @@ impl Kernel {
                     ));
                 }
                 let p = self.project.as_ref().unwrap();
-                if ids.len() == 1 {
-                    let result = workbench_assembly::analyse(p, &ids[0])?;
-                    Ok(serde_json::to_value(result).unwrap())
-                } else {
-                    let result = workbench_assembly::envelope(p, &ids)?;
-                    Ok(serde_json::to_value(result).unwrap())
+                let kind = stability_request::parse(payload)?;
+                if !matches!(kind, stability_request::AnalysisKind::LinearStatic) && ids.len() != 1 {
+                    return Err(err(
+                        "INVALID_LOAD",
+                        "Stability analyses take exactly one case or combination; envelopes are not valid inputs",
+                    ));
+                }
+                match kind {
+                    stability_request::AnalysisKind::LinearStatic if ids.len() == 1 => {
+                        let result = workbench_assembly::analyse(p, &ids[0])?;
+                        Ok(serde_json::to_value(result).unwrap())
+                    }
+                    stability_request::AnalysisKind::LinearStatic => {
+                        let result = workbench_assembly::envelope(p, &ids)?;
+                        Ok(serde_json::to_value(result).unwrap())
+                    }
+                    stability_request::AnalysisKind::ElasticBuckling(settings) => {
+                        let result = workbench_assembly::elastic_buckling(p, &ids[0], &settings)?;
+                        Ok(serde_json::to_value(result).unwrap())
+                    }
+                    stability_request::AnalysisKind::SecondOrder(settings) => {
+                        let result = workbench_assembly::second_order(p, &ids[0], &settings)?;
+                        Ok(serde_json::to_value(result).unwrap())
+                    }
                 }
             }
             "queryGeometry" => {
@@ -681,7 +700,8 @@ fn excluded_domains() -> Value {
         "solids",
         "arbitrary CAD solids",
         "plasticity",
-        "second-order response",
+        "geometrically nonlinear (large-displacement) response",
+        "torsional and lateral-torsional instability",
         "cable/tension-only members",
         "soil contact",
         "code-generated wind/seismic loads",
@@ -699,7 +719,7 @@ fn domain_disclosure() -> Value {
     json!({
         "comparisonStatus": "UNKNOWN",
         "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
-        "supportedSummary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1).",
+        "supportedSummary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1); elastic flexural buckling factors and linearised P-Δ-δ second-order analysis of one case or combination (stability-v1).",
         "excludedDomains": excluded_domains()
     })
 }
@@ -708,7 +728,7 @@ fn capabilities_payload() -> Value {
     json!({
         "protocolVersion": 1,
         "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0"],
-        "analysisTypes": ["linearStatic"],
+        "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder"],
         "designProfiles": workbench_design::default_registry()
             .metadata()
             .into_iter()
@@ -728,7 +748,9 @@ fn capabilities_payload() -> Value {
             "linearStaticFrame",
             "nodalAndMemberLoads",
             "explicitCombinations",
-            "elasticFibreStressScreen"
+            "elasticFibreStressScreen",
+            "elasticFlexuralBuckling",
+            "linearisedSecondOrderPDelta"
         ],
         "excludedDomains": excluded_domains(),
         "domainDisclosure": domain_disclosure(),
@@ -736,7 +758,8 @@ fn capabilities_payload() -> Value {
             "Conservative fill guard may reject large models",
             "No code compliance or commercial parity claim",
             "Schema 0.9.0 imports migrate to 1.0.0; unknown majors are refused",
-            "Elastic stress screen is mechanics-v1 only — not stability or building-code checks"
+            "Elastic stress screen is mechanics-v1 only — not stability or building-code checks",
+            "Stability analyses (stability-v1) are flexural only, reject member end releases and take one case or combination; a critical factor is an elastic load multiplier, not a member resistance or code verdict"
         ]
     })
 }

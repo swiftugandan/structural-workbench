@@ -16,7 +16,8 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
     "shells",
     "solids",
     "plasticity",
-    "second-order response",
+    "geometrically nonlinear (large-displacement) response",
+    "torsional and lateral-torsional instability",
     "code-certified member sizing",
     "DWG/native PROKON formats",
   ]) {
@@ -25,13 +26,31 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
       `missing exclusion: ${domain}`,
     );
   }
-  assert.ok(ledger.capabilities.some((c) => c.capabilityId === "elastic-stress-screen"));
+  assert.ok(
+    ledger.capabilities.some((c) => c.capabilityId === "elastic-stress-screen"),
+  );
   assert.ok(
     ledger.capabilities.every(
       (c) => (c.comparisonStatus || ledger.comparisonStatus) === "UNKNOWN",
     ),
   );
-  const steel = ledger.capabilities.find((c) => c.capabilityId === "steel-code");
+  // stability-v1 is kernel-verified only until the M09 journey is accepted.
+  for (const id of ["elastic-buckling", "second-order-p-delta"]) {
+    const row = ledger.capabilities.find((c) => c.capabilityId === id);
+    assert.equal(row.implementationStatus, "partial", id);
+    assert.ok(
+      row.limitations.some((l) => /M09/.test(l)),
+      id,
+    );
+  }
+  assert.deepEqual(ledger.supportedDomain.analysisTypes, [
+    "linearStatic",
+    "elasticBuckling",
+    "secondOrder",
+  ]);
+  const steel = ledger.capabilities.find(
+    (c) => c.capabilityId === "steel-code",
+  );
   assert.equal(steel.implementationStatus, "partial");
   assert.equal(steel.verificationStatus, "fixture-pass");
   assert.deepEqual(steel.resourceBlockers, []);
