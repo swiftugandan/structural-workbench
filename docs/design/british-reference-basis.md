@@ -24,3 +24,12 @@ This resource gate does not block selection, hierarchy, visibility, catalogue wo
 The first-generation candidate is BS EN 1992-1-1:2004+A1:2014 with NA+A2:2014. [BSI lists that National Annex](https://knowledge.bsigroup.com/products/uk-national-annex-to-eurocode-2-design-of-concrete-structures-general-rules-and-rules-for-buildings). [The Concrete Centre describes the coexistence of the two generations](https://www.concretecentre.com/Structural-design/Eurocode-2-concrete/Using-2nd%C2%A0generation-Eurocode-2.aspx) and explains why the generation must be explicit. This is a proposed development resource basis, not an enabled profile or a decision to mix generations.
 
 Acquired the [JRC 2014 worked-examples report](https://eurocodes.jrc.ec.europa.eu/publications/eurocode-2-background-appications-design-concrete-buildings-worked-examples) from its official PDF endpoint into the ignored private resource directory. R-EC2-JRC-EXAMPLES records its SHA-256. Individual examples still need extraction, national-parameter reconciliation and independent expected outputs. It does not replace the standard/UK NA text. R-EC2-UK-STANDARDS remains not acquired; the existing ACI resource entries remain separate.
+
+## Open-access resource check, 2026-09-28
+
+The user approved Public.Resource.Org postings as local reference only. The results were:
+
+- **UK National Annex, locked.** R-EC2-UK-NA-2009 is the NA to BS EN 1992-1-1:2004, first edition December 2005, incorporating AMD 1 (December 2009). The downloaded file matches the Internet Archive SHA-1/MD5. It does not include NA+A2:2014.
+- **EN 1992-1-1 clause text, not acquired.** The Public.Resource.Org item `en.1992.1.1.2004` is withdrawn (dark) on the Internet Archive. The only other copy found (`bs_en_1992-1-1-2004_eurocode_2`) carries a per-page institutional licensed-copy watermark. It was deleted and not recorded, because it is not a lawful open posting.
+
+R-EC2-UK-STANDARDS is therefore partially acquired. The clause text, A1:2014 and NA+A2:2014 still need a lawful source, such as a purchase, an institutional BSOL subscription, or read-only BSOL access at a British Library Business & IP Centre for reconciling the amendments. No profile is enabled.

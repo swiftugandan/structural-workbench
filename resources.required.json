@@ -299,7 +299,7 @@
     },
     {
       "id": "R-EC2-UK-STANDARDS",
-      "status": "not_acquired",
+      "status": "partially_acquired",
       "requiredBy": [
         "UKR01-design"
       ],
@@ -308,7 +308,19 @@
       "sourceHash": null,
       "rightsStatus": "licensed_source_required",
       "localPath": null,
-      "validationEvidence": []
+      "validationEvidence": [],
+      "acquiredComponents": [
+        {
+          "id": "R-EC2-UK-NA-2009",
+          "localPath": "resources/private/bs-na-en-1992-1-1-uk-national-annex.pdf",
+          "sourceHash": "11ced86488f7840f5f544ca736c429271e4b1df79e012fbc9012b5343ef26221"
+        }
+      ],
+      "missingComponents": [
+        "EN 1992-1-1:2004 clause text (Public.Resource.Org item en.1992.1.1.2004 is withdrawn/dark on the Internet Archive; only other copy found is a leaked institutional licensed copy, rejected)",
+        "A1:2014 amendment to BS EN 1992-1-1",
+        "NA+A2:2014 changes to the UK National Annex"
+      ]
     },
     {
       "id": "R-EC2-JRC-EXAMPLES",

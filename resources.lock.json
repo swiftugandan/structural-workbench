@@ -429,6 +429,18 @@
       "rightsStatus": "public_official_download_local_reference_only_not_redistributed",
       "retrievedAt": "2026-09-26T19:44:48.554240+00:00",
       "validationUse": "Candidate independent EC2 examples; extraction and comparison to the selected UK NA profile still required; no numerical acceptance"
+    },
+    {
+      "id": "R-EC2-UK-NA-2009",
+      "edition": "NA to BS EN 1992-1-1:2004, first edition December 2005, incorporating National Amendment No.1 (December 2009); does not include NA+A2:2014",
+      "authoritativeOrigin": "https://archive.org/details/bs.na.en.1992.1.1.2004 (Public.Resource.Org posting indexed at https://law.resource.org/pub/eu/eurocode.html)",
+      "contentHashSha256": "11ced86488f7840f5f544ca736c429271e4b1df79e012fbc9012b5343ef26221",
+      "archiveSha1": "660d2d1af137456d35753f848c93ae912f2c9fc9",
+      "archiveMd5": "729c615b0bd55606064b72d9c8bb5cc4",
+      "rightsStatus": "Public.Resource.Org 'Published Under the Rule of Law' posting; BSI copyright notice retained; rights contested; user-approved 2026-09-28 as local reference only; not redistributed",
+      "localPath": "resources/private/bs-na-en-1992-1-1-uk-national-annex.pdf",
+      "retrievedAt": "2026-09-28",
+      "validationUse": "UK NDP values for R-EC2-UK-STANDARDS at the 2009 amendment state; superseded by NA+A2:2014 \u2014 differences must be reconciled before any current-UK profile is enabled"
     }
   ],
   "unresolved": [

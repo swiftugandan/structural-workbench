@@ -3083,10 +3083,11 @@
       ],
       "resourceIds": [
         "R-EC2-UK-STANDARDS",
+        "R-EC2-UK-NA-2009",
         "R-EC2-JRC-EXAMPLES"
       ],
       "status": "BLOCKED_RESOURCE",
-      "resumeWhen": "Acquire edition-specific authoritative standards and UK NAs; extract/reconcile JRC examples and validate bounded Rust/WASM profiles. Eurocodes with UK NAs confirmed by user; no legacy BS 8110."
+      "resumeWhen": "Acquire lawful EN 1992-1-1:2004+A1:2014 clause text (purchase/BSOL; no free authoritative copy found 2026-09-28) and NA+A2:2014 changes; UK NA at AMD1:2009 locked as R-EC2-UK-NA-2009. Extract/reconcile JRC examples and validate bounded Rust/WASM profiles. Eurocodes with UK NAs confirmed by user; no legacy BS 8110."
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
