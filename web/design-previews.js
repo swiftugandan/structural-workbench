@@ -1,5 +1,9 @@
 import { previewIdentity } from "./selection-context.js";
-import { previewInspector, previewPane } from "./design-presentation.js";
+import {
+  mechanicsRows,
+  previewInspector,
+  previewPane,
+} from "./design-presentation.js";
 /** Workflow illustrations only. Validation, units and action provenance belong to Rust. */
 import { escape as esc } from "./reports/report.js";
 const names = { rcBeam: "RC beam", slab: "Slab", padFooting: "Pad footing" };
@@ -17,6 +21,13 @@ function fieldInput(value, unit) {
     /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(text)
     ? text + unit
     : text;
+}
+// An untouched input returns its stored SI value bit-exactly, so saving never
+// perturbs values or provenance through display rounding.
+function submittedValue(input, unit) {
+  return input.value === input.defaultValue && input.dataset.si !== undefined
+    ? Number(input.dataset.si)
+    : fieldInput(input.value, unit);
 }
 export function previewState(run, ctx) {
   if (!run) return "NOT CHECKED";
@@ -66,7 +77,8 @@ export function concreteWorkspace({
     templates,
     generation = 0,
     face = "Top X",
-    sourceMode = "synthetic";
+    sourceMode = "synthetic",
+    mechanicsLaw;
   let projectId;
   let pane = "summary",
     checkIndex = 0,
@@ -159,6 +171,7 @@ export function concreteWorkspace({
       ["actions", d.kind === "slab" ? "Plate actions" : "Design actions"],
       ["details", "Calculation details"],
       ["reinforcement", "Reinforcement"],
+      ...(d.kind === "rcBeam" ? [["mechanics", "Section mechanics"]] : []),
       ["schedule", "Schedule"],
       ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
     ];
@@ -223,7 +236,10 @@ export function concreteWorkspace({
       if (!ds.some((d) => d.id === active)) active = undefined;
       const d = draft(),
         t = templates.find((t) => t.kind === d?.kind);
+      if (!getContext().dirty)
+        mechanicsLaw = d?.mechanics?.law || t?.mechanics?.defaultLaw;
       host.innerHTML = previewInspector({
+        mechanicsLaw,
         d,
         templates,
         ds,
@@ -293,10 +309,7 @@ export function concreteWorkspace({
             const inputs = Object.fromEntries(
               t.fields.map((f) => [
                 f.key,
-                fieldInput(
-                  host.querySelector(`[name="${f.key}"]`).value,
-                  f.unit,
-                ),
+                submittedValue(host.querySelector(`[name="${f.key}"]`), f.unit),
               ]),
             );
             await command("SetDesignPreview", {
@@ -304,6 +317,22 @@ export function concreteWorkspace({
               inputs,
               targetId: $("#preview-target")?.value,
               soilReference: $("#preview-soil")?.value ?? d.soilReference,
+              ...(t.mechanics && {
+                mechanics: {
+                  law: mechanicsLaw,
+                  inputs: Object.fromEntries(
+                    t.mechanics.fields
+                      .filter((f) => f.law === "all" || f.law === mechanicsLaw)
+                      .map((f) => [
+                        f.key,
+                        submittedValue(
+                          host.querySelector(`[name="mech-${f.key}"]`),
+                          f.unit,
+                        ),
+                      ]),
+                  ),
+                },
+              }),
             });
             onDirty(false);
             await render();
@@ -323,6 +352,15 @@ export function concreteWorkspace({
             fail(e);
           }
         };
+        if ($("#preview-mech-law"))
+          $("#preview-mech-law").onchange = () => {
+            mechanicsLaw = $("#preview-mech-law").value;
+            $("#preview-mech-fields").innerHTML = mechanicsRows(
+              d,
+              t,
+              mechanicsLaw,
+            );
+          };
         if ($("#preview-face"))
           $("#preview-face").onchange = () => {
             face = $("#preview-face").value;

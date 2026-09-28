@@ -124,3 +124,95 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     );
     expect(errors).toEqual([]);
   });
+
+test("RC beam section mechanics: oracle value, law switch, provenance, fit failure and reopen", async ({
+  page,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  const oracle = JSON.parse(
+    await readFile("fixtures/design/rc-section-mechanics/cases.json", "utf8"),
+  ).cases.find((c) => c.id === "RC-PREVIEW-DEFAULT").expected.ultimate;
+  const model = JSON.parse(await readFile("fixtures/models/B04.json", "utf8"));
+  model.id = "preview-mechanics";
+  await page.goto("/");
+  await page.locator("#import-file").setInputFiles({
+    name: "preview.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(model)),
+  });
+  await expect(page.locator("#kernel-status")).toContainText("ready");
+  await page.locator("[data-inspector-tab=concrete]").click();
+  await page.locator("#preview-kind").selectOption("rcBeam");
+  await page.locator("#preview-create").click();
+  await expect(page.locator("#preview-mech-law")).toHaveValue(
+    "rectangularBlock",
+  );
+  const runAndOpen = async () => {
+    await page.locator("#preview-run").click();
+    await page.locator('[data-preview-pane="mechanics"]').click();
+  };
+  await runAndOpen();
+  const pane = page.locator("[data-testid=preview-result]");
+  await expect(pane).toContainText("MECHANICS ONLY");
+  const expected = new Intl.NumberFormat("en-GB", {
+    maximumFractionDigits: 2,
+  }).format(oracle.moment / 1000);
+  await expect(page.locator("[data-testid=mechanics-moment]")).toHaveText(
+    `${expected} kN·m`,
+  );
+  await page.locator('[data-preview-pane="summary"]').click();
+  await expect(page.locator("[data-testid=preview-state]")).toHaveText(
+    "UNSUPPORTED",
+  );
+
+  await page.locator("#preview-mech-law").selectOption("parabolaRectangle");
+  await expect(page.locator("#preview-mech-parabolaPeak")).toBeVisible();
+  await page.locator("#preview-mech-parabolaPeak").fill("25");
+  await page.locator("#preview-save").click();
+  await expect(page.locator("#preview-mech-law")).toHaveValue(
+    "parabolaRectangle",
+  );
+  await expect(
+    page.locator("label:has(#preview-mech-parabolaPeak) abbr"),
+  ).toHaveText("U");
+  await expect(
+    page.locator("label:has(#preview-mech-strainAtPeak) abbr"),
+  ).toHaveText("S");
+  // Untouched values survive save bit-exactly: no display-rounding provenance flip.
+  await expect(page.locator("#preview-mech-concreteModulus")).toHaveValue("30");
+  await expect(
+    page.locator("label:has(#preview-mech-concreteModulus) abbr"),
+  ).toHaveText("S");
+  await runAndOpen();
+  await expect(pane).toContainText("parabola-rectangle");
+
+  await page.locator("#preview-barCount").fill("12");
+  await page.locator("#preview-save").click();
+  await runAndOpen();
+  await expect(page.locator("[data-testid=mechanics-fit]")).toHaveText("No");
+  await expect(page.locator("[data-testid=mechanics-status]")).toContainText(
+    "Row does not fit",
+  );
+  await page.locator("#undo").click();
+
+  const p = page.waitForEvent("download");
+  await menuCommand(page, "File", "Download project");
+  const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
+  expect(saved.designPreviews[0].mechanics.law).toBe("parabolaRectangle");
+  expect(saved.designPreviews[0].mechanics.inputs.parabolaPeak).toBe(25e6);
+  await page.locator("#import-file").setInputFiles({
+    name: "saved.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(saved)),
+  });
+  await page.locator("[data-inspector-tab=concrete]").click();
+  await expect(page.locator("#preview-mech-law")).toHaveValue(
+    "parabolaRectangle",
+  );
+  await expect(page.locator("#preview-mech-parabolaPeak")).toHaveValue("25");
+  await mkdir(dir, { recursive: true });
+  await runAndOpen();
+  await page.screenshot({ path: `${dir}/rcBeam-mechanics.png` });
+  expect(errors).toEqual([]);
+});

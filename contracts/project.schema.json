@@ -1209,6 +1209,40 @@
               "user"
             ]
           }
+        },
+        "mechanics": {
+          "description": "rcBeam only. Explicit, code-agnostic section-mechanics material law (ADR 0012); keys depend on law.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "law",
+            "inputs",
+            "inputSources"
+          ],
+          "properties": {
+            "law": {
+              "enum": [
+                "rectangularBlock",
+                "parabolaRectangle"
+              ]
+            },
+            "inputs": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "inputSources": {
+              "type": "object",
+              "additionalProperties": {
+                "enum": [
+                  "syntheticFixture",
+                  "user"
+                ]
+              }
+            }
+          }
         }
       }
     }

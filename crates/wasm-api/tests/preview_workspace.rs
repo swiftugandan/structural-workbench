@@ -157,3 +157,124 @@ fn preview_invalid_geometry_is_atomic_and_slab_refuses_frame_actions() {
     assert_ne!(good["modelHash"], c["modelHash"]);
     assert_eq!(req(&mut k, "undo", json!({}))["modelHash"], c["modelHash"]);
 }
+
+const RC_FIXTURE: &str = include_str!("../../../fixtures/design/rc-section-mechanics/cases.json");
+
+fn rc_run(k: &mut Kernel, id: &Value, model_hash: &Value) -> Value {
+    let r = req(
+        k,
+        "evaluateDesignPreview",
+        json!({"draftId":id,"modelHash":model_hash,"sourceMode":"synthetic"}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    r["payload"].clone()
+}
+fn rc_set(k: &mut Kernel, draft: &Value, mechanics: Value, bar_count: &str) -> Value {
+    let mut inputs = draft["inputs"].clone();
+    inputs["barCount"] = json!(bar_count);
+    cmd(
+        k,
+        "SetDesignPreview",
+        json!({"id":draft["id"],"inputs":inputs,"targetId":"m1","soilReference":"","mechanics":mechanics}),
+    )
+}
+fn block_mechanics(depth_ratio: &str) -> Value {
+    json!({"law":"rectangularBlock","inputs":{"blockIntensity":"20 MPa","blockDepthRatio":depth_ratio,"ultimateStrain":"0.003",
+        "steelYieldStrength":"460 MPa","steelModulus":"200 GPa","concreteModulus":"30 GPa","concreteTensileStrength":"2.8 MPa","minimumClearSpacing":"25 mm"}})
+}
+
+#[test]
+fn rc_beam_section_mechanics_match_oracle_and_never_change_status() {
+    let mut k = open();
+    let c = create(&mut k, "rcBeam");
+    let draft = &c["payload"]["project"]["designPreviews"][0];
+    assert_eq!(draft["mechanics"]["law"], "rectangularBlock");
+    assert!(draft["mechanics"]["inputSources"].as_object().unwrap().values().all(|s| s == "syntheticFixture"));
+    let run = rc_run(&mut k, &draft["id"], &c["modelHash"]);
+    assert_eq!(run["overall"], "unsupported");
+    assert!(run["checks"].as_array().unwrap().iter().all(|c| c["status"] == "unsupported" && c["utilisation"].is_null()));
+    let sm = &run["sectionMechanics"];
+    assert_eq!(sm["status"], "evaluated", "{sm}");
+    assert_eq!(sm["basis"], "mechanics");
+    assert!(sm["codeProfile"].is_null());
+    assert_eq!(sm["rowFit"]["fits"], true);
+    let doc: Value = serde_json::from_str(RC_FIXTURE).unwrap();
+    let want = doc["cases"].as_array().unwrap().iter().find(|c| c["id"] == "RC-PREVIEW-DEFAULT").unwrap();
+    let rel = doc["tolerance"]["relative"].as_f64().unwrap();
+    for (got, key, exp) in [
+        (&sm["ultimate"]["neutralAxisDepth"], "x", &want["expected"]["ultimate"]["neutralAxisDepth"]),
+        (&sm["ultimate"]["moment"], "Mu", &want["expected"]["ultimate"]["moment"]),
+        (&sm["elastic"]["crackedInertia"], "Icr", &want["expected"]["elastic"]["crackedInertia"]),
+        (&sm["elastic"]["crackingMoment"], "Mcr", &want["expected"]["elastic"]["crackingMoment"]),
+    ] {
+        let (g, e) = (got.as_f64().unwrap(), exp.as_f64().unwrap());
+        assert!((g - e).abs() <= rel * e.abs(), "{key}: got {g:e} want {e:e}");
+    }
+    assert_eq!(sm["ultimate"]["classification"], want["expected"]["ultimate"]["classification"]);
+}
+
+#[test]
+fn rc_beam_mechanics_edits_are_validated_atomic_and_provenance_tracked() {
+    let mut k = open();
+    let c = create(&mut k, "rcBeam");
+    let draft = c["payload"]["project"]["designPreviews"][0].clone();
+    let before = req(&mut k, "getSnapshot", json!({}));
+    let bad = rc_set(&mut k, &draft, block_mechanics("1.5"), "4");
+    assert_eq!(bad["status"], "error", "{bad}");
+    assert_eq!(req(&mut k, "getSnapshot", json!({}))["modelHash"], before["modelHash"]);
+
+    let unchanged = rc_set(&mut k, &draft, block_mechanics("0.75"), "4");
+    assert_eq!(unchanged["status"], "ok", "{unchanged}");
+    let m = &unchanged["payload"]["project"]["designPreviews"][0]["mechanics"];
+    assert!(m["inputSources"].as_object().unwrap().values().all(|s| s == "syntheticFixture"), "{m}");
+
+    let parabola = json!({"law":"parabolaRectangle","inputs":{"parabolaPeak":"22 MPa","strainAtPeak":"0.002","parabolaExponent":"2","ultimateStrain":"0.0034",
+        "steelYieldStrength":"460 MPa","steelModulus":"200 GPa","concreteModulus":"30 GPa","concreteTensileStrength":"2.8 MPa","minimumClearSpacing":"25 mm"}});
+    let r = rc_set(&mut k, &draft, parabola, "4");
+    assert_eq!(r["status"], "ok", "{r}");
+    let d = &r["payload"]["project"]["designPreviews"][0];
+    let src = &d["mechanics"]["inputSources"];
+    assert_eq!(src["parabolaPeak"], "user");
+    assert_eq!(src["ultimateStrain"], "user");
+    assert_eq!(src["strainAtPeak"], "syntheticFixture");
+    assert_eq!(src["steelModulus"], "syntheticFixture");
+    assert!(d["mechanics"]["inputs"].get("blockIntensity").is_none());
+    let run = rc_run(&mut k, &d["id"], &r["modelHash"]);
+    assert_eq!(run["sectionMechanics"]["law"], "parabolaRectangle");
+    assert_eq!(run["sectionMechanics"]["status"], "evaluated");
+
+    let crowded = rc_set(&mut k, d, block_mechanics("0.75"), "12");
+    assert_eq!(crowded["status"], "ok", "{crowded}");
+    let run = rc_run(&mut k, &d["id"], &crowded["modelHash"]);
+    assert_eq!(run["sectionMechanics"]["status"], "rowDoesNotFit");
+    assert!(run["sectionMechanics"].get("ultimate").is_none());
+    assert_eq!(run["overall"], "unsupported");
+}
+
+#[test]
+fn rc_beam_saved_without_mechanics_reopens_as_not_configured() {
+    let mut k = open();
+    let c = create(&mut k, "rcBeam");
+    let mut project = c["payload"]["project"].clone();
+    project["designPreviews"][0].as_object_mut().unwrap().remove("mechanics");
+    let mut reopened = Kernel::new();
+    let r = req(&mut reopened, "importProject", json!({"jsonUtf8":project.to_string()}));
+    assert_eq!(r["status"], "ok", "{r}");
+    let run = rc_run(&mut reopened, &project["designPreviews"][0]["id"], &r["modelHash"]);
+    assert_eq!(run["sectionMechanics"]["status"], "notConfigured");
+    assert_eq!(run["overall"], "unsupported");
+}
+
+#[test]
+fn mechanics_rejected_for_non_beam_previews() {
+    let mut k = open();
+    let c = create(&mut k, "slab");
+    let d = &c["payload"]["project"]["designPreviews"][0];
+    assert!(d.get("mechanics").is_none());
+    let r = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","mechanics":block_mechanics("0.75")}),
+    );
+    assert_eq!(r["status"], "error", "{r}");
+}

@@ -9,7 +9,10 @@ mod residential;
 mod section_props;
 pub use residential::residential_reference;
 pub mod structure;
-pub use design_inputs::{DesignPreview, DesignSource, DesignValue, SteelDesign};
+pub use design_inputs::{
+    DesignPreview, DesignSource, DesignValue, MECHANICS_COMMON_KEYS, SectionMechanicsInputs,
+    SteelDesign,
+};
 pub use migrate::{CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, import_project};
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;

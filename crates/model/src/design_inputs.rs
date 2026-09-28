@@ -14,9 +14,90 @@ pub struct DesignPreview {
     pub input_sources: std::collections::BTreeMap<String, String>,
     pub inputs: std::collections::BTreeMap<String, f64>,
     pub soil_reference: String,
+    /// rcBeam only: explicit section-mechanics material law (ADR 0012). Never a code value.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mechanics: Option<SectionMechanicsInputs>,
 }
+
+/// Material law and fit inputs for code-agnostic RC section mechanics. Keys are
+/// SI; the required set depends on `law`.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct SectionMechanicsInputs {
+    pub law: String,
+    pub inputs: std::collections::BTreeMap<String, f64>,
+    pub input_sources: std::collections::BTreeMap<String, String>,
+}
+
+pub const MECHANICS_COMMON_KEYS: &[&str] = &[
+    "ultimateStrain",
+    "steelYieldStrength",
+    "steelModulus",
+    "concreteModulus",
+    "concreteTensileStrength",
+    "minimumClearSpacing",
+];
+
+impl SectionMechanicsInputs {
+    pub fn law_keys(law: &str) -> Option<&'static [&'static str]> {
+        match law {
+            "rectangularBlock" => Some(&["blockIntensity", "blockDepthRatio"]),
+            "parabolaRectangle" => Some(&["parabolaPeak", "strainAtPeak", "parabolaExponent"]),
+            _ => None,
+        }
+    }
+
+    pub fn validate(&self) -> Result<()> {
+        let law_keys = Self::law_keys(&self.law)
+            .ok_or_else(|| err("INVALID_SCHEMA", "Unknown section-mechanics law"))?;
+        let expected: Vec<&str> = MECHANICS_COMMON_KEYS.iter().chain(law_keys).copied().collect();
+        if self.inputs.len() != expected.len()
+            || expected.iter().any(|k| {
+                self.inputs
+                    .get(*k)
+                    .is_none_or(|v| !v.is_finite() || *v <= 0.0)
+            })
+        {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Section-mechanics inputs must be complete, finite and positive for the chosen law",
+            ));
+        }
+        if self.input_sources.len() != expected.len()
+            || expected.iter().any(|k| {
+                self.input_sources
+                    .get(*k)
+                    .is_none_or(|s| !["syntheticFixture", "user"].contains(&s.as_str()))
+            })
+        {
+            return Err(err("INVALID_SCHEMA", "Incomplete section-mechanics provenance"));
+        }
+        if self.law == "rectangularBlock" && self.inputs["blockDepthRatio"] > 1.0 {
+            return Err(err("INVALID_SCHEMA", "Block depth ratio must not exceed 1"));
+        }
+        if self.law == "parabolaRectangle"
+            && self.inputs["strainAtPeak"] > self.inputs["ultimateStrain"]
+        {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Strain at peak must not exceed ultimate strain",
+            ));
+        }
+        Ok(())
+    }
+}
+
 impl DesignPreview {
     pub fn validate(&self) -> Result<()> {
+        if let Some(m) = &self.mechanics {
+            if self.kind != "rcBeam" {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Section mechanics apply only to RC beam drafts",
+                ));
+            }
+            m.validate()?;
+        }
         let keys: &[&str] = match self.kind.as_str() {
             "rcBeam" => &[
                 "width",

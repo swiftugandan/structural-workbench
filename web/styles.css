@@ -3138,6 +3138,18 @@ body.design-workspace {
   color: #172d44;
   font-size: 12px;
 }
+.design-subsection {
+  margin: 10px 0 0;
+  padding: 8px 0 0;
+  border: 0;
+  border-top: 1px dashed #e0e7ee;
+}
+.design-subsection legend {
+  padding: 0;
+  color: #172d44;
+  font-size: 11px;
+  font-weight: 600;
+}
 #concrete-inspector .design-field,
 #steel-design-inspector .design-field {
   display: grid;

@@ -2,7 +2,7 @@
   "fixtureVersion": 1,
   "formulation": "docs/formulations/rc-section.md",
   "oracle": "tools/oracles/rc_section_oracle.py",
-  "oracleSha256": "0e9f30aff510683c3c55214020395bc19ae153e75bf7f0d898972f01b8c1ea27",
+  "oracleSha256": "486776f382c53850540d5472218b469b8bc993fb02555d89fab8946bb33c2b66",
   "python": "3.14.6",
   "units": "SI (N, m, Pa); compression positive; depths from compression face",
   "tolerance": {
@@ -277,6 +277,69 @@
             48386683.339894556,
             -124699445.86135618
           ]
+        }
+      }
+    },
+    {
+      "id": "RC-PREVIEW-DEFAULT",
+      "note": "Default rcBeam preview draft: 300x600, cover 35 to link, link 10, 4 x 20 bars each face; synthetic mechanics defaults",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.05500000000000001,
+          "area": 0.0012566370614359175
+        },
+        {
+          "depth": 0.5449999999999999,
+          "area": 0.0012566370614359175
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.08069263989798448,
+          "moment": 292229.5996717784,
+          "concreteForce": 363116.8795409303,
+          "curvature": 0.03717811195411062,
+          "classification": "tensionYielded",
+          "depthRatio": 0.14805988972107245,
+          "layers": [
+            {
+              "strain": 0.0009552038425239158,
+              "steelStress": 191040768.50478315,
+              "force": 214936.16871959172
+            },
+            {
+              "strain": -0.017262071014990284,
+              "steelStress": -460000000.0,
+              "force": -578053.0482605221
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.19424188669627374,
+          "uncrackedCentroid": 0.3,
+          "uncrackedInertia": 0.006254869248943829,
+          "crackingMoment": 58378.77965680907,
+          "crackedNeutralAxis": 0.13733161566715438,
+          "crackedInertia": 0.0016995758369982416
         }
       }
     },

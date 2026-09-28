@@ -578,23 +578,25 @@ mod tests {
                 let e: ElasticInputs = parse(&c["elastic"]);
                 let r = elastic(&s, &layers, &steel, &e).unwrap();
                 for (what, got) in [
-                    ("modularRatio", r.modular_ratio),
-                    ("uncrackedArea", r.uncracked_area),
-                    ("uncrackedCentroid", r.uncracked_centroid),
-                    ("uncrackedInertia", r.uncracked_inertia),
-                    ("crackingMoment", r.cracking_moment.unwrap()),
-                    ("crackedNeutralAxis", r.cracked_neutral_axis),
-                    ("crackedInertia", r.cracked_inertia),
-                    ("serviceConcreteStress", r.service_concrete_stress.unwrap()),
+                    ("modularRatio", Some(r.modular_ratio)),
+                    ("uncrackedArea", Some(r.uncracked_area)),
+                    ("uncrackedCentroid", Some(r.uncracked_centroid)),
+                    ("uncrackedInertia", Some(r.uncracked_inertia)),
+                    ("crackingMoment", r.cracking_moment),
+                    ("crackedNeutralAxis", Some(r.cracked_neutral_axis)),
+                    ("crackedInertia", Some(r.cracked_inertia)),
+                    ("serviceConcreteStress", r.service_concrete_stress),
                 ] {
-                    close(id, what, got, we[what].as_f64().unwrap(), rel);
+                    // Optional outputs must be present exactly when the oracle produced them.
+                    assert_eq!(got.is_some(), we.get(what).is_some(), "{id} {what} presence");
+                    if let Some(got) = got {
+                        close(id, what, got, we[what].as_f64().unwrap(), rel);
+                    }
                 }
-                for (got, want) in r
-                    .service_steel_stress
-                    .unwrap()
-                    .iter()
-                    .zip(we["serviceSteelStress"].as_array().unwrap())
-                {
+                let steel_stresses = r.service_steel_stress.unwrap_or_default();
+                let want_stresses = we["serviceSteelStress"].as_array().cloned().unwrap_or_default();
+                assert_eq!(steel_stresses.len(), want_stresses.len(), "{id} service steel stresses");
+                for (got, want) in steel_stresses.iter().zip(&want_stresses) {
                     close(id, "serviceSteelStress", *got, want.as_f64().unwrap(), rel);
                 }
             }
