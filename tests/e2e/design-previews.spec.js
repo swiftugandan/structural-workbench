@@ -152,8 +152,14 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   await expect(page.locator("#preview-mech-law")).toHaveValue(
     "rectangularBlock",
   );
+  // Values are read only once the run has replaced the stale one. The run is
+  // a Worker round trip bounded by the 30 s transport timeout, not the 5 s
+  // display budget; under batch load it has exceeded 5 s.
   const runAndOpen = async () => {
     await page.locator("#preview-run").click();
+    await expect(page.locator("[data-testid=preview-stale]")).toHaveCount(0, {
+      timeout: 30000,
+    });
     await page.locator('[data-preview-pane="mechanics"]').click();
   };
   await runAndOpen();
@@ -169,6 +175,8 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   await page.locator("#preview-topBarDiameter").fill("16");
   await page.locator("#preview-bottomBarDiameter").fill("25");
   await page.locator("#preview-save").click();
+  // The previous run's capacities stay visible but are labelled stale.
+  await expect(page.locator("[data-testid=preview-stale]")).toBeVisible();
   await runAndOpen();
   await expect(
     page.locator("[data-testid=mechanics-moment-sagging]"),

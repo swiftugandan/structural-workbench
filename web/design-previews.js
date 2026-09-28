@@ -182,7 +182,7 @@ export function concreteWorkspace({
       ["schedule", "Schedule"],
       ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
     ];
-    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div><div class="design-pane">${previewPane({ run, state, d, pane, checkIndex, sketch: illustration(d, face) })}</div></section>`;
+    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${previewPane({ run, state, d, pane, checkIndex, sketch: illustration(d, face) })}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
       b.onclick = () => {
         pane = b.dataset.previewPane;
