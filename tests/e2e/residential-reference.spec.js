@@ -1,11 +1,14 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
+// Full reference model: assertions use the documented full-model budget.
+import { expect, FULL_MODEL_TEST_TIMEOUT_MS } from "../full-model-helpers.js";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
-const dir = process.env.WORKBENCH_EVIDENCE_DIR || "evidence/residential-reference";
+const dir =
+  process.env.WORKBENCH_EVIDENCE_DIR || "evidence/residential-reference";
 test("UK residential reference: actual WASM analysis, hierarchy, model-sourced footing review and stale edits", async ({
   page,
 }) => {
-  test.setTimeout(120000);
+  test.setTimeout(FULL_MODEL_TEST_TIMEOUT_MS);
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
@@ -30,9 +33,7 @@ test("UK residential reference: actual WASM analysis, hierarchy, model-sourced f
   ).toContainText("Slab");
   await page.locator("#result-case").selectOption("SLS");
   await page.locator("#analyse").click();
-  await expect(page.locator("#result-status")).toHaveText("✓ Current", {
-    timeout: 60000,
-  });
+  await expect(page.locator("#result-status")).toHaveText("✓ Current");
   await mkdir(dir, { recursive: true });
   await page.screenshot({ path: `${dir}/reference-sls.png` });
   const d = page.waitForEvent("download");

@@ -1,8 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
+// Full reference model: assertions use the documented full-model budget.
+import { expect, FULL_MODEL_TEST_TIMEOUT_MS } from "../full-model-helpers.js";
 
 test("One selection identity follows a bound footing, its support and physical members", async ({
   page,
 }) => {
+  test.setTimeout(FULL_MODEL_TEST_TIMEOUT_MS);
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
