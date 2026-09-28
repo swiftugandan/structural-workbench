@@ -1,0 +1,107 @@
+{
+  "fixtureVersion": 1,
+  "source": {
+    "resourceId": "R-EC2-JRC-EXAMPLES",
+    "sha256": "06f6106355fb737bee2cb98870d2f3b7d80c3cded5b37400c8eb81dfbbbe954a",
+    "document": "JRC89037 (2014), Eurocode 2 worked examples, chapter 3 (Walraven, Gmainer), section 3.2.1 Slab on beams, beam axis 2",
+    "pages": "printed 53-60 (PDF 65-72)"
+  },
+  "codeBasis": {
+    "standard": "R-EC2-EN-1992-1-1-2004 (EN 1992-1-1:2004 incl. AC:2008/AC:2010)",
+    "ndpSet": "EU recommended values as used by the example (not the UK National Annex)",
+    "note": "Published values only. Transcribed from the example's own numbers; no prose reproduced."
+  },
+  "units": "N, mm, MPa, kN, kN m as labelled per field",
+  "materials": {
+    "fck_MPa": 25,
+    "fyk_MPa": 500,
+    "gammaC": 1.5,
+    "gammaS": 1.15,
+    "alphaCC": 1.0,
+    "fyd_MPa_published": 435,
+    "cnom_mm": 30,
+    "stressBlock": { "lambda": 0.8, "eta": 1.0 }
+  },
+  "section": {
+    "bw_mm": 250,
+    "h_mm": 400,
+    "hf_mm": 180,
+    "d_mm": 372,
+    "beffMidspan_mm": 2611.2,
+    "beffSupport_mm": 1827.6
+  },
+  "cases": [
+    {
+      "id": "JRC-A2-FLEX-MIDSPAN",
+      "clauses": ["3.1.6(1)P", "3.1.7(3)", "6.1(2)P"],
+      "page": "printed 58",
+      "description": "Span AB, sagging; flange in compression, compression width beff = 2611.2 mm",
+      "inputs": { "MEd_kNm": 89.3, "b_mm": 2611.2, "d_mm": 372 },
+      "published": {
+        "K": { "value": 0.0148, "decimals": 4 },
+        "zOverD": { "value": 0.9925, "decimals": 4 },
+        "AsReq_mm2": { "value": 556, "decimals": 0 }
+      },
+      "provided": { "description": "5 bars 12 mm (565 mm2), also used as rho_l at support A", "As_mm2_published": 565 }
+    },
+    {
+      "id": "JRC-A2-FLEX-SUPPORT-B",
+      "clauses": ["3.1.6(1)P", "3.1.7(3)", "6.1(2)P"],
+      "page": "printed 58",
+      "description": "Intermediate support B, hogging at the support face; web (bw = 250 mm) in compression",
+      "inputs": { "MEd_kNm": 132.9, "b_mm": 250, "d_mm": 372 },
+      "published": {
+        "K": { "value": 0.230, "decimals": 3 },
+        "zOverD": { "value": 0.867, "decimals": 3 },
+        "AsReq_mm2": { "value": 947, "decimals": 0 }
+      }
+    },
+    {
+      "id": "JRC-A2-SHEAR-SUPPORT-A",
+      "clauses": ["6.2.1(8)", "6.2.2(1)", "6.2.3(2)", "6.2.3(3)", "9.2.2(5)", "9.2.2(6)"],
+      "page": "printed 59-60",
+      "description": "End support A; shear taken at d from the support; vertical links; cot(theta) = 2.5; z = 0.9 d",
+      "inputs": {
+        "VEdSupport_kN": 129.9,
+        "zeroShearDistance_m": 3.36,
+        "AslProv_mm2": 565,
+        "cotTheta": 2.5,
+        "zOverD": 0.9,
+        "linkDiameter_mm": 6,
+        "linkLegs": 2,
+        "linkSpacing_mm": 175,
+        "alpha_deg": 90
+      },
+      "published": {
+        "VEdRed_kN": { "value": 115.52, "decimals": 2 },
+        "CRdc": { "value": 0.12, "decimals": 2 },
+        "k": { "value": 1.73, "decimals": 2 },
+        "rhoL": { "value": 0.0061, "decimals": 4 },
+        "VRdc_kN": { "value": 47.90, "decimals": 2 },
+        "aswReq_mm2PerM": { "value": 317, "decimals": 0 },
+        "aswProv_mm2PerM": { "value": 339, "decimals": 0 },
+        "aswMin_mm2PerM": { "value": 200, "decimals": 0 },
+        "slMax_mm": { "value": 279, "decimals": 0 },
+        "nu": { "value": 0.54, "decimals": 2 },
+        "VRdMax_kN": { "value": 259.8, "decimals": 1 }
+      },
+      "knownPublicationDiscrepancies": [
+        {
+          "field": "aswProv_mm2PerM",
+          "published": 339,
+          "note": "Two legs of 6 mm at 175 mm give 2 x pi x 6^2/4 / 0.175 = 323.1 mm2/m, not 339. The published conclusion (provided >= required 317) still holds. The oracle reports the recomputed value and flags this field instead of matching it."
+        },
+        {
+          "field": "aswMin_mm2PerM",
+          "published": 200,
+          "note": "The intermediate is printed as 0.002 m2; 0.08 x sqrt(25)/500 x 0.25 m = 0.0002 m2/m. The final 200 mm2/m is consistent; only the intermediate is a typo."
+        },
+        {
+          "field": "slMax_mm",
+          "published": 279,
+          "note": "The example cites 9.3.2(4); the beam rule is 9.2.2(6) (same expression). Value unaffected."
+        }
+      ]
+    }
+  ]
+}

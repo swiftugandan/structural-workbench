@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M08",
-  "activeTask": "M08-B1",
+  "activeTask": "M08-B2",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -3307,14 +3307,44 @@
       "dependencies": [
         "M08-A1"
       ],
-      "status": "READY",
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
       "resources": [
         "R-EC2-EN-1992-1-1-2004",
         "R-EC2-UK-NA-2009",
         "R-EC2-JRC-EXAMPLES"
       ],
       "constraints": "Clause text read from the locked PDF only, never from memory; every clause and NDP records edition/amendment state; any clause that A1:2014 or NA+A2:2014 may change is flagged unreconciled; profile stays disabled (no PASS) until M08-B",
-      "nextAction": "Read EN 1992-1-1 sections 3.1 (concrete), 3.2 (reinforcing steel), 6.1 (bending) and 6.2 (shear) and the UK NA NDPs for them; write docs/code-profiles/ec2-uk dossier with clause references; extract matching JRC beam examples as independent fixtures"
+      "nextAction": "M08-B2: implement the disabled ec2-uk-na profile for rectangular beams (materials, flexure M_Rd via rc_section, As,min/As,max, shear VRd,c/VRd,s/VRd,max, link limits) behind the dossier, fixture-tested against the oracle and JRC values; overall stays unsupported until anchorage/SLS/cover and A1/A2 reconciliation",
+      "ownedPaths": [
+        "docs/code-profiles/ec2-uk-na/README.md",
+        "docs/code-profiles/ec2-uk-na/dossier-beam.md",
+        "fixtures/design/ec2-uk-na/jrc-axis2-beam.published.json",
+        "fixtures/design/ec2-uk-na/jrc-axis2-beam.reconciliation.json",
+        "tools/oracles/ec2_beam_oracle.py",
+        "crates/design/tests/ec2_jrc_kernel.rs"
+      ],
+      "requiredCommands": [
+        "python3 tools/oracles/ec2_beam_oracle.py",
+        "cargo test -p workbench-design --test ec2_jrc_kernel",
+        "cargo test --workspace"
+      ],
+      "actualOutcomes": [
+        "clauses read from the locked PDFs by page render (text layer is OCR and unreliable): 2.4.2.4, Table 3.1, 3.1.6, 3.1.7, 3.2.7, 6.1, 6.2.1-6.2.3, 9.2.1.1, 9.2.1.2, 9.2.2; UK Table NA.1 rows for the same",
+        "oracle: 18 of 18 JRC beam-axis-2 published figures agree within published rounding; 1 publication error confirmed (provided links 339 published vs 323.1 mm2/m)",
+        "oracle mutations: alpha_cc, k cap, nu, VRd,max strut term, VRd,c exponent each fail",
+        "kernel: rc_section with EC2 block reproduces JRC M_Ed 89.3 and 132.9 kN m at the published A_s with yielding steel; midspan block within the flange",
+        "cargo test --workspace: 108 passed"
+      ],
+      "fixtureSha256": {
+        "published": "1d2cc28432b849fc8ccaa52524cd795f7679d35edf45a69b763f5468f7f6192d",
+        "reconciliation": "455e8e8f9aceb4a4875a61eae41d5bb4cd2b7e27781130246cd2fd003c1fb397"
+      },
+      "openQuestions": [
+        "A1:2014 / NA+A2:2014 changes to these clauses unknown (texts not held)",
+        "UK NA 6.2.3(3) VRd,max <= 200 bw^2 cap has no stated units",
+        "alpha_cc for shear under UK NA (1.0 vs conservative 0.85) needs an ADR",
+        "UK Cmax shear note for classes above C50/60"
+      ]
     }
   },
   "blockers": [
@@ -3366,7 +3396,7 @@
   ],
   "lastVerifiedSourceRevision": "90067de",
   "lastVerifiedBuildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
-  "nextAction": "M08-B1: EC2 beam clause dossier (flexure, shear, reinforcement limits) from locked EN 1992-1-1:2004+AC2008/AC2010 with UK NA 2009 NDPs and JRC examples; profile remains disabled until A1:2014 and NA+A2:2014 are reconciled (M08-B).",
+  "nextAction": "M08-B2: disabled ec2-uk-na beam profile (flexure, reinforcement limits, shear) implemented from dossier-beam.md and tested against the JRC fixture and oracle; decide alpha_cc-for-shear in an ADR first. Enablement still blocked on A1:2014 and NA+A2:2014.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
   "lastVerifiedScope": "Fresh same-build native/contracts/security/numerical/WASM/oracle and complete 112-test real-GPU browser corpus; no stale release evidence. Preview scope only."

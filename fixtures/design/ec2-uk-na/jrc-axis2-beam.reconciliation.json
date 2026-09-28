@@ -1,0 +1,245 @@
+{
+  "fixtureVersion": 1,
+  "published": "fixtures/design/ec2-uk-na/jrc-axis2-beam.published.json",
+  "publishedSha256": "1d2cc28432b849fc8ccaa52524cd795f7679d35edf45a69b763f5468f7f6192d",
+  "oracle": "tools/oracles/ec2_beam_oracle.py",
+  "oracleSha256": "8243ac7936120c0ed8d17276df40e157b809923fe70ea6b610f11934096c31b7",
+  "python": "3.14.6",
+  "dossier": "docs/code-profiles/ec2-uk-na/dossier-beam.md",
+  "tolerancePolicy": "max(0.5% relative, half a unit in the last published decimal)",
+  "checks": [
+    {
+      "case": "JRC-A2-FLEX-MIDSPAN",
+      "field": "K",
+      "published": 0.0148,
+      "oracle": 0.014827799074017397,
+      "tolerance": 7.400000000000001e-05,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-FLEX-MIDSPAN",
+      "field": "zOverD",
+      "published": 0.9925,
+      "oracle": 0.9925303041062461,
+      "tolerance": 0.004962500000000001,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-FLEX-MIDSPAN",
+      "field": "AsReq_mm2",
+      "published": 556,
+      "oracle": 556.0008896099978,
+      "tolerance": 2.7800000000000002,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-FLEX-MIDSPAN",
+      "field": "MRdAtPublishedAs_kNm",
+      "published": 89.3,
+      "oracle": 89.29985819393382,
+      "tolerance": 0.4465,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-FLEX-SUPPORT-B",
+      "field": "K",
+      "published": 0.23,
+      "oracle": 0.23048907388137357,
+      "tolerance": 0.00115,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-FLEX-SUPPORT-B",
+      "field": "zOverD",
+      "published": 0.867,
+      "oracle": 0.8670905379593885,
+      "tolerance": 0.004335,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-FLEX-SUPPORT-B",
+      "field": "AsReq_mm2",
+      "published": 947,
+      "oracle": 947.1708789101051,
+      "tolerance": 4.735,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-FLEX-SUPPORT-B",
+      "field": "MRdAtPublishedAs_kNm",
+      "published": 132.9,
+      "oracle": 132.879698037,
+      "tolerance": 0.6645000000000001,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "VEdRed_kN",
+      "published": 115.52,
+      "oracle": 115.5182142857143,
+      "tolerance": 0.5776,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "CRdc",
+      "published": 0.12,
+      "oracle": 0.12,
+      "tolerance": 0.005,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "k",
+      "published": 1.73,
+      "oracle": 1.7332355751067663,
+      "tolerance": 0.00865,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "rhoL",
+      "published": 0.0061,
+      "oracle": 0.006075268817204301,
+      "tolerance": 5e-05,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "VRdc_kN",
+      "published": 47.9,
+      "oracle": 47.90236530502512,
+      "tolerance": 0.2395,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "aswReq_mm2PerM",
+      "published": 317,
+      "oracle": 317.2749262849374,
+      "tolerance": 1.585,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "aswProv_mm2PerM",
+      "published": 339,
+      "oracle": 323.13524436923586,
+      "tolerance": 1.695,
+      "status": "publishedDiscrepancyConfirmed"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "aswMin_mm2PerM",
+      "published": 200,
+      "oracle": 200.0,
+      "tolerance": 1.0,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "slMax_mm",
+      "published": 279,
+      "oracle": 279.0,
+      "tolerance": 1.395,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "nu",
+      "published": 0.54,
+      "oracle": 0.54,
+      "tolerance": 0.005,
+      "status": "agrees"
+    },
+    {
+      "case": "JRC-A2-SHEAR-SUPPORT-A",
+      "field": "VRdMax_kN",
+      "published": 259.8,
+      "oracle": 259.7586206896552,
+      "tolerance": 1.2990000000000002,
+      "status": "agrees"
+    }
+  ],
+  "derived": {
+    "JRC-A2-FLEX-MIDSPAN": {
+      "MRdAtPublishedAs_kNm": 89.29985819393382,
+      "xOverD": 0.018674209855313092,
+      "blockDepth_mm": 5.557444852941176
+    },
+    "JRC-A2-FLEX-SUPPORT-B": {
+      "MRdAtPublishedAs_kNm": 132.879698037,
+      "xOverD": 0.3322137096774193,
+      "blockDepth_mm": 98.8668
+    },
+    "JRC-A2-SHEAR-SUPPORT-A": {
+      "VEdRed_kN": 115.5182142857143,
+      "CRdc": 0.12,
+      "k": 1.7332355751067663,
+      "rhoL": 0.006075268817204301,
+      "vmin_MPa": 0.39932310591632075,
+      "VRdc_expr62a_kN": 47.90236530502512,
+      "VRdc_kN": 47.90236530502512,
+      "aswReq_mm2PerM": 317.2749262849374,
+      "aswProv_mm2PerM": 323.13524436923586,
+      "aswMin_mm2PerM": 200.0,
+      "slMax_mm": 279.0,
+      "nu": 0.54,
+      "VRdMax_kN": 259.7586206896552
+    }
+  },
+  "applicability": {
+    "midspanBlockWithinFlange": true,
+    "midspanBlockDepth_mm": 5.557444852941176,
+    "hf_mm": 180
+  },
+  "ukNa2009Variant": {
+    "independence": "oracle-only (no independent publication)",
+    "ndp": {
+      "gammaC": 1.5,
+      "gammaS": 1.15,
+      "alphaCC_flexure": 0.85,
+      "alphaCC_other": 1.0,
+      "CRdc_num": 0.18,
+      "k1": 0.15,
+      "cotThetaMax": 2.5,
+      "cotThetaMin": 1.0
+    },
+    "values": {
+      "JRC-A2-FLEX-MIDSPAN": {
+        "fcd_MPa": 14.166666666666666,
+        "fyd_MPa": 434.7826086956522,
+        "K": 0.017444469498844,
+        "zOverD": 0.9912003310774311,
+        "AsReq_mm2": 557.0252940834091,
+        "MRdAtJrcAs_kNm": 89.13708564177367,
+        "xOverD": 0.0219586793136527
+      },
+      "JRC-A2-FLEX-SUPPORT-B": {
+        "fcd_MPa": 14.166666666666666,
+        "fyd_MPa": 434.7826086956522,
+        "K": 0.2711636163310277,
+        "zOverD": 0.8382575820798199,
+        "AsReq_mm2": 980.2399238052511,
+        "MRdAtJrcAs_kNm": 129.2334348938063,
+        "xOverD": 0.3906443362758848
+      },
+      "JRC-A2-SHEAR-SUPPORT-A": {
+        "VEdRed_kN": 115.5182142857143,
+        "CRdc": 0.12,
+        "k": 1.7332355751067663,
+        "rhoL": 0.006075268817204301,
+        "vmin_MPa": 0.39932310591632075,
+        "VRdc_expr62a_kN": 47.90236530502512,
+        "VRdc_kN": 47.90236530502512,
+        "aswReq_mm2PerM": 317.4335637480799,
+        "aswProv_mm2PerM": 323.13524436923586,
+        "aswMin_mm2PerM": 200.0,
+        "slMax_mm": 279.0,
+        "nu": 0.54,
+        "VRdMax_kN": 259.7586206896552
+      }
+    }
+  },
+  "failures": []
+}
