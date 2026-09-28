@@ -89,12 +89,16 @@ export function sceneGeometry(
       tr,
     );
     if (mode !== "concrete") {
-      for (let i = 0; i < v.barCount; i++)
-        for (const z of [-v.depth / 2 + v.cover, v.depth / 2 - v.cover]) {
+      for (const [z, n] of [
+        [-v.depth / 2 + v.cover, v.bottomBarCount],
+        [v.depth / 2 - v.cover, v.topBarCount],
+      ])
+        for (let i = 0; i < n; i++) {
           const y =
             -v.width / 2 +
             v.cover +
-            ((v.width - 2 * v.cover) * i) / Math.max(1, v.barCount - 1);
+            ((v.width - 2 * v.cover) * (n === 1 ? 0.5 : i)) /
+              Math.max(1, n - 1);
           bar(
             tr([v.cover, y, z]),
             tr([length - v.cover, y, z]),

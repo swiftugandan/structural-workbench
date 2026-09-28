@@ -2,7 +2,7 @@
   "fixtureVersion": 1,
   "formulation": "docs/formulations/rc-section.md",
   "oracle": "tools/oracles/rc_section_oracle.py",
-  "oracleSha256": "486776f382c53850540d5472218b469b8bc993fb02555d89fab8946bb33c2b66",
+  "oracleSha256": "51996510593ec1765fac8b240c677c613b134a7b773b3a6125d89b1290816b6e",
   "python": "3.14.6",
   "units": "SI (N, m, Pa); compression positive; depths from compression face",
   "tolerance": {
@@ -51,7 +51,8 @@
             {
               "strain": -0.014126455832714836,
               "steelStress": -460000000.0,
-              "force": -433539.7861953915
+              "force": -433539.7861953915,
+              "yielded": true
             }
           ]
         },
@@ -105,7 +106,8 @@
             {
               "strain": -0.0023053053053053063,
               "steelStress": -460000000.0,
-              "force": -1399542.4528301887
+              "force": -1399542.4528301887,
+              "yielded": true
             }
           ]
         }
@@ -146,7 +148,8 @@
             {
               "strain": -0.0022983973170038687,
               "steelStress": -459679463.4007737,
-              "force": -1401367.1598714092
+              "force": -1401367.1598714092,
+              "yielded": false
             }
           ]
         }
@@ -192,7 +195,8 @@
             {
               "strain": -0.001331985842271599,
               "steelStress": -266397168.4543198,
-              "force": -1713994.5212993817
+              "force": -1713994.5212993817,
+              "yielded": false
             }
           ]
         },
@@ -255,12 +259,14 @@
             {
               "strain": 0.0021764021524579794,
               "steelStress": 435280430.49159586,
-              "force": 391392.58488360135
+              "force": 391392.58488360135,
+              "yielded": false
             },
             {
               "strain": -0.007066195914402475,
               "steelStress": -460000000.0,
-              "force": -1129009.8598838318
+              "force": -1129009.8598838318,
+              "yielded": true
             }
           ]
         },
@@ -323,12 +329,14 @@
             {
               "strain": 0.0009552038425239158,
               "steelStress": 191040768.50478315,
-              "force": 214936.16871959172
+              "force": 214936.16871959172,
+              "yielded": false
             },
             {
               "strain": -0.017262071014990284,
               "steelStress": -460000000.0,
-              "force": -578053.0482605221
+              "force": -578053.0482605221,
+              "yielded": true
             }
           ]
         },
@@ -340,6 +348,136 @@
           "crackingMoment": 58378.77965680907,
           "crackedNeutralAxis": 0.13733161566715438,
           "crackedInertia": 0.0016995758369982416
+        }
+      }
+    },
+    {
+      "id": "RC-PREVIEW-ASYM-SAGGING",
+      "note": "Preview draft with top 2x16, bottom 4x25; top face in compression",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.053000000000000005,
+          "area": 0.00040212385965949355
+        },
+        {
+          "depth": 0.5425,
+          "area": 0.001963495408493621
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.1660018966748955,
+          "moment": 435209.9008692903,
+          "concreteForce": 747008.5350370299,
+          "curvature": 0.018072082669484887,
+          "classification": "tensionYielded",
+          "depthRatio": 0.30599427958506087,
+          "layers": [
+            {
+              "strain": 0.0020421796185173006,
+              "steelStress": 408435923.7034601,
+              "force": 156199.35287003592,
+              "yielded": false
+            },
+            {
+              "strain": -0.00680410484819555,
+              "steelStress": -460000000.0,
+              "force": -903207.8879070656,
+              "yielded": true
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.19340517585286765,
+          "uncrackedCentroid": 0.3110407106162075,
+          "uncrackedInertia": 0.006169751966060333,
+          "crackingMoment": 59784.56529917634,
+          "crackedNeutralAxis": 0.1740966334387573,
+          "crackedInertia": 0.0023376806388544983
+        }
+      }
+    },
+    {
+      "id": "RC-PREVIEW-ASYM-HOGGING",
+      "note": "Same draft; bottom face in compression, so the 2x16 top row is in tension",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.05750000000000001,
+          "area": 0.001963495408493621
+        },
+        {
+          "depth": 0.5469999999999999,
+          "area": 0.00040212385965949355
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.05466802470059291,
+          "moment": 99648.33031043498,
+          "concreteForce": 246006.11115266837,
+          "curvature": 0.05487668552925533,
+          "classification": "tensionYielded",
+          "depthRatio": 0.09994154424240022,
+          "layers": [
+            {
+              "strain": -0.00015540941793218166,
+              "steelStress": -31081883.58643633,
+              "force": -61029.13570930097,
+              "yielded": false
+            },
+            {
+              "strain": -0.027017546984502663,
+              "steelStress": -460000000.0,
+              "force": -184976.97544336703,
+              "yielded": true
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.19340517585286765,
+          "uncrackedCentroid": 0.2889592893837924,
+          "uncrackedInertia": 0.006169751966060333,
+          "crackingMoment": 55540.33576744522,
+          "crackedNeutralAxis": 0.08109555341287246,
+          "crackedInertia": 0.0006414457395995797
         }
       }
     },
@@ -388,12 +526,14 @@
             {
               "strain": 0.0021893621405959292,
               "steelStress": 437872428.11918586,
-              "force": 167232.2259212523
+              "force": 167232.2259212523,
+              "yielded": false
             },
             {
               "strain": -0.00991701645344478,
               "steelStress": -460000000.0,
-              "force": -903207.8879070656
+              "force": -903207.8879070656,
+              "yielded": true
             }
           ]
         },
@@ -462,17 +602,20 @@
             {
               "strain": 0.0018226262589751407,
               "steelStress": 364525251.79502815,
-              "force": 74552.7764311407
+              "force": 74552.7764311407,
+              "yielded": false
             },
             {
               "strain": -0.008143080845504807,
               "steelStress": -500000000.0,
-              "force": -314159.26535897935
+              "force": -314159.26535897935,
+              "yielded": true
             },
             {
               "strain": -0.009220454586529668,
               "steelStress": -500000000.0,
-              "force": -471238.898038469
+              "force": -471238.898038469,
+              "yielded": true
             }
           ]
         },

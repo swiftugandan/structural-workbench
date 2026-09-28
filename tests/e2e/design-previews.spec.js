@@ -125,14 +125,18 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     expect(errors).toEqual([]);
   });
 
-test("RC beam section mechanics: oracle value, law switch, provenance, fit failure and reopen", async ({
+test("RC beam section mechanics: per-face oracle values, law switch, provenance, fit failure and reopen", async ({
   page,
 }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  const oracle = JSON.parse(
+  const cases = JSON.parse(
     await readFile("fixtures/design/rc-section-mechanics/cases.json", "utf8"),
-  ).cases.find((c) => c.id === "RC-PREVIEW-DEFAULT").expected.ultimate;
+  ).cases;
+  const kNm = (id) =>
+    `${new Intl.NumberFormat("en-GB", { maximumFractionDigits: 2 }).format(
+      cases.find((c) => c.id === id).expected.ultimate.moment / 1000,
+    )} kN·m`;
   const model = JSON.parse(await readFile("fixtures/models/B04.json", "utf8"));
   model.id = "preview-mechanics";
   await page.goto("/");
@@ -155,12 +159,23 @@ test("RC beam section mechanics: oracle value, law switch, provenance, fit failu
   await runAndOpen();
   const pane = page.locator("[data-testid=preview-result]");
   await expect(pane).toContainText("MECHANICS ONLY");
-  const expected = new Intl.NumberFormat("en-GB", {
-    maximumFractionDigits: 2,
-  }).format(oracle.moment / 1000);
-  await expect(page.locator("[data-testid=mechanics-moment]")).toHaveText(
-    `${expected} kN·m`,
-  );
+  // Equal default rows: sagging and hogging both equal the oracle default.
+  for (const face of ["sagging", "hogging"])
+    await expect(
+      page.locator(`[data-testid=mechanics-moment-${face}]`),
+    ).toHaveText(kNm("RC-PREVIEW-DEFAULT"));
+  // Unequal rows: each face matches its own oracle case.
+  await page.locator("#preview-topBarCount").fill("2");
+  await page.locator("#preview-topBarDiameter").fill("16");
+  await page.locator("#preview-bottomBarDiameter").fill("25");
+  await page.locator("#preview-save").click();
+  await runAndOpen();
+  await expect(
+    page.locator("[data-testid=mechanics-moment-sagging]"),
+  ).toHaveText(kNm("RC-PREVIEW-ASYM-SAGGING"));
+  await expect(
+    page.locator("[data-testid=mechanics-moment-hogging]"),
+  ).toHaveText(kNm("RC-PREVIEW-ASYM-HOGGING"));
   await page.locator('[data-preview-pane="summary"]').click();
   await expect(page.locator("[data-testid=preview-state]")).toHaveText(
     "UNSUPPORTED",
@@ -187,10 +202,15 @@ test("RC beam section mechanics: oracle value, law switch, provenance, fit failu
   await runAndOpen();
   await expect(pane).toContainText("parabola-rectangle");
 
-  await page.locator("#preview-barCount").fill("12");
+  await page.locator("#preview-bottomBarCount").fill("12");
   await page.locator("#preview-save").click();
   await runAndOpen();
-  await expect(page.locator("[data-testid=mechanics-fit]")).toHaveText("No");
+  await expect(page.locator("[data-testid=mechanics-fit-bottom]")).toHaveText(
+    "No",
+  );
+  await expect(page.locator("[data-testid=mechanics-fit-top]")).toHaveText(
+    "Yes",
+  );
   await expect(page.locator("[data-testid=mechanics-status]")).toContainText(
     "Row does not fit",
   );
@@ -199,6 +219,9 @@ test("RC beam section mechanics: oracle value, law switch, provenance, fit failu
   const p = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
+  expect(saved.schemaVersion).toBe("1.2.0");
+  expect(saved.designPreviews[0].inputs.topBarCount).toBe(2);
+  expect(saved.designPreviews[0].inputs.bottomBarDiameter).toBe(0.025);
   expect(saved.designPreviews[0].mechanics.law).toBe("parabolaRectangle");
   expect(saved.designPreviews[0].mechanics.inputs.parabolaPeak).toBe(25e6);
   await page.locator("#import-file").setInputFiles({

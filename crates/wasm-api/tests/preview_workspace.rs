@@ -171,7 +171,7 @@ fn rc_run(k: &mut Kernel, id: &Value, model_hash: &Value) -> Value {
 }
 fn rc_set(k: &mut Kernel, draft: &Value, mechanics: Value, bar_count: &str) -> Value {
     let mut inputs = draft["inputs"].clone();
-    inputs["barCount"] = json!(bar_count);
+    inputs["bottomBarCount"] = json!(bar_count);
     cmd(
         k,
         "SetDesignPreview",
@@ -197,20 +197,21 @@ fn rc_beam_section_mechanics_match_oracle_and_never_change_status() {
     assert_eq!(sm["status"], "evaluated", "{sm}");
     assert_eq!(sm["basis"], "mechanics");
     assert!(sm["codeProfile"].is_null());
-    assert_eq!(sm["rowFit"]["fits"], true);
+    assert_eq!(sm["rowFits"]["top"]["fits"], true);
+    assert_eq!(sm["rowFits"]["bottom"]["fits"], true);
     let doc: Value = serde_json::from_str(RC_FIXTURE).unwrap();
     let want = doc["cases"].as_array().unwrap().iter().find(|c| c["id"] == "RC-PREVIEW-DEFAULT").unwrap();
     let rel = doc["tolerance"]["relative"].as_f64().unwrap();
     for (got, key, exp) in [
-        (&sm["ultimate"]["neutralAxisDepth"], "x", &want["expected"]["ultimate"]["neutralAxisDepth"]),
-        (&sm["ultimate"]["moment"], "Mu", &want["expected"]["ultimate"]["moment"]),
-        (&sm["elastic"]["crackedInertia"], "Icr", &want["expected"]["elastic"]["crackedInertia"]),
-        (&sm["elastic"]["crackingMoment"], "Mcr", &want["expected"]["elastic"]["crackingMoment"]),
+        (&sm["sagging"]["ultimate"]["neutralAxisDepth"], "x", &want["expected"]["ultimate"]["neutralAxisDepth"]),
+        (&sm["sagging"]["ultimate"]["moment"], "Mu", &want["expected"]["ultimate"]["moment"]),
+        (&sm["sagging"]["elastic"]["crackedInertia"], "Icr", &want["expected"]["elastic"]["crackedInertia"]),
+        (&sm["sagging"]["elastic"]["crackingMoment"], "Mcr", &want["expected"]["elastic"]["crackingMoment"]),
     ] {
         let (g, e) = (got.as_f64().unwrap(), exp.as_f64().unwrap());
         assert!((g - e).abs() <= rel * e.abs(), "{key}: got {g:e} want {e:e}");
     }
-    assert_eq!(sm["ultimate"]["classification"], want["expected"]["ultimate"]["classification"]);
+    assert_eq!(sm["sagging"]["ultimate"]["classification"], want["expected"]["ultimate"]["classification"]);
 }
 
 #[test]
@@ -247,7 +248,8 @@ fn rc_beam_mechanics_edits_are_validated_atomic_and_provenance_tracked() {
     assert_eq!(crowded["status"], "ok", "{crowded}");
     let run = rc_run(&mut k, &d["id"], &crowded["modelHash"]);
     assert_eq!(run["sectionMechanics"]["status"], "rowDoesNotFit");
-    assert!(run["sectionMechanics"].get("ultimate").is_none());
+    assert!(run["sectionMechanics"].get("sagging").is_none());
+    assert!(run["sectionMechanics"]["reason"].as_str().unwrap().contains("bottom"));
     assert_eq!(run["overall"], "unsupported");
 }
 
@@ -277,4 +279,95 @@ fn mechanics_rejected_for_non_beam_previews() {
         json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","mechanics":block_mechanics("0.75")}),
     );
     assert_eq!(r["status"], "error", "{r}");
+}
+
+fn oracle_case(id: &str) -> (Value, f64) {
+    let doc: Value = serde_json::from_str(RC_FIXTURE).unwrap();
+    let case = doc["cases"].as_array().unwrap().iter().find(|c| c["id"] == id).unwrap().clone();
+    (case, doc["tolerance"]["relative"].as_f64().unwrap())
+}
+
+#[test]
+fn rc_beam_unequal_faces_give_distinct_sagging_and_hogging_matching_oracle() {
+    let mut k = open();
+    let c = create(&mut k, "rcBeam");
+    let draft = c["payload"]["project"]["designPreviews"][0].clone();
+    let mut inputs = draft["inputs"].clone();
+    inputs["topBarDiameter"] = json!("16 mm");
+    inputs["topBarCount"] = json!("2");
+    inputs["bottomBarDiameter"] = json!("25 mm");
+    inputs["bottomBarCount"] = json!("4");
+    let r = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":draft["id"],"inputs":inputs,"targetId":"m1","soilReference":"","mechanics":block_mechanics("0.75")}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let run = rc_run(&mut k, &draft["id"], &r["modelHash"]);
+    let sm = &run["sectionMechanics"];
+    assert_eq!(sm["status"], "evaluated", "{sm}");
+    for (face, id, compression) in [
+        ("sagging", "RC-PREVIEW-ASYM-SAGGING", "top"),
+        ("hogging", "RC-PREVIEW-ASYM-HOGGING", "bottom"),
+    ] {
+        let (case, rel) = oracle_case(id);
+        let got = &sm[face];
+        assert_eq!(got["compressionFace"], compression);
+        let want = &case["expected"]["ultimate"];
+        for key in ["neutralAxisDepth", "moment"] {
+            let (g, e) = (got["ultimate"][key].as_f64().unwrap(), want[key].as_f64().unwrap());
+            assert!((g - e).abs() <= rel * e.abs(), "{face} {key}: got {g:e} want {e:e}");
+        }
+        assert_eq!(got["ultimate"]["classification"], want["classification"], "{face}");
+        for (l, w) in got["layers"].as_array().unwrap().iter().zip(case["layers"].as_array().unwrap()) {
+            let (g, e) = (l["depth"].as_f64().unwrap(), w["depth"].as_f64().unwrap());
+            assert!((g - e).abs() <= 1e-15, "{face} layer depth {g} vs {e}");
+        }
+    }
+    let schedule = run["schedule"].as_array().unwrap();
+    assert_eq!(schedule.len(), 2);
+    assert_eq!(schedule[0]["region"], "Top");
+    assert_eq!(schedule[0]["quantity"], 2.0);
+    assert_eq!(schedule[1]["diameter"], 0.025);
+    assert_eq!(run["overall"], "unsupported");
+}
+
+#[test]
+fn schema_1_1_rc_beam_drafts_migrate_to_equal_top_and_bottom_rows() {
+    let mut k = open();
+    let c = create(&mut k, "rcBeam");
+    let mut legacy = c["payload"]["project"].clone();
+    legacy["schemaVersion"] = json!("1.1.0");
+    let d = &mut legacy["designPreviews"][0];
+    d.as_object_mut().unwrap().remove("mechanics");
+    for map in ["inputs", "inputSources"] {
+        let obj = d[map].as_object_mut().unwrap();
+        let (dia, count) = (obj["topBarDiameter"].clone(), obj["topBarCount"].clone());
+        for key in ["topBarDiameter", "topBarCount", "bottomBarDiameter", "bottomBarCount"] {
+            obj.remove(key);
+        }
+        obj.insert("barDiameter".into(), dia);
+        obj.insert("barCount".into(), count);
+    }
+    legacy["designPreviews"][0]["inputs"]["barCount"] = json!(3.0);
+    legacy["designPreviews"][0]["inputSources"]["barCount"] = json!("user");
+    let mut reopened = Kernel::new();
+    let r = req(&mut reopened, "importProject", json!({"jsonUtf8":legacy.to_string()}));
+    assert_eq!(r["status"], "ok", "{r}");
+    let migrated = &r["payload"]["project"];
+    assert_eq!(migrated["schemaVersion"], "1.2.0");
+    let m = &migrated["designPreviews"][0];
+    for face in ["top", "bottom"] {
+        assert_eq!(m["inputs"][format!("{face}BarCount")], 3.0);
+        assert_eq!(m["inputs"][format!("{face}BarDiameter")], 0.02);
+        assert_eq!(m["inputSources"][format!("{face}BarCount")], "user");
+    }
+    assert!(m["inputs"].get("barCount").is_none());
+    let steps = r["payload"]["migrationReport"]["steps"].to_string();
+    assert!(steps.contains("equal top and bottom rows"), "{}", r["payload"]["migrationReport"]);
+
+    // A 1.1.0 RC beam missing its bar preference is refused, not guessed.
+    legacy["designPreviews"][0]["inputs"].as_object_mut().unwrap().remove("barDiameter");
+    let bad = req(&mut Kernel::new(), "importProject", json!({"jsonUtf8":legacy.to_string()}));
+    assert_eq!(bad["status"], "error", "{bad}");
 }

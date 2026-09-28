@@ -68,6 +68,8 @@ pub struct LayerState {
     pub steel_stress: f64,
     /// Net layer force (bar minus displaced concrete), compression positive.
     pub force: f64,
+    /// |strain| ≥ yield strain, in tension or compression.
+    pub yielded: bool,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -302,6 +304,7 @@ fn ultimate_parts(
                 strain,
                 steel_stress,
                 force,
+                yielded: strain.abs() >= steel.yield_strain(),
             }
         })
         .collect();
@@ -366,18 +369,21 @@ pub fn ultimate(
         .sum::<f64>()
         .max(p.concrete_force);
     let relative_residual = net_force(&p).abs() / scale;
+    // Classified by the extreme (deepest) tension layer, the conventional
+    // ductility measure; a shallow layer just below the neutral axis does not decide it.
     let ey = steel.yield_strain();
-    let classification = if p
-        .layers
+    let deepest_index = layers
         .iter()
-        .filter(|l| l.strain < 0.0)
-        .all(|l| -l.strain >= ey)
-    {
+        .enumerate()
+        .max_by(|a, b| a.1.depth.total_cmp(&b.1.depth))
+        .map(|(i, _)| i)
+        .unwrap();
+    let classification = if -p.layers[deepest_index].strain >= ey {
         TensionState::TensionYielded
     } else {
         TensionState::TensionElastic
     };
-    let deepest = layers.iter().map(|l| l.depth).fold(0.0, f64::max);
+    let deepest = layers[deepest_index].depth;
     let out = UltimateState {
         neutral_axis_depth: x,
         moment,
@@ -563,6 +569,11 @@ mod tests {
                 .zip(w["layers"].as_array().unwrap())
                 .enumerate()
             {
+                assert_eq!(
+                    got.yielded,
+                    want["yielded"].as_bool().unwrap(),
+                    "{id} layer {i} yielded"
+                );
                 let ws = want["strain"].as_f64().unwrap();
                 assert!(
                     (got.strain - ws).abs() <= abs_strain,
@@ -588,14 +599,25 @@ mod tests {
                     ("serviceConcreteStress", r.service_concrete_stress),
                 ] {
                     // Optional outputs must be present exactly when the oracle produced them.
-                    assert_eq!(got.is_some(), we.get(what).is_some(), "{id} {what} presence");
+                    assert_eq!(
+                        got.is_some(),
+                        we.get(what).is_some(),
+                        "{id} {what} presence"
+                    );
                     if let Some(got) = got {
                         close(id, what, got, we[what].as_f64().unwrap(), rel);
                     }
                 }
                 let steel_stresses = r.service_steel_stress.unwrap_or_default();
-                let want_stresses = we["serviceSteelStress"].as_array().cloned().unwrap_or_default();
-                assert_eq!(steel_stresses.len(), want_stresses.len(), "{id} service steel stresses");
+                let want_stresses = we["serviceSteelStress"]
+                    .as_array()
+                    .cloned()
+                    .unwrap_or_default();
+                assert_eq!(
+                    steel_stresses.len(),
+                    want_stresses.len(),
+                    "{id} service steel stresses"
+                );
                 for (got, want) in steel_stresses.iter().zip(&want_stresses) {
                     close(id, "serviceSteelStress", *got, want.as_f64().unwrap(), rel);
                 }

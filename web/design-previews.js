@@ -45,11 +45,13 @@ function illustration(d, face) {
       h = (180 * v.depth) / Math.max(v.width, v.depth),
       x = (300 - w) / 2,
       y = (220 - h) / 2;
-    const bars = Array.from(
-      { length: v.barCount },
-      (_, i) => x + 12 + ((w - 24) * i) / Math.max(1, v.barCount - 1),
-    );
-    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#dce6ef" stroke="#516b82"/><rect x="${x + 8}" y="${y + 8}" width="${w - 16}" height="${h - 16}" rx="6" fill="none" stroke="#62798a"/>${bars.flatMap((cx) => [y + 14, y + h - 14].map((cy) => `<circle cx="${cx}" cy="${cy}" r="4" fill="#1167a2"/>`)).join("")}<text x="150" y="218" text-anchor="middle">Bar preference illustration · fit unverified</text>`;
+    const row = (n, cy) =>
+      Array.from(
+        { length: n },
+        (_, i) =>
+          `<circle cx="${n === 1 ? x + w / 2 : x + 12 + ((w - 24) * i) / (n - 1)}" cy="${cy}" r="4" fill="#1167a2"/>`,
+      ).join("");
+    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#dce6ef" stroke="#516b82"/><rect x="${x + 8}" y="${y + 8}" width="${w - 16}" height="${h - 16}" rx="6" fill="none" stroke="#62798a"/>${row(v.topBarCount, y + 14)}${row(v.bottomBarCount, y + h - 14)}<text x="150" y="218" text-anchor="middle">Bar preference illustration · fit unverified</text>`;
   }
   const w = (230 * v.length) / Math.max(v.length, v.width),
     h = (160 * v.width) / Math.max(v.length, v.width),
@@ -198,15 +200,16 @@ export function concreteWorkspace({
         $("#preview-schedule").onclick = () =>
           download(
             "illustrative-schedule.csv",
-            "previewRunId,currentState,mark,diameter_m,quantityPerFace,cutLength,source,status\n" +
+            "previewRunId,currentState,mark,region,diameter_m,quantity,cutLength,source,status\n" +
               run.schedule
                 .map((r) =>
                   [
                     run.previewRunId,
                     state,
                     r.mark,
+                    r.region,
                     r.diameter,
-                    r.quantityPerFace,
+                    r.quantity,
                     "",
                     r.source,
                     r.status,

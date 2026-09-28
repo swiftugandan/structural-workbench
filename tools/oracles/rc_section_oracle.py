@@ -140,12 +140,14 @@ def ultimate(case):
     C, Mc, layers = ultimate_parts(case, x)
     Mu = -sum(l["force"] * L["depth"] for l, L in zip(layers, case["layers"])) - Mc
     ey = case["steel"]["yieldStrength"] / case["steel"]["modulus"]
-    tension = [l for l in layers if l["strain"] < 0]
-    cls = "tensionYielded" if all(-l["strain"] >= ey for l in tension) else "tensionElastic"
+    # Extreme (deepest) tension layer decides the classification.
     dmax = max(L["depth"] for L in case["layers"])
+    extreme = next(l for l, L in zip(layers, case["layers"]) if L["depth"] == dmax)
+    cls = "tensionYielded" if -extreme["strain"] >= ey else "tensionElastic"
     return {"neutralAxisDepth": x, "moment": Mu, "concreteForce": C, "curvature": case["concrete"]["ultimateStrain"] / x,
             "classification": cls, "depthRatio": x / dmax,
-            "layers": [{"strain": l["strain"], "steelStress": l["steelStress"], "force": l["force"]} for l in layers]}
+            "layers": [{"strain": l["strain"], "steelStress": l["steelStress"], "force": l["force"],
+                        "yielded": abs(l["strain"]) >= ey} for l in layers]}
 
 
 def elastic(case):
@@ -225,6 +227,14 @@ def cases():
         {"id": "RC-PREVIEW-DEFAULT", "note": "Default rcBeam preview draft: 300x600, cover 35 to link, link 10, 4 x 20 bars each face; synthetic mechanics defaults",
          "section": SEC, "steel": STEEL, "concrete": BLOCK,
          "layers": [{"depth": 0.035 + 0.01 + 0.01, "area": bar(4, 0.02)}, {"depth": 0.6 - (0.035 + 0.01 + 0.01), "area": bar(4, 0.02)}],
+         "elastic": {"concreteModulus": 30e9, "tensileStrength": 2.8e6}},
+        {"id": "RC-PREVIEW-ASYM-SAGGING", "note": "Preview draft with top 2x16, bottom 4x25; top face in compression",
+         "section": SEC, "steel": STEEL, "concrete": BLOCK,
+         "layers": [{"depth": 0.035 + 0.01 + 0.008, "area": bar(2, 0.016)}, {"depth": 0.6 - (0.035 + 0.01 + 0.0125), "area": bar(4, 0.025)}],
+         "elastic": {"concreteModulus": 30e9, "tensileStrength": 2.8e6}},
+        {"id": "RC-PREVIEW-ASYM-HOGGING", "note": "Same draft; bottom face in compression, so the 2x16 top row is in tension",
+         "section": SEC, "steel": STEEL, "concrete": BLOCK,
+         "layers": [{"depth": 0.035 + 0.01 + 0.0125, "area": bar(4, 0.025)}, {"depth": 0.6 - (0.035 + 0.01 + 0.008), "area": bar(2, 0.016)}],
          "elastic": {"concreteModulus": 30e9, "tensileStrength": 2.8e6}},
         {"id": "RC-DR-PARABOLA", "note": "Doubly reinforced, parabola-rectangle n=2, compression bars displace concrete",
          "section": SEC, "steel": STEEL, "concrete": PARA2,

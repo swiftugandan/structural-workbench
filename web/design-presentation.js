@@ -90,7 +90,14 @@ export function previewInspector({
           ];
   const special =
     d.kind === "rcBeam"
-      ? ["barDiameter", "barCount", "linkDiameter", "linkSpacing"]
+      ? [
+          "topBarCount",
+          "topBarDiameter",
+          "bottomBarCount",
+          "bottomBarDiameter",
+          "linkDiameter",
+          "linkSpacing",
+        ]
       : d.kind === "slab"
         ? ["meshSize"]
         : ["bearingPressure", "embedment", "soilUnitWeight"];
@@ -118,9 +125,23 @@ export function provenanceTable(run) {
 }
 export function beamElevation(d) {
   const v = d.inputs;
-  return `<svg class="design-drawing" viewBox="0 0 660 170" aria-label="Illustrative longitudinal reinforcement"><path d="M40 38H620V128H40Z" fill="#e7ecf1" stroke="#667a8c"/><path d="M43 46H617" stroke="#b44232" stroke-width="4"/><path d="M43 116H617" stroke="#286dbd" stroke-width="4"/>${Array.from({ length: 34 }, (_, i) => `<path d="M${48 + i * 17} 43V121" stroke="#718695"/>`).join("")}<path d="M45 129l-12 22h24ZM615 129l-12 22h24Z" fill="#546a7d"/><text x="60" y="25">Top preference · ${v.barCount} × Ø${pretty(v.barDiameter * 1000)} mm</text><text x="310" y="160">Links Ø${pretty(v.linkDiameter * 1000)} @ ${pretty(v.linkSpacing * 1000)} mm · fit unverified</text><text x="330" y="101">Bottom preference · ${v.barCount} × Ø${pretty(v.barDiameter * 1000)} mm</text></svg>`;
+  return `<svg class="design-drawing" viewBox="0 0 660 170" aria-label="Illustrative longitudinal reinforcement"><path d="M40 38H620V128H40Z" fill="#e7ecf1" stroke="#667a8c"/><path d="M43 46H617" stroke="#b44232" stroke-width="4"/><path d="M43 116H617" stroke="#286dbd" stroke-width="4"/>${Array.from({ length: 34 }, (_, i) => `<path d="M${48 + i * 17} 43V121" stroke="#718695"/>`).join("")}<path d="M45 129l-12 22h24ZM615 129l-12 22h24Z" fill="#546a7d"/><text x="60" y="25">Top preference · ${v.topBarCount} × Ø${pretty(v.topBarDiameter * 1000)} mm</text><text x="310" y="160">Links Ø${pretty(v.linkDiameter * 1000)} @ ${pretty(v.linkSpacing * 1000)} mm · fit unverified</text><text x="330" y="101">Bottom preference · ${v.bottomBarCount} × Ø${pretty(v.bottomBarDiameter * 1000)} mm</text></svg>`;
 }
 const strainText = (e) => `${pretty(e * 1000, 3)} ‰`;
+function mechanicsState(label, st, testid) {
+  if (st.status !== "evaluated")
+    return `<article><h4>${label}</h4><p role="status">Unsupported · ${esc(st.reason || "")}</p></article>`;
+  const u = st.ultimate,
+    e = st.elastic;
+  const rows = u.layers
+    .map(
+      (l, i) =>
+        `<tr><td>${i === 0 ? "Compression-face row" : "Opposite-face row"}</td><td>${pretty(st.layers[i].depth * 1000, 1)} mm</td><td>${strainText(l.strain)}</td><td>${pretty(l.steelStress / 1e6, 1)} MPa${l.yielded ? " · yielded" : ""}</td><td>${pretty(l.force / 1000, 1)} kN</td></tr>`,
+    )
+    .join("");
+  return `<article><h4>${label} · ${esc(st.compressionFace)} face in compression</h4><dl class="design-provenance-grid"><dt>Mechanical moment capacity</dt><dd data-testid="${testid}">${pretty(u.moment / 1000, 2)} kN·m</dd><dt>Neutral-axis depth x</dt><dd>${pretty(u.neutralAxisDepth * 1000, 1)} mm</dd><dt>x / deepest layer</dt><dd>${pretty(u.depthRatio, 3)}</dd><dt>Extreme tension steel</dt><dd>${u.classification === "tensionYielded" ? "Yielded" : "Elastic"}</dd><dt>Cracking moment</dt><dd>${pretty(e.crackingMoment / 1000, 2)} kN·m</dd><dt>Cracked I</dt><dd>${pretty((e.crackedInertia * 1e12) / 1e6, 1)} × 10⁶ mm⁴</dd></dl>
+ <table><thead><tr><th>Layer</th><th>Depth from compression face</th><th>Strain</th><th>Steel stress</th><th>Net force</th></tr></thead><tbody>${rows}</tbody></table></article>`;
+}
 export function mechanicsPane(run) {
   const sm = run?.sectionMechanics;
   const banner =
@@ -129,23 +150,15 @@ export function mechanicsPane(run) {
     return `<h4>Section mechanics</h4>${banner}<p>Run the preview to evaluate section mechanics.</p>`;
   if (sm.status === "notConfigured")
     return `<h4>Section mechanics</h4>${banner}<p>${esc(sm.reason)}. Save the section-mechanics law in the inspector to evaluate it.</p>`;
-  const fit = sm.rowFit
-    ? `<dl class="design-provenance-grid"><dt>Bars per face</dt><dd>${pretty(sm.rowFit.area * 1e6, 0)} mm² per row</dd><dt>Clear spacing</dt><dd>${sm.rowFit.clearSpacing == null ? "Single bar" : pretty(sm.rowFit.clearSpacing * 1000, 1) + " mm"}</dd><dt>Minimum clear spacing (input)</dt><dd>${pretty(sm.inputs.minimumClearSpacing * 1000, 1)} mm · ${esc(sm.inputSources.minimumClearSpacing === "user" ? "User input" : "Synthetic fixture")}</dd><dt>Row fits</dt><dd data-testid="mechanics-fit">${sm.rowFit.fits ? "Yes" : "No"}</dd></dl>`
+  const fitRow = (face, f) =>
+    `<tr><td>${face}</td><td>${pretty(f.area * 1e6, 0)} mm²</td><td>${f.clearSpacing == null ? "Single bar" : pretty(f.clearSpacing * 1000, 1) + " mm"}</td><td data-testid="mechanics-fit-${face.toLowerCase()}">${f.fits ? "Yes" : "No"}</td></tr>`;
+  const fit = sm.rowFits
+    ? `<table><thead><tr><th>Row</th><th>Area</th><th>Clear spacing</th><th>Fits</th></tr></thead><tbody>${fitRow("Top", sm.rowFits.top)}${fitRow("Bottom", sm.rowFits.bottom)}</tbody></table><p class="source-key">Minimum clear spacing input ${pretty(sm.inputs.minimumClearSpacing * 1000, 1)} mm · ${esc(sm.inputSources.minimumClearSpacing === "user" ? "User input" : "Synthetic fixture")}. Cover is measured to the link.</p>`
     : "";
   if (sm.status !== "evaluated")
     return `<h4>Section mechanics</h4>${banner}${fit}<p role="status" data-testid="mechanics-status">${esc(sm.status === "rowDoesNotFit" ? "Row does not fit" : "Unsupported")} · ${esc(sm.reason || "")}</p>`;
-  const u = sm.ultimate,
-    e = sm.elastic;
-  const layers = u.layers
-    .map(
-      (l, i) =>
-        `<tr><td>${i === 0 ? "Compression-face row" : "Tension-face row"}</td><td>${pretty(sm.layers[i].depth * 1000, 1)} mm</td><td>${strainText(l.strain)}</td><td>${pretty(l.steelStress / 1e6, 1)} MPa</td><td>${pretty(l.force / 1000, 1)} kN</td></tr>`,
-    )
-    .join("");
-  return `<h4>Section mechanics · ${esc(sm.law === "rectangularBlock" ? "rectangular stress block" : "parabola-rectangle")}</h4>${banner}
- <div class="reinforcement-layout"><article><h4>Ultimate state (strain compatibility, N = 0)</h4><dl class="design-provenance-grid"><dt>Mechanical moment capacity</dt><dd data-testid="mechanics-moment">${pretty(u.moment / 1000, 2)} kN·m</dd><dt>Neutral-axis depth x</dt><dd>${pretty(u.neutralAxisDepth * 1000, 1)} mm</dd><dt>x / deepest layer</dt><dd>${pretty(u.depthRatio, 3)}</dd><dt>Tension steel</dt><dd>${u.classification === "tensionYielded" ? "Yielded" : "Elastic"}</dd><dt>Applies to</dt><dd>Sagging and hogging (equal rows at both faces)</dd></dl>
- <table><thead><tr><th>Layer</th><th>Depth from compression face</th><th>Strain</th><th>Steel stress</th><th>Net force</th></tr></thead><tbody>${layers}</tbody></table></article>
- <article><h4>Elastic section</h4><dl class="design-provenance-grid"><dt>Modular ratio</dt><dd>${pretty(e.modularRatio, 3)}</dd><dt>Uncracked I</dt><dd>${pretty((e.uncrackedInertia * 1e12) / 1e6, 1)} × 10⁶ mm⁴</dd><dt>Cracking moment</dt><dd>${pretty(e.crackingMoment / 1000, 2)} kN·m</dd><dt>Cracked neutral axis</dt><dd>${pretty(e.crackedNeutralAxis * 1000, 1)} mm</dd><dt>Cracked I</dt><dd>${pretty((e.crackedInertia * 1e12) / 1e6, 1)} × 10⁶ mm⁴</dd></dl>${fit}</article></div>
+  return `<h4>Section mechanics · ${esc(sm.law === "rectangularBlock" ? "rectangular stress block" : "parabola-rectangle")}</h4>${banner}${fit}
+ <div class="reinforcement-layout">${mechanicsState("Sagging", sm.sagging, "mechanics-moment-sagging")}${mechanicsState("Hogging", sm.hogging, "mechanics-moment-hogging")}</div>
  <ul class="design-note">${sm.limitations.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`;
 }
 export function previewPane({ run, state, d, pane, checkIndex, sketch }) {
@@ -157,7 +170,7 @@ export function previewPane({ run, state, d, pane, checkIndex, sketch }) {
   if (pane === "reinforcement")
     return `<div class="reinforcement-layout"><article><h4>${d.kind === "rcBeam" ? "Longitudinal reinforcement layout" : "Reinforcement plan"} <small>· illustration only</small></h4>${d.kind === "rcBeam" ? beamElevation(d) : `<svg class="design-drawing" viewBox="0 0 300 230">${sketch}</svg>`}<p class="design-note">Preference illustration · not a verified arrangement or construction drawing.</p></article><article><h4>${d.kind === "rcBeam" ? "Cross-section" : "Geometry and layers"}</h4><svg class="section-drawing" viewBox="0 0 300 230">${sketch}</svg><p>Cover ${pretty(d.inputs.cover * 1000)} mm · fit, spacing and anchorage unverified.</p></article></div>`;
   if (pane === "schedule")
-    return `<h4>Bar schedule · illustrative preferences only</h4><table><thead><tr><th>Mark</th><th>Region</th><th>Bar</th><th>Qty/face</th><th>Cut length</th><th>Status</th></tr></thead><tbody>${(run?.schedule || []).map((r) => `<tr><td>${esc(r.mark)}</td><td>${esc(r.region)}</td><td>Ø${pretty(r.diameter * 1000)} mm</td><td>${r.quantityPerFace}</td><td>—</td><td>Unverified</td></tr>`).join("")}</tbody></table><p class="design-note">${run?.schedule.length ? "No fabrication lengths or verified quantities are available." : "A verified schedule is unavailable for this design object."}</p>`;
+    return `<h4>Bar schedule · illustrative preferences only</h4><table><thead><tr><th>Mark</th><th>Region</th><th>Bar</th><th>Qty</th><th>Cut length</th><th>Status</th></tr></thead><tbody>${(run?.schedule || []).map((r) => `<tr><td>${esc(r.mark)}</td><td>${esc(r.region)}</td><td>Ø${pretty(r.diameter * 1000)} mm</td><td>${r.quantity}</td><td>—</td><td>Unverified</td></tr>`).join("")}</tbody></table><p class="design-note">${run?.schedule.length ? "No fabrication lengths or verified quantities are available." : "A verified schedule is unavailable for this design object."}</p>`;
   if (pane === "soil")
     return `<div class="reinforcement-layout"><article><h4>Soil / contact</h4><svg class="section-drawing" viewBox="0 0 300 230">${sketch}</svg><p class="design-note">Contact INDETERMINATE · pressure contours are unavailable.</p></article><article><h4>External soil inputs</h4><dl class="design-provenance-grid"><dt>Allowable bearing input</dt><dd>${pretty(d.inputs.bearingPressure / 1000)} kPa</dd><dt>Origin</dt><dd>${esc(sourceLabel(d.inputSources?.bearingPressure || d.inputSource))}</dd><dt>Reference</dt><dd>${esc(d.soilReference)}</dd><dt>Workbench soil capacity</dt><dd>Not calculated</dd><dt>qmin / qmax</dt><dd>Unavailable</dd><dt>Contact area</dt><dd>Unavailable</dd></dl></article></div>`;
   if (pane === "details") {

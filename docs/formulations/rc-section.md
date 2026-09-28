@@ -35,7 +35,7 @@ Closed forms used by the kernel:
 Equilibrium is `F(x) = C_c(x) + Σ_i A_i (σ_s,i − [ε_i>0] σ_c(ε_i)) = 0`. The root is bracketed on `(0, h]` and found by bisection until the bracket stops shrinking in `f64`. The kernel reports `NO_EQUILIBRIUM` (unsupported) when `F(h) < 0`, meaning the neutral axis would leave the section, or when `F` has no sign change. The residual `|F| / max(C_c, Σ|A σ|)` is reported.
 
 - **Capacity:** with layer forces `F_i` (compression positive) and the concrete moment `M_c(top) = C_c ȳ_c` about the compression face, `M_u = −Σ_i F_i d_i − M_c(top)`. Because `N = 0`, the same value holds about any point, and `M_u > 0`.
-- **Classification (mechanics only):** `tensionYielded` when every layer with `ε_i < 0` has `|ε_i| ≥ ε_y`; otherwise `tensionElastic`. The kernel also reports `x / d_max`, where `d_max` is the deepest layer. These are not code ductility limits.
+- **Classification (mechanics only):** `tensionYielded` when the extreme (deepest) layer has `−ε ≥ ε_y`, otherwise `tensionElastic`. A shallow layer just below the neutral axis does not decide it. Each layer also reports `yielded` (`|ε_i| ≥ ε_y`). The kernel reports `x / d_max`, where `d_max` is the deepest layer. These are not code ductility limits.
 
 ## Elastic uncracked (transformed)
 

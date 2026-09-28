@@ -13,8 +13,10 @@ fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64
             ("width", "Width", 0.3, "mm", 1000.),
             ("depth", "Depth", 0.6, "mm", 1000.),
             ("cover", "Cover", 0.035, "mm", 1000.),
-            ("barDiameter", "Preferred bar diameter", 0.02, "mm", 1000.),
-            ("barCount", "Preferred bars per face", 4., "", 1.),
+            ("topBarDiameter", "Top bar diameter", 0.02, "mm", 1000.),
+            ("topBarCount", "Top bars", 4., "", 1.),
+            ("bottomBarDiameter", "Bottom bar diameter", 0.02, "mm", 1000.),
+            ("bottomBarCount", "Bottom bars", 4., "", 1.),
             ("linkDiameter", "Link diameter", 0.01, "mm", 1000.),
             ("linkSpacing", "Link spacing", 0.2, "mm", 1000.),
         ],
@@ -293,41 +295,41 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
     }
     Ok(())
 }
-/// Code-agnostic section mechanics for an rcBeam draft (ADR 0012). The bar
-/// preference is one row of `barCount` bars at each face; `cover` is taken to
-/// the link. Results are mechanics only and never feed a check status.
+/// Code-agnostic section mechanics for an rcBeam draft (ADR 0012). Each face
+/// has one row of its own bars; `cover` is taken to the link. Sagging puts
+/// the top face in compression, hogging the bottom. Results are mechanics only
+/// and never feed a check status.
 fn section_mechanics(d: &DesignPreview) -> Value {
     let Some(m) = &d.mechanics else {
         return json!({"status":"notConfigured","reason":"No explicit section-mechanics material law is recorded for this draft"});
     };
     let v = &d.inputs;
     let mi = &m.inputs;
-    let row = BarRow {
+    let row = |face: &str| BarRow {
         width: v["width"],
         side_cover: v["cover"],
         link_diameter: v["linkDiameter"],
-        bar_diameter: v["barDiameter"],
-        count: v["barCount"] as u32,
+        bar_diameter: v[&format!("{face}BarDiameter")],
+        count: v[&format!("{face}BarCount")] as u32,
         minimum_clear_spacing: mi["minimumClearSpacing"],
     };
     let base = json!({"basis":"mechanics","codeProfile":null,"law":m.law,"inputs":mi,"inputSources":m.input_sources,
-        "arrangement":"One row of barCount × barDiameter at each face; cover measured to the link; layer depths from the compression face",
+        "arrangement":"One row per face (top and bottom bar inputs); cover measured to the link; layer depths from the compression face",
         "limitations":["Mechanics only — not a code resistance; no partial factors or code limits applied","Pure flexure (N = 0) about the width axis; concrete tension ignored at ultimate and in the cracked state","Material-law parameters are explicit inputs with recorded provenance"]});
-    let fit = match rc_section::row_fit(&row) {
-        Ok(fit) => fit,
-        Err(e) => return merge(base, json!({"status":"unsupported","reason":e.message})),
+    let (top, bottom) = match (rc_section::row_fit(&row("top")), rc_section::row_fit(&row("bottom"))) {
+        (Ok(t), Ok(b)) => (t, b),
+        (Err(e), _) | (_, Err(e)) => return merge(base, json!({"status":"unsupported","reason":e.message})),
     };
-    let fit_json = serde_json::to_value(&fit).unwrap();
-    if !fit.fits {
-        return merge(base, json!({"status":"rowDoesNotFit","rowFit":fit_json,"reason":"Bar row does not fit the width with the stated clear spacing; ultimate state not evaluated"}));
+    let fits = json!({"top":top,"bottom":bottom});
+    if !(top.fits && bottom.fits) {
+        let faces: Vec<&str> = [("top", top.fits), ("bottom", bottom.fits)]
+            .iter()
+            .filter(|(_, ok)| !ok)
+            .map(|(f, _)| *f)
+            .collect();
+        return merge(base, json!({"status":"rowDoesNotFit","rowFits":fits,"reason":format!("The {} bar row does not fit the width with the stated clear spacing; ultimate state not evaluated", faces.join(" and "))}));
     }
     let section = RcRectangle { width: v["width"], depth: v["depth"] };
-    let near = fit.depth_from_face;
-    let far = v["depth"] - near;
-    let layers = [
-        BarLayer { depth: near, area: fit.area },
-        BarLayer { depth: far, area: fit.area },
-    ];
     let steel = SteelLaw { yield_strength: mi["steelYieldStrength"], modulus: mi["steelModulus"] };
     let law = if m.law == "rectangularBlock" {
         ConcreteLaw::RectangularBlock {
@@ -348,14 +350,29 @@ fn section_mechanics(d: &DesignPreview) -> Value {
         tensile_strength: Some(mi["concreteTensileStrength"]),
         service_moment: None,
     };
-    // Equal rows at both faces make sagging and hogging identical; one state,
-    // with layer depths measured from whichever face is in compression.
-    let ultimate = rc_section::ultimate(&section, &layers, &steel, &law);
-    let elastic = rc_section::elastic(&section, &layers, &steel, &elastic_inputs);
-    match (ultimate, elastic) {
-        (Ok(u), Ok(e)) => merge(base, json!({"status":"evaluated","rowFit":fit_json,"appliesTo":["sagging","hogging"],"layers":layers,"ultimate":u,"elastic":e})),
-        (Err(e), _) | (_, Err(e)) => merge(base, json!({"status":"unsupported","rowFit":fit_json,"reason":e.message})),
-    }
+    // Layers are ordered [compression-face row, opposite row] with depths from
+    // the compression face.
+    let state = |compression: &str, near: &rc_section::RowFit, far: &rc_section::RowFit| -> Value {
+        let layers = [
+            BarLayer { depth: near.depth_from_face, area: near.area },
+            BarLayer { depth: v["depth"] - far.depth_from_face, area: far.area },
+        ];
+        match (
+            rc_section::ultimate(&section, &layers, &steel, &law),
+            rc_section::elastic(&section, &layers, &steel, &elastic_inputs),
+        ) {
+            (Ok(u), Ok(e)) => json!({"status":"evaluated","compressionFace":compression,"layers":layers,"ultimate":u,"elastic":e}),
+            (Err(e), _) | (_, Err(e)) => json!({"status":"unsupported","compressionFace":compression,"reason":e.message}),
+        }
+    };
+    let sagging = state("top", &top, &bottom);
+    let hogging = state("bottom", &bottom, &top);
+    let status = if sagging["status"] == "evaluated" && hogging["status"] == "evaluated" {
+        "evaluated"
+    } else {
+        "unsupported"
+    };
+    merge(base, json!({"status":status,"rowFits":fits,"sagging":sagging,"hogging":hogging}))
 }
 fn merge(mut a: Value, b: Value) -> Value {
     for (k, v) in b.as_object().unwrap() {
@@ -463,7 +480,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         ],
     };
     let schedule = if draft.kind == "rcBeam" {
-        json!([{"mark":"ILL-01","region":"Top and bottom preference","diameter":draft.inputs["barDiameter"],"quantityPerFace":draft.inputs["barCount"],"cutLength":null,"source":"illustrationOnly","status":"unverified"}])
+        json!([("ILL-T1","Top","top"),("ILL-B1","Bottom","bottom")].iter().map(|(mark,region,face)|json!({"mark":mark,"region":region,"diameter":draft.inputs[&format!("{face}BarDiameter")],"quantity":draft.inputs[&format!("{face}BarCount")],"cutLength":null,"source":"illustrationOnly","status":"unverified"})).collect::<Vec<_>>())
     } else {
         json!([])
     };

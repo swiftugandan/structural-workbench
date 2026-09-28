@@ -705,7 +705,7 @@ fn domain_disclosure() -> Value {
 fn capabilities_payload() -> Value {
     json!({
         "protocolVersion": 1,
-        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0"],
+        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0"],
         "analysisTypes": ["linearStatic"],
         "designProfiles": workbench_design::default_registry()
             .metadata()

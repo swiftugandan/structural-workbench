@@ -39,19 +39,19 @@ self.onmessage = ({ data: r }) => {
           ? JSON.parse(r.payload.jsonUtf8)
           : r.payload.project;
       const version = p.schemaVersion;
-      const migratable = ["0.9.0", "1.0.0", "1.1.0"].includes(version);
+      const migratable = ["0.9.0", "1.0.0", "1.1.0", "1.2.0"].includes(version);
       if (!migratable) {
         postMessage(
           error(
             r,
             "UNSUPPORTED_SCHEMA",
-            `Project schema ${version} is not supported. Supported import schemas: 0.9.0, 1.0.0, 1.1.0`,
+            `Project schema ${version} is not supported. Supported import schemas: 0.9.0, 1.0.0, 1.1.0, 1.2.0`,
           ),
         );
         return;
       }
-      // Legacy 0.9/1.0 imports migrate in Rust; current documents use AJV and Rust validation.
-      if (version === "1.1.0" && !validate(p)) {
+      // Legacy 0.9/1.0/1.1 imports migrate in Rust; current documents use AJV and Rust validation.
+      if (version === "1.2.0" && !validate(p)) {
         postMessage(
           error(
             r,

@@ -50,7 +50,11 @@ impl SectionMechanicsInputs {
     pub fn validate(&self) -> Result<()> {
         let law_keys = Self::law_keys(&self.law)
             .ok_or_else(|| err("INVALID_SCHEMA", "Unknown section-mechanics law"))?;
-        let expected: Vec<&str> = MECHANICS_COMMON_KEYS.iter().chain(law_keys).copied().collect();
+        let expected: Vec<&str> = MECHANICS_COMMON_KEYS
+            .iter()
+            .chain(law_keys)
+            .copied()
+            .collect();
         if self.inputs.len() != expected.len()
             || expected.iter().any(|k| {
                 self.inputs
@@ -70,7 +74,10 @@ impl SectionMechanicsInputs {
                     .is_none_or(|s| !["syntheticFixture", "user"].contains(&s.as_str()))
             })
         {
-            return Err(err("INVALID_SCHEMA", "Incomplete section-mechanics provenance"));
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Incomplete section-mechanics provenance",
+            ));
         }
         if self.law == "rectangularBlock" && self.inputs["blockDepthRatio"] > 1.0 {
             return Err(err("INVALID_SCHEMA", "Block depth ratio must not exceed 1"));
@@ -105,8 +112,10 @@ impl DesignPreview {
                 "cover",
                 "concreteStrength",
                 "rebarStrength",
-                "barDiameter",
-                "barCount",
+                "topBarDiameter",
+                "topBarCount",
+                "bottomBarDiameter",
+                "bottomBarCount",
                 "linkDiameter",
                 "linkSpacing",
             ],
@@ -164,11 +173,13 @@ impl DesignPreview {
             ));
         }
         if self.kind == "rcBeam"
-            && (self.inputs["barCount"].fract() != 0.0 || self.inputs["barCount"] > 20.0)
+            && ["topBarCount", "bottomBarCount"]
+                .iter()
+                .any(|k| self.inputs[*k].fract() != 0.0 || self.inputs[*k] > 20.0)
         {
             return Err(err(
                 "INVALID_SCHEMA",
-                "Illustration bar count must be an integer from 1 to 20",
+                "Bar count per face must be an integer from 1 to 20",
             ));
         }
         let depth = if self.kind == "rcBeam" {

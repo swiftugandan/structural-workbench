@@ -2,7 +2,9 @@ use crate::{Project, Result, digest, err};
 use serde_json::{Value, json};
 
 /// Current engineering project schema written by the application.
-pub const CURRENT_SCHEMA: &str = "1.1.0";
+pub const CURRENT_SCHEMA: &str = "1.2.0";
+/// Previous current schema (explicit structure, single rcBeam bar preference).
+pub const SCHEMA_1_1: &str = "1.1.0";
 /// Oldest schema this binary can migrate into CURRENT_SCHEMA.
 pub const LEGACY_SCHEMA_0_9: &str = "0.9.0";
 
@@ -60,32 +62,36 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
     }
     let (mut steps, report_from) = match version.as_str() {
         CURRENT_SCHEMA => (Vec::new(), CURRENT_SCHEMA.to_string()),
+        SCHEMA_1_1 => (Vec::new(), SCHEMA_1_1.to_string()),
         "1.0.0" => (Vec::new(), "1.0.0".to_string()),
         LEGACY_SCHEMA_0_9 => (migrate_0_9_to_1_0(&mut raw)?, LEGACY_SCHEMA_0_9.to_string()),
         _ => {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
                 format!(
-                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {CURRENT_SCHEMA}"
+                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {CURRENT_SCHEMA}"
                 ),
             ));
         }
     };
 
-    if version != CURRENT_SCHEMA {
+    if version == LEGACY_SCHEMA_0_9 || version == "1.0.0" {
         if raw.get("structure").is_some() {
             return Err(err(
                 "INVALID_SCHEMA",
                 "Legacy project cannot contain a structure extension",
             ));
         }
-        raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+        raw["schemaVersion"] = json!(SCHEMA_1_1);
         raw["structure"] = serde_json::to_value(crate::Structure::default()).unwrap();
         let legacy: Project = serde_json::from_value(raw.clone())
             .map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
         raw["structure"] = serde_json::to_value(crate::Structure::initialise(&legacy)).unwrap();
         steps.push("create explicit physical members, joints, support details and draft bindings; preserve unassigned roles".into());
         steps.push("set schemaVersion 1.1.0".into());
+    }
+    if version != CURRENT_SCHEMA {
+        steps.extend(migrate_1_1_to_1_2(&mut raw)?);
     }
     let text = serde_json::to_string(&raw).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let project = Project::parse_current(&text)?;
@@ -99,6 +105,49 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
             original_retained: true,
         },
     ))
+}
+
+/// 1.1.0 → 1.2.0: an rcBeam draft's single bar preference (applied to both
+/// faces) becomes explicit, equal top and bottom rows. Values and per-field
+/// provenance are copied unchanged, so engineering meaning is preserved.
+fn migrate_1_1_to_1_2(raw: &mut Value) -> Result<Vec<String>> {
+    let mut split = 0;
+    if let Some(drafts) = raw.get_mut("designPreviews").and_then(|v| v.as_array_mut()) {
+        for d in drafts.iter_mut().filter(|d| d["kind"] == "rcBeam") {
+            for map in ["inputs", "inputSources"] {
+                let Some(obj) = d.get_mut(map).and_then(|v| v.as_object_mut()) else {
+                    continue;
+                };
+                if obj.is_empty() && map == "inputSources" {
+                    continue;
+                }
+                for (old, faces) in [
+                    ("barDiameter", ["topBarDiameter", "bottomBarDiameter"]),
+                    ("barCount", ["topBarCount", "bottomBarCount"]),
+                ] {
+                    let value = obj.remove(old).ok_or_else(|| {
+                        err(
+                            "INVALID_SCHEMA",
+                            format!("Schema 1.1.0 RC beam draft is missing {map}.{old}"),
+                        )
+                    })?;
+                    for face in faces {
+                        obj.insert(face.into(), value.clone());
+                    }
+                }
+            }
+            split += 1;
+        }
+    }
+    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    let mut steps = Vec::new();
+    if split > 0 {
+        steps.push(format!(
+            "split the bar preference of {split} RC beam draft(s) into equal top and bottom rows"
+        ));
+    }
+    steps.push("set schemaVersion 1.2.0".into());
+    Ok(steps)
 }
 
 fn migrate_0_9_to_1_0(raw: &mut Value) -> Result<Vec<String>> {
