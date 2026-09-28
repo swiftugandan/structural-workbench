@@ -4,40 +4,29 @@
 //! advertised in capabilities and may return Pass/Fail only after its resource
 //! lock and clause corpus verify. Until then evaluateDesign returns UNSUPPORTED.
 
-mod profile;
 pub mod native;
+mod profile;
+pub mod rc_section;
 
+pub use profile::aisc36022::{
+    Aisc36022LrfdProfile, aisc_s2_resources_verified, verify_vault_pdfs_if_present,
+};
 pub use profile::{
     CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,
-    ProfileApplicability, ProfileMetadata, ProfileRegistry, TensionEndProps, WSectionProps,
-    PROFILE_AISC_360_22_LRFD,
-};
-pub use profile::aisc36022::{
-    aisc_s2_resources_verified, verify_vault_pdfs_if_present, Aisc36022LrfdProfile,
+    PROFILE_AISC_360_22_LRFD, ProfileApplicability, ProfileMetadata, ProfileRegistry,
+    TensionEndProps, WSectionProps,
 };
 
 use workbench_model::Section;
 
 /// σₓ = N/A + My z / Iy − Mz y / Iz at fibre (y, z) in local section axes.
-pub fn longitudinal_stress(
-    n: f64,
-    my: f64,
-    mz: f64,
-    s: &Section,
-    y: f64,
-    z: f64,
-) -> f64 {
+pub fn longitudinal_stress(n: f64, my: f64, mz: f64, s: &Section, y: f64, z: f64) -> f64 {
     n / s.a + my * z / s.iy - mz * y / s.iz
 }
 
 /// Four-corner extrema using ±cy, ±cz. Returns (maximum, minimum).
 pub fn corner_stress_extrema(n: f64, my: f64, mz: f64, s: &Section) -> (f64, f64) {
-    let corners = [
-        (s.cy, s.cz),
-        (s.cy, -s.cz),
-        (-s.cy, s.cz),
-        (-s.cy, -s.cz),
-    ];
+    let corners = [(s.cy, s.cz), (s.cy, -s.cz), (-s.cy, s.cz), (-s.cy, -s.cz)];
     let mut max = f64::NEG_INFINITY;
     let mut min = f64::INFINITY;
     for (y, z) in corners {

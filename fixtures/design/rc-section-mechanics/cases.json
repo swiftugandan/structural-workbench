@@ -1,0 +1,496 @@
+{
+  "fixtureVersion": 1,
+  "formulation": "docs/formulations/rc-section.md",
+  "oracle": "tools/oracles/rc_section_oracle.py",
+  "oracleSha256": "0e9f30aff510683c3c55214020395bc19ae153e75bf7f0d898972f01b8c1ea27",
+  "python": "3.14.6",
+  "units": "SI (N, m, Pa); compression positive; depths from compression face",
+  "tolerance": {
+    "relative": 1e-09,
+    "absoluteStrain": 1e-12
+  },
+  "codeProfile": null,
+  "cases": [
+    {
+      "id": "RC-SR-BLOCK-YIELD",
+      "note": "Singly reinforced, rectangular block, tension yields; hand check x = A fy /(intensity b lambda)",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.55,
+          "area": 0.000942477796076938
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0,
+        "serviceMoment": 150000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.09634217471008694,
+          "moment": 222783.82022293654,
+          "concreteForce": 433539.78619539156,
+          "curvature": 0.03113901060493606,
+          "classification": "tensionYielded",
+          "depthRatio": 0.17516759038197624,
+          "layers": [
+            {
+              "strain": -0.014126455832714836,
+              "steelStress": -460000000.0,
+              "force": -433539.7861953915
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.18534070751110265,
+          "uncrackedCentroid": 0.3072039051523297,
+          "uncrackedInertia": 0.005724175731854835,
+          "crackingMoment": 54740.11549755158,
+          "crackedNeutralAxis": 0.13227809442259644,
+          "crackedInertia": 0.0013278165168649542,
+          "serviceConcreteStress": 14943114.437404964,
+          "serviceSteelStress": [
+            -314593093.4521491
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-SR-BLOCK-BAL-UNDER",
+      "note": "0.1% below balanced area: tension yields",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.55,
+          "area": 0.003042483593109106
+        }
+      ],
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.3110094339622641,
+          "moment": 606521.7592837753,
+          "concreteForce": 1399542.452830189,
+          "curvature": 0.009646009646009647,
+          "classification": "tensionYielded",
+          "depthRatio": 0.5654716981132074,
+          "layers": [
+            {
+              "strain": -0.0023053053053053063,
+              "steelStress": -460000000.0,
+              "force": -1399542.4528301887
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-SR-BLOCK-BAL-OVER",
+      "note": "0.1% above balanced area: tension elastic",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.55,
+          "area": 0.0030485746513535684
+        }
+      ],
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.3114149244158685,
+          "moment": 607099.444865437,
+          "concreteForce": 1401367.1598714087,
+          "curvature": 0.00963344966727976,
+          "classification": "tensionElastic",
+          "depthRatio": 0.5662089534833972,
+          "layers": [
+            {
+              "strain": -0.0022983973170038687,
+              "steelStress": -459679463.4007737,
+              "force": -1401367.1598714092
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-SR-BLOCK-OVER",
+      "note": "Heavily reinforced: tension steel elastic at ultimate",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.55,
+          "area": 0.006433981754551897
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0,
+        "serviceMoment": 150000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.38088767139986224,
+          "moment": 697882.2184609692,
+          "concreteForce": 1713994.5212993803,
+          "curvature": 0.00787633789503927,
+          "classification": "tensionElastic",
+          "depthRatio": 0.6925230389088404,
+          "layers": [
+            {
+              "strain": -0.001331985842271599,
+              "steelStress": -266397168.4543198,
+              "force": -1713994.5212993817
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.21645922994246075,
+          "uncrackedCentroid": 0.34210865708077265,
+          "uncrackedInertia": 0.0072948895686347675,
+          "crackingMoment": 79202.70048992983,
+          "crackedNeutralAxis": 0.27858832665154126,
+          "crackedInertia": 0.005321862819816276,
+          "serviceConcreteStress": 7852184.5475103455,
+          "serviceSteelStress": [
+            -50999374.19240517
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-DR-BLOCK",
+      "note": "Doubly reinforced, rectangular block; compression bars inside the block displace concrete",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "rectangularBlock",
+        "intensity": 20000000.0,
+        "depthRatio": 0.75,
+        "ultimateStrain": 0.003
+      },
+      "layers": [
+        {
+          "depth": 0.045,
+          "area": 0.000942477796076938
+        },
+        {
+          "depth": 0.55,
+          "area": 0.002454369260617026
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0,
+        "serviceMoment": 150000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.1639149500000511,
+          "moment": 558002.8195847818,
+          "concreteForce": 737617.2750002304,
+          "curvature": 0.01830217438982268,
+          "classification": "tensionYielded",
+          "depthRatio": 0.2980271818182747,
+          "layers": [
+            {
+              "strain": 0.0021764021524579794,
+              "steelStress": 435280430.49159586,
+              "force": 391392.58488360135
+            },
+            {
+              "strain": -0.007066195914402475,
+              "steelStress": -460000000.0,
+              "force": -1129009.8598838318
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.19924879998793246,
+          "uncrackedCentroid": 0.31061558565976,
+          "uncrackedInertia": 0.006594081807155697,
+          "crackingMoment": 63802.43076369626,
+          "crackedNeutralAxis": 0.1861740802074057,
+          "crackedInertia": 0.0029176225866881936,
+          "serviceConcreteStress": 9571529.970505852,
+          "serviceSteelStress": [
+            48386683.339894556,
+            -124699445.86135618
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-DR-PARABOLA",
+      "note": "Doubly reinforced, parabola-rectangle n=2, compression bars displace concrete",
+      "section": {
+        "width": 0.3,
+        "depth": 0.6
+      },
+      "steel": {
+        "yieldStrength": 460000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "parabolaRectangle",
+        "peak": 22000000.0,
+        "strainAtPeak": 0.0021,
+        "ultimateStrain": 0.0034,
+        "exponent": 2.0
+      },
+      "layers": [
+        {
+          "depth": 0.05,
+          "area": 0.00040212385965949355
+        },
+        {
+          "depth": 0.55,
+          "area": 0.001963495408493621
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 30000000000.0,
+        "tensileStrength": 2800000.0,
+        "serviceMoment": 150000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.1404218434765302,
+          "moment": 445988.7787332889,
+          "concreteForce": 735975.6619858132,
+          "curvature": 0.024212757188081416,
+          "classification": "tensionYielded",
+          "depthRatio": 0.25531244268460035,
+          "layers": [
+            {
+              "strain": 0.0021893621405959292,
+              "steelStress": 437872428.11918586,
+              "force": 167232.2259212523
+            },
+            {
+              "strain": -0.00991701645344478,
+              "steelStress": -460000000.0,
+              "force": -903207.8879070656
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.666666666666667,
+          "uncrackedArea": 0.19340517585286765,
+          "uncrackedCentroid": 0.31143683470600464,
+          "uncrackedInertia": 0.0062125258640194385,
+          "crackingMoment": 60281.680101241946,
+          "crackedNeutralAxis": 0.1754438165765694,
+          "crackedInertia": 0.002412305776413253,
+          "serviceConcreteStress": 10909302.105811112,
+          "serviceSteelStress": [
+            52001623.42731113,
+            -155268949.3536516
+          ]
+        }
+      }
+    },
+    {
+      "id": "RC-ML-PARABOLA-NONINT",
+      "note": "Two tension rows, non-integer exponent, higher strength",
+      "section": {
+        "width": 0.25,
+        "depth": 0.5
+      },
+      "steel": {
+        "yieldStrength": 500000000.0,
+        "modulus": 200000000000.0
+      },
+      "concrete": {
+        "kind": "parabolaRectangle",
+        "peak": 38000000.0,
+        "strainAtPeak": 0.0023,
+        "ultimateStrain": 0.0029,
+        "exponent": 1.6
+      },
+      "layers": [
+        {
+          "depth": 0.04,
+          "area": 0.0002261946710584651
+        },
+        {
+          "depth": 0.41,
+          "area": 0.0006283185307179587
+        },
+        {
+          "depth": 0.45,
+          "area": 0.000942477796076938
+        }
+      ],
+      "elastic": {
+        "concreteModulus": 33000000000.0,
+        "tensileStrength": 3500000.0,
+        "serviceMoment": 90000.0
+      },
+      "expected": {
+        "ultimate": {
+          "neutralAxisDepth": 0.10766922896195166,
+          "moment": 309008.6617436598,
+          "concreteForce": 710845.3869663076,
+          "curvature": 0.026934343525621483,
+          "classification": "tensionYielded",
+          "depthRatio": 0.23926495324878147,
+          "layers": [
+            {
+              "strain": 0.0018226262589751407,
+              "steelStress": 364525251.79502815,
+              "force": 74552.7764311407
+            },
+            {
+              "strain": -0.008143080845504807,
+              "steelStress": -500000000.0,
+              "force": -314159.26535897935
+            },
+            {
+              "strain": -0.009220454586529668,
+              "steelStress": -500000000.0,
+              "force": -471238.898038469
+            }
+          ]
+        },
+        "elastic": {
+          "modularRatio": 6.0606060606060606,
+          "uncrackedArea": 0.13409386353459127,
+          "uncrackedCentroid": 0.25911500423354417,
+          "uncrackedInertia": 0.002915686158841974,
+          "crackingMoment": 42364.20588786204,
+          "crackedNeutralAxis": 0.1450630175512978,
+          "crackedInertia": 0.0010654457495117935,
+          "serviceConcreteStress": 12253717.831808094,
+          "serviceSteelStress": [
+            53786971.799160324,
+            -135634387.20542395,
+            -156112371.96267632
+          ]
+        }
+      }
+    }
+  ],
+  "rows": [
+    {
+      "id": "ROW-FITS",
+      "width": 0.3,
+      "sideCover": 0.035,
+      "linkDiameter": 0.01,
+      "barDiameter": 0.02,
+      "count": 4,
+      "minimumClearSpacing": 0.025,
+      "expected": {
+        "area": 0.0012566370614359172,
+        "clearSpacing": 0.043333333333333314,
+        "depthFromFace": 0.05500000000000001,
+        "fits": true
+      }
+    },
+    {
+      "id": "ROW-SPACING-FAILS",
+      "width": 0.3,
+      "sideCover": 0.035,
+      "linkDiameter": 0.01,
+      "barDiameter": 0.025,
+      "count": 5,
+      "minimumClearSpacing": 0.025,
+      "expected": {
+        "area": 0.0024543692606170263,
+        "clearSpacing": 0.02124999999999999,
+        "depthFromFace": 0.05750000000000001,
+        "fits": false
+      }
+    },
+    {
+      "id": "ROW-OVERFILLS",
+      "width": 0.2,
+      "sideCover": 0.04,
+      "linkDiameter": 0.01,
+      "barDiameter": 0.032,
+      "count": 5,
+      "minimumClearSpacing": 0.02,
+      "expected": {
+        "area": 0.004021238596594935,
+        "clearSpacing": -0.015,
+        "depthFromFace": 0.066,
+        "fits": false
+      }
+    },
+    {
+      "id": "ROW-SINGLE",
+      "width": 0.2,
+      "sideCover": 0.04,
+      "linkDiameter": 0.01,
+      "barDiameter": 0.02,
+      "count": 1,
+      "minimumClearSpacing": 0.02,
+      "expected": {
+        "area": 0.0003141592653589793,
+        "clearSpacing": null,
+        "depthFromFace": 0.060000000000000005,
+        "fits": true
+      }
+    }
+  ]
+}

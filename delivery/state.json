@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M07",
-  "activeTask": "REVIEW-02",
+  "activeMilestone": "M08",
+  "activeTask": "M08-A2",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -3042,6 +3042,49 @@
         "18 engineering hashes unchanged; visible Chrome current/edit/stale/reanalysis/current PASS",
         "Common M00 gate PASS; release gate has no stale evidence and remains BLOCKED only on unimplemented remaining milestone gates"
       ]
+    },
+    "M08-A1": {
+      "id": "M08-A1",
+      "useCase": "Rectangular RC section mechanics kernel (ultimate strain compatibility, cracked/uncracked elastic, bar-row fit); code-agnostic per ADR 0012",
+      "dependencies": [
+        "M06"
+      ],
+      "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+      "ownedPaths": [
+        "crates/design/src/rc_section.rs",
+        "docs/formulations/rc-section.md",
+        "tools/oracles/rc_section_oracle.py",
+        "fixtures/design/rc-section-mechanics/cases.json",
+        "docs/adr/0012-concrete-mechanics-before-code-profile.md"
+      ],
+      "requiredCommands": [
+        "python3 tools/oracles/rc_section_oracle.py",
+        "cargo test -p workbench-design",
+        "cargo build -p workbench-design --target wasm32-unknown-unknown --release"
+      ],
+      "actualOutcomes": [
+        "oracle regenerated 7 section cases + 4 row cases",
+        "cargo test -p workbench-design: 20 passed",
+        "wasm32 release build: ok (6 pre-existing AISC warnings)",
+        "mutation checks: parabola closed-form +1e-7 and disabled block displaced-concrete both fail the oracle comparison",
+        "clippy not run: component not installed for pinned toolchain 1.96.0"
+      ],
+      "fixtureSha256": "947235f7701ffe4b51d75e1ff9b2980856a663d1f8398ec4fe4f57538bf9b42a",
+      "codeProfile": null,
+      "nextAction": "M08-A2: expose section mechanics through wasm-api for the rcBeam preview (explicit material-law inputs with provenance, bar rows from cover/link/diameter/count), labelled mechanics-only; code checks stay unsupported"
+    },
+    "M08-B": {
+      "id": "M08-B",
+      "useCase": "Concrete code profile (EC2 UK NA candidate) supplying parameters/clause checks to M08-A kernel",
+      "dependencies": [
+        "M08-A1"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "blockedBy": [
+        "UKR01-EC-resources",
+        "M08-concrete-resources"
+      ],
+      "nextAction": "Wait for lawful EN 1992-1-1:2004+A1:2014 and NA+A2:2014; then clause dossier + JRC example reconciliation"
     }
   },
   "blockers": [
@@ -3092,7 +3135,7 @@
   ],
   "lastVerifiedSourceRevision": "90067de",
   "lastVerifiedBuildHash": "4e3e8f028f29f63ccabbf1f7ae6d65aea8d684c94261e131c4c00d2e4e41f3a0",
-  "nextAction": "Resolve residential physical geometry/detailing acceptance and acquire exact Eurocode/UK NA resources for concrete numerical/code profiles. See docs/design/current-capability-review.md.",
+  "nextAction": "M08-A2: wire rc_section mechanics into the rcBeam preview via wasm-api with explicit, provenance-tracked material-law inputs; mechanics-only labels; overall stays unsupported (ADR 0012).",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "f5b1eb1be2744d973ec45636316a4298da39cf2099de2c398ed3f68a6a2778b9",
   "lastVerifiedScope": "Fresh same-build native/contracts/security/numerical/WASM/oracle and complete 112-test real-GPU browser corpus; no stale release evidence. Preview scope only."
