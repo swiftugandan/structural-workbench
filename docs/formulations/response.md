@@ -106,9 +106,9 @@ for matrices and modes.
 | ID | Case | Reference | Gate |
 | --- | --- | --- | --- |
 | H-SDOF | Massless cantilever, tip mass, transverse tip load | U = F / (k(1 + iΩa₁) − mΩ² + iΩa₀m), k = 3EI/L³, at 7 frequencies incl. resonance | complex U ≤ 1e-9 relative |
-| H-STATIC | Any model, Ω → 0 | linear static solution of the same case | ≤ 1e-8 relative at f = 1e-6 Hz |
+| H-STATIC | Any model, Ω → 0 | linear static solution of the same case | ≤ 1e-8 relative at f = 1e-9 Hz (at 1e-6 Hz the damping phase Ω(a₁ + a₀m/k) is itself 3.7e-8 for the cantilever) |
 | H-FRAME-OS | Spatial frame (dynamics-v1 D-FRAME-OS, lumped, 4 subdivisions), lateral load case, Rayleigh ζ = 0.05 at f₁, f₃ | direct complex solve with OpenSees K and M (GimmeMCK) at 5 frequencies | nodal complex U ≤ 1e-6 of max ‖U‖ |
-| H-MODAL | Same frame | modal superposition over all modes of the same K, M (oracle self-check) | agrees with the direct solve to 1e-9 |
+| H-REAL2N | Same frame | the equivalent real 2n × 2n block system (oracle self-check) | agrees with the complex solve to 1e-9 |
 | R-SDOF | Cantilever with tip mass | u = s Sa(T)/ω², base shear m s Sa, base moment m s Sa L | ≤ 1e-9 |
-| R-SHEAR2 | Two-storey shear frame (D-SHEAR2) | closed-form modes; SRSS and CQC of floor displacements and storey shears by hand algebra | ≤ 1e-5 (the frame is near-rigid, as in D-SHEAR2) |
+| R-SHEAR2 | Two-storey shear frame (D-SHEAR2) | closed-form modes; SRSS and CQC of floor displacements and base shear by hand algebra | ≤ 1e-5 (the frame is near-rigid, as in D-SHEAR2) |
 | R-FRAME-OS | Spatial frame, X and Y, SRSS and CQC | OpenSees modes; per-mode member end forces (setNodeDisp + localForce), reactions and displacements; combination in Python | ≤ 1e-6 of each quantity's largest value |

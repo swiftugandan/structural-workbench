@@ -123,7 +123,8 @@ fn a_1_3_project_migrates_by_version_only() {
         report.steps,
         [
             "set schemaVersion 1.4.0 (no mass sources declared)",
-            "set schemaVersion 1.5.0 (slab plate analysis not configured)"
+            "set schemaVersion 1.5.0 (slab plate analysis not configured)",
+            "set schemaVersion 1.6.0 (no response spectra)"
         ]
     );
     assert!(migrated.mass_sources.is_empty());

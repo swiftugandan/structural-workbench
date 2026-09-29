@@ -6,6 +6,8 @@ mod study;
 mod stability;
 mod second_order;
 mod modal;
+mod dynamic;
+mod response;
 
 use serde_json::json;
 use sprs::TriMat;
@@ -23,6 +25,9 @@ pub use study::{apply_pointer, execute_study_document};
 pub use second_order::{Imperfection, SecondOrderSettings, second_order};
 pub use stability::{StabilitySettings, elastic_buckling};
 pub use modal::{MassMatrix, ModalSettings, modal};
+pub use response::{
+    Combination, Damping, HarmonicSettings, SpectrumSettings, harmonic, response_spectrum,
+};
 
 fn section_actions(end: &[f64], q: [f64; 3], x: f64) -> [f64; 6] {
     [

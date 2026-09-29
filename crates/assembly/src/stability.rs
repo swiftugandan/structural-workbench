@@ -284,23 +284,7 @@ pub(crate) fn assemble(p: &Project, d: &Dofs, local: impl Fn(&Member, f64) -> Ma
             m.local_y,
         );
         let g = transform(&local(m, l), r);
-        let (i, j) = (d.node[&m.start], d.node[&m.end]);
-        let ids: [usize; 12] =
-            std::array::from_fn(|x| if x < 6 { i * 6 + x } else { j * 6 + x - 6 });
-        // Element DOF x = Σ coefficient × free DOF: the node DOF, plus the
-        // released axis times the hinge DOF on end rotations.
-        let mut map: [Vec<(usize, f64)>; 12] = std::array::from_fn(|x| {
-            d.free[ids[x]].map(|f| vec![(f, 1.)]).unwrap_or_default()
-        });
-        for end in 0..2 {
-            for h in d.hinges.get(&(m.id.clone(), end)).into_iter().flatten() {
-                for c in 0..3 {
-                    if h.axis[c] != 0. {
-                        map[end * 6 + 3 + c].push((h.dof, h.axis[c]));
-                    }
-                }
-            }
-        }
+        let map = element_dofs(d, m, d.node[&m.start], d.node[&m.end]);
         for x in 0..12 {
             for y in 0..12 {
                 if g[x][y] == 0. {
@@ -315,6 +299,24 @@ pub(crate) fn assemble(p: &Project, d: &Dofs, local: impl Fn(&Member, f64) -> Ma
         }
     }
     t.to_csc()
+}
+
+/// Element DOF x = Σ coefficient × free DOF: the node DOF, plus the released
+/// axis times the hinge DOF on end rotations. Restrained DOFs map to nothing.
+pub(crate) fn element_dofs(d: &Dofs, m: &Member, i: usize, j: usize) -> [Vec<(usize, f64)>; 12] {
+    let ids: [usize; 12] = std::array::from_fn(|x| if x < 6 { i * 6 + x } else { j * 6 + x - 6 });
+    let mut map: [Vec<(usize, f64)>; 12] =
+        std::array::from_fn(|x| d.free[ids[x]].map(|f| vec![(f, 1.)]).unwrap_or_default());
+    for end in 0..2 {
+        for h in d.hinges.get(&(m.id.clone(), end)).into_iter().flatten() {
+            for c in 0..3 {
+                if h.axis[c] != 0. {
+                    map[end * 6 + 3 + c].push((h.dof, h.axis[c]));
+                }
+            }
+        }
+    }
+    map
 }
 
 /// Physical member → (analysis member, station range) pieces, in order.

@@ -282,7 +282,7 @@ fn migrated_slab_drafts_are_not_configured() {
         json!({"jsonUtf8":project.to_string()}),
     );
     assert_eq!(r["status"], "ok", "{r}");
-    assert_eq!(r["payload"]["project"]["schemaVersion"], "1.5.0");
+    assert_eq!(r["payload"]["project"]["schemaVersion"], workbench_model::CURRENT_SCHEMA);
     let run = evaluate(&mut reopened, &d, "plate");
     assert_eq!(run["diagnostics"][0]["code"], "DESIGN_INPUT_INCOMPLETE", "{run}");
     // The synthetic illustration still runs and says the plate was not run.

@@ -15,7 +15,7 @@ pub use design_inputs::{
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
-    SCHEMA_1_4, import_project,
+    SCHEMA_1_4, SCHEMA_1_5, import_project,
 };
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;
@@ -184,6 +184,74 @@ impl MassSource {
     }
 }
 
+/// A user response spectrum (schema 1.6.0, ADR 0023,
+/// `docs/formulations/response.md`): pseudo-acceleration Sa (m/s²) against
+/// period T (s), linear between points, from T = 0. Never a code value.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ResponseSpectrum {
+    pub id: String,
+    pub name: String,
+    /// [T, Sa] pairs, T strictly increasing from 0.
+    pub points: Vec<[f64; 2]>,
+    /// The damping ratio the spectrum represents (used by CQC).
+    pub damping_ratio: f64,
+    /// Where the ordinates came from (the user's statement).
+    pub reference: String,
+}
+
+impl ResponseSpectrum {
+    pub fn validate(&self) -> Result<()> {
+        if self.name.is_empty() || self.name.len() > 128 || self.reference.len() > 512 {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "A response spectrum needs a name (≤ 128 bytes) and a reference of at most 512 bytes",
+            ));
+        }
+        if !(2..=200).contains(&self.points.len()) {
+            return Err(err(
+                "INVALID_SPECTRUM",
+                "A response spectrum needs 2 to 200 points",
+            ));
+        }
+        if self.points[0][0] != 0. {
+            return Err(err("INVALID_SPECTRUM", "The first period must be 0 s"));
+        }
+        for (k, [t, sa]) in self.points.iter().enumerate() {
+            if !(t.is_finite() && sa.is_finite() && *sa >= 0.) {
+                return Err(err(
+                    "INVALID_SPECTRUM",
+                    format!("Point {} needs a finite period and Sa ≥ 0", k + 1),
+                ));
+            }
+        }
+        if self.points.windows(2).any(|w| w[1][0] <= w[0][0]) {
+            return Err(err(
+                "INVALID_SPECTRUM",
+                "Periods must increase strictly",
+            ));
+        }
+        if !(self.damping_ratio > 0. && self.damping_ratio < 1.) {
+            return Err(err(
+                "INVALID_SPECTRUM",
+                "The spectrum damping ratio must lie in (0, 1)",
+            ));
+        }
+        Ok(())
+    }
+
+    /// Sa at period `t`, linear between points; `None` beyond the last point.
+    pub fn sa(&self, t: f64) -> Option<f64> {
+        if !(t >= 0.) {
+            return None;
+        }
+        self.points.windows(2).find_map(|w| {
+            let ([t0, s0], [t1, s1]) = (w[0], w[1]);
+            (t0 <= t && t <= t1).then(|| s0 + (s1 - s0) * (t - t0) / (t1 - t0))
+        })
+    }
+}
+
 record!(Term {
     case: String,
     factor: f64
@@ -207,7 +275,7 @@ pub struct Metadata {
     #[serde(default)]
     pub entity_labels: std::collections::BTreeMap<String, String>,
 }
-record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata,structure:Structure,#[serde(default,skip_serializing_if="Vec::is_empty")]design_previews:Vec<DesignPreview>,#[serde(default,skip_serializing_if="Vec::is_empty")]mass_sources:Vec<MassSource>});
+record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata,structure:Structure,#[serde(default,skip_serializing_if="Vec::is_empty")]design_previews:Vec<DesignPreview>,#[serde(default,skip_serializing_if="Vec::is_empty")]mass_sources:Vec<MassSource>,#[serde(default,skip_serializing_if="Vec::is_empty")]response_spectra:Vec<ResponseSpectrum>});
 impl Project {
     pub fn parse(s: &str) -> Result<Self> {
         Ok(import_project(s)?.0)
@@ -233,6 +301,10 @@ impl Project {
                     .iter()
                     .map(|x| x.id().to_string())
                     .collect(),
+            ),
+            (
+                "rs",
+                self.response_spectra.iter().map(|x| x.id.clone()).collect(),
             ),
         ];
         let mut used = BTreeSet::new();
@@ -272,6 +344,7 @@ impl Project {
         self.loads.sort_by(|a, b| a.id().cmp(b.id()));
         self.combinations.sort_by(|a, b| a.id.cmp(&b.id));
         self.mass_sources.sort_by(|a, b| a.id().cmp(b.id()));
+        self.response_spectra.sort_by(|a, b| a.id.cmp(&b.id));
         for c in &mut self.combinations {
             c.terms.sort_by(|a, b| a.case.cmp(&b.case));
         }
@@ -397,6 +470,16 @@ impl Project {
             }
         }
         validate_mass_sources(self)?;
+        if self.response_spectra.len() > 100 {
+            return Err(err("MEMORY_LIMIT", "At most 100 response spectra"));
+        }
+        for s in &self.response_spectra {
+            check_id(&s.id)?;
+            if !all.insert(&s.id) {
+                return Err(err("DUPLICATE_ID", &s.id));
+            }
+            s.validate()?;
+        }
         check_id(&self.id)?;
         if self.design_previews.len() > 100 {
             return Err(err("MEMORY_LIMIT", "At most 100 design previews"));

@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { CURRENT_SCHEMA, migratedTo } from "../schema-version.js";
 
 process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M04/migrations";
 process.env.WORKBENCH_TASK_ID ||= "M04-C";
@@ -29,9 +30,7 @@ test("M04 migration: 0.9.0 imports, retains original, unknown schema refused", a
     buffer: Buffer.from(legacy),
   });
   await expect(page.locator("#workspace")).toBeVisible();
-  await expect(page.locator("#message")).toContainText(
-    /Migrated schema 0\.9\.0 → 1\.5\.0/i,
-  );
+  await expect(page.locator("#message")).toContainText(migratedTo("0.9.0"));
   await expect(page.locator("#message")).toContainText(legacySha.slice(0, 12));
   await expect(page.locator("#save-status")).toHaveText("Saved locally", {
     timeout: 10000,
@@ -55,7 +54,7 @@ test("M04 migration: 0.9.0 imports, retains original, unknown schema refused", a
   expect(originalRecord).toBeTruthy();
   expect(originalRecord.sha256).toBe(legacySha);
   expect(originalRecord.fromSchema).toBe("0.9.0");
-  expect(originalRecord.toSchema).toBe("1.5.0");
+  expect(originalRecord.toSchema).toBe(CURRENT_SCHEMA);
   expect(originalRecord.originalUtf8).toBe(legacy);
 
   await page.goto("/");

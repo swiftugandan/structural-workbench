@@ -11,8 +11,6 @@
 use std::collections::BTreeMap;
 
 use serde_json::json;
-use sprs::{CsMat, TriMat};
-use workbench_frame::{consistent_mass, lumped_mass, stiffness};
 use workbench_geometry::{axes, global};
 use workbench_model::{Load, MassSource, Member, Project, Result, digest, err};
 use workbench_results::{
@@ -21,8 +19,8 @@ use workbench_results::{
 use workbench_solver::eigen::vibration;
 use workbench_solver::matvec;
 
-use crate::expand::expand_point_loads;
-use crate::stability::{assemble, dofs, mode_members, subdivide};
+use crate::dynamic::DynamicModel;
+use crate::stability::mode_members;
 
 pub const DEFAULT_MODAL_MODES: usize = 12;
 pub const DEFAULT_MODAL_SUBDIVISIONS: usize = 8;
@@ -68,16 +66,16 @@ impl Default for ModalSettings {
 const DIRECTIONS: [&str; 3] = ["X", "Y", "Z"];
 
 /// Mass of the meshed model from the declared sources, before assembly.
-struct Masses {
+pub(crate) struct Masses {
     /// Per analysis element: multiplier on its own ρA and ρ(Iy + Iz).
-    self_factor: BTreeMap<String, f64>,
+    pub(crate) self_factor: BTreeMap<String, f64>,
     /// Per analysis element: added translational line mass (kg/m).
-    line: BTreeMap<String, f64>,
+    pub(crate) line: BTreeMap<String, f64>,
     /// Per analysis node: translational point mass (kg).
-    point: BTreeMap<String, f64>,
+    pub(crate) point: BTreeMap<String, f64>,
     /// Mass contributed by each declared source (kg), in source order.
-    by_source: Vec<SourceMass>,
-    diagnostics: Vec<serde_json::Value>,
+    pub(crate) by_source: Vec<SourceMass>,
+    pub(crate) diagnostics: Vec<serde_json::Value>,
 }
 
 
@@ -87,7 +85,7 @@ fn dot(a: [f64; 3], b: [f64; 3]) -> f64 {
 
 /// Converts declared sources on the mesh. `original` supplies the load ids
 /// named in diagnostics; `mesh` carries the same loads split onto elements.
-fn masses(original: &Project, mesh: &Project) -> Result<Masses> {
+pub(crate) fn masses(original: &Project, mesh: &Project) -> Result<Masses> {
     let length: BTreeMap<&str, f64> = {
         let position: BTreeMap<&str, [f64; 3]> = mesh
             .nodes
@@ -289,16 +287,21 @@ pub fn modal(project: &Project, settings: &ModalSettings) -> Result<ModalAnalysi
             "Modal subdivisions must be 1–32, requested modes 1–50 and the participation target in (0, 1]",
         ));
     }
-    project.validate()?;
-    let mut original = project.clone();
-    original.canonicalise();
-    if original.mass_sources.is_empty() {
-        return Err(err(
-            "NO_MASS",
-            "Declare mass sources (self mass, load cases or nodal masses) before a modal analysis",
-        ));
-    }
-    let model_hash = original.hash();
+    let dynamic = DynamicModel::build(project, settings.mass_matrix, settings.subdivisions)?;
+    let DynamicModel {
+        original,
+        model_hash,
+        mesh,
+        splits,
+        d,
+        mass,
+        k,
+        m,
+        influence,
+        participating,
+        total_mass,
+        ..
+    } = dynamic;
     let settings_hash = digest(
         &serde_json::to_vec(&json!({
             "analysisSettings": original.analysis_settings,
@@ -313,69 +316,7 @@ pub fn modal(project: &Project, settings: &ModalSettings) -> Result<ModalAnalysi
         }))
         .unwrap(),
     );
-    let (expanded, splits) = expand_point_loads(&original)?;
-    let mesh = subdivide(&expanded, settings.subdivisions)?;
     let p = &mesh.project;
-    let mass = masses(&original, p)?;
-    let total_mass: f64 = mass.by_source.iter().map(|s| s.mass).sum();
-    if !(total_mass > 0.) {
-        return Err(err(
-            "NO_MASS",
-            "The declared mass sources contribute no mass",
-        ));
-    }
-
-    let d = dofs(p);
-    let material = |m: &Member| p.materials.iter().find(|x| x.id == m.material).unwrap();
-    let section = |m: &Member| p.sections.iter().find(|x| x.id == m.section).unwrap();
-    let k = assemble(p, &d, |m, l| stiffness(l, material(m), section(m)));
-    let element_mass = assemble(p, &d, |m, l| {
-        let own = mass.self_factor.get(&m.id).copied().unwrap_or(0.);
-        let mu =
-            own * material(m).density * section(m).a + mass.line.get(&m.id).copied().unwrap_or(0.);
-        match settings.mass_matrix {
-            MassMatrix::Consistent => consistent_mass(
-                l,
-                mu,
-                own * material(m).density * (section(m).iy + section(m).iz),
-            ),
-            MassMatrix::Lumped => lumped_mass(l, mu),
-        }
-    });
-    let mut nodal = TriMat::new((d.count, d.count));
-    for (node, m) in &mass.point {
-        for a in 0..3 {
-            if let Some(f) = d.free[d.node[node] * 6 + a] {
-                nodal.add_triplet(f, f, *m);
-            }
-        }
-    }
-    let nodal: CsMat<f64> = nodal.to_csc();
-    let m = &element_mass + &nodal;
-
-    // Participating mass: a rigid unit translation of the free DOFs.
-    let influence: Vec<Vec<f64>> = (0..3)
-        .map(|dir| {
-            let mut r = vec![0.; d.count];
-            for i in 0..p.nodes.len() {
-                if let Some(f) = d.free[i * 6 + dir] {
-                    r[f] = 1.;
-                }
-            }
-            r
-        })
-        .collect();
-    let participating: Vec<f64> = influence
-        .iter()
-        .map(|r| r.iter().zip(matvec(&m, r)).map(|(a, b)| a * b).sum())
-        .collect();
-    if participating.iter().all(|v| *v <= 0.) {
-        return Err(err(
-            "NO_MASS",
-            "All declared mass sits on restrained degrees of freedom",
-        ));
-    }
-
     let budget = p.analysis_settings.memory_limit_mi_b as usize * 1024 * 1024 / 2;
     let solved = vibration(&k, &m, settings.modes, budget)?;
 

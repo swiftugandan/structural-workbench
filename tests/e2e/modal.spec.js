@@ -4,6 +4,7 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { CURRENT_SCHEMA, migratedTo } from "../schema-version.js";
 
 const dir = process.env.WORKBENCH_EVIDENCE_DIR || "evidence/M14/modal";
 const oracle = JSON.parse(
@@ -117,7 +118,7 @@ test("M14 modal: declare mass, frequencies against the oracle, participation, st
     buffer: Buffer.from(JSON.stringify(portal())),
   });
   await expect(page.locator("#kernel-status")).toContainText("ready");
-  await expect(page.locator("#message")).toContainText(/1\.0\.0 → 1\.5\.0/);
+  await expect(page.locator("#message")).toContainText(migratedTo("1.0.0"));
 
   // No mass is implied: the modal tab says so and cannot run.
   await page.locator("[data-testid=tab-modal]").click();
@@ -234,7 +235,7 @@ test("M14 modal: declare mass, frequencies against the oracle, participation, st
   const projectDownload = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = await readFile(await (await projectDownload).path(), "utf8");
-  expect(JSON.parse(saved).schemaVersion).toBe("1.5.0");
+  expect(JSON.parse(saved).schemaVersion).toBe(CURRENT_SCHEMA);
   expect(JSON.parse(saved).massSources).toHaveLength(3);
   await writeFile(`${dir}/project.json`, saved);
   await page.goto("/");

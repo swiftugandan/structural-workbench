@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { CURRENT_SCHEMA } from "../schema-version.js";
 
 /** Runs the active preview and waits for the run to finish, so a pane chosen
  * next is not reset to the summary by the arriving result. */
@@ -242,7 +243,7 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   const p = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
-  expect(saved.schemaVersion).toBe("1.5.0");
+  expect(saved.schemaVersion).toBe(CURRENT_SCHEMA);
   expect(saved.designPreviews[0].inputs.topBarCount).toBe(2);
   expect(saved.designPreviews[0].inputs.bottomBarDiameter).toBe(0.025);
   expect(saved.designPreviews[0].mechanics.law).toBe("parabolaRectangle");
@@ -564,7 +565,7 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   const saved = JSON.parse(
     await readFile(await (await download).path(), "utf8"),
   );
-  expect(saved.schemaVersion).toBe("1.5.0");
+  expect(saved.schemaVersion).toBe(CURRENT_SCHEMA);
   expect(saved.designPreviews[0].tensionAnchorageConfirmed).toBe(true);
   expect(saved.designPreviews[0].inputs.linkLegs).toBe(2);
   expect(errors).toEqual([]);

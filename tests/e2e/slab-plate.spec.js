@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { CURRENT_SCHEMA } from "../schema-version.js";
 
 /** M10 slab plate analysis (plate-v1, ADR 0021) through the browser build:
  * inputs, solve, contour display, oracle agreement, refusals, stale state and
@@ -180,7 +181,7 @@ test("Slab plate analysis reproduces the opening oracle, shows contours and pers
   const p = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
-  expect(saved.schemaVersion).toBe("1.5.0");
+  expect(saved.schemaVersion).toBe(CURRENT_SCHEMA);
   expect(saved.designPreviews[0].plate.edges).toEqual([
     "simple",
     "simple",

@@ -304,3 +304,140 @@ pub struct DirectionParticipation {
     /// Null where nothing participates in this direction.
     pub achieved: Option<bool>,
 }
+
+/// Rayleigh damping C = a₀M + a₁K (response-v1), with the ratio and the two
+/// frequencies it was derived from when entered that way.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RayleighDamping {
+    pub a0: f64,
+    pub a1: f64,
+    pub ratio: Option<f64>,
+    /// Hz.
+    pub frequencies: Option<[f64; 2]>,
+}
+
+/// Steady-state response at one forcing frequency: complex amplitudes,
+/// u(t) = Re(U e^{iΩt}), for the load case applied as F cos(Ωt).
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HarmonicFrequency {
+    /// Hz.
+    pub frequency: f64,
+    /// rad/s.
+    pub omega: f64,
+    /// The Rayleigh ratio at this frequency, a₀/(2Ω) + a₁Ω/2.
+    pub damping_ratio: f64,
+    /// ‖ZU − F‖∞ / ‖F‖∞.
+    pub residual: f64,
+    /// Six per node (node order of `nodeIds`): real and imaginary parts.
+    pub displacement_re: Vec<f64>,
+    pub displacement_im: Vec<f64>,
+    /// Six per support (order of `supportIds`).
+    pub reaction_re: Vec<f64>,
+    pub reaction_im: Vec<f64>,
+}
+
+/// Harmonic (steady-state) response of one case or combination
+/// (response-v1, `docs/formulations/response.md`).
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HarmonicResponse {
+    pub result_id: String,
+    pub schema_version: String,
+    /// Always "harmonic".
+    pub analysis_type: String,
+    pub converged: bool,
+    pub model_hash: String,
+    pub settings_hash: String,
+    pub solver_build_hash: String,
+    pub source_revision: u64,
+    pub case_id: String,
+    pub subdivisions: usize,
+    pub mass_matrix: String,
+    pub damping: RayleighDamping,
+    pub node_ids: Vec<String>,
+    pub support_ids: Vec<String>,
+    pub frequencies: Vec<HarmonicFrequency>,
+    pub numerical_checks: serde_json::Value,
+    pub disclosures: Vec<String>,
+    pub diagnostics: Vec<serde_json::Value>,
+}
+
+/// One mode's contribution to a response-spectrum analysis.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SpectrumMode {
+    pub mode: usize,
+    pub omega: f64,
+    pub frequency: f64,
+    pub period: f64,
+    /// Spectral pseudo-acceleration at the period, × scale (m/s²).
+    pub sa: f64,
+    /// Γ in the excitation direction (φ M-normalised).
+    pub participation_factor: f64,
+    /// Γ² (kg).
+    pub effective_mass: f64,
+    pub effective_mass_ratio: Option<f64>,
+    /// Γ² × s × Sa (N), the modal base shear in the excitation direction.
+    pub base_shear: f64,
+}
+
+/// Combined section-action magnitudes at one mesh node of a member.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SpectrumStation {
+    pub station: f64,
+    /// "left" / "right" of an interior mesh node; absent at member ends.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub side: Option<String>,
+    /// |N|, |Vy|, |Vz|, |T|, |My|, |Mz| in member local axes.
+    pub actions: [f64; 6],
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SpectrumMember {
+    pub id: String,
+    pub stations: Vec<SpectrumStation>,
+}
+
+/// Response-spectrum analysis with a user spectrum (response-v1).
+/// Combined values are non-negative peak magnitudes.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SpectrumResponse {
+    pub result_id: String,
+    pub schema_version: String,
+    /// Always "responseSpectrum".
+    pub analysis_type: String,
+    pub converged: bool,
+    pub model_hash: String,
+    pub settings_hash: String,
+    pub solver_build_hash: String,
+    pub source_revision: u64,
+    pub spectrum_id: String,
+    /// "X", "Y" or "Z".
+    pub direction: String,
+    pub scale: f64,
+    /// "srss" or "cqc".
+    pub combination: String,
+    pub damping_ratio: f64,
+    pub subdivisions: usize,
+    pub mass_matrix: String,
+    pub requested_modes: usize,
+    pub modes: Vec<SpectrumMode>,
+    pub participation: DirectionParticipation,
+    pub node_ids: Vec<String>,
+    /// Six magnitudes per node.
+    pub node_displacements: Vec<f64>,
+    pub support_ids: Vec<String>,
+    /// Six magnitudes per support.
+    pub reactions: Vec<f64>,
+    /// Combined |ΣFx|, |ΣFy|, |ΣFz| of the support reactions.
+    pub base_reaction: [f64; 3],
+    pub members: Vec<SpectrumMember>,
+    pub numerical_checks: serde_json::Value,
+    pub disclosures: Vec<String>,
+    pub diagnostics: Vec<serde_json::Value>,
+}

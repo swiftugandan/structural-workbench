@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.6.0"
+      "const": "1.5.0"
     },
     "id": {
       "type": "string",
@@ -118,7 +118,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "string",
-            "pattern": "^(n|m|s|l|mat|sec|lc|c|ms|rs)[1-9][0-9]*$"
+            "pattern": "^(n|m|s|l|mat|sec|lc|c|ms)[1-9][0-9]*$"
           }
         }
       },
@@ -544,13 +544,6 @@
       "maxItems": 5000,
       "items": {
         "$ref": "#/$defs/massSource"
-      }
-    },
-    "responseSpectra": {
-      "type": "array",
-      "maxItems": 100,
-      "items": {
-        "$ref": "#/$defs/responseSpectrum"
       }
     }
   },
@@ -1486,52 +1479,6 @@
           "additionalProperties": false
         }
       ]
-    },
-    "responseSpectrum": {
-      "description": "A user response spectrum (schema 1.6.0, ADR 0023): pseudo-acceleration Sa (m/s^2) against period T (s), linear between points, T strictly increasing from 0. Never a code value.",
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "id",
-        "name",
-        "points",
-        "dampingRatio",
-        "reference"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
-        },
-        "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        },
-        "points": {
-          "type": "array",
-          "minItems": 2,
-          "maxItems": 200,
-          "items": {
-            "type": "array",
-            "minItems": 2,
-            "maxItems": 2,
-            "items": {
-              "type": "number",
-              "minimum": 0
-            }
-          }
-        },
-        "dampingRatio": {
-          "type": "number",
-          "exclusiveMinimum": 0,
-          "exclusiveMaximum": 1
-        },
-        "reference": {
-          "type": "string",
-          "maxLength": 512
-        }
-      }
     }
   },
   "$comment": "The invalid domain is an identifier, not a downloadable endpoint."

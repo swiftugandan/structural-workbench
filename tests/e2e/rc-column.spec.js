@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { CURRENT_SCHEMA } from "../schema-version.js";
 
 /** M12 RC column section mechanics (ADR 0022) through the browser build: a
  * draft bound to a model member reproduces the column oracle's SQ-PARABOLA
@@ -137,7 +138,7 @@ test("RC column mechanics match the oracle at model station actions, go stale an
   const p = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
-  expect(saved.schemaVersion).toBe("1.5.0");
+  expect(saved.schemaVersion).toBe(CURRENT_SCHEMA);
   const draft = saved.designPreviews.find((d) => d.kind === "rcColumn");
   expect(draft.mechanics.law).toBe("parabolaRectangle");
   expect(draft.mechanics.inputs.fullCompressionStrain).toBe(0.002);

@@ -1,6 +1,7 @@
 use sprs::{CsMat, TriMat};
 use workbench_model::{Result, err};
 
+pub mod complex;
 pub mod eigen;
 pub struct Solution {
     pub values: Vec<f64>,

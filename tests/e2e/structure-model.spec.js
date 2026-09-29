@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { CURRENT_SCHEMA } from "../schema-version.js";
 async function exported(page) {
   const pending = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
@@ -17,7 +18,7 @@ test("Authored structure survives save, undo, topology and reopen; invalid bindi
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
   const original = await exported(page);
-  expect(original.schemaVersion).toBe("1.5.0");
+  expect(original.schemaVersion).toBe(CURRENT_SCHEMA);
   const owner = original.structure.physicalMembers[0];
   await page.locator("[data-structure-add=storeys]").click();
   await page.locator("#structure-form [name=name]").fill("Level 1");

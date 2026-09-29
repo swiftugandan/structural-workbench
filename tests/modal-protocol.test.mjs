@@ -5,6 +5,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import Ajv from "ajv/dist/2020.js";
+import { CURRENT_SCHEMA } from "./schema-version.js";
 
 const oracle = JSON.parse(
   await readFile("fixtures/dynamics/modal-oracle.json", "utf8"),
@@ -144,7 +145,7 @@ test("a legacy import migrates to 1.4.0 with no mass, and modal refuses to run",
       "set schemaVersion 1.4.0 (no mass sources declared)",
     ),
   );
-  assert.equal(p.schemaVersion, "1.5.0");
+  assert.equal(p.schemaVersion, CURRENT_SCHEMA);
   assert.equal(p.massSources, undefined);
   assert.ok(projectSchema(p), JSON.stringify(projectSchema.errors));
   const r = ask("analyse", {

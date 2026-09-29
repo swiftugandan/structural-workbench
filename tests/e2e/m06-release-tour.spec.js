@@ -2,6 +2,7 @@ import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { CURRENT_SCHEMA } from "../schema-version.js";
 
 process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M06/full";
 process.env.WORKBENCH_TASK_ID ||= "M06-parent";
@@ -65,7 +66,7 @@ test("M06 release tour: analyse, stress screen, ledger, save and report", async 
   await menuCommand(page, "File", "Download project");
   const projectFile = await projectDownload;
   const projectJson = await readFile(await projectFile.path(), "utf8");
-  expect(JSON.parse(projectJson).schemaVersion).toBe("1.5.0");
+  expect(JSON.parse(projectJson).schemaVersion).toBe(CURRENT_SCHEMA);
   await writeFile(`${evidence()}/exported-project.json`, projectJson);
 
   expect(errors).toEqual([]);

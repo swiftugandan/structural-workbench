@@ -2,6 +2,7 @@ import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { CURRENT_SCHEMA } from "../schema-version.js";
 
 process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M04/full";
 process.env.WORKBENCH_TASK_ID ||= "M04-parent";
@@ -30,7 +31,7 @@ test("M04 record: export/import equivalence and report matches displayed results
   const projectFile = await projectDownload;
   const projectJson = await readFile(await projectFile.path(), "utf8");
   const project = JSON.parse(projectJson);
-  expect(project.schemaVersion).toBe("1.5.0");
+  expect(project.schemaVersion).toBe(CURRENT_SCHEMA);
   expect(project).not.toHaveProperty("canUndo");
   await writeFile(`${evidence()}/exported-project.json`, projectJson);
 

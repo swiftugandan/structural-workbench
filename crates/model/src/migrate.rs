@@ -2,8 +2,10 @@ use crate::{Project, Result, digest, err};
 use serde_json::{Value, json};
 
 /// Current engineering project schema written by the application.
-pub const CURRENT_SCHEMA: &str = "1.5.0";
-/// Previous current schema (no slab plate inputs, ADR 0021).
+pub const CURRENT_SCHEMA: &str = "1.6.0";
+/// Previous current schema (no response spectra, ADR 0023).
+pub const SCHEMA_1_5: &str = "1.5.0";
+/// No slab plate inputs or RC columns (ADR 0021, ADR 0022).
 pub const SCHEMA_1_4: &str = "1.4.0";
 /// No declared mass sources (ADR 0018).
 pub const SCHEMA_1_3: &str = "1.3.0";
@@ -68,6 +70,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
     }
     let (mut steps, report_from) = match version.as_str() {
         CURRENT_SCHEMA => (Vec::new(), CURRENT_SCHEMA.to_string()),
+        SCHEMA_1_5 => (Vec::new(), SCHEMA_1_5.to_string()),
         SCHEMA_1_4 => (Vec::new(), SCHEMA_1_4.to_string()),
         SCHEMA_1_3 => (Vec::new(), SCHEMA_1_3.to_string()),
         SCHEMA_1_2 => (Vec::new(), SCHEMA_1_2.to_string()),
@@ -78,7 +81,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
                 format!(
-                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {SCHEMA_1_2}, {SCHEMA_1_3}, {SCHEMA_1_4}, {CURRENT_SCHEMA}"
+                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {SCHEMA_1_2}, {SCHEMA_1_3}, {SCHEMA_1_4}, {SCHEMA_1_5}, {CURRENT_SCHEMA}"
                 ),
             ));
         }
@@ -99,17 +102,21 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
         steps.push("create explicit physical members, joints, support details and draft bindings; preserve unassigned roles".into());
         steps.push("set schemaVersion 1.1.0".into());
     }
-    if ![CURRENT_SCHEMA, SCHEMA_1_4, SCHEMA_1_3, SCHEMA_1_2].contains(&version.as_str()) {
+    let newer = |versions: &[&str]| versions.contains(&version.as_str());
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3, SCHEMA_1_2]) {
         steps.extend(migrate_1_1_to_1_2(&mut raw)?);
     }
-    if ![CURRENT_SCHEMA, SCHEMA_1_4, SCHEMA_1_3].contains(&version.as_str()) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3]) {
         steps.extend(migrate_1_2_to_1_3(&mut raw)?);
     }
-    if ![CURRENT_SCHEMA, SCHEMA_1_4].contains(&version.as_str()) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_5, SCHEMA_1_4]) {
         steps.extend(migrate_1_3_to_1_4(&mut raw)?);
     }
-    if version != CURRENT_SCHEMA {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_5]) {
         steps.extend(migrate_1_4_to_1_5(&mut raw)?);
+    }
+    if version != CURRENT_SCHEMA {
+        steps.extend(migrate_1_5_to_1_6(&mut raw)?);
     }
     let text = serde_json::to_string(&raw).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let project = Project::parse_current(&text)?;
@@ -240,10 +247,23 @@ fn migrate_1_4_to_1_5(raw: &mut Value) -> Result<Vec<String>> {
             "Schema 1.4.0 design drafts cannot carry plate inputs or RC columns",
         ));
     }
-    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    raw["schemaVersion"] = json!(SCHEMA_1_5);
     Ok(vec![
         "set schemaVersion 1.5.0 (slab plate analysis not configured)".into(),
     ])
+}
+
+/// 1.5.0 → 1.6.0: projects may carry response spectra (ADR 0023). None is
+/// implied.
+fn migrate_1_5_to_1_6(raw: &mut Value) -> Result<Vec<String>> {
+    if raw.get("responseSpectra").is_some() {
+        return Err(err(
+            "INVALID_SCHEMA",
+            "Schema 1.5.0 projects cannot carry response spectra",
+        ));
+    }
+    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    Ok(vec!["set schemaVersion 1.6.0 (no response spectra)".into()])
 }
 
 fn migrate_0_9_to_1_0(raw: &mut Value) -> Result<Vec<String>> {
