@@ -33,16 +33,21 @@
     },
     {
       "id": "R-COLUMN-EXAMPLES",
-      "status": "not_acquired",
+      "status": "partially_acquired",
       "requiredBy": [
         "M12"
       ],
       "definition": "SOURCES.md section 3",
-      "sourceEdition": null,
-      "sourceHash": null,
-      "rightsStatus": "unverified",
-      "localPath": null,
-      "validationEvidence": []
+      "sourceEdition": "rc-column project oracle (axial and biaxial mechanics)",
+      "sourceHash": "d101f4799376083d11d01edd9cb5e53ed14bf41096c3bec0bbc227ab5a3484e1",
+      "rightsStatus": "project_generated_redistributable",
+      "localPath": "fixtures/column/column-oracle.json",
+      "validationEvidence": [
+        "resources.lock.json#R-COLUMN-EXAMPLES",
+        "docs/formulations/rc-column.md",
+        "evidence/M12/column/ACCEPTANCE.md"
+      ],
+      "note": "Strain-compatibility integration and independently solved axial/biaxial cases are held. Slenderness cases need the column code profile (M08 resources) and are not constructed."
     },
     {
       "id": "R-COMPOSITE-CODE",
@@ -262,16 +267,21 @@
     },
     {
       "id": "R-SHELL-BENCHMARKS",
-      "status": "not_acquired",
+      "status": "acquired",
       "requiredBy": [
         "M10"
       ],
       "definition": "SOURCES.md section 3",
-      "sourceEdition": null,
-      "sourceHash": null,
-      "rightsStatus": "unverified",
-      "localPath": null,
-      "validationEvidence": []
+      "sourceEdition": "plate-v1 project oracle",
+      "sourceHash": "c697c0b6fe1d1a3a79cd3310bdbef42975f1a875e5595d5d0fed8837ff414bfe",
+      "rightsStatus": "project_generated_redistributable",
+      "localPath": "fixtures/plate/plate-oracle.json",
+      "validationEvidence": [
+        "resources.lock.json#R-SHELL-BENCHMARKS",
+        "docs/formulations/plate.md",
+        "evidence/M10/plate/ACCEPTANCE.md"
+      ],
+      "note": "Covers the plate-v1 numerical family. M10 remains blocked on M08 (slab code profile) for reinforcement, punching and deflection checks."
     },
     {
       "id": "R-STABILITY-ORACLE",

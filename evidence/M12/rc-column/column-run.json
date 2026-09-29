@@ -1,0 +1,648 @@
+{
+  "checks": [
+    {
+      "name": "Axial and biaxial bending",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Slenderness and second-order effects",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Minimum eccentricity",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Shear",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    },
+    {
+      "name": "Detailing",
+      "reason": "Required numerical family or locked code/example resources are unavailable",
+      "status": "unsupported",
+      "utilisation": null
+    }
+  ],
+  "codeProfile": null,
+  "codeProfilePreview": null,
+  "columnMechanics": {
+    "axialRange": {
+      "squash": 4224037.482906114,
+      "tension": -1708241.0053894501,
+      "tensionAttained": false
+    },
+    "basis": "mechanics",
+    "beyondAxialRange": false,
+    "codeProfile": null,
+    "contour": {
+      "nEd": 1478413.1190171398,
+      "points": [
+        [
+          3.637978807091713e-12,
+          301672.00325336866
+        ],
+        [
+          -18378.49205619196,
+          295568.6616574755
+        ],
+        [
+          -37479.672405608646,
+          286363.19146262296
+        ],
+        [
+          -58083.98514053734,
+          273474.58261441806
+        ],
+        [
+          -77880.04117817138,
+          259473.02272132525
+        ],
+        [
+          -97157.91675141285,
+          243927.4167859385
+        ],
+        [
+          -116324.36056226163,
+          227849.65464574588
+        ],
+        [
+          -135565.1009192777,
+          210991.57673198738
+        ],
+        [
+          -154954.0592378209,
+          193139.88720155787
+        ],
+        [
+          -174318.0980385837,
+          174318.09803858373
+        ],
+        [
+          -193139.88720155787,
+          154954.05923782094
+        ],
+        [
+          -210991.57673198736,
+          135565.1009192777
+        ],
+        [
+          -227849.6546457459,
+          116324.36056226169
+        ],
+        [
+          -243927.4167859385,
+          97157.91675141285
+        ],
+        [
+          -259473.02272132525,
+          77880.0411781714
+        ],
+        [
+          -273474.582614418,
+          58083.98514053739
+        ],
+        [
+          -286363.19146262296,
+          37479.67240560868
+        ],
+        [
+          -295568.6616574755,
+          18378.492056191964
+        ],
+        [
+          -301672.00325336866,
+          8.096674969592065e-12
+        ],
+        [
+          -295568.6616574755,
+          -18378.492056191943
+        ],
+        [
+          -286363.19146262296,
+          -37479.67240560864
+        ],
+        [
+          -273474.58261441794,
+          -58083.98514053735
+        ],
+        [
+          -259473.0227213253,
+          -77880.0411781713
+        ],
+        [
+          -243927.41678593843,
+          -97157.91675141279
+        ],
+        [
+          -227849.654645746,
+          -116324.36056226162
+        ],
+        [
+          -210991.57673198736,
+          -135565.1009192777
+        ],
+        [
+          -193139.88720155787,
+          -154954.05923782094
+        ],
+        [
+          -174318.0980385837,
+          -174318.0980385837
+        ],
+        [
+          -154954.05923782097,
+          -193139.8872015578
+        ],
+        [
+          -135565.10091927764,
+          -210991.57673198736
+        ],
+        [
+          -116324.36056226178,
+          -227849.65464574582
+        ],
+        [
+          -97157.91675141288,
+          -243927.41678593843
+        ],
+        [
+          -77880.04117817142,
+          -259473.02272132528
+        ],
+        [
+          -58083.985140537305,
+          -273474.58261441806
+        ],
+        [
+          -37479.67240560864,
+          -286363.19146262296
+        ],
+        [
+          -18378.492056191957,
+          -295568.6616574754
+        ],
+        [
+          -3.800471076589116e-11,
+          -301672.00325336866
+        ],
+        [
+          18378.49205619192,
+          -295568.66165747546
+        ],
+        [
+          37479.672405608566,
+          -286363.1914626231
+        ],
+        [
+          58083.98514053726,
+          -273474.58261441806
+        ],
+        [
+          77880.04117817135,
+          -259473.02272132525
+        ],
+        [
+          97157.91675141269,
+          -243927.4167859385
+        ],
+        [
+          116324.36056226169,
+          -227849.65464574593
+        ],
+        [
+          135565.1009192776,
+          -210991.5767319874
+        ],
+        [
+          154954.0592378208,
+          -193139.88720155798
+        ],
+        [
+          174318.0980385837,
+          -174318.0980385837
+        ],
+        [
+          193139.8872015578,
+          -154954.05923782097
+        ],
+        [
+          210991.57673198753,
+          -135565.10091927758
+        ],
+        [
+          227849.6546457458,
+          -116324.3605622618
+        ],
+        [
+          243927.41678593832,
+          -97157.91675141297
+        ],
+        [
+          259473.02272132528,
+          -77880.04117817135
+        ],
+        [
+          273474.58261441806,
+          -58083.98514053732
+        ],
+        [
+          286363.19146262296,
+          -37479.672405608646
+        ],
+        [
+          295568.66165747546,
+          -18378.49205619197
+        ],
+        [
+          301672.00325336866,
+          -4.792037513902907e-11
+        ],
+        [
+          295568.6616574755,
+          18378.492056191877
+        ],
+        [
+          286363.1914626231,
+          37479.672405608566
+        ],
+        [
+          273474.58261441806,
+          58083.98514053725
+        ],
+        [
+          259473.02272132516,
+          77880.04117817146
+        ],
+        [
+          243927.4167859386,
+          97157.91675141267
+        ],
+        [
+          227849.65464574605,
+          116324.36056226149
+        ],
+        [
+          210991.57673198738,
+          135565.1009192777
+        ],
+        [
+          193139.88720155787,
+          154954.05923782088
+        ],
+        [
+          174318.09803858376,
+          174318.09803858364
+        ],
+        [
+          154954.05923782097,
+          193139.88720155778
+        ],
+        [
+          135565.10091927781,
+          210991.5767319873
+        ],
+        [
+          116324.36056226166,
+          227849.6546457461
+        ],
+        [
+          97157.916751413,
+          243927.41678593832
+        ],
+        [
+          77880.04117817135,
+          259473.02272132525
+        ],
+        [
+          58083.98514053732,
+          273474.58261441806
+        ],
+        [
+          37479.67240560865,
+          286363.19146262296
+        ],
+        [
+          18378.492056192,
+          295568.6616574754
+        ]
+      ],
+      "status": "evaluated"
+    },
+    "convention": "N compression positive (N = −N_frame); frame My and Mz unchanged: My < 0 compresses the +z face, Mz > 0 the +y face; θ = atan2(Mz, My)",
+    "demand": {
+      "basis": "modelKeyStations",
+      "status": "evaluated"
+    },
+    "formulation": "docs/formulations/rc-column.md",
+    "governing": {
+      "index": 0,
+      "mEd": 198650.79829030274,
+      "mRd": 248313.49786287858,
+      "nEd": 1478413.1190171398,
+      "station": 0,
+      "utilisation": 0.7999999999999995
+    },
+    "kernel": "workbench-design::rc_column",
+    "law": "parabolaRectangle",
+    "limitations": [
+      "Checked at the member's key stations (ends, component extrema, discontinuities) only",
+      "No slenderness, second-order moments, minimum eccentricity, partial factors or detailing"
+    ],
+    "materialInputs": {
+      "concreteModulus": 30000000000,
+      "concreteTensileStrength": 2800000,
+      "fullCompressionStrain": 0.002,
+      "minimumClearSpacing": 0.025,
+      "parabolaExponent": 2,
+      "parabolaPeak": 17000000,
+      "steelModulus": 200000000000,
+      "steelYieldStrength": 435000000,
+      "strainAtPeak": 0.002,
+      "ultimateStrain": 0.0035
+    },
+    "materialSources": {
+      "concreteModulus": "syntheticFixture",
+      "concreteTensileStrength": "syntheticFixture",
+      "fullCompressionStrain": "syntheticFixture",
+      "minimumClearSpacing": "syntheticFixture",
+      "parabolaExponent": "syntheticFixture",
+      "parabolaPeak": "user",
+      "steelModulus": "syntheticFixture",
+      "steelYieldStrength": "user",
+      "strainAtPeak": "syntheticFixture",
+      "ultimateStrain": "user"
+    },
+    "section": {
+      "barCount": 8,
+      "bars": [
+        {
+          "area": 0.0004908738521234052,
+          "y": -0.15000000000000002,
+          "z": -0.15000000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0,
+          "z": -0.15000000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0.15000000000000002,
+          "z": -0.15000000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": -0.15000000000000002,
+          "z": 0.15000000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0,
+          "z": 0.15000000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0.15000000000000002,
+          "z": 0.15000000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": -0.15000000000000002,
+          "z": 0
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0.15000000000000002,
+          "z": 0
+        }
+      ],
+      "depth": 0.4,
+      "steelArea": 0.003926990816987241,
+      "width": 0.4
+    },
+    "stations": [
+      {
+        "actions": [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          158649.58161387788,
+          119551.03477225135
+        ],
+        "axialRatio": 0.3499999999999999,
+        "capacity": {
+          "angleIterations": 47,
+          "axialResidual": 1.653612056683385e-16,
+          "depthIterations": 47,
+          "directionError": 3.3306690738754696e-16,
+          "mRd": 248313.49786287858,
+          "my": 198311.9770173474,
+          "mz": 149438.79346531435,
+          "n": 1478413.119017139,
+          "neutralAxisAngle": 5.385817230730776,
+          "neutralAxisDepth": 0.32337818512416344,
+          "pivot": "ultimateCompression",
+          "plane": {
+            "e0": 0.0004578951460879649,
+            "ky": 0.0067501249113140855,
+            "kz": -0.00846039935824609
+          }
+        },
+        "kind": "end",
+        "mEd": 198650.79829030274,
+        "myEd": 158649.58161387788,
+        "mzEd": 119551.03477225135,
+        "nEd": 1478413.1190171398,
+        "side": null,
+        "station": 0,
+        "status": "evaluated",
+        "utilisation": 0.7999999999999995
+      },
+      {
+        "actions": [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          -2.9103830456733704e-11,
+          5.820766091346741e-11
+        ],
+        "axialRatio": 0.3499999999999999,
+        "capacity": {
+          "angleIterations": 47,
+          "axialResidual": 0,
+          "depthIterations": 47,
+          "directionError": 8.881784197001252e-16,
+          "mRd": 256350.24369519102,
+          "my": -114643.31419021658,
+          "mz": 229286.6283804337,
+          "n": 1478413.1190171398,
+          "neutralAxisAngle": 0.5159547130325987,
+          "neutralAxisDepth": 0.3128978484137596,
+          "pivot": "ultimateCompression",
+          "plane": {
+            "e0": 0.00045034233944608523,
+            "ky": 0.009729620553475891,
+            "kz": 0.005518667749293683
+          }
+        },
+        "kind": "end",
+        "mEd": 6.507814330688532e-11,
+        "myEd": -2.9103830456733704e-11,
+        "mzEd": 5.820766091346741e-11,
+        "nEd": 1478413.1190171398,
+        "side": null,
+        "station": 1,
+        "status": "evaluated",
+        "utilisation": 2.538641757027756e-16
+      }
+    ],
+    "status": "evaluated"
+  },
+  "contactState": "notApplicable",
+  "contractVersion": 1,
+  "draftId": "dpfab9d3ed357a6fc5",
+  "flexuralDemand": null,
+  "inputHash": "b8d30f0b011b4fb289d44ccf1f85befbfec1b120a0271896f7c51c18cd716a14",
+  "inputs": {
+    "id": "dpfab9d3ed357a6fc5",
+    "inputSource": "mixed",
+    "inputSources": {
+      "barDiameter": "syntheticFixture",
+      "barsAlongDepth": "syntheticFixture",
+      "barsAlongWidth": "syntheticFixture",
+      "concreteStrength": "syntheticFixture",
+      "cover": "user",
+      "depth": "syntheticFixture",
+      "linkDiameter": "syntheticFixture",
+      "rebarStrength": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "barDiameter": 0.025,
+      "barsAlongDepth": 3,
+      "barsAlongWidth": 3,
+      "concreteStrength": 30000000,
+      "cover": 0.0275,
+      "depth": 0.4,
+      "linkDiameter": 0.01,
+      "rebarStrength": 500000000,
+      "width": 0.4
+    },
+    "kind": "rcColumn",
+    "mechanics": {
+      "inputSources": {
+        "concreteModulus": "syntheticFixture",
+        "concreteTensileStrength": "syntheticFixture",
+        "fullCompressionStrain": "syntheticFixture",
+        "minimumClearSpacing": "syntheticFixture",
+        "parabolaExponent": "syntheticFixture",
+        "parabolaPeak": "user",
+        "steelModulus": "syntheticFixture",
+        "steelYieldStrength": "user",
+        "strainAtPeak": "syntheticFixture",
+        "ultimateStrain": "user"
+      },
+      "inputs": {
+        "concreteModulus": 30000000000,
+        "concreteTensileStrength": 2800000,
+        "fullCompressionStrain": 0.002,
+        "minimumClearSpacing": 0.025,
+        "parabolaExponent": 2,
+        "parabolaPeak": 17000000,
+        "steelModulus": 200000000000,
+        "steelYieldStrength": 435000000,
+        "strainAtPeak": 0.002,
+        "ultimateStrain": 0.0035
+      },
+      "law": "parabolaRectangle"
+    },
+    "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+    "targetId": "m1"
+  },
+  "kind": "rcColumn",
+  "limitations": [
+    "MOCK WORKFLOW — no code-compliance claim",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"
+  ],
+  "mock": true,
+  "modelHash": "6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63",
+  "overall": "unsupported",
+  "plateAnalysis": null,
+  "previewRunId": "62d556c72d7d18830a1638fa5df35c897da1b50cca8f8e3e7ce0fb491387c568",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "schedule": [],
+  "sectionMechanics": null,
+  "soilProvenance": null,
+  "sourceProvenance": {
+    "combinationId": "LC1",
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63",
+    "note": "Actual model actions at the member's key stations; the draft section is not applied to frame stiffness",
+    "resultId": "6a4bd0c7ff1a943f-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
+    "sourceRevision": 2,
+    "stations": [
+      {
+        "actions": [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          158649.58161387788,
+          119551.03477225135
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 0
+      },
+      {
+        "actions": [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          -2.9103830456733704e-11,
+          5.820766091346741e-11
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 1
+      }
+    ],
+    "targetId": "m1"
+  },
+  "sourceRevision": 2,
+  "currentState": "UNSUPPORTED"
+}

@@ -475,6 +475,28 @@
       "formulation": "docs/formulations/modal.md",
       "rightsStatus": "Project-authored, redistributable with the repository",
       "validationUse": "M14 modal kernel, protocol and browser acceptance"
+    },
+    {
+      "id": "R-SHELL-BENCHMARKS",
+      "version": "plate-v1",
+      "authoritativeOrigin": "Project-generated: Mindlin/Kirchhoff Navier series, Timoshenko & Woinowsky-Krieger Table 35 clamped-plate coefficients, the MacNeal–Harder distorted patch, and OpenSeesPy 3.4.0 ShellMITC4 on identical rectilinear and checkerboard-distorted meshes, by tools/oracles/plate_oracle.py",
+      "fixture": "fixtures/plate/plate-oracle.json",
+      "fixtureSha256": "c697c0b6fe1d1a3a79cd3310bdbef42975f1a875e5595d5d0fed8837ff414bfe",
+      "generatorSha256": "1aad6c822ad634961fa7460595b709b7d55c62d1fb37fe526aa0d1688cec6832",
+      "formulation": "docs/formulations/plate.md",
+      "rightsStatus": "Project-authored, redistributable with the repository (published coefficients cited, not reproduced beyond three values)",
+      "validationUse": "M10 plate-v1 kernel, slab protocol and browser numerical-family gate"
+    },
+    {
+      "id": "R-COLUMN-EXAMPLES",
+      "version": "rc-column (mechanics)",
+      "authoritativeOrigin": "Project-generated: exact reference integration, an 800² fibre model and closed-form endpoints (squash, tension, balanced point) by tools/oracles/column_oracle.py; strain-domain shape from the held EN 1992-1-1:2004 6.1 / Figure 6.1 with caller strain values",
+      "fixture": "fixtures/column/column-oracle.json",
+      "fixtureSha256": "d101f4799376083d11d01edd9cb5e53ed14bf41096c3bec0bbc227ab5a3484e1",
+      "generatorSha256": "9f01902d145c38a7df543ab815ff242c9bd3885cff95705b89b0dbc504c0a629",
+      "formulation": "docs/formulations/rc-column.md",
+      "rightsStatus": "Project-authored, redistributable with the repository",
+      "validationUse": "M12 biaxial section kernel, rcColumn protocol and browser numerical-family gate; slenderness cases not covered"
     }
   ],
   "unresolved": [

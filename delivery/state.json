@@ -4215,6 +4215,152 @@
       "regression": {
         "fullBrowserBatch": "115/115 passed on the final build (WORKBENCH_TEST_TIMEOUT_MS=120000)"
       }
+    },
+    "M10-PLATE": {
+      "id": "M10-PLATE",
+      "useCase": "plate-v1 numerical family: slab panel plate analysis (Q4 membrane + MITC4, one opening, free/simple/clamped edges), Wood-Armer design moments, clamped-edge line moments, convergence indicator; slab drafts solve their panel (schema 1.5.0) with contours and calculation record",
+      "dependencies": [
+        "M06"
+      ],
+      "status": "ACCEPTED",
+      "scope": "Numerical family only; the M10 parent needs the slab code profile (M08)",
+      "ownedPaths": [
+        "docs/formulations/plate.md",
+        "docs/adr/0021-slab-plate-analysis.md",
+        "tools/oracles/plate_oracle.py",
+        "fixtures/plate/plate-oracle.json",
+        "crates/plate",
+        "crates/wasm-api/src/preview_workspace.rs",
+        "crates/model/src/design_inputs.rs",
+        "crates/model/src/migrate.rs",
+        "web/slab-plate.js",
+        "tests/e2e/slab-plate.spec.js",
+        "tools/run-m10-plate.mjs"
+      ],
+      "acceptanceIds": [
+        "M10-P1-ELEMENT",
+        "M10-P2-NAVIER",
+        "M10-P3-CLAMPED",
+        "M10-P4-OPENSEES",
+        "M10-P5-EQUILIBRIUM",
+        "M10-P6-PROTOCOL",
+        "M10-P7-SCHEMA",
+        "M10-P8-BROWSER"
+      ],
+      "requiredCommands": [
+        "node tools/run-m10-plate.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "m10-plate-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M10/plate/m10-plate-acceptance.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Navier: 32x32 w <= 3.5e-4, element-centre moments <= 7.3e-4, O(h^2); no locking at a/t = 300",
+        "Timoshenko clamped square: w 0.001271 (0.00126), centre mx 0.02286 (0.0231), edge line moment from reactions -0.05122 (-0.0513)",
+        "OpenSees ShellMITC4 identical rectilinear meshes (clamped; 6 x 5 m with opening, 464 elements) within 1e-6",
+        "Distorted meshes: plate-v1 (pointwise J^-1) and OpenSees (Bathe-Dvorkin 1985 element-constant angles) converge together (9.7e-4 -> 5.4e-4); gate defined after the variant was traced (ADR 0021 item 10)",
+        "Found and fixed: refused preview runs lost their reason on re-render"
+      ],
+      "evidencePaths": [
+        "evidence/M10/plate",
+        "evidence/M10/slab-plate"
+      ],
+      "sourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
+      "buildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
+      "acceptedAt": "2026-09-29T17:04:03.337Z",
+      "nextAction": "M10 parent: reinforcement areas, punching and deflection once the M08 slab code profile is enabled; frame-slab coupling and column supports are later slices",
+      "regression": {
+        "fullBrowserBatch": "119/119 passed on the final build (WORKBENCH_TEST_TIMEOUT_MS=180000)",
+        "cargoWorkspace": "240/240 (release, --locked)",
+        "nodeUnitAndSecurity": "54/54 (after correcting the stale camera-side depth test)"
+      }
+    },
+    "M12-COLUMN": {
+      "id": "M12-COLUMN",
+      "useCase": "rc-column numerical family: biaxial strain-compatibility section mechanics (exact integration, Figure 6.1 pivots with caller strains, M_Rd(N, theta) by nested bisection); rcColumn drafts (schema 1.5.0) checked at model key stations with contour, station table and calculation record",
+      "dependencies": [
+        "M08-A1",
+        "M09"
+      ],
+      "status": "ACCEPTED",
+      "scope": "Numerical family only; the M12 parent needs the column code profile (M08)",
+      "ownedPaths": [
+        "docs/formulations/rc-column.md",
+        "docs/adr/0022-biaxial-column-section.md",
+        "tools/oracles/column_oracle.py",
+        "fixtures/column/column-oracle.json",
+        "crates/design/src/rc_column.rs",
+        "crates/design/tests/rc_column.rs",
+        "crates/wasm-api/tests/rc_column_preview.rs",
+        "web/rc-column.js",
+        "tests/e2e/rc-column.spec.js",
+        "tools/run-m12-column.mjs"
+      ],
+      "acceptanceIds": [
+        "M12-C1-INTEGRATION",
+        "M12-C2-CAPACITY",
+        "M12-C3-REFUSALS",
+        "M12-C4-PROTOCOL",
+        "M12-C5-BROWSER"
+      ],
+      "requiredCommands": [
+        "node tools/run-m12-column.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "m12-column-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M12/column/m12-column-acceptance.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Resultants vs exact reference 7.5e-15 of scale; vs 800^2 fibre model within its measured refinement error",
+        "48 oracle capacities within 1e-9 (4.4e-14); uniaxial agreement with rc_section::ultimate within 1e-9",
+        "Browser: cantilever at the oracle's N = 1478.4 kN, theta = 37 deg case reports utilisation 0.800 at the fixed end",
+        "Found and fixed: JSON schema design-object kind enum; untouched integer inputs marked user-edited"
+      ],
+      "evidencePaths": [
+        "evidence/M12/column",
+        "evidence/M12/rc-column"
+      ],
+      "sourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
+      "buildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
+      "acceptedAt": "2026-09-29T17:04:58.118Z",
+      "nextAction": "M12 parent: partial factors, slenderness/second-order moments, minimum eccentricity, shear and detailing once the M08 column code profile is enabled",
+      "regression": {
+        "fullBrowserBatch": "119/119 passed on the final build (WORKBENCH_TEST_TIMEOUT_MS=180000)",
+        "cargoWorkspace": "240/240 (release, --locked)",
+        "nodeUnitAndSecurity": "54/54 (after correcting the stale camera-side depth test)"
+      }
+    },
+    "M10-parent": {
+      "id": "M10-parent",
+      "useCase": "Analyse and design a slab panel (SPECIFICATION M10)",
+      "dependencies": [
+        "M10-PLATE",
+        "M08-B"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "blockedBy": [
+        "UKR01-EC-resources"
+      ],
+      "nextAction": "Needs the slab code profile: EN 1992-1-1 A1:2014 and UK NA + A2:2014 (reinforcement, punching, deflection). R-SHELL-BENCHMARKS acquired as a project oracle."
+    },
+    "M12-parent": {
+      "id": "M12-parent",
+      "useCase": "Design a column family (SPECIFICATION M12)",
+      "dependencies": [
+        "M12-COLUMN",
+        "M08-B"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "blockedBy": [
+        "UKR01-EC-resources"
+      ],
+      "nextAction": "Needs the column code profile: EN 1992-1-1 A1:2014 and UK NA + A2:2014 (partial factors, slenderness, minimum eccentricity); R-COLUMN-EXAMPLES slenderness cases follow from it."
     }
   },
   "blockers": [
@@ -4264,10 +4410,10 @@
       "partiallyClearedAt": "2026-09-28"
     }
   ],
-  "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
-  "nextAction": "Unblocked: Windows/Linux real-GPU evidence; segment-level Cb for members with interior bracing points (needs a bracing-point input). Resource-blocked milestones unchanged.",
+  "lastVerifiedSourceRevision": "12e1889",
+  "lastVerifiedBuildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
+  "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents. Unblocked: Windows/Linux real-GPU evidence; segment-level Cb for interior bracing.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
-  "lastVerifiedScope": "M07-LTB (with DW-LTB1-CB), M07-S and M07 parent gates on the same build. Full browser batch 115/115 on this build."
+  "lastVerifiedSourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
+  "lastVerifiedScope": "M10-PLATE and M12-COLUMN numerical-family gates on the same build; full browser batch 119/119, cargo workspace 240/240, node unit/security 54/54"
 }

@@ -1,0 +1,930 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>B04 — calculation record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f8;padding:20px;font-size:12px}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}code{font-size:11px;overflow-wrap:anywhere}svg{width:100%;height:220px}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / CALCULATION RECORD</p><h1>B04</h1><p>Linear elastic frame analysis · LC1 · SI units</p><small>Model SHA-256: 6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63<br>Solver source: 85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c<br>Settings: 71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da<br>Created 2026-09-29T17:11:43.018Z</small></header><p class="banner">Mechanics preview. Prismatic Euler–Bernoulli members, small displacement, isotropic material, principal axes and Saint Venant torsion. No shear deformation, buckling, material nonlinearity, connection design or building-code compliance. Commercial numerical parity is UNKNOWN.</p><h2>Excluded capabilities</h2><p>These domains are outside the analysis MVP and are not claimed by this calculation record. Commercial numerical parity is UNKNOWN.</p><ul><li>shells</li><li>solids</li><li>arbitrary CAD solids</li><li>plasticity</li><li>geometrically nonlinear (large-displacement) response</li><li>torsional and lateral-torsional instability</li><li>response spectrum, time-history and harmonic analysis</li><li>cable/tension-only members</li><li>soil contact</li><li>code-generated wind/seismic loads</li><li>code-certified member sizing</li><li>connections</li><li>reinforcement detailing</li><li>DWG/native PROKON formats</li><li>Revit plugins</li><li>live collaboration</li><li>mobile CAD editing</li></ul><h2>Model</h2><p>2 nodes · 1 members · spatial. Global Z up; right-hand rotations. </p><h2>Global XZ elevation</h2><p>Grey: undeformed. Blue: deformation ×10. Projection may hide out-of-plane members.</p><svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Global XZ elevation with deformation amplified ten times"><polyline points="50,150 59.75,150 69.5,150 79.25,150 89,150 98.75,150 108.5,150 118.24999999999999,150 128,150 137.75,150 147.5,150 157.25,150 167,150 176.75,150 186.49999999999997,150 196.25,150 206.00000000000003,150 215.75,150 225.5,150 235.24999999999997,150 245,150 254.75000000000003,150 264.5,150 274.25,150 284,150 293.75,150 303.5,150 313.25000000000006,150 322.99999999999994,150 332.75,150 342.5,150 352.25,150 362.00000000000006,150 371.74999999999994,150 381.5,150 391.25,150 401,150 410.75000000000006,150 420.49999999999994,150 430.25,150 440,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="50,150 59.67792736044792,150.28761433916796 69.35585472089583,151.1407896477923 79.03378208134374,152.54502436255356 88.71170944179167,154.4858169201324 98.38963680223958,156.9486657572094 108.06756416268749,159.91906931046518 117.74549152313539,163.38252601658033 127.42341888358334,167.32453431223547 137.10134624403125,171.7305926341112 146.77927360447916,176.58619941888813 156.45720096492707,181.87685310324687 166.13512832537498,187.588052123868 175.81305568582292,193.70529491743218 185.49098304627077,200.21407992061995 195.1689104067187,207.09990557011199 204.84683776716668,214.3482703025889 214.52476512761453,221.94467255473117 224.2026924880625,229.87461076321952 233.88061984851035,238.12358336473451 243.5585472089583,246.67708879595682 253.23647456940623,255.52062549356702 262.91440192985414,264.63969189424563 272.592329290302,274.01978643467334 282.27025665074996,283.64640755153073 291.94818401119784,293.50505368149834 301.62611137164583,303.58122326125704 311.3040387320938,313.8604147274872 320.98196609254154,324.32812651686936 330.6598934529895,334.9698570660842 340.3378208134374,345.77110481181256 350.01574817388536,356.71736819073476 359.69367553433335,367.7941456395315 369.3716028947811,378.98693559488333 379.04953025522906,390.2812364934711 388.727457615677,401.6625467719751 398.405384976125,413.11636486707613 408.0833123365729,424.6281892154547 417.7612396970207,436.1835182537913 427.43916705746864,447.7678504187669 437.1170944179166,459.36668414706185" fill="none" stroke="#225dc7" stroke-width="2"/></svg><h2>Nodal displacements</h2><table><tr><th>Node</th><th>ux (m)</th><th>uy (m)</th><th>uz (m)</th><th>rx (rad)</th><th>ry (rad)</th><th>rz (rad)</th></tr><tr><th>n1</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr><tr><th>n2</th><td>-0.00221761968</td><td>0.0896632761</td><td>-0.237974372</td><td>0.00000000</td><td>0.118987186</td><td>0.0448316380</td></tr></table><h2>Physical support reactions</h2><table><tr><th>Support</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>s1</th><td>1478413.12</td><td>-39850.3449</td><td>52883.1939</td><td>0.00000000</td><td>-158649.582</td><td>-119551.035</td></tr></table><h2>Member end actions</h2><p>Actions applied by nodes to the element, in local axes. These differ from cut-face section actions.</p><h3>m1 · 3 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>1478413.12</td><td>-39850.3449</td><td>52883.1939</td><td>0.00000000</td><td>-158649.582</td><td>-119551.035</td></tr><tr><th>j</th><td>-1478413.12</td><td>39850.3449</td><td>-52883.1939</td><td>0.00000000</td><td>0.00000000</td><td>5.82076609e-11</td></tr></table><section data-testid="report-column-previews"><h2>RC column section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. Explicit material law and strain limits; no partial factors, slenderness, second-order moments or minimum eccentricity (ADR 0022). A mechanics utilisation is not a code check; overall design remains UNSUPPORTED.</p><section data-testid="report-column-preview" data-draft-id="dpfab9d3ed357a6fc5"><h3>RC column draft dpfab9d3ed357a6fc5 · member m1</h3>
+<p>Overall <strong>UNSUPPORTED</strong> · code profile unavailable · parabolaRectangle · 0.4 m × 0.4 m, 8 bars, A<sub>s</sub> 0.003926990816987241 m²</p>
+<p>Preview run 62d556c72d7d18830a1638fa5df35c897da1b50cca8f8e3e7ce0fb491387c568 · input b8d30f0b011b4fb289d44ccf1f85befbfec1b120a0271896f7c51c18cd716a14 · result 6a4bd0c7ff1a943f-LC1 · combination LC1 · model 6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63</p>
+<p>Axial range <span data-si="-1708241.0053894501">-1708.24 kN</span> … <span data-si="4224037.482906114">4224.04 kN</span> (compression positive). N compression positive (N = −N_frame); frame My and Mz unchanged: My &lt; 0 compresses the +z face, Mz &gt; 0 the +y face; θ = atan2(Mz, My).</p>
+<table><thead><tr><th>Station</th><th>N<sub>Ed</sub></th><th>My</th><th>Mz</th><th>M<sub>Rd</sub>(N, θ)</th><th>M<sub>Ed</sub>/M<sub>Rd</sub> (mechanics)</th></tr></thead><tbody><tr data-testid="report-column-station"><th scope="row">x/L 0</th><td><span data-si="1478413.1190171398">1478.41 kN</span></td><td><span data-si="158649.58161387788">158.650 kN·m</span></td><td><span data-si="119551.03477225135">119.551 kN·m</span></td><td><span data-si="248313.49786287858">248.313 kN·m</span></td><td data-testid="report-column-utilisation"><span data-si="0.7999999999999995">0.8000</span></td></tr><tr data-testid="report-column-station"><th scope="row">x/L 1</th><td><span data-si="1478413.1190171398">1478.41 kN</span></td><td><span data-si="-2.9103830456733704e-11">-2.91038e-14 kN·m</span></td><td><span data-si="5.820766091346741e-11">5.82077e-14 kN·m</span></td><td><span data-si="256350.24369519102">256.350 kN·m</span></td><td data-testid="report-column-utilisation"><span data-si="2.538641757027756e-16">2.539e-16</span></td></tr></tbody></table>
+<h4>Material-law inputs (SI)</h4><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody><tr><th scope="row">concreteModulus</th><td>30000000000</td><td>syntheticFixture</td></tr><tr><th scope="row">concreteTensileStrength</th><td>2800000</td><td>syntheticFixture</td></tr><tr><th scope="row">fullCompressionStrain</th><td>0.002</td><td>syntheticFixture</td></tr><tr><th scope="row">minimumClearSpacing</th><td>0.025</td><td>syntheticFixture</td></tr><tr><th scope="row">parabolaExponent</th><td>2</td><td>syntheticFixture</td></tr><tr><th scope="row">parabolaPeak</th><td>17000000</td><td>user</td></tr><tr><th scope="row">steelModulus</th><td>200000000000</td><td>syntheticFixture</td></tr><tr><th scope="row">steelYieldStrength</th><td>435000000</td><td>user</td></tr><tr><th scope="row">strainAtPeak</th><td>0.002</td><td>syntheticFixture</td></tr><tr><th scope="row">ultimateStrain</th><td>0.0035</td><td>user</td></tr></tbody></table>
+<ul><li>Checked at the member&#39;s key stations (ends, component extrema, discontinuities) only</li><li>No slenderness, second-order moments, minimum eccentricity, partial factors or detailing</li></ul>
+<details><summary>Complete preview run record</summary><pre>{
+  &quot;checks&quot;: [
+    {
+      &quot;name&quot;: &quot;Axial and biaxial bending&quot;,
+      &quot;reason&quot;: &quot;Required numerical family or locked code/example resources are unavailable&quot;,
+      &quot;status&quot;: &quot;unsupported&quot;,
+      &quot;utilisation&quot;: null
+    },
+    {
+      &quot;name&quot;: &quot;Slenderness and second-order effects&quot;,
+      &quot;reason&quot;: &quot;Required numerical family or locked code/example resources are unavailable&quot;,
+      &quot;status&quot;: &quot;unsupported&quot;,
+      &quot;utilisation&quot;: null
+    },
+    {
+      &quot;name&quot;: &quot;Minimum eccentricity&quot;,
+      &quot;reason&quot;: &quot;Required numerical family or locked code/example resources are unavailable&quot;,
+      &quot;status&quot;: &quot;unsupported&quot;,
+      &quot;utilisation&quot;: null
+    },
+    {
+      &quot;name&quot;: &quot;Shear&quot;,
+      &quot;reason&quot;: &quot;Required numerical family or locked code/example resources are unavailable&quot;,
+      &quot;status&quot;: &quot;unsupported&quot;,
+      &quot;utilisation&quot;: null
+    },
+    {
+      &quot;name&quot;: &quot;Detailing&quot;,
+      &quot;reason&quot;: &quot;Required numerical family or locked code/example resources are unavailable&quot;,
+      &quot;status&quot;: &quot;unsupported&quot;,
+      &quot;utilisation&quot;: null
+    }
+  ],
+  &quot;codeProfile&quot;: null,
+  &quot;codeProfilePreview&quot;: null,
+  &quot;columnMechanics&quot;: {
+    &quot;axialRange&quot;: {
+      &quot;squash&quot;: 4224037.482906114,
+      &quot;tension&quot;: -1708241.0053894501,
+      &quot;tensionAttained&quot;: false
+    },
+    &quot;basis&quot;: &quot;mechanics&quot;,
+    &quot;beyondAxialRange&quot;: false,
+    &quot;codeProfile&quot;: null,
+    &quot;contour&quot;: {
+      &quot;nEd&quot;: 1478413.1190171398,
+      &quot;points&quot;: [
+        [
+          3.637978807091713e-12,
+          301672.00325336866
+        ],
+        [
+          -18378.49205619196,
+          295568.6616574755
+        ],
+        [
+          -37479.672405608646,
+          286363.19146262296
+        ],
+        [
+          -58083.98514053734,
+          273474.58261441806
+        ],
+        [
+          -77880.04117817138,
+          259473.02272132525
+        ],
+        [
+          -97157.91675141285,
+          243927.4167859385
+        ],
+        [
+          -116324.36056226163,
+          227849.65464574588
+        ],
+        [
+          -135565.1009192777,
+          210991.57673198738
+        ],
+        [
+          -154954.0592378209,
+          193139.88720155787
+        ],
+        [
+          -174318.0980385837,
+          174318.09803858373
+        ],
+        [
+          -193139.88720155787,
+          154954.05923782094
+        ],
+        [
+          -210991.57673198736,
+          135565.1009192777
+        ],
+        [
+          -227849.6546457459,
+          116324.36056226169
+        ],
+        [
+          -243927.4167859385,
+          97157.91675141285
+        ],
+        [
+          -259473.02272132525,
+          77880.0411781714
+        ],
+        [
+          -273474.582614418,
+          58083.98514053739
+        ],
+        [
+          -286363.19146262296,
+          37479.67240560868
+        ],
+        [
+          -295568.6616574755,
+          18378.492056191964
+        ],
+        [
+          -301672.00325336866,
+          8.096674969592065e-12
+        ],
+        [
+          -295568.6616574755,
+          -18378.492056191943
+        ],
+        [
+          -286363.19146262296,
+          -37479.67240560864
+        ],
+        [
+          -273474.58261441794,
+          -58083.98514053735
+        ],
+        [
+          -259473.0227213253,
+          -77880.0411781713
+        ],
+        [
+          -243927.41678593843,
+          -97157.91675141279
+        ],
+        [
+          -227849.654645746,
+          -116324.36056226162
+        ],
+        [
+          -210991.57673198736,
+          -135565.1009192777
+        ],
+        [
+          -193139.88720155787,
+          -154954.05923782094
+        ],
+        [
+          -174318.0980385837,
+          -174318.0980385837
+        ],
+        [
+          -154954.05923782097,
+          -193139.8872015578
+        ],
+        [
+          -135565.10091927764,
+          -210991.57673198736
+        ],
+        [
+          -116324.36056226178,
+          -227849.65464574582
+        ],
+        [
+          -97157.91675141288,
+          -243927.41678593843
+        ],
+        [
+          -77880.04117817142,
+          -259473.02272132528
+        ],
+        [
+          -58083.985140537305,
+          -273474.58261441806
+        ],
+        [
+          -37479.67240560864,
+          -286363.19146262296
+        ],
+        [
+          -18378.492056191957,
+          -295568.6616574754
+        ],
+        [
+          -3.800471076589116e-11,
+          -301672.00325336866
+        ],
+        [
+          18378.49205619192,
+          -295568.66165747546
+        ],
+        [
+          37479.672405608566,
+          -286363.1914626231
+        ],
+        [
+          58083.98514053726,
+          -273474.58261441806
+        ],
+        [
+          77880.04117817135,
+          -259473.02272132525
+        ],
+        [
+          97157.91675141269,
+          -243927.4167859385
+        ],
+        [
+          116324.36056226169,
+          -227849.65464574593
+        ],
+        [
+          135565.1009192776,
+          -210991.5767319874
+        ],
+        [
+          154954.0592378208,
+          -193139.88720155798
+        ],
+        [
+          174318.0980385837,
+          -174318.0980385837
+        ],
+        [
+          193139.8872015578,
+          -154954.05923782097
+        ],
+        [
+          210991.57673198753,
+          -135565.10091927758
+        ],
+        [
+          227849.6546457458,
+          -116324.3605622618
+        ],
+        [
+          243927.41678593832,
+          -97157.91675141297
+        ],
+        [
+          259473.02272132528,
+          -77880.04117817135
+        ],
+        [
+          273474.58261441806,
+          -58083.98514053732
+        ],
+        [
+          286363.19146262296,
+          -37479.672405608646
+        ],
+        [
+          295568.66165747546,
+          -18378.49205619197
+        ],
+        [
+          301672.00325336866,
+          -4.792037513902907e-11
+        ],
+        [
+          295568.6616574755,
+          18378.492056191877
+        ],
+        [
+          286363.1914626231,
+          37479.672405608566
+        ],
+        [
+          273474.58261441806,
+          58083.98514053725
+        ],
+        [
+          259473.02272132516,
+          77880.04117817146
+        ],
+        [
+          243927.4167859386,
+          97157.91675141267
+        ],
+        [
+          227849.65464574605,
+          116324.36056226149
+        ],
+        [
+          210991.57673198738,
+          135565.1009192777
+        ],
+        [
+          193139.88720155787,
+          154954.05923782088
+        ],
+        [
+          174318.09803858376,
+          174318.09803858364
+        ],
+        [
+          154954.05923782097,
+          193139.88720155778
+        ],
+        [
+          135565.10091927781,
+          210991.5767319873
+        ],
+        [
+          116324.36056226166,
+          227849.6546457461
+        ],
+        [
+          97157.916751413,
+          243927.41678593832
+        ],
+        [
+          77880.04117817135,
+          259473.02272132525
+        ],
+        [
+          58083.98514053732,
+          273474.58261441806
+        ],
+        [
+          37479.67240560865,
+          286363.19146262296
+        ],
+        [
+          18378.492056192,
+          295568.6616574754
+        ]
+      ],
+      &quot;status&quot;: &quot;evaluated&quot;
+    },
+    &quot;convention&quot;: &quot;N compression positive (N = −N_frame); frame My and Mz unchanged: My &lt; 0 compresses the +z face, Mz &gt; 0 the +y face; θ = atan2(Mz, My)&quot;,
+    &quot;demand&quot;: {
+      &quot;basis&quot;: &quot;modelKeyStations&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;
+    },
+    &quot;formulation&quot;: &quot;docs/formulations/rc-column.md&quot;,
+    &quot;governing&quot;: {
+      &quot;index&quot;: 0,
+      &quot;mEd&quot;: 198650.79829030274,
+      &quot;mRd&quot;: 248313.49786287858,
+      &quot;nEd&quot;: 1478413.1190171398,
+      &quot;station&quot;: 0,
+      &quot;utilisation&quot;: 0.7999999999999995
+    },
+    &quot;kernel&quot;: &quot;workbench-design::rc_column&quot;,
+    &quot;law&quot;: &quot;parabolaRectangle&quot;,
+    &quot;limitations&quot;: [
+      &quot;Checked at the member&#39;s key stations (ends, component extrema, discontinuities) only&quot;,
+      &quot;No slenderness, second-order moments, minimum eccentricity, partial factors or detailing&quot;
+    ],
+    &quot;materialInputs&quot;: {
+      &quot;concreteModulus&quot;: 30000000000,
+      &quot;concreteTensileStrength&quot;: 2800000,
+      &quot;fullCompressionStrain&quot;: 0.002,
+      &quot;minimumClearSpacing&quot;: 0.025,
+      &quot;parabolaExponent&quot;: 2,
+      &quot;parabolaPeak&quot;: 17000000,
+      &quot;steelModulus&quot;: 200000000000,
+      &quot;steelYieldStrength&quot;: 435000000,
+      &quot;strainAtPeak&quot;: 0.002,
+      &quot;ultimateStrain&quot;: 0.0035
+    },
+    &quot;materialSources&quot;: {
+      &quot;concreteModulus&quot;: &quot;syntheticFixture&quot;,
+      &quot;concreteTensileStrength&quot;: &quot;syntheticFixture&quot;,
+      &quot;fullCompressionStrain&quot;: &quot;syntheticFixture&quot;,
+      &quot;minimumClearSpacing&quot;: &quot;syntheticFixture&quot;,
+      &quot;parabolaExponent&quot;: &quot;syntheticFixture&quot;,
+      &quot;parabolaPeak&quot;: &quot;user&quot;,
+      &quot;steelModulus&quot;: &quot;syntheticFixture&quot;,
+      &quot;steelYieldStrength&quot;: &quot;user&quot;,
+      &quot;strainAtPeak&quot;: &quot;syntheticFixture&quot;,
+      &quot;ultimateStrain&quot;: &quot;user&quot;
+    },
+    &quot;section&quot;: {
+      &quot;barCount&quot;: 8,
+      &quot;bars&quot;: [
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: -0.15000000000000002,
+          &quot;z&quot;: -0.15000000000000002
+        },
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: 0,
+          &quot;z&quot;: -0.15000000000000002
+        },
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: 0.15000000000000002,
+          &quot;z&quot;: -0.15000000000000002
+        },
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: -0.15000000000000002,
+          &quot;z&quot;: 0.15000000000000002
+        },
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: 0,
+          &quot;z&quot;: 0.15000000000000002
+        },
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: 0.15000000000000002,
+          &quot;z&quot;: 0.15000000000000002
+        },
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: -0.15000000000000002,
+          &quot;z&quot;: 0
+        },
+        {
+          &quot;area&quot;: 0.0004908738521234052,
+          &quot;y&quot;: 0.15000000000000002,
+          &quot;z&quot;: 0
+        }
+      ],
+      &quot;depth&quot;: 0.4,
+      &quot;steelArea&quot;: 0.003926990816987241,
+      &quot;width&quot;: 0.4
+    },
+    &quot;stations&quot;: [
+      {
+        &quot;actions&quot;: [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          158649.58161387788,
+          119551.03477225135
+        ],
+        &quot;axialRatio&quot;: 0.3499999999999999,
+        &quot;capacity&quot;: {
+          &quot;angleIterations&quot;: 47,
+          &quot;axialResidual&quot;: 1.653612056683385e-16,
+          &quot;depthIterations&quot;: 47,
+          &quot;directionError&quot;: 3.3306690738754696e-16,
+          &quot;mRd&quot;: 248313.49786287858,
+          &quot;my&quot;: 198311.9770173474,
+          &quot;mz&quot;: 149438.79346531435,
+          &quot;n&quot;: 1478413.119017139,
+          &quot;neutralAxisAngle&quot;: 5.385817230730776,
+          &quot;neutralAxisDepth&quot;: 0.32337818512416344,
+          &quot;pivot&quot;: &quot;ultimateCompression&quot;,
+          &quot;plane&quot;: {
+            &quot;e0&quot;: 0.0004578951460879649,
+            &quot;ky&quot;: 0.0067501249113140855,
+            &quot;kz&quot;: -0.00846039935824609
+          }
+        },
+        &quot;kind&quot;: &quot;end&quot;,
+        &quot;mEd&quot;: 198650.79829030274,
+        &quot;myEd&quot;: 158649.58161387788,
+        &quot;mzEd&quot;: 119551.03477225135,
+        &quot;nEd&quot;: 1478413.1190171398,
+        &quot;side&quot;: null,
+        &quot;station&quot;: 0,
+        &quot;status&quot;: &quot;evaluated&quot;,
+        &quot;utilisation&quot;: 0.7999999999999995
+      },
+      {
+        &quot;actions&quot;: [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          -2.9103830456733704e-11,
+          5.820766091346741e-11
+        ],
+        &quot;axialRatio&quot;: 0.3499999999999999,
+        &quot;capacity&quot;: {
+          &quot;angleIterations&quot;: 47,
+          &quot;axialResidual&quot;: 0,
+          &quot;depthIterations&quot;: 47,
+          &quot;directionError&quot;: 8.881784197001252e-16,
+          &quot;mRd&quot;: 256350.24369519102,
+          &quot;my&quot;: -114643.31419021658,
+          &quot;mz&quot;: 229286.6283804337,
+          &quot;n&quot;: 1478413.1190171398,
+          &quot;neutralAxisAngle&quot;: 0.5159547130325987,
+          &quot;neutralAxisDepth&quot;: 0.3128978484137596,
+          &quot;pivot&quot;: &quot;ultimateCompression&quot;,
+          &quot;plane&quot;: {
+            &quot;e0&quot;: 0.00045034233944608523,
+            &quot;ky&quot;: 0.009729620553475891,
+            &quot;kz&quot;: 0.005518667749293683
+          }
+        },
+        &quot;kind&quot;: &quot;end&quot;,
+        &quot;mEd&quot;: 6.507814330688532e-11,
+        &quot;myEd&quot;: -2.9103830456733704e-11,
+        &quot;mzEd&quot;: 5.820766091346741e-11,
+        &quot;nEd&quot;: 1478413.1190171398,
+        &quot;side&quot;: null,
+        &quot;station&quot;: 1,
+        &quot;status&quot;: &quot;evaluated&quot;,
+        &quot;utilisation&quot;: 2.538641757027756e-16
+      }
+    ],
+    &quot;status&quot;: &quot;evaluated&quot;
+  },
+  &quot;contactState&quot;: &quot;notApplicable&quot;,
+  &quot;contractVersion&quot;: 1,
+  &quot;draftId&quot;: &quot;dpfab9d3ed357a6fc5&quot;,
+  &quot;flexuralDemand&quot;: null,
+  &quot;inputHash&quot;: &quot;b8d30f0b011b4fb289d44ccf1f85befbfec1b120a0271896f7c51c18cd716a14&quot;,
+  &quot;inputs&quot;: {
+    &quot;id&quot;: &quot;dpfab9d3ed357a6fc5&quot;,
+    &quot;inputSource&quot;: &quot;mixed&quot;,
+    &quot;inputSources&quot;: {
+      &quot;barDiameter&quot;: &quot;syntheticFixture&quot;,
+      &quot;barsAlongDepth&quot;: &quot;syntheticFixture&quot;,
+      &quot;barsAlongWidth&quot;: &quot;syntheticFixture&quot;,
+      &quot;concreteStrength&quot;: &quot;syntheticFixture&quot;,
+      &quot;cover&quot;: &quot;user&quot;,
+      &quot;depth&quot;: &quot;syntheticFixture&quot;,
+      &quot;linkDiameter&quot;: &quot;syntheticFixture&quot;,
+      &quot;rebarStrength&quot;: &quot;syntheticFixture&quot;,
+      &quot;width&quot;: &quot;syntheticFixture&quot;
+    },
+    &quot;inputs&quot;: {
+      &quot;barDiameter&quot;: 0.025,
+      &quot;barsAlongDepth&quot;: 3,
+      &quot;barsAlongWidth&quot;: 3,
+      &quot;concreteStrength&quot;: 30000000,
+      &quot;cover&quot;: 0.0275,
+      &quot;depth&quot;: 0.4,
+      &quot;linkDiameter&quot;: 0.01,
+      &quot;rebarStrength&quot;: 500000000,
+      &quot;width&quot;: 0.4
+    },
+    &quot;kind&quot;: &quot;rcColumn&quot;,
+    &quot;mechanics&quot;: {
+      &quot;inputSources&quot;: {
+        &quot;concreteModulus&quot;: &quot;syntheticFixture&quot;,
+        &quot;concreteTensileStrength&quot;: &quot;syntheticFixture&quot;,
+        &quot;fullCompressionStrain&quot;: &quot;syntheticFixture&quot;,
+        &quot;minimumClearSpacing&quot;: &quot;syntheticFixture&quot;,
+        &quot;parabolaExponent&quot;: &quot;syntheticFixture&quot;,
+        &quot;parabolaPeak&quot;: &quot;user&quot;,
+        &quot;steelModulus&quot;: &quot;syntheticFixture&quot;,
+        &quot;steelYieldStrength&quot;: &quot;user&quot;,
+        &quot;strainAtPeak&quot;: &quot;syntheticFixture&quot;,
+        &quot;ultimateStrain&quot;: &quot;user&quot;
+      },
+      &quot;inputs&quot;: {
+        &quot;concreteModulus&quot;: 30000000000,
+        &quot;concreteTensileStrength&quot;: 2800000,
+        &quot;fullCompressionStrain&quot;: 0.002,
+        &quot;minimumClearSpacing&quot;: 0.025,
+        &quot;parabolaExponent&quot;: 2,
+        &quot;parabolaPeak&quot;: 17000000,
+        &quot;steelModulus&quot;: 200000000000,
+        &quot;steelYieldStrength&quot;: 435000000,
+        &quot;strainAtPeak&quot;: 0.002,
+        &quot;ultimateStrain&quot;: 0.0035
+      },
+      &quot;law&quot;: &quot;parabolaRectangle&quot;
+    },
+    &quot;soilReference&quot;: &quot;Synthetic starter input; replace with a referenced geotechnical report&quot;,
+    &quot;targetId&quot;: &quot;m1&quot;
+  },
+  &quot;kind&quot;: &quot;rcColumn&quot;,
+  &quot;limitations&quot;: [
+    &quot;MOCK WORKFLOW — no code-compliance claim&quot;,
+    &quot;Dimensions are draft inputs; frame geometry/stiffness is unchanged&quot;,
+    &quot;Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified&quot;
+  ],
+  &quot;mock&quot;: true,
+  &quot;modelHash&quot;: &quot;6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63&quot;,
+  &quot;overall&quot;: &quot;unsupported&quot;,
+  &quot;plateAnalysis&quot;: null,
+  &quot;previewRunId&quot;: &quot;62d556c72d7d18830a1638fa5df35c897da1b50cca8f8e3e7ce0fb491387c568&quot;,
+  &quot;reinforcementFields&quot;: [
+    &quot;Top X&quot;,
+    &quot;Top Y&quot;,
+    &quot;Bottom X&quot;,
+    &quot;Bottom Y&quot;
+  ],
+  &quot;schedule&quot;: [],
+  &quot;sectionMechanics&quot;: null,
+  &quot;soilProvenance&quot;: null,
+  &quot;sourceProvenance&quot;: {
+    &quot;combinationId&quot;: &quot;LC1&quot;,
+    &quot;kind&quot;: &quot;modelAnalysis&quot;,
+    &quot;mock&quot;: false,
+    &quot;modelHash&quot;: &quot;6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63&quot;,
+    &quot;note&quot;: &quot;Actual model actions at the member&#39;s key stations; the draft section is not applied to frame stiffness&quot;,
+    &quot;resultId&quot;: &quot;6a4bd0c7ff1a943f-LC1&quot;,
+    &quot;settingsHash&quot;: &quot;71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da&quot;,
+    &quot;solverBuildHash&quot;: &quot;85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c&quot;,
+    &quot;sourceRevision&quot;: 2,
+    &quot;stations&quot;: [
+      {
+        &quot;actions&quot;: [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          158649.58161387788,
+          119551.03477225135
+        ],
+        &quot;components&quot;: [
+          &quot;N&quot;,
+          &quot;Vy&quot;,
+          &quot;Vz&quot;,
+          &quot;T&quot;,
+          &quot;My&quot;,
+          &quot;Mz&quot;
+        ],
+        &quot;kind&quot;: &quot;end&quot;,
+        &quot;station&quot;: 0
+      },
+      {
+        &quot;actions&quot;: [
+          -1478413.1190171398,
+          39850.344924083765,
+          -52883.193871292635,
+          0,
+          -2.9103830456733704e-11,
+          5.820766091346741e-11
+        ],
+        &quot;components&quot;: [
+          &quot;N&quot;,
+          &quot;Vy&quot;,
+          &quot;Vz&quot;,
+          &quot;T&quot;,
+          &quot;My&quot;,
+          &quot;Mz&quot;
+        ],
+        &quot;kind&quot;: &quot;end&quot;,
+        &quot;station&quot;: 1
+      }
+    ],
+    &quot;targetId&quot;: &quot;m1&quot;
+  },
+  &quot;sourceRevision&quot;: 2
+}</pre></details></section></section><h2>Equilibrium and diagnostics</h2><pre>{
+  &quot;checks&quot;: {
+    &quot;factorNnzEstimate&quot;: 18,
+    &quot;forcePass&quot;: true,
+    &quot;globalBalance&quot;: [
+      2.3283064365386963e-10,
+      5.820766091346741e-11,
+      7.275957614183426e-12,
+      0,
+      0,
+      1.1641532182693481e-10
+    ],
+    &quot;matrixNnz&quot;: 10,
+    &quot;minScaledPivot&quot;: 0.25,
+    &quot;momentPass&quot;: true,
+    &quot;origin&quot;: [
+      0,
+      0,
+      0
+    ],
+    &quot;scaledResidual&quot;: 2.985923165853575e-17
+  },
+  &quot;diagnostics&quot;: [],
+  &quot;generatedConstraints&quot;: []
+}</pre><h2>Reproducible project input</h2><pre>{
+  &quot;analysisMode&quot;: &quot;spatial&quot;,
+  &quot;analysisSettings&quot;: {
+    &quot;formulation&quot;: &quot;eulerBernoulli3D&quot;,
+    &quot;memoryLimitMiB&quot;: 512,
+    &quot;mergeTolerance&quot;: 0.000001,
+    &quot;timeoutMs&quot;: 30000,
+    &quot;type&quot;: &quot;linearStatic&quot;
+  },
+  &quot;combinations&quot;: [],
+  &quot;designPreviews&quot;: [
+    {
+      &quot;id&quot;: &quot;dpfab9d3ed357a6fc5&quot;,
+      &quot;inputSource&quot;: &quot;mixed&quot;,
+      &quot;inputSources&quot;: {
+        &quot;barDiameter&quot;: &quot;syntheticFixture&quot;,
+        &quot;barsAlongDepth&quot;: &quot;syntheticFixture&quot;,
+        &quot;barsAlongWidth&quot;: &quot;syntheticFixture&quot;,
+        &quot;concreteStrength&quot;: &quot;syntheticFixture&quot;,
+        &quot;cover&quot;: &quot;user&quot;,
+        &quot;depth&quot;: &quot;syntheticFixture&quot;,
+        &quot;linkDiameter&quot;: &quot;syntheticFixture&quot;,
+        &quot;rebarStrength&quot;: &quot;syntheticFixture&quot;,
+        &quot;width&quot;: &quot;syntheticFixture&quot;
+      },
+      &quot;inputs&quot;: {
+        &quot;barDiameter&quot;: 0.025,
+        &quot;barsAlongDepth&quot;: 3,
+        &quot;barsAlongWidth&quot;: 3,
+        &quot;concreteStrength&quot;: 30000000,
+        &quot;cover&quot;: 0.0275,
+        &quot;depth&quot;: 0.4,
+        &quot;linkDiameter&quot;: 0.01,
+        &quot;rebarStrength&quot;: 500000000,
+        &quot;width&quot;: 0.4
+      },
+      &quot;kind&quot;: &quot;rcColumn&quot;,
+      &quot;mechanics&quot;: {
+        &quot;inputSources&quot;: {
+          &quot;concreteModulus&quot;: &quot;syntheticFixture&quot;,
+          &quot;concreteTensileStrength&quot;: &quot;syntheticFixture&quot;,
+          &quot;fullCompressionStrain&quot;: &quot;syntheticFixture&quot;,
+          &quot;minimumClearSpacing&quot;: &quot;syntheticFixture&quot;,
+          &quot;parabolaExponent&quot;: &quot;syntheticFixture&quot;,
+          &quot;parabolaPeak&quot;: &quot;user&quot;,
+          &quot;steelModulus&quot;: &quot;syntheticFixture&quot;,
+          &quot;steelYieldStrength&quot;: &quot;user&quot;,
+          &quot;strainAtPeak&quot;: &quot;syntheticFixture&quot;,
+          &quot;ultimateStrain&quot;: &quot;user&quot;
+        },
+        &quot;inputs&quot;: {
+          &quot;concreteModulus&quot;: 30000000000,
+          &quot;concreteTensileStrength&quot;: 2800000,
+          &quot;fullCompressionStrain&quot;: 0.002,
+          &quot;minimumClearSpacing&quot;: 0.025,
+          &quot;parabolaExponent&quot;: 2,
+          &quot;parabolaPeak&quot;: 17000000,
+          &quot;steelModulus&quot;: 200000000000,
+          &quot;steelYieldStrength&quot;: 435000000,
+          &quot;strainAtPeak&quot;: 0.002,
+          &quot;ultimateStrain&quot;: 0.0035
+        },
+        &quot;law&quot;: &quot;parabolaRectangle&quot;
+      },
+      &quot;soilReference&quot;: &quot;Synthetic starter input; replace with a referenced geotechnical report&quot;,
+      &quot;targetId&quot;: &quot;m1&quot;
+    }
+  ],
+  &quot;displayUnits&quot;: &quot;engineeringMetric&quot;,
+  &quot;gravity&quot;: [
+    0,
+    0,
+    -9.80665
+  ],
+  &quot;id&quot;: &quot;rc-column-oracle&quot;,
+  &quot;loadCases&quot;: [
+    {
+      &quot;category&quot;: &quot;other&quot;,
+      &quot;id&quot;: &quot;LC1&quot;,
+      &quot;name&quot;: &quot;Reference load&quot;
+    }
+  ],
+  &quot;loads&quot;: [
+    {
+      &quot;case&quot;: &quot;LC1&quot;,
+      &quot;id&quot;: &quot;l1&quot;,
+      &quot;node&quot;: &quot;n2&quot;,
+      &quot;type&quot;: &quot;nodal&quot;,
+      &quot;values&quot;: [
+        -1478413.1190171395,
+        39850.34492408382,
+        -52883.19387129263,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  &quot;materials&quot;: [
+    {
+      &quot;E&quot;: 200000000000,
+      &quot;density&quot;: 7850,
+      &quot;id&quot;: &quot;mat1&quot;,
+      &quot;name&quot;: &quot;Synthetic isotropic material&quot;,
+      &quot;nu&quot;: 0.25
+    }
+  ],
+  &quot;members&quot;: [
+    {
+      &quot;end&quot;: &quot;n2&quot;,
+      &quot;id&quot;: &quot;m1&quot;,
+      &quot;localY&quot;: [
+        0,
+        1,
+        0
+      ],
+      &quot;material&quot;: &quot;mat1&quot;,
+      &quot;releaseEnd&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;releaseStart&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;section&quot;: &quot;sec1&quot;,
+      &quot;start&quot;: &quot;n1&quot;
+    }
+  ],
+  &quot;metadata&quot;: {
+    &quot;createdBy&quot;: &quot;Specification package&quot;,
+    &quot;description&quot;: &quot;Analytical verification only&quot;,
+    &quot;entityLabels&quot;: {
+      &quot;LC1&quot;: &quot;lc1&quot;,
+      &quot;l1&quot;: &quot;l1&quot;,
+      &quot;m1&quot;: &quot;m1&quot;,
+      &quot;mat1&quot;: &quot;mat1&quot;,
+      &quot;n1&quot;: &quot;n1&quot;,
+      &quot;n2&quot;: &quot;n2&quot;,
+      &quot;s1&quot;: &quot;s1&quot;,
+      &quot;sec1&quot;: &quot;sec1&quot;
+    }
+  },
+  &quot;name&quot;: &quot;B04&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;n1&quot;,
+      &quot;position&quot;: [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;n2&quot;,
+      &quot;position&quot;: [
+        3,
+        0,
+        0
+      ]
+    }
+  ],
+  &quot;revision&quot;: 2,
+  &quot;schemaVersion&quot;: &quot;1.5.0&quot;,
+  &quot;sections&quot;: [
+    {
+      &quot;A&quot;: 0.01,
+      &quot;Iy&quot;: 0.00001,
+      &quot;Iz&quot;: 0.00002,
+      &quot;J&quot;: 0.00002,
+      &quot;cy&quot;: 0.1,
+      &quot;cz&quot;: 0.2,
+      &quot;id&quot;: &quot;sec1&quot;,
+      &quot;name&quot;: &quot;Synthetic principal section&quot;,
+      &quot;provenance&quot;: &quot;Original analytical fixture, not a catalogue section&quot;
+    }
+  ],
+  &quot;structure&quot;: {
+    &quot;designObjects&quot;: [
+      {
+        &quot;analysisStatus&quot;: &quot;unverified&quot;,
+        &quot;id&quot;: &quot;doff4a3ad4b8504077b6f5&quot;,
+        &quot;kind&quot;: &quot;rcColumn&quot;,
+        &quot;name&quot;: &quot;RC column&quot;,
+        &quot;physicalMemberId&quot;: &quot;pmca0df2c95aa144c1d0ff&quot;,
+        &quot;previewId&quot;: &quot;dpfab9d3ed357a6fc5&quot;,
+        &quot;storeyId&quot;: null,
+        &quot;supportId&quot;: null
+      }
+    ],
+    &quot;grids&quot;: [],
+    &quot;groups&quot;: [],
+    &quot;joints&quot;: [
+      {
+        &quot;detailStatus&quot;: &quot;notDesigned&quot;,
+        &quot;id&quot;: &quot;jt0480a93d2e9b094b89e0&quot;,
+        &quot;name&quot;: &quot;Joint n2&quot;,
+        &quot;nodeId&quot;: &quot;n2&quot;,
+        &quot;storeyId&quot;: null
+      },
+      {
+        &quot;detailStatus&quot;: &quot;notDesigned&quot;,
+        &quot;id&quot;: &quot;jt676b8bb84ce7267dd520&quot;,
+        &quot;name&quot;: &quot;Joint n1&quot;,
+        &quot;nodeId&quot;: &quot;n1&quot;,
+        &quot;storeyId&quot;: null
+      }
+    ],
+    &quot;layers&quot;: [],
+    &quot;physicalMembers&quot;: [
+      {
+        &quot;analyticalMemberIds&quot;: [
+          &quot;m1&quot;
+        ],
+        &quot;id&quot;: &quot;pmca0df2c95aa144c1d0ff&quot;,
+        &quot;name&quot;: &quot;m1&quot;,
+        &quot;role&quot;: &quot;unassigned&quot;,
+        &quot;storeyId&quot;: null
+      }
+    ],
+    &quot;storeys&quot;: [],
+    &quot;supportDetails&quot;: [
+      {
+        &quot;detailStatus&quot;: &quot;notDesigned&quot;,
+        &quot;id&quot;: &quot;sde8bc163c82eee1873328&quot;,
+        &quot;name&quot;: &quot;Support s1&quot;,
+        &quot;supportId&quot;: &quot;s1&quot;
+      }
+    ]
+  },
+  &quot;supports&quot;: [
+    {
+      &quot;fixed&quot;: [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      &quot;id&quot;: &quot;s1&quot;,
+      &quot;node&quot;: &quot;n1&quot;,
+      &quot;prescribed&quot;: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}</pre></html>

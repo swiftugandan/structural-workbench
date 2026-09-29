@@ -1,3 +1,43 @@
+## Latest: slab plate analysis (M10) and RC column mechanics (M12), numerical families
+
+Both milestones depend on M08, whose concrete code profile is blocked until EN 1992-1-1 A1:2014 and the UK NA + A2:2014 are held. What does not need them is built, validated and gated on its own. Both parents stay planned.
+
+**Slab plate analysis (plate-v1, ADR 0021).**
+
+- **Element and supports:** new crate `crates/plate` with a flat shell (Q4 membrane + MITC4 plate) on a structured panel mesh. Each of the four edges is free, hard simple or clamped, and one rectangular opening is supported. Uniform pressure.
+- **Stability and balance:** support sufficiency is decided from the edge topology. A single simple edge, or free edges only, is `UNSTABLE_MODEL`. Reactions must balance the load (`RESIDUAL_FAILURE` above 1e-8).
+- **Results:**
+  - Unsmoothed element-centre actions are the design values.
+  - Wood–Armer design moments.
+  - Clamped-edge line moments recovered from the reactions.
+  - A mesh-convergence indicator, which stays high at the re-entrant corners of openings by design.
+- **Validation:** `fixtures/plate/plate-oracle.json`.
+  - Patch and rigid-mode tests.
+  - Navier O(h²) convergence.
+  - Timoshenko clamped square: edge moment −0.05122 vs −0.0513.
+  - OpenSees ShellMITC4 on identical rectilinear meshes to 1e-6, including a 6 × 5 m panel with an opening.
+  - Distorted meshes: OpenSees uses Bathe–Dvorkin 1985 element-constant shear angles and plate-v1 the pointwise J⁻¹. They converge together and are gated that way, as recorded in the ADR.
+- **In the app:** slab drafts (schema 1.5.0) carry a `plate` object and solve their own panel with the "Plate analysis" source. The workspace shows contour maps (mx, my, mxy, Wood–Armer faces, w), equilibrium, convergence and governing design moments. Reinforcement, punching and deflection checks stay UNSUPPORTED.
+- **Gate:** `node tools/run-m10-plate.mjs` → evidence/M10/plate.
+
+**RC column mechanics (rc-column, ADR 0022).**
+
+- **Kernel:** `workbench-design::rc_column` gives biaxial strain compatibility with exact polygon integration. It uses the Figure 6.1 pivot shape with caller strain values and computes M_Rd(N_Ed, θ) along the demand direction by nested bisection.
+- **Validation:** `fixtures/column/column-oracle.json` (reference integration, 800² fibre model, closed forms). 48 capacities match within 1e-9.
+- **Draft kind:** new `rcColumn` (schema 1.5.0), bound to a member. It uses a perimeter bar layout and the explicit mechanics law plus the pivot-C strain. Every key station of the bound case is checked (N_Ed = −N_frame).
+- **Browser check:** a cantilever loaded to the oracle's N = 1478 kN, θ = 37° case reports utilisation 0.800 at the fixed end.
+- **In the app:** the workspace shows the interaction contour with the demand points and a station table. The HTML calculation record now includes column and slab plate runs. Slenderness, minimum eccentricity, partial factors, shear and detailing stay UNSUPPORTED.
+- **Gate:** `node tools/run-m12-column.mjs` → evidence/M12/column.
+
+**Also fixed:**
+
+- Refused preview runs kept their reason hidden by the re-render.
+- Untouched integer inputs (bar counts) were being marked user-edited.
+- The JSON schema's design-object kind enum lacked rcColumn.
+- A stale viewport unit test (`connections.test.mjs`) had asserted the camera on the wrong side since 69e5448 flipped the depth sign.
+
+Resources: R-SHELL-BENCHMARKS is acquired as a project oracle. R-COLUMN-EXAMPLES is partial, because slenderness cases need the code profile.
+
 ## Latest: Cb from the model
 
 Steel members can derive Cb from their own strong-axis moment diagram (Spec F1-1) when the member is the unbraced segment (Lb = member length). A member with an unbraced free end takes Cb = 1.0 (Section F1), not F1-1's unconservative 1.67. Example F.1-2B's third-point bracing, modelled as three members, gives the published Cb = 1.01 and 1.46. The run records the derivation (Mmax, MA, MB, MC) and the panel shows it. Members with interior bracing points still need a user Cb. Gates M07-LTB (new criterion DW-LTB1-CB), M07-S and M07 pass on one build.

@@ -285,7 +285,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Surface-design UI follows M10-SHELL in the approved shell; distinguish display-smoothed contours from design actions.",
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Surface-design UI follows M10-SHELL in the approved shell; distinguish display-smoothed contours from design actions. Numerical family plate-v1 gated on its own (evidence/M10/plate, ADR 0021, R-SHELL-BENCHMARKS acquired as a project oracle); the parent stays planned until the M08 slab code profile enables reinforcement, punching and deflection checks.",
       "experienceFollowOns": [
         "M10-SHELL"
       ]
@@ -340,7 +340,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Numerical family rc-column (biaxial section mechanics at model stations) gated on its own (evidence/M12/column, ADR 0022, R-COLUMN-EXAMPLES partially acquired); the parent stays planned until the M08 column code profile supplies partial factors, slenderness and minimum eccentricity."
     },
     {
       "id": "M13",

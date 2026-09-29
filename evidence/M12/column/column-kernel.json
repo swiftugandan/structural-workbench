@@ -1,0 +1,48 @@
+{
+  "taskId": "M12-COLUMN",
+  "milestone": "M12",
+  "sourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
+  "buildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
+  "lockHashes": {
+    "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T17:04:22.016Z",
+  "status": "PASS",
+  "testCount": 12,
+  "testIds": [
+    "closed_form_endpoints",
+    "oracle_self_checks_passed",
+    "check_utilisation",
+    "refusals",
+    "pivot_a_range_is_attained",
+    "resultants_match_reference_integration",
+    "resultants_within_fibre_error_bound",
+    "resistance_vanishes_at_the_axial_limits",
+    "uniaxial_agrees_with_rc_section",
+    "capacities_match_oracle",
+    "square_symmetry",
+    "contour_points_are_capacities"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--release",
+    "-p",
+    "workbench-design",
+    "--test",
+    "rc_column"
+  ],
+  "artifacts": []
+}

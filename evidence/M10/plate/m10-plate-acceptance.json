@@ -1,0 +1,166 @@
+{
+  "taskId": "M10-PLATE",
+  "milestone": "M10",
+  "sourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
+  "buildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
+  "lockHashes": {
+    "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T17:04:03.337Z",
+  "status": "PASS",
+  "testCount": 8,
+  "testIds": [
+    "M10-P1-ELEMENT",
+    "M10-P2-NAVIER",
+    "M10-P3-CLAMPED",
+    "M10-P4-OPENSEES",
+    "M10-P5-EQUILIBRIUM",
+    "M10-P6-PROTOCOL",
+    "M10-P7-SCHEMA",
+    "M10-P8-BROWSER"
+  ],
+  "command": [
+    "node",
+    "tools/run-m10-plate.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "M10-P1-ELEMENT",
+      "title": "Element: patch tests and rigid-body modes",
+      "evidence": "kernel_validation",
+      "tests": {
+        "plate-kernel": [
+          "p_patch_membrane_and_bending",
+          "p_rigid_six_zero_eigenvalues"
+        ]
+      },
+      "observation": "MacNeal–Harder distorted patch reproduces constant membrane strain and constant curvature (zero transverse shear) to 1e-10; rectangular and distorted single elements have exactly six zero eigenvalues and no negative ones.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M10-P2-NAVIER",
+      "title": "Hard simply supported plates against Mindlin Navier series",
+      "evidence": "kernel_validation",
+      "tests": {
+        "plate-kernel": [
+          "p_ss_navier_convergence"
+        ]
+      },
+      "observation": "Thin, thick and rectangular panels: 32 × 32 centre w ≤ 3.5e-4 and element-centre mx, my ≤ 7.3e-4 (gates 2e-3, 5e-3), falling 8 → 16 → 32 at O(h²); no shear locking at a/t = 300 (16 × 16 w 1.3e-3, gate 2e-2).",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M10-P3-CLAMPED",
+      "title": "Clamped square against Timoshenko & Woinowsky-Krieger Table 35",
+      "evidence": "kernel_validation",
+      "tests": {
+        "plate-kernel": [
+          "p_cl_timoshenko"
+        ]
+      },
+      "observation": "32 × 32: w 0.001271 (0.00126), centre mx 0.02286 (0.0231), edge-mid line moment from reactions −0.05122 (−0.0513), all within 2 %; the four clamped edges agree by symmetry to 1e-9.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M10-P4-OPENSEES",
+      "title": "OpenSees ShellMITC4 on identical meshes",
+      "evidence": "kernel_validation",
+      "tests": {
+        "plate-kernel": [
+          "p_cl_opensees_identical_mesh",
+          "p_open_opensees_identical_mesh",
+          "p_distort_navier_and_opensees"
+        ]
+      },
+      "observation": "Clamped 16 × 16 and the 6 × 5 m panel with a 1 × 1 m opening (464 elements): nodal w and element-centre mx, my, mxy within 1e-6. Checkerboard-distorted meshes (no parallelogram cells): Navier w error 2.1e-2 → 6.6e-3 → 1.8e-3 (gate 1e-2 at 32) and the difference from OpenSees falls 9.7e-4 → 6.6e-4 → 5.4e-4 (gate 1e-3). The two use different published MITC4 shear transformations off parallelograms (ADR 0021).",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M10-P5-EQUILIBRIUM",
+      "title": "Equilibrium, refusals and the convergence indicator",
+      "evidence": "failure_path",
+      "tests": {
+        "plate-kernel": [
+          "p_balance_mixed_edges_and_target_mesh",
+          "refusals",
+          "convergence_indicator_falls_with_refinement",
+          "convergence_indicator_exposes_reentrant_corners",
+          "wood_armer_cases"
+        ],
+        "slab-protocol": [
+          "refusals_leave_the_project_unchanged"
+        ]
+      },
+      "observation": "Reactions balance the pressure resultant to 1e-9 with mixed edges and an opening. Only-free edges or a single simple edge are UNSTABLE_MODEL, meshes over 40 000 cells are MEMORY_LIMIT, and invalid material or load is INVALID_SETTINGS or INVALID_SCHEMA, each leaving the project unchanged. The convergence indicator falls on smooth panels and stays above 5 % at re-entrant opening corners. Wood–Armer handles its corrected branches.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M10-P6-PROTOCOL",
+      "title": "Slab drafts solve their panel through the protocol",
+      "evidence": "kernel_validation",
+      "tests": {
+        "slab-protocol": [
+          "plate_source_reproduces_the_opening_oracle",
+          "clamped_edges_report_line_moments",
+          "new_slab_drafts_carry_synthetic_plate_inputs",
+          "preview_all_families_persist_and_never_claim_compliance"
+        ]
+      },
+      "observation": "The kernel's evaluateDesignPreview with sourceMode plate reproduces P-OPEN-OS to 1e-6 and is deterministic. Wood–Armer governing values equal the field maxima. Every slab code check stays UNSUPPORTED and overall stays unsupported.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M10-P7-SCHEMA",
+      "title": "Schema 1.5.0 and migration",
+      "evidence": "save_and_reopen",
+      "tests": {
+        "schema-1-5": [
+          "plate_inputs_round_trip",
+          "plate_inputs_are_validated",
+          "a_1_4_project_migrates_by_version_only",
+          "a_1_3_project_migrates_by_version_only"
+        ],
+        "slab-protocol": [
+          "migrated_slab_drafts_are_not_configured"
+        ]
+      },
+      "observation": "Plate inputs round-trip with per-field provenance, invalid or out-of-panel values are INVALID_SCHEMA, and 1.4.0 projects migrate by version only with unconfigured slabs. A 1.4.0 file carrying plate inputs is refused.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M10-P8-BROWSER",
+      "title": "Browser journey on the same build",
+      "evidence": "ui_journey",
+      "tests": {
+        "slab-browser": [
+          "Slab plate analysis reproduces the opening oracle, shows contours and persists",
+          "Slab plate refusals keep the project and explain the reason",
+          "Concrete preview slab: source, stale, undo, persistence and export"
+        ]
+      },
+      "observation": "In the browser build, the P-OPEN-OS panel reproduces the oracle to 1e-6 from the downloaded run record. The browser test switches the contours through mx, my, Top X, Bottom Y and w. Edits make the run STALE, and clamped edges show line moments. The project downloads and reopens with its plate inputs. A mechanism and an invalid Poisson's ratio are refused with their reasons shown.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "plate-v1 mechanics only: flat rectangular panels with one rectangular opening, uniform pressure, linear elastic isotropic material, free/simple/clamped edges, no frame–slab coupling, column supports, cracking or long-term effects. Reinforcement areas, punching, detailing and deflection limits need the slab code profile (M08 resources) and stay UNSUPPORTED; the M10 parent is not accepted."
+}
