@@ -125,7 +125,7 @@ pub struct RowFit {
     pub fits: bool,
 }
 
-fn positive(name: &str, v: f64) -> Result<()> {
+pub(crate) fn positive(name: &str, v: f64) -> Result<()> {
     if !v.is_finite() {
         return Err(err("NONFINITE_INPUT", format!("{name} must be finite")));
     }
@@ -158,11 +158,11 @@ fn validate_section(s: &RcRectangle, layers: &[BarLayer]) -> Result<()> {
 }
 
 impl SteelLaw {
-    fn validate(&self) -> Result<()> {
+    pub(crate) fn validate(&self) -> Result<()> {
         positive("Steel yield strength", self.yield_strength)?;
         positive("Steel modulus", self.modulus)
     }
-    fn stress(&self, strain: f64) -> f64 {
+    pub(crate) fn stress(&self, strain: f64) -> f64 {
         (self.modulus * strain).clamp(-self.yield_strength, self.yield_strength)
     }
     pub fn yield_strain(&self) -> f64 {
@@ -171,7 +171,7 @@ impl SteelLaw {
 }
 
 impl ConcreteLaw {
-    fn validate(&self) -> Result<()> {
+    pub(crate) fn validate(&self) -> Result<()> {
         match *self {
             Self::RectangularBlock {
                 intensity,
@@ -206,7 +206,7 @@ impl ConcreteLaw {
         Ok(())
     }
 
-    fn ultimate_strain(&self) -> f64 {
+    pub(crate) fn ultimate_strain(&self) -> f64 {
         match *self {
             Self::RectangularBlock {
                 ultimate_strain, ..
