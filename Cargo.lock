@@ -526,6 +526,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "workbench-plate"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sprs",
+ "workbench-model",
+ "workbench-solver",
+]
+
+[[package]]
 name = "workbench-results"
 version = "0.1.0"
 dependencies = [

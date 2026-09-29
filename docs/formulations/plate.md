@@ -46,9 +46,18 @@ warning (`MESH_ASPECT`).
 ## Loads and solution
 
 Consistent pressure load f_w = −∫ N_i q dA (2 × 2 Gauss). K is assembled
-sparse on the free DOFs and solved with the kernel's LDLᵀ factor; a model
-without enough support is `UNSTABLE_MODEL`. Reactions are recovered and
-checked against the applied load (global balance ≤ 1e-9 relative).
+sparse on the free DOFs (upper triangle accumulated once and mirrored, so the
+matrix is exactly symmetric) and solved with the kernel's LDLᵀ factor.
+
+Support sufficiency is decided from the edge topology before assembly: the
+plate rigid modes w = a + b x + c y are held by one clamped edge or by any two
+supported edges; a single simple edge leaves rotation about its own line free
+and is `UNSTABLE_MODEL`, as is a panel with only free edges. Supported edges
+hold u and v, which removes the membrane rigid modes.
+
+Reactions R = K u − f are recovered at every restrained DOF and checked
+against the applied load; a relative imbalance above 1e-8 is
+`RESIDUAL_FAILURE` (the validation gate is 1e-9).
 
 ## Results and sign conventions
 
@@ -58,11 +67,22 @@ checked against the applied load (global balance ≤ 1e-9 relative).
   mx = −D(κx + ν κy), my = −D(κy + ν κx), mxy = −D(1 − ν)/2 κxy) and shear
   forces qx, qy (N/m) from the MITC shear field. These are the design and
   validation values.
+- **Clamped-edge line moments:** at each node of a clamped edge, the
+  reaction moment about the edge line divided by the node's tributary edge
+  length: mx = R_ry / L on x = 0, −R_ry / L on x = Lx, my = −R_rx / L on
+  y = 0, R_rx / L on y = Ly. By virtual work on the edge strip this includes
+  the shear term that carries the moment from the first element to the
+  support, so it is the edge value rather than the value h/2 inside it. These
+  are the support (hogging) design values along clamped edges.
 - **Smoothed nodal actions:** the average of the adjacent element-centre
   values. Display only; never used for design or validation.
 - **Mesh convergence indicator:** the panel is also solved at twice the target
   size, and the relative change of max |w|, max mx, max my, min mx and min my
-  is reported. This is an indicator, not a proof of convergence.
+  is reported (moments relative to the fine solution's largest moment). This
+  is an indicator, not a proof of convergence. A free-edged opening has
+  re-entrant corners where the plate moments are singular; the extremes there
+  grow with refinement and the indicator stays high, which is the correct
+  report: peak moments at re-entrant corners are mesh-dependent.
 - **Design actions (Wood–Armer, mechanics):** from the unsmoothed moments, per
   element, bottom mx* = mx + |mxy|, my* = my + |mxy|, with the standard
   corrections when one is negative (mx* = 0, my* = my + |mxy²/mx|, and the
@@ -83,7 +103,7 @@ checked against the applied load (global balance ≤ 1e-9 relative).
 | P-SS-THICK | t = 1.0 | Mindlin Navier | as above |
 | P-SS-RECT | 6 × 4 m | Mindlin Navier | as above |
 | P-SS-THINLIMIT | t = 0.02 (a/t = 300) | Navier (≈ Kirchhoff 0.00406 qa⁴/D) | no locking: 16 × 16 w ≤ 2e-2 |
-| P-CL-TIM | Clamped square, ν = 0.3 | Timoshenko & Woinowsky-Krieger Table 35 | 32 × 32 w, centre and edge-mid mx ≤ 2 % |
+| P-CL-TIM | Clamped square, ν = 0.3 | Timoshenko & Woinowsky-Krieger Table 35 | 32 × 32 w, centre element mx and edge-mid line moment (from reactions) ≤ 2 % |
 | P-CL-OS | Clamped, 16 × 16 | OpenSees ShellMITC4, identical mesh | nodal w and element-centre moments ≤ 1e-6 |
 | P-OPEN-OS | 6 × 5 m with a 1 × 1 m opening, 24 × 20 | OpenSees ShellMITC4, identical mesh | ≤ 1e-6 |
 | P-BALANCE | Any panel | applied pressure resultant | reactions to 1e-9 relative |
