@@ -6,6 +6,7 @@
 
 pub mod native;
 mod profile;
+pub mod rc_column;
 pub mod rc_section;
 
 pub use profile::aisc36022::{
