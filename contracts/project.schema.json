@@ -1151,6 +1151,34 @@
         },
         "cb": {
           "$ref": "#/$defs/designValue"
+        },
+        "serviceability": {
+          "description": "User deflection criterion L/n under one service case or combination (ADR 0020); absent means not checked.",
+          "type": "object",
+          "properties": {
+            "combinationId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "limitRatio": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100000
+            },
+            "basis": {
+              "enum": [
+                "chord",
+                "absolute"
+              ]
+            }
+          },
+          "required": [
+            "combinationId",
+            "limitRatio",
+            "basis"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [

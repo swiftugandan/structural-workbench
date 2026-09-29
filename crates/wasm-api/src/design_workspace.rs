@@ -41,6 +41,10 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
         "bracing":previous["bracing"].as_str().unwrap_or("notProvided"),
         "ky":previous.get("ky").unwrap_or(&unset),"kz":previous.get("kz").unwrap_or(&unset),
         "lb":previous.get("lb").unwrap_or(&unset),"cb":previous.get("cb").unwrap_or(&unset)});
+    // Serviceability criteria belong to the member, not the section.
+    if let Some(service) = previous.get("serviceability") {
+        v["members"][index]["steelDesign"]["serviceability"] = service.clone();
+    }
     Ok(())
 }
 
@@ -199,10 +203,64 @@ fn evaluate_analysis(
         "designSettingsHash":settings_hash,"inputs":settings,"catalogue":native::catalogue()["source"],"catalogueSourceHash":native::catalogue()["sourceSha256"],
         "stabilityBasis":"First-order analysis with user effective-length factors; no second-order / direct-analysis compliance claim",
         "bracingSegments":[{"start":0.0,"end":1.0,"kind":settings.bracing,"source":"user"}],
-        "serviceability":"notChecked","warnings":["Only the selected case/combination is checked; load completeness is the user's responsibility"],
-        "limitations":["Bounded AISC S2 strength checks only", "Tension details, weak-axis actions, LTB and second-order stability remain unsupported", "No serviceability or connection design"]});
+        "serviceability":serviceability(p, id)?,"warnings":["Only the selected case/combination is checked; load completeness is the user's responsibility"],
+        "limitations":["Bounded AISC 360-22 strength checks (S2, S3 flexure)", "Tension details, weak-axis actions, noncompact webs and second-order stability remain unsupported", "Serviceability is a user deflection criterion, reported separately from strength; no connection design"]});
     out["designRunId"] = json!(digest(&serde_json::to_vec(&out).unwrap()));
     Ok(out)
+}
+
+/// User deflection criterion of one member (ADR 0020), evaluated on a fresh
+/// Rust solution of its service case or combination. Its status is separate
+/// from the strength `overall` and never changes it.
+fn serviceability(p: &Project, id: &str) -> Result<Value> {
+    let member = native::member(p, id)?;
+    let Some(criteria) = member.steel_design.as_ref().and_then(|d| d.serviceability.as_ref()) else {
+        return Ok(json!({"status":"notChecked","reason":"No serviceability criteria are set for this member"}));
+    };
+    let analysis = workbench_assembly::analyse(p, &criteria.combination_id)?;
+    if !analysis.converged {
+        return Err(err("ANALYSIS_FAILED", "Service analysis did not converge"));
+    }
+    let result = analysis
+        .members
+        .iter()
+        .find(|m| m.id == id)
+        .ok_or_else(|| err("DANGLING_REFERENCE", "Service result member is missing"))?;
+    let position = |n: &str| p.nodes.iter().find(|x| x.id == n).unwrap().position;
+    let (length, r) = workbench_geometry::axes(position(&member.start), position(&member.end), member.local_y);
+    let samples = &result.samples;
+    let (first, last) = (samples.first().unwrap().displacement, samples.last().unwrap().displacement);
+    let chord = criteria.basis == "chord";
+    let mut governing = (0.0f64, 0.0f64, [0.0f64; 3]);
+    for s in samples {
+        let t = s.station;
+        let relative: [f64; 3] = std::array::from_fn(|a| {
+            s.displacement[a] - if chord { (1.0 - t) * first[a] + t * last[a] } else { 0.0 }
+        });
+        let l = workbench_geometry::local(r, relative);
+        let transverse = l[1].hypot(l[2]);
+        if transverse > governing.0 {
+            governing = (transverse, t, l);
+        }
+    }
+    let limit = length / criteria.limit_ratio;
+    let ratio = governing.0 / limit;
+    Ok(json!({
+        "status": if governing.0 <= limit { "pass" } else { "fail" },
+        "combinationId": criteria.combination_id,
+        "basis": criteria.basis,
+        "limitRatio": criteria.limit_ratio,
+        "length": length,
+        "demand": governing.0,
+        "limit": limit,
+        "ratio": ratio,
+        "station": governing.1,
+        "localDeflection": [governing.2[1], governing.2[2]],
+        "units": "m",
+        "samples": samples.len(),
+        "resultId": analysis.result_id,
+        "note": "User deflection criterion, not an AISC 360 requirement; sampled at the analysis stations of the member and reported separately from strength",
+    }))
 }
 
 /// All members are represented, including those without design inputs. One exact

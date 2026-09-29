@@ -162,3 +162,53 @@ test("DW-F4: fail reaches governing station and clause; LTB governs once Lb exce
     "FAIL",
   );
 });
+
+test("DW-SVc1: a deflection criterion is a separate serviceability status", async ({
+  page,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await openModel(page);
+  // B04: 3 m cantilever, 10 kN tip load, W18×50 bending about AISC x.
+  const E = 29000 * 6.894757293168361e6;
+  const I = 800 * 0.0254 ** 4;
+  const tip = (10000 * 3 ** 3) / (3 * E * I);
+
+  await page.locator("#design-service-case").selectOption("LC1");
+  await page.locator("#design-service-ratio").fill("180");
+  await page.locator("#design-service-basis").selectOption("absolute");
+  await page.locator("#design-save").click();
+  await page.locator("#analyse").click();
+  await expect(page.locator("#design-run")).toBeEnabled();
+  await page.locator("#design-run").click();
+  const service = page.locator("[data-testid='steel-serviceability']").first();
+  await expect(service).toHaveAttribute("data-status", "pass");
+  const demand = Number(
+    await service
+      .locator("[data-testid='steel-serviceability-demand']")
+      .getAttribute("data-si"),
+  );
+  expect(Math.abs(demand / tip - 1)).toBeLessThanOrEqual(1e-6);
+
+  // A far tighter limit fails serviceability; strength is unaffected.
+  await page.locator("#design-service-ratio").fill("100000");
+  await page.locator("#design-save").click();
+  await page.locator("#analyse").click();
+  await expect(page.locator("#design-run")).toBeEnabled();
+  await page.locator("#design-run").click();
+  await expect(service).toHaveAttribute("data-status", "fail");
+  await expect(page.locator("[data-testid='native-design-state']")).toHaveText(
+    "PASS",
+  );
+
+  // The record carries both, separately.
+  const download = page.waitForEvent("download");
+  await page.locator("#design-download").click();
+  const record = JSON.parse(
+    await readFile(await (await download).path(), "utf8"),
+  );
+  expect(record.overall).toBe("pass");
+  expect(record.serviceability.status).toBe("fail");
+  expect(record.serviceability.basis).toBe("absolute");
+  expect(errors).toEqual([]);
+});

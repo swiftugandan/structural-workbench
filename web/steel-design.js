@@ -30,7 +30,15 @@ export function provenanceHtml(run) {
 export function designResultsHtml(run, state) {
   if (!run)
     return '<div class="empty-results"><strong>Steel design · NOT CHECKED</strong><p>Select a member and complete its design inputs in the Selection Inspector.</p></div>';
-  return `<section data-testid="native-design-result" class="native-design-workspace"><div class="design-result-tabs"><button data-steel-pane="summary" aria-pressed="true">Design summary</button><button data-steel-pane="details" aria-pressed="false">Calculation details</button><button data-steel-pane="provenance" aria-pressed="false">Provenance</button><span class="spacer"></span><button id="design-why">Show governing location</button><button id="design-download">Download design record</button></div><div data-steel-view="summary" class="steel-summary-pane">${renderResult({ ...run, overall: state })}<aside class="design-notes"><h4>Design basis</h4><p class="design-note">${state === "stale" ? "STALE — recorded model or result has changed." : "Model-native checks · selected case/combination only."}</p><p>${esc(run.stabilityBasis)}</p><p>Serviceability: NOT CHECKED.</p><p>Flexure: yielding, flange local buckling (F3) and lateral-torsional buckling (F2.2) with your Lb and Cb; noncompact webs remain unsupported. No full-code compliance claim.</p></aside></div><div data-steel-view="details" class="design-pane" hidden></div><div data-steel-view="provenance" class="design-pane" hidden>${provenanceHtml(run)}<p>Download the exact record for all ${run.stationChecks.length} station checks.</p></div></section>`;
+  return `<section data-testid="native-design-result" class="native-design-workspace"><div class="design-result-tabs"><button data-steel-pane="summary" aria-pressed="true">Design summary</button><button data-steel-pane="details" aria-pressed="false">Calculation details</button><button data-steel-pane="provenance" aria-pressed="false">Provenance</button><span class="spacer"></span><button id="design-why">Show governing location</button><button id="design-download">Download design record</button></div><div data-steel-view="summary" class="steel-summary-pane">${renderResult({ ...run, overall: state })}${serviceabilityHtml(run.serviceability, state)}<aside class="design-notes"><h4>Design basis</h4><p class="design-note">${state === "stale" ? "STALE — recorded model or result has changed." : "Model-native checks · selected case/combination only."}</p><p>${esc(run.stabilityBasis)}</p><p>Serviceability: ${run.serviceability?.status === "notChecked" || !run.serviceability ? "NOT CHECKED — no user criterion is set." : "user deflection criterion, reported separately from strength."}</p><p>Flexure: yielding, flange local buckling (F3) and lateral-torsional buckling (F2.2) with your Lb and Cb; noncompact webs remain unsupported. No full-code compliance claim.</p></aside></div><div data-steel-view="details" class="design-pane" hidden></div><div data-steel-view="provenance" class="design-pane" hidden>${provenanceHtml(run)}<p>Download the exact record for all ${run.stationChecks.length} station checks.</p></div></section>`;
+}
+/** The member's user deflection criterion (ADR 0020), separate from strength. */
+export function serviceabilityHtml(s, state) {
+  if (!s || s.status === "notChecked")
+    return `<section class="steel-serviceability" data-testid="steel-serviceability" data-status="notChecked"><h4>Serviceability</h4><p>NOT CHECKED — set a service case and deflection limit under Design inputs.</p></section>`;
+  const mm = (v) => `${Number((v * 1000).toPrecision(4))} mm`;
+  const status = state === "stale" ? "stale" : s.status;
+  return `<section class="steel-serviceability" data-testid="steel-serviceability" data-status="${esc(status)}"><h4>Serviceability <span class="badge ${esc(status)}">${esc(status.toUpperCase())}</span></h4><p>Deflection ${s.basis === "chord" ? "relative to the member chord" : "from the undeformed position"} under ${esc(s.combinationId)}: <strong data-si="${s.demand}" data-testid="steel-serviceability-demand">${mm(s.demand)}</strong> against L/${Number(s.limitRatio)} = ${mm(s.limit)} (ratio ${Number(s.ratio.toPrecision(3))}) at x/L ${Number(s.station.toPrecision(3))}.</p><p class="design-note">${esc(s.note)}</p></section>`;
 }
 export function bindSteelResultViews(host, run) {
   let index = 0;
@@ -131,6 +139,15 @@ export function steelDesignWorkspace({
       <div class="steel-section-card"><svg viewBox="0 0 100 110" role="img" aria-label="W section schematic"><path d="M20 10H80V22H57V86H80V98H20V86H43V22H20Z" fill="#aab7c4" stroke="#405369"/><path d="M25 15H75M48 27V82M25 92H75" stroke="#dce5ee" stroke-width="3"/></svg><div><strong>${esc(shape.designation)}</strong><small>AISC Shapes Database v16</small><dl><dt>Depth</dt><dd>${(shape.d * 25.4).toFixed(1)} mm</dd><dt>Flange width</dt><dd>${(shape.bf * 25.4).toFixed(1)} mm</dd><dt>Material</dt><dd>ASTM A992</dd></dl></div></div><div class="design-inline"><span>Fy 50 ksi · Fu 65 ksi</span><button id="design-assign">Assign section and material</button></div>
       <details class="catalogue-browser"><summary>Browse section catalogue · 5 verified records</summary><table><thead><tr><th>Section</th><th>d mm</th><th>bf mm</th></tr></thead><tbody>${cat.shapes.map((s) => `<tr><td><button data-catalogue-choice="${cat.id}:${s.designation}">${esc(s.designation)}</button></td><td>${(s.d * 25.4).toFixed(1)}</td><td>${(s.bf * 25.4).toFixed(1)}</td></tr>`).join("")}</tbody></table><small>${esc(cat.source)}</small></details></section>
       <form id="design-inputs"><section class="design-section"><h3>2. Design inputs</h3>${valueField("ky", "Effective length, Kᵧ")}${valueField("kz", "Effective length, K𝓏")}${valueField("lb", "Unbraced length, Lᵦ", "m")}${valueField("cb", "Moment gradient, Cᵦ")}<label class="design-field"><span>Bracing</span><select id="design-bracing"><option value="notProvided">Not provided</option><option value="continuous">Continuous lateral bracing</option><option value="unbraced">Unbraced length supplied</option></select></label><small>U · user specified. Missing assumptions are never defaulted.</small></section>
+      <section class="design-section"><h3>Serviceability · your criterion</h3><label class="design-field"><span>Service case or combination</span><select id="design-service-case"><option value="">Not checked</option>${ctx.project.loadCases.map((c) => `<option value="${esc(c.id)}">${esc(c.name)} · load case</option>`).join("")}${ctx.project.combinations
+        .filter((c) => c.purpose !== "strength")
+        .map(
+          (c) =>
+            `<option value="${esc(c.id)}">${esc(c.name)} · ${esc(c.purpose)}</option>`,
+        )
+        .join(
+          "",
+        )}</select></label><label class="design-field"><span>Deflection limit, L /</span><span class="design-field-control"><input id="design-service-ratio" type="number" min="1" max="100000" step="any" value="${d?.serviceability?.limitRatio ?? 360}"></span></label><label class="design-field"><span>Measured</span><select id="design-service-basis"><option value="chord">Relative to the member chord · spans</option><option value="absolute">From the undeformed position · cantilevers</option></select></label><small>Reported separately from strength; not an AISC 360 requirement.</small></section>
       <section class="design-section"><h3>3. Design settings</h3><label class="design-field"><span>Code profile</span><select disabled aria-label="Steel code profile"><option>AISC 360-22 LRFD · bounded S2</option></select></label><label class="design-basis-check"><input id="design-basis" type="checkbox" ${d?.stabilityBasis === "firstOrderUserEffectiveLength" ? "checked" : ""}>First-order analysis with user Kᵧ / K𝓏</label><div class="design-form-actions"><button id="design-save" ${!d ? "disabled" : ""}>Save design inputs</button><button type="button" id="design-cancel">Cancel changes</button></div></section></form>
       <section class="design-section"><h3>4. Design readiness <span class="status-text" data-testid="design-readiness">${esc(ready.status.toUpperCase())}</span></h3><div class="readiness-grid"><span>${current ? "✓" : "△"} Analysis ${current ? "current" : "required"}</span><span>${d ? "✓" : "△"} Section ${d ? "recognised" : "not bound"}</span><span>${d ? "✓" : "△"} Material ${d ? "recognised" : "not bound"}</span><span>${ready.status === "ready" ? "✓" : "△"} Design inputs ${ready.status === "ready" ? "complete" : "incomplete"}</span></div><ul class="readiness-issues">${[...ready.missing, ...ready.unsupported].map((v) => `<li>${esc(v)}</li>`).join("")}</ul><small data-testid="design-analysis-state">${!ctx.result ? "Analyse the model first." : !current ? "Analysis is stale, failed, or an envelope." : `Current analysis · ${esc(ctx.result.caseId)} · ${esc(ctx.result.resultId)}`}</small><div class="design-form-actions"><button class="primary" id="design-run" ${ready.status !== "ready" || !current || ctx.dirty || getContext().locked ? "disabled" : ""}>Run member design</button>${run ? '<button id="design-details">Calculation details</button>' : ""}</div><p id="design-message" role="status"></p></section>
       <p class="design-note">Flexure uses your unbraced length Lb and moment gradient factor Cb (lateral-torsional buckling, AISC F2.2); Lb = 0 means continuous restraint. Second-order stability and serviceability remain unsupported. Assigning a section changes stiffness and requires reanalysis.</p>`;
@@ -141,6 +158,8 @@ export function steelDesignWorkspace({
           $("#design-section").dispatchEvent(new Event("change"));
         };
       $("#design-bracing").value = d?.bracing || "notProvided";
+      $("#design-service-case").value = d?.serviceability?.combinationId || "";
+      $("#design-service-basis").value = d?.serviceability?.basis || "chord";
       const fail = (e) => {
         const el = $("#design-message");
         if (el) el.textContent = e.message;
@@ -180,21 +199,26 @@ export function steelDesignWorkspace({
               : Number($("#design-" + key).value),
           source: $("#design-" + key).value === "" ? "notProvided" : "user",
         });
+        const design = {
+          ...d,
+          ky: val("ky"),
+          kz: val("kz"),
+          lb: val("lb"),
+          cb: val("cb"),
+          bracing: $("#design-bracing").value,
+          stabilityBasis: $("#design-basis").checked
+            ? "firstOrderUserEffectiveLength"
+            : "notProvided",
+        };
+        delete design.serviceability;
+        if ($("#design-service-case").value)
+          design.serviceability = {
+            combinationId: $("#design-service-case").value,
+            limitRatio: Number($("#design-service-ratio").value),
+            basis: $("#design-service-basis").value,
+          };
         try {
-          await command("SetSteelDesign", {
-            id: m.id,
-            design: {
-              ...d,
-              ky: val("ky"),
-              kz: val("kz"),
-              lb: val("lb"),
-              cb: val("cb"),
-              bracing: $("#design-bracing").value,
-              stabilityBasis: $("#design-basis").checked
-                ? "firstOrderUserEffectiveLength"
-                : "notProvided",
-            },
-          });
+          await command("SetSteelDesign", { id: m.id, design });
         } catch (e) {
           fail(e);
         }

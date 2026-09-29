@@ -1,0 +1,81 @@
+{
+  "taskId": "M07-S",
+  "milestone": "M07",
+  "sourceHash": "fdfd1aee6f75c574b52d69897412ea9983c49811a43234d48641f92160f883b6",
+  "buildHash": "90222244eeafd9743a7d3dc890d6ab6d7c0952d4daa4b174017edb493c33fc6e",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T11:17:24.856Z",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "DW-SVc1-DEFLECTION",
+    "DW-SVc1-SEPARATE",
+    "DW-SVc1-GUARDS"
+  ],
+  "command": [
+    "node",
+    "tools/run-m07-s.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "DW-SVc1-DEFLECTION",
+      "title": "Deflection under a service case against closed forms",
+      "evidence": "kernel_validation",
+      "tests": {
+        "design-workspace": [
+          "serviceability_is_a_separate_deflection_status_against_the_closed_form"
+        ],
+        "steel-browser": [
+          "DW-SVc1: a deflection criterion is a separate serviceability status"
+        ]
+      },
+      "observation": "B04 cantilever W18×50: absolute tip deflection equals PL³/3EI to 1e-9 (kernel) and 1e-6 (browser, independent Ix and E); chord-relative deflection equals max[v(x) − v(L)x/L].",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "DW-SVc1-SEPARATE",
+      "title": "Serviceability status distinct from strength",
+      "evidence": "ui_journey, exported_outcome",
+      "tests": {
+        "design-workspace": [
+          "serviceability_is_a_separate_deflection_status_against_the_closed_form"
+        ],
+        "steel-browser": [
+          "DW-SVc1: a deflection criterion is a separate serviceability status"
+        ]
+      },
+      "observation": "A failing deflection limit leaves the strength verdict PASS; the panel, overview column and design record carry serviceability separately; members without criteria show NOT CHECKED.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "DW-SVc1-GUARDS",
+      "title": "Service inputs are validated",
+      "evidence": "failure_path",
+      "tests": {
+        "design-workspace": [
+          "serviceability_refuses_strength_combinations_and_dangling_references"
+        ]
+      },
+      "observation": "Strength combinations (INVALID_LOAD), missing cases (DANGLING_REFERENCE) and limits below L/1 (INVALID_SCHEMA) are refused atomically; section reassignment keeps the member's criteria.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "User deflection criterion L/n under one service case or combination, chord-relative or absolute, sampled at the 41 exact analysis stations of each member. Not an AISC 360 requirement; vibration, drift and ponding are not checked."
+}

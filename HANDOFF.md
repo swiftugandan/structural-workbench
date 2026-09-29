@@ -1,3 +1,7 @@
+## Latest: steel serviceability (M07-S)
+
+A member's steel design can carry a deflection criterion: a service load case or non-strength combination, a limit L/n, and a basis (relative to the chord for spans, or absolute for cantilevers). The kernel re-solves that service case and reports the deflection separately from strength: a PASS/FAIL panel beside the strength result, a Serviceability column in the model review, and a field in the design record. It never changes the strength verdict. Strength combinations and missing references are refused. Gate: `node tools/run-m07-s.mjs` → evidence/M07/serviceability. ADR 0020.
+
 ## Latest: AISC flexure breadth S3 (M07-LTB)
 
 Steel flexure now covers lateral-torsional buckling (F2.2, inelastic and elastic, with your Lb and Cb) and compression flange local buckling of noncompact flanges (F3-1). It reproduces Design Examples F.1-2B, F.1-3B and F.3B within 0.5 %. rts and ho are derived by the Spec's definitions from the catalogue; the derivation reproduces the published W18×50 values. This closed a latent unconservative gap: the standalone check credited noncompact-flange shapes such as W14×99 with Mp. Slender flanges, noncompact webs, missing data and Cb < 1 are UNSUPPORTED. Gates: `node tools/run-m07-ltb.mjs` (evidence/M07/ltb) and `npm run verify:m07` on the same build. ADR 0019, dossier-S3.

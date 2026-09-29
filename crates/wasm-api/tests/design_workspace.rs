@@ -327,3 +327,120 @@ fn catalogue_study_reanalyses_self_weight_without_mutating_baseline() {
         "error"
     );
 }
+
+/// Sets the member's serviceability criteria through SetSteelDesign.
+fn service(k: &mut Kernel, criteria: Value) -> Value {
+    let mut d =
+        req(k, "getSnapshot", json!({}))["payload"]["project"]["members"][0]["steelDesign"].clone();
+    d["serviceability"] = criteria;
+    command(k, "SetSteelDesign", json!({"id":"m1","design":d}))
+}
+
+#[test]
+fn serviceability_is_a_separate_deflection_status_against_the_closed_form() {
+    let mut k = open();
+    assign(&mut k, "W18X50");
+    inputs(&mut k, 0.0);
+    // Without criteria serviceability is reported as not checked.
+    assert_eq!(evaluate(&mut k)["serviceability"]["status"], "notChecked");
+
+    // B04: 3 m cantilever, 10 kN at the tip in -Y, bending about AISC x.
+    let project = req(&mut k, "getSnapshot", json!({}))["payload"]["project"].clone();
+    let m = &project["members"][0];
+    let section = project["sections"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|s| s["id"] == m["section"])
+        .unwrap();
+    let material = project["materials"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|s| s["id"] == m["material"])
+        .unwrap();
+    let (p, l) = (10_000.0f64, 3.0f64);
+    let ei = material["E"].as_f64().unwrap() * section["Iz"].as_f64().unwrap();
+    let tip = p * l.powi(3) / (3.0 * ei);
+
+    let r = service(
+        &mut k,
+        json!({"combinationId":"LC1","limitRatio":180.0,"basis":"absolute"}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let run = evaluate(&mut k);
+    let s = &run["serviceability"];
+    assert!(
+        (s["demand"].as_f64().unwrap() / tip - 1.0).abs() <= 1e-9,
+        "{s}"
+    );
+    assert_eq!(s["station"], 1.0);
+    assert!((s["limit"].as_f64().unwrap() - l / 180.0).abs() <= 1e-15);
+    assert_eq!(s["status"], if tip <= l / 180.0 { "pass" } else { "fail" });
+
+    // Relative to the chord: max over x of v(x) - v(L) x / L, v = P x²(3L - x)/(6EI).
+    service(
+        &mut k,
+        json!({"combinationId":"LC1","limitRatio":100000.0,"basis":"chord"}),
+    );
+    let run = evaluate(&mut k);
+    let s = &run["serviceability"];
+    let v = |x: f64| p * x * x * (3.0 * l - x) / (6.0 * ei);
+    let exact = (0..=40)
+        .map(|i| {
+            let x = l * i as f64 / 40.0;
+            (v(x) - v(l) * x / l).abs()
+        })
+        .fold(0.0, f64::max);
+    assert!(
+        (s["demand"].as_f64().unwrap() / exact - 1.0).abs() <= 1e-9,
+        "{s}"
+    );
+    // A tight limit fails serviceability without touching the strength verdict.
+    assert_eq!(s["status"], "fail");
+    assert_eq!(run["overall"], "pass");
+    assert!(
+        run["checks"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|c| c["checkId"] != "serviceability")
+    );
+}
+
+#[test]
+fn serviceability_refuses_strength_combinations_and_dangling_references() {
+    let mut k = open();
+    assign(&mut k, "W18X50");
+    inputs(&mut k, 0.0);
+    let r = command(
+        &mut k,
+        "SetCombination",
+        json!({"id":"ULS","name":"ULS","purpose":"strength","terms":[{"case":"LC1","factor":1.5}],"existence":"create"}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let r = service(
+        &mut k,
+        json!({"combinationId":"ULS","limitRatio":360.0,"basis":"chord"}),
+    );
+    assert_eq!(r["diagnostics"][0]["code"], "INVALID_LOAD", "{r}");
+    let r = service(
+        &mut k,
+        json!({"combinationId":"missing","limitRatio":360.0,"basis":"chord"}),
+    );
+    assert_eq!(r["diagnostics"][0]["code"], "DANGLING_REFERENCE", "{r}");
+    let r = service(
+        &mut k,
+        json!({"combinationId":"LC1","limitRatio":0.5,"basis":"chord"}),
+    );
+    assert_eq!(r["diagnostics"][0]["code"], "INVALID_SCHEMA", "{r}");
+    // Reassigning the section keeps the member's criteria.
+    service(
+        &mut k,
+        json!({"combinationId":"LC1","limitRatio":360.0,"basis":"chord"}),
+    );
+    assign(&mut k, "W24X62");
+    let d =
+        &req(&mut k, "getSnapshot", json!({}))["payload"]["project"]["members"][0]["steelDesign"];
+    assert_eq!(d["serviceability"]["limitRatio"], 360.0);
+}

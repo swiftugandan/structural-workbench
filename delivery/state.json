@@ -2,7 +2,7 @@
   "stateVersion": 1,
   "specVersion": "1.0",
   "activeMilestone": "M07",
-  "activeTask": "M07-S",
+  "activeTask": null,
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -4059,6 +4059,52 @@
       "buildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
       "acceptedAt": "2026-09-29T10:44:29.060Z",
       "nextAction": "M07-S serviceability (ADR 0020 drafted); Cb from the model's moment diagram is a later slice"
+    },
+    "M07-S": {
+      "id": "M07-S",
+      "useCase": "Steel serviceability: user deflection criterion L/n under a service case, chord or absolute basis, separate status from strength",
+      "dependencies": [
+        "M07-F"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/model/src/design_inputs.rs",
+        "crates/model/src/lib.rs",
+        "crates/wasm-api/src/design_workspace.rs",
+        "crates/wasm-api/tests/design_workspace.rs",
+        "contracts/project.schema.json",
+        "contracts/PROTOCOL.md",
+        "web/steel-design.js",
+        "web/steel-overview.js",
+        "tests/e2e/native-steel-design.spec.js",
+        "tools/run-m07-s.mjs",
+        "docs/adr/0020-steel-serviceability-deflection.md"
+      ],
+      "acceptanceIds": [
+        "DW-SVc1"
+      ],
+      "requiredCommands": [
+        "node tools/run-m07-s.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "m07-s-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/serviceability/m07-s-acceptance.json"
+        }
+      ],
+      "regression": {
+        "cargoWorkspace": "192 pass",
+        "contracts": "13 pass",
+        "steelBrowser": "10 pass"
+      },
+      "evidencePaths": [
+        "evidence/M07/serviceability"
+      ],
+      "sourceHash": "fdfd1aee6f75c574b52d69897412ea9983c49811a43234d48641f92160f883b6",
+      "buildHash": "90222244eeafd9743a7d3dc890d6ab6d7c0952d4daa4b174017edb493c33fc6e",
+      "acceptedAt": "2026-09-29T11:17:24.856Z",
+      "nextAction": "None"
     }
   },
   "blockers": [
@@ -4109,9 +4155,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
-  "nextAction": "M07-S: steel serviceability deflection criteria separate from strength (ADR 0020). Other milestones remain resource-blocked.",
+  "lastVerifiedBuildHash": "90222244eeafd9743a7d3dc890d6ab6d7c0952d4daa4b174017edb493c33fc6e",
+  "nextAction": "Full browser regression on the latest build, then further unblocked slices (Cb from the model's moment diagram; hinge DOFs for stability/modal releases). Resource-blocked milestones unchanged.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
-  "lastVerifiedScope": "M07-LTB gate and M07 parent gate on the same build; cargo workspace 190."
+  "lastVerifiedSourceHash": "fdfd1aee6f75c574b52d69897412ea9983c49811a43234d48641f92160f883b6",
+  "lastVerifiedScope": "M07-S gate on the same build; cargo 192, contracts 13, steel browser 10."
 }

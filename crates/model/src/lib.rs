@@ -11,7 +11,7 @@ pub use residential::residential_reference;
 pub mod structure;
 pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, MECHANICS_COMMON_KEYS, SectionMechanicsInputs,
-    SteelDesign,
+    SteelDesign, SteelServiceability,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
@@ -476,6 +476,22 @@ impl Project {
         for m in &self.members {
             if let Some(design) = &m.steel_design {
                 design.validate()?;
+                if let Some(service) = &design.serviceability {
+                    let id = &service.combination_id;
+                    let combination = self.combinations.iter().find(|c| &c.id == id);
+                    if combination.is_none() && !self.load_cases.iter().any(|c| &c.id == id) {
+                        return Err(err(
+                            "DANGLING_REFERENCE",
+                            format!("Service case or combination {id} does not exist"),
+                        ));
+                    }
+                    if combination.is_some_and(|c| c.purpose == "strength") {
+                        return Err(err(
+                            "INVALID_LOAD",
+                            format!("{id} is a strength combination; serviceability needs a service case or combination"),
+                        ));
+                    }
+                }
             }
             match (&m.parent_member_id, m.station_range) {
                 (Some(parent), Some([a, b]))

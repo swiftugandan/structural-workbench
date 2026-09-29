@@ -255,6 +255,21 @@ pub struct SteelDesign {
     pub kz: DesignValue,
     pub lb: DesignValue,
     pub cb: DesignValue,
+    /// User serviceability criteria (ADR 0020); absent means not checked.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub serviceability: Option<SteelServiceability>,
+}
+
+/// A deflection limit L/n under one service case or combination, measured
+/// relative to the member chord or from the undeformed position (ADR 0020).
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct SteelServiceability {
+    pub combination_id: String,
+    /// n in the L/n limit.
+    pub limit_ratio: f64,
+    /// "chord" | "absolute".
+    pub basis: String,
 }
 
 impl SteelDesign {
@@ -299,6 +314,23 @@ impl SteelDesign {
                     "INVALID_SCHEMA",
                     format!("{key} value and source disagree"),
                 ));
+            }
+        }
+        if let Some(s) = &self.serviceability {
+            if !(s.limit_ratio.is_finite() && (1.0..=100_000.0).contains(&s.limit_ratio)) {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "The deflection limit L/n needs n between 1 and 100000",
+                ));
+            }
+            if !["chord", "absolute"].contains(&s.basis.as_str()) {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Deflection basis must be chord or absolute",
+                ));
+            }
+            if s.combination_id.is_empty() || s.combination_id.len() > 64 {
+                return Err(err("INVALID_SCHEMA", "Service case or combination is required"));
             }
         }
         Ok(())

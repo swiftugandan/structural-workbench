@@ -21,6 +21,7 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 | getResults | {resultId: string, caseId: string, entityIds: string[]} | header plus typed buffers described below |
 | exportProject | {includeResults: boolean} | portable engineering JSON and optional separate result files with hashes |
 | evaluateDesign | {profileId: string, memberIds: string[], resultId?: string, inputs: object} | DesignRun (overall, checks[], limitations). Inputs carry section/demand in SI; envelopes are refused by UI provenance rules. |
+| evaluateModelDesign | {memberId, modelHash, caseId, resultId} | Model-native DesignRun re-solved in Rust. Also carries `serviceability`: `{status: "notChecked"}` or, when the member's `steelDesign.serviceability {combinationId, limitRatio, basis: chord|absolute}` is set, `{status: pass|fail, combinationId, basis, limitRatio, length, demand, limit, ratio, station, localDeflection, resultId}` from a fresh solution of that service case. It never changes `overall` (ADR 0020). |
 | runStudy | {study: object, baseProjectJson?: string} | Comparative study report (variant model/result hashes). Uses open project when baseProjectJson omitted. |
 | computeSection | {shape: "solidRectangle", width: number, depth: number, customJ: number\|null} | A, Iy, Iz, J, cy, cz, provenance and jSource (SI). Does not mutate the project. width is along local y; depth along local z. Null customJ uses the Saint-Venant rectangle estimate. |
 
