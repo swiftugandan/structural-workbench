@@ -191,6 +191,10 @@ pub fn second_order(
 
     // Elements and the factored load vector (nodal loads + equivalent member loads).
     let mut f = vec![0.; nd];
+    // Equivalent nodal loads of member loads, kept apart: the element end
+    // actions already carry them, so reactions subtract only loads applied
+    // at nodes.
+    let mut member_equivalent = vec![0.; nd];
     for load in &p.loads {
         if let Load::Nodal {
             case, node, values, ..
@@ -238,6 +242,7 @@ pub fn second_order(
             );
             for a in 0..3 {
                 f[ids[block * 3 + a]] += v[a];
+                member_equivalent[ids[block * 3 + a]] += v[a];
             }
         }
         elements.push(e);
@@ -264,6 +269,16 @@ pub fn second_order(
         for (g, free) in d.free.iter().enumerate() {
             if let Some(a) = free {
                 rhs[*a] = f[g];
+            }
+        }
+        // A released end rotation is the node rotation plus axis × hinge DOF,
+        // so the member load's end moment also acts on the hinge DOF.
+        for e in &elements {
+            for (end, list) in e.hinges.iter().enumerate() {
+                let m = global(e.r, [e.fe[end * 6 + 3], e.fe[end * 6 + 4], e.fe[end * 6 + 5]]);
+                for &(_, dof, axis) in list {
+                    rhs[dof] += axis[0] * m[0] + axis[1] * m[1] + axis[2] * m[2];
+                }
             }
         }
         for (e, &n) in elements.iter().zip(axial) {
@@ -407,7 +422,11 @@ pub fn second_order(
             .zip(axial)
             .map(|(e, &n)| e.end_actions(u, n))
             .collect();
-        let mut reactions = f.iter().map(|v| -v).collect::<Vec<_>>();
+        let mut reactions = f
+            .iter()
+            .zip(&member_equivalent)
+            .map(|(v, e)| e - v)
+            .collect::<Vec<_>>();
         for (e, end) in elements.iter().zip(&ends) {
             let ids = e.ids();
             for block in 0..4 {

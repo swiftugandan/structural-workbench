@@ -376,3 +376,59 @@ fn a_portal_with_a_pinned_beam_sways_as_two_exact_beam_column_flagpoles() {
         );
     }
 }
+
+/// A member load reaching a support, with and without an end release: with
+/// no axial force, second order is linear static exactly. Before the fix the
+/// member load was counted twice in the reactions (EQUILIBRIUM_FAILURE) and
+/// never reached a released end's hinge DOF.
+#[test]
+fn member_loads_at_supports_and_released_ends_match_linear_static() {
+    for release in [false, true] {
+        let p = serde_json::json!({
+            "schemaVersion": "1.0.0", "id": "udl", "name": "udl", "revision": 0, "displayUnits": "SI",
+            "analysisMode": "spatial", "gravity": [0, 0, -9.80665],
+            "materials": [{"id": "mat1", "name": "s", "E": 210e9, "nu": 0.3, "density": 0}],
+            "sections": [{"id": "sec1", "name": "s", "A": 1e-2, "Iy": 1e-4, "Iz": 2e-4, "J": 1e-5,
+                "cy": 0.1, "cz": 0.1, "provenance": "test"}],
+            "nodes": [{"id": "n1", "position": [0, 0, 0]}, {"id": "n2", "position": [6, 0, 0]}],
+            "members": [{"id": "m1", "start": "n1", "end": "n2", "material": "mat1", "section": "sec1",
+                "localY": [0, 1, 0], "releaseStart": {"my": false, "mz": false},
+                "releaseEnd": {"my": release, "mz": release}}],
+            "supports": [
+                {"id": "s1", "node": "n1", "fixed": [true, true, true, true, true, true], "prescribed": [0, 0, 0, 0, 0, 0]},
+                {"id": "s2", "node": "n2", "fixed": [true, true, true, true, true, true], "prescribed": [0, 0, 0, 0, 0, 0]}],
+            "loadCases": [{"id": "LC1", "name": "udl", "category": "other"}],
+            "loads": [{"id": "l1", "case": "LC1", "type": "uniform", "member": "m1", "axes": "global",
+                "forcePerLength": [0, 0, -10000]}],
+            "combinations": [],
+            "analysisSettings": {"type": "linearStatic", "formulation": "eulerBernoulli3D",
+                "mergeTolerance": 1e-6, "timeoutMs": 30000, "memoryLimitMiB": 512},
+            "metadata": {"description": "test", "createdBy": "test"}
+        });
+        let p = Project::parse(&p.to_string()).unwrap();
+        let linear = analyse(&p, "LC1").unwrap();
+        for n in [1, 4] {
+            let r = second_order(&p, "LC1", &settings(n)).unwrap();
+            for (a, b) in r.reactions.iter().zip(&linear.reactions) {
+                assert!(
+                    (a - b).abs() <= 1e-9 * 60e3,
+                    "release {release}, n {n}: {a} vs {b}"
+                );
+            }
+            // Fixed–fixed: wL/2 and wL²/12; propped: 5wL/8, 3wL/8 and wL²/8.
+            let (left, moment) = if release {
+                (37_500., 45_000.)
+            } else {
+                (30_000., 30_000.)
+            };
+            assert!(
+                (reaction(&r, "s1", 2) - left).abs() <= 1e-6,
+                "release {release}, n {n}"
+            );
+            assert!((reaction(&r, "s1", 4).abs() - moment).abs() <= 1e-6);
+            if release {
+                assert!(reaction(&r, "s2", 4).abs() <= 1e-6);
+            }
+        }
+    }
+}
