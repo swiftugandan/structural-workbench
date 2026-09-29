@@ -117,7 +117,7 @@ test("M14 modal: declare mass, frequencies against the oracle, participation, st
     buffer: Buffer.from(JSON.stringify(portal())),
   });
   await expect(page.locator("#kernel-status")).toContainText("ready");
-  await expect(page.locator("#message")).toContainText(/1\.0\.0 → 1\.4\.0/);
+  await expect(page.locator("#message")).toContainText(/1\.0\.0 → 1\.5\.0/);
 
   // No mass is implied: the modal tab says so and cannot run.
   await page.locator("[data-testid=tab-modal]").click();

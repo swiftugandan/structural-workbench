@@ -50,7 +50,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
       kind === "rcBeam"
         ? "Shear"
         : kind === "slab"
-          ? "Mesh convergence"
+          ? "Bottom X/Y reinforcement"
           : "Bearing",
     );
     await page.locator("[data-preview-pane=reinforcement]").click();
@@ -74,10 +74,14 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
       );
     }
     if (kind === "slab") {
+      // Slabs solve their own panel by default (ADR 0021); plate analysis
+      // stages are results, not checks.
       await page.locator("[data-preview-pane=actions]").click();
-      await expect(page.locator(".design-pane")).toContainText("62,000");
-      await expect(page.locator(".design-pane")).toContainText(
-        "synthetic fixture",
+      await expect(page.locator("[data-testid=plate-pane]")).toContainText(
+        "Governing design moments",
+      );
+      await expect(page.locator("[data-testid=plate-pane]")).toContainText(
+        "Mesh convergence",
       );
     }
     await expect(page.locator("#hash-status")).toHaveText(hash);
