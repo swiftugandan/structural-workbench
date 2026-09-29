@@ -13,7 +13,10 @@ pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, MECHANICS_COMMON_KEYS, SectionMechanicsInputs,
     SteelDesign,
 };
-pub use migrate::{CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, import_project};
+pub use migrate::{
+    CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
+    import_project,
+};
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -152,6 +155,33 @@ impl Load {
         }
     }
 }
+/// Declared mass for modal analysis (schema 1.4.0, ADR 0018,
+/// `docs/formulations/modal.md`). Mass is never implied.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(tag = "kind", deny_unknown_fields)]
+pub enum MassSource {
+    /// ρ·A of every member, × factor.
+    #[serde(rename = "selfMass")]
+    SelfMass { id: String, factor: f64 },
+    /// The gravity component of one load case's loads ÷ g, × factor.
+    #[serde(rename = "loadCase")]
+    LoadCase {
+        id: String,
+        case: String,
+        factor: f64,
+    },
+    /// A translational point mass (kg) at a node, acting in X, Y and Z.
+    #[serde(rename = "nodalMass")]
+    NodalMass { id: String, node: String, mass: f64 },
+}
+impl MassSource {
+    pub fn id(&self) -> &str {
+        match self {
+            Self::SelfMass { id, .. } | Self::LoadCase { id, .. } | Self::NodalMass { id, .. } => id,
+        }
+    }
+}
+
 record!(Term {
     case: String,
     factor: f64
@@ -175,7 +205,7 @@ pub struct Metadata {
     #[serde(default)]
     pub entity_labels: std::collections::BTreeMap<String, String>,
 }
-record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata,structure:Structure,#[serde(default,skip_serializing_if="Vec::is_empty")]design_previews:Vec<DesignPreview>});
+record!(Project{schema_version:String,id:String,name:String,revision:u64,display_units:String,analysis_mode:String,gravity:[f64;3],materials:Vec<Material>,sections:Vec<Section>,nodes:Vec<Node>,members:Vec<Member>,supports:Vec<Support>,load_cases:Vec<LoadCase>,loads:Vec<Load>,combinations:Vec<Combination>,analysis_settings:Settings,metadata:Metadata,structure:Structure,#[serde(default,skip_serializing_if="Vec::is_empty")]design_previews:Vec<DesignPreview>,#[serde(default,skip_serializing_if="Vec::is_empty")]mass_sources:Vec<MassSource>});
 impl Project {
     pub fn parse(s: &str) -> Result<Self> {
         Ok(import_project(s)?.0)
@@ -194,6 +224,10 @@ impl Project {
             (
                 "c",
                 self.combinations.iter().map(|x| x.id.clone()).collect(),
+            ),
+            (
+                "ms",
+                self.mass_sources.iter().map(|x| x.id().to_string()).collect(),
             ),
         ];
         let mut used = BTreeSet::new();
@@ -232,6 +266,7 @@ impl Project {
         self.load_cases.sort_by(|a, b| a.id.cmp(&b.id));
         self.loads.sort_by(|a, b| a.id().cmp(b.id()));
         self.combinations.sort_by(|a, b| a.id.cmp(&b.id));
+        self.mass_sources.sort_by(|a, b| a.id().cmp(b.id()));
         for c in &mut self.combinations {
             c.terms.sort_by(|a, b| a.case.cmp(&b.case));
         }
@@ -350,6 +385,13 @@ impl Project {
                 return Err(err("DUPLICATE_ID", l.id()));
             }
         }
+        for m in &self.mass_sources {
+            check_id(m.id())?;
+            if !all.insert(m.id()) {
+                return Err(err("DUPLICATE_ID", m.id()));
+            }
+        }
+        validate_mass_sources(self)?;
         check_id(&self.id)?;
         if self.design_previews.len() > 100 {
             return Err(err("MEMORY_LIMIT", "At most 100 design previews"));
@@ -609,6 +651,57 @@ fn check_id(s: &str) -> Result<()> {
             .all(|b| b.is_ascii_alphanumeric() || b == b'_' || b == b'-')
     {
         return Err(err("INVALID_SCHEMA", "Invalid entity ID"));
+    }
+    Ok(())
+}
+
+/// Mass source rules: positive finite values, existing references, and the
+/// deduplication rules of ADR 0018 (one self mass, one source per load case,
+/// one nodal mass per node).
+fn validate_mass_sources(p: &Project) -> Result<()> {
+    if p.mass_sources.len() > 5000 {
+        return Err(err("MEMORY_LIMIT", "At most 5000 mass sources"));
+    }
+    let invalid = |m: String| err("INVALID_MASS_SOURCE", m);
+    let mut self_mass = 0;
+    let mut cases = BTreeSet::new();
+    let mut nodes = BTreeSet::new();
+    for s in &p.mass_sources {
+        match s {
+            MassSource::SelfMass { id, factor } => {
+                if !(factor.is_finite() && *factor > 0.) {
+                    return Err(invalid(format!("Mass source {id}: factor must be positive")));
+                }
+                self_mass += 1;
+                if self_mass > 1 {
+                    return Err(invalid("Declare self mass once".into()));
+                }
+            }
+            MassSource::LoadCase { id, case, factor } => {
+                if !(factor.is_finite() && *factor > 0.) {
+                    return Err(invalid(format!("Mass source {id}: factor must be positive")));
+                }
+                if !p.load_cases.iter().any(|c| &c.id == case) {
+                    return Err(err("DANGLING_REFERENCE", format!("Mass source {id}: {case}")));
+                }
+                if !cases.insert(case.as_str()) {
+                    return Err(invalid(format!("Load case {case} is a mass source twice")));
+                }
+            }
+            MassSource::NodalMass { id, node, mass } => {
+                if !(mass.is_finite() && *mass > 0.) {
+                    return Err(invalid(format!("Mass source {id}: mass must be positive")));
+                }
+                if !p.nodes.iter().any(|n| &n.id == node) {
+                    return Err(err("DANGLING_REFERENCE", format!("Mass source {id}: {node}")));
+                }
+                if !nodes.insert(node.as_str()) {
+                    return Err(invalid(format!(
+                        "Node {node} has two nodal masses; declare one total"
+                    )));
+                }
+            }
+        }
     }
     Ok(())
 }

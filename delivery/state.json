@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M14",
-  "activeTask": "M14-A",
+  "activeMilestone": "M22",
+  "activeTask": "M22-A",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -12,7 +12,8 @@
     "M05",
     "M06",
     "M07",
-    "M09"
+    "M09",
+    "M14"
   ],
   "tasks": {
     "M00-A": {
@@ -3813,14 +3814,120 @@
       "id": "M14-A",
       "useCase": "dynamics-v1 formulation, ADR 0018 and independent modal oracle fixed before any kernel result",
       "dependencies": [],
-      "status": "IMPLEMENTING",
+      "status": "ACCEPTED",
       "ownedPaths": [
         "docs/formulations/modal.md",
         "docs/adr/0018-modal-analysis-and-mass-sources.md",
         "tools/oracles/modal_oracle.py",
         "fixtures/dynamics/modal-oracle.json"
       ],
-      "nextAction": "Commit formulation, ADR and oracle; then M14-B schema 1.4.0 mass sources and kernel"
+      "nextAction": "None",
+      "acceptedVia": "M14-parent",
+      "actualOutcomes": [
+        "docs/formulations/modal.md, ADR 0018 and fixtures/dynamics/modal-oracle.json committed before any kernel result (f8bd5e2)",
+        "Amendment before acceptance: D-AXIAL moved from 16 to 32 elements with an added second-order convergence requirement, tolerance unchanged; the linear axial interpolation's known error (kh)^2/24 made the 16-element gate unattainable (recorded in the formulation)"
+      ]
+    },
+    "M14-B": {
+      "id": "M14-B",
+      "useCase": "Schema 1.4.0 mass sources, consistent/lumped element mass, modal kernel on the stability-v1 eigen-solver, protocol, capabilities",
+      "dependencies": [
+        "M14-A"
+      ],
+      "status": "ACCEPTED",
+      "acceptedVia": "M14-parent",
+      "ownedPaths": [
+        "crates/model/src/lib.rs",
+        "crates/model/src/migrate.rs",
+        "crates/frame/src/lib.rs",
+        "crates/solver/src/eigen.rs",
+        "crates/results/src/lib.rs",
+        "crates/assembly/src/modal.rs",
+        "crates/assembly/src/stability.rs",
+        "crates/wasm-api/src/analysis_request.rs",
+        "crates/wasm-api/src/lib.rs",
+        "contracts/project.schema.json",
+        "contracts/project-v1.3.schema.json",
+        "contracts/PROTOCOL.md",
+        "web/worker.js"
+      ],
+      "actualOutcomes": [
+        "23 native tests (element mass, vibration solver, mass sources, modal oracle cases incl. OpenSees 1e-6)",
+        "5 protocol tests on the built WASM kernel",
+        "Worker converts response buffers only for results that declare bufferDescriptors"
+      ],
+      "nextAction": "None"
+    },
+    "M14-C": {
+      "id": "M14-C",
+      "useCase": "Browser journey: mass-source editor, Modal tab, mode overlay, participation targets, stale rules, vibration report, save/reopen, negative paths",
+      "dependencies": [
+        "M14-B"
+      ],
+      "status": "ACCEPTED",
+      "acceptedVia": "M14-parent",
+      "ownedPaths": [
+        "web/modal.js",
+        "web/reports/vibration.js",
+        "web/entity-forms.js",
+        "web/model-explorer.js",
+        "web/command-menu.js",
+        "web/app.js",
+        "web/app.html",
+        "web/render/viewport.js",
+        "tests/e2e/modal.spec.js"
+      ],
+      "nextAction": "None"
+    },
+    "M14-parent": {
+      "id": "M14-parent",
+      "useCase": "Same-build M14 packaging: modal native + protocol + browser journey + acceptance criteria",
+      "dependencies": [
+        "M14-C"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "tools/run-m14-parent.mjs",
+        "tools/record-m14-acceptance.mjs",
+        "tools/parent-gate.mjs",
+        "tools/verify.mjs",
+        "tools/milestone-rules.mjs",
+        "evidence/M14/full"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M14"
+      ],
+      "requiredCommands": [
+        "node tools/run-m14-parent.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "gate-M14",
+          "status": "PASS",
+          "evidencePath": "evidence/M14/full/gate-M14.json"
+        },
+        {
+          "check": "m14-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M14/full/m14-acceptance.json"
+        }
+      ],
+      "regression": {
+        "cargoWorkspace": "180 pass",
+        "contracts": "13 pass",
+        "security": "2 pass",
+        "numerical": "33 native + WASM checks pass",
+        "affectedBrowserSpecs": "23 pass"
+      },
+      "evidencePaths": [
+        "evidence/M14/full"
+      ],
+      "sourceHash": "d7a6f89704619ef9bd94fb11c5c23244dd8f8682c7b7ab026c769996bf3fe28a",
+      "buildHash": "4e5f4ec963cd94e7bf4307f54fde4c4f3dcf73b50ede29b14d8653e13ca1783c",
+      "attempts": [],
+      "acceptedAt": "2026-09-29T08:35:40.895Z",
+      "acceptanceMeaning": "dynamics-v1: undamped modal analysis with declared mass sources, consistent/lumped mass, translational participation, omitted-mode and target reporting and a vibration report. Criteria SDOF-CANTILEVER, MASS-MATRIX, MASS-SCALING, ORTHOGONALITY, EFFECTIVE-MASS, FRAME-BENCHMARK, MASS-SOURCES, FAILURE-PATHS, UI-JOURNEY, NOT-A-VERDICT, ORACLE-PROVENANCE. Damping, response spectra (M15), rotary inertia, releases and serviceability verdicts remain out of scope.",
+      "nextAction": "M15 needs R-SEISMIC-CODE for code spectra; M13/M19/M20 blocked on resources; M21/M22 dependency-ready"
     }
   },
   "blockers": [
@@ -3871,9 +3978,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "12ad0d64876b7052f6b4bb14faa02fd6e237ae251f65c27dcbd2178c4d620b69",
-  "nextAction": "M14: modal analysis with declared mass sources (schema 1.4.0), consistent/lumped mass, participation and a vibration report; formulation docs/formulations/modal.md and ADR 0018. M08-B enablement stays BLOCKED_RESOURCE.",
+  "lastVerifiedBuildHash": "4e5f4ec963cd94e7bf4307f54fde4c4f3dcf73b50ede29b14d8653e13ca1783c",
+  "nextAction": "Choose the next dependency-ready milestone whose resources exist: M22 (repeatable study automation) or M21 (BIM/CAD exchange, R-EXCHANGE-CORPUS not acquired). M08/M10/M11/M13/M15/M19/M20 need external resources.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "3e89c30fc55bf793b4bc8a020c71eb4de330cfe2034367da841a29e211c0e45a",
-  "lastVerifiedScope": "M09 parent gate (stability native, protocol on built WASM, browser journey, acceptance criteria) on the same build; full browser batch 108/109 with one GPU-initialisation flake that passed alone."
+  "lastVerifiedSourceHash": "d7a6f89704619ef9bd94fb11c5c23244dd8f8682c7b7ab026c769996bf3fe28a",
+  "lastVerifiedScope": "M14 parent gate (modal native, protocol on built WASM, browser journey, acceptance criteria) on the same build; cargo workspace 180, contracts 13, security 2, numerical/WASM 33, affected browser specs 23."
 }

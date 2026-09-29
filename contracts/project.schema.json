@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.3.0"
+      "const": "1.4.0"
     },
     "id": {
       "type": "string",
@@ -118,7 +118,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "string",
-            "pattern": "^(n|m|s|l|mat|sec|lc|c)[1-9][0-9]*$"
+            "pattern": "^(n|m|s|l|mat|sec|lc|c|ms)[1-9][0-9]*$"
           }
         }
       },
@@ -535,6 +535,14 @@
             }
           }
         }
+      }
+    },
+    "massSources": {
+      "description": "Declared mass for modal analysis (ADR 0018, docs/formulations/modal.md). Absent means none; mass is never implied.",
+      "type": "array",
+      "maxItems": 5000,
+      "items": {
+        "$ref": "#/$defs/massSource"
       }
     }
   },
@@ -1249,6 +1257,85 @@
           "type": "boolean"
         }
       }
+    },
+    "massSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "kind": {
+              "const": "selfMass"
+            },
+            "factor": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "factor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "kind": {
+              "const": "loadCase"
+            },
+            "case": {
+              "type": "string"
+            },
+            "factor": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "case",
+            "factor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "kind": {
+              "const": "nodalMass"
+            },
+            "node": {
+              "type": "string"
+            },
+            "mass": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "kg, translational, acting in X, Y and Z"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "node",
+            "mass"
+          ],
+          "additionalProperties": false
+        }
+      ]
     }
   },
   "$comment": "The invalid domain is an identifier, not a downloadable endpoint."

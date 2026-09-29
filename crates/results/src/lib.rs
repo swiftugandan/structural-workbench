@@ -214,3 +214,93 @@ pub struct AxialSegment {
     pub t1: f64,
     pub n: f64,
 }
+
+/// Modal analysis result (dynamics-v1, `docs/formulations/modal.md`).
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ModalAnalysis {
+    pub result_id: String,
+    pub schema_version: String,
+    /// Always "modal".
+    pub analysis_type: String,
+    pub converged: bool,
+    pub model_hash: String,
+    pub settings_hash: String,
+    pub solver_build_hash: String,
+    pub source_revision: u64,
+    pub subdivisions: usize,
+    /// "consistent" or "lumped".
+    pub mass_matrix: String,
+    pub requested_modes: usize,
+    /// Ascending frequency.
+    pub modes: Vec<VibrationMode>,
+    pub mass: ModalMass,
+    /// Global X, Y and Z, in that order.
+    pub participation: Vec<DirectionParticipation>,
+    pub numerical_checks: serde_json::Value,
+    pub disclosures: Vec<String>,
+    pub diagnostics: Vec<serde_json::Value>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VibrationMode {
+    /// 1-based, in ascending frequency.
+    pub mode: usize,
+    /// Circular frequency (rad/s).
+    pub omega: f64,
+    /// Hz.
+    pub frequency: f64,
+    /// s.
+    pub period: f64,
+    /// ‖Kφ − ω²Mφ‖∞ / ‖Kφ‖∞.
+    pub residual: f64,
+    /// Γ = φᵀ M r for X, Y, Z with φ M-normalised and signed like the
+    /// displayed shape (kg^½).
+    pub participation_factor: [f64; 3],
+    /// Γ² (kg).
+    pub effective_mass: [f64; 3],
+    /// Γ² over the participating mass; null where that mass is zero.
+    pub effective_mass_ratio: [Option<f64>; 3],
+    pub cumulative_ratio: [Option<f64>; 3],
+    /// Physical node ids, in project order, with six components each.
+    pub node_ids: Vec<String>,
+    /// Shape scaled so the largest translation over the mesh is +1.
+    pub node_displacements: Vec<f64>,
+    pub members: Vec<MemberModeShape>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ModalMass {
+    /// Mass contributed by each declared source after deduplication (kg).
+    pub sources: Vec<SourceMass>,
+    /// Their sum (kg), acting in each global translation.
+    pub total: f64,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SourceMass {
+    pub id: String,
+    pub kind: String,
+    pub mass: f64,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DirectionParticipation {
+    /// "X", "Y" or "Z".
+    pub direction: String,
+    /// rᵀ M r over the free DOFs (kg).
+    pub participating_mass: f64,
+    /// Total mass minus the participating mass: mass held by restraints (kg).
+    pub non_participating_mass: f64,
+    /// Sum of the reported modes' ratios; null where nothing participates.
+    pub cumulative_ratio: Option<f64>,
+    /// Mass fraction in modes not computed.
+    pub omitted_ratio: Option<f64>,
+    pub target: f64,
+    /// Null where nothing participates in this direction.
+    pub achieved: Option<bool>,
+}

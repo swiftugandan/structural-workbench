@@ -14,7 +14,7 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 | applyCommand | {command: CommandV1} | new revision, modelHash, affected IDs, undo availability and render delta |
 | undo / redo | {} | same shape as command acknowledgement |
 | validateModel | {} | diagnostics[], canAnalyse and estimated memory |
-| analyse | {caseIds: string[], combinationIds: string[], analysisType?: "linearStatic" \| "elasticBuckling" \| "secondOrder", stability?: {…}} | jobId and accepted snapshot hash; completion arrives as an event. Stability types: see "Stability analyses (stability-v1)" |
+| analyse | {caseIds: string[], combinationIds: string[], analysisType?: "linearStatic" \| "elasticBuckling" \| "secondOrder" \| "modal", stability?: {…}, modal?: {…}} | jobId and accepted snapshot hash; completion arrives as an event. Stability types: see "Stability analyses (stability-v1)"; modal: see "Modal analysis (dynamics-v1)" |
 | cancelAnalysis | {jobId: string} | job status cancelled or alreadyFinished |
 | getSnapshot | {includeView: boolean} | ProjectV1 plus separate optional view state |
 | queryGeometry | {kind: ray or snap or measure, query: object, viewRevision: integer} | entity IDs, f64 positions/distances and matching viewRevision |
@@ -33,7 +33,7 @@ From M03 the browser hosts two Workers: a durable model Worker owns create/impor
 
 ## 2 Command vocabulary
 
-CommandV1 is {id, type, args}. Supported types and args are AddNode(node), AddMember(member), SetNodePosition({id,position}), SetMaterial(material), SetSection(section), SetSupport(support), SetLoadCase(loadCase), SetLoad(load), SetCombination(combination), SetGravity({gravity}), SetAnalysisMode({mode}), MoveNodes({ids,delta}), CopySelection({ids,delta,connectToExisting:false}), CopyBay({ids,delta,count,includeSupports:true,tieUnsupportedNodes:true,setSpatial?,stabilizeBases?}), SplitMember({id,stations}), MergeNodes({sourceIds,targetId}), DeleteEntities({ids,cascade:false}) and Batch({commands}). Envelope names in parentheses are records, not executable functions.
+CommandV1 is {id, type, args}. Supported types and args are AddNode(node), AddMember(member), SetNodePosition({id,position}), SetMaterial(material), SetSection(section), SetSupport(support), SetLoadCase(loadCase), SetLoad(load), SetCombination(combination), SetMassSource(massSource), SetGravity({gravity}), SetAnalysisMode({mode}), MoveNodes({ids,delta}), CopySelection({ids,delta,connectToExisting:false}), CopyBay({ids,delta,count,includeSupports:true,tieUnsupportedNodes:true,setSpatial?,stabilizeBases?}), SplitMember({id,stations}), MergeNodes({sourceIds,targetId}), DeleteEntities({ids,cascade:false}) (including mass sources) and Batch({commands}). Envelope names in parentheses are records, not executable functions.
 
 Upsert-style Set operations must specify expected entity existence as create/update to detect accidental overwrites. Batch uses one model revision and one undo entry; nested Batch is rejected. Import commands do not bypass validation. Member splitting preserves member-load total and physical-parent provenance; IDs of new entities are deterministic from the command ID and ordinal. Undo stores sufficient inverse data to restore exact engineering values and IDs.
 
@@ -258,3 +258,39 @@ iteration and history, and no numerical payload.
 A critical factor or a second-order response is never a member resistance or a
 code stability verdict, and it never changes a design record's declared
 first-order basis.
+
+## Modal analysis (dynamics-v1, M14)
+
+Formulation: `docs/formulations/modal.md`; decisions: ADR 0018. `analysisType:
+"modal"` uses the `analyse` job lifecycle unchanged. It takes no load case:
+`caseIds` and `combinationIds` must be empty (`INVALID_LOAD` otherwise). The
+optional `modal` object is `{modes?: 1–50 (default 12), massMatrix?:
+"consistent" | "lumped" (default consistent), subdivisions?: 1–32 (default 8),
+participationTarget?: (0, 1] (default 0.9)}`. `modal` settings with another
+analysis type, unknown fields or wrong types are `INVALID_SCHEMA`; ranges are
+`INVALID_SETTINGS`.
+
+Mass comes only from the project's `massSources` (schema 1.4.0): `{id, kind:
+"selfMass", factor}`, `{id, kind: "loadCase", case, factor}` or `{id, kind:
+"nodalMass", node, mass}` (kg). `SetMassSource` creates or updates one source
+with the usual `existence` rule; `factor` and `mass` accept dimensioned
+strings (`"2.5 t"`, `"300 kg"`). Validation enforces the ADR 0018
+deduplication rules (`INVALID_MASS_SOURCE`, `DANGLING_REFERENCE`). Schema 1.3.0
+projects migrate to 1.4.0 with no mass sources.
+
+Result: `analysisType: "modal"`, the ResultHeader identity fields,
+`subdivisions`, `massMatrix`, `requestedModes`, `modes[]` (`mode`, `omega`
+rad/s, `frequency` Hz, `period` s, `residual`, `participationFactor[3]`,
+`effectiveMass[3]` kg, `effectiveMassRatio[3]` and `cumulativeRatio[3]` —
+`null` where nothing participates — `nodeIds`, `nodeDisplacements` normalised
+to a unit positive peak translation, and `members[].stations[]` as for
+buckling), `mass` (`sources[] {id, kind, mass}`, `total`), `participation[]`
+for X, Y, Z (`participatingMass`, `nonParticipatingMass`, `cumulativeRatio`,
+`omittedRatio`, `target`, `achieved`), `numericalChecks` (iterations, Sturm
+shift and count, residuals, mass and stiffness orthogonality), `disclosures`
+and `diagnostics` (`SELF_MASS_DEDUPLICATED`, `NON_GRAVITY_COMPONENTS_IGNORED`,
+`FEWER_MODES_THAN_REQUESTED`, `PARTICIPATION_TARGET_NOT_MET`). There are no
+response buffers. Failures (`NO_MASS`, `NEGATIVE_MASS`,
+`MODAL_RELEASES_UNSUPPORTED`, `UNSTABLE_MODEL`, `STURM_MISMATCH`) end in
+`analysisFailed` with no payload. A frequency or participation ratio is never
+a floor-vibration or code serviceability verdict.

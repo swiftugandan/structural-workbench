@@ -10,7 +10,7 @@
     "build": "node tools/build.mjs",
     "preview": "node tools/serve.mjs",
     "test:wasm": "node tools/numerical.mjs --wasm",
-    "test:contracts": "node --test tests/contracts.test.mjs tests/stability-protocol.test.mjs",
+    "test:contracts": "node --test tests/contracts.test.mjs tests/stability-protocol.test.mjs tests/modal-protocol.test.mjs",
     "test:numerical": "node tools/numerical.mjs",
     "test:oracle": "node tools/oracle.mjs",
     "test:e2e": "playwright test tests/e2e",

@@ -192,6 +192,7 @@ export function commandMenu({
           ["Loads…", "loads"],
           ["Load cases…", "loadCases"],
           ["Combinations…", "combinations"],
+          ["Mass sources…", "massSources"],
         ].map(([label, key]) =>
           cmd(label, group(key), null, { blocked: editingBlocked }),
         ),

@@ -29,7 +29,9 @@ function readSettings(host, previous) {
   const kind = host.querySelector('[name="stability-type"]:checked')?.value;
   return {
     type: kind || previous.type,
-    subdivisions: Number(v("stability-subdivisions")?.value ?? previous.subdivisions),
+    subdivisions: Number(
+      v("stability-subdivisions")?.value ?? previous.subdivisions,
+    ),
     modes: Number(v("stability-modes")?.value ?? previous.modes),
     imperfection: v("stability-imperfection")?.value ?? previous.imperfection,
     ratio: Number(v("stability-ratio")?.value ?? previous.ratio),
@@ -83,7 +85,9 @@ export function stabilityWorkspace({
   const state = () => {
     const ctx = getContext();
     if (!run) return "none";
-    return run.modelHash === ctx.modelHash && run.caseId === ctx.caseId && !ctx.dirty
+    return run.modelHash === ctx.modelHash &&
+      run.caseId === ctx.caseId &&
+      !ctx.dirty
       ? "current"
       : "stale";
   };
@@ -107,7 +111,7 @@ export function stabilityWorkspace({
         label: `Second order · ${getContext().label(run.caseId)}`,
         members: run.result.members,
       };
-    viewport.stabilityOverlay = overlay;
+    viewport.overlay = overlay;
     viewport.draw();
   }
 
@@ -115,7 +119,9 @@ export function stabilityWorkspace({
     settings = readSettings(host, settings);
     const ctx = getContext();
     if (ctx.caseId === "__envelope__" || !ctx.caseId) {
-      onError("Stability analyses take one real case or combination, not an envelope.");
+      onError(
+        "Stability analyses take one real case or combination, not an envelope.",
+      );
       return;
     }
     const request = stabilityRequest(settings, ctx.casePayload);
@@ -130,7 +136,8 @@ export function stabilityWorkspace({
         request,
         result,
       };
-      if (settings.type === "elasticBuckling" && result.modes.length) shownMode = 0;
+      if (settings.type === "elasticBuckling" && result.modes.length)
+        shownMode = 0;
     } catch (e) {
       const d = e.diagnostics?.[0] || {};
       if (/CANCELLED/.test(e.message)) {
@@ -263,7 +270,9 @@ ${
     if (run) {
       const badge = `<span class="badge ${st === "current" ? "current" : "stale"}" data-testid="stability-state">${st === "current" ? "✓ Current" : "⚠ Stale"}</span>`;
       const title =
-        run.kind === "elasticBuckling" ? "Elastic buckling" : "First- vs second-order response";
+        run.kind === "elasticBuckling"
+          ? "Elastic buckling"
+          : "First- vs second-order response";
       body = `<section data-testid="stability-result"><h4>${title} · ${esc(ctx.label(run.caseId))} ${badge}</h4>${
         st === "stale"
           ? '<p class="notice-small">Stale results — these values belong to a previous model or case. Run the stability analysis again.</p>'
@@ -307,10 +316,12 @@ ${
     render,
     /** The run, when it is current for the given model hash; for reports. */
     current: (modelHash) =>
-      run?.result && run.modelHash === modelHash && state() === "current" ? run : null,
+      run?.result && run.modelHash === modelHash && state() === "current"
+        ? run
+        : null,
     hide: () => {
       shownMode = null;
-      viewport.stabilityOverlay = null;
+      viewport.overlay = null;
       viewport.draw();
     },
   };

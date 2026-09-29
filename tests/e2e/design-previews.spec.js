@@ -234,7 +234,7 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   const p = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
-  expect(saved.schemaVersion).toBe("1.3.0");
+  expect(saved.schemaVersion).toBe("1.4.0");
   expect(saved.designPreviews[0].inputs.topBarCount).toBe(2);
   expect(saved.designPreviews[0].inputs.bottomBarDiameter).toBe(0.025);
   expect(saved.designPreviews[0].mechanics.law).toBe("parabolaRectangle");
@@ -556,7 +556,7 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   const saved = JSON.parse(
     await readFile(await (await download).path(), "utf8"),
   );
-  expect(saved.schemaVersion).toBe("1.3.0");
+  expect(saved.schemaVersion).toBe("1.4.0");
   expect(saved.designPreviews[0].tensionAnchorageConfirmed).toBe(true);
   expect(saved.designPreviews[0].inputs.linkLegs).toBe(2);
   expect(errors).toEqual([]);

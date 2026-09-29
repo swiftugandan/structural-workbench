@@ -1154,15 +1154,15 @@ export class Viewport {
           line(curve[i - 1], curve[i], 2.5, blue);
       }
     }
-    // Stability overlays (stability-v1), drawn only while they belong to the
-    // current model and no action diagram is shown:
-    // - a buckling mode is a normalised shape, not a response; its largest
+    // Mode and second-order overlays (stability-v1, dynamics-v1), drawn only
+    // while they belong to the current model and no action diagram is shown:
+    // - a buckling or vibration mode is a normalised shape, not a response; its largest
     //   translation is drawn at 12 % of the model extent;
     // - a second-order response is drawn at the deformation scale, so it
     //   overlays the first-order shape of the same case one to one.
     const overlay =
-      !component && this.stabilityOverlay?.modelHash === this.currentModelHash
-        ? this.stabilityOverlay
+      !component && this.overlay?.modelHash === this.currentModelHash
+        ? this.overlay
         : null;
     delete this.canvas.dataset.modeShape;
     delete this.canvas.dataset.secondOrderShape;
@@ -1172,7 +1172,9 @@ export class Viewport {
       for (const member of overlay.members) {
         if (!this.isVisible(member.id)) continue;
         const points = member.stations.map((s) =>
-          this.projectPoint(s.position.map((v, a) => v + k * s.displacement[a])),
+          this.projectPoint(
+            s.position.map((v, a) => v + k * s.displacement[a]),
+          ),
         );
         for (let i = 1; i < points.length; i++)
           line(points[i - 1], points[i], 2.5, violet);
@@ -1192,7 +1194,7 @@ export class Viewport {
       }
       this.canvas.dataset.secondOrderShape = overlay.label;
     }
-    const overlayLegend = document.querySelector("#stability-legend");
+    const overlayLegend = document.querySelector("#overlay-legend");
     if (overlayLegend) {
       overlayLegend.hidden = !overlay;
       overlayLegend.querySelector("i").className =

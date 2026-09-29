@@ -7,6 +7,7 @@ export const EXCLUDED_DOMAINS = [
   "plasticity",
   "geometrically nonlinear (large-displacement) response",
   "torsional and lateral-torsional instability",
+  "response spectrum, time-history and harmonic analysis",
   "cable/tension-only members",
   "soil contact",
   "code-generated wind/seismic loads",

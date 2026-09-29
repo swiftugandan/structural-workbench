@@ -38,6 +38,11 @@ export const entityGuides = {
     "Forces on your structure",
     "Choose where the load acts and how strongly it pushes. The diagram explains the direction signs.",
   ],
+  massSources: [
+    "Mass source",
+    "Mass for vibration",
+    "Declare the mass a modal analysis uses: the members' own mass, the weight of a load case converted to mass, or a point mass at a node. Mass acts in every direction; nothing is added automatically.",
+  ],
   combinations: [
     "Combination",
     "Loads acting together",
@@ -93,6 +98,11 @@ export function guideDiagram(key) {
     return svg(
       `<path d="M112 25h96v17h-37v56h37v17h-96V98h37V42h-37z" fill="#dce9ff"/><path d="M80 70h160m-80 60V10" stroke-dasharray="4 4"/>${text(244, 74, "y")}${text(166, 15, "z")}${text(12, 132, "Illustration only · use your section’s properties")}`,
       "Illustrative I section with local y and z axes through its centre, not a preview of the entered properties.",
+    );
+  if (key === "massSources")
+    return svg(
+      `<path d="M40 100h240" stroke-width="6"/><rect x="92" y="52" width="44" height="40" rx="4"/><rect x="190" y="62" width="30" height="30" rx="4"/><path d="M114 30v14m-6-6 6 6 6-6M40 118h240" stroke-dasharray="4 4"/>${text(84, 45, "m = W ÷ g")}${text(40, 134, "Mass acts in X, Y and Z · no mass is implied")}`,
+      "Masses on a frame: a load's weight becomes mass by dividing by g, and every mass moves in all three directions.",
     );
   if (key === "materials")
     return svg(
@@ -424,6 +434,26 @@ export function entityFields(key, entity, project, { compact = false } = {}) {
       "Global −Z acts downward: enter <b>−10</b> in Force along Z for 10 kN downward. For a local load, signs follow the member’s local axes, not the building axes.",
     );
   }
+  if (key === "massSources") {
+    content = select("kind", "Where does the mass come from?", entity.kind, [
+      ["selfMass", "Self mass · density × area of every member"],
+      ["loadCase", "Load case · gravity loads ÷ g"],
+      ["nodalMass", "Point mass · at a node"],
+    ]);
+    if (entity.kind === "loadCase")
+      content += ref("case", "Load case", "loadCases");
+    if (entity.kind === "nodalMass")
+      content +=
+        ref("node", "Node", "nodes") + field("mass", "Mass", entity.mass, "kg");
+    else content += field("factor", "Multiplier", entity.factor);
+    content += help(
+      entity.kind === "selfMass"
+        ? "Declare self mass once. With it, self-weight loads inside load-case mass sources are skipped so no mass is counted twice."
+        : entity.kind === "loadCase"
+          ? `Only the component along gravity [${project.gravity.join(", ")}] m/s² becomes mass; horizontal forces and moments carry none. A load acting upward cannot be mass and stops the analysis.`
+          : "The mass acts in X, Y and Z at the node. Declare one total per node.",
+    );
+  }
   if (key === "combinations")
     content =
       field("name", "Combination name", entity.name) +
@@ -662,7 +692,8 @@ export function bindSectionCalculator(form, compute) {
     if (custom?.checked) {
       const jMm4 = Number(form.elements.namedItem("rect-j")?.value);
       if (!(jMm4 > 0)) {
-        status.textContent = "Enter a positive custom J, or clear the override.";
+        status.textContent =
+          "Enter a positive custom J, or clear the override.";
         return;
       }
       customJ = jMm4 * 1e-12;

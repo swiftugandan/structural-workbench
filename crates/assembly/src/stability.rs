@@ -19,7 +19,7 @@ use workbench_results::{
 use workbench_solver::eigen::buckling;
 
 use crate::analyse_assembled;
-use crate::expand::expand_point_loads;
+use crate::expand::{SplitMap, expand_point_loads};
 
 pub const DEFAULT_SUBDIVISIONS: usize = 8;
 pub const DEFAULT_MODES: usize = 5;
@@ -245,7 +245,7 @@ pub(crate) fn dofs(p: &Project) -> Dofs {
     }
 }
 
-fn assemble(p: &Project, d: &Dofs, local: impl Fn(&Member, f64) -> Matrix) -> CsMat<f64> {
+pub(crate) fn assemble(p: &Project, d: &Dofs, local: impl Fn(&Member, f64) -> Matrix) -> CsMat<f64> {
     let position: BTreeMap<&str, [f64; 3]> = p
         .nodes
         .iter()
@@ -273,6 +273,63 @@ fn assemble(p: &Project, d: &Dofs, local: impl Fn(&Member, f64) -> Matrix) -> Cs
         }
     }
     t.to_csc()
+}
+
+/// Physical member → (analysis member, station range) pieces, in order.
+pub(crate) fn pieces(splits: &SplitMap, id: &str) -> Vec<(String, f64, f64)> {
+    match splits.get(id) {
+        Some(s) => s
+            .children
+            .iter()
+            .map(|c| (c.id.clone(), c.t0, c.t1))
+            .collect(),
+        None => vec![(id.to_string(), 0., 1.)],
+    }
+}
+
+/// Translations of the mesh displacement vector `u` at every analysis node
+/// along each physical member of `original`, for drawing a mode shape.
+pub(crate) fn mode_members(
+    original: &Project,
+    mesh: &Mesh,
+    splits: &SplitMap,
+    d: &Dofs,
+    u: &[f64],
+) -> Vec<MemberModeShape> {
+    let position: BTreeMap<&str, [f64; 3]> = mesh
+        .project
+        .nodes
+        .iter()
+        .map(|x| (x.id.as_str(), x.position))
+        .collect();
+    let translation = |id: &str| -> [f64; 3] { std::array::from_fn(|a| u[d.node[id] * 6 + a]) };
+    original
+        .members
+        .iter()
+        .map(|m| {
+            let mut stations: Vec<ModeStation> = vec![];
+            for (child, t0, t1) in pieces(splits, &m.id) {
+                for (s, node) in &mesh.stations[&child] {
+                    let station = t0 + (t1 - t0) * s;
+                    if stations
+                        .last()
+                        .is_some_and(|x| (x.station - station).abs() < 1e-12)
+                    {
+                        continue;
+                    }
+                    stations.push(ModeStation {
+                        station,
+                        position: position[node.as_str()],
+                        displacement: translation(node),
+                    });
+                }
+            }
+            MemberModeShape {
+                id: m.id.clone(),
+                stations,
+            }
+        })
+        .collect()
 }
 
 pub fn elastic_buckling(
@@ -336,22 +393,6 @@ pub fn elastic_buckling(
     let budget = p.analysis_settings.memory_limit_mi_b as usize * 1024 * 1024 / 2;
     let solved = buckling(&k, &kg, settings.modes, compression, budget)?;
 
-    // Physical member → (analysis member, station range) pieces, in order.
-    let pieces = |id: &str| -> Vec<(String, f64, f64)> {
-        match splits.get(id) {
-            Some(s) => s
-                .children
-                .iter()
-                .map(|c| (c.id.clone(), c.t0, c.t1))
-                .collect(),
-            None => vec![(id.to_string(), 0., 1.)],
-        }
-    };
-    let position: BTreeMap<&str, [f64; 3]> = p
-        .nodes
-        .iter()
-        .map(|x| (x.id.as_str(), x.position))
-        .collect();
     let mut modes = vec![];
     for ((factor, shape), residual) in solved
         .factors
@@ -376,34 +417,7 @@ pub fn elastic_buckling(
         }
         let scale = 1. / u[at];
         u.iter_mut().for_each(|x| *x *= scale);
-        let translation = |id: &str| -> [f64; 3] { std::array::from_fn(|a| u[d.node[id] * 6 + a]) };
-        let members = original
-            .members
-            .iter()
-            .map(|m| {
-                let mut stations: Vec<ModeStation> = vec![];
-                for (child, t0, t1) in pieces(&m.id) {
-                    for (s, node) in &mesh.stations[&child] {
-                        let station = t0 + (t1 - t0) * s;
-                        if stations
-                            .last()
-                            .is_some_and(|x| (x.station - station).abs() < 1e-12)
-                        {
-                            continue;
-                        }
-                        stations.push(ModeStation {
-                            station,
-                            position: position[node.as_str()],
-                            displacement: translation(node),
-                        });
-                    }
-                }
-                MemberModeShape {
-                    id: m.id.clone(),
-                    stations,
-                }
-            })
-            .collect();
+        let members = mode_members(&original, &mesh, &splits, &d, &u);
         modes.push(BucklingMode {
             factor: *factor,
             residual: *residual,
@@ -421,7 +435,7 @@ pub fn elastic_buckling(
         .iter()
         .map(|m| MemberAxialForces {
             id: m.id.clone(),
-            segments: pieces(&m.id)
+            segments: pieces(&splits, &m.id)
                 .into_iter()
                 .flat_map(|(child, t0, t1)| {
                     let n = mesh.elements[&child].len() as f64;

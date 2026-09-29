@@ -113,17 +113,22 @@
     },
     {
       "id": "R-DYNAMIC-ORACLE",
-      "status": "not_acquired",
+      "status": "partially_acquired",
       "requiredBy": [
         "M14",
         "M15"
       ],
       "definition": "SOURCES.md section 3",
-      "sourceEdition": null,
-      "sourceHash": null,
-      "rightsStatus": "unverified",
-      "localPath": null,
-      "validationEvidence": []
+      "sourceEdition": "dynamics-v1 project oracle (modal only)",
+      "sourceHash": "30677e61c0a2003294f8f8bd34526cdbf113c7139f52641c2930278da3d7f106",
+      "rightsStatus": "project_generated_redistributable",
+      "localPath": "fixtures/dynamics/modal-oracle.json",
+      "validationEvidence": [
+        "resources.lock.json#R-DYNAMIC-ORACLE",
+        "docs/formulations/modal.md",
+        "evidence/M14/full/ACCEPTANCE.md"
+      ],
+      "note": "Covers M14 modal analysis. M15 response-spectrum/harmonic oracles are not yet constructed."
     },
     {
       "id": "R-EXCHANGE-CORPUS",

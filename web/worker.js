@@ -39,19 +39,19 @@ self.onmessage = ({ data: r }) => {
           ? JSON.parse(r.payload.jsonUtf8)
           : r.payload.project;
       const version = p.schemaVersion;
-      const migratable = ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0"].includes(version);
+      const migratable = ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0"].includes(version);
       if (!migratable) {
         postMessage(
           error(
             r,
             "UNSUPPORTED_SCHEMA",
-            `Project schema ${version} is not supported. Supported import schemas: 0.9.0, 1.0.0, 1.1.0, 1.2.0, 1.3.0`,
+            `Project schema ${version} is not supported. Supported import schemas: 0.9.0, 1.0.0, 1.1.0, 1.2.0, 1.3.0, 1.4.0`,
           ),
         );
         return;
       }
-      // Legacy 0.9/1.0/1.1/1.2 imports migrate in Rust; current documents use AJV and Rust validation.
-      if (version === "1.3.0" && !validate(p)) {
+      // Legacy 0.9–1.3 imports migrate in Rust; current documents use AJV and Rust validation.
+      if (version === "1.4.0" && !validate(p)) {
         postMessage(
           error(
             r,
@@ -102,10 +102,11 @@ self.onmessage = ({ data: r }) => {
         response.status === "ok" ? "analysisCompleted" : "analysisFailed";
       response.jobId = r.requestId;
       response.sourceRevision = revision;
-      // Buckling results carry per-mode shapes, not response buffers.
+      // Only results that declare response buffers carry them; buckling
+      // and modal results carry per-mode shapes instead.
       if (
         response.status === "ok" &&
-        response.payload.analysisType !== "elasticBuckling"
+        Array.isArray(response.payload.bufferDescriptors)
       ) {
         const p = response.payload;
         p.nodeDisplacements = new Float64Array(p.nodeDisplacements);

@@ -464,6 +464,17 @@
       "formulation": "docs/formulations/stability.md",
       "rightsStatus": "Project-authored, redistributable with the repository",
       "validationUse": "M09 elastic buckling and second-order kernel, protocol and browser acceptance"
+    },
+    {
+      "id": "R-DYNAMIC-ORACLE",
+      "version": "dynamics-v1",
+      "authoritativeOrigin": "Project-generated: closed-form SDOF, cantilever, simply supported, axial and torsional bar frequencies and a two-storey shear frame by tools/oracles/modal_oracle.py; spatial frame (lumped) and planar portal (consistent) eigenvalues from OpenSeesPy 3.4.0 (R-OPENSees-ORACLE)",
+      "fixture": "fixtures/dynamics/modal-oracle.json",
+      "fixtureSha256": "30677e61c0a2003294f8f8bd34526cdbf113c7139f52641c2930278da3d7f106",
+      "generatorSha256": "392e041c48afc9925dc8e1a79fa0bb2e85dba787b9e6dddd2b075942775d9eec",
+      "formulation": "docs/formulations/modal.md",
+      "rightsStatus": "Project-authored, redistributable with the repository",
+      "validationUse": "M14 modal kernel, protocol and browser acceptance"
     }
   ],
   "unresolved": [
@@ -474,7 +485,6 @@
     "R-CONNECTION-CODE",
     "R-CONNECTION-EXAMPLES",
     "R-DETAILING",
-    "R-DYNAMIC-ORACLE",
     "R-EXCHANGE-CORPUS",
     "R-FOUNDATION-EXAMPLES",
     "R-FULL-INVENTORY",

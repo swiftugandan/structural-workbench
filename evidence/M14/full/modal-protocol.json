@@ -1,0 +1,40 @@
+{
+  "taskId": "M14-parent",
+  "milestone": "M14",
+  "sourceHash": "d7a6f89704619ef9bd94fb11c5c23244dd8f8682c7b7ab026c769996bf3fe28a",
+  "buildHash": "4e5f4ec963cd94e7bf4307f54fde4c4f3dcf73b50ede29b14d8653e13ca1783c",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T08:35:11.342Z",
+  "status": "PASS",
+  "testCount": 7,
+  "testIds": [
+    "capabilities.json publishes UNKNOWN parity and SPEC exclusions",
+    "ledger helpers render disclosures without inventing parity",
+    "capabilities advertise modal analysis and schema 1.4.0",
+    "a legacy import migrates to 1.4.0 with no mass, and modal refuses to run",
+    "SetMassSource with a dimensioned mass gives the SDOF closed form",
+    "negative mass fails with its reason and no payload",
+    "malformed or ambiguous modal requests and sources are refused"
+  ],
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "tests/modal-protocol.test.mjs",
+    "tests/capability-ledger.test.mjs"
+  ],
+  "artifacts": []
+}

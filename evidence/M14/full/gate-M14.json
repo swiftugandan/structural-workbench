@@ -1,0 +1,15 @@
+{
+  "milestone": "M14",
+  "status": "PASS",
+  "sourceHash": "d7a6f89704619ef9bd94fb11c5c23244dd8f8682c7b7ab026c769996bf3fe28a",
+  "buildHash": "4e5f4ec963cd94e7bf4307f54fde4c4f3dcf73b50ede29b14d8653e13ca1783c",
+  "required": [
+    "build",
+    "modal-native",
+    "modal-protocol",
+    "m14-browser",
+    "m14-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-29T08:35:40.895Z"
+}

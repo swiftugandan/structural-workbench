@@ -163,10 +163,16 @@ OpenSeesPy 3.4.0 for the frame case.
 | D-SDOF | Massless cantilever with a tip point mass | ω = √(3EI/(mL³)) per plane, √(EA/(mL)) axial | 1e-9 relative, consistent and lumped |
 | D-CANT | Cantilever, distributed mass | ω_n = (β_nL)²√(EI/(μL⁴)), β_nL = 1.8751, 4.6941, 7.8548 | 16 elements: ≤ 1e-4 (modes 1–3); consistent refinement 2→4→8→16 decreases from above |
 | D-SS | Simply supported beam | ω_n = (nπ)²√(EI/(μL⁴)) | 16 elements: ≤ 1e-4 (modes 1–3) |
-| D-AXIAL | Fixed–free bar, axial | ω_n = (2n−1)π/(2L)·√(E/ρ) | 16 elements: ≤ 1e-3 (modes 1–2) |
+| D-AXIAL | Fixed–free bar, axial | ω_n = (2n−1)π/(2L)·√(E/ρ) | 32 elements: ≤ 1e-3 (modes 1–2); error ratio 16→32 ≈ 4 (linear axial interpolation, error ≈ (kh)²/24 from above) |
 | D-TORSION | Fixed–free shaft, torsion | ω_n = (2n−1)π/(2L)·√(GJ/(ρ(Iy+Iz))) | 16 elements: ≤ 1e-3 (mode 1) |
 | D-SCALE | Every mass × 4 | every ω halves | 1e-12 relative |
 | D-SHEAR2 | Two-storey shear frame: rigid beams, massless fixed–fixed columns, storey masses | 2-DOF closed form | ≤ 1e-5 (finite beam stiffness) |
 | D-FRAME-OS | Two-storey spatial frame, lumped mass | OpenSees `eigen` (-lMass) | ≤ 1e-6 relative, 6 modes |
 | D-EFFMASS | All modes of a small frame | Σ M* = M_d per direction | 1e-10 relative |
 | D-ORTH | Any result | ΦᵀMΦ = I, ΦᵀKΦ = Ω² | 1e-8 |
+
+Amendment (M14-B, before acceptance): D-AXIAL was first set at 16 elements.
+The linear axial interpolation's known frequency error, (kh)²/24 ≈ 3.6e-3 for
+mode 2 at 16 elements, makes that gate unattainable by any correct
+implementation. The tolerance is unchanged; the mesh is 32 elements and the
+second-order convergence rate is now also required.

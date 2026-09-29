@@ -2,7 +2,7 @@ mod cad;
 mod design_workspace;
 mod preview_workspace;
 mod snap;
-mod stability_request;
+mod analysis_request;
 mod structure_workspace;
 mod topology;
 mod view;
@@ -219,35 +219,48 @@ impl Kernel {
                         }
                     }
                 }
-                if ids.is_empty() {
+                let p = self.project.as_ref().unwrap();
+                let kind = analysis_request::parse(payload)?;
+                if !kind.takes_cases() && !ids.is_empty() {
+                    return Err(err(
+                        "INVALID_LOAD",
+                        "Modal analysis takes no load case or combination; its mass comes from the declared mass sources",
+                    ));
+                }
+                if kind.takes_cases() && ids.is_empty() {
                     return Err(err(
                         "INVALID_LOAD",
                         "Select at least one case or combination",
                     ));
                 }
-                let p = self.project.as_ref().unwrap();
-                let kind = stability_request::parse(payload)?;
-                if !matches!(kind, stability_request::AnalysisKind::LinearStatic) && ids.len() != 1 {
+                if !matches!(kind, analysis_request::AnalysisKind::LinearStatic)
+                    && kind.takes_cases()
+                    && ids.len() != 1
+                {
                     return Err(err(
                         "INVALID_LOAD",
                         "Stability analyses take exactly one case or combination; envelopes are not valid inputs",
                     ));
                 }
                 match kind {
-                    stability_request::AnalysisKind::LinearStatic if ids.len() == 1 => {
+                    analysis_request::AnalysisKind::LinearStatic if ids.len() == 1 => {
                         let result = workbench_assembly::analyse(p, &ids[0])?;
                         Ok(serde_json::to_value(result).unwrap())
                     }
-                    stability_request::AnalysisKind::LinearStatic => {
+                    analysis_request::AnalysisKind::LinearStatic => {
                         let result = workbench_assembly::envelope(p, &ids)?;
                         Ok(serde_json::to_value(result).unwrap())
                     }
-                    stability_request::AnalysisKind::ElasticBuckling(settings) => {
+                    analysis_request::AnalysisKind::ElasticBuckling(settings) => {
                         let result = workbench_assembly::elastic_buckling(p, &ids[0], &settings)?;
                         Ok(serde_json::to_value(result).unwrap())
                     }
-                    stability_request::AnalysisKind::SecondOrder(settings) => {
+                    analysis_request::AnalysisKind::SecondOrder(settings) => {
                         let result = workbench_assembly::second_order(p, &ids[0], &settings)?;
+                        Ok(serde_json::to_value(result).unwrap())
+                    }
+                    analysis_request::AnalysisKind::Modal(settings) => {
+                        let result = workbench_assembly::modal(p, &settings)?;
                         Ok(serde_json::to_value(result).unwrap())
                     }
                 }
@@ -561,6 +574,12 @@ fn apply_inner(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
         "SetLoadCase" => "loadCases",
         "SetLoad" => "loads",
         "SetCombination" => "combinations",
+        "SetMassSource" => {
+            if v.get("massSources").is_none() {
+                v["massSources"] = json!([]);
+            }
+            "massSources"
+        }
         "SetGravity" => {
             v["gravity"] = a["gravity"].clone();
             return Ok(());
@@ -582,10 +601,11 @@ fn apply_inner(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
                 "loadCases",
                 "loads",
                 "combinations",
+                "massSources",
             ] {
-                v[k].as_array_mut()
-                    .unwrap()
-                    .retain(|item| !ids.contains(&item["id"]));
+                if let Some(items) = v.get_mut(k).and_then(Value::as_array_mut) {
+                    items.retain(|item| !ids.contains(&item["id"]));
+                }
             }
             return Ok(());
         }
@@ -674,6 +694,14 @@ fn normalise_units(kind: &str, a: &mut Value) -> Result<()> {
                 }
             }
         }
+        "SetMassSource" => {
+            if a.get("factor").is_some() {
+                quantity(&mut a["factor"], "dimensionless")?;
+            }
+            if a.get("mass").is_some() {
+                quantity(&mut a["mass"], "mass")?;
+            }
+        }
         "SetLoad" => {
             if let Some(values) = a.get_mut("forcePerLength").and_then(Value::as_array_mut) {
                 for v in values {
@@ -702,6 +730,7 @@ fn excluded_domains() -> Value {
         "plasticity",
         "geometrically nonlinear (large-displacement) response",
         "torsional and lateral-torsional instability",
+        "response spectrum, time-history and harmonic analysis",
         "cable/tension-only members",
         "soil contact",
         "code-generated wind/seismic loads",
@@ -719,7 +748,7 @@ fn domain_disclosure() -> Value {
     json!({
         "comparisonStatus": "UNKNOWN",
         "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
-        "supportedSummary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1); elastic flexural buckling factors and linearised P-Δ-δ second-order analysis of one case or combination (stability-v1).",
+        "supportedSummary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1); elastic flexural buckling factors and linearised P-Δ-δ second-order analysis of one case or combination (stability-v1); undamped modal analysis with declared mass sources and translational participation (dynamics-v1).",
         "excludedDomains": excluded_domains()
     })
 }
@@ -727,8 +756,8 @@ fn domain_disclosure() -> Value {
 fn capabilities_payload() -> Value {
     json!({
         "protocolVersion": 1,
-        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0"],
-        "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder"],
+        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0"],
+        "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder", "modal"],
         "designProfiles": workbench_design::default_registry()
             .metadata()
             .into_iter()

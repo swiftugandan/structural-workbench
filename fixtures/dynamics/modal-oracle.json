@@ -1,7 +1,7 @@
 {
   "formulation": "docs/formulations/modal.md (dynamics-v1)",
   "generator": "tools/oracles/modal_oracle.py",
-  "generatorSha256": "5298246abb3b636e9bc4fa329d5ae4fde40164278c548b1e86ab864475c94137",
+  "generatorSha256": "392e041c48afc9925dc8e1a79fa0bb2e85dba787b9e6dddd2b075942775d9eec",
   "opensees": {
     "package": "openseespy",
     "version": "3.4.0",
@@ -94,7 +94,8 @@
       4874.6781462343115
     ],
     "tolerance": 0.001,
-    "subdivisions": 16
+    "subdivisions": 32,
+    "convergenceOrder": 2
   },
   "torsion": {
     "id": "D-TORSION",

@@ -8,7 +8,8 @@
     "analysisTypes": [
       "linearStatic",
       "elasticBuckling",
-      "secondOrder"
+      "secondOrder",
+      "modal"
     ],
     "formulation": "eulerBernoulli3D / isotropic / prismatic / SI",
     "limits": {
@@ -27,6 +28,7 @@
     "plasticity",
     "geometrically nonlinear (large-displacement) response",
     "torsional and lateral-torsional instability",
+    "response spectrum, time-history and harmonic analysis",
     "cable/tension-only members",
     "soil contact",
     "code-generated wind/seismic loads",
@@ -178,6 +180,32 @@
       ]
     },
     {
+      "capabilityId": "modal-analysis",
+      "scopeKey": "dynamics-v1 / declared mass sources / consistent or lumped mass / subspace iteration with Sturm check",
+      "implementationStatus": "implemented",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Undamped free vibration about the unstressed geometry; no damping, geometric stiffness or soil-structure interaction",
+        "Euler-Bernoulli members: rotary inertia of sections is neglected",
+        "Participation is reported for global translations only",
+        "Mass is declared (self mass, load-case gravity loads / g, nodal masses), never implied",
+        "Rigid-body modes are refused, not computed; member end moment releases are rejected until hinge DOFs exist",
+        "A frequency or participation ratio is not a floor-vibration, comfort or code serviceability verdict"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/modal.md",
+        "docs/adr/0018-modal-analysis-and-mass-sources.md",
+        "fixtures/dynamics/modal-oracle.json",
+        "crates/assembly/tests/modal.rs",
+        "crates/frame/tests/mass.rs",
+        "crates/solver/tests/eigen.rs",
+        "evidence/M14/full/gate-M14.json",
+        "evidence/M14/full/ACCEPTANCE.md"
+      ]
+    },
+    {
       "capabilityId": "webgpu-viewport",
       "scopeKey": "WebGPU / orthographic 3D / GPU ID / Rust screen picking",
       "implementationStatus": "implemented",
@@ -244,7 +272,7 @@
     },
     {
       "capabilityId": "advanced-suite",
-      "scopeKey": "M10–M23",
+      "scopeKey": "M10–M13, M15–M23",
       "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
       "comparisonStatus": "UNKNOWN",

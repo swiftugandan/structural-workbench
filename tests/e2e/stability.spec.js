@@ -128,8 +128,8 @@ test("M09 stability: buckling modes, first- vs second-order sway, over-critical 
   await expect(page.locator("#viewport")).toHaveAttribute("data-mode-shape", /^Mode 1 · λ = /);
   await page.locator("[data-stability-mode='1']").click();
   await expect(page.locator("#viewport")).toHaveAttribute("data-mode-shape", /^Mode 2/);
-  await expect(page.locator("#stability-legend")).toBeVisible();
-  await expect(page.locator("#stability-legend")).toContainText("shape only");
+  await expect(page.locator("#overlay-legend")).toBeVisible();
+  await expect(page.locator("#overlay-legend")).toContainText("shape only");
   await mkdir(dir, { recursive: true });
   await page.screenshot({ path: `${dir}/buckling-mode.png` });
   await page.locator("[data-testid=stability-result]").screenshot({
@@ -140,7 +140,7 @@ test("M09 stability: buckling modes, first- vs second-order sway, over-critical 
   await page.locator("#result-case").selectOption("C1");
   await expect(page.locator("[data-testid=stability-state]")).toHaveText("⚠ Stale");
   await expect(page.locator("#viewport")).not.toHaveAttribute("data-mode-shape", /.*/);
-  await expect(page.locator("#stability-legend")).toBeHidden();
+  await expect(page.locator("#overlay-legend")).toBeHidden();
   await page.locator("[name=stability-type][value=secondOrder]").check();
   await page.locator("#stability-run").click();
   await expect(page.locator("[data-testid=stability-state]")).toHaveText("✓ Current");
@@ -160,7 +160,7 @@ test("M09 stability: buckling modes, first- vs second-order sway, over-critical 
     "data-second-order-shape",
     /^Second order · /,
   );
-  await expect(page.locator("#stability-legend")).toContainText("Second order");
+  await expect(page.locator("#overlay-legend")).toContainText("Second order");
   await page.screenshot({ path: `${dir}/second-order.png` });
   await page.locator("[data-testid=stability-result]").screenshot({
     path: `${dir}/second-order-table.png`,
@@ -188,7 +188,7 @@ test("M09 stability: buckling modes, first- vs second-order sway, over-critical 
     /^Second order · /,
   );
   await page.locator("#deformation-scale").fill("2000");
-  await expect(page.locator("#stability-legend")).toContainText("× 2000");
+  await expect(page.locator("#overlay-legend")).toContainText("× 2000");
   await page.locator("#viewport").screenshot({ path: `${dir}/sway-comparison.png` });
   const reportDownload = page.waitForEvent("download");
   await menuCommand(page, "File", "Export calculation report");

@@ -51,6 +51,7 @@ import {
 } from "./steel-design.js";
 import { concreteWorkspace } from "./design-previews.js";
 import { stabilityWorkspace } from "./stability.js";
+import { modalWorkspace, describeSource } from "./modal.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -259,6 +260,30 @@ const stability = stabilityWorkspace({
       moment: (v) => `${format(eng ? v / 1000 : v)} ${eng ? "kN·m" : "N·m"}`,
     };
   },
+});
+const modalView = modalWorkspace({
+  gateway,
+  viewport,
+  download,
+  onError: message,
+  onRunning: (v) => {
+    setAnalysing(v);
+    setBusy(v);
+  },
+  onEditSources: () => {
+    if (formDirty)
+      return message(
+        "Apply or cancel property changes before editing mass sources.",
+      );
+    entityList("massSources");
+  },
+  getContext: () => ({
+    project,
+    modelHash,
+    dirty: formDirty,
+    locked: busy || readOnly || analysing || !project,
+    label: (id) => label(id),
+  }),
 });
 const modelTools = modeling({
   getProject: () => project,
@@ -1437,7 +1462,14 @@ function renderResults() {
   }
   if (tab === "stability") {
     $("#export-csv").disabled = true;
+    modalView.hide();
     stability.render($("#results-content"));
+    return;
+  }
+  if (tab === "modal") {
+    $("#export-csv").disabled = true;
+    stability.hide();
+    modalView.render($("#results-content"));
     return;
   }
   if (tab === "steel-overview") {
@@ -1673,6 +1705,7 @@ for (const b of document.querySelectorAll("[data-tab]"))
   b.onclick = () => {
     tab = b.dataset.tab;
     if (tab !== "stability") stability.hide();
+    if (tab !== "modal") modalView.hide();
     if ($("#results-content").hidden) $("#toggle-results")?.click();
     document
       .querySelectorAll("[data-tab]")
@@ -2062,17 +2095,19 @@ function entityList(key) {
     loadCases: "Load cases",
     loads: "Loads",
     combinations: "Combinations",
+    massSources: "Mass sources",
   }[key];
   modal(
     title,
-    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${project[
-      key
-    ]
+    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${(
+      project[key] ?? []
+    )
       .map((v) => {
         const lineage =
           key === "members" ? lineageSummary(project, v, label) : null;
         const description =
           lineage?.text ||
+          (key === "massSources" ? describeSource(v, label) : "") ||
           v.name ||
           label(v.node) ||
           v.type ||
@@ -2089,7 +2124,7 @@ function entityList(key) {
     b.onclick = () =>
       editEntity(
         key,
-        project[key].find((x) => x.id === b.dataset.edit),
+        (project[key] ?? []).find((x) => x.id === b.dataset.edit),
       );
   $("#add-entity").onclick = () => editEntity(key, null);
 }
@@ -2152,6 +2187,16 @@ function editEntity(key, old, draft) {
       purpose: "analysis",
       terms: [{ case: project.loadCases[0]?.id, factor: 1 }],
     },
+    massSources: (project.massSources ?? []).some((m) => m.kind === "selfMass")
+      ? {
+          id,
+          kind: "nodalMass",
+          node:
+            project.nodes.find((n) => n.id === selected)?.id ||
+            project.nodes.at(-1)?.id,
+          mass: 1000,
+        }
+      : { id, kind: "selfMass", factor: 1 },
   };
   const entity = structuredClone(draft || old || defaults[key]);
   const needs =
@@ -2202,6 +2247,22 @@ function editEntity(key, old, draft) {
   bindTemplates($("#entity-form"), key, entity, project, (next) =>
     editEntity(key, old, next),
   );
+  const massKind = $("#entity-form [name=kind]");
+  if (key === "massSources" && massKind)
+    massKind.onchange = () => {
+      const next = { id: entity.id, kind: massKind.value };
+      if (next.kind === "selfMass") next.factor = 1;
+      if (next.kind === "loadCase")
+        Object.assign(next, { case: project.loadCases[0]?.id, factor: 1 });
+      if (next.kind === "nodalMass")
+        Object.assign(next, {
+          node:
+            project.nodes.find((n) => n.id === selected)?.id ||
+            project.nodes.at(-1)?.id,
+          mass: 1000,
+        });
+      editEntity(key, old, next);
+    };
   const loadType = $("#entity-form [name=type]");
   if (key === "loads" && loadType)
     loadType.onchange = () => {
@@ -2258,6 +2319,7 @@ function editEntity(key, old, draft) {
         loadCases: "SetLoadCase",
         loads: "SetLoad",
         combinations: "SetCombination",
+        massSources: "SetMassSource",
       }[key];
       if (key === "members" && old) {
         await command("Batch", {

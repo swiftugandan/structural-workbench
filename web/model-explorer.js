@@ -23,15 +23,16 @@ export function renderExplorer(
     return `<details class="explorer-branch" data-branch="${esc(key)}" ${expanded ? "open" : ""} ${deferred ? 'data-lazy="true"' : ""}><summary><span>${esc(title)}</span>${count !== "" ? `<small>${count}</small>` : ""}</summary><div class="explorer-children">${deferred ? "" : body || '<p class="explorer-empty">None in this model</p>'}</div></details>`;
   };
   const leaf = (key, e) =>
-    `<button class="explorer-leaf ${selected === e.id ? "active" : ""}" data-entity-key="${key}" data-entity-id="${esc(e.id)}" ${selected === e.id ? 'aria-current="true"' : ""}><span class="nav-icon">${icon({ nodes: "node", supports: "support", loads: "load", materials: "material", sections: "section", loadCases: "loadCase", combinations: "combination" }[key])}</span><span>${esc(label(e.id))}</span><small>${esc(e.name || e.node || "")}</small></button>`;
+    `<button class="explorer-leaf ${selected === e.id ? "active" : ""}" data-entity-key="${key}" data-entity-id="${esc(e.id)}" ${selected === e.id ? 'aria-current="true"' : ""}><span class="nav-icon">${icon({ nodes: "node", supports: "support", loads: "load", materials: "material", sections: "section", loadCases: "loadCase", combinations: "combination", massSources: "load" }[key])}</span><span>${esc(label(e.id))}</span><small>${esc(e.name || e.node || e.kind || "")}</small></button>`;
   const manage = (key, title) =>
-    `<button class="explorer-manage" data-group="${key}" aria-label="${title} ${project[key].length}">${esc(title)}<small>${project[key].length}</small><span aria-hidden="true">↗</span></button>`;
+    `<button class="explorer-manage" data-group="${key}" aria-label="${title} ${(project[key] ?? []).length}">${esc(title)}<small>${(project[key] ?? []).length}</small><span aria-hidden="true">↗</span></button>`;
   const group = (key, title, open = true) =>
     branch(
       key,
       title,
-      manage(key, title) + project[key].map((e) => leaf(key, e)).join(""),
-      project[key].length,
+      manage(key, title) +
+        (project[key] ?? []).map((e) => leaf(key, e)).join(""),
+      (project[key] ?? []).length,
       open,
     );
   const domainLeaf = (key, x) =>
@@ -189,7 +190,8 @@ export function renderExplorer(
       "Load cases & combinations",
       group("loadCases", "Load cases") +
         group("loads", "Loads") +
-        group("combinations", "Combinations"),
+        group("combinations", "Combinations") +
+        group("massSources", "Mass sources"),
     ) +
     group("materials", "Materials") +
     group("sections", "Sections")

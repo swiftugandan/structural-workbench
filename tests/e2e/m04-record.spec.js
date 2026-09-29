@@ -30,7 +30,7 @@ test("M04 record: export/import equivalence and report matches displayed results
   const projectFile = await projectDownload;
   const projectJson = await readFile(await projectFile.path(), "utf8");
   const project = JSON.parse(projectJson);
-  expect(project.schemaVersion).toBe("1.3.0");
+  expect(project.schemaVersion).toBe("1.4.0");
   expect(project).not.toHaveProperty("canUndo");
   await writeFile(`${evidence()}/exported-project.json`, projectJson);
 

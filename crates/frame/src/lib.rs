@@ -53,6 +53,48 @@ pub fn geometric(l: f64, n: f64) -> Matrix {
     }
     k
 }
+/// Consistent element mass matrix in local axes (dynamics-v1,
+/// `docs/formulations/modal.md`): `mu` translational mass per length (kg/m),
+/// `mu_polar` polar mass moment per length (kg·m). Euler–Bernoulli: no rotary
+/// inertia of the section in bending.
+pub fn consistent_mass(l: f64, mu: f64, mu_polar: f64) -> Matrix {
+    let mut m = [[0.; 12]; 12];
+    for (ids, value) in [([0, 6], mu), ([3, 9], mu_polar)] {
+        let c = value * l / 6.;
+        m[ids[0]][ids[0]] = 2. * c;
+        m[ids[1]][ids[1]] = 2. * c;
+        m[ids[0]][ids[1]] = c;
+        m[ids[1]][ids[0]] = c;
+    }
+    let b = [
+        [156., 22. * l, 54., -13. * l],
+        [22. * l, 4. * l * l, 13. * l, -3. * l * l],
+        [54., 13. * l, 156., -22. * l],
+        [-13. * l, -3. * l * l, -22. * l, 4. * l * l],
+    ];
+    // Same interpolation and sign convention as the stiffness: w′ = −ry.
+    for (ids, signs) in [
+        ([1, 5, 7, 11], [1., 1., 1., 1.]),
+        ([2, 4, 8, 10], [1., -1., 1., -1.]),
+    ] {
+        for i in 0..4 {
+            for j in 0..4 {
+                m[ids[i]][ids[j]] = mu * l / 420. * b[i][j] * signs[i] * signs[j];
+            }
+        }
+    }
+    m
+}
+
+/// Lumped element mass: half the member mass on each end translation, no
+/// rotational or torsional mass.
+pub fn lumped_mass(l: f64, mu: f64) -> Matrix {
+    let mut m = [[0.; 12]; 12];
+    for i in [0, 1, 2, 6, 7, 8] {
+        m[i][i] = mu * l / 2.;
+    }
+    m
+}
 pub fn transform(k: &Matrix, r: [[f64; 3]; 3]) -> Matrix {
     let mut g = [[0.; 12]; 12];
     for i in 0..12 {

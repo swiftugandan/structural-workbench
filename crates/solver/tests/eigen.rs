@@ -1,5 +1,6 @@
 use sprs::{CsMat, TriMat};
-use workbench_solver::eigen::{buckling, symmetric_eigen};
+use workbench_solver::eigen::{buckling, symmetric_eigen, vibration};
+use workbench_solver::matvec;
 
 const BUDGET: usize = usize::MAX;
 
@@ -223,4 +224,38 @@ fn a_weak_compressive_mode_behind_strong_tension_modes_is_still_found() {
     assert_eq!(modes.factors.len(), 1, "{modes:?}", modes = modes.factors);
     assert!((modes.factors[0] / reference[0] - 1.).abs() < 1e-10);
     assert!(modes.block_size > 10, "block {}", modes.block_size);
+}
+
+#[test]
+fn a_fixed_fixed_spring_mass_chain_has_the_closed_form_frequencies() {
+    // n equal masses m between n + 1 springs k: ω_j² = (4k/m) sin²(jπ / (2(n + 1))).
+    let (n, k, m) = (12, 3.0e6, 250.0);
+    let r = vibration(&chain(n, k), &diagonal(&vec![m; n]), 5, BUDGET).unwrap();
+    for (j, w2) in r.omega_squared.iter().enumerate() {
+        let theta = (j + 1) as f64 * std::f64::consts::PI / (2. * (n + 1) as f64);
+        let exact = 4. * k / m * theta.sin().powi(2);
+        assert!((w2 / exact - 1.).abs() <= 1e-10, "mode {j}: {w2} vs {exact}");
+    }
+    // M-normalised: φᵀMφ = 1.
+    for phi in &r.shapes {
+        let norm: f64 = phi.iter().map(|x| m * x * x).sum();
+        assert!((norm - 1.).abs() <= 1e-10);
+    }
+    assert_eq!(r.sturm.as_ref().unwrap().negative_pivots, 4);
+}
+
+#[test]
+fn massless_directions_are_never_reported() {
+    // Mass only on the first two of four DOFs: exactly two finite modes.
+    let k = chain(4, 1.0e4);
+    let m = diagonal(&[2.0, 3.0, 0.0, 0.0]);
+    let r = vibration(&k, &m, 4, BUDGET).unwrap();
+    assert_eq!(r.omega_squared.len(), 2);
+    for (w2, phi) in r.omega_squared.iter().zip(&r.shapes) {
+        let kp = matvec(&k, phi);
+        let mp = matvec(&m, phi);
+        let res = kp.iter().zip(&mp).map(|(a, b)| (a - w2 * b).abs()).fold(0., f64::max);
+        let scale = kp.iter().map(|x| x.abs()).fold(0., f64::max);
+        assert!(res <= 1e-8 * scale, "residual {res}");
+    }
 }

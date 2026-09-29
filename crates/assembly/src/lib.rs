@@ -5,6 +5,7 @@ mod envelope;
 mod study;
 mod stability;
 mod second_order;
+mod modal;
 
 use serde_json::json;
 use sprs::TriMat;
@@ -21,6 +22,7 @@ pub use envelope::envelope;
 pub use study::{apply_pointer, execute_study_document};
 pub use second_order::{Imperfection, SecondOrderSettings, second_order};
 pub use stability::{StabilitySettings, elastic_buckling};
+pub use modal::{MassMatrix, ModalSettings, modal};
 
 fn section_actions(end: &[f64], q: [f64; 3], x: f64) -> [f64; 6] {
     [

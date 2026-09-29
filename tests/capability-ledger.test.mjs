@@ -18,6 +18,7 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
     "plasticity",
     "geometrically nonlinear (large-displacement) response",
     "torsional and lateral-torsional instability",
+    "response spectrum, time-history and harmonic analysis",
     "code-certified member sizing",
     "DWG/native PROKON formats",
   ]) {
@@ -40,7 +41,10 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
     const row = ledger.capabilities.find((c) => c.capabilityId === id);
     assert.equal(row.implementationStatus, "implemented", id);
     assert.equal(row.verificationStatus, "parent-gate-pass", id);
-    assert.ok(row.evidenceReferences.includes("evidence/M09/full/gate-M09.json"), id);
+    assert.ok(
+      row.evidenceReferences.includes("evidence/M09/full/gate-M09.json"),
+      id,
+    );
     assert.ok(
       row.limitations.some((l) => /Flexural instability only/.test(l)),
       id,
@@ -55,7 +59,14 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
     "linearStatic",
     "elasticBuckling",
     "secondOrder",
+    "modal",
   ]);
+  // dynamics-v1 is accepted by the M14 parent gate and keeps its limitations.
+  const modal = ledger.capabilities.find((c) => c.capabilityId === "modal-analysis");
+  assert.equal(modal.implementationStatus, "implemented");
+  assert.equal(modal.verificationStatus, "parent-gate-pass");
+  assert.ok(modal.evidenceReferences.includes("evidence/M14/full/gate-M14.json"));
+  assert.ok(modal.limitations.some((l) => /not a floor-vibration/.test(l)));
   const steel = ledger.capabilities.find(
     (c) => c.capabilityId === "steel-code",
   );

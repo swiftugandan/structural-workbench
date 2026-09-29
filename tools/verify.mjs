@@ -1,7 +1,20 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { sourceHash } from "./build.mjs";
-import { common, m01, m01ux, m02, m03, m04, m05, m06, m07, m09, recordIssues } from "./milestone-rules.mjs";
+import {
+  common,
+  m01,
+  m01ux,
+  m02,
+  m03,
+  m04,
+  m05,
+  m06,
+  m07,
+  m09,
+  m14,
+  recordIssues,
+} from "./milestone-rules.mjs";
 import { evidenceDir } from "./evidence.mjs";
 const milestone = process.argv[2] || "M00";
 /** Parent gates: evidence directory and required records per milestone. */
@@ -15,6 +28,7 @@ const gates = {
   M06: ["evidence/M06/full", m06],
   M07: ["evidence/M07/full", m07],
   M09: ["evidence/M09/full", m09],
+  M14: ["evidence/M14/full", m14],
 };
 const [fallbackDir, required] = gates[milestone] || [
   "evidence/M00/current",

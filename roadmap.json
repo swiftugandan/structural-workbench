@@ -370,7 +370,7 @@
     {
       "id": "M14",
       "name": "Assess building vibration",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M06"
       ],
@@ -389,7 +389,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "dynamics-v1 accepted (evidence/M14/full): undamped modal analysis with declared mass sources (schema 1.4.0), consistent/lumped mass, translational participation with omitted-mode and target reporting, vibration report; oracle fixtures/dynamics/modal-oracle.json. Response spectra and harmonic response are M15; a frequency is never a serviceability verdict."
     },
     {
       "id": "M15",

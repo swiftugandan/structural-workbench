@@ -110,7 +110,11 @@ axial = {
     "density": RHO,
     "omega": [(2 * n - 1) * math.pi / (2 * L) * math.sqrt(E / RHO) for n in (1, 2)],
     "tolerance": 1e-3,
-    "subdivisions": 16,
+    # Linear axial elements with consistent mass err by about (kh)^2/24 from
+    # above: mode 2 at 16 elements is 3.6e-3, at 32 about 9e-4. The gate is
+    # the 1e-3 tolerance at 32 elements plus second-order convergence 16->32.
+    "subdivisions": 32,
+    "convergenceOrder": 2,
 }
 torsion = {
     "id": "D-TORSION",

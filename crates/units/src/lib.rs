@@ -24,6 +24,8 @@ pub fn parse(input: &str, dimension: &str, default_factor: f64) -> Result<f64, S
         ("inertia", "m4" | "m⁴") => 1.,
         ("inertia", "mm4" | "mm⁴") => 1e-12,
         ("density", "kg/m3" | "kg/m³") => 1.,
+        ("mass", "kg") => 1.,
+        ("mass", "t") => 1000.,
         ("stress", "Pa") => 1.,
         ("stress", "kPa") => 1000.,
         ("stress", "MPa") => 1e6,
@@ -44,4 +46,6 @@ fn units() {
     assert_eq!(parse("200 kPa", "stress", 1.).unwrap(), 200000.);
     assert!(parse("200 kPa", "length", 1.).is_err());
     assert!(parse("10 kN", "length", 1.).is_err());
+    assert_eq!(parse("2.5 t", "mass", 1.).unwrap(), 2500.);
+    assert_eq!(parse("300 kg", "mass", 1.).unwrap(), 300.);
 }

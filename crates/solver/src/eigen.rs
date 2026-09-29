@@ -5,6 +5,9 @@
 //! K⁻¹(−K_G), whose eigenvalues are μ = 1/λ. The projected problem is solved
 //! rank-revealingly (K_G is often low rank), and a Sturm count of K + σK_G
 //! proves no positive mode below the reported ones was missed.
+//!
+//! Free vibration (dynamics-v1) is the same pencil with K_G = −M: see
+//! `vibration`.
 
 use crate::{Factor, matvec};
 use sprs::{CsMat, TriMat};
@@ -270,6 +273,50 @@ pub fn buckling(
         }
         p = n.min(2 * p);
     }
+}
+
+pub struct VibrationModes {
+    /// ω² ascending (rad²/s²), one per mode with mass.
+    pub omega_squared: Vec<f64>,
+    /// Free-DOF shapes, M-normalised (φᵀMφ = 1).
+    pub shapes: Vec<Vec<f64>>,
+    /// ‖Kφ − ω²Mφ‖∞ / ‖Kφ‖∞ per mode.
+    pub residuals: Vec<f64>,
+    pub iterations: usize,
+    pub block_size: usize,
+    pub sturm: Option<Sturm>,
+}
+
+/// Smallest `q` natural frequencies of K φ = ω² M φ (dynamics-v1), K
+/// positive definite and M positive semidefinite.
+///
+/// This is the buckling pencil with K_G = −M and λ = ω², solved by the same
+/// subspace iteration and Sturm check (K − σM). Massless directions have
+/// μ = 1/λ = 0 and are never reported. Shapes come back K-normalised
+/// (φᵀKφ = 1, so φᵀMφ = 1/ω²) and are rescaled to φᵀMφ = 1.
+pub fn vibration(k: &CsMat<f64>, m: &CsMat<f64>, q: usize, budget: usize) -> Result<VibrationModes> {
+    let negated = m.map(|v| -v);
+    let solved = buckling(k, &negated, q, true, budget)?;
+    if !solved.negative_factors.is_empty() {
+        return Err(err(
+            "INVALID_MASS",
+            "The mass matrix is not positive semidefinite",
+        ));
+    }
+    let shapes = solved
+        .shapes
+        .iter()
+        .zip(&solved.factors)
+        .map(|(phi, w2)| phi.iter().map(|x| x * w2.sqrt()).collect())
+        .collect();
+    Ok(VibrationModes {
+        omega_squared: solved.factors,
+        shapes,
+        residuals: solved.residuals,
+        iterations: solved.iterations,
+        block_size: solved.block_size,
+        sturm: solved.sturm,
+    })
 }
 
 fn add(a: &CsMat<f64>, b: &CsMat<f64>, s: f64) -> CsMat<f64> {

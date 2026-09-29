@@ -90,6 +90,13 @@ export const m09 = [
   "m09-browser",
   "m09-acceptance",
 ];
+export const m14 = [
+  "build",
+  "modal-native",
+  "modal-protocol",
+  "m14-browser",
+  "m14-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -169,6 +176,22 @@ export const requiredIds = {
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
     "M06 release tour: analyse, stress screen, ledger, save and report",
   ],
+  "m14-acceptance": [
+    "M14-SDOF-CANTILEVER",
+    "M14-MASS-MATRIX",
+    "M14-MASS-SCALING",
+    "M14-ORTHOGONALITY",
+    "M14-EFFECTIVE-MASS",
+    "M14-FRAME-BENCHMARK",
+    "M14-MASS-SOURCES",
+    "M14-FAILURE-PATHS",
+    "M14-UI-JOURNEY",
+    "M14-NOT-A-VERDICT",
+    "M14-ORACLE-PROVENANCE",
+  ],
+  "m14-browser": [
+    "M14 modal: declare mass, frequencies against the oracle, participation, stale, failure, reopen and report",
+  ],
   "m09-acceptance": [
     "M09-EULER",
     "M09-PDELTA-PORTAL",
@@ -182,11 +205,7 @@ export const requiredIds = {
   "m09-browser": [
     "M09 stability: buckling modes, first- vs second-order sway, over-critical failure, stale and record",
   ],
-  "m07-acceptance": [
-    "M07-S2-FIXTURES",
-    "M07-UI-MATRIX",
-    "M07-MODEL-REPORT",
-  ],
+  "m07-acceptance": ["M07-S2-FIXTURES", "M07-UI-MATRIX", "M07-MODEL-REPORT"],
   "m07-browser": [
     "standalone S2-D1 steel check passes via evaluateDesign UI",
     "complete-member matrix: ≥3 pass and ≥3 fail seeds",
@@ -311,7 +330,18 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
         ? requiredIds["native-m03"]
         : milestone === "M02" && name === "browser-suite"
           ? requiredIds["browser-suite-m02"]
-          : ["M01", "M01-UX", "M02", "M03", "M04", "M05", "M06", "M07", "M09"].includes(milestone)
+          : [
+                "M01",
+                "M01-UX",
+                "M02",
+                "M03",
+                "M04",
+                "M05",
+                "M06",
+                "M07",
+                "M09",
+                "M14",
+              ].includes(milestone)
             ? requiredIds[name] || []
             : [];
   for (const id of ids)
@@ -366,6 +396,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 2)
   )
     errors.push(`${name}: failed, skipped or incomplete M09 browser journey`);
+  if (
+    name === "m14-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 2)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M14 browser journey`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);
