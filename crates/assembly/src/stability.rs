@@ -55,7 +55,7 @@ pub(crate) fn reject_releases(p: &Project) -> Result<()> {
         return Err(err(
             "STABILITY_RELEASES_UNSUPPORTED",
             format!(
-                "Member {} has an end moment release; stability analyses reject releases until hinge DOFs exist",
+                "Member {} has an end moment release; second-order analysis rejects releases until its end-action recovery includes hinge DOFs",
                 m.id
             ),
         ));
@@ -63,7 +63,8 @@ pub(crate) fn reject_releases(p: &Project) -> Result<()> {
     Ok(())
 }
 
-/// Every member split into `n` equal elements.
+/// Every member split into `n` equal elements; end releases stay on the
+/// first and last element as hinge DOFs.
 pub(crate) struct Mesh {
     pub(crate) project: Project,
     /// Per input member: (station 0..1, node id) at every mesh node, in order.
@@ -119,13 +120,22 @@ pub(crate) fn subdivide(p: &Project, n: usize) -> Result<Mesh> {
                 material: m.material.clone(),
                 section: m.section.clone(),
                 local_y: m.local_y,
-                release_start: Release {
-                    my: false,
-                    mz: false,
+                // Member end releases stay at the member ends (hinge DOFs).
+                release_start: if k == 0 {
+                    m.release_start.clone()
+                } else {
+                    Release {
+                        my: false,
+                        mz: false,
+                    }
                 },
-                release_end: Release {
-                    my: false,
-                    mz: false,
+                release_end: if k + 1 == n {
+                    m.release_end.clone()
+                } else {
+                    Release {
+                        my: false,
+                        mz: false,
+                    }
                 },
                 parent_member_id: Some(m.parent_member_id.clone().unwrap_or_else(|| m.id.clone())),
                 station_range: None,
@@ -201,6 +211,17 @@ pub(crate) struct Dofs {
     pub(crate) count: usize,
     /// Prescribed values at constrained DOFs (zero where free).
     pub(crate) prescribed: Vec<f64>,
+    /// Hinge DOFs of released member ends, keyed by (element id, end 0|1).
+    pub(crate) hinges: BTreeMap<(String, usize), Vec<Hinge>>,
+}
+
+/// A released end rotation (my about local y, mz about local z) is an
+/// independent free DOF `a`: the element's end rotation is the node's
+/// rotation plus `axis · a`, with `axis` the released local axis in global
+/// coordinates. A pure hinge carries no moment about that axis.
+pub(crate) struct Hinge {
+    pub(crate) dof: usize,
+    pub(crate) axis: [f64; 3],
 }
 
 pub(crate) fn dofs(p: &Project) -> Dofs {
@@ -237,11 +258,33 @@ pub(crate) fn dofs(p: &Project) -> Dofs {
             })
         })
         .collect();
+    let position: BTreeMap<&str, [f64; 3]> = p
+        .nodes
+        .iter()
+        .map(|x| (x.id.as_str(), x.position))
+        .collect();
+    let mut hinges = BTreeMap::new();
+    for m in &p.members {
+        let (_, r) = axes(position[m.start.as_str()], position[m.end.as_str()], m.local_y);
+        for (end, release) in [(0, &m.release_start), (1, &m.release_end)] {
+            let mut list = vec![];
+            for (released, axis) in [(release.my, r[1]), (release.mz, r[2])] {
+                if released {
+                    list.push(Hinge { dof: count, axis });
+                    count += 1;
+                }
+            }
+            if !list.is_empty() {
+                hinges.insert((m.id.clone(), end), list);
+            }
+        }
+    }
     Dofs {
         node,
         free,
         count,
         prescribed,
+        hinges,
     }
 }
 
@@ -262,11 +305,28 @@ pub(crate) fn assemble(p: &Project, d: &Dofs, local: impl Fn(&Member, f64) -> Ma
         let (i, j) = (d.node[&m.start], d.node[&m.end]);
         let ids: [usize; 12] =
             std::array::from_fn(|x| if x < 6 { i * 6 + x } else { j * 6 + x - 6 });
+        // Element DOF x = Σ coefficient × free DOF: the node DOF, plus the
+        // released axis times the hinge DOF on end rotations.
+        let mut map: [Vec<(usize, f64)>; 12] = std::array::from_fn(|x| {
+            d.free[ids[x]].map(|f| vec![(f, 1.)]).unwrap_or_default()
+        });
+        for end in 0..2 {
+            for h in d.hinges.get(&(m.id.clone(), end)).into_iter().flatten() {
+                for c in 0..3 {
+                    if h.axis[c] != 0. {
+                        map[end * 6 + 3 + c].push((h.dof, h.axis[c]));
+                    }
+                }
+            }
+        }
         for x in 0..12 {
             for y in 0..12 {
-                if let (Some(a), Some(b)) = (d.free[ids[x]], d.free[ids[y]]) {
-                    if g[x][y] != 0. {
-                        t.add_triplet(a, b, g[x][y]);
+                if g[x][y] == 0. {
+                    continue;
+                }
+                for &(a, ca) in &map[x] {
+                    for &(b, cb) in &map[y] {
+                        t.add_triplet(a, b, g[x][y] * ca * cb);
                     }
                 }
             }
@@ -346,7 +406,6 @@ pub fn elastic_buckling(
     project.validate()?;
     let mut original = project.clone();
     original.canonicalise();
-    reject_releases(&original)?;
     let model_hash = original.hash();
     let settings_hash = digest(
         &serde_json::to_vec(&json!({

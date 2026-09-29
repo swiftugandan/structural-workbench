@@ -790,7 +790,7 @@ fn capabilities_payload() -> Value {
             "No code compliance or commercial parity claim",
             "Schema 0.9.0 imports migrate to 1.0.0; unknown majors are refused",
             "Elastic stress screen is mechanics-v1 only — not stability or building-code checks",
-            "Stability analyses (stability-v1) are flexural only, reject member end releases and take one case or combination; a critical factor is an elastic load multiplier, not a member resistance or code verdict"
+            "Stability analyses (stability-v1) are flexural only and take one case or combination; elastic buckling takes My/Mz end releases as hinge DOFs, second order rejects them; a critical factor is an elastic load multiplier, not a member resistance or code verdict"
         ]
     })
 }

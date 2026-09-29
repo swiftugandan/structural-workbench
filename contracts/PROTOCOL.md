@@ -234,7 +234,8 @@ object. The stability types take exactly one id in `caseIds` ∪
   [x, y]}}`. The imperfection is never implied.
 
 Unknown fields or types are `INVALID_SCHEMA`; out-of-range values are
-`INVALID_SETTINGS`. Models with member end moment releases are refused with
+`INVALID_SETTINGS`. My/Mz member end releases are independent hinge DOFs in
+`elasticBuckling`; `secondOrder` refuses them with
 `STABILITY_RELEASES_UNSUPPORTED`.
 
 `elasticBuckling` result: ResultHeader fields plus `subdivisions`,
@@ -292,6 +293,6 @@ shift and count, residuals, mass and stiffness orthogonality), `disclosures`
 and `diagnostics` (`SELF_MASS_DEDUPLICATED`, `NON_GRAVITY_COMPONENTS_IGNORED`,
 `FEWER_MODES_THAN_REQUESTED`, `PARTICIPATION_TARGET_NOT_MET`). There are no
 response buffers. Failures (`NO_MASS`, `NEGATIVE_MASS`,
-`MODAL_RELEASES_UNSUPPORTED`, `UNSTABLE_MODEL`, `STURM_MISMATCH`) end in
+`UNSTABLE_MODEL`, `STURM_MISMATCH`) end in
 `analysisFailed` with no payload. A frequency or participation ratio is never
 a floor-vibration or code serviceability verdict.

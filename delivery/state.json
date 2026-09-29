@@ -4096,7 +4096,8 @@
       "regression": {
         "cargoWorkspace": "192 pass",
         "contracts": "13 pass",
-        "steelBrowser": "10 pass"
+        "steelBrowser": "10 pass",
+        "fullBrowserBatch": "114/114 passed on the M07-S build (WORKBENCH_TEST_TIMEOUT_MS=120000)"
       },
       "evidencePaths": [
         "evidence/M07/serviceability"
@@ -4105,6 +4106,40 @@
       "buildHash": "90222244eeafd9743a7d3dc890d6ab6d7c0952d4daa4b174017edb493c33fc6e",
       "acceptedAt": "2026-09-29T11:17:24.856Z",
       "nextAction": "None"
+    },
+    "HINGE-DOF-A": {
+      "id": "HINGE-DOF-A",
+      "useCase": "My/Mz member end releases as independent hinge DOFs in elastic buckling (stability-v1) and modal analysis (dynamics-v1)",
+      "dependencies": [
+        "M09-parent",
+        "M14-parent"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/assembly/src/stability.rs",
+        "crates/assembly/src/modal.rs",
+        "crates/assembly/tests/stability.rs",
+        "crates/assembly/tests/modal.rs",
+        "tests/stability-protocol.test.mjs",
+        "docs/formulations/stability.md",
+        "docs/formulations/modal.md",
+        "docs/adr/0017-elastic-stability-analysis-types.md",
+        "docs/adr/0018-modal-analysis-and-mass-sources.md"
+      ],
+      "actualOutcomes": [
+        "Fixed strut with released ends = pinned strut to 1e-9; pinned-beam portal buckles at pi^2 EI/(4h^2) per column within 1e-4 (native and WASM)",
+        "Released fixed bar reproduces D-SS frequencies; pinned-beam portal sway within 1e-5 of sqrt(6EI/h^3 / 2m)",
+        "Second order still refuses releases (STABILITY_RELEASES_UNSUPPORTED)",
+        "M09 and M14 parent gates rerun and PASS on this build; full browser batch 114/114 on the preceding M07-S build"
+      ],
+      "evidencePaths": [
+        "evidence/M09/full",
+        "evidence/M14/full"
+      ],
+      "sourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
+      "buildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
+      "acceptedAt": "2026-09-29T11:44:00.823Z",
+      "nextAction": "Hinge DOFs in second-order end-action recovery; Cb from the model's moment diagram"
     }
   },
   "blockers": [
@@ -4155,9 +4190,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "90222244eeafd9743a7d3dc890d6ab6d7c0952d4daa4b174017edb493c33fc6e",
-  "nextAction": "Full browser regression on the latest build, then further unblocked slices (Cb from the model's moment diagram; hinge DOFs for stability/modal releases). Resource-blocked milestones unchanged.",
+  "lastVerifiedBuildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
+  "nextAction": "Unblocked slices: hinge DOFs in second-order recovery; Cb from the model's moment diagram per unbraced segment. Resource-blocked milestones unchanged.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "fdfd1aee6f75c574b52d69897412ea9983c49811a43234d48641f92160f883b6",
-  "lastVerifiedScope": "M07-S gate on the same build; cargo 192, contracts 13, steel browser 10."
+  "lastVerifiedSourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
+  "lastVerifiedScope": "M09 and M14 parent gates on the same build after hinge DOFs; cargo 196, contracts 14; full browser batch 114/114 on the preceding build."
 }

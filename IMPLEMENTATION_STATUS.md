@@ -45,23 +45,24 @@ Chromium/SwiftShader checks; computer-use access is blocked by an unavailable to
 policy check. Neither historical observations nor software timings establish current
 hardware performance.
 
-Formal milestone/release verification is intentionally not green while required
-platform evidence is missing. No milestone is self-declared accepted. The current
-working preview does not equal the complete 24-milestone project.
+Milestones are accepted only by their same-build parent gates (table below).
+Release verification still lacks the Windows/Linux real-GPU platform evidence.
+The working preview does not equal the complete 24-milestone project.
 
-## Remaining implementation
+## Milestone status (2026-09-29)
 
-| Milestone | Implemented pieces | Still required |
-| --- | --- | --- |
-| M00 | Cantilever user journey, sparse WASM/native kernel, units, selection, save/reopen/report, instability/no-adapter paths | Complete required platform evidence and release-grade acceptance audit |
-| M01 | Portal authoring, three working planes, snapping/feedback, camera/selection gestures, move/copy/delete/measure, numeric fields, local axes, topology previews, invariance and portal oracle, autosave/history, CAD capacity/startup tests, evidence verifier | Current computer-use verification, Windows/Linux real-GPU performance and platform acceptance |
-| M02 | Uniform loads, self weight, prescribed motion, cases/combinations, sampled diagrams, My/Mz releases, exact My/Mz extrema key stations, interior point loads with analytical split and force-jump discontinuities, multi-case envelopes with governing provenance, expanded INVALID load/release/combination corpus (N08–N22) | Parent platform/CUA acceptance |
-| M03 | 3D orbit, cancel, spatial oracle, CopyBay, dual Workers, OpenSees pack (S01/S02/B07; R01/B09 native per ADR 0006), 5k-node capacity + WASM MEMORY_LIMIT, unit-action/roll, section-axis edit, hierarchy UI, cancel≤250ms / UI≤100ms / GPU-during-analysis — **parent accepted** (`evidence/M03/full`) | — |
-| M04 | IndexedDB snapshots, single-writer lock, exports, escaped reports, stale controls, historical revision recovery UI (M04-A) | Offline cache/update lifecycle, schema migrations and full crash/recovery matrix |
-| M05 | Editable synthetic sections and examples | Parametric templates, section calculator, project variants and side-by-side comparison |
-| M06 | Unexposed elastic stress helper | Verified mechanics UI, accumulated regression, performance and clean release gates |
-| M07 | Bounded AISC 360-22 LRFD S2 member check (parent + UX accepted); Screen-04 harness | Model-native workflow M07-E→F→G (ADR 0008); M07-S/LTB deferred |
-| M08–M23 | Not started as product modules (M08 blocked on concrete resources) | Material-code packages, advanced analysis/design/exchange/automation and finite parity inventory |
+Accepted parents carry same-build gate evidence under `evidence/<milestone>/full`
+and their records in `delivery/state.json`.
+
+| Milestone | Status | Scope delivered | Still outside scope |
+| --- | --- | --- | --- |
+| M00–M06 | Accepted | Analysis MVP: cantilever and portal journeys, CAD authoring, loads/combinations/envelopes, spatial frames, recovery/offline/migration, sections/variants, elastic stress screen | Windows/Linux real-GPU platform evidence |
+| M07 | Accepted (+ M07-E/F/G, M07-LTB, M07-S) | AISC 360-22 LRFD for doubly symmetric W-shapes: S2 checks; flexure with flange local buckling (F3) and lateral-torsional buckling (F2.2) from published examples; model-native catalogue, review and study; user deflection serviceability, reported separately | Cb from the model, noncompact/slender webs, HSS, torsion, full-code claims |
+| M08 | Blocked (resources) | Concrete mechanics previews and a disabled EC2 UK profile | EN 1992-1-1 A1:2014 and UK NA + A2:2014 |
+| M09 | Accepted | Elastic flexural buckling and linearised P-Δ-δ second order; first- vs second-order comparison; stability-v1 oracle | Torsional/LTB modes, large displacement, end releases |
+| M14 | Accepted | Modal analysis with declared mass sources (schema 1.4.0), consistent/lumped mass, participation and omitted-mode reporting, vibration report; dynamics-v1 oracle | Damping, response spectra (M15), end releases |
+| M22 | Accepted | Declarative JSON-pointer studies from the CLI and the browser on one core: replay identity, cancellation, budgets, located errors, guards | General scripting, multilingual reports |
+| M10–M13, M15–M21, M23 | Not started or blocked | — | External standards, benchmarks or exchange corpora (see `resources.required.json`) |
 
 My/Mz end releases use static condensation. Interior point actions expand
 deterministically at analyse time (physical model hash preserved). Axial/shear/
@@ -87,7 +88,10 @@ into external-resource blockers.
 
 ## Next concrete work
 
-Execute the integrated design workspace program ([agent-tasks/DESIGN-WORKFLOW.md](agent-tasks/DESIGN-WORKFLOW.md), ADR 0008): **M07-E** (phases 1–3) next, then thin **M07-F** (mockups 01–02), then **M07-G** (03–05). M07-S / M07-LTB deferred. M08 remains blocked on concrete resources; SHELL slices wait on engineering parents. Mockups are layout-only.
+Unblocked slices: derive Cb from the model's moment diagram for each unbraced
+segment; give released member-end rotations their own DOFs so stability-v1 and
+dynamics-v1 accept releases; Windows/Linux real-GPU evidence. Other milestones
+need the external resources listed in `resources.required.json`.
 
-Authoritative hashes and task history: `delivery/state.json`. Historical M01 canvas/UX evidence lives under `evidence/M01/` — accepted context, not current priority. Remaining parent platform/CUA gaps (real-GPU runner, live visual) do not block M07-E.
-
+Authoritative hashes and task history: `delivery/state.json`; the latest narrative
+is at the top of `HANDOFF.md`.

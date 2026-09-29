@@ -63,3 +63,10 @@ stability mesh. Mass must survive save and reopen, so it is project data.
   factor). The UI, report and ledger say so.
 - Frames with pinned member ends cannot run modal analysis until the shared
   hinge-DOF slice lands.
+
+## Amendment (2026-09-29): hinge DOFs
+
+Decision 8 is superseded: modal analysis uses the stability-v1 hinge DOFs for
+My/Mz end releases. A fixed bar with released ends reproduces the simply
+supported (nπ)² frequencies (D-SS) and a portal with a pinned beam sways at
+√(2·3EI/h³ / 2m) within 1e-5.

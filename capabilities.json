@@ -163,7 +163,7 @@
       "limitations": [
         "A critical factor is an elastic load multiplier of the idealised model, not a member resistance, effective length or code verdict",
         "Flexural instability only: torsional, flexural-torsional and lateral-torsional modes are excluded",
-        "Member end moment releases are rejected until hinge DOFs exist",
+        "My/Mz member end releases are independent hinge DOFs",
         "One real load case or combination; envelopes are not valid inputs"
       ],
       "evidenceReferences": [
@@ -188,7 +188,7 @@
         "Proportional loading only; no construction staging",
         "Loads at or beyond the elastic critical state fail with no response",
         "Flexural instability only: torsional, flexural-torsional and lateral-torsional modes are excluded",
-        "Member end moment releases are rejected until hinge DOFs exist",
+        "Member end moment releases are rejected until its end-action recovery includes hinge DOFs",
         "One real load case or combination; envelopes are not valid inputs"
       ],
       "evidenceReferences": [
@@ -212,7 +212,7 @@
         "Euler-Bernoulli members: rotary inertia of sections is neglected",
         "Participation is reported for global translations only",
         "Mass is declared (self mass, load-case gravity loads / g, nodal masses), never implied",
-        "Rigid-body modes are refused, not computed; member end moment releases are rejected until hinge DOFs exist",
+        "Rigid-body modes are refused, not computed; My/Mz member end releases are independent hinge DOFs",
         "A frequency or participation ratio is not a floor-vibration, comfort or code serviceability verdict"
       ],
       "evidenceReferences": [

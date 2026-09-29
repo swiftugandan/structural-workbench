@@ -589,10 +589,6 @@ fn unsupported_or_meaningless_requests_are_refused() {
         ),
         "NEGATIVE_MASS"
     );
-    // End releases until hinge DOFs exist.
-    let mut released = portal(&o, portal_mass(&o));
-    released.members[2].release_end.my = true;
-    assert_eq!(code(&released, ok), "MODAL_RELEASES_UNSUPPORTED");
     // A mechanism has rigid-body modes: refused, never reported as zero.
     let mut mechanism = portal(&o, portal_mass(&o));
     for s in &mut mechanism.supports {
@@ -641,4 +637,83 @@ fn settings_and_mass_enter_the_result_identity() {
             .collect::<Vec<_>>()
     };
     assert_eq!(w(&a), w(&again));
+}
+
+#[test]
+fn end_releases_on_a_fixed_bar_give_the_simply_supported_frequencies() {
+    // Fixed supports at both ends with My/Mz released at both member ends are
+    // pinned ends for bending: the D-SS frequencies.
+    let o = oracle();
+    let c = &o["simplySupported"];
+    let mut p = bar(
+        f(&c["L"]),
+        c["section"].clone(),
+        f(&c["density"]),
+        [true; 6],
+        json!([{"id": "ms1", "kind": "selfMass", "factor": 1.0}]),
+    );
+    p.supports[1].fixed = [false, true, true, true, true, true];
+    let member = &mut p.members[0];
+    for end in [&mut member.release_start, &mut member.release_end] {
+        end.my = true;
+        end.mz = true;
+    }
+    let r = modal(&p, &settings(25, MassMatrix::Consistent, 16)).unwrap();
+    let (weak, strong) = (omegas(&r, 2), omegas(&r, 1));
+    for k in 0..3 {
+        assert!(
+            rel(weak[k], f(&c["omegaWeak"][k])) <= f(&c["tolerance"]),
+            "weak {k}"
+        );
+        assert!(
+            rel(strong[k], f(&c["omegaStrong"][k])) <= f(&c["tolerance"]),
+            "strong {k}"
+        );
+    }
+}
+
+#[test]
+fn a_portal_with_a_pinned_beam_sways_on_two_cantilevers() {
+    // Massless fixed-base columns, near-rigid pinned beam, top masses:
+    // k = 2 × 3EI/h³, ω = √(k / (2m)).
+    let o = oracle();
+    let c = &o["shearFrame"];
+    let (h, b) = (f(&c["storeyHeight"]), f(&c["bay"]));
+    let m = 5000.0;
+    let mut p = Model {
+        mode: "planarXZ",
+        density: 0.,
+        nu: f(&c["nu"]),
+        sections: json!([section("col", &c["column"]), section("beam", &c["beam"])]),
+        nodes: json!([
+            node("a0", [0., 0., 0.]),
+            node("b0", [b, 0., 0.]),
+            node("a1", [0., 0., h]),
+            node("b1", [b, 0., h])
+        ]),
+        members: json!([
+            member("c1", "a0", "a1", "col", [0., 1., 0.]),
+            member("c2", "b0", "b1", "col", [0., 1., 0.]),
+            member("f1", "a1", "b1", "beam", [0., 1., 0.])
+        ]),
+        supports: json!([
+            support("s1", "a0", [true; 6]),
+            support("s2", "b0", [true; 6])
+        ]),
+        loads: json!([]),
+        mass: json!([{"id": "m1", "kind": "nodalMass", "node": "a1", "mass": m},
+                     {"id": "m2", "kind": "nodalMass", "node": "b1", "mass": m}]),
+    }
+    .build();
+    let beam = p.members.iter_mut().find(|x| x.id == "f1").unwrap();
+    beam.release_start.my = true;
+    beam.release_end.my = true;
+    let r = modal(&p, &settings(1, MassMatrix::Consistent, 1)).unwrap();
+    let ei = 210e9 * f(&c["column"]["Iy"]);
+    let exact = (2. * 3. * ei / h.powi(3) / (2. * m)).sqrt();
+    assert!(
+        rel(r.modes[0].omega, exact) <= 1e-5,
+        "{} vs {exact}",
+        r.modes[0].omega
+    );
 }

@@ -196,11 +196,63 @@ fn releases_envelopes_and_bad_settings_are_rejected() {
         code(elastic_buckling(&p, "LC1", &settings(8, 21))),
         "INVALID_SETTINGS"
     );
+    // Releasing a rotation the support already frees leaves that node
+    // rotation without stiffness: an unstable model, as in linear analysis.
     let mut released = p.clone();
     released.members[0].release_end.mz = true;
     assert_eq!(
         code(elastic_buckling(&released, "LC1", &settings(8, 1))),
-        "STABILITY_RELEASES_UNSUPPORTED"
+        "UNSTABLE_MODEL"
+    );
+}
+
+#[test]
+fn end_releases_on_a_fixed_strut_are_the_pinned_strut() {
+    // S-EUL-1 geometry with fixed supports at both ends and My/Mz released at
+    // both member ends: the hinge DOFs make it the pinned–pinned strut.
+    let euler = &oracle()["euler"];
+    let pinned = strut(&euler[0], -P_REF);
+    let mut hinged = strut(&euler[2], -P_REF);
+    let member = &mut hinged.members[0];
+    for end in [&mut member.release_start, &mut member.release_end] {
+        end.my = true;
+        end.mz = true;
+    }
+    assert_eq!(euler[2]["ends"], "fixedFixed");
+    let a = elastic_buckling(&pinned, "LC1", &settings(16, 2)).unwrap();
+    let b = elastic_buckling(&hinged, "LC1", &settings(16, 2)).unwrap();
+    for (x, y) in a.modes.iter().zip(&b.modes) {
+        assert!(
+            (y.factor / x.factor - 1.).abs() <= 1e-9,
+            "{} vs {}",
+            y.factor,
+            x.factor
+        );
+    }
+    let exact = euler[0]["PcrWeak"].as_f64().unwrap() / P_REF;
+    assert!((b.modes[0].factor / exact - 1.).abs() <= 1e-4);
+}
+
+#[test]
+fn a_portal_with_a_pinned_beam_buckles_as_two_flagpoles() {
+    // Fixed-base portal, beam pinned at both ends: each column is a cantilever
+    // (K = 2) and the beam an axial link, so P_cr = π²EI/(4h²) per column.
+    let o = oracle();
+    let pb = &o["portalBuckling"];
+    let (h, e, i) = (
+        pb["geometry"]["h"].as_f64().unwrap(),
+        210e9,
+        pb["column"]["I"].as_f64().unwrap(),
+    );
+    let mut p = portal(-P_REF);
+    p.members[2].release_start.my = true;
+    p.members[2].release_end.my = true;
+    let r = elastic_buckling(&p, "LC1", &settings(16, 1)).unwrap();
+    let exact = std::f64::consts::PI.powi(2) * e * i / (4. * h * h) / P_REF;
+    assert!(
+        (r.modes[0].factor / exact - 1.).abs() <= 1e-4,
+        "{} vs {exact}",
+        r.modes[0].factor
     );
 }
 

@@ -136,7 +136,7 @@ pub fn check_flexure_major(
     if !(lb.is_finite() && lb >= 0.0) {
         return unsupported("F2", "The unbraced length Lb must be zero or positive");
     }
-    let mp = fy * section.zx;
+    let mp = evaluate_flexure_major_yielding(section, fy).mp;
     let noncompact_flange = lambda > lpf;
     let (local_mn, local_clause, local_state) = if noncompact_flange {
         (

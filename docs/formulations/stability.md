@@ -30,10 +30,14 @@ code stability verdict. Every result carries that disclosure.
 - Axial force is taken constant on each element: N = (q₆ − q₀)/2 from the
   element end actions of the governing state (tension positive). A uniform
   axial load density is thus averaged per element; refinement converges it.
-- Member end moment releases are rejected in both analysis types for
-  stability-v1 (`STABILITY_RELEASES_UNSUPPORTED`). Static condensation of
-  K + λK_G would make the eigenproblem λ-dependent; the structurally correct
-  remedy (released rotations as independent hinge DOFs) is a later slice.
+- My/Mz member end releases are independent hinge DOFs in `elasticBuckling`:
+  each released end rotation gets its own free DOF a, and the element's end
+  rotation is the node's plus a along the released local axis, so K and K_G
+  are assembled without condensation and the eigenproblem stays linear in λ.
+  A node whose rotation every connected member releases has no stiffness and
+  is `UNSTABLE_MODEL`, as in linear analysis. `secondOrder` still rejects
+  releases (`STABILITY_RELEASES_UNSUPPORTED`) until its end-action recovery
+  includes hinge DOFs.
 - Supports, prescribed displacements and planar-mode DOF constraints are
   partitioned exactly as in mechanics-v1. No stabilising springs.
 - Envelopes are not valid inputs. Each analysis uses one real load case or

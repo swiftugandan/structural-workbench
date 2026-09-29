@@ -1,8 +1,8 @@
 {
   "taskId": "M09-parent",
   "milestone": "M09",
-  "sourceHash": "3e89c30fc55bf793b4bc8a020c71eb4de330cfe2034367da841a29e211c0e45a",
-  "buildHash": "12ad0d64876b7052f6b4bb14faa02fd6e237ae251f65c27dcbd2178c4d620b69",
+  "sourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
+  "buildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
   "lockHashes": {
     "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,10 +17,10 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T07:43:48.364Z",
+  "observedAt": "2026-09-29T11:42:56.389Z",
   "status": "PASS",
   "pageErrors": [],
   "comparisonStatus": "UNKNOWN",
-  "excludedCount": 16,
-  "capabilityCount": 13
+  "excludedCount": 17,
+  "capabilityCount": 15
 }

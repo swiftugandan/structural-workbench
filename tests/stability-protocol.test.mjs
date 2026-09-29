@@ -177,6 +177,37 @@ test("elasticBuckling returns the portal sway factor with disclosures", () => {
   s.free();
 });
 
+test("elasticBuckling takes end releases as hinges; secondOrder refuses them", () => {
+  // Beam pinned at both ends: each fixed-base column is a flagpole (K = 2).
+  const p = portal([0, -1e3], -1e3);
+  const beam = p.members.find((m) => m.id === "bm");
+  beam.releaseStart = { my: true, mz: false };
+  beam.releaseEnd = { my: true, mz: false };
+  const s = session(p);
+  const out = s.ask("analyse", {
+    caseIds: ["LC1"],
+    combinationIds: [],
+    analysisType: "elasticBuckling",
+    stability: { subdivisions: 16, modes: 1 },
+  });
+  assert.equal(out.status, "ok", JSON.stringify(out.diagnostics));
+  const { h } = pb.geometry;
+  const flagpole = (Math.PI ** 2 * 210e9 * pb.column.I) / (4 * h * h) / 1e3;
+  assert.ok(
+    Math.abs(out.payload.modes[0].factor / flagpole - 1) <= 1e-4,
+    `${out.payload.modes[0].factor} vs ${flagpole}`,
+  );
+  const second = s.ask("analyse", {
+    caseIds: ["LC1"],
+    combinationIds: [],
+    analysisType: "secondOrder",
+    stability: { imperfection: { kind: "none" } },
+  });
+  assert.equal(second.status, "error");
+  assert.equal(second.diagnostics[0].code, "STABILITY_RELEASES_UNSUPPORTED");
+  s.free();
+});
+
 test("secondOrder reproduces the exact P-Delta sway and records convergence", () => {
   const c = oracle.secondOrder.find((x) => x.id === "S-POR-PD-050");
   const s = session(portal([H, -c.PPerColumn], -c.PPerColumn));

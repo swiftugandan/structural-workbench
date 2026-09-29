@@ -1,3 +1,7 @@
+## Latest: end releases in buckling and modal analysis
+
+Elastic buckling and modal analysis now accept My/Mz member end releases. Each released end rotation is an independent hinge DOF, not a condensation, so both eigenproblems stay linear. A fixed strut with released ends reproduces the pinned strut to 1e-9. A portal with a pinned beam buckles as two flagpoles (π²EI/4h²) and sways at √(6EI/h³ / 2m). Released fixed bars reproduce the simply supported frequencies. Second-order analysis still refuses releases. The M09 and M14 gates were rerun and pass on this build, and the full browser batch is 114/114 on the build just before.
+
 ## Latest: steel serviceability (M07-S)
 
 A member's steel design can carry a deflection criterion: a service load case or non-strength combination, a limit L/n, and a basis (relative to the chord for spans, or absolute for cantilevers). The kernel re-solves that service case and reports the deflection separately from strength: a PASS/FAIL panel beside the strength result, a Serviceability column in the model review, and a field in the design record. It never changes the strength verdict. Strength combinations and missing references are refused. Gate: `node tools/run-m07-s.mjs` → evidence/M07/serviceability. ADR 0020.

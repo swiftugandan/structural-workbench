@@ -19,10 +19,11 @@ Response spectra, time history and harmonic response are M15.
 - Euler–Bernoulli members: rotary inertia of the cross-section in bending and
   shear deformation are neglected. Torsional (polar) mass is included in the
   consistent matrix.
-- Member end moment releases are rejected (`MODAL_RELEASES_UNSUPPORTED`), as in
-  stability-v1: static condensation of K − ω²M makes the eigenproblem
-  frequency-dependent. Released rotations as independent hinge DOFs are a later
-  slice shared with stability.
+- My/Mz member end releases are independent hinge DOFs, shared with
+  stability-v1 elastic buckling: K and M are assembled through the hinge
+  rotation, so the eigenproblem is not frequency-dependent. Released-end
+  rotational inertia moves with the hinge; a node rotation no member stiffens
+  is `UNSTABLE_MODEL`.
 - Supports and planar-mode constraints are partitioned exactly as in
   mechanics-v1. Prescribed support displacements are irrelevant to free
   vibration and ignored. No stabilising springs.

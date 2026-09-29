@@ -1,8 +1,8 @@
 {
   "taskId": "M09-parent",
   "milestone": "M09",
-  "sourceHash": "3e89c30fc55bf793b4bc8a020c71eb4de330cfe2034367da841a29e211c0e45a",
-  "buildHash": "12ad0d64876b7052f6b4bb14faa02fd6e237ae251f65c27dcbd2178c4d620b69",
+  "sourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
+  "buildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
   "lockHashes": {
     "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,13 +10,13 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "124ba2fdf1932c266337e981c1720f2f8ff4522e96babd73d634cb08fcc39651",
-    "journey.json": "44f8564a7a1c53963676b9baed5a0c967278316e74d781ff27e278f00a5761f8",
-    "record.html": "ae33a65db961f0202f062dab1fac83720d397a10d893f45e3cd57201486d0913",
-    "second-order-run.json": "280220ed194be270faff46c74e5181c8765afb634298a974936a879fb96a2ce9",
-    "project.json": "752a3f3bde1c28852778f5fd62ffdff3277dbcded71b2a116c7e11c517891657",
-    "buckling-mode.png": "96bcfc494c025114b30bd1538606c22965d30de60c5aa30b47f3240890285761",
-    "second-order.png": "cd0b32b4d1f2b0f61db6f7827cd7f8361b8feb9aef7e0b52572c991a9a8c1f2d",
+    "playwright-results.json": "76198b4e8f5c19bf5740a2ac627e283803460d2b22115eddc0fe5e967b0af8e8",
+    "journey.json": "b3146bb765d11caa91b64bba5b6422c2417b4475a00086820d9dcc262b2814ab",
+    "record.html": "321c0a997aca0522703be5cfd7853c638ac54efbc6b058c951bf50d2d150fffa",
+    "second-order-run.json": "cceeb691f5ea088b89cffa34861821ddf16e414916a62d4fb99550b3133605be",
+    "project.json": "20399584330b6c27e5ecca490dadb61cafde2b761ddbe30e2e982dd65df0c455",
+    "buckling-mode.png": "babe05dcf0aa3878661a26580f3c2431732d64659db7914ed3e5c24c9aaf12e6",
+    "second-order.png": "2f247db545a0a0f423f67a62e4a6836f90c5bce358be2106fe3f6498bb731e21",
     "sway-comparison.png": "9bfd6773087f92a096e00a08a1a37e61fd962544032f81a0b53711a60231a194",
     "over-critical.png": "a27ca8153e56607e78239ddb6105c21947ec0fccc2e9f99350c163996b6cdffd"
   },
@@ -27,7 +27,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T07:44:13.566Z",
+  "observedAt": "2026-09-29T11:43:21.886Z",
   "status": "PASS",
   "testCount": 2,
   "testIds": [
@@ -41,6 +41,14 @@
     "tests/e2e/stability.spec.js",
     "tests/e2e/capability-ledger.spec.js"
   ],
+  "stats": {
+    "startTime": "2026-09-29T11:42:50.187Z",
+    "duration": 31571.281,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
   "artifacts": [
     "playwright-results.json",
     "journey.json",
@@ -51,35 +59,5 @@
     "second-order.png",
     "sway-comparison.png",
     "over-critical.png"
-  ],
-  "stats": {
-    "startTime": "2026-09-29T07:43:43.649Z",
-    "duration": 29886.362,
-    "expected": 2,
-    "skipped": 0,
-    "unexpected": 0,
-    "flaky": 0
-  },
-  "journey": {
-    "test": "M09 stability journey",
-    "oracle": "fixtures/stability/stability-oracle.json",
-    "bucklingFactor": {
-      "measured": 1.9999669978807468,
-      "expected": 2,
-      "tolerance": 0.0001
-    },
-    "secondOrderSway": {
-      "measured": 0.0001609186198629019,
-      "expected": 0.0001609027692531934,
-      "tolerance": 0.001
-    },
-    "amplification": {
-      "measured": 1.989,
-      "expected": 1.9890992833465082,
-      "tolerance": 0.001
-    },
-    "overCritical": "TANGENT_NOT_POSITIVE_DEFINITE, no payload",
-    "reopenedSwayIdentical": true,
-    "modelHash": "69233341cbdd · f64"
-  }
+  ]
 }

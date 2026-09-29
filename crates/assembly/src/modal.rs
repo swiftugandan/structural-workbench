@@ -14,7 +14,7 @@ use serde_json::json;
 use sprs::{CsMat, TriMat};
 use workbench_frame::{consistent_mass, lumped_mass, stiffness};
 use workbench_geometry::{axes, global};
-use workbench_model::{Load, MassSource, Member, Project, Release, Result, digest, err};
+use workbench_model::{Load, MassSource, Member, Project, Result, digest, err};
 use workbench_results::{
     DirectionParticipation, ModalAnalysis, ModalMass, SourceMass, VibrationMode,
 };
@@ -80,23 +80,6 @@ struct Masses {
     diagnostics: Vec<serde_json::Value>,
 }
 
-fn reject_releases(p: &Project) -> Result<()> {
-    let released = |r: &Release| r.my || r.mz;
-    if let Some(m) = p
-        .members
-        .iter()
-        .find(|m| released(&m.release_start) || released(&m.release_end))
-    {
-        return Err(err(
-            "MODAL_RELEASES_UNSUPPORTED",
-            format!(
-                "Member {} has an end moment release; modal analysis rejects releases until hinge DOFs exist",
-                m.id
-            ),
-        ));
-    }
-    Ok(())
-}
 
 fn dot(a: [f64; 3], b: [f64; 3]) -> f64 {
     a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
@@ -309,7 +292,6 @@ pub fn modal(project: &Project, settings: &ModalSettings) -> Result<ModalAnalysi
     project.validate()?;
     let mut original = project.clone();
     original.canonicalise();
-    reject_releases(&original)?;
     if original.mass_sources.is_empty() {
         return Err(err(
             "NO_MASS",

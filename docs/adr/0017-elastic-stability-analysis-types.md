@@ -61,3 +61,12 @@ must be fixed before any kernel result exists.
 - The near-critical tolerance (1e-2 at 0.99 λ_cr) reflects the r/(1 − r)
   magnification of discretisation error, not a relaxed accuracy target;
   other ratios keep 1e-3, and buckling factors keep 1e-4.
+
+## Amendment (2026-09-29): hinge DOFs for elastic buckling
+
+Decision 7 is superseded for `elasticBuckling`: each released My/Mz member end
+rotation is an independent free DOF, and the element's end rotation is the
+node's plus that DOF along the released local axis. Verified by a fixed strut
+with both ends released reproducing the pinned strut to 1e-9 and a portal with
+a pinned beam buckling at π²EI/(4h²) per column within 1e-4. `secondOrder`
+keeps rejecting releases until its end-action recovery includes hinge DOFs.
