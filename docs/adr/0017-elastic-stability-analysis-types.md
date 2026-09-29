@@ -70,3 +70,8 @@ node's plus that DOF along the released local axis. Verified by a fixed strut
 with both ends released reproducing the pinned strut to 1e-9 and a portal with
 a pinned beam buckling at π²EI/(4h²) per column within 1e-4. `secondOrder`
 keeps rejecting releases until its end-action recovery includes hinge DOFs.
+
+Second amendment (2026-09-29): `secondOrder` also carries hinge DOFs. A
+fixed-base portal with a pinned beam at 0.5 of its flagpole load sways within
+1e-3 of the exact cantilever beam-column (H/2)(tan kh − kh)/(P k), and the
+hinges report no moment about the released axis.

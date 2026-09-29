@@ -222,6 +222,7 @@ export const requiredIds = {
     "M09-SIGN-NORMALISATION",
     "M09-NONCONVERGENCE",
     "M09-SEPARATE-TYPES",
+    "M09-HINGES",
     "M09-UI-JOURNEY",
     "M09-NOT-A-VERDICT",
     "M09-ORACLE-PROVENANCE",

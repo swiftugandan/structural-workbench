@@ -35,9 +35,9 @@ code stability verdict. Every result carries that disclosure.
   rotation is the node's plus a along the released local axis, so K and K_G
   are assembled without condensation and the eigenproblem stays linear in λ.
   A node whose rotation every connected member releases has no stiffness and
-  is `UNSTABLE_MODEL`, as in linear analysis. `secondOrder` still rejects
-  releases (`STABILITY_RELEASES_UNSUPPORTED`) until its end-action recovery
-  includes hinge DOFs.
+  is `UNSTABLE_MODEL`, as in linear analysis. `secondOrder` carries the hinge
+  DOFs through its iteration and recovery, so released ends report no moment
+  about the released axis.
 - Supports, prescribed displacements and planar-mode DOF constraints are
   partitioned exactly as in mechanics-v1. No stabilising springs.
 - Envelopes are not valid inputs. Each analysis uses one real load case or

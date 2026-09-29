@@ -220,7 +220,7 @@ fn sway_imperfection_is_explicit_and_listed() {
 }
 
 #[test]
-fn releases_and_envelopes_are_rejected() {
+fn envelopes_and_bad_settings_are_rejected() {
     let case = &oracle()["secondOrder"][0];
     let model = lateral_portal(case["PPerColumn"].as_f64().unwrap());
     assert_eq!(
@@ -228,14 +228,6 @@ fn releases_and_envelopes_are_rejected() {
             .unwrap_err()
             .code,
         "INVALID_LOAD"
-    );
-    let mut released = model.clone();
-    released.members[2].release_start.my = true;
-    assert_eq!(
-        second_order(&released, "LC1", &settings(8))
-            .unwrap_err()
-            .code,
-        "STABILITY_RELEASES_UNSUPPORTED"
     );
     assert_eq!(
         second_order(&model, "LC1", &settings(33)).unwrap_err().code,
@@ -340,4 +332,47 @@ fn the_first_order_record_is_the_linear_response_to_the_same_loads() {
         (amplification / exact - 1.).abs() <= 1e-3,
         "{amplification} vs {exact}"
     );
+}
+
+#[test]
+fn a_portal_with_a_pinned_beam_sways_as_two_exact_beam_column_flagpoles() {
+    // Fixed bases, beam pinned at both ends (hinge DOFs): each column is a
+    // cantilever beam-column carrying P and half of H. Exact small-rotation
+    // tip sway: Δ = (H/2)(tan kh − kh)/(P k), k = √(P/EI); first order
+    // (H/2)h³/(3EI).
+    let o = oracle();
+    let pb = &o["portalBuckling"];
+    let (h, e, i) = (
+        pb["geometry"]["h"].as_f64().unwrap(),
+        210e9,
+        pb["column"]["I"].as_f64().unwrap(),
+    );
+    let hh = o["firstOrderSwayUnderH"]["H"].as_f64().unwrap();
+    let pcr = std::f64::consts::PI.powi(2) * e * i / (4. * h * h);
+    let p = 0.5 * pcr;
+    let mut model = lateral_portal(p);
+    model.members[2].release_start.my = true;
+    model.members[2].release_end.my = true;
+    let r = second_order(&model, "LC1", &settings(16)).unwrap();
+    let k = (p / (e * i)).sqrt();
+    let exact = 0.5 * hh * ((k * h).tan() - k * h) / (p * k);
+    assert!(
+        (sway(&r) / exact - 1.).abs() <= 1e-3,
+        "{} vs {exact}",
+        sway(&r)
+    );
+    let first = &r.numerical_checks["firstOrder"]["nodeDisplacements"];
+    let tl = r.node_ids.iter().position(|n| n == "tl").unwrap();
+    let first_exact = 0.5 * hh * h.powi(3) / (3. * e * i);
+    assert!((first[tl * 6].as_f64().unwrap() / first_exact - 1.).abs() <= 1e-3);
+    // The hinges carry no bending moment about the released axis.
+    let beam = r.members.iter().find(|m| m.id == "bm").unwrap();
+    let column_base = base_moment(&r);
+    for end in [4, 10] {
+        assert!(
+            beam.end_actions[end].abs() <= 1e-9 * column_base,
+            "{:?}",
+            beam.end_actions
+        );
+    }
 }

@@ -177,7 +177,7 @@ test("elasticBuckling returns the portal sway factor with disclosures", () => {
   s.free();
 });
 
-test("elasticBuckling takes end releases as hinges; secondOrder refuses them", () => {
+test("both stability types take end releases as hinge DOFs", () => {
   // Beam pinned at both ends: each fixed-base column is a flagpole (K = 2).
   const p = portal([0, -1e3], -1e3);
   const beam = p.members.find((m) => m.id === "bm");
@@ -197,15 +197,30 @@ test("elasticBuckling takes end releases as hinges; secondOrder refuses them", (
     Math.abs(out.payload.modes[0].factor / flagpole - 1) <= 1e-4,
     `${out.payload.modes[0].factor} vs ${flagpole}`,
   );
-  const second = s.ask("analyse", {
+  s.free();
+  // Second order on the same frame with the lateral load H at the left top.
+  const lateral = portal([H, -1e3], -1e3);
+  const pinned = lateral.members.find((m) => m.id === "bm");
+  pinned.releaseStart = { my: true, mz: false };
+  pinned.releaseEnd = { my: true, mz: false };
+  const t = session(lateral);
+  const second = t.ask("analyse", {
     caseIds: ["LC1"],
     combinationIds: [],
     analysisType: "secondOrder",
-    stability: { imperfection: { kind: "none" } },
+    stability: { subdivisions: 16, imperfection: { kind: "none" } },
   });
-  assert.equal(second.status, "error");
-  assert.equal(second.diagnostics[0].code, "STABILITY_RELEASES_UNSUPPORTED");
-  s.free();
+  assert.equal(second.status, "ok", JSON.stringify(second.diagnostics));
+  // 1 kN at 1/1000 of the flagpole load: sway within 1e-3 of the exact
+  // cantilever beam-column, each column carrying H/2.
+  const P = 1e3;
+  const k = Math.sqrt(P / (210e9 * pb.column.I));
+  const exact = (0.5 * H * (Math.tan(k * h) - k * h)) / (P * k);
+  const ids = second.payload.nodeIds;
+  const d = second.payload.nodeDisplacements;
+  const sway = 0.5 * (d[ids.indexOf("tl") * 6] + d[ids.indexOf("tr") * 6]);
+  assert.ok(Math.abs(sway / exact - 1) <= 1e-3, `${sway} vs ${exact}`);
+  t.free();
 });
 
 test("secondOrder reproduces the exact P-Delta sway and records convergence", () => {

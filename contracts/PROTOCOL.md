@@ -235,8 +235,7 @@ object. The stability types take exactly one id in `caseIds` ∪
 
 Unknown fields or types are `INVALID_SCHEMA`; out-of-range values are
 `INVALID_SETTINGS`. My/Mz member end releases are independent hinge DOFs in
-`elasticBuckling`; `secondOrder` refuses them with
-`STABILITY_RELEASES_UNSUPPORTED`.
+both stability types.
 
 `elasticBuckling` result: ResultHeader fields plus `subdivisions`,
 `requestedModes`, `modes[]` (`factor`, `residual`, `nodeIds`,

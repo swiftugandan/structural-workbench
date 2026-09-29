@@ -1,8 +1,8 @@
 {
   "taskId": "M09-parent",
   "milestone": "M09",
-  "sourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
-  "buildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
+  "sourceHash": "4a62662f29be6748d814d13b1f51cb5676ffe0404087d02aab6fc2916449213c",
+  "buildHash": "f0da657bb175395079888f253aaf3fee114cb8e4a3d4aeaa2fedb15372d0d1c6",
   "lockHashes": {
     "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,13 +10,13 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "76198b4e8f5c19bf5740a2ac627e283803460d2b22115eddc0fe5e967b0af8e8",
+    "playwright-results.json": "1b6ad4dd56065fb097bad72154d5e7823d4ce37933447615d137a1f83fd35ec6",
     "journey.json": "b3146bb765d11caa91b64bba5b6422c2417b4475a00086820d9dcc262b2814ab",
-    "record.html": "321c0a997aca0522703be5cfd7853c638ac54efbc6b058c951bf50d2d150fffa",
-    "second-order-run.json": "cceeb691f5ea088b89cffa34861821ddf16e414916a62d4fb99550b3133605be",
+    "record.html": "e1dbddee8497fe05a06e5f891bcfe871a15309572361f12b5d338531d39634a8",
+    "second-order-run.json": "29caef70307d97a2bd799d6152b4f4c167a999e1d550a4f5047854b7b29704da",
     "project.json": "20399584330b6c27e5ecca490dadb61cafde2b761ddbe30e2e982dd65df0c455",
-    "buckling-mode.png": "babe05dcf0aa3878661a26580f3c2431732d64659db7914ed3e5c24c9aaf12e6",
-    "second-order.png": "2f247db545a0a0f423f67a62e4a6836f90c5bce358be2106fe3f6498bb731e21",
+    "buckling-mode.png": "8042fdc9c590b0dfacf46676cf7aac94bb26d78c1330889f2f5da9f87c784861",
+    "second-order.png": "65addeb8e59893c3b71d05d0b00faabbc3a32d61755d5f193c4babc61c5afb94",
     "sway-comparison.png": "9bfd6773087f92a096e00a08a1a37e61fd962544032f81a0b53711a60231a194",
     "over-critical.png": "a27ca8153e56607e78239ddb6105c21947ec0fccc2e9f99350c163996b6cdffd"
   },
@@ -27,7 +27,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T11:43:21.886Z",
+  "observedAt": "2026-09-29T11:58:13.150Z",
   "status": "PASS",
   "testCount": 2,
   "testIds": [
@@ -42,8 +42,8 @@
     "tests/e2e/capability-ledger.spec.js"
   ],
   "stats": {
-    "startTime": "2026-09-29T11:42:50.187Z",
-    "duration": 31571.281,
+    "startTime": "2026-09-29T11:57:45.390Z",
+    "duration": 27734.928,
     "expected": 2,
     "skipped": 0,
     "unexpected": 0,

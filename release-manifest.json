@@ -1,5 +1,5 @@
 {
-  "sourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
+  "sourceHash": "4a62662f29be6748d814d13b1f51cb5676ffe0404087d02aab6fc2916449213c",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -17,7 +17,7 @@
     "cad.js": "820cc8d27d9909e83bbc30b59c90330e46447336e3e81636ebf51b77c73ff68a",
     "canvas-tools.js": "521b224d56358812afb68b9349b6b66f6b05e67612bd42914102ea40a6f8d8e3",
     "capabilities-ledger.js": "abe15bb20ae34ddda443a18840254504331fe232e3c4f6560f7e2a6e11c1b272",
-    "capabilities.json": "b6a9664f06723b32bf7dda67e5f7febf8b4d65f15d873c804a8489324eb7cec5",
+    "capabilities.json": "508898c467657f073a62d609123a64e8406f04cd5d38f63f6529b6ada6397411",
     "command-menu.js": "28fd5ff5603bb65a7f3495ad26d8e08af6ac01b9f3423e6fd1ec71ff8d76b73b",
     "design-presentation.js": "fb0ed22c7c9fb1bcd1b97b3d916b421b8a613dba5749c42f0a7222815f0560be",
     "design-previews.js": "3da59102f62889dcd039ba9076b8e3f99a7f9af0577b32d61c4402f7e84bf562",
@@ -58,7 +58,7 @@
     "offline.js": "bcccfca2f33f5df48ae12b262aa2d7d3441113ba09b29394de42ef726a594834",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "1721d3a75e3163739ab729bd453ccf926fce29531d02a84f8e3910edbf551ba5",
+    "pkg/workbench_wasm_api_bg.wasm": "71122ca7c12b4321afd823f29fca2acde3b1d1fd5f9ccb7b1f51d55ebe5239ff",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/connections.js": "718307212938168507007eb994bdf7fde2f71d6fe4d5bdbfd1696c44f550c0ba",
@@ -87,12 +87,12 @@
     "structure-workspace.js": "8abe0db3dd1667d67ef9aa154b9c109f4a7d2636e33f418da5443a8030fb8de8",
     "study.js": "6cc08a08fd2abe86840615654e80ea1bf5b343c06cc6934031050fd64e8e3ffe",
     "styles.css": "c8869a414a90f5f37579ba3e775809c28d0c58681fbbbcbb042dbe61902fc2b3",
-    "sw.js": "5321e921e822bc14853a72076e365443f29ce4c3f5101890cf41d7bcefcf2b15",
+    "sw.js": "501d6f23af1add8f4007758df0af31d5e911e3368e3d1b623693c239e6b59e47",
     "topology.js": "1723af43311ec50b120967a09bc04ea472e7ec88d746a7cf6932ec6ebc533b84",
     "variants.js": "e7be206d5557d058a6364b1c78706ccc3cf92852e6ab5ef8f49a010a700d243b",
     "worker.js": "0a5a85384eb205ab89693d076af596d85e9a47da0aa08c7eb31aefb845b89e24",
     "workspace-ui.js": "3d9c8a9f0b73c688de5c994a6d56ce80fac92b7a11ec04b4878db61630cd6ef6"
   },
-  "buildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
+  "buildHash": "f0da657bb175395079888f253aaf3fee114cb8e4a3d4aeaa2fedb15372d0d1c6",
   "releaseStatus": "working-preview-not-accepted"
 }

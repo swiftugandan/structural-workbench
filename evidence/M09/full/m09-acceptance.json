@@ -1,8 +1,8 @@
 {
   "taskId": "M09-parent",
   "milestone": "M09",
-  "sourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
-  "buildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
+  "sourceHash": "4a62662f29be6748d814d13b1f51cb5676ffe0404087d02aab6fc2916449213c",
+  "buildHash": "f0da657bb175395079888f253aaf3fee114cb8e4a3d4aeaa2fedb15372d0d1c6",
   "lockHashes": {
     "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,15 +17,16 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T11:43:21.962Z",
+  "observedAt": "2026-09-29T11:58:13.210Z",
   "status": "PASS",
-  "testCount": 8,
+  "testCount": 9,
   "testIds": [
     "M09-EULER",
     "M09-PDELTA-PORTAL",
     "M09-SIGN-NORMALISATION",
     "M09-NONCONVERGENCE",
     "M09-SEPARATE-TYPES",
+    "M09-HINGES",
     "M09-UI-JOURNEY",
     "M09-NOT-A-VERDICT",
     "M09-ORACLE-PROVENANCE"
@@ -99,7 +100,7 @@
         "stability-native": [
           "near_critical_portal_converges_with_large_amplification",
           "over_critical_portal_fails_without_a_response",
-          "releases_and_envelopes_are_rejected",
+          "envelopes_and_bad_settings_are_rejected",
           "releases_envelopes_and_bad_settings_are_rejected"
         ],
         "stability-protocol": [
@@ -110,7 +111,7 @@
           "M09 stability: buckling modes, first- vs second-order sway, over-critical failure, stale and record"
         ]
       },
-      "observation": "0.99 Pcr converges with the exact amplification; 1.01 Pcr ends NONCONVERGED/TANGENT_NOT_POSITIVE_DEFINITE with no numbers in kernel, protocol and UI; envelopes, releases and bad settings are refused.",
+      "observation": "0.99 Pcr converges with the exact amplification; 1.01 Pcr ends NONCONVERGED/TANGENT_NOT_POSITIVE_DEFINITE with no numbers in kernel, protocol and UI; envelopes, bad settings and releases that leave a node rotation unstiffened are refused.",
       "status": "PASS",
       "missing": []
     },
@@ -129,6 +130,24 @@
         ]
       },
       "observation": "elasticBuckling and secondOrder are distinct analyse types on one real case or combination; imperfections are never implied and are listed as equivalent nodal forces; settings enter the result identity.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-HINGES",
+      "title": "Member end releases as hinge DOFs",
+      "evidence": "kernel_validation",
+      "tests": {
+        "stability-native": [
+          "end_releases_on_a_fixed_strut_are_the_pinned_strut",
+          "a_portal_with_a_pinned_beam_buckles_as_two_flagpoles",
+          "a_portal_with_a_pinned_beam_sways_as_two_exact_beam_column_flagpoles"
+        ],
+        "stability-protocol": [
+          "both stability types take end releases as hinge DOFs"
+        ]
+      },
+      "observation": "Released My/Mz ends are independent hinge DOFs: a fixed strut with released ends equals the pinned strut to 1e-9; a pinned-beam portal buckles at π²EI/(4h²) per column within 1e-4 and sways within 1e-3 of the exact cantilever beam-column; hinges carry no moment about the released axis.",
       "status": "PASS",
       "missing": []
     },
@@ -172,5 +191,5 @@
       "missing": []
     }
   ],
-  "limitations": "stability-v1 is flexural only (no torsional, flexural-torsional or lateral-torsional modes), small rotations about the undeformed geometry, proportional loading, one real case or combination, and no member end moment releases. A critical factor is never a member resistance or code verdict. Commercial PROKON parity remains UNKNOWN."
+  "limitations": "stability-v1 is flexural only (no torsional, flexural-torsional or lateral-torsional modes), small rotations about the undeformed geometry, proportional loading and one real case or combination; My/Mz end releases are hinge DOFs. A critical factor is never a member resistance or code verdict. Commercial PROKON parity remains UNKNOWN."
 }

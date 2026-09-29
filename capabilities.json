@@ -188,7 +188,7 @@
         "Proportional loading only; no construction staging",
         "Loads at or beyond the elastic critical state fail with no response",
         "Flexural instability only: torsional, flexural-torsional and lateral-torsional modes are excluded",
-        "Member end moment releases are rejected until its end-action recovery includes hinge DOFs",
+        "My/Mz member end releases are independent hinge DOFs",
         "One real load case or combination; envelopes are not valid inputs"
       ],
       "evidenceReferences": [

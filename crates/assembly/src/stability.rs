@@ -45,24 +45,6 @@ impl Default for StabilitySettings {
 /// reference state, not compression, and are set to zero.
 const AXIAL_NOISE: f64 = 1e-9;
 
-pub(crate) fn reject_releases(p: &Project) -> Result<()> {
-    let released = |r: &Release| r.my || r.mz;
-    if let Some(m) = p
-        .members
-        .iter()
-        .find(|m| released(&m.release_start) || released(&m.release_end))
-    {
-        return Err(err(
-            "STABILITY_RELEASES_UNSUPPORTED",
-            format!(
-                "Member {} has an end moment release; second-order analysis rejects releases until its end-action recovery includes hinge DOFs",
-                m.id
-            ),
-        ));
-    }
-    Ok(())
-}
-
 /// Every member split into `n` equal elements; end releases stay on the
 /// first and last element as hinge DOFs.
 pub(crate) struct Mesh {

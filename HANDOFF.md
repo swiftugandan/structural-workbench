@@ -1,6 +1,6 @@
 ## Latest: end releases in buckling and modal analysis
 
-Elastic buckling and modal analysis now accept My/Mz member end releases. Each released end rotation is an independent hinge DOF, not a condensation, so both eigenproblems stay linear. A fixed strut with released ends reproduces the pinned strut to 1e-9. A portal with a pinned beam buckles as two flagpoles (π²EI/4h²) and sways at √(6EI/h³ / 2m). Released fixed bars reproduce the simply supported frequencies. Second-order analysis still refuses releases. The M09 and M14 gates were rerun and pass on this build, and the full browser batch is 114/114 on the build just before.
+Elastic buckling and modal analysis now accept My/Mz member end releases. Each released end rotation is an independent hinge DOF, not a condensation, so both eigenproblems stay linear. A fixed strut with released ends reproduces the pinned strut to 1e-9. A portal with a pinned beam buckles as two flagpoles (π²EI/4h²) and sways at √(6EI/h³ / 2m). Released fixed bars reproduce the simply supported frequencies. Second-order analysis carries the hinges through iteration and recovery: the pinned-beam portal sways within 1e-3 of the exact cantilever beam-column, with zero hinge moments. The M09 gate (new criterion M09-HINGES) and the M14 gate pass.
 
 ## Latest: steel serviceability (M07-S)
 

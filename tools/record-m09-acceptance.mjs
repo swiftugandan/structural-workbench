@@ -79,7 +79,7 @@ const criteria = [
       "stability-native": [
         "near_critical_portal_converges_with_large_amplification",
         "over_critical_portal_fails_without_a_response",
-        "releases_and_envelopes_are_rejected",
+        "envelopes_and_bad_settings_are_rejected",
         "releases_envelopes_and_bad_settings_are_rejected",
       ],
       "stability-protocol": [
@@ -89,7 +89,7 @@ const criteria = [
       "m09-browser": [JOURNEY],
     },
     observation:
-      "0.99 Pcr converges with the exact amplification; 1.01 Pcr ends NONCONVERGED/TANGENT_NOT_POSITIVE_DEFINITE with no numbers in kernel, protocol and UI; envelopes, releases and bad settings are refused.",
+      "0.99 Pcr converges with the exact amplification; 1.01 Pcr ends NONCONVERGED/TANGENT_NOT_POSITIVE_DEFINITE with no numbers in kernel, protocol and UI; envelopes, bad settings and releases that leave a node rotation unstiffened are refused.",
   },
   {
     id: "M09-SEPARATE-TYPES",
@@ -107,6 +107,21 @@ const criteria = [
     },
     observation:
       "elasticBuckling and secondOrder are distinct analyse types on one real case or combination; imperfections are never implied and are listed as equivalent nodal forces; settings enter the result identity.",
+  },
+  {
+    id: "M09-HINGES",
+    title: "Member end releases as hinge DOFs",
+    evidence: "kernel_validation",
+    tests: {
+      "stability-native": [
+        "end_releases_on_a_fixed_strut_are_the_pinned_strut",
+        "a_portal_with_a_pinned_beam_buckles_as_two_flagpoles",
+        "a_portal_with_a_pinned_beam_sways_as_two_exact_beam_column_flagpoles",
+      ],
+      "stability-protocol": ["both stability types take end releases as hinge DOFs"],
+    },
+    observation:
+      "Released My/Mz ends are independent hinge DOFs: a fixed strut with released ends equals the pinned strut to 1e-9; a pinned-beam portal buckles at π²EI/(4h²) per column within 1e-4 and sways within 1e-3 of the exact cantilever beam-column; hinges carry no moment about the released axis.",
   },
   {
     id: "M09-UI-JOURNEY",
@@ -157,7 +172,7 @@ if (provenance.status !== "PASS")
 rows.push(provenance);
 
 const limitations =
-  "stability-v1 is flexural only (no torsional, flexural-torsional or lateral-torsional modes), small rotations about the undeformed geometry, proportional loading, one real case or combination, and no member end moment releases. A critical factor is never a member resistance or code verdict. Commercial PROKON parity remains UNKNOWN.";
+  "stability-v1 is flexural only (no torsional, flexural-torsional or lateral-torsional modes), small rotations about the undeformed geometry, proportional loading and one real case or combination; My/Mz end releases are hinge DOFs. A critical factor is never a member resistance or code verdict. Commercial PROKON parity remains UNKNOWN.";
 
 await record("m09-acceptance", {
   status: issues.length ? "FAIL" : "PASS",

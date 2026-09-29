@@ -4140,6 +4140,31 @@
       "buildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
       "acceptedAt": "2026-09-29T11:44:00.823Z",
       "nextAction": "Hinge DOFs in second-order end-action recovery; Cb from the model's moment diagram"
+    },
+    "HINGE-DOF-B": {
+      "id": "HINGE-DOF-B",
+      "useCase": "Hinge DOFs through second-order iteration and end-action recovery",
+      "dependencies": [
+        "HINGE-DOF-A"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/assembly/src/second_order.rs",
+        "crates/assembly/tests/second_order.rs",
+        "tests/stability-protocol.test.mjs",
+        "tools/record-m09-acceptance.mjs"
+      ],
+      "actualOutcomes": [
+        "Pinned-beam portal at 0.5 flagpole load sways within 1e-3 of the exact cantilever beam-column (native and WASM); first-order record within 1e-3 of (H/2)h^3/(3EI); hinge end moments below 1e-9 of the base moment",
+        "M09 gate criterion M09-HINGES added; gate PASS; cargo 197; contracts 14"
+      ],
+      "evidencePaths": [
+        "evidence/M09/full"
+      ],
+      "sourceHash": "4a62662f29be6748d814d13b1f51cb5676ffe0404087d02aab6fc2916449213c",
+      "buildHash": "f0da657bb175395079888f253aaf3fee114cb8e4a3d4aeaa2fedb15372d0d1c6",
+      "acceptedAt": "2026-09-29T11:58:13.638Z",
+      "nextAction": "None"
     }
   },
   "blockers": [
@@ -4190,9 +4215,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "56354502fbd366864b92ddb0ad40ee87b471f047d8484ad50cabe1a4529b665a",
-  "nextAction": "Unblocked slices: hinge DOFs in second-order recovery; Cb from the model's moment diagram per unbraced segment. Resource-blocked milestones unchanged.",
+  "lastVerifiedBuildHash": "f0da657bb175395079888f253aaf3fee114cb8e4a3d4aeaa2fedb15372d0d1c6",
+  "nextAction": "Unblocked: Cb from the model's moment diagram per unbraced segment; Windows/Linux real-GPU evidence. Resource-blocked milestones unchanged (see resources.required.json).",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521",
-  "lastVerifiedScope": "M09 and M14 parent gates on the same build after hinge DOFs; cargo 196, contracts 14; full browser batch 114/114 on the preceding build."
+  "lastVerifiedSourceHash": "4a62662f29be6748d814d13b1f51cb5676ffe0404087d02aab6fc2916449213c",
+  "lastVerifiedScope": "M09 gate (with M09-HINGES) on the same build; cargo 197, contracts 14."
 }

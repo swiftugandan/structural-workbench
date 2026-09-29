@@ -17,7 +17,7 @@ use workbench_results::{Analysis, KeyStation, MemberResult, Sample};
 use workbench_solver::{LinearSolver, SparseLdl};
 
 use crate::expand::expand_point_loads;
-use crate::stability::{dofs, reject_releases, subdivide};
+use crate::stability::{dofs, subdivide};
 use crate::{case_factors, member_load_density, section_actions};
 
 pub const MAX_ITERATIONS: usize = 100;
@@ -53,6 +53,9 @@ struct Element<'a> {
     q: [f64; 3],
     material: &'a Material,
     section: &'a Section,
+    /// Hinge DOFs at the start (0) and end (1): (index in the extended
+    /// displacement vector, free DOF, released axis in global coordinates).
+    hinges: [Vec<(usize, usize, [f64; 3])>; 2],
 }
 
 impl Element<'_> {
@@ -65,18 +68,25 @@ impl Element<'_> {
             }
         })
     }
-    fn local_displacements(&self, u: &[f64]) -> [f64; 12] {
+    /// Element DOFs in global axes: the node DOFs, with each released end
+    /// rotation carrying its hinge DOF along the released axis.
+    fn global_displacements(&self, u: &[f64]) -> [f64; 12] {
         let ids = self.ids();
+        let mut dg: [f64; 12] = std::array::from_fn(|x| u[ids[x]]);
+        for (end, list) in self.hinges.iter().enumerate() {
+            for &(ext, _, axis) in list {
+                for c in 0..3 {
+                    dg[end * 6 + 3 + c] += axis[c] * u[ext];
+                }
+            }
+        }
+        dg
+    }
+    fn local_displacements(&self, u: &[f64]) -> [f64; 12] {
+        let dg = self.global_displacements(u);
         let mut dl = [0.; 12];
         for block in 0..4 {
-            let v = local(
-                self.r,
-                [
-                    u[ids[block * 3]],
-                    u[ids[block * 3 + 1]],
-                    u[ids[block * 3 + 2]],
-                ],
-            );
+            let v = local(self.r, [dg[block * 3], dg[block * 3 + 1], dg[block * 3 + 2]]);
             dl[block * 3..block * 3 + 3].copy_from_slice(&v);
         }
         dl
@@ -141,7 +151,6 @@ pub fn second_order(
     project.validate()?;
     let mut original = project.clone();
     original.canonicalise();
-    reject_releases(&original)?;
     let model_hash = original.hash();
     let imperfection_json = match imperfection {
         None => json!({"kind": "none"}),
@@ -165,6 +174,15 @@ pub fn second_order(
     let factors = case_factors(p, case)?;
     let d = dofs(p);
     let nd = p.nodes.len() * 6;
+    // Hinge DOFs follow the node DOFs in the extended displacement vector.
+    let hinge_ext: BTreeMap<usize, usize> = d
+        .hinges
+        .values()
+        .flatten()
+        .enumerate()
+        .map(|(k, h)| (h.dof, nd + k))
+        .collect();
+    let nu = nd + hinge_ext.len();
     let position: BTreeMap<&str, [f64; 3]> = p
         .nodes
         .iter()
@@ -205,6 +223,12 @@ pub fn second_order(
             q,
             material,
             section,
+            hinges: std::array::from_fn(|end| {
+                d.hinges
+                    .get(&(m.id.clone(), end))
+                    .map(|list| list.iter().map(|h| (hinge_ext[&h.dof], h.dof, h.axis)).collect())
+                    .unwrap_or_default()
+            }),
         };
         let ids = e.ids();
         for block in 0..4 {
@@ -247,25 +271,46 @@ pub fn second_order(
             let kt: Matrix = std::array::from_fn(|a| std::array::from_fn(|b| e.k[a][b] + kg[a][b]));
             let g = transform(&kt, e.r);
             let ids = e.ids();
+            // Each element DOF as free DOFs with coefficients, or a prescribed value.
+            let mut free: [Vec<(usize, f64)>; 12] = std::array::from_fn(|x| {
+                d.free[ids[x]].map(|a| vec![(a, 1.)]).unwrap_or_default()
+            });
+            for (end, list) in e.hinges.iter().enumerate() {
+                for &(_, dof, axis) in list {
+                    for c in 0..3 {
+                        if axis[c] != 0. {
+                            free[end * 6 + 3 + c].push((dof, axis[c]));
+                        }
+                    }
+                }
+            }
+            let fixed: [f64; 12] = std::array::from_fn(|x| {
+                if d.free[ids[x]].is_none() { d.prescribed[ids[x]] } else { 0. }
+            });
             for x in 0..12 {
-                let Some(a) = d.free[ids[x]] else { continue };
                 for y in 0..12 {
                     if g[x][y] == 0. {
                         continue;
                     }
-                    match d.free[ids[y]] {
-                        Some(b) => t.add_triplet(a, b, g[x][y]),
-                        None => rhs[a] -= g[x][y] * d.prescribed[ids[y]],
+                    for &(a, ca) in &free[x] {
+                        for &(b, cb) in &free[y] {
+                            t.add_triplet(a, b, g[x][y] * ca * cb);
+                        }
+                        rhs[a] -= ca * g[x][y] * fixed[y];
                     }
                 }
             }
         }
         let solved = SparseLdl.solve(&t.to_csc(), &rhs, budget)?;
         let mut u = d.prescribed.clone();
+        u.resize(nu, 0.);
         for (g, free) in d.free.iter().enumerate() {
             if let Some(a) = free {
                 u[g] = solved.values[*a];
             }
+        }
+        for (&dof, &ext) in &hinge_ext {
+            u[ext] = solved.values[dof];
         }
         Ok((u, solved.residual))
     };
