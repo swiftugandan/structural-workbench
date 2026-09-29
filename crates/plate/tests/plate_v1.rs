@@ -3,7 +3,10 @@
 
 use serde_json::Value;
 use workbench_plate::element::{self, DOFS, NODE_DOFS};
-use workbench_plate::{Edge, Mesh, Panel, PlateMaterial, Solution, solve, solve_mesh, wood_armer};
+use workbench_plate::{
+    Edge, Mesh, Panel, PlateMaterial, PointKind, PointSupport, Solution, solve, solve_mesh,
+    wood_armer,
+};
 use workbench_solver::eigen::symmetric_eigen;
 
 const BUDGET: usize = 1 << 30;
@@ -32,6 +35,7 @@ fn panel(a: f64, b: f64, edge: Edge, opening: Option<[f64; 4]>) -> Panel {
         opening,
         edges: [edge; 4],
         target: a.max(b),
+        points: vec![],
     }
 }
 
@@ -378,6 +382,7 @@ fn p_balance_mixed_edges_and_target_mesh() {
         opening: Some([1.1, 2.35, 3.0, 4.2]),
         edges: [Edge::Clamped, Edge::Simple, Edge::Free, Edge::Simple],
         target: 0.3,
+        points: vec![],
     };
     let s = solve(&p, &m, 12.5e3, BUDGET).unwrap();
     let area = 7.3 * 4.9 - 1.25 * 1.2;
@@ -403,6 +408,7 @@ fn refusals() {
         opening: None,
         edges: [Edge::Free; 4],
         target: 0.5,
+        points: vec![],
     };
     assert_eq!(
         solve(&free, &m, 1e3, BUDGET).unwrap_err().code,
@@ -478,6 +484,7 @@ fn indicator(opening: Option<[f64; 4]>) -> Vec<f64> {
                 opening,
                 edges: [Edge::Simple; 4],
                 target,
+                points: vec![],
             };
             let s = solve(&p, &m, 1e4, BUDGET).unwrap();
             let c = workbench_plate::convergence(&p, &m, 1e4, &s, BUDGET).unwrap();
@@ -580,4 +587,169 @@ fn p_distort_navier_and_opensees() {
         differences[2] <= f(&c["openSeesGate"], "w"),
         "{differences:?}"
     );
+}
+
+fn kind(p: &Value) -> PointKind {
+    match p["kind"].as_str().unwrap() {
+        "pinned" => PointKind::Pinned,
+        "fixed" => PointKind::Fixed,
+        _ => PointKind::Spring {
+            kz: f(p, "kz"),
+            krx: f(p, "krx"),
+            kry: f(p, "kry"),
+        },
+    }
+}
+
+/// A flat slab on six columns (pinned, fixed, springs) against OpenSees on
+/// the identical mesh: deflections, element moments and column reactions.
+#[test]
+fn p_points_opensees_identical_mesh() {
+    let o = oracle();
+    let c = &o["points"];
+    let points: Vec<PointSupport> = c["points"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|p| PointSupport {
+            x: f(p, "x"),
+            y: f(p, "y"),
+            kind: kind(p),
+        })
+        .collect();
+    let p = Panel {
+        lx: f(c, "a"),
+        ly: f(c, "b"),
+        opening: None,
+        edges: [Edge::Free; 4],
+        target: 1.,
+        points,
+    };
+    let m = PlateMaterial {
+        e: f(c, "E"),
+        nu: f(c, "nu"),
+        t: f(c, "t"),
+    };
+    let s = solve_uniform(&p, 24, 20, &m, f(c, "q"));
+    assert!(s.balance <= 1e-9, "balance {}", s.balance);
+    let tol = f(c, "tolerance");
+    let grid = |k: &str| -> (usize, usize) {
+        let (i, j) = k.split_once(',').unwrap();
+        (i.parse().unwrap(), j.parse().unwrap())
+    };
+    let w_scale = c["nodeW"]
+        .as_object()
+        .unwrap()
+        .values()
+        .map(|v| v.as_f64().unwrap().abs())
+        .fold(0., f64::max);
+    for (k, want) in c["nodeW"].as_object().unwrap() {
+        let (i, j) = grid(k);
+        let got = s.displacements[s.mesh.node_at(i, j).unwrap()][2];
+        assert!(
+            (got - want.as_f64().unwrap()).abs() <= tol * w_scale,
+            "w {k}: {got} vs {want}"
+        );
+    }
+    for (k, want) in c["elementMoments"].as_object().unwrap() {
+        let (i, j) = grid(k);
+        let a = s.element_actions[s.mesh.element_at(i, j).unwrap()];
+        let scale = f(want, "mx")
+            .abs()
+            .max(f(want, "my").abs())
+            .max(f(want, "mxy").abs());
+        for (got, key) in [(a.mx, "mx"), (a.my, "my"), (a.mxy, "mxy")] {
+            assert!(
+                (got - f(want, key)).abs() <= tol * scale,
+                "{key} {k}: {got} vs {}",
+                want[key]
+            );
+        }
+    }
+    let reactions = c["pointReactions"].as_array().unwrap();
+    let r_scale = reactions
+        .iter()
+        .map(|r| r[0].as_f64().unwrap().abs())
+        .fold(0., f64::max);
+    for (k, want) in reactions.iter().enumerate() {
+        for a in 0..3 {
+            let (got, w) = (s.point_reactions[k][a], want[a].as_f64().unwrap());
+            assert!(
+                (got - w).abs() <= tol * r_scale,
+                "column {k}[{a}]: {got} vs {w}"
+            );
+        }
+    }
+}
+
+#[test]
+fn point_supports_need_a_non_collinear_set() {
+    let m = PlateMaterial {
+        e: 30e9,
+        nu: 0.2,
+        t: 0.25,
+    };
+    let pin = |x: f64, y: f64| PointSupport {
+        x,
+        y,
+        kind: PointKind::Pinned,
+    };
+    let panel = |points: Vec<PointSupport>| Panel {
+        lx: 8.,
+        ly: 6.,
+        opening: None,
+        edges: [Edge::Free; 4],
+        target: 0.5,
+        points,
+    };
+    let code = |p: Panel| solve(&p, &m, 1e4, BUDGET).unwrap_err().code;
+    // Three columns on one line: the slab rotates about it.
+    assert_eq!(
+        code(panel(vec![pin(1., 1.), pin(4., 1.), pin(7., 1.)])),
+        "UNSTABLE_MODEL"
+    );
+    // One fixed column holds bending but not the in-plane rotation.
+    assert_eq!(
+        code(panel(vec![PointSupport {
+            x: 4.,
+            y: 3.,
+            kind: PointKind::Fixed
+        }])),
+        "UNSTABLE_MODEL"
+    );
+    // Columns off the slab, inside the opening or repeated are refused.
+    assert_eq!(
+        code(panel(vec![pin(1., 1.), pin(9., 1.), pin(4., 5.)])),
+        "INVALID_SETTINGS"
+    );
+    assert_eq!(
+        code(panel(vec![pin(1., 1.), pin(1., 1.), pin(4., 5.)])),
+        "INVALID_SETTINGS"
+    );
+    let mut holed = panel(vec![pin(1., 1.), pin(7., 1.), pin(4., 3.)]);
+    holed.opening = Some([3., 5., 2., 4.]);
+    assert_eq!(code(holed), "INVALID_SETTINGS");
+    let weak = PointSupport {
+        x: 4.,
+        y: 5.,
+        kind: PointKind::Spring {
+            kz: 0.,
+            krx: 1.,
+            kry: 1.,
+        },
+    };
+    assert_eq!(
+        code(panel(vec![pin(1., 1.), pin(7., 1.), weak])),
+        "INVALID_SETTINGS"
+    );
+    // Three columns not on a line hold it, and carry the whole load.
+    let s = solve(
+        &panel(vec![pin(1., 1.), pin(7., 1.), pin(4., 5.)]),
+        &m,
+        1e4,
+        BUDGET,
+    )
+    .unwrap();
+    let total: f64 = s.point_reactions.iter().map(|r| r[0]).sum();
+    assert!((total - 1e4 * 48.).abs() <= 1e-9 * 1e4 * 48.);
 }

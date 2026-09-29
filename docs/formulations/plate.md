@@ -49,11 +49,26 @@ Consistent pressure load f_w = −∫ N_i q dA (2 × 2 Gauss). K is assembled
 sparse on the free DOFs (upper triangle accumulated once and mirrored, so the
 matrix is exactly symmetric) and solved with the kernel's LDLᵀ factor.
 
-Support sufficiency is decided from the edge topology before assembly: the
-plate rigid modes w = a + b x + c y are held by one clamped edge or by any two
-supported edges; a single simple edge leaves rotation about its own line free
-and is `UNSTABLE_MODEL`, as is a panel with only free edges. Supported edges
-hold u and v, which removes the membrane rigid modes.
+**Point supports (columns).** A panel may carry up to 200 point supports at
+(x, y) on the slab (edges included, not inside the opening). The mesh places
+grid lines through each one. Every point support holds u and v. `pinned` also
+holds w; `fixed` holds w, rx and ry; `spring` adds kz to w and krx, kry to
+the two rotations (kz > 0, rotational springs ≥ 0). Point reactions are the
+support forces on the slab, [Fz (up), Mx, My]: K u − f at restraints, −k u
+through springs.
+
+**Support sufficiency** is decided exactly before assembly. Every support
+contributes rows of constraints on the rigid plate modes w = a + b x + c y:
+
+- a supported edge gives its two end points and the slope along it;
+- a clamped edge or fixed point also gives the slope across;
+- a point gives [1, x, y];
+- a rotational spring gives its slope row.
+
+The panel is stable in bending iff these rows have rank 3. In plane, a
+supported edge or two point supports hold the membrane modes. Otherwise the
+result is `UNSTABLE_MODEL`: a single simple edge, free edges only, columns on
+one line, or a single column.
 
 Reactions R = K u − f are recovered at every restrained DOF and checked
 against the applied load; a relative imbalance above 1e-8 is
@@ -109,3 +124,4 @@ against the applied load; a relative imbalance above 1e-8 is
 | P-CL-OS | Clamped, 16 × 16 | OpenSees ShellMITC4, identical mesh | nodal w and element-centre moments ≤ 1e-6 |
 | P-OPEN-OS | 6 × 5 m with a 1 × 1 m opening, 24 × 20 | OpenSees ShellMITC4, identical mesh | ≤ 1e-6 |
 | P-BALANCE | Any panel | applied pressure resultant | reactions to 1e-9 relative |
+| P-POINTS-OS | 12 × 10 m, all edges free, six columns (pinned, fixed, springs), 24 × 20 | OpenSees ShellMITC4 with zeroLength springs, identical mesh | nodal w, element-centre moments and column reactions ≤ 1e-6 of their scale |

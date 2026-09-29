@@ -1403,6 +1403,71 @@
                   ]
                 }
               }
+            },
+            "placement": {
+              "description": "Model position of the panel corner (x = 0, y = 0) at the slab level; panel axes along global X and Y.",
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              }
+            },
+            "columns": {
+              "type": "array",
+              "maxItems": 200,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "x",
+                  "y",
+                  "kind",
+                  "source"
+                ],
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "kind": {
+                    "enum": [
+                      "pinned",
+                      "fixed",
+                      "spring"
+                    ]
+                  },
+                  "kz": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "krx": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "kry": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "source": {
+                    "enum": [
+                      "user",
+                      "model"
+                    ]
+                  },
+                  "nodeId": {
+                    "type": "string"
+                  },
+                  "memberIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             }
           }
         }

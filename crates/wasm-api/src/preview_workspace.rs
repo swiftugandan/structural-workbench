@@ -9,8 +9,8 @@ use workbench_design::{
     RcBarRow, RcBeamContext, RcFace, RcLinks,
 };
 use workbench_model::{
-    DesignPreview, MECHANICS_COMMON_KEYS, Project, Result, SectionMechanicsInputs, SlabPlateInputs,
-    digest, err,
+    DesignPreview, Project, Result, SectionMechanicsInputs, SlabColumn, SlabPlateInputs, digest,
+    err,
 };
 use workbench_results::KeyStation;
 
@@ -301,6 +301,8 @@ fn default_plate() -> SlabPlateInputs {
             .map(|f| (f.0.to_string(), f.2))
             .collect(),
         input_sources,
+        placement: None,
+        columns: vec![],
     }
 }
 /// Parse edited plate inputs; provenance becomes `user` only where a value
@@ -347,8 +349,301 @@ fn edit_plate(old: Option<&SlabPlateInputs>, args: &Value) -> Result<SlabPlateIn
         next.input_sources
             .insert("includeOpening".into(), "user".into());
     }
+    // Columns: a column identical to a stored one keeps its source (a model
+    // column stays tied to its node and members); anything else is the
+    // user's own point support.
+    if let Some(list) = args.get("columns").filter(|v| !v.is_null()) {
+        let list = list
+            .as_array()
+            .ok_or_else(|| err("INVALID_SCHEMA", "plate.columns must be an array"))?;
+        next.columns = list
+            .iter()
+            .map(|c| {
+                let mut column: SlabColumn = serde_json::from_value(json!({
+                    "x": c["x"], "y": c["y"], "kind": c["kind"],
+                    "kz": c.get("kz").cloned().unwrap_or(json!(0.)),
+                    "krx": c.get("krx").cloned().unwrap_or(json!(0.)),
+                    "kry": c.get("kry").cloned().unwrap_or(json!(0.)),
+                    "source": "user",
+                }))
+                .map_err(|e| err("INVALID_SCHEMA", format!("Invalid column: {e}")))?;
+                if let Some(stored) = base.columns.iter().find(|s| {
+                    (s.x, s.y, &s.kind, s.kz, s.krx, s.kry)
+                        == (column.x, column.y, &column.kind, column.kz, column.krx, column.kry)
+                }) {
+                    column = stored.clone();
+                }
+                Ok(column)
+            })
+            .collect::<Result<Vec<_>>>()?;
+    }
+    if let Some(p) = args.get("placement") {
+        next.placement = if p.is_null() {
+            None
+        } else {
+            Some(
+                serde_json::from_value(p.clone())
+                    .map_err(|_| err("INVALID_SCHEMA", "plate.placement must be [x, y, z]"))?,
+            )
+        };
+    }
     next.validate()?;
     Ok(next)
+}
+
+/// The plate-v1 panel of a slab draft, its material and its pressure.
+fn slab_model(
+    d: &DesignPreview,
+) -> Result<(workbench_plate::Panel, workbench_plate::PlateMaterial, f64)> {
+    use workbench_plate::{Edge, Panel, PlateMaterial, PointKind, PointSupport};
+    let plate = d.plate.as_ref().ok_or_else(|| {
+        err(
+            "DESIGN_INPUT_INCOMPLETE",
+            "Record plate analysis inputs (pressure, material, edges) for this slab first",
+        )
+    })?;
+    let v = &d.inputs;
+    let opening = plate.include_opening.then(|| {
+        let (x0, y0) = (plate.inputs["openingX"], plate.inputs["openingY"]);
+        [x0, x0 + v["openingLength"], y0, y0 + v["openingWidth"]]
+    });
+    let edges = plate.edges.each_ref().map(|e| match e.as_str() {
+        "free" => Edge::Free,
+        "simple" => Edge::Simple,
+        _ => Edge::Clamped,
+    });
+    let points = plate
+        .columns
+        .iter()
+        .map(|c| PointSupport {
+            x: c.x,
+            y: c.y,
+            kind: match c.kind.as_str() {
+                "pinned" => PointKind::Pinned,
+                "fixed" => PointKind::Fixed,
+                _ => PointKind::Spring {
+                    kz: c.kz,
+                    krx: c.krx,
+                    kry: c.kry,
+                },
+            },
+        })
+        .collect();
+    let panel = Panel {
+        lx: v["length"],
+        ly: v["width"],
+        opening,
+        edges,
+        target: v["meshSize"],
+        points,
+    };
+    let material = PlateMaterial {
+        e: plate.inputs["elasticModulus"],
+        nu: plate.inputs["poissonRatio"],
+        t: v["thickness"],
+    };
+    Ok((panel, material, plate.inputs["pressure"]))
+}
+
+fn slab_index(v: &Value, id: &str) -> Result<usize> {
+    let index = v["designPreviews"]
+        .as_array()
+        .and_then(|ds| ds.iter().position(|d| d["id"] == id))
+        .ok_or_else(|| err("DANGLING_REFERENCE", "Unknown design preview"))?;
+    if v["designPreviews"][index]["kind"] != "slab" {
+        return Err(err("INVALID_SCHEMA", "Only slab drafts have columns"));
+    }
+    if v["designPreviews"][index].get("plate").is_none() {
+        return Err(err(
+            "DESIGN_INPUT_INCOMPLETE",
+            "Record plate analysis inputs for this slab first",
+        ));
+    }
+    Ok(index)
+}
+
+/// `DeriveSlabColumns {id, origin: [x, y, z]}`: the vertical members meeting
+/// the slab level inside the placed panel become spring supports with
+/// kz = ΣEA/L and, about global X and Y, Σ4EI/L (3EI/L when the far end
+/// is free to rotate about that axis; 0 when the slab end is released).
+/// User columns are kept; model columns are replaced.
+fn derive_slab_columns(v: &mut Value, a: &Value) -> Result<()> {
+    let id = a["id"].as_str().unwrap_or("");
+    let index = slab_index(v, id)?;
+    let origin: [f64; 3] = serde_json::from_value(a["origin"].clone())
+        .ok()
+        .filter(|o: &[f64; 3]| o.iter().all(|x| x.is_finite()))
+        .ok_or_else(|| err("INVALID_SCHEMA", "origin must be [x, y, z] in metres"))?;
+    let draft: DesignPreview = serde_json::from_value(v["designPreviews"][index].clone())
+        .map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
+    let (lx, ly) = (draft.inputs["length"], draft.inputs["width"]);
+    let project: Project = serde_json::from_value(v.clone())
+        .map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
+    let position = |id: &str| project.nodes.iter().find(|n| n.id == id).map(|n| n.position);
+    let extent = project
+        .nodes
+        .iter()
+        .flat_map(|n| n.position)
+        .fold(1f64, |m, x| m.max(x.abs()));
+    let tol = 1e-6 * extent.max(lx).max(ly);
+    let mut columns = vec![];
+    let mut skewed = vec![];
+    for node in &project.nodes {
+        let [x, y, z] = node.position;
+        let (px, py) = (x - origin[0], y - origin[1]);
+        if (z - origin[2]).abs() > tol
+            || !(-tol..=lx + tol).contains(&px)
+            || !(-tol..=ly + tol).contains(&py)
+        {
+            continue;
+        }
+        let (mut kz, mut krx, mut kry) = (0., 0., 0.);
+        let mut members = vec![];
+        for m in &project.members {
+            let near_start = m.start == node.id;
+            if !near_start && m.end != node.id {
+                continue;
+            }
+            let far = if near_start { &m.end } else { &m.start };
+            let (Some(a), Some(b)) = (position(&m.start), position(&m.end)) else {
+                continue;
+            };
+            let (length, axes) = workbench_geometry::axes(a, b, m.local_y);
+            if axes[0][2].abs() < 1. - 1e-9 {
+                // Beams in the slab plane carry nothing to this support; an
+                // inclined member is not a column.
+                if axes[0][2].abs() > 1e-9 {
+                    skewed.push(m.id.clone());
+                }
+                continue;
+            }
+            let material = project.materials.iter().find(|x| x.id == m.material).unwrap();
+            let section = project.sections.iter().find(|x| x.id == m.section).unwrap();
+            let far_support = project.supports.iter().find(|s| &s.node == far);
+            let far_connected = project
+                .members
+                .iter()
+                .any(|o| o.id != m.id && (&o.start == far || &o.end == far));
+            if far_support.is_none_or(|s| !s.fixed[2]) && !far_connected {
+                continue;
+            }
+            kz += material.e * section.a / length;
+            let (near_release, far_release) = if near_start {
+                (&m.release_start, &m.release_end)
+            } else {
+                (&m.release_end, &m.release_start)
+            };
+            // Local y and z of a vertical member lie along global X or Y.
+            for (local, inertia, near_free, far_free) in [
+                (axes[1], section.iy, near_release.my, far_release.my),
+                (axes[2], section.iz, near_release.mz, far_release.mz),
+            ] {
+                let along_x = local[0].abs() > 1. - 1e-9;
+                let along_y = local[1].abs() > 1. - 1e-9;
+                if !(along_x || along_y) {
+                    skewed.push(m.id.clone());
+                    continue;
+                }
+                if near_free {
+                    continue;
+                }
+                let global_axis = if along_x { 0 } else { 1 };
+                let far_rotates = far_free
+                    || (!far_connected
+                        && far_support.is_none_or(|s| !s.fixed[3 + global_axis]));
+                let k = if far_rotates { 3. } else { 4. } * material.e * inertia / length;
+                if along_x {
+                    krx += k;
+                } else {
+                    kry += k;
+                }
+            }
+            members.push(m.id.clone());
+        }
+        if kz > 0. {
+            members.sort();
+            columns.push(SlabColumn {
+                x: px.clamp(0., lx),
+                y: py.clamp(0., ly),
+                kind: "spring".into(),
+                kz,
+                krx,
+                kry,
+                source: "model".into(),
+                node_id: Some(node.id.clone()),
+                member_ids: members,
+            });
+        }
+    }
+    if !skewed.is_empty() {
+        skewed.sort();
+        skewed.dedup();
+        return Err(err(
+            "UNSUPPORTED_FEATURE",
+            format!(
+                "Members {} meet the slab but are not vertical columns with axes along X and Y",
+                skewed.join(", ")
+            ),
+        ));
+    }
+    if columns.is_empty() {
+        return Err(err(
+            "DESIGN_INPUT_INCOMPLETE",
+            "No column meets the slab level inside the placed panel",
+        ));
+    }
+    let mut plate = draft.plate.clone().unwrap();
+    plate.columns.retain(|c| c.source == "user");
+    plate.columns.extend(columns);
+    plate.placement = Some(origin);
+    plate.validate()?;
+    v["designPreviews"][index]["plate"] = serde_json::to_value(plate).unwrap();
+    Ok(())
+}
+
+/// `ApplySlabColumnLoads {id, caseId}`: solves the slab and writes, at each
+/// model column's node, the slab's action on the column (the negated support
+/// reaction [0, 0, −Fz, −Mx, −My, 0]) as a nodal load in the load case.
+/// Loads from this slab carry an id prefix derived from the draft and are
+/// replaced on every apply.
+fn apply_slab_column_loads(v: &mut Value, a: &Value) -> Result<()> {
+    let id = a["id"].as_str().unwrap_or("");
+    let index = slab_index(v, id)?;
+    let case = a["caseId"].as_str().unwrap_or("");
+    if !v["loadCases"]
+        .as_array()
+        .is_some_and(|cs| cs.iter().any(|c| c["id"] == case))
+    {
+        return Err(err("INVALID_LOAD", "Choose an existing load case"));
+    }
+    let draft: DesignPreview = serde_json::from_value(v["designPreviews"][index].clone())
+        .map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
+    let plate = draft.plate.as_ref().unwrap();
+    if !plate.columns.iter().any(|c| c.source == "model") {
+        return Err(err(
+            "DESIGN_INPUT_INCOMPLETE",
+            "Take the slab's columns from the model first",
+        ));
+    }
+    let (panel, material, q) = slab_model(&draft)?;
+    let memory = v["analysisSettings"]["memoryLimitMiB"].as_u64().unwrap_or(512) as usize;
+    let s = workbench_plate::solve(&panel, &material, q, memory * 1024 * 1024 / 2)?;
+    let prefix = format!("sl{}x", &digest(id.as_bytes())[..8]);
+    let loads = v["loads"]
+        .as_array_mut()
+        .ok_or_else(|| err("INVALID_SCHEMA", "Missing loads"))?;
+    loads.retain(|l| !l["id"].as_str().is_some_and(|x| x.starts_with(&prefix)));
+    for (c, r) in plate.columns.iter().zip(&s.point_reactions) {
+        let Some(node) = &c.node_id else { continue };
+        loads.push(json!({
+            "id": format!("{prefix}{}", &digest(node.as_bytes())[..12]),
+            "case": case,
+            "type": "nodal",
+            "node": node,
+            "values": [0., 0., -r[0], -r[1], -r[2], 0.],
+        }));
+    }
+    Ok(())
 }
 pub fn templates() -> Value {
     json!([("rcBeam","RC beam"),("rcColumn","RC column"),("slab","Slab"),("padFooting","Pad footing")].iter().map(|(kind,name)|{
@@ -379,6 +674,12 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
         v["designPreviews"] = json!([]);
     }
     let a = &c["args"];
+    if c["type"] == "DeriveSlabColumns" {
+        return derive_slab_columns(v, a);
+    }
+    if c["type"] == "ApplySlabColumnLoads" {
+        return apply_slab_column_loads(v, a);
+    }
     if c["type"] == "CreateDesignPreview" {
         let kind = a["kind"].as_str().unwrap_or("");
         if !["rcBeam", "rcColumn", "slab", "padFooting"].contains(&kind) {
@@ -972,36 +1273,10 @@ fn code_profile_preview(
 /// a check status. Element-centre (unsmoothed) actions are the design values;
 /// Wood–Armer moments are moments to resist, not reinforcement.
 fn plate_analysis(p: &Project, d: &DesignPreview) -> Result<Value> {
-    use workbench_plate::{Edge, Panel, PlateMaterial, wood_armer};
-    let plate = d.plate.as_ref().ok_or_else(|| {
-        err(
-            "DESIGN_INPUT_INCOMPLETE",
-            "Record plate analysis inputs (pressure, material, edges) for this slab first",
-        )
-    })?;
-    let v = &d.inputs;
-    let opening = plate.include_opening.then(|| {
-        let (x0, y0) = (plate.inputs["openingX"], plate.inputs["openingY"]);
-        [x0, x0 + v["openingLength"], y0, y0 + v["openingWidth"]]
-    });
-    let edges = plate.edges.each_ref().map(|e| match e.as_str() {
-        "free" => Edge::Free,
-        "simple" => Edge::Simple,
-        _ => Edge::Clamped,
-    });
-    let panel = Panel {
-        lx: v["length"],
-        ly: v["width"],
-        opening,
-        edges,
-        target: v["meshSize"],
-    };
-    let material = PlateMaterial {
-        e: plate.inputs["elasticModulus"],
-        nu: plate.inputs["poissonRatio"],
-        t: v["thickness"],
-    };
-    let q = plate.inputs["pressure"];
+    use workbench_plate::wood_armer;
+    let (panel, material, q) = slab_model(d)?;
+    let plate = d.plate.as_ref().unwrap();
+    let opening = panel.opening;
     let budget = p.analysis_settings.memory_limit_mi_b as usize * 1024 * 1024 / 2;
     let s = workbench_plate::solve(&panel, &material, q, budget)?;
     let c = workbench_plate::convergence(&panel, &material, q, &s, budget)?;
@@ -1038,7 +1313,8 @@ fn plate_analysis(p: &Project, d: &DesignPreview) -> Result<Value> {
         "codeProfile": null,
         "family": "plate-v1",
         "formulation": "docs/formulations/plate.md",
-        "panel": {"lengthX":panel.lx,"lengthY":panel.ly,"thickness":material.t,"opening":opening,"edges":plate.edges,"targetMeshSize":panel.target},
+        "panel": {"lengthX":panel.lx,"lengthY":panel.ly,"thickness":material.t,"opening":opening,"edges":plate.edges,"targetMeshSize":panel.target,"placement":plate.placement},
+        "columns": plate.columns.iter().zip(&s.point_reactions).map(|(c, r)| json!({"x":c.x,"y":c.y,"kind":c.kind,"kz":c.kz,"krx":c.krx,"kry":c.kry,"source":c.source,"nodeId":c.node_id,"memberIds":c.member_ids,"reaction":r})).collect::<Vec<_>>(),
         "load": {"pressure":q,"direction":"down","source":plate.input_sources["pressure"]},
         "material": {"elasticModulus":material.e,"poissonRatio":material.nu,"shearCorrection":5.0/6.0,"sources":{"elasticModulus":plate.input_sources["elasticModulus"],"poissonRatio":plate.input_sources["poissonRatio"]}},
         "mesh": {"elements":count,"nodes":s.mesh.nodes.len(),"freeDofs":s.free_dofs,"maxAspect":aspect,"smallestCell":smallest,"xs":s.mesh.xs,"ys":s.mesh.ys,"warnings":warnings},

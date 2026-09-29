@@ -546,6 +546,8 @@ fn apply_inner(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
         "CreateDesignPreview",
         "SetDesignPreview",
         "DeleteDesignPreview",
+        "DeriveSlabColumns",
+        "ApplySlabColumnLoads",
     ]
     .contains(&kind)
     {

@@ -282,9 +282,15 @@ fn migrated_slab_drafts_are_not_configured() {
         json!({"jsonUtf8":project.to_string()}),
     );
     assert_eq!(r["status"], "ok", "{r}");
-    assert_eq!(r["payload"]["project"]["schemaVersion"], workbench_model::CURRENT_SCHEMA);
+    assert_eq!(
+        r["payload"]["project"]["schemaVersion"],
+        workbench_model::CURRENT_SCHEMA
+    );
     let run = evaluate(&mut reopened, &d, "plate");
-    assert_eq!(run["diagnostics"][0]["code"], "DESIGN_INPUT_INCOMPLETE", "{run}");
+    assert_eq!(
+        run["diagnostics"][0]["code"], "DESIGN_INPUT_INCOMPLETE",
+        "{run}"
+    );
     // The synthetic illustration still runs and says the plate was not run.
     let run = evaluate(&mut reopened, &d, "synthetic");
     assert_eq!(run["payload"]["plateAnalysis"]["status"], "notRun");
@@ -295,4 +301,216 @@ fn migrated_slab_drafts_are_not_configured() {
         evaluate(&mut reopened, &d, "plate")["payload"]["plateAnalysis"]["status"],
         "evaluated"
     );
+}
+
+/// Four 3 m columns (fixed bases, local y along X) under a 6 × 5 m slab at
+/// z = 3, and an empty load case for the slab's loads.
+fn column_frame() -> Kernel {
+    let mut k = Kernel::new();
+    let section = json!({"id": "col", "name": "col", "A": 0.04, "Iy": 1.2e-4, "Iz": 2.0e-4, "J": 2e-4,
+                         "cy": 0.1, "cz": 0.1, "provenance": "test"});
+    let corners = [(0., 0.), (6., 0.), (0., 5.), (6., 5.)];
+    let mut nodes = vec![];
+    let mut members = vec![];
+    let mut supports = vec![];
+    for (i, (x, y)) in corners.iter().enumerate() {
+        nodes.push(json!({"id": format!("b{i}"), "position": [x, y, 0.]}));
+        nodes.push(json!({"id": format!("t{i}"), "position": [x, y, 3.]}));
+        members.push(
+            json!({"id": format!("c{i}"), "start": format!("b{i}"), "end": format!("t{i}"),
+            "material": "mat1", "section": "col", "localY": [1, 0, 0],
+            "releaseStart": {"my": false, "mz": false}, "releaseEnd": {"my": false, "mz": false}}),
+        );
+        supports.push(json!({"id": format!("s{i}"), "node": format!("b{i}"),
+            "fixed": [true, true, true, true, true, true], "prescribed": [0, 0, 0, 0, 0, 0]}));
+    }
+    // Lateral ties at the top keep the frame stable in plan.
+    for (i, (a, b)) in [(0, 1), (2, 3), (0, 2), (1, 3)].iter().enumerate() {
+        members.push(
+            json!({"id": format!("g{i}"), "start": format!("t{a}"), "end": format!("t{b}"),
+            "material": "mat1", "section": "col", "localY": [0, 0, 1],
+            "releaseStart": {"my": false, "mz": false}, "releaseEnd": {"my": false, "mz": false}}),
+        );
+    }
+    let p = json!({
+        "schemaVersion": "1.0.0", "id": "slab-frame", "name": "slab-frame", "revision": 0,
+        "displayUnits": "SI", "analysisMode": "spatial", "gravity": [0, 0, -9.80665],
+        "materials": [{"id": "mat1", "name": "concrete", "E": 30e9, "nu": 0.2, "density": 0}],
+        "sections": [section], "nodes": nodes, "members": members, "supports": supports,
+        "loadCases": [{"id": "SL", "name": "Slab", "category": "dead"}], "loads": [], "combinations": [],
+        "analysisSettings": {"type": "linearStatic", "formulation": "eulerBernoulli3D",
+            "mergeTolerance": 1e-6, "timeoutMs": 30000, "memoryLimitMiB": 512},
+        "metadata": {"description": "slab on columns", "createdBy": "tests"}
+    });
+    assert_eq!(
+        req(&mut k, "createProject", json!({"project": p}))["status"],
+        "ok"
+    );
+    k
+}
+
+fn slab_draft(k: &mut Kernel) -> Value {
+    let d = slab(k);
+    let mut plate = plate_args(&d);
+    plate["edges"] = json!(["free", "free", "free", "free"]);
+    plate["includeOpening"] = json!(false);
+    let r = set(k, &d, d["inputs"].clone(), plate);
+    assert_eq!(r["status"], "ok", "{r}");
+    r["payload"]["project"]["designPreviews"][0].clone()
+}
+
+#[test]
+fn columns_from_the_model_carry_the_slab_to_the_frame() {
+    let mut k = column_frame();
+    let d = slab_draft(&mut k);
+    let r = cmd(
+        &mut k,
+        "DeriveSlabColumns",
+        json!({"id": d["id"], "origin": [0, 0, 3]}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let saved = r["payload"]["project"]["designPreviews"][0].clone();
+    let columns = saved["plate"]["columns"].as_array().unwrap().clone();
+    assert_eq!(columns.len(), 4);
+    let (e, a, iy, iz, l) = (30e9, 0.04, 1.2e-4, 2.0e-4, 3.);
+    for c in &columns {
+        assert_eq!(c["source"], "model");
+        assert_eq!(c["kind"], "spring");
+        let rel = |g: &Value, w: f64| (g.as_f64().unwrap() - w).abs() <= 1e-12 * w;
+        assert!(rel(&c["kz"], e * a / l), "{c}");
+        // Local y is global X: bending about X uses Iy, about Y uses Iz.
+        assert!(
+            rel(&c["krx"], 4. * e * iy / l) && rel(&c["kry"], 4. * e * iz / l),
+            "{c}"
+        );
+        assert!(c["nodeId"].as_str().unwrap().starts_with('t'));
+    }
+    assert_eq!(saved["plate"]["placement"], json!([0., 0., 3.]));
+    // The slab solves on its columns: the four reactions carry q·A equally.
+    let run = evaluate(&mut k, &saved, "plate");
+    assert_eq!(run["status"], "ok", "{run}");
+    let reactions: Vec<f64> = run["payload"]["plateAnalysis"]["columns"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|c| c["reaction"][0].as_f64().unwrap())
+        .collect();
+    let total = 10e3 * 6. * 5.;
+    assert!((reactions.iter().sum::<f64>() - total).abs() <= 1e-8 * total);
+    for r in &reactions {
+        assert!((r - total / 4.).abs() <= 1e-6 * total, "{reactions:?}");
+    }
+    // Applying the loads writes one nodal load per column; the frame's base
+    // then carries the slab, and re-applying replaces rather than adds.
+    for _ in 0..2 {
+        let r = cmd(
+            &mut k,
+            "ApplySlabColumnLoads",
+            json!({"id": d["id"], "caseId": "SL"}),
+        );
+        assert_eq!(r["status"], "ok", "{r}");
+        let loads = r["payload"]["project"]["loads"].as_array().unwrap().clone();
+        assert_eq!(loads.len(), 4, "{loads:?}");
+        assert!(
+            loads
+                .iter()
+                .all(|l| l["case"] == "SL" && l["values"][2].as_f64().unwrap() < 0.)
+        );
+    }
+    let a = req(
+        &mut k,
+        "analyse",
+        json!({"caseIds": ["SL"], "combinationIds": []}),
+    );
+    assert_eq!(a["status"], "ok", "{a}");
+    let base: f64 = a["payload"]["reactions"]
+        .as_array()
+        .unwrap()
+        .chunks(6)
+        .map(|r| r[2].as_f64().unwrap())
+        .sum();
+    assert!((base - total).abs() <= 1e-6 * total, "{base}");
+}
+
+#[test]
+fn slab_column_commands_refuse_what_they_cannot_do() {
+    let mut k = column_frame();
+    let d = slab_draft(&mut k);
+    let code = |r: &Value| {
+        r["diagnostics"][0]["code"]
+            .as_str()
+            .unwrap_or("")
+            .to_string()
+    };
+    let before = req(&mut k, "getSnapshot", json!({}))["modelHash"].clone();
+    // No column meets z = 7.
+    let r = cmd(
+        &mut k,
+        "DeriveSlabColumns",
+        json!({"id": d["id"], "origin": [0, 0, 7]}),
+    );
+    assert_eq!(code(&r), "DESIGN_INPUT_INCOMPLETE");
+    assert_eq!(
+        code(&cmd(
+            &mut k,
+            "DeriveSlabColumns",
+            json!({"id": d["id"], "origin": [0, 0]})
+        )),
+        "INVALID_SCHEMA"
+    );
+    // No model columns yet, and an unknown case.
+    assert_eq!(
+        code(&cmd(
+            &mut k,
+            "ApplySlabColumnLoads",
+            json!({"id": d["id"], "caseId": "SL"})
+        )),
+        "DESIGN_INPUT_INCOMPLETE"
+    );
+    assert_eq!(
+        code(&cmd(
+            &mut k,
+            "ApplySlabColumnLoads",
+            json!({"id": d["id"], "caseId": "nope"})
+        )),
+        "INVALID_LOAD"
+    );
+    assert_eq!(req(&mut k, "getSnapshot", json!({}))["modelHash"], before);
+    // User columns through SetDesignPreview; three on one line are refused
+    // at analysis with the reason.
+    let mut plate = plate_args(&d);
+    plate["columns"] = json!([
+        {"x": 1, "y": 1, "kind": "pinned"}, {"x": 3, "y": 1, "kind": "pinned"}, {"x": 5, "y": 1, "kind": "pinned"}
+    ]);
+    plate["edges"] = json!(["free", "free", "free", "free"]);
+    plate["includeOpening"] = json!(false);
+    let r = set(&mut k, &d, d["inputs"].clone(), plate);
+    assert_eq!(r["status"], "ok", "{r}");
+    let saved = r["payload"]["project"]["designPreviews"][0].clone();
+    assert!(
+        saved["plate"]["columns"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|c| c["source"] == "user")
+    );
+    assert_eq!(
+        evaluate(&mut k, &saved, "plate")["diagnostics"][0]["code"],
+        "UNSTABLE_MODEL"
+    );
+    // An inclined member meeting the slab is not a column.
+    let r = cmd(
+        &mut k,
+        "AddMember",
+        json!({"id": "brace", "start": "b0", "end": "t3", "material": "mat1",
+        "section": "col", "localY": [0, 0, 1], "releaseStart": {"my": false, "mz": false},
+        "releaseEnd": {"my": false, "mz": false}}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let r = cmd(
+        &mut k,
+        "DeriveSlabColumns",
+        json!({"id": d["id"], "origin": [0, 0, 3]}),
+    );
+    assert_eq!(code(&r), "UNSUPPORTED_FEATURE", "{r}");
 }

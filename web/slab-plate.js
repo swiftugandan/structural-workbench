@@ -28,7 +28,40 @@ export function plateSection(d, template) {
         `<label class="design-field"><span>${esc(label)}</span><select name="plate-edge-${i}" id="preview-plate-edge-${i}">${t.edgeConditions.map((c) => `<option value="${c}" ${edges[i] === c ? "selected" : ""}>${c[0].toUpperCase() + c.slice(1)}</option>`).join("")}</select>${sourceMark(src("edges"))}</label>`,
     )
     .join("");
-  return `<fieldset class="design-subsection" id="preview-plate"><legend>Plate analysis (plate-v1)</legend>${plate ? "" : '<p class="design-note" data-testid="plate-not-configured">Not configured · saving records these inputs.</p>'}<p class="design-note">Uniform pressure on the panel; edges and material are your inputs. Not connected to the frame model.</p>${edgeRows}<label class="design-check full"><input type="checkbox" id="preview-plate-opening" ${include ? "checked" : ""}> Cut the opening from the panel ${sourceMark(src("includeOpening"))}</label>${rows}</fieldset>`;
+  return `<fieldset class="design-subsection" id="preview-plate"><legend>Plate analysis (plate-v1)</legend>${plate ? "" : '<p class="design-note" data-testid="plate-not-configured">Not configured · saving records these inputs.</p>'}<p class="design-note">Uniform pressure on the panel; edges, material and columns are your inputs or come from the frame model.</p>${edgeRows}<label class="design-check full"><input type="checkbox" id="preview-plate-opening" ${include ? "checked" : ""}> Cut the opening from the panel ${sourceMark(src("includeOpening"))}</label>${rows}${plate ? columnsSection(plate) : ""}</fieldset>`;
+}
+
+const COLUMN_KINDS = ["pinned", "fixed", "spring"];
+
+/** One editable (user) or read-only (model) column row. */
+function columnRow(c, i) {
+  const ro = c.source === "model" ? " readonly" : "";
+  const dis = c.source === "model" ? " disabled" : "";
+  const num = (name, v, label) =>
+    `<label><span>${label}</span><input name="col-${name}-${i}" value="${v ?? 0}" inputmode="decimal"${ro}></label>`;
+  return `<div class="slab-column" data-column-row="${i}" data-source="${esc(c.source)}" data-testid="slab-column">${num("x", c.x, "x (m)")}${num("y", c.y, "y (m)")}<label><span>Kind</span><select name="col-kind-${i}"${dis}>${COLUMN_KINDS.map((k) => `<option${k === c.kind ? " selected" : ""}>${k}</option>`).join("")}</select></label>${num("kz", c.kz, "kz (N/m)")}${num("krx", c.krx, "krx (N·m/rad)")}${num("kry", c.kry, "kry (N·m/rad)")}<span class="slab-column-source">${c.source === "model" ? `model · ${esc(c.nodeId)} · ${esc(c.memberIds.join(", "))}` : "user"}</span>${c.source === "model" ? "" : `<button type="button" data-remove-column="${i}">Remove</button>`}</div>`;
+}
+
+function columnsSection(plate) {
+  const columns = plate.columns || [];
+  const o = plate.placement || [0, 0, 0];
+  return `<div class="slab-columns" id="slab-columns"><h4>Columns (${columns.length})</h4>${columns.map(columnRow).join("")}<button type="button" id="slab-add-column">Add column</button><div class="slab-derive"><span>Panel corner in the model</span><label>X <input id="slab-origin-x" value="${o[0]}" inputmode="decimal"></label><label>Y <input id="slab-origin-y" value="${o[1]}" inputmode="decimal"></label><label>Z <input id="slab-origin-z" value="${o[2]}" inputmode="decimal"></label><button type="button" id="slab-derive-columns">Take columns from the model</button></div><small>Model columns are springs: kz = ΣEA/L and krx, kry = Σ4EI/L (3EI/L when the far end rotates freely). The panel axes follow global X and Y.</small></div>`;
+}
+
+/** Adds an empty user column row to the form (not saved until Save). */
+export function addColumnRow(host) {
+  const list = host.querySelector("#slab-columns");
+  const i = host.querySelectorAll("[data-column-row]").length;
+  host
+    .querySelector("#slab-add-column")
+    .insertAdjacentHTML(
+      "beforebegin",
+      columnRow(
+        { x: 0, y: 0, kind: "pinned", kz: 0, krx: 0, kry: 0, source: "user" },
+        i,
+      ),
+    );
+  return list;
 }
 
 /** The `plate` argument of SetDesignPreview, or undefined for other kinds. */
@@ -40,6 +73,23 @@ export function plateArgs(host, d, template, submitted) {
       (_, i) => host.querySelector(`[name="plate-edge-${i}"]`).value,
     ),
     includeOpening: host.querySelector("#preview-plate-opening").checked,
+    ...(host.querySelector("#slab-columns") && {
+      columns: [...host.querySelectorAll("[data-column-row]")].map((row) => {
+        const i = row.dataset.columnRow;
+        const n = (name) =>
+          Number(host.querySelector(`[name="col-${name}-${i}"]`).value);
+        const kind = host.querySelector(`[name="col-kind-${i}"]`).value;
+        const spring = kind === "spring";
+        return {
+          x: n("x"),
+          y: n("y"),
+          kind,
+          kz: spring ? n("kz") : 0,
+          krx: spring ? n("krx") : 0,
+          kry: spring ? n("kry") : 0,
+        };
+      }),
+    }),
     inputs: Object.fromEntries(
       t.fields.map((f) => [
         f.key,
@@ -154,13 +204,32 @@ export function plateContour(pa, key) {
   const unit = nodal ? "mm" : "kN·m/m",
     scale = nodal ? 1000 : 0.001;
   const legend = `<g font-size="11" fill="#142b44"><text x="${pad}" y="${H - 8}">min ${pretty(lo * scale, 2)} ${unit}</text><text x="${W - pad}" y="${H - 8}" text-anchor="end">max ${pretty(hi * scale, 2)} ${unit}</text></g>`;
-  return `<svg class="plate-contour" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(key)} contour over the slab panel" data-testid="plate-contour" data-field="${esc(key)}" data-cells="${cells.length}"><g shape-rendering="crispEdges">${rects}</g>${opening}${[0, 1, 2, 3].map(edgeLine).join("")}<circle cx="${px}" cy="${py}" r="5" fill="none" stroke="#142b44" stroke-width="2"/><text x="${X(0)}" y="${Y(0) + 16}" font-size="11" fill="#53667c">0,0</text><text x="${X(lx)}" y="${Y(0) + 16}" font-size="11" fill="#53667c" text-anchor="end">x = ${pretty(lx, 2)} m</text><text x="${X(0) - 6}" y="${Y(ly) + 4}" font-size="11" fill="#53667c" text-anchor="end">y</text>${legend}</svg>`;
+  return `<svg class="plate-contour" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(key)} contour over the slab panel" data-testid="plate-contour" data-field="${esc(key)}" data-cells="${cells.length}"><g shape-rendering="crispEdges">${rects}</g>${opening}${[0, 1, 2, 3].map(edgeLine).join("")}<circle cx="${px}" cy="${py}" r="5" fill="none" stroke="#142b44" stroke-width="2"/>${(pa.columns || []).map((c) => `<rect x="${X(c.x) - 5}" y="${Y(c.y) - 5}" width="10" height="10" fill="#142b44" data-testid="plate-column-marker"/>`).join("")}<text x="${X(0)}" y="${Y(0) + 16}" font-size="11" fill="#53667c">0,0</text><text x="${X(lx)}" y="${Y(0) + 16}" font-size="11" fill="#53667c" text-anchor="end">x = ${pretty(lx, 2)} m</text><text x="${X(0) - 6}" y="${Y(ly) + 4}" font-size="11" fill="#53667c" text-anchor="end">y</text>${legend}</svg>`;
 }
 
 const kNm = (v) => `${pretty(v / 1000, 2)} kN·m/m`;
 
+/** Column reactions on the slab and the route back to the frame. */
+function columnsTable(pa, context) {
+  if (!pa.columns?.length) return "";
+  const kN = (v) => pretty(v / 1000, 2);
+  const rows = pa.columns
+    .map(
+      (c, i) =>
+        `<tr data-testid="plate-column-reaction"><th scope="row">${i + 1}${c.nodeId ? ` · ${esc(c.nodeId)}` : ""}</th><td>${pretty(c.x, 3)}, ${pretty(c.y, 3)}</td><td>${esc(c.kind)}</td><td data-si="${c.reaction[0]}">${kN(c.reaction[0])}</td><td data-si="${c.reaction[1]}">${kN(c.reaction[1])}</td><td data-si="${c.reaction[2]}">${kN(c.reaction[2])}</td></tr>`,
+    )
+    .join("");
+  const model = pa.columns.some((c) => c.source === "model");
+  const cases = context?.loadCases || [];
+  return `<h4>Column reactions on the slab</h4><table data-testid="plate-columns"><thead><tr><th scope="col">Column</th><th>At (m)</th><th>Kind</th><th>Fz (kN)</th><th>Mx (kN·m)</th><th>My (kN·m)</th></tr></thead><tbody>${rows}</tbody></table>${
+    model
+      ? `<div class="slab-apply"><label>Load case <select id="slab-apply-case">${cases.map((c) => `<option value="${esc(c.id)}">${esc(c.label)}</option>`).join("")}</select></label><button type="button" id="slab-apply-loads"${cases.length ? "" : " disabled"}>Apply column loads to the frame</button><small>Writes −(Fz, Mx, My) at each model column's node in that case, replacing this slab's previous loads.</small></div>`
+      : ""
+  }`;
+}
+
 /** The "Plate actions" pane of a slab run. */
-export function platePane(run, field) {
+export function platePane(run, field, context) {
   const pa = run?.plateAnalysis;
   if (!pa)
     return '<p data-testid="plate-status">Run the preview with the plate analysis source.</p>';
@@ -190,5 +259,5 @@ export function platePane(run, field) {
         return `<h4>Clamped-edge line moments</h4><table><thead><tr><th>Edge</th><th>Most hogging</th></tr></thead><tbody>${byEdge}</tbody></table><p class="design-note">From the support reactions over each node's tributary edge length.</p>`;
       })()
     : "";
-  return `<div class="plate-pane" data-testid="plate-pane"><div class="plate-map"><div class="design-view-switch" role="group" aria-label="Plate result field">${plateFields.map(([k, label]) => `<button data-plate-field="${k}" aria-pressed="${field === k}">${esc(label)}</button>`).join("")}</div>${plateContour(pa, field)}<p class="design-note">Element-centre values (unsmoothed), sagging positive. Wood–Armer values are moments to resist on each face, not reinforcement. Heavy edge: clamped · dashed: simple · thin: free.</p></div><div class="plate-tables"><h4>Solution <span class="design-tag">MECHANICS · plate-v1</span></h4><table><tbody><tr><td>Mesh</td><td data-testid="plate-elements">${m.elements} elements · ${m.nodes} nodes · largest aspect ${pretty(m.maxAspect, 2)}</td></tr><tr><td>Pressure</td><td>${pretty(pa.load.pressure / 1000, 3)} kPa down</td></tr><tr><td>Equilibrium</td><td data-testid="plate-balance" data-si="${e.relativeImbalance}">reactions ${pretty(e.reactions / 1000, 3)} kN vs load ${pretty(e.applied / 1000, 3)} kN (${e.relativeImbalance.toExponential(1)})</td></tr><tr><td>Max deflection</td><td>${pretty(x.maxDeflection * 1000, 3)} mm</td></tr><tr><td>mx range</td><td>${kNm(x.minMx)} … ${kNm(x.maxMx)}</td></tr><tr><td>my range</td><td>${kNm(x.minMy)} … ${kNm(x.maxMy)}</td></tr><tr><td>Mesh convergence</td><td data-testid="plate-convergence" data-within="${c.withinLimit}">${pretty(c.change * 100, 1)} % change from a ${pretty(c.coarseMeshSize * 1000, 0)} mm mesh · ${c.withinLimit ? "within" : "exceeds"} ${pretty(c.indicatorLimit * 100, 0)} %</td></tr></tbody></table><p class="design-note">${esc(c.note)}</p>${m.warnings.map((w) => `<p class="notice-small" data-testid="plate-warning">${esc(w.code)} · ${esc(w.message)}</p>`).join("")}<h4>Governing design moments</h4><table><thead><tr><th>Face</th><th>Wood–Armer</th><th>At</th></tr></thead><tbody>${governing}</tbody></table>${clamped}<p class="design-note">Reinforcement areas, punching and deflection limits need a slab code profile and remain UNSUPPORTED.</p></div></div>`;
+  return `<div class="plate-pane" data-testid="plate-pane"><div class="plate-map"><div class="design-view-switch" role="group" aria-label="Plate result field">${plateFields.map(([k, label]) => `<button data-plate-field="${k}" aria-pressed="${field === k}">${esc(label)}</button>`).join("")}</div>${plateContour(pa, field)}<p class="design-note">Element-centre values (unsmoothed), sagging positive. Wood–Armer values are moments to resist on each face, not reinforcement. Heavy edge: clamped · dashed: simple · thin: free.</p></div><div class="plate-tables"><h4>Solution <span class="design-tag">MECHANICS · plate-v1</span></h4><table><tbody><tr><td>Mesh</td><td data-testid="plate-elements">${m.elements} elements · ${m.nodes} nodes · largest aspect ${pretty(m.maxAspect, 2)}</td></tr><tr><td>Pressure</td><td>${pretty(pa.load.pressure / 1000, 3)} kPa down</td></tr><tr><td>Equilibrium</td><td data-testid="plate-balance" data-si="${e.relativeImbalance}">reactions ${pretty(e.reactions / 1000, 3)} kN vs load ${pretty(e.applied / 1000, 3)} kN (${e.relativeImbalance.toExponential(1)})</td></tr><tr><td>Max deflection</td><td>${pretty(x.maxDeflection * 1000, 3)} mm</td></tr><tr><td>mx range</td><td>${kNm(x.minMx)} … ${kNm(x.maxMx)}</td></tr><tr><td>my range</td><td>${kNm(x.minMy)} … ${kNm(x.maxMy)}</td></tr><tr><td>Mesh convergence</td><td data-testid="plate-convergence" data-within="${c.withinLimit}">${pretty(c.change * 100, 1)} % change from a ${pretty(c.coarseMeshSize * 1000, 0)} mm mesh · ${c.withinLimit ? "within" : "exceeds"} ${pretty(c.indicatorLimit * 100, 0)} %</td></tr></tbody></table><p class="design-note">${esc(c.note)}</p>${m.warnings.map((w) => `<p class="notice-small" data-testid="plate-warning">${esc(w.code)} · ${esc(w.message)}</p>`).join("")}<h4>Governing design moments</h4><table><thead><tr><th>Face</th><th>Wood–Armer</th><th>At</th></tr></thead><tbody>${governing}</tbody></table>${clamped}${columnsTable(pa, context)}<p class="design-note">Reinforcement areas, punching and deflection limits need a slab code profile and remain UNSUPPORTED.</p></div></div>`;
 }

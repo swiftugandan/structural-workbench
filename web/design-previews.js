@@ -6,7 +6,12 @@ import {
 } from "./design-presentation.js";
 /** Workflow illustrations only. Validation, units and action provenance belong to Rust. */
 import { escape as esc } from "./reports/report.js";
-import { plateArgs, plateSection, platePane } from "./slab-plate.js";
+import {
+  addColumnRow,
+  plateArgs,
+  plateSection,
+  platePane,
+} from "./slab-plate.js";
 import { columnPane, columnSketch } from "./rc-column.js";
 const names = {
   rcBeam: "RC beam",
@@ -177,7 +182,12 @@ export function concreteWorkspace({
   function paneHtml(run, state, d) {
     if (d.kind === "slab" && pane === "actions")
       if (run?.plateAnalysis?.status === "evaluated")
-        return platePane(run, plateField);
+        return platePane(run, plateField, {
+          loadCases: (getContext().project?.loadCases || []).map((c) => ({
+            id: c.id,
+            label: `${c.id} · ${c.name}`,
+          })),
+        });
     if (d.kind === "rcColumn" && pane === "mechanics") return columnPane(run);
     return previewPane({
       run,
@@ -217,6 +227,24 @@ export function concreteWorkspace({
       b.onclick = () => {
         pane = b.dataset.previewPane;
         results(host);
+      };
+    const apply = host.querySelector("#slab-apply-loads");
+    if (apply)
+      apply.onclick = async () => {
+        onRunning(true);
+        try {
+          await command("ApplySlabColumnLoads", {
+            id: d.id,
+            caseId: host.querySelector("#slab-apply-case").value,
+          });
+          onError(
+            "Column loads applied to the frame. Analyse the case to see their effect.",
+          );
+        } catch (e) {
+          onError(e.message);
+        } finally {
+          onRunning(false);
+        }
       };
     for (const b of host.querySelectorAll("[data-plate-field]"))
       b.onclick = () => {
@@ -341,7 +369,9 @@ export function concreteWorkspace({
           sourceMode = $("#preview-source").value;
           readiness();
         };
-        $("#preview-form").oninput = () => {
+        $("#preview-form").oninput = (e) => {
+          // Command parameters (the slab's model origin) are not draft inputs.
+          if (e?.target?.closest?.(".slab-derive")) return;
           onDirty(true);
           $("#preview-active").disabled = true;
           $("#preview-create").disabled = true;
@@ -411,6 +441,36 @@ export function concreteWorkspace({
               t,
               mechanicsLaw,
             );
+          };
+        if ($("#slab-add-column"))
+          $("#slab-add-column").onclick = () => {
+            addColumnRow(host);
+            $("#preview-form").oninput();
+          };
+        for (const b of host.querySelectorAll("[data-remove-column]"))
+          b.onclick = () => {
+            b.closest("[data-column-row]").remove();
+            $("#preview-form").oninput();
+          };
+        if ($("#slab-derive-columns"))
+          $("#slab-derive-columns").onclick = async () => {
+            if (getContext().dirty)
+              return fail(
+                new Error(
+                  "Save or cancel the draft inputs before taking columns from the model.",
+                ),
+              );
+            try {
+              await command("DeriveSlabColumns", {
+                id: d.id,
+                origin: ["x", "y", "z"].map((a) =>
+                  Number($(`#slab-origin-${a}`).value),
+                ),
+              });
+              await render();
+            } catch (e) {
+              fail(e);
+            }
           };
         if ($("#preview-face"))
           $("#preview-face").onchange = () => {

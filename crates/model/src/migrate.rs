@@ -253,13 +253,18 @@ fn migrate_1_4_to_1_5(raw: &mut Value) -> Result<Vec<String>> {
     ])
 }
 
-/// 1.5.0 → 1.6.0: projects may carry response spectra (ADR 0023). None is
-/// implied.
+/// 1.5.0 → 1.6.0: projects may carry response spectra (ADR 0023) and slab
+/// drafts a placement and columns (ADR 0021). None is implied.
 fn migrate_1_5_to_1_6(raw: &mut Value) -> Result<Vec<String>> {
-    if raw.get("responseSpectra").is_some() {
+    let slab_columns = raw["designPreviews"].as_array().is_some_and(|ds| {
+        ds.iter().any(|d| {
+            d["plate"].get("columns").is_some() || d["plate"].get("placement").is_some()
+        })
+    });
+    if raw.get("responseSpectra").is_some() || slab_columns {
         return Err(err(
             "INVALID_SCHEMA",
-            "Schema 1.5.0 projects cannot carry response spectra",
+            "Schema 1.5.0 projects cannot carry response spectra or slab columns",
         ));
     }
     raw["schemaVersion"] = json!(CURRENT_SCHEMA);

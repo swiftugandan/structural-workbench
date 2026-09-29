@@ -213,7 +213,7 @@ test("Slab plate refusals keep the project and explain the reason", async ({
   await expect(page.locator("#preview-run")).toBeEnabled();
   await page.locator("#preview-run").click();
   await expect(page.locator("#preview-error")).toContainText(
-    "rotate about a single simple edge",
+    "can rotate or lift as a rigid plate",
   );
   await expect(page.locator("#preview-plate-edge-1")).toHaveValue("free");
   // Invalid values are refused atomically.
@@ -223,5 +223,142 @@ test("Slab plate refusals keep the project and explain the reason", async ({
   await page.locator("#preview-cancel").click();
   await expect(page.locator("#preview-plate-poissonRatio")).toHaveValue("0.2");
   await page.screenshot({ path: `${dir}/refusal.png` });
+  expect(errors).toEqual([]);
+});
+
+/** Four 3 m columns with fixed bases and top ties; an empty "Slab" case. */
+function columnFrame() {
+  const corners = [
+    [0, 0],
+    [6, 0],
+    [0, 5],
+    [6, 5],
+  ];
+  const member = (id, start, end, localY) => ({
+    id,
+    start,
+    end,
+    material: "mat1",
+    section: "col",
+    localY,
+    releaseStart: { my: false, mz: false },
+    releaseEnd: { my: false, mz: false },
+  });
+  return {
+    schemaVersion: "1.0.0",
+    id: "slab-columns",
+    name: "Slab on columns",
+    revision: 0,
+    displayUnits: "SI",
+    analysisMode: "spatial",
+    gravity: [0, 0, -9.80665],
+    materials: [{ id: "mat1", name: "concrete", E: 30e9, nu: 0.2, density: 0 }],
+    sections: [
+      {
+        id: "col",
+        name: "col",
+        A: 0.04,
+        Iy: 1.2e-4,
+        Iz: 2e-4,
+        J: 2e-4,
+        cy: 0.1,
+        cz: 0.1,
+        provenance: "test",
+      },
+    ],
+    nodes: corners.flatMap(([x, y], i) => [
+      { id: `b${i}`, position: [x, y, 0] },
+      { id: `t${i}`, position: [x, y, 3] },
+    ]),
+    members: [
+      ...corners.map((_, i) => member(`c${i}`, `b${i}`, `t${i}`, [1, 0, 0])),
+      ...[
+        [0, 1],
+        [2, 3],
+        [0, 2],
+        [1, 3],
+      ].map(([a, b], i) => member(`g${i}`, `t${a}`, `t${b}`, [0, 0, 1])),
+    ],
+    supports: corners.map((_, i) => ({
+      id: `s${i}`,
+      node: `b${i}`,
+      fixed: [true, true, true, true, true, true],
+      prescribed: [0, 0, 0, 0, 0, 0],
+    })),
+    loadCases: [{ id: "SL", name: "Slab", category: "dead" }],
+    loads: [],
+    combinations: [],
+    analysisSettings: {
+      type: "linearStatic",
+      formulation: "eulerBernoulli3D",
+      mergeTolerance: 1e-6,
+      timeoutMs: 30000,
+      memoryLimitMiB: 512,
+    },
+    metadata: { description: "slab on columns", createdBy: "tests" },
+  };
+}
+
+test("Slab on model columns: derive the columns, solve and apply the column loads to the frame", async ({
+  page,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.setViewportSize({ width: 1600, height: 1300 });
+  await page.goto("/");
+  await page.locator("#import-file").setInputFiles({
+    name: "frame.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(columnFrame())),
+  });
+  await expect(page.locator("#kernel-status")).toContainText("ready");
+  await page.locator("[data-inspector-tab=concrete]").click();
+  await page.locator("#preview-kind").selectOption("slab");
+  await page.locator("#preview-create").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  for (const i of [0, 1, 2, 3])
+    await page.locator(`#preview-plate-edge-${i}`).selectOption("free");
+  await page.locator("#preview-plate-opening").uncheck();
+  await page.locator("#preview-save").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  await page.locator("#slab-origin-z").fill("3");
+  await page.locator("#slab-derive-columns").click();
+  await expect(
+    page.locator('[data-testid=slab-column][data-source="model"]'),
+  ).toHaveCount(4);
+  await page.locator("#preview-run").click();
+  await expect(page.locator("#workspace")).not.toHaveAttribute(
+    "aria-busy",
+    "true",
+  );
+  await page.locator('[data-preview-pane="actions"]').click();
+  await expect(page.locator("[data-testid=plate-column-marker]")).toHaveCount(
+    4,
+  );
+  const reactions = await page
+    .locator("[data-testid=plate-column-reaction] td[data-si]")
+    .evaluateAll((cells) => cells.map((c) => Number(c.dataset.si)));
+  const fz = reactions.filter((_, k) => k % 3 === 0);
+  const total = 10e3 * 6 * 5;
+  expect(Math.abs(fz.reduce((a, b) => a + b, 0) - total)).toBeLessThanOrEqual(
+    1e-8 * total,
+  );
+  await mkdir(dir, { recursive: true });
+  await page.screenshot({ path: `${dir}/columns.png` });
+  await page.locator("#slab-apply-case").selectOption("SL");
+  await page.locator("#slab-apply-loads").click();
+  await expect(page.locator("#workspace")).not.toHaveAttribute(
+    "aria-busy",
+    "true",
+  );
+  const p = page.waitForEvent("download");
+  await menuCommand(page, "File", "Download project");
+  const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
+  const loads = saved.loads.filter((l) => l.case === "SL");
+  expect(loads).toHaveLength(4);
+  expect(
+    Math.abs(loads.reduce((a, l) => a - l.values[2], 0) - total),
+  ).toBeLessThanOrEqual(1e-8 * total);
+  expect(saved.designPreviews[0].plate.placement).toEqual([0, 0, 3]);
   expect(errors).toEqual([]);
 });

@@ -62,6 +62,20 @@ preview draft today shows synthetic plate actions only.
     difference of at most 1e-3 at 32. This gate was defined after the first
     run showed the variant difference; no existing gate changed.
 
+11. **Slabs on columns and the frame link.** Point supports (pinned, fixed,
+    springs) extend plate-v1, and the stability test becomes the exact rank
+    test on the rigid plate modes. A slab draft records its placement in the
+    model and its columns (schema 1.6.0).
+    - `DeriveSlabColumns` takes the vertical members meeting that level
+      inside the panel as springs: kz = ΣEA/L, and krx, kry = Σ4EI/L (3EI/L
+      when the far end rotates freely, 0 when the slab end is released). It
+      refuses inclined or skewed members rather than dropping coupling terms.
+    - `ApplySlabColumnLoads` solves the slab in Rust. It writes each model
+      column's share as a nodal load (−reaction) in a chosen load case,
+      replacing that slab's previous loads.
+    The slab is still analysed on its own under its entered pressure: a
+    one-way link, not a coupled frame–shell model.
+
 ## Consequences
 
 - The slab preview can report real, converged plate actions and design

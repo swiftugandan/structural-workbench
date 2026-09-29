@@ -43,7 +43,43 @@ pub struct SlabPlateInputs {
     pub inputs: std::collections::BTreeMap<String, f64>,
     /// Provenance of every numeric key and of `edges` and `includeOpening`.
     pub input_sources: std::collections::BTreeMap<String, String>,
+    /// Where the panel's corner (x = 0, y = 0) sits in the model, with the
+    /// panel axes along global X and Y at elevation z (schema 1.6.0).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub placement: Option<[f64; 3]>,
+    /// Column (point) supports of the panel (schema 1.6.0).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub columns: Vec<SlabColumn>,
 }
+
+/// A column under a slab panel: a point support at (x, y) in panel
+/// coordinates. `spring` carries the column's axial (kz, N/m) and bending
+/// (krx, kry about global X and Y, N m/rad) stiffness.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct SlabColumn {
+    pub x: f64,
+    pub y: f64,
+    /// "pinned", "fixed" or "spring".
+    pub kind: String,
+    #[serde(default)]
+    pub kz: f64,
+    #[serde(default)]
+    pub krx: f64,
+    #[serde(default)]
+    pub kry: f64,
+    /// "user", or "model" when derived from the frame's columns.
+    pub source: String,
+    /// The model node the column meets the slab at (model source).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub node_id: Option<String>,
+    /// The model members that gave its stiffness (model source).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub member_ids: Vec<String>,
+}
+
+/// Most columns under one slab panel.
+pub const MAX_SLAB_COLUMNS: usize = 200;
 
 /// pressure (Pa, uniform, downward), elasticModulus (Pa), poissonRatio,
 /// openingX / openingY (m, the opening's corner nearest the origin).
@@ -103,6 +139,43 @@ impl SlabPlateInputs {
             })
         {
             return Err(err("INVALID_SCHEMA", "Incomplete plate input provenance"));
+        }
+        if self.columns.len() > MAX_SLAB_COLUMNS {
+            return Err(err(
+                "INVALID_SCHEMA",
+                format!("At most {MAX_SLAB_COLUMNS} slab columns"),
+            ));
+        }
+        if self.placement.is_some_and(|p| p.iter().any(|v| !v.is_finite())) {
+            return Err(err("INVALID_SCHEMA", "Slab placement must be finite"));
+        }
+        for (k, c) in self.columns.iter().enumerate() {
+            let numbers = [c.x, c.y, c.kz, c.krx, c.kry];
+            let spring = c.kind == "spring";
+            if !["pinned", "fixed", "spring"].contains(&c.kind.as_str())
+                || numbers.iter().any(|v| !v.is_finite())
+                || [c.kz, c.krx, c.kry].iter().any(|v| *v < 0.)
+                || (spring && c.kz <= 0.)
+                || (!spring && (c.kz != 0. || c.krx != 0. || c.kry != 0.))
+            {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    format!(
+                        "Column {}: kind pinned, fixed or spring (kz > 0, rotational springs ≥ 0), finite position",
+                        k + 1
+                    ),
+                ));
+            }
+            let model = c.source == "model";
+            if !["user", "model"].contains(&c.source.as_str())
+                || model != c.node_id.is_some()
+                || (model && c.member_ids.is_empty())
+            {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    format!("Column {}: a model column names its node and members", k + 1),
+                ));
+            }
         }
         Ok(())
     }
@@ -371,6 +444,18 @@ impl DesignPreview {
                 "INVALID_SCHEMA",
                 "Preview opening must lie inside the slab boundary",
             ));
+        }
+        if let Some(plate) = &self.plate {
+            let (lx, ly) = (self.inputs["length"], self.inputs["width"]);
+            let tol = 1e-9 * lx.max(ly);
+            for (k, c) in plate.columns.iter().enumerate() {
+                if !((-tol..=lx + tol).contains(&c.x) && (-tol..=ly + tol).contains(&c.y)) {
+                    return Err(err(
+                        "INVALID_SCHEMA",
+                        format!("Column {} lies outside the slab panel", k + 1),
+                    ));
+                }
+            }
         }
         if let Some(plate) = self.plate.as_ref().filter(|p| p.include_opening) {
             let (x0, y0) = (plate.inputs["openingX"], plate.inputs["openingY"]);

@@ -165,10 +165,30 @@ const criteria = [
     observation:
       "In the browser build, the P-OPEN-OS panel reproduces the oracle to 1e-6 from the downloaded run record. The browser test switches the contours through mx, my, Top X, Bottom Y and w. Edits make the run STALE, and clamped edges show line moments. The project downloads and reopens with its plate inputs. A mechanism and an invalid Poisson's ratio are refused with their reasons shown.",
   },
+  {
+    id: "M10-P9-COLUMNS",
+    title: "Slabs on columns and the link to the frame",
+    evidence: "kernel_validation",
+    tests: {
+      "plate-kernel": [
+        "p_points_opensees_identical_mesh",
+        "point_supports_need_a_non_collinear_set",
+      ],
+      "slab-protocol": [
+        "columns_from_the_model_carry_the_slab_to_the_frame",
+        "slab_column_commands_refuse_what_they_cannot_do",
+      ],
+      "slab-browser": [
+        "Slab on model columns: derive the columns, solve and apply the column loads to the frame",
+      ],
+    },
+    observation:
+      "A 12 × 10 m flat slab on six columns (pinned, fixed, springs) matches OpenSees ShellMITC4 with zeroLength springs on the identical mesh to 1e-6: deflections, element moments and column reactions. Collinear columns, a single column, off-slab and repeated columns are refused. From the model, four columns become springs with kz = EA/L and krx, kry = 4EI/L (local axes mapped to global). The slab's reactions sum to q·A. Applying them writes four nodal loads (idempotent), and the frame's base then carries the slab exactly. Inclined members, missing columns and unknown cases are refused.",
+  },
 ];
 const { rows, issues } = await evaluateCriteria(dir, build, criteria);
 const limitations =
-  "plate-v1 mechanics only: flat rectangular panels with one rectangular opening, uniform pressure, linear elastic isotropic material, free/simple/clamped edges, no frame–slab coupling, column supports, cracking or long-term effects. Reinforcement areas, punching, detailing and deflection limits need the slab code profile (M08 resources) and stay UNSUPPORTED; the M10 parent is not accepted.";
+  "plate-v1 mechanics only: flat rectangular panels with one rectangular opening, uniform pressure, linear elastic isotropic material, free/simple/clamped edges and pinned/fixed/spring column supports; the frame link is one-way (columns and their stiffness from the model, column loads back to it), not a coupled frame–shell model; no cracking or long-term effects. Reinforcement areas, punching, detailing and deflection limits need the slab code profile (M08 resources) and stay UNSUPPORTED; the M10 parent is not accepted.";
 await record("m10-plate-acceptance", {
   status: issues.length ? "FAIL" : "PASS",
   testCount: rows.length,

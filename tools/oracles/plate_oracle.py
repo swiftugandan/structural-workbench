@@ -4,8 +4,8 @@
 Navier double series give the Kirchhoff and Mindlin (hard simple support)
 solutions of uniformly loaded rectangular plates; Timoshenko & Woinowsky-
 Krieger's published coefficients give the clamped square; OpenSees ShellMITC4
-gives clamped, perforated and distorted panels on meshes identical to the
-kernel's.
+gives clamped, perforated, distorted and column-supported panels on meshes
+identical to the kernel's.
 Nothing here imports the Rust kernel. Run with tools/oracle-env/bin/python.
 
 Sign convention (docs/formulations/plate.md): global Z up, pressure q > 0
@@ -287,6 +287,114 @@ distorted_case = {
                      "mesh": 32, "w": 1e-3},
 }
 
+# Flat slab on columns (P-POINTS-OS): a 12 x 10 m panel, all edges free,
+# on six columns: pinned, fixed and elastic (zeroLength springs to ground in
+# w, rx, ry). Columns hold u, v. OpenSees ShellMITC4 on the identical 0.5 m
+# mesh; point reactions are the support forces on the slab (restraint
+# reactions, or -k u for springs).
+def opensees_points(a, b, t, nx, ny, points, nu=NU):
+    ops.wipe()
+    ops.model("basic", "-ndm", 3, "-ndf", 6)
+    ops.section("ElasticMembranePlateSection", 1, E, nu, t, 0.0)
+    xs = [a * i / nx for i in range(nx + 1)]
+    ys = [b * j / ny for j in range(ny + 1)]
+    tag = {}
+    for j in range(ny + 1):
+        for i in range(nx + 1):
+            tag[(i, j)] = len(tag) + 1
+            ops.node(tag[(i, j)], xs[i], ys[j], 0.0)
+    grid = lambda x, y: (round(x / (a / nx)), round(y / (b / ny)))
+    ops.uniaxialMaterial("Elastic", 900, 1.0)  # placeholder, replaced per spring
+    mat = [900]
+    ground = 100000
+    elem = 100000
+    for k, pt in enumerate(points):
+        n = tag[grid(pt["x"], pt["y"])]
+        if pt["kind"] == "pinned":
+            ops.fix(n, 1, 1, 1, 0, 0, 0)
+        elif pt["kind"] == "fixed":
+            ops.fix(n, 1, 1, 1, 1, 1, 0)
+        else:
+            ops.fix(n, 1, 1, 0, 0, 0, 0)
+            ground += 1
+            ops.node(ground, pt["x"], pt["y"], 0.0)
+            ops.fix(ground, 1, 1, 1, 1, 1, 1)
+            mats, dirs = [], []
+            for d, key in ((3, "kz"), (4, "krx"), (5, "kry")):
+                if pt[key] > 0:
+                    mat[0] += 1
+                    ops.uniaxialMaterial("Elastic", mat[0], pt[key])
+                    mats.append(mat[0])
+                    dirs.append(d)
+            elem += 1
+            ops.element("zeroLength", elem, ground, n, "-mat", *mats, "-dir", *dirs)
+    e = 0
+    for j in range(ny):
+        for i in range(nx):
+            e += 1
+            ops.element("ShellMITC4", e, tag[(i, j)], tag[(i + 1, j)], tag[(i + 1, j + 1)], tag[(i, j + 1)], 1)
+    ops.timeSeries("Linear", 1)
+    ops.pattern("Plain", 1, 1)
+    for j in range(ny):
+        for i in range(nx):
+            share = Q * (xs[i + 1] - xs[i]) * (ys[j + 1] - ys[j]) / 4
+            for c in [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]:
+                ops.load(tag[c], 0.0, 0.0, -share, 0.0, 0.0, 0.0)
+    ops.system("UmfPack")
+    ops.numberer("RCM")
+    ops.constraints("Plain")
+    ops.integrator("LoadControl", 1.0)
+    ops.algorithm("Linear")
+    ops.analysis("Static")
+    if ops.analyze(1) != 0:
+        raise RuntimeError("OpenSees point-supported slab failed")
+    ops.reactions()
+    w = {f"{i},{j}": ops.nodeDisp(n, 3) for (i, j), n in tag.items()}
+    moments = {}
+    e = 0
+    for j in range(ny):
+        for i in range(nx):
+            e += 1
+            st = ops.eleResponse(e, "stresses")
+            gp = [st[k * 8:(k + 1) * 8] for k in range(4)]
+            avg = [sum(g[c] for g in gp) / 4 for c in range(8)]
+            moments[f"{i},{j}"] = {"mx": -avg[3], "my": -avg[4], "mxy": -avg[5]}
+    reactions = []
+    for pt in points:
+        n = tag[grid(pt["x"], pt["y"])]
+        if pt["kind"] == "spring":
+            u = [ops.nodeDisp(n, d) for d in (3, 4, 5)]
+            reactions.append([-pt["kz"] * u[0], -pt["krx"] * u[1], -pt["kry"] * u[2]])
+        else:
+            r = ops.nodeReaction(n)
+            reactions.append([r[2], r[3] if pt["kind"] == "fixed" else 0.0, r[4] if pt["kind"] == "fixed" else 0.0])
+    return {"w": w, "moments": moments, "reactions": reactions}
+
+
+POINTS = [
+    {"x": 1.0, "y": 1.0, "kind": "pinned"},
+    {"x": 6.0, "y": 1.0, "kind": "fixed"},
+    {"x": 11.0, "y": 1.0, "kind": "spring", "kz": 5e8, "krx": 2e8, "kry": 2e8},
+    {"x": 1.0, "y": 9.0, "kind": "spring", "kz": 8e8, "krx": 0.0, "kry": 3e8},
+    {"x": 6.0, "y": 9.0, "kind": "spring", "kz": 5e8, "krx": 2e8, "kry": 2e8},
+    {"x": 11.0, "y": 9.0, "kind": "pinned"},
+]
+for pt in POINTS:
+    pt.setdefault("kz", 0.0)
+    pt.setdefault("krx", 0.0)
+    pt.setdefault("kry", 0.0)
+pp = opensees_points(12.0, 10.0, 0.25, 24, 20, POINTS)
+total = sum(r[0] for r in pp["reactions"])
+check(abs(total - Q * 12.0 * 10.0) < 1e-6 * Q * 120.0, f"point reactions {total} vs load")
+points_case = {
+    "id": "P-POINTS-OS", "a": 12.0, "b": 10.0, "t": 0.25, "E": E, "nu": NU, "q": Q, "edges": "free",
+    "points": POINTS, "mesh": [24, 20],
+    "nodeW": pick(pp["w"], ["12,10", "2,2", "22,18", "0,20", "24,0", "12,0"]),
+    "elementMoments": pick(pp["moments"], ["11,9", "1,1", "12,1", "22,17", "5,18"]),
+    "pointReactions": pp["reactions"],
+    "tolerance": 1e-6,
+}
+
 # MacNeal-Harder distorted patch (0.24 x 0.12) for membrane and bending patch
 # tests; the exact fields are linear (membrane) and quadratic (bending).
 patch = {
@@ -312,6 +420,7 @@ oracle = {
     "clampedOpenSees": clamped_os,
     "openingOpenSees": opening_os,
     "distorted": distorted_case,
+    "points": points_case,
     "patch": patch,
     "failures": failures,
 }

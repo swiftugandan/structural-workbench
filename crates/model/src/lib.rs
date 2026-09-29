@@ -10,8 +10,9 @@ mod section_props;
 pub use residential::residential_reference;
 pub mod structure;
 pub use design_inputs::{
-    DesignPreview, DesignSource, DesignValue, MECHANICS_COMMON_KEYS, SLAB_EDGE_CONDITIONS,
-    SLAB_PLATE_KEYS, SectionMechanicsInputs, SlabPlateInputs, SteelDesign, SteelServiceability,
+    DesignPreview, DesignSource, DesignValue, MAX_SLAB_COLUMNS, MECHANICS_COMMON_KEYS,
+    SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs, SlabColumn, SlabPlateInputs,
+    SteelDesign, SteelServiceability,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,

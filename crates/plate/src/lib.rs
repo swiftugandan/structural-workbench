@@ -27,6 +27,26 @@ pub enum Edge {
     Clamped,
 }
 
+/// A point support (a column) at (x, y). Every kind holds the in-plane
+/// displacements u, v; `Spring` gives the slab elastic supports in w and the
+/// two rotations (a column's axial and bending stiffness).
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum PointKind {
+    Pinned,
+    Fixed,
+    Spring { kz: f64, krx: f64, kry: f64 },
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct PointSupport {
+    pub x: f64,
+    pub y: f64,
+    pub kind: PointKind,
+}
+
+/// Most point supports on one panel.
+pub const MAX_POINTS: usize = 200;
+
 /// A rectangular panel [0, lx] × [0, ly] with at most one rectangular opening.
 #[derive(Clone, Debug)]
 pub struct Panel {
@@ -38,6 +58,8 @@ pub struct Panel {
     pub edges: [Edge; 4],
     /// Target cell size (m).
     pub target: f64,
+    /// Interior or edge point supports; grid lines pass through each.
+    pub points: Vec<PointSupport>,
 }
 
 #[derive(Clone, Debug)]
@@ -50,6 +72,31 @@ pub struct Mesh {
     pub elements: Vec<[usize; 4]>,
     /// Grid index (i, j) of each element (its lower-left corner).
     pub element_grid: Vec<(usize, usize)>,
+}
+
+/// Numerical rank of a set of dimensionless 3-vectors (Gauss–Jordan).
+fn rank3(rows: &[[f64; 3]]) -> usize {
+    let mut m: Vec<[f64; 3]> = rows.to_vec();
+    let mut rank = 0;
+    for c in 0..3 {
+        let Some(pivot) = (rank..m.len())
+            .filter(|&r| m[r][c].abs() > 1e-9)
+            .max_by(|&a, &b| m[a][c].abs().total_cmp(&m[b][c].abs()))
+        else {
+            continue;
+        };
+        m.swap(rank, pivot);
+        for r in 0..m.len() {
+            if r != rank {
+                let f = m[r][c] / m[rank][c];
+                for k in 0..3 {
+                    m[r][k] -= f * m[rank][k];
+                }
+            }
+        }
+        rank += 1;
+    }
+    rank
 }
 
 fn grid_lines(length: f64, cuts: &[f64], target: f64) -> Vec<f64> {
@@ -84,15 +131,97 @@ impl Panel {
                 "The opening must lie strictly inside the panel",
             ));
         }
-        // The plate rigid modes w = a + b x + c y are held by one clamped
-        // edge or by any two supported edges; one simple edge leaves the
-        // rotation about its own line free. Supported edges hold u and v.
-        let clamped = self.edges.iter().filter(|e| **e == Edge::Clamped).count();
-        let supported = self.edges.iter().filter(|e| **e != Edge::Free).count();
-        if clamped == 0 && supported < 2 {
+        if self.points.len() > MAX_POINTS {
+            return Err(err(
+                "INVALID_SETTINGS",
+                format!("At most {MAX_POINTS} point supports"),
+            ));
+        }
+        let tolerance = 1e-9 * self.lx.max(self.ly);
+        for (k, p) in self.points.iter().enumerate() {
+            let inside = p.x.is_finite()
+                && p.y.is_finite()
+                && (-tolerance..=self.lx + tolerance).contains(&p.x)
+                && (-tolerance..=self.ly + tolerance).contains(&p.y);
+            let in_opening = self
+                .opening
+                .is_some_and(|[x0, x1, y0, y1]| x0 < p.x && p.x < x1 && y0 < p.y && p.y < y1);
+            if !inside || in_opening {
+                return Err(err(
+                    "INVALID_SETTINGS",
+                    format!(
+                        "Point support {} must lie on the slab, outside the opening",
+                        k + 1
+                    ),
+                ));
+            }
+            if let PointKind::Spring { kz, krx, kry } = p.kind
+                && !([kz, krx, kry].iter().all(|v| v.is_finite() && *v >= 0.) && kz > 0.)
+            {
+                return Err(err(
+                    "INVALID_SETTINGS",
+                    format!(
+                        "Point support {} needs kz > 0 and rotational springs ≥ 0",
+                        k + 1
+                    ),
+                ));
+            }
+            if self.points[..k]
+                .iter()
+                .any(|q| (q.x - p.x).hypot(q.y - p.y) <= tolerance)
+            {
+                return Err(err(
+                    "INVALID_SETTINGS",
+                    format!("Point support {} repeats another", k + 1),
+                ));
+            }
+        }
+        // Rigid plate modes w = a + b x + c y: every support contributes rows
+        // of constraints on (a, b, c); the panel is stable in bending iff they
+        // have rank 3. A simple edge holds w along its line and the slope
+        // along it; a clamped edge or fixed point also the slope across. In
+        // plane, a supported edge or two point supports hold u, v and the
+        // in-plane rotation.
+        let (lx, ly) = (self.lx, self.ly);
+        let mut rows: Vec<[f64; 3]> = vec![];
+        let ends = [
+            [[0., 0.], [0., ly]],
+            [[lx, 0.], [lx, ly]],
+            [[0., 0.], [lx, 0.]],
+            [[0., ly], [lx, ly]],
+        ];
+        for (k, edge) in self.edges.iter().enumerate() {
+            if *edge == Edge::Free {
+                continue;
+            }
+            for [x, y] in ends[k] {
+                rows.push([1., x / lx, y / ly]);
+            }
+            rows.push(if k < 2 { [0., 0., 1.] } else { [0., 1., 0.] });
+            if *edge == Edge::Clamped {
+                rows.push([0., 1., 0.]);
+                rows.push([0., 0., 1.]);
+            }
+        }
+        for p in &self.points {
+            let (rx, ry) = match p.kind {
+                PointKind::Pinned => (false, false),
+                PointKind::Fixed => (true, true),
+                PointKind::Spring { krx, kry, .. } => (krx > 0., kry > 0.),
+            };
+            rows.push([1., p.x / lx, p.y / ly]);
+            if rx {
+                rows.push([0., 0., 1.]);
+            }
+            if ry {
+                rows.push([0., 1., 0.]);
+            }
+        }
+        let in_plane = self.edges.iter().any(|e| *e != Edge::Free) || self.points.len() >= 2;
+        if rank3(&rows) < 3 || !in_plane {
             return Err(err(
                 "UNSTABLE_MODEL",
-                "The panel needs one clamped edge or two supported edges; it can rotate about a single simple edge",
+                "The supports do not hold the panel: it can rotate or lift as a rigid plate. Add a clamped edge, a second supported edge or three point supports not on one line",
             ));
         }
         Ok(())
@@ -101,10 +230,14 @@ impl Panel {
     /// The structured mesh at the panel's target size.
     pub fn mesh(&self) -> Result<Mesh> {
         self.validate()?;
-        let (cx, cy) = match self.opening {
+        let (mut cx, mut cy) = match self.opening {
             Some([x0, x1, y0, y1]) => (vec![x0, x1], vec![y0, y1]),
             None => (vec![], vec![]),
         };
+        for p in &self.points {
+            cx.push(p.x.clamp(0., self.lx));
+            cy.push(p.y.clamp(0., self.ly));
+        }
         Mesh::structured(
             self,
             grid_lines(self.lx, &cx, self.target),
@@ -137,6 +270,16 @@ impl Mesh {
             return Err(err(
                 "INVALID_SETTINGS",
                 "Grid lines must include the opening edges",
+            ));
+        }
+        if panel
+            .points
+            .iter()
+            .any(|p| !(has(&xs, p.x.clamp(0., panel.lx)) && has(&ys, p.y.clamp(0., panel.ly))))
+        {
+            return Err(err(
+                "INVALID_SETTINGS",
+                "Grid lines must pass through every point support",
             ));
         }
         let cells = (xs.len() - 1) * (ys.len() - 1);
@@ -289,6 +432,9 @@ pub struct Solution {
     /// [mx, my, mxy].
     pub smoothed: Vec<[f64; 3]>,
     pub reactions: Vec<Reaction>,
+    /// Per point support (order of `Panel::points`): [Fz (up), Mx, My] on
+    /// the slab, from restraint or spring.
+    pub point_reactions: Vec<[f64; 3]>,
     /// Line moments along clamped edges.
     pub edge_moments: Vec<EdgeMoment>,
     /// Sum of vertical support reactions (N, positive up).
@@ -301,8 +447,26 @@ pub struct Solution {
     pub residual: f64,
 }
 
+/// The point support at a mesh node, if any.
+fn point_at(panel: &Panel, x: f64, y: f64) -> Option<usize> {
+    let tolerance = 1e-9 * panel.lx.max(panel.ly);
+    panel.points.iter().position(|p| {
+        (p.x.clamp(0., panel.lx) - x).abs() <= tolerance
+            && (p.y.clamp(0., panel.ly) - y).abs() <= tolerance
+    })
+}
+
 fn restraints(panel: &Panel, x: f64, y: f64) -> [bool; NODE_DOFS] {
     let mut fixed = [false; NODE_DOFS];
+    if let Some(k) = point_at(panel, x, y) {
+        fixed[0] = true;
+        fixed[1] = true;
+        match panel.points[k].kind {
+            PointKind::Pinned => fixed[2] = true,
+            PointKind::Fixed => fixed = [true; NODE_DOFS],
+            PointKind::Spring { .. } => {}
+        }
+    }
     let on = [
         x.abs() < 1e-12,
         (x - panel.lx).abs() < 1e-12,
@@ -395,6 +559,23 @@ pub fn solve_mesh(
         }
         stiffness.push(k);
     }
+    // Column springs on w, rx, ry.
+    let mut springs = vec![0.; n * NODE_DOFS];
+    for (node, &[x, y]) in mesh.nodes.iter().enumerate() {
+        if let Some(k) = point_at(panel, x, y)
+            && let PointKind::Spring { kz, krx, kry } = panel.points[k].kind
+        {
+            for (a, value) in [(2, kz), (3, krx), (4, kry)] {
+                let g = node * NODE_DOFS + a;
+                springs[g] = value;
+                if let Some(f) = free[g]
+                    && value > 0.
+                {
+                    *upper.entry((f, f)).or_default() += value;
+                }
+            }
+        }
+    }
     let mut t = TriMat::with_capacity((count, count), 2 * upper.len());
     for (&(a, b), &v) in &upper {
         t.add_triplet(a, b, v);
@@ -427,21 +608,41 @@ pub fn solve_mesh(
         }
         element_actions.push(element::actions(&mesh.element_xy(e), material, &d, 0., 0.));
     }
+    // Support forces on the slab: restraints carry K u − f, springs −k u.
     let reaction = |g: usize| {
         if free[g].is_none() {
             internal[g] - f_full[g]
         } else {
-            0.
+            -springs[g] * u[g]
         }
     };
     let reactions: Vec<Reaction> = (0..n)
-        .filter(|k| (2..NODE_DOFS).any(|a| free[k * NODE_DOFS + a].is_none()))
+        .filter(|k| {
+            (2..NODE_DOFS)
+                .any(|a| free[k * NODE_DOFS + a].is_none() || springs[k * NODE_DOFS + a] > 0.)
+        })
         .map(|k| Reaction {
             node: k,
             force: [2, 3, 4].map(|a| reaction(k * NODE_DOFS + a)),
         })
         .collect();
     let reaction_z: f64 = reactions.iter().map(|r| r.force[0]).sum();
+    let point_reactions: Vec<[f64; 3]> = panel
+        .points
+        .iter()
+        .map(|p| {
+            let (x, y) = (p.x.clamp(0., panel.lx), p.y.clamp(0., panel.ly));
+            mesh.nodes
+                .iter()
+                .position(|&[nx, ny]| {
+                    point_at(panel, nx, ny).is_some()
+                        && (nx - x).abs() + (ny - y).abs() < 1e-9 * panel.lx.max(panel.ly)
+                })
+                .map_or([0.; 3], |node| {
+                    [2, 3, 4].map(|a| reaction(node * NODE_DOFS + a))
+                })
+        })
+        .collect();
     let applied: f64 = -f_full.iter().skip(2).step_by(NODE_DOFS).sum::<f64>();
     let edge_moments = edge_moments(panel, &mesh, &reactions);
     let mut sums = vec![[0.; 3]; n];
@@ -475,6 +676,7 @@ pub fn solve_mesh(
     }
     Ok(Solution {
         reactions,
+        point_reactions,
         edge_moments,
         mesh,
         displacements,
