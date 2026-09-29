@@ -1,5 +1,5 @@
 {
-  "taskId": "M07-parent",
+  "taskId": "M07-LTB",
   "milestone": "M07",
   "sourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
   "buildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
@@ -10,7 +10,7 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "8850239e70848c02c7250e271ffd9733131ae99eb03da292fed6ca394b5fba59"
+    "playwright-results.json": "7996a76f55e781fda0460087bf9bbcbf2c78fcd6ca63fa2bc3ea7f73d4b4fea4"
   },
   "runner": {
     "platform": "darwin",
@@ -19,29 +19,34 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T10:50:32.221Z",
+  "observedAt": "2026-09-29T10:44:29.057Z",
   "status": "PASS",
-  "testCount": 5,
+  "testCount": 7,
   "testIds": [
+    "DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen",
+    "DW-F4: fail reaches governing station and clause; LTB governs once Lb exceeds Lp",
     "standalone S2-D1 steel check passes via evaluateDesign UI",
     "complete-member matrix: ≥3 pass and ≥3 fail seeds",
+    "steel check remains usable in a narrow viewport",
     "standalone S2-D1 fail seed reports overall fail",
-    "model-derived demand check lands in calculation report clause trail",
-    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions"
+    "model-derived demand check lands in calculation report clause trail"
   ],
   "command": [
     "npx",
     "playwright",
     "test",
     "tests/e2e/steel-check.spec.js",
-    "tests/e2e/capability-ledger.spec.js"
-  ],
-  "artifacts": [
-    "playwright-results.json"
+    "tests/e2e/native-steel-design.spec.js"
   ],
   "stats": {
-    "unexpected": 0,
+    "startTime": "2026-09-29T10:38:18.433Z",
+    "duration": 370604.349,
+    "expected": 7,
     "skipped": 0,
-    "expected": 5
-  }
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifacts": [
+    "playwright-results.json"
+  ]
 }

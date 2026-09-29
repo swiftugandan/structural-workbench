@@ -135,7 +135,7 @@ test("DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen"
   expect(errors).toEqual([]);
 });
 
-test("DW-F4: fail reaches governing station and clause; LTB stays unsupported", async ({
+test("DW-F4: fail reaches governing station and clause; LTB governs once Lb exceeds Lp", async ({
   page,
 }) => {
   await openModel(page, 300000);
@@ -155,10 +155,10 @@ test("DW-F4: fail reaches governing station and clause; LTB stays unsupported", 
   await page.locator("#analyse").click();
   await expect(page.locator("#design-run")).toBeEnabled();
   await page.locator("#design-run").click();
+  // Lb = 3 m on the W18×50 is past Lp: inelastic lateral-torsional buckling
+  // (F2-2) now governs the flexure check instead of yielding.
+  await expect(page.locator("[data-check-id='flexure']")).toContainText("F2-2");
   await expect(page.locator("[data-testid='native-design-state']")).toHaveText(
-    "UNSUPPORTED",
-  );
-  await expect(page.locator("[data-check-id='flexure']")).toContainText(
-    "unsupported",
+    "FAIL",
   );
 });

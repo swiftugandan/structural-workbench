@@ -134,14 +134,8 @@ fn evaluate_analysis(
                 "Weak-axis bending or shear is outside the model-native S2 scope",
             ));
         }
-        if mz != 0.0 && (props.bf_over_2tf > 0.38 * root || props.h_over_tw > 3.76 * root) {
-            run.checks.retain(|c| c.check_id != "flexure");
-            run.checks.push(CheckOutcome::unsupported(
-                "flexure",
-                "B4.1b/F2",
-                "Noncompact/slender flexure is outside the compact F2 path",
-            ));
-        }
+        // Flexural classification (F2 compact, F3 noncompact flange, F4/F5
+        // webs unsupported) is the profile's own flexure check.
         if vy != 0.0 && props.h_over_tw > 2.24 * root {
             run.checks.retain(|c| c.check_id != "shear");
             run.checks.push(CheckOutcome::unsupported(

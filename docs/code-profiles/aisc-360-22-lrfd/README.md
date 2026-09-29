@@ -6,7 +6,7 @@
 | Standard | ANSI/AISC 360 |
 | Edition | 2022 |
 | Method | LRFD |
-| M07 breadth | S2 — prismatic doubly-symmetric W: classification, tension, compression, flexure, shear, H1 interaction |
+| M07 breadth | S2 — prismatic doubly-symmetric W: classification, tension, compression, flexure, shear, H1 interaction; S3 — flexure with flange local buckling (F3) and lateral-torsional buckling (F2.2), `dossier-S3.md` |
 | Resource gates | `R-CODE-STEEL`, `R-STEEL-EXAMPLES` |
 | Status | Registered and **enabled** when committed `resources.lock` + S2 fixtures verify (no private PDFs required in CI) |
 
@@ -37,6 +37,9 @@ Never commit the PDFs. Never enable `resources_verified` on the profile until a 
 | tension | D2, D3, B4.3b | `S2-D1` | D.1 |
 | compression | E3 | `S2-E1C` | E.1C |
 | flexure | F2-1 (compact, continuous brace) | `S2-F11B` | F.1-1B |
+| flexure (LTB, inelastic) | F2-5, F2-6, F2-2 | `S3-F12B` | F.1-2B |
+| flexure (LTB, elastic) | F2-3, F2-4 | `S3-F13B` | F.1-3B |
+| flexure (noncompact flange) | B4.1b Case 10, F3-1 | `S3-F3B` | F.3B |
 | shear | G2.1 | `S2-G1B` | G.1B |
 | interaction-H1 | H1-1a | `S2-H1B` | H.1B |
 

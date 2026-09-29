@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": null,
-  "activeTask": null,
+  "activeMilestone": "M07",
+  "activeTask": "M07-S",
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -4006,6 +4006,59 @@
       "acceptedAt": "2026-09-29T09:17:11.792Z",
       "acceptanceMeaning": "Restricted declarative JSON-pointer sweeps of linear static analysis, native CLI and browser on one core, with replay identity, cancellation, budgets, located errors, guards and manual-workflow equivalence. Criteria INTERFACE, REPLAY, CANCELLATION, BUDGETS, LOCATED-ERRORS, MANUAL-MATCH, GUARDS, EXPORT. General scripting, other analysis types in studies and multilingual reports are out of scope.",
       "nextAction": "Remaining milestones need external resources or depend on blocked ones"
+    },
+    "M07-LTB": {
+      "id": "M07-LTB",
+      "useCase": "AISC 360-22 flexure breadth S3: lateral-torsional buckling (F2.2) and noncompact-flange local buckling (F3-1) with published fixtures; fail-closed boundaries",
+      "dependencies": [
+        "M07-E"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/design/src/profile/aisc36022/flexure.rs",
+        "crates/design/src/profile/aisc36022/fixture_tests.rs",
+        "fixtures/design/aisc-360-22-lrfd/S3-*.json",
+        "docs/code-profiles/aisc-360-22-lrfd/dossier-S3.md",
+        "docs/adr/0019-aisc-flexure-ltb-and-flange-local-buckling.md",
+        "crates/wasm-api/src/design_workspace.rs",
+        "web/steel-check.js",
+        "web/steel-design.js",
+        "tools/run-m07-ltb.mjs"
+      ],
+      "acceptanceIds": [
+        "DW-LTB1"
+      ],
+      "requiredCommands": [
+        "node tools/run-m07-ltb.mjs",
+        "npm run verify:m07"
+      ],
+      "outcomes": [
+        {
+          "check": "m07-ltb-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/ltb/m07-ltb-acceptance.json"
+        },
+        {
+          "check": "gate-M07 (same build)",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/full/gate-M07.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Examples F.1-2B (inelastic LTB), F.1-3B (elastic LTB) and F.3B (FLB) reproduced within 0.5 %; derived rts/ho match the published W18x50 values",
+        "Latent unconservative gap closed: the standalone path credited noncompact-flange W-shapes with Mp; flexure now owns classification and applies F3-1",
+        "Duplicate model-native noncompact gate removed; model members with Lb > Lp get F2-2/F2-3",
+        "Slender flanges, noncompact webs, missing data and Cb < 1 are UNSUPPORTED",
+        "Browser runs used WORKBENCH_TEST_TIMEOUT_MS=300000 because unrelated processes held the machine at load ~12; assertions unchanged"
+      ],
+      "evidencePaths": [
+        "evidence/M07/ltb",
+        "evidence/M07/full"
+      ],
+      "sourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
+      "buildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
+      "acceptedAt": "2026-09-29T10:44:29.060Z",
+      "nextAction": "M07-S serviceability (ADR 0020 drafted); Cb from the model's moment diagram is a later slice"
     }
   },
   "blockers": [
@@ -4056,9 +4109,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
-  "nextAction": "All dependency-ready milestones without external resource needs are accepted (M00-M07, M09, M14, M22). Blocked on resources: M08 (EC2 A1:2014 + UK NA+A2:2014), M10 (shell benchmarks), M11, M12, M13 (connection code/examples), M15 (seismic code), M16-M20, M21 (exchange corpus). Next without new resources: M07-LTB/S steel expansions within the acquired AISC resources, or the hinge-DOF slice that lifts the release limitation of stability-v1 and dynamics-v1.",
+  "lastVerifiedBuildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
+  "nextAction": "M07-S: steel serviceability deflection criteria separate from strength (ADR 0020). Other milestones remain resource-blocked.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
-  "lastVerifiedScope": "M22 parent gate on the same build (study native, CLI, CLI replay, 4 browser journeys, acceptance); cargo workspace 185, contracts 13."
+  "lastVerifiedSourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
+  "lastVerifiedScope": "M07-LTB gate and M07 parent gate on the same build; cargo workspace 190."
 }

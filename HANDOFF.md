@@ -1,3 +1,9 @@
+## Latest: AISC flexure breadth S3 (M07-LTB)
+
+Steel flexure now covers lateral-torsional buckling (F2.2, inelastic and elastic, with your Lb and Cb) and compression flange local buckling of noncompact flanges (F3-1). It reproduces Design Examples F.1-2B, F.1-3B and F.3B within 0.5 %. rts and ho are derived by the Spec's definitions from the catalogue; the derivation reproduces the published W18×50 values. This closed a latent unconservative gap: the standalone check credited noncompact-flange shapes such as W14×99 with Mp. Slender flanges, noncompact webs, missing data and Cb < 1 are UNSUPPORTED. Gates: `node tools/run-m07-ltb.mjs` (evidence/M07/ltb) and `npm run verify:m07` on the same build. ADR 0019, dossier-S3.
+
+Unrelated vitest processes from another project held this machine at load ~12, so browser gates ran with `WORKBENCH_TEST_TIMEOUT_MS=300000`. This is a new, optional per-test budget; assertions are unchanged.
+
 ## Latest: M22 declarative studies accepted
 
 M22 passed its parent gate: `node tools/run-m22-parent.mjs` → `evidence/M22/full`. Studies (Analysis › Run study…, or `workbench-cli study`) are strict JSON-pointer sweeps applied to the validated open project, exactly like manual edits. They are budgeted (50 variants, 100 steps per variant, 1000 per study, sharing the analysis time limit) and cancellable from the toolbar. Every failure names its variant, step, path and stage. The new Study results tab shows observed values, ratios and full hashes. The HTML report embeds the study document with its replay identity (study digest, base model hash, solver build). The CLI replays byte for byte.

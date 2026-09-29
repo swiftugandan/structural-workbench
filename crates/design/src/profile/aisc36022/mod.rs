@@ -3,6 +3,7 @@
 mod classification;
 mod compression;
 mod flexure;
+pub use flexure::{Ltb, evaluate_ltb};
 mod interaction;
 mod shear;
 mod tension;
@@ -122,8 +123,8 @@ impl CodeProfile for Aisc36022LrfdProfile {
         }
 
         if mu > 0.0 {
-            checks.push(flexure::check_flexure_major_continuous(
-                section, ctx.fy, ctx.lb, mu,
+            checks.push(flexure::check_flexure_major(
+                section, ctx.fy, ctx.lb, ctx.cb, mu,
             ));
         }
 

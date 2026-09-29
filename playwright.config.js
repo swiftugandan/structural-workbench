@@ -7,7 +7,8 @@ export default defineConfig({
     process.env.WORKBENCH_LIVE_VISUAL === "1"
       ? []
       : ["**/live-visual.spec.js"],
-  timeout: 45000,
+  // Per-test budget; raise WORKBENCH_TEST_TIMEOUT_MS on a loaded machine.
+  timeout: Number(process.env.WORKBENCH_TEST_TIMEOUT_MS) || 45000,
   workers: 1,
   fullyParallel: false,
   use: {

@@ -67,7 +67,8 @@ test("standalone S2-D1 steel check passes via evaluateDesign UI", async ({
 });
 
 test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) => {
-  test.setTimeout(120_000);
+  // Ten seeds in one journey; never less than the configured per-test budget.
+  test.setTimeout(Math.max(180_000, test.info().timeout));
   const errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.goto("/");
@@ -77,7 +78,15 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
   });
   await openSteelPanel(page);
 
-  const passSeeds = ["S2-D1", "S2-E1C", "S2-F11B", "S2-G1B", "S2-H1B"];
+  const passSeeds = [
+    "S2-D1",
+    "S2-E1C",
+    "S2-F11B",
+    "S2-G1B",
+    "S2-H1B",
+    "S3-F12B",
+    "S3-F13B",
+  ];
   const failSeeds = [
     "S2-D1-fail",
     "S2-E1C-fail",
@@ -85,7 +94,7 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
     "S2-G1B-fail",
   ];
   const unsupportedSeeds = [
-    "S2-LTB-unsupported",
+    "S3-slender-flange-unsupported",
     "S2-HSS-unsupported",
     "S2-torsion-unsupported",
   ];
@@ -98,6 +107,15 @@ test("complete-member matrix: ≥3 pass and ≥3 fail seeds", async ({ page }) =
         "kN·m",
       );
     }
+    // Published LTB examples: inelastic F2-2 and elastic F2-3 govern.
+    if (id === "S3-F12B")
+      await expect(page.locator('[data-check-id="flexure"]')).toContainText(
+        "F2-2",
+      );
+    if (id === "S3-F13B")
+      await expect(page.locator('[data-check-id="flexure"]')).toContainText(
+        "F2-3",
+      );
     results.pass.push(id);
   }
   for (const id of failSeeds) {

@@ -1,5 +1,5 @@
 {
-  "sourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
+  "sourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -17,7 +17,7 @@
     "cad.js": "820cc8d27d9909e83bbc30b59c90330e46447336e3e81636ebf51b77c73ff68a",
     "canvas-tools.js": "521b224d56358812afb68b9349b6b66f6b05e67612bd42914102ea40a6f8d8e3",
     "capabilities-ledger.js": "abe15bb20ae34ddda443a18840254504331fe232e3c4f6560f7e2a6e11c1b272",
-    "capabilities.json": "4472bf628b7f3b50f7d7a886073378abf78f1b3b82b7b4b6c6d70a08acbd41ce",
+    "capabilities.json": "ad832e8ec73e6cbcb798eb23dbbb342986bcf06755109e051aaa1f58806fbb6d",
     "command-menu.js": "28fd5ff5603bb65a7f3495ad26d8e08af6ac01b9f3423e6fd1ec71ff8d76b73b",
     "design-presentation.js": "fb0ed22c7c9fb1bcd1b97b3d916b421b8a613dba5749c42f0a7222815f0560be",
     "design-previews.js": "3da59102f62889dcd039ba9076b8e3f99a7f9af0577b32d61c4402f7e84bf562",
@@ -58,7 +58,7 @@
     "offline.js": "bcccfca2f33f5df48ae12b262aa2d7d3441113ba09b29394de42ef726a594834",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "72248fa520bdaaca9ac559cfa438acacffc87809e39141feb2a683ae78ee8b02",
+    "pkg/workbench_wasm_api_bg.wasm": "dcba42a4e1343b0318cf5bf2ef4a143c71211188b620fa6e6469bc2a3a5f47b3",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/connections.js": "718307212938168507007eb994bdf7fde2f71d6fe4d5bdbfd1696c44f550c0ba",
@@ -80,19 +80,19 @@
     "state/storage.js": "eaafbc48438b9f8bc06ec4c8c25785ec930e2c7cf5a478f5935ea67c9c54eb42",
     "state/transport.js": "2f26cae1c68d840e26cf57815c7584e3f2972189397886aa589c4cddb54f90d0",
     "steel-catalogue-study.js": "d876a05ce33288e635310026abcb491caa1c9c6db0b4ffdb18f6cfb22568413d",
-    "steel-check.js": "17ea8be6d2b8a2435a4dd107a192a7a1f5fe0a0f3e2ed300c44983c0038ed262",
-    "steel-design.js": "b32ebc09cc5d1e01ec4eebf761dc8e09e4a3a2d5fa9d1c56bca2ba2ba93baab0",
+    "steel-check.js": "b6a156b1cc1ff65eef29d4ec1323c8a66fc0146b112a648c4e098c57318f1205",
+    "steel-design.js": "f8ac3f2542fee63c7a167668c54ceaa2cb198716c12c4a22ed4f5c80272fba7b",
     "steel-overview.js": "f643eb200841b813992220118c1769ed78323c4b435a39d6c63a3c1e1db7b303",
     "structural-icons.js": "8d4dde99cf08ad51a162d1c412f507fb33dc06063e4287eed8cd4df4c7f2aedf",
     "structure-workspace.js": "8abe0db3dd1667d67ef9aa154b9c109f4a7d2636e33f418da5443a8030fb8de8",
     "study.js": "6cc08a08fd2abe86840615654e80ea1bf5b343c06cc6934031050fd64e8e3ffe",
     "styles.css": "281a9cf8a24b9a3844d81d86cbf99f472f454562b38f373bc9a2cf0ba7a4a8dc",
-    "sw.js": "ab5bc2f0a6f367a78d41e13d39d2047043175cfc55bfd736c5c901baebc411b8",
+    "sw.js": "6b39f8a5cb153968a0d59f0ba4cfaf5fbc8a0b5ec45378a03208aa3595df34f0",
     "topology.js": "1723af43311ec50b120967a09bc04ea472e7ec88d746a7cf6932ec6ebc533b84",
     "variants.js": "e7be206d5557d058a6364b1c78706ccc3cf92852e6ab5ef8f49a010a700d243b",
     "worker.js": "0a5a85384eb205ab89693d076af596d85e9a47da0aa08c7eb31aefb845b89e24",
     "workspace-ui.js": "3d9c8a9f0b73c688de5c994a6d56ce80fac92b7a11ec04b4878db61630cd6ef6"
   },
-  "buildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
+  "buildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
   "releaseStatus": "working-preview-not-accepted"
 }

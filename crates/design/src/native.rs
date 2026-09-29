@@ -78,6 +78,8 @@ pub fn resolve(
         sy: n("Sy") * INCH.powi(3),
         bf_over_2tf: n("bf/2tf"),
         h_over_tw: n("h/tw"),
+        iy: n("Iy") * INCH.powi(4),
+        j: n("J") * INCH.powi(4),
         e: material.e,
     };
     Ok((section, material, props))

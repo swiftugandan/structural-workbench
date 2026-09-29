@@ -1,0 +1,70 @@
+{
+  "id": "S3-F12B",
+  "exampleId": "F.1-2B",
+  "exampleTitle": "W-Shape Flexural Member Design in Major-Axis Bending, Braced at Third Points",
+  "relatedExamples": [
+    "F.1-1A",
+    "F.1-1B",
+    "F.1-2A"
+  ],
+  "pdfPages": [
+    172,
+    173
+  ],
+  "designMethod": "LRFD",
+  "section": {
+    "family": "W",
+    "designation": "W18X50",
+    "materialAstm": "A992",
+    "Fy_ksi": 50,
+    "E_ksi": 29000,
+    "Zx_in3": 101,
+    "Sx_in3": 88.9,
+    "ry_in": 1.65,
+    "J_in4": 1.24,
+    "d_in": 18.0,
+    "tf_in": 0.57,
+    "Iy_in4": 40.1,
+    "bf_over_2tf": 6.57,
+    "h_over_tw": 45.2,
+    "publishedRts_in": 1.98,
+    "publishedHo_in": 17.4,
+    "compactness": "compact",
+    "inputSource": "Zx from F.1-1B; ry, Sx, J, rts, ho published in the example (Manual Table 1-1); d, tf, Iy, bf/2tf, h/tw from the Table 1-1 subset in crates/design/data/aisc-v16-subset.json. The kernel derives ho = d - tf and rts^2 = Iy ho / (2 Sx) (Spec F2-7 with Cw = Iy ho^2 / 4) and must reproduce the published rts and ho."
+  },
+  "member": {
+    "span_ft": 35.0,
+    "Lb_ft": 11.7,
+    "Cb": 1.01,
+    "bracing": "ends and third points",
+    "governingSegment": "centre",
+    "support": "simple",
+    "prismatic": true,
+    "doublySymmetric": true
+  },
+  "loads": {
+    "Mu_kip_ft": 266,
+    "combination": "1.2D+1.6L"
+  },
+  "published": {
+    "Lp_in": 69.9,
+    "Lp_ft": 5.83,
+    "Lr_in": 203,
+    "Lr_ft": 16.9,
+    "Mp_kip_in": 5050,
+    "Mn_kip_in": 4060,
+    "Mn_kip_ft": 338,
+    "phi_b": 0.9,
+    "phi_b_Mn_kip_ft": 304,
+    "limitState": "inelastic lateral-torsional buckling F2-2",
+    "pass": true
+  },
+  "specEquations": [
+    "F1-1",
+    "F2-5",
+    "F2-6",
+    "F2-2",
+    "F1"
+  ],
+  "toleranceRef": "manifest.defaultTolerance"
+}

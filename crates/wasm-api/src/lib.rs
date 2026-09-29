@@ -431,6 +431,8 @@ impl Kernel {
                         bf_over_2tf: s["bfOver2tf"].as_f64().unwrap_or(0.0),
                         h_over_tw: s["hOverTw"].as_f64().unwrap_or(0.0),
                         e: s["e"].as_f64().unwrap_or(200e9),
+                        iy: s["iy"].as_f64().unwrap_or(0.0),
+                        j: s["j"].as_f64().unwrap_or(0.0),
                     })
                 });
                 let tension_end = inputs.get("tensionEnd").and_then(|t| {

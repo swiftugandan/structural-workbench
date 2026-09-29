@@ -69,6 +69,11 @@ pub struct WSectionProps {
     /// Web slenderness h/tw (dimensionless).
     pub h_over_tw: f64,
     pub e: f64,
+    /// Weak-axis second moment of area (m⁴); 0 when not provided. Needed for
+    /// lateral-torsional buckling (rts, F2-7).
+    pub iy: f64,
+    /// Saint-Venant torsional constant (m⁴); 0 when not provided (F2-6, F2-4).
+    pub j: f64,
 }
 
 /// Tension-end inputs for Spec D2/D3 (SI).

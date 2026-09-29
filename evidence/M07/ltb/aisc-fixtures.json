@@ -1,0 +1,52 @@
+{
+  "taskId": "M07-LTB",
+  "milestone": "M07",
+  "sourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
+  "buildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T10:38:15.196Z",
+  "status": "PASS",
+  "testCount": 16,
+  "testIds": [
+    "profile::aisc36022::fixture_tests::s2_g1b_shear_matches_example",
+    "profile::aisc36022::fixture_tests::s2_f11b_flexure_matches_example",
+    "profile::aisc36022::fixture_tests::s2_e1c_compression_matches_example",
+    "profile::aisc36022::fixture_tests::s2_d1_tension_matches_example",
+    "profile::aisc36022::fixture_tests::s2_h1b_interaction_matches_example",
+    "profile::aisc36022::fixture_tests::s3_f3b_noncompact_flange_local_buckling_matches_example",
+    "profile::aisc36022::fixture_tests::s3_f12b_inelastic_ltb_matches_example",
+    "profile::aisc36022::fixture_tests::s3_f13b_elastic_ltb_matches_example",
+    "profile::aisc36022::fixture_tests::s3_full_check_routes_noncompact_flanges_through_f3_and_caps_ltb_at_mp",
+    "profile::aisc36022::fixture_tests::s3_unsupported_flexure_stays_unsupported",
+    "profile::aisc36022::tests::missing_classification_ratios_are_unsupported",
+    "profile::aisc36022::tests::lb_gt_zero_flexure_is_unsupported",
+    "profile::aisc36022::tests::missing_zx_flexure_is_unsupported_not_numeric_fail",
+    "profile::aisc36022::tests::rejects_hss_and_torsion",
+    "profile::aisc36022::verify::tests::committed_lock_and_manifest_verify",
+    "profile::aisc36022::verify::tests::vault_pdfs_match_lock_when_present"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "workbench-design",
+    "--lib",
+    "--",
+    "aisc36022"
+  ],
+  "artifacts": []
+}

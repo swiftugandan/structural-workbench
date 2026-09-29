@@ -156,19 +156,23 @@ const SEEDS = {
         mz: 266 * KIP_FT,
         t: 0,
         section: {
-          ag: 0,
-          d: 0,
-          tw: 0,
-          bf: 0,
-          tf: 0,
-          rx: 0,
-          ry: 0,
+          // AISC Shapes Database v16.0 — W18X50 (catalogue subset; ry, Sx,
+          // J as published in Examples F.1-2B and F.1-3B)
+          ag: 14.7 * IN * IN,
+          d: 18.0 * IN,
+          tw: 0.355 * IN,
+          bf: 7.5 * IN,
+          tf: 0.57 * IN,
+          rx: 7.38 * IN,
+          ry: 1.65 * IN,
           zx: 101 * IN * IN * IN,
-          zy: 0,
-          sx: 0,
-          sy: 0,
-          bfOver2tf: 0,
-          hOverTw: 0,
+          zy: 16.6 * IN * IN * IN,
+          sx: 88.9 * IN * IN * IN,
+          sy: 10.7 * IN * IN * IN,
+          bfOver2tf: 6.57,
+          hOverTw: 45.2,
+          iy: 40.1 * IN ** 4,
+          j: 1.24 * IN ** 4,
           e: 29000 * KSI,
         },
       },
@@ -258,8 +262,9 @@ const SEEDS = {
         length: 14 * FT,
         ky: 1,
         kz: 1,
-        // Example H.1B has unbraced length 14 ft; LTB is deferred. This seed
-        // exercises H1 with published φ capacities on the continuous-brace path.
+        // Example H.1B has an unbraced length of 14 ft; this seed exercises H1
+        // with its published φ capacities on the continuous-brace path, where
+        // the noncompact flange gives F3-1 for the flexure check itself.
         lb: 0,
         cb: 1,
         torsionPresent: false,
@@ -285,8 +290,8 @@ const SEEDS = {
           ry: 3.71 * IN,
           zx: 173 * IN * IN * IN,
           zy: 83.6 * IN * IN * IN,
-          sx: 0,
-          sy: 0,
+          sx: 157 * IN * IN * IN,
+          sy: 55.2 * IN * IN * IN,
           bfOver2tf: 9.34,
           hOverTw: 23.5,
           e: 29000 * KSI,
@@ -294,14 +299,38 @@ const SEEDS = {
       },
     }),
   },
-  "S2-LTB-unsupported": {
-    label: "S2 LTB unsupported · Lb>0 on W18×50",
+  "S3-F12B": {
+    label: "S3-F12B inelastic LTB pass · W18×50 Lb=11.7 ft, Cb=1.01",
+    expect: "pass",
+    payload: () => {
+      const p = SEEDS["S2-F11B"].payload();
+      p.memberIds = ["S3-F12B"];
+      p.resultId = "standalone-S3-F12B";
+      p.inputs.lb = 11.7 * FT;
+      p.inputs.cb = 1.01;
+      return p;
+    },
+  },
+  "S3-F13B": {
+    label: "S3-F13B elastic LTB pass · W18×50 Lb=17.5 ft, Cb=1.30",
+    expect: "pass",
+    payload: () => {
+      const p = SEEDS["S2-F11B"].payload();
+      p.memberIds = ["S3-F13B"];
+      p.resultId = "standalone-S3-F13B";
+      p.inputs.lb = 17.5 * FT;
+      p.inputs.cb = 1.3;
+      return p;
+    },
+  },
+  "S3-slender-flange-unsupported": {
+    label: "S3 slender flange unsupported · bf/2tf > λrf (F3-2)",
     expect: "unsupported",
     payload: () => {
       const p = SEEDS["S2-F11B"].payload();
-      p.memberIds = ["S2-LTB-unsupported"];
-      p.resultId = "standalone-S2-LTB-unsupported";
-      p.inputs.lb = 10 * FT;
+      p.memberIds = ["S3-slender-flange-unsupported"];
+      p.resultId = "standalone-S3-slender-flange-unsupported";
+      p.inputs.section.bfOver2tf = 25;
       return p;
     },
   },

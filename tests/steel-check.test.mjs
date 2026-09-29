@@ -32,8 +32,10 @@ test("seed catalog has ≥3 pass, ≥3 fail, and unsupported scope cases", () =>
     assert.equal(p.profileId, "aisc-360-22-lrfd");
     assert.ok(p.inputs.section);
   }
-  const ltb = seedPayload("S2-LTB-unsupported");
-  assert.ok(ltb.inputs.lb > 0);
+  // S3: published LTB examples run with Lb > 0; a slender flange stays unsupported.
+  assert.ok(seedPayload("S3-F12B").inputs.lb > 0);
+  assert.ok(seedPayload("S3-F13B").inputs.lb > seedPayload("S3-F12B").inputs.lb);
+  assert.equal(seedPayload("S3-slender-flange-unsupported").inputs.section.bfOver2tf, 25);
   assert.equal(seedPayload("S2-HSS-unsupported").inputs.sectionFamily, "HSS");
   assert.equal(seedPayload("S2-torsion-unsupported").inputs.torsionPresent, true);
 });

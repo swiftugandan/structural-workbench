@@ -10,7 +10,10 @@ use serde_json::Value;
 
 use super::classification::classify_compression_w;
 use super::compression::evaluate_compression;
-use super::flexure::evaluate_flexure_major_yielding;
+use super::flexure::{
+    check_flexure_major, evaluate_flange_local_buckling, evaluate_flexure_major_yielding,
+    evaluate_ltb, flange_limits,
+};
 use super::interaction::evaluate_h1;
 use super::shear::evaluate_shear_major_g21a;
 use super::tension::evaluate_tension;
@@ -18,7 +21,7 @@ use super::units::{
     ft_to_m, in2_to_m2, in3_to_m3, in_to_m, kip_ft_to_nm, kip_to_n, ksi_to_pa, n_to_kip,
     nm_to_kip_ft, pa_to_ksi,
 };
-use crate::profile::{TensionEndProps, WSectionProps};
+use crate::profile::{CheckStatus, TensionEndProps, WSectionProps};
 
 fn fixtures_dir() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../fixtures/design/aisc-360-22-lrfd")
@@ -241,4 +244,160 @@ fn s2_h1b_interaction_matches_example() {
         0.01,
     );
     assert!(r.ratio <= 1.0);
+}
+
+// ---- S3: lateral-torsional buckling (F2.2) and flange local buckling (F3) ----
+
+fn in4_to_m4(v: f64) -> f64 {
+    in_to_m(1.0).powi(4) * v
+}
+
+/// The W18×50 of Examples F.1-2B / F.1-3B from its fixture inputs.
+fn w18x50(sec: &Value) -> WSectionProps {
+    let f = |k: &str| sec[k].as_f64().unwrap();
+    WSectionProps {
+        zx: in3_to_m3(f("Zx_in3")),
+        sx: in3_to_m3(f("Sx_in3")),
+        ry: in_to_m(f("ry_in")),
+        j: in4_to_m4(f("J_in4")),
+        iy: in4_to_m4(f("Iy_in4")),
+        d: in_to_m(f("d_in")),
+        tf: in_to_m(f("tf_in")),
+        bf_over_2tf: f("bf_over_2tf"),
+        h_over_tw: f("h_over_tw"),
+        e: ksi_to_pa(f("E_ksi")),
+        ..WSectionProps::default()
+    }
+}
+
+#[test]
+fn s3_f12b_inelastic_ltb_matches_example() {
+    let v = load("S3-F12B-ltb-inelastic-W18x50.json");
+    let sec = &v["section"];
+    let section = w18x50(sec);
+    let fy = ksi_to_pa(sec["Fy_ksi"].as_f64().unwrap());
+    let lb = ft_to_m(v["member"]["Lb_ft"].as_f64().unwrap());
+    let cb = v["member"]["Cb"].as_f64().unwrap();
+    let pubd = &v["published"];
+    let ltb = evaluate_ltb(&section, fy, lb, cb);
+    // Derived rts and ho reproduce the tabulated values.
+    near(ltb.rts / in_to_m(1.0), sec["publishedRts_in"].as_f64().unwrap(), 0.005, 0.01);
+    near(ltb.ho / in_to_m(1.0), sec["publishedHo_in"].as_f64().unwrap(), 0.005, 0.05);
+    near(ltb.lp / in_to_m(1.0), pubd["Lp_in"].as_f64().unwrap(), 0.005, 0.5);
+    near(ltb.lr / in_to_m(1.0), pubd["Lr_in"].as_f64().unwrap(), 0.005, 1.0);
+    assert_eq!(ltb.branch, "inelastic");
+    near(ltb.mn.unwrap() / (kip_to_n(1.0) * in_to_m(1.0)), pubd["Mn_kip_in"].as_f64().unwrap(), 0.005, 12.0);
+    let mu = kip_ft_to_nm(v["loads"]["Mu_kip_ft"].as_f64().unwrap());
+    let c = check_flexure_major(&section, fy, lb, cb, mu);
+    assert_eq!(c.clause, "F2-2");
+    assert_eq!(c.status, CheckStatus::Pass);
+    near(nm_to_kip_ft(c.resistance.unwrap()), pubd["phi_b_Mn_kip_ft"].as_f64().unwrap(), 0.005, 1.0);
+}
+
+#[test]
+fn s3_f13b_elastic_ltb_matches_example() {
+    let v = load("S3-F13B-ltb-elastic-W18x50.json");
+    let sec = &v["section"];
+    let section = w18x50(sec);
+    let fy = ksi_to_pa(sec["Fy_ksi"].as_f64().unwrap());
+    let lb = ft_to_m(v["member"]["Lb_ft"].as_f64().unwrap());
+    let cb = v["member"]["Cb"].as_f64().unwrap();
+    let pubd = &v["published"];
+    let ltb = evaluate_ltb(&section, fy, lb, cb);
+    assert_eq!(ltb.branch, "elastic");
+    near(ltb.lp / ft_to_m(1.0), pubd["Lp_ft"].as_f64().unwrap(), 0.005, 0.05);
+    near(ltb.lr / ft_to_m(1.0), pubd["Lr_ft"].as_f64().unwrap(), 0.005, 0.1);
+    near(pa_to_ksi(ltb.fcr.unwrap()), pubd["Fcr_ksi"].as_f64().unwrap(), 0.005, 0.1);
+    near(ltb.mn.unwrap() / (kip_to_n(1.0) * in_to_m(1.0)), pubd["Mn_kip_in"].as_f64().unwrap(), 0.005, 12.0);
+    let mu = kip_ft_to_nm(v["loads"]["Mu_kip_ft"].as_f64().unwrap());
+    let c = check_flexure_major(&section, fy, lb, cb, mu);
+    assert_eq!(c.clause, "F2-3");
+    assert_eq!(c.status, CheckStatus::Pass);
+    near(nm_to_kip_ft(c.resistance.unwrap()), pubd["phi_b_Mn_kip_ft"].as_f64().unwrap(), 0.005, 1.0);
+    // Raising the demand above the published capacity fails, never passes.
+    let over = kip_ft_to_nm(pubd["phi_b_Mn_kip_ft"].as_f64().unwrap() * 1.05);
+    assert_eq!(check_flexure_major(&section, fy, lb, cb, over).status, CheckStatus::Fail);
+}
+
+#[test]
+fn s3_f3b_noncompact_flange_local_buckling_matches_example() {
+    let v = load("S3-F3B-flb-W21x48.json");
+    let sec = &v["section"];
+    let section = WSectionProps {
+        zx: in3_to_m3(sec["Zx_in3"].as_f64().unwrap()),
+        sx: in3_to_m3(sec["Sx_in3"].as_f64().unwrap()),
+        bf_over_2tf: sec["bf_over_2tf"].as_f64().unwrap(),
+        e: ksi_to_pa(sec["E_ksi"].as_f64().unwrap()),
+        ..WSectionProps::default()
+    };
+    let fy = ksi_to_pa(sec["Fy_ksi"].as_f64().unwrap());
+    let pubd = &v["published"];
+    let (lpf, lrf) = flange_limits(section.e, fy);
+    near(lpf, pubd["lambda_pf"].as_f64().unwrap(), 0.005, 0.01);
+    near(lrf, pubd["lambda_rf"].as_f64().unwrap(), 0.005, 0.1);
+    let mn = evaluate_flange_local_buckling(&section, fy);
+    near(mn / (kip_to_n(1.0) * in_to_m(1.0)), pubd["Mn_kip_in"].as_f64().unwrap(), 0.005, 12.0);
+    near(nm_to_kip_ft(0.9 * mn), pubd["phi_b_Mn_kip_ft"].as_f64().unwrap(), 0.005, 1.0);
+    let mu = kip_ft_to_nm(v["loads"]["Mu_kip_ft"].as_f64().unwrap());
+    assert!(mu <= 0.9 * mn);
+}
+
+#[test]
+fn s3_full_check_routes_noncompact_flanges_through_f3_and_caps_ltb_at_mp() {
+    // W14×99 (catalogue subset): bf/2tf 9.34 > λpf, compact web.
+    let section = WSectionProps {
+        zx: in3_to_m3(173.0),
+        sx: in3_to_m3(157.0),
+        ry: in_to_m(3.71),
+        iy: in4_to_m4(402.0),
+        j: in4_to_m4(5.37),
+        d: in_to_m(14.2),
+        tf: in_to_m(0.78),
+        bf_over_2tf: 9.34,
+        h_over_tw: 23.5,
+        e: ksi_to_pa(29_000.0),
+        ..WSectionProps::default()
+    };
+    let fy = ksi_to_pa(50.0);
+    let c = check_flexure_major(&section, fy, 0.0, 1.0, 1.0);
+    assert_eq!(c.clause, "F3-1");
+    let flb = 0.9 * evaluate_flange_local_buckling(&section, fy);
+    assert!((c.resistance.unwrap() - flb).abs() <= 1e-9 * flb);
+    // A short unbraced length below Lp leaves F3-1 governing; a large Cb never lifts LTB above Mp.
+    let ltb = evaluate_ltb(&section, fy, 0.5 * evaluate_ltb(&section, fy, 1.0, 1.0).lp, 1.0);
+    assert!(ltb.mn.is_none());
+    let lr = evaluate_ltb(&section, fy, 1.0, 1.0).lr;
+    let capped = evaluate_ltb(&section, fy, 0.5 * lr, 3.0).mn.unwrap();
+    assert!(capped <= fy * section.zx * (1.0 + 1e-12));
+}
+
+#[test]
+fn s3_unsupported_flexure_stays_unsupported() {
+    let base = WSectionProps {
+        zx: in3_to_m3(101.0),
+        sx: in3_to_m3(88.9),
+        ry: in_to_m(1.65),
+        iy: in4_to_m4(40.1),
+        j: in4_to_m4(1.24),
+        d: in_to_m(18.0),
+        tf: in_to_m(0.57),
+        bf_over_2tf: 6.57,
+        h_over_tw: 45.2,
+        e: ksi_to_pa(29_000.0),
+        ..WSectionProps::default()
+    };
+    let fy = ksi_to_pa(50.0);
+    let lb = ft_to_m(10.0);
+    let unsupported = |s: &WSectionProps, lb: f64, cb: f64, clause: &str| {
+        let c = check_flexure_major(s, fy, lb, cb, 1.0);
+        assert_eq!(c.status, CheckStatus::Unsupported, "{clause}");
+        assert_eq!(c.clause, clause);
+    };
+    unsupported(&WSectionProps { bf_over_2tf: 25.0, ..base.clone() }, 0.0, 1.0, "F3-2");
+    unsupported(&WSectionProps { h_over_tw: 100.0, ..base.clone() }, 0.0, 1.0, "F4");
+    unsupported(&WSectionProps { bf_over_2tf: 0.0, ..base.clone() }, 0.0, 1.0, "B4.1b");
+    unsupported(&WSectionProps { j: 0.0, ..base.clone() }, lb, 1.0, "F2.2");
+    unsupported(&base, lb, 0.9, "F1");
+    // Lb = 0 on a compact section is plain yielding, as in S2-F11B.
+    assert_eq!(check_flexure_major(&base, fy, 0.0, 1.0, 1.0).clause, "F2-1");
 }

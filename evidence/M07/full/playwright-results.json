@@ -39,7 +39,7 @@
         "testMatch": [
           "**/*.spec.js"
         ],
-        "timeout": 45000
+        "timeout": 300000
       }
     ],
     "quiet": false,
@@ -84,7 +84,7 @@
           "tags": [],
           "tests": [
             {
-              "timeout": 45000,
+              "timeout": 300000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "",
@@ -94,12 +94,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3597,
+                  "duration": 23689,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T17:03:44.384Z",
+                  "startTime": "2026-09-29T10:44:44.756Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -132,7 +132,7 @@
           "tags": [],
           "tests": [
             {
-              "timeout": 45000,
+              "timeout": 300000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "",
@@ -142,12 +142,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4889,
+                  "duration": 37758,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T17:03:48.339Z",
+                  "startTime": "2026-09-29T10:45:08.899Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -172,7 +172,7 @@
           "tags": [],
           "tests": [
             {
-              "timeout": 120000,
+              "timeout": 300000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "",
@@ -182,12 +182,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16960,
+                  "duration": 193558,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T17:03:53.298Z",
+                  "startTime": "2026-09-29T10:45:46.776Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -212,7 +212,7 @@
           "tags": [],
           "tests": [
             {
-              "timeout": 45000,
+              "timeout": 300000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "",
@@ -222,12 +222,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1950,
+                  "duration": 19034,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T17:04:10.379Z",
+                  "startTime": "2026-09-29T10:49:00.521Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -243,7 +243,7 @@
           ],
           "id": "a7f9f3524b22b69adcb5-c9bf9f5cf31ff145116a",
           "file": "e2e/steel-check.spec.js",
-          "line": 124,
+          "line": 142,
           "column": 1
         },
         {
@@ -252,7 +252,7 @@
           "tags": [],
           "tests": [
             {
-              "timeout": 45000,
+              "timeout": 300000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "",
@@ -262,12 +262,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4875,
+                  "duration": 34889,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T17:04:12.397Z",
+                  "startTime": "2026-09-29T10:49:19.667Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -283,7 +283,7 @@
           ],
           "id": "a7f9f3524b22b69adcb5-18af81555ad0276b7d5e",
           "file": "e2e/steel-check.spec.js",
-          "line": 142,
+          "line": 160,
           "column": 1
         },
         {
@@ -302,12 +302,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4140,
+                  "duration": 37304,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-23T17:04:17.344Z",
+                  "startTime": "2026-09-29T10:49:54.673Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -323,7 +323,7 @@
           ],
           "id": "a7f9f3524b22b69adcb5-6bcb428e1c111d79d80d",
           "file": "e2e/steel-check.spec.js",
-          "line": 166,
+          "line": 184,
           "column": 1
         }
       ]
@@ -331,8 +331,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-23T17:03:43.396Z",
-    "duration": 38251.816999999995,
+    "startTime": "2026-09-29T10:44:42.654Z",
+    "duration": 349549.35500000004,
     "expected": 6,
     "skipped": 0,
     "unexpected": 0,

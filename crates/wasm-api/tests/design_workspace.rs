@@ -125,15 +125,38 @@ fn native_no_seed_flexure_and_shear_have_exact_station_provenance() {
     );
 }
 
+fn governing_flexure(run: &Value) -> Value {
+    run["checks"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|c| c["checkId"] == "flexure")
+        .unwrap()
+        .clone()
+}
+
 #[test]
-fn unsupported_compactness_ltb_and_missing_tension_details_never_pass() {
+fn noncompact_flanges_and_ltb_use_their_clauses_and_missing_tension_details_never_pass() {
     let mut k = open();
+    // W14×99: noncompact flange for flexure, so F3-1 flange local buckling.
     assign(&mut k, "W14X99");
     inputs(&mut k, 0.0);
-    assert_eq!(evaluate(&mut k)["overall"], "unsupported");
+    let run = evaluate(&mut k);
+    assert_eq!(governing_flexure(&run)["clause"], "F3-1");
+    // W18×50 with Lb = 3 m (> Lp = 5.83 ft): inelastic LTB, F2-2 with Cb.
     assign(&mut k, "W18X50");
     inputs(&mut k, 3.0);
-    assert_eq!(evaluate(&mut k)["overall"], "unsupported");
+    let run = evaluate(&mut k);
+    let flex = governing_flexure(&run);
+    assert_eq!(flex["clause"], "F2-2");
+    let (_, _, section) = workbench_design::native::resolve(
+        &format!("{}:W18X50", workbench_design::native::CATALOGUE_ID),
+        workbench_design::native::MATERIAL_ID,
+    )
+    .unwrap();
+    let ltb = workbench_design::evaluate_ltb(&section, 50.0 * 6_894_757.293_168_361, 3.0, 1.0);
+    let expected = 0.9 * ltb.mn.unwrap();
+    assert!((flex["resistance"].as_f64().unwrap() / expected - 1.).abs() <= 1e-12);
     let mut p = req(&mut k, "getSnapshot", json!({}))["payload"]["project"].clone();
     p["loads"][0]["values"] = json!([10000., 0., 0., 0., 0., 0.]);
     req(&mut k, "importProject", json!({"jsonUtf8":p.to_string()}));

@@ -1,5 +1,5 @@
 {
-  "taskId": "M07-parent",
+  "taskId": "M07-LTB",
   "milestone": "M07",
   "sourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
   "buildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
@@ -17,10 +17,19 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T10:44:57.449Z",
+  "observedAt": "2026-09-29T10:38:16.752Z",
   "status": "PASS",
-  "pageErrors": [],
-  "comparisonStatus": "UNKNOWN",
-  "excludedCount": 17,
-  "capabilityCount": 15
+  "testCount": 3,
+  "testIds": [
+    "fail seeds raise demand above published capacity",
+    "seed catalog has ≥3 pass, ≥3 fail, and unsupported scope cases",
+    "applyAnalysisDemand overlays midspan sample and rejects envelopes"
+  ],
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "tests/steel-check.test.mjs"
+  ],
+  "artifacts": []
 }

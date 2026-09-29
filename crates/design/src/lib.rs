@@ -9,7 +9,8 @@ mod profile;
 pub mod rc_section;
 
 pub use profile::aisc36022::{
-    Aisc36022LrfdProfile, aisc_s2_resources_verified, verify_vault_pdfs_if_present,
+    Aisc36022LrfdProfile, Ltb, aisc_s2_resources_verified, evaluate_ltb,
+    verify_vault_pdfs_if_present,
 };
 pub use profile::ec2uk::{Ec2Ndp, Ec2UkNaProfile};
 pub use profile::{
