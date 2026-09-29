@@ -51,6 +51,17 @@ preview draft today shows synthetic plate actions only.
    have singular re-entrant corners, so the indicator stays above the limit
    there by design. That is reported, not suppressed.
 
+10. **Distorted meshes compare as converging discretisations.** OpenSees
+    ShellMITC4 maps the tied shear strains with Bathe & Dvorkin's (1985)
+    element-constant r/s angles. plate-v1 uses the pointwise tensor transform
+    J⁻¹. Both are published MITC4 forms and coincide on parallelograms. On the
+    checkerboard-distorted meshes (P-DISTORT) they differ by 9.7e-4, 6.6e-4
+    and 5.4e-4 in w at 8, 16 and 32. The identical-mesh 1e-6 gate therefore
+    applies to rectilinear meshes. The distorted gate is Navier
+    convergence (1.8e-3 at 32, gate 1e-2), plus a falling kernel–OpenSees
+    difference of at most 1e-3 at 32. This gate was defined after the first
+    run showed the variant difference; no existing gate changed.
+
 ## Consequences
 
 - The slab preview can report real, converged plate actions and design

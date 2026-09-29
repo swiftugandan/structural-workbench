@@ -181,6 +181,7 @@ export function renderExplorer(
           "drafts",
           "Design objects · mock",
           drafts("rcBeam", "RC beams") +
+            drafts("rcColumn", "RC columns") +
             drafts("slab", "Slabs") +
             drafts("padFooting", "Foundations"),
         ),

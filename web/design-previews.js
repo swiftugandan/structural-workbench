@@ -7,7 +7,13 @@ import {
 /** Workflow illustrations only. Validation, units and action provenance belong to Rust. */
 import { escape as esc } from "./reports/report.js";
 import { plateArgs, plateSection, platePane } from "./slab-plate.js";
-const names = { rcBeam: "RC beam", slab: "Slab", padFooting: "Pad footing" };
+import { columnPane, columnSketch } from "./rc-column.js";
+const names = {
+  rcBeam: "RC beam",
+  rcColumn: "RC column",
+  slab: "Slab",
+  padFooting: "Pad footing",
+};
 const sourceName = (value) =>
   ({
     syntheticFixture: "Synthetic fixture",
@@ -44,6 +50,7 @@ export function previewState(run, ctx) {
 }
 function illustration(d, face) {
   const v = d.inputs;
+  if (d.kind === "rcColumn") return columnSketch(d);
   if (d.kind === "rcBeam") {
     const w = (180 * v.width) / Math.max(v.width, v.depth),
       h = (180 * v.depth) / Math.max(v.width, v.depth),
@@ -137,7 +144,7 @@ export function concreteWorkspace({
     }
     document.body.classList.toggle("concrete-focus", focusObject);
     viewport.designPreview =
-      focusObject || (d.kind === "rcBeam" && d.targetId)
+      focusObject || (["rcBeam", "rcColumn"].includes(d.kind) && d.targetId)
         ? { draft: d, mode: displayMode, face, context: !focusObject }
         : null;
     $("#design-geometry-labels").hidden = !viewport.designPreview;
@@ -166,6 +173,21 @@ export function concreteWorkspace({
     };
     viewport.draw();
   }
+  /** Kind-specific panes, else the shared preview panes. */
+  function paneHtml(run, state, d) {
+    if (d.kind === "slab" && pane === "actions")
+      if (run?.plateAnalysis?.status === "evaluated")
+        return platePane(run, plateField);
+    if (d.kind === "rcColumn" && pane === "mechanics") return columnPane(run);
+    return previewPane({
+      run,
+      state,
+      d,
+      pane,
+      checkIndex,
+      sketch: illustration(d, face),
+    });
+  }
   function results(host) {
     const run = runs.get(active),
       state = previewState(run, getContext());
@@ -186,10 +208,11 @@ export function concreteWorkspace({
             ["ec2", "EC2 checks · disabled"],
           ]
         : []),
+      ...(d.kind === "rcColumn" ? [["mechanics", "Section mechanics"]] : []),
       ["schedule", "Schedule"],
       ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
     ];
-    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${d.kind === "slab" && pane === "actions" && run?.plateAnalysis?.status === "evaluated" ? platePane(run, plateField) : previewPane({ run, state, d, pane, checkIndex, sketch: illustration(d, face) })}</div></section>`;
+    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
       b.onclick = () => {
         pane = b.dataset.previewPane;

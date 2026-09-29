@@ -194,6 +194,7 @@ impl Structure {
                     id: structure_id("do", &d.id),
                     name: match d.kind.as_str() {
                         "rcBeam" => "RC beam",
+                        "rcColumn" => "RC column",
                         "slab" => "Slab",
                         _ => "Foundation",
                     }
@@ -427,11 +428,11 @@ impl Structure {
                 return Err(err("INVALID_SCHEMA", "Design object kind/status mismatch"));
             }
             if x.physical_member_id.as_ref().is_some_and(|id| {
-                x.kind != "rcBeam" || !self.physical_members.iter().any(|m| &m.id == id)
+                !d.binds_member() || !self.physical_members.iter().any(|m| &m.id == id)
             }) {
                 return Err(err("DANGLING_REFERENCE", "Invalid physical design binding"));
             }
-            if d.kind == "rcBeam" {
+            if d.binds_member() {
                 if let Some(target) = &d.target_id {
                     let pm = self
                         .physical_members

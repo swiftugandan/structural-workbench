@@ -1980,6 +1980,25 @@ $("#export-report").onclick = () => {
               run.sourceProvenance.kind === "modelAnalysis" &&
               run.sourceProvenance.resultId === result.resultId,
           ),
+        // Current model-sourced RC column previews bound to this result.
+        columnRuns: concrete
+          .records()
+          .filter(
+            (run) =>
+              run.kind === "rcColumn" &&
+              run.modelHash === modelHash &&
+              run.sourceProvenance.kind === "modelAnalysis" &&
+              run.sourceProvenance.resultId === result.resultId,
+          ),
+        // Slab plate analyses of the current model's drafts (ADR 0021).
+        plateRuns: concrete
+          .records()
+          .filter(
+            (run) =>
+              run.kind === "slab" &&
+              run.modelHash === modelHash &&
+              run.plateAnalysis?.status === "evaluated",
+          ),
         // A stability run of the current model, whichever case it analysed.
         stabilityRun: stability.current(modelHash),
       }),

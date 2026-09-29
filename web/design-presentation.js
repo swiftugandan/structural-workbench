@@ -4,6 +4,7 @@ import { entityLabel } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
 export const designNames = {
   rcBeam: "RC beam",
+  rcColumn: "RC column",
   slab: "Slab",
   padFooting: "Pad footing",
 };
@@ -51,7 +52,8 @@ export function mechanicsRows(d, template, law) {
     .join("");
 }
 export function mechanicsSection(d, template, law) {
-  if (d.kind !== "rcBeam" || !template.mechanics) return "";
+  if (!["rcBeam", "rcColumn"].includes(d.kind) || !template.mechanics)
+    return "";
   return `<fieldset class="design-subsection" id="preview-mechanics"><legend>Section mechanics law</legend><p class="design-note">Explicit mechanics inputs. These are not code values and never produce a design PASS.</p><label class="design-field"><span>Concrete law</span><select id="preview-mech-law">${template.mechanics.laws.map((l) => `<option value="${l.id}" ${l.id === law ? "selected" : ""}>${esc(l.label)}</option>`).join("")}</select></label><div id="preview-mech-fields">${mechanicsRows(d, template, law)}</div></fieldset>`;
 }
 export function previewInspector({
@@ -72,7 +74,7 @@ export function previewInspector({
   const t = templates.find((t) => t.kind === d.kind),
     v = d.inputs;
   const geometry =
-    d.kind === "rcBeam"
+    d.kind === "rcBeam" || d.kind === "rcColumn"
       ? ["width", "depth", "cover"]
       : d.kind === "slab"
         ? [
@@ -92,25 +94,27 @@ export function previewInspector({
             "cover",
           ];
   const special =
-    d.kind === "rcBeam"
-      ? [
-          "topBarCount",
-          "topBarDiameter",
-          "bottomBarCount",
-          "bottomBarDiameter",
-          "linkDiameter",
-          "linkSpacing",
-          "linkLegs",
-        ]
-      : d.kind === "slab"
-        ? ["meshSize"]
-        : ["bearingPressure", "embedment", "soilUnitWeight"];
+    d.kind === "rcColumn"
+      ? ["barDiameter", "barsAlongWidth", "barsAlongDepth", "linkDiameter"]
+      : d.kind === "rcBeam"
+        ? [
+            "topBarCount",
+            "topBarDiameter",
+            "bottomBarCount",
+            "bottomBarDiameter",
+            "linkDiameter",
+            "linkSpacing",
+            "linkLegs",
+          ]
+        : d.kind === "slab"
+          ? ["meshSize"]
+          : ["bearingPressure", "embedment", "soilUnitWeight"];
   return `<div class="design-object-title"><div><small>SELECTED ${designNames[d.kind].toUpperCase()}</small><h2>${esc(previewIdentity(ctx.project, d).text)}<span class="design-tag">Mock workflow</span></h2></div>${chooser}</div>
  <p class="design-note">Draft geometry is independent of analysis stiffness. The binding identifies the source of actions.</p>
  <form id="preview-form"><section class="design-section"><h3>1. Geometry and section</h3><div class="design-section-sketch"><svg viewBox="0 0 300 230" aria-label="Section sketch">${sketch}</svg><div>${fieldRows(d, t, geometry)}</div></div></section>
  <section class="design-section"><h3>2. Materials</h3>${fieldRows(d, t, ["concreteStrength", "rebarStrength"])}<small class="source-key">S · synthetic fixture &nbsp; U · user input. Strength inputs are not a code profile.</small>${mechanicsSection(d, t, mechanicsLaw)}</section>
- <section class="design-section"><h3>3. ${d.kind === "rcBeam" ? "Reinforcement preferences" : d.kind === "slab" ? "Mesh settings" : "Soil parameters"}</h3>${fieldRows(d, t, special)}${d.kind === "rcBeam" ? `<label class="design-check full"><input type="checkbox" id="preview-anchorage" ${d.tensionAnchorageConfirmed ? "checked" : ""}> I confirm the tension steel extends at least l<sub>bd</sub> + d beyond the checked sections</label><small>Your confirmation, never assumed. Unconfirmed, EC2 shear ignores this steel (ρ<sub>l</sub> = 0).</small>` : ""}${d.kind === "padFooting" ? `<label class="design-field full"><span>Geotechnical reference</span><textarea id="preview-soil" maxlength="512">${esc(d.soilReference)}</textarea></label><small>Bearing pressure is externally supplied, never calculated here.</small>` : ""}${d.kind === "slab" ? `<small>Target cell size of the structured plate mesh.</small>${plateHtml}` : ""}</section>
- <section class="design-section"><h3>4. Model binding</h3>${d.kind !== "slab" ? `<label class="design-field"><span>${d.kind === "rcBeam" ? "Member" : "Support"}</span><select id="preview-target"><option value="">No model binding</option>${ctx.project[d.kind === "rcBeam" ? "members" : "supports"].map((e) => `<option value="${e.id}" ${d.targetId === e.id ? "selected" : ""}>${esc(entityLabel(ctx.project, e.id))}</option>`).join("")}</select></label>` : "<p>The panel is analysed on its own under its entered pressure · frame forces never substitute for plate results.</p>"}<div class="design-form-actions"><button id="preview-save">Save inputs</button><button type="button" id="preview-cancel">Cancel edits</button></div></section></form>
+ <section class="design-section"><h3>3. ${d.kind === "rcBeam" || d.kind === "rcColumn" ? "Reinforcement preferences" : d.kind === "slab" ? "Mesh settings" : "Soil parameters"}</h3>${fieldRows(d, t, special)}${d.kind === "rcBeam" ? `<label class="design-check full"><input type="checkbox" id="preview-anchorage" ${d.tensionAnchorageConfirmed ? "checked" : ""}> I confirm the tension steel extends at least l<sub>bd</sub> + d beyond the checked sections</label><small>Your confirmation, never assumed. Unconfirmed, EC2 shear ignores this steel (ρ<sub>l</sub> = 0).</small>` : ""}${d.kind === "padFooting" ? `<label class="design-field full"><span>Geotechnical reference</span><textarea id="preview-soil" maxlength="512">${esc(d.soilReference)}</textarea></label><small>Bearing pressure is externally supplied, never calculated here.</small>` : ""}${d.kind === "slab" ? `<small>Target cell size of the structured plate mesh.</small>${plateHtml}` : ""}</section>
+ <section class="design-section"><h3>4. Model binding</h3>${d.kind !== "slab" ? `<label class="design-field"><span>${d.kind === "padFooting" ? "Support" : "Member"}</span><select id="preview-target"><option value="">No model binding</option>${ctx.project[d.kind === "padFooting" ? "supports" : "members"].map((e) => `<option value="${e.id}" ${d.targetId === e.id ? "selected" : ""}>${esc(entityLabel(ctx.project, e.id))}</option>`).join("")}</select></label>` : "<p>The panel is analysed on its own under its entered pressure · frame forces never substitute for plate results.</p>"}<div class="design-form-actions"><button id="preview-save">Save inputs</button><button type="button" id="preview-cancel">Cancel edits</button></div></section></form>
  <section class="design-section"><h3>5. Design actions and readiness</h3><label class="design-field"><span>Action source</span><select id="preview-source">${d.kind === "slab" ? '<option value="plate">Plate analysis of this panel</option>' : ""}<option value="synthetic">Synthetic fixture · MOCK</option>${d.kind !== "slab" ? '<option value="model">Current model case / combination</option>' : ""}</select></label>${d.kind === "slab" ? `<label class="design-field"><span>Reinforcement layer</span><select id="preview-face">${["Top X", "Top Y", "Bottom X", "Bottom Y"].map((f) => `<option ${f === face ? "selected" : ""}>${f}</option>`).join("")}</select></label>` : ""}<div class="readiness-grid"><span>✓ Draft geometry recorded</span><span>△ Code profile unavailable</span><span>△ Reinforcement unverified</span><span>△ ${d.kind === "padFooting" ? "Contact indeterminate" : "Resistance unsupported"}</span></div><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run workflow preview</button></section>
  <p class="design-note">MOCK WORKFLOW · No code-compliance claim. Draft dimensions do not change frame stiffness.</p>${create}<button id="preview-delete" class="design-delete">Delete this draft</button><p id="preview-error" role="alert"></p>`;
 }

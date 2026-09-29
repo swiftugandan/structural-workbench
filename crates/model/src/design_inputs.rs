@@ -14,7 +14,8 @@ pub struct DesignPreview {
     pub input_sources: std::collections::BTreeMap<String, String>,
     pub inputs: std::collections::BTreeMap<String, f64>,
     pub soil_reference: String,
-    /// rcBeam only: explicit section-mechanics material law (ADR 0012). Never a code value.
+    /// rcBeam and rcColumn: explicit section-mechanics material law (ADR 0012,
+    /// ADR 0022). Never a code value.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mechanics: Option<SectionMechanicsInputs>,
     /// rcBeam only: the user confirms longitudinal tension steel extends at
@@ -117,6 +118,9 @@ pub struct SectionMechanicsInputs {
     pub input_sources: std::collections::BTreeMap<String, String>,
 }
 
+/// rcColumn mechanics add the full-compression strain of pivot C (ADR 0022).
+pub const COLUMN_MECHANICS_KEYS: &[&str] = &["fullCompressionStrain"];
+
 pub const MECHANICS_COMMON_KEYS: &[&str] = &[
     "ultimateStrain",
     "steelYieldStrength",
@@ -135,14 +139,27 @@ impl SectionMechanicsInputs {
         }
     }
 
-    pub fn validate(&self) -> Result<()> {
-        let law_keys = Self::law_keys(&self.law)
+    /// The keys a draft of `kind` records for `law`.
+    pub fn keys(kind: &str, law: &str) -> Option<Vec<&'static str>> {
+        let law_keys = Self::law_keys(law)?;
+        let extra: &[&str] = if kind == "rcColumn" {
+            COLUMN_MECHANICS_KEYS
+        } else {
+            &[]
+        };
+        Some(
+            MECHANICS_COMMON_KEYS
+                .iter()
+                .chain(law_keys)
+                .chain(extra)
+                .copied()
+                .collect(),
+        )
+    }
+
+    pub fn validate(&self, kind: &str) -> Result<()> {
+        let expected = Self::keys(kind, &self.law)
             .ok_or_else(|| err("INVALID_SCHEMA", "Unknown section-mechanics law"))?;
-        let expected: Vec<&str> = MECHANICS_COMMON_KEYS
-            .iter()
-            .chain(law_keys)
-            .copied()
-            .collect();
         if self.inputs.len() != expected.len()
             || expected.iter().any(|k| {
                 self.inputs
@@ -178,20 +195,33 @@ impl SectionMechanicsInputs {
                 "Strain at peak must not exceed ultimate strain",
             ));
         }
+        if kind == "rcColumn"
+            && self.inputs["fullCompressionStrain"] > self.inputs["ultimateStrain"]
+        {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Full-compression strain must not exceed ultimate strain",
+            ));
+        }
         Ok(())
     }
 }
 
 impl DesignPreview {
+    /// Drafts bound to an analytical member (rather than a support).
+    pub fn binds_member(&self) -> bool {
+        matches!(self.kind.as_str(), "rcBeam" | "rcColumn")
+    }
+
     pub fn validate(&self) -> Result<()> {
         if let Some(m) = &self.mechanics {
-            if self.kind != "rcBeam" {
+            if !self.binds_member() {
                 return Err(err(
                     "INVALID_SCHEMA",
-                    "Section mechanics apply only to RC beam drafts",
+                    "Section mechanics apply only to RC beam and column drafts",
                 ));
             }
-            m.validate()?;
+            m.validate(&self.kind)?;
         }
         if let Some(plate) = &self.plate {
             if self.kind != "slab" {
@@ -222,6 +252,17 @@ impl DesignPreview {
                 "linkDiameter",
                 "linkSpacing",
                 "linkLegs",
+            ],
+            "rcColumn" => &[
+                "width",
+                "depth",
+                "cover",
+                "concreteStrength",
+                "rebarStrength",
+                "barDiameter",
+                "barsAlongWidth",
+                "barsAlongDepth",
+                "linkDiameter",
             ],
             "slab" => &[
                 "length",
@@ -295,7 +336,26 @@ impl DesignPreview {
                 "Link legs must be an integer from 2 to 8",
             ));
         }
-        let depth = if self.kind == "rcBeam" {
+        if self.kind == "rcColumn" {
+            if ["barsAlongWidth", "barsAlongDepth"]
+                .iter()
+                .any(|k| self.inputs[*k].fract() != 0.0 || !(2.0..=20.0).contains(&self.inputs[*k]))
+            {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Bars along each face must be an integer from 2 to 20",
+                ));
+            }
+            let inset =
+                self.inputs["cover"] + self.inputs["linkDiameter"] + self.inputs["barDiameter"];
+            if 2.0 * inset >= self.inputs["width"].min(self.inputs["depth"]) {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Cover, links and bars consume the column section",
+                ));
+            }
+        }
+        let depth = if self.binds_member() {
             self.inputs["depth"]
         } else {
             self.inputs["thickness"]

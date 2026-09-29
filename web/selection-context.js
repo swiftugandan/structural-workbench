@@ -5,9 +5,12 @@ export function previewIdentity(project, draft) {
   const binding = project.structure?.designObjects.find(
     (x) => x.previewId === draft.id,
   );
-  const kind = { rcBeam: "RC beam", slab: "Slab", padFooting: "Pad footing" }[
-    draft.kind
-  ];
+  const kind = {
+    rcBeam: "RC beam",
+    rcColumn: "RC column",
+    slab: "Slab",
+    padFooting: "Pad footing",
+  }[draft.kind];
   const target = draft.targetId ? entityLabel(project, draft.targetId) : null;
   const name = binding?.name || `${kind} ${draft.id}`;
   return {

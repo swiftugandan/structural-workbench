@@ -18,6 +18,16 @@ M12 asks for RC columns: a biaxial interaction check at the model's station acti
 6. **Ray utilisation only where it is defined.** The utilisation is measured from the section centre. When the resistance contour at `N_Ed` does not surround the centre (eccentric reinforcement near the axial limits), the kernel refuses with `UNSUPPORTED_FEATURE` rather than report a misleading ratio. The axial range is the uniform planes'. Eccentric states above the uniform squash load are reported as beyond it.
 7. **What stays UNSUPPORTED:** design strengths and partial factors, slenderness and second-order moments, minimum eccentricity, detailing rules and any PASS/FAIL. The M12 parent stays blocked on the M08 resources. The rcColumn draft kind (schema, station actions, UI) is integrated separately and consumes this kernel's mechanics.
 
+8. **Integration (M12-C).** Schema 1.5.0 adds the `rcColumn` draft kind. It
+   binds to a member, uses a perimeter bar layout (bars per face along width
+   and depth), and carries the rcBeam mechanics law plus `fullCompressionStrain`.
+   In model mode, every key station of the bound member for the bound case or
+   combination is checked, with `N_Ed = −N_frame` and the frame's `My` and
+   `Mz`. The run reports each station's utilisation and the contour at the
+   governing `N_Ed`. Stations beyond the axial range are reported, never
+   rated. The result is `columnMechanics`, and it never changes the check
+   list or `overall`.
+
 ## Consequences
 
 - Column previews can show a converged, validated interaction surface and a mechanics utilisation at model actions, while every code check stays UNSUPPORTED.

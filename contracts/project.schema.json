@@ -488,6 +488,7 @@
               "kind": {
                 "enum": [
                   "rcBeam",
+                  "rcColumn",
                   "slab",
                   "padFooting"
                 ]
@@ -1212,6 +1213,7 @@
         "kind": {
           "enum": [
             "rcBeam",
+            "rcColumn",
             "slab",
             "padFooting"
           ]
@@ -1247,7 +1249,7 @@
           }
         },
         "mechanics": {
-          "description": "rcBeam only. Explicit, code-agnostic section-mechanics material law (ADR 0012); keys depend on law.",
+          "description": "rcBeam and rcColumn. Explicit, code-agnostic section-mechanics material law (ADR 0012, ADR 0022); keys depend on law, and rcColumn adds fullCompressionStrain.",
           "type": "object",
           "additionalProperties": false,
           "required": [

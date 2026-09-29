@@ -216,6 +216,72 @@ ${ec2Html(run.codeProfilePreview)}
   return `<section data-testid="report-concrete-previews"><h2>RC beam section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. The section mechanics are not a code resistance: no partial factors or code limits are applied to them, and they carry no utilisation ratio. Any EC2 checks shown come from a disabled profile, for review only (ADR 0016). Overall design remains UNSUPPORTED until a concrete code profile is enabled (ADR 0012).</p>${runs.join("")}</section>`;
 }
 
+const siCell = (v, scale, unit) =>
+  typeof v === "number"
+    ? `<span data-si="${v}">${(v / scale).toPrecision(6)} ${unit}</span>`
+    : "—";
+
+/** RC column section mechanics runs (ADR 0022): biaxial M_Rd(N_Ed, θ) and a
+ * mechanics utilisation at each key station. Never a code check. */
+function columnRunsHtml(project, runs, e) {
+  if (!runs?.length) return "";
+  const body = runs
+    .map((run) => {
+      const cm = run.columnMechanics,
+        src = run.sourceProvenance;
+      if (cm?.status !== "evaluated")
+        return `<section data-testid="report-column-preview"><h3>RC column draft ${e(run.draftId)}</h3><p>${e(cm?.status || "Not evaluated")} · ${e(cm?.reason || "")}</p></section>`;
+      const rows = cm.stations
+        .map(
+          (s) =>
+            `<tr data-testid="report-column-station"><th scope="row">x/L ${s.station}${s.side ? ` (${e(s.side)})` : ""}</th><td>${siCell(s.nEd, 1e3, "kN")}</td><td>${siCell(s.myEd, 1e3, "kN·m")}</td><td>${siCell(s.mzEd, 1e3, "kN·m")}</td><td>${s.capacity ? siCell(s.capacity.mRd, 1e3, "kN·m") : "—"}</td><td data-testid="report-column-utilisation">${s.status === "evaluated" ? `<span data-si="${s.utilisation}">${s.utilisation.toPrecision(4)}</span>` : e(s.status === "beyondAxialRange" ? "N beyond the axial range" : s.reason || s.status)}</td></tr>`,
+        )
+        .join("");
+      const inputs = Object.entries(cm.materialInputs)
+        .map(
+          ([k, v]) =>
+            `<tr><th scope="row">${e(k)}</th><td>${v}</td><td>${e(cm.materialSources?.[k] || "")}</td></tr>`,
+        )
+        .join("");
+      return `<section data-testid="report-column-preview" data-draft-id="${e(run.draftId)}"><h3>RC column draft ${e(run.draftId)} · member ${e(entityLabel(project, src.targetId))}</h3>
+<p>Overall <strong>${e(String(run.overall).toUpperCase())}</strong> · code profile unavailable · ${e(cm.law)} · ${cm.section.width} m × ${cm.section.depth} m, ${cm.section.barCount} bars, A<sub>s</sub> ${cm.section.steelArea} m²</p>
+<p>Preview run ${e(run.previewRunId)} · input ${e(run.inputHash)} · result ${e(src.resultId)} · combination ${e(src.combinationId)} · model ${e(run.modelHash)}</p>
+<p>Axial range ${siCell(cm.axialRange.tension, 1e3, "kN")} … ${siCell(cm.axialRange.squash, 1e3, "kN")} (compression positive). ${e(cm.convention)}.</p>
+<table><thead><tr><th>Station</th><th>N<sub>Ed</sub></th><th>My</th><th>Mz</th><th>M<sub>Rd</sub>(N, θ)</th><th>M<sub>Ed</sub>/M<sub>Rd</sub> (mechanics)</th></tr></thead><tbody>${rows}</tbody></table>
+<h4>Material-law inputs (SI)</h4><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody>${inputs}</tbody></table>
+<ul>${cm.limitations.map((l) => `<li>${e(l)}</li>`).join("")}</ul>
+<details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
+    })
+    .join("");
+  return `<section data-testid="report-column-previews"><h2>RC column section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. Explicit material law and strain limits; no partial factors, slenderness, second-order moments or minimum eccentricity (ADR 0022). A mechanics utilisation is not a code check; overall design remains UNSUPPORTED.</p>${body}</section>`;
+}
+
+/** Slab plate analyses (plate-v1, ADR 0021): solution quality, extremes,
+ * Wood–Armer design moments and clamped-edge moments. Mechanics only. */
+function plateRunsHtml(runs, e) {
+  if (!runs?.length) return "";
+  const body = runs
+    .map((run) => {
+      const pa = run.plateAnalysis;
+      const dm = ["bottomX", "bottomY", "topX", "topY"]
+        .map(
+          (k) =>
+            `<tr data-testid="report-plate-design-moment"><th scope="row">${k}</th><td>${siCell(pa.designMoments[k].value, 1e3, "kN·m/m")}</td><td>(${pa.designMoments[k].at.map((v) => v.toPrecision(4)).join(", ")}) m</td></tr>`,
+        )
+        .join("");
+      const x = pa.extremes;
+      return `<section data-testid="report-plate-preview" data-draft-id="${e(run.draftId)}"><h3>Slab draft ${e(run.draftId)} · ${pa.panel.lengthX} m × ${pa.panel.lengthY} m × ${pa.panel.thickness} m</h3>
+<p>Overall <strong>${e(String(run.overall).toUpperCase())}</strong> · code profile unavailable · edges (x = 0, x = Lx, y = 0, y = Ly) ${e(pa.panel.edges.join(", "))} · opening ${pa.panel.opening ? e(pa.panel.opening.join(", ")) + " m" : "none"} · pressure ${siCell(pa.load.pressure, 1e3, "kPa")} (${e(pa.load.source)})</p>
+<p>Preview run ${e(run.previewRunId)} · input ${e(run.inputHash)} · model ${e(run.modelHash)} · ${e(pa.family)}</p>
+<table><tbody><tr><th scope="row">Mesh</th><td>${pa.mesh.elements} elements · ${pa.mesh.nodes} nodes · aspect ≤ ${pa.mesh.maxAspect.toPrecision(3)}${pa.mesh.warnings.map((w) => ` · ${e(w.code)}`).join("")}</td></tr><tr><th scope="row">Equilibrium</th><td data-testid="report-plate-balance" data-si="${pa.equilibrium.relativeImbalance}">reactions ${siCell(pa.equilibrium.reactions, 1e3, "kN")} vs load ${siCell(pa.equilibrium.applied, 1e3, "kN")}</td></tr><tr><th scope="row">Max deflection</th><td>${siCell(x.maxDeflection, 1e-3, "mm")}</td></tr><tr><th scope="row">mx, my range</th><td>${siCell(x.minMx, 1e3, "kN·m/m")} … ${siCell(x.maxMx, 1e3, "kN·m/m")}; ${siCell(x.minMy, 1e3, "kN·m/m")} … ${siCell(x.maxMy, 1e3, "kN·m/m")}</td></tr><tr><th scope="row">Convergence indicator</th><td>${(pa.convergence.change * 100).toPrecision(3)} % from a ${pa.convergence.coarseMeshSize} m mesh · ${pa.convergence.withinLimit ? "within" : "exceeds"} ${pa.convergence.indicatorLimit * 100} %</td></tr></tbody></table>
+<h4>Governing Wood–Armer design moments (element centres)</h4><table><thead><tr><th>Face</th><th>Moment to resist</th><th>At</th></tr></thead><tbody>${dm}</tbody></table>
+<p>${e(pa.convergence.note)} ${e(pa.signs)}. Reinforcement, punching and deflection limits are UNSUPPORTED.</p>
+<details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
+    })
+    .join("");
+  return `<section data-testid="report-plate-previews"><h2>Slab plate analysis (preview)</h2><p class="banner">MECHANICS ONLY. plate-v1 actions of the draft panel under its entered pressure, not connected to the frame model (ADR 0021). Wood–Armer values are moments to resist, not reinforcement; overall design remains UNSUPPORTED.</p>${body}</section>`;
+}
+
 /** Current stability-v1 run (elastic buckling or second order), SI values. */
 function stabilityHtml(project, run, e) {
   if (!run?.result) return "";
@@ -242,12 +308,14 @@ function stabilityHtml(project, run, e) {
 export function report(
   project,
   result,
-  { designRuns, previewRuns, stabilityRun } = {},
+  { designRuns, previewRuns, columnRuns, plateRuns, stabilityRun } = {},
 ) {
   const e = escape;
   const designSection =
     designRunsHtml(designRuns, e) +
     concretePreviewsHtml(project, previewRuns, e) +
+    columnRunsHtml(project, columnRuns, e) +
+    plateRunsHtml(plateRuns, e) +
     stabilityHtml(project, stabilityRun, e);
   if (result.analysisType === "envelope") {
     const ids = (result.caseOrCombinationIds || []).join(", ");

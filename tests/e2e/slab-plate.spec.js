@@ -112,6 +112,39 @@ test("Slab plate analysis reproduces the opening oracle, shows contours and pers
   }
   await writeFile(`${dir}/opening-run.json`, JSON.stringify(r, null, 2));
 
+  // The calculation record (after an analysis of the frame) carries the
+  // current slab plate run.
+  await page.locator("#analyse").click();
+  await expect(page.locator("#workspace")).not.toHaveAttribute(
+    "aria-busy",
+    "true",
+  );
+  const report = page.waitForEvent("download");
+  await menuCommand(page, "File", "Export calculation report");
+  const html = await readFile(await (await report).path(), "utf8");
+  expect(html).not.toContain("<script>");
+  await writeFile(`${dir}/calculation-record.html`, html);
+  const doc = await page.context().newPage();
+  await doc.setContent(html);
+  await expect(doc.locator("[data-testid=report-plate-preview]")).toHaveCount(
+    1,
+  );
+  expect(
+    Number(
+      await doc
+        .locator("[data-testid=report-plate-balance]")
+        .getAttribute("data-si"),
+    ),
+  ).toBeLessThanOrEqual(1e-9);
+  const topX = Number(
+    await doc
+      .locator("[data-testid=report-plate-design-moment] [data-si]")
+      .nth(2)
+      .getAttribute("data-si"),
+  );
+  expect(topX).toBe(pa.designMoments.topX.value);
+  await doc.close();
+
   // Editing the load makes the run stale; the draft keeps provenance.
   await page.locator("[data-inspector-tab=concrete]").click();
   await page.locator("#preview-plate-pressure").fill("12.5");

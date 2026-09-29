@@ -227,16 +227,17 @@ fn migrate_1_3_to_1_4(raw: &mut Value) -> Result<Vec<String>> {
     ])
 }
 
-/// 1.4.0 → 1.5.0: slab drafts may carry plate analysis inputs (ADR 0021).
-/// They are never implied, so existing slab drafts stay unconfigured.
+/// 1.4.0 → 1.5.0: slab drafts may carry plate analysis inputs (ADR 0021) and
+/// RC column drafts exist (ADR 0022). Neither is implied, so existing slab
+/// drafts stay unconfigured.
 fn migrate_1_4_to_1_5(raw: &mut Value) -> Result<Vec<String>> {
-    if raw["designPreviews"]
-        .as_array()
-        .is_some_and(|ds| ds.iter().any(|d| d.get("plate").is_some()))
-    {
+    if raw["designPreviews"].as_array().is_some_and(|ds| {
+        ds.iter()
+            .any(|d| d.get("plate").is_some() || d["kind"] == "rcColumn")
+    }) {
         return Err(err(
             "INVALID_SCHEMA",
-            "Schema 1.4.0 design drafts cannot carry plate inputs",
+            "Schema 1.4.0 design drafts cannot carry plate inputs or RC columns",
         ));
     }
     raw["schemaVersion"] = json!(CURRENT_SCHEMA);

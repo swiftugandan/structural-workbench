@@ -4144,3 +4144,26 @@ body.design-workspace {
     grid-template-columns: 1fr;
   }
 }
+
+/* RC column section mechanics (ADR 0022). */
+.column-pane {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.column-contour {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+.column-pane tr.governing td {
+  font-weight: 600;
+}
+@media (max-width: 900px) {
+  .column-pane {
+    grid-template-columns: 1fr;
+  }
+}

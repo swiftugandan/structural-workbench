@@ -1,5 +1,6 @@
 //! Workflow previews. Missing numerical/code resources never produce a PASS.
 use serde_json::{Value, json};
+use workbench_design::rc_column;
 use workbench_design::rc_section::{
     self, BarLayer, BarRow, ConcreteLaw, ElasticInputs, RcRectangle, SteelLaw,
 };
@@ -32,6 +33,16 @@ fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64
             ("linkDiameter", "Link diameter", 0.01, "mm", 1000.),
             ("linkSpacing", "Link spacing", 0.2, "mm", 1000.),
             ("linkLegs", "Link legs", 2., "", 1.),
+        ],
+        // Width along the member's local y, depth along local z (ADR 0022).
+        "rcColumn" => vec![
+            ("width", "Width (local y)", 0.4, "mm", 1000.),
+            ("depth", "Depth (local z)", 0.4, "mm", 1000.),
+            ("cover", "Cover", 0.035, "mm", 1000.),
+            ("barDiameter", "Bar diameter", 0.025, "mm", 1000.),
+            ("barsAlongWidth", "Bars along width (per face)", 3., "", 1.),
+            ("barsAlongDepth", "Bars along depth (per face)", 3., "", 1.),
+            ("linkDiameter", "Link diameter", 0.01, "mm", 1000.),
         ],
         "slab" => vec![
             ("length", "Length X", 6., "m", 1.),
@@ -171,34 +182,38 @@ const MECHANICS_FIELDS: &[MechanicsField] = &[
         1000.,
         "all",
     ),
+    // Column drafts only (pivot C of the strain domain, ADR 0022).
+    (
+        "fullCompressionStrain",
+        "Full-compression strain (pivot C)",
+        0.002,
+        "",
+        1.,
+        "rcColumn",
+    ),
 ];
 const MECHANICS_LAWS: &[(&str, &str)] = &[
     ("rectangularBlock", "Rectangular stress block"),
     ("parabolaRectangle", "Parabola-rectangle"),
 ];
-fn mechanics_default(law: &str, key: &str) -> Option<f64> {
+fn mechanics_default(kind: &str, law: &str, key: &str) -> Option<f64> {
     MECHANICS_FIELDS
         .iter()
-        .find(|f| f.0 == key && (f.5 == "all" || f.5 == law))
+        .find(|f| f.0 == key && (f.5 == "all" || f.5 == law || f.5 == kind))
         .map(|f| f.2)
 }
-fn mechanics_keys(law: &str) -> Result<Vec<&'static str>> {
-    let law_keys = SectionMechanicsInputs::law_keys(law)
-        .ok_or_else(|| err("INVALID_SCHEMA", "Unknown section-mechanics law"))?;
-    Ok(MECHANICS_COMMON_KEYS
-        .iter()
-        .chain(law_keys)
-        .copied()
-        .collect())
+fn mechanics_keys(kind: &str, law: &str) -> Result<Vec<&'static str>> {
+    SectionMechanicsInputs::keys(kind, law)
+        .ok_or_else(|| err("INVALID_SCHEMA", "Unknown section-mechanics law"))
 }
-fn default_mechanics() -> SectionMechanicsInputs {
+fn default_mechanics(kind: &str) -> SectionMechanicsInputs {
     let law = "rectangularBlock";
-    let keys = mechanics_keys(law).unwrap();
+    let keys = mechanics_keys(kind, law).unwrap();
     SectionMechanicsInputs {
         law: law.into(),
         inputs: keys
             .iter()
-            .map(|k| (k.to_string(), mechanics_default(law, k).unwrap()))
+            .map(|k| (k.to_string(), mechanics_default(kind, law, k).unwrap()))
             .collect(),
         input_sources: keys
             .iter()
@@ -210,13 +225,14 @@ fn default_mechanics() -> SectionMechanicsInputs {
 /// differs from the previously stored value (or the synthetic default for a
 /// newly introduced key).
 fn edit_mechanics(
+    kind: &str,
     old: Option<&SectionMechanicsInputs>,
     args: &Value,
 ) -> Result<SectionMechanicsInputs> {
     let law = args["law"]
         .as_str()
         .ok_or_else(|| err("INVALID_SCHEMA", "Section-mechanics law is required"))?;
-    let keys = mechanics_keys(law)?;
+    let keys = mechanics_keys(kind, law)?;
     let mut inputs = std::collections::BTreeMap::new();
     let mut sources = std::collections::BTreeMap::new();
     for key in keys {
@@ -244,7 +260,7 @@ fn edit_mechanics(
         let source = match previous {
             Some((p, s)) if p == value => s,
             Some(_) => "user".into(),
-            None if mechanics_default(law, key) == Some(value) => "syntheticFixture".into(),
+            None if mechanics_default(kind, law, key) == Some(value) => "syntheticFixture".into(),
             None => "user".into(),
         };
         inputs.insert(key.to_string(), value);
@@ -255,7 +271,7 @@ fn edit_mechanics(
         inputs,
         input_sources: sources,
     };
-    m.validate()?;
+    m.validate(kind)?;
     Ok(m)
 }
 /// (key, label, synthetic default, unit, display scale). The defaults are
@@ -335,7 +351,7 @@ fn edit_plate(old: Option<&SlabPlateInputs>, args: &Value) -> Result<SlabPlateIn
     Ok(next)
 }
 pub fn templates() -> Value {
-    json!([("rcBeam","RC beam"),("slab","Slab"),("padFooting","Pad footing")].iter().map(|(kind,name)|{
+    json!([("rcBeam","RC beam"),("rcColumn","RC column"),("slab","Slab"),("padFooting","Pad footing")].iter().map(|(kind,name)|{
         let mut t = json!({"kind":kind,"name":name,"mock":true,"fields":fields(kind).into_iter().map(|(key,label,value,unit,scale)|json!({"key":key,"label":label,"defaultValue":value,"unit":unit,"displayScale":scale})).collect::<Vec<_>>()});
         if *kind == "slab" {
             t["plate"] = json!({
@@ -346,11 +362,13 @@ pub fn templates() -> Value {
                 "defaultIncludeOpening": true,
             });
         }
-        if *kind == "rcBeam" {
+        if ["rcBeam", "rcColumn"].contains(kind) {
+            // Kind-only fields are listed for every law of that kind.
             t["mechanics"] = json!({
                 "laws": MECHANICS_LAWS.iter().map(|(id,label)|json!({"id":id,"label":label})).collect::<Vec<_>>(),
                 "defaultLaw": "rectangularBlock",
-                "fields": MECHANICS_FIELDS.iter().map(|(key,label,value,unit,scale,law)|json!({"key":key,"label":label,"defaultValue":value,"unit":unit,"displayScale":scale,"law":law})).collect::<Vec<_>>(),
+                "fields": MECHANICS_FIELDS.iter().filter(|f| !["rcBeam","rcColumn"].contains(&f.5) || f.5 == *kind)
+                    .map(|(key,label,value,unit,scale,law)|json!({"key":key,"label":label,"defaultValue":value,"unit":unit,"displayScale":scale,"law":if law == kind {"all"} else {law}})).collect::<Vec<_>>(),
             });
         }
         t
@@ -363,7 +381,7 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
     let a = &c["args"];
     if c["type"] == "CreateDesignPreview" {
         let kind = a["kind"].as_str().unwrap_or("");
-        if !["rcBeam", "slab", "padFooting"].contains(&kind) {
+        if !["rcBeam", "rcColumn", "slab", "padFooting"].contains(&kind) {
             return Err(err("INVALID_SCHEMA", "Unknown preview kind"));
         }
         let id = format!(
@@ -388,7 +406,9 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                 .collect(),
             soil_reference:
                 "Synthetic starter input; replace with a referenced geotechnical report".into(),
-            mechanics: (kind == "rcBeam").then(default_mechanics),
+            mechanics: ["rcBeam", "rcColumn"]
+                .contains(&kind)
+                .then(|| default_mechanics(kind)),
             // Never defaulted: only the user can confirm anchorage (ADR 0016).
             tension_anchorage_confirmed: None,
             plate: (kind == "slab").then(default_plate),
@@ -438,7 +458,8 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
         let sources: serde_json::Map<String, Value> = fields(&kind)
             .iter()
             .map(|(key, _, _, _, _)| {
-                let source = if inputs[*key] != old["inputs"][*key] {
+                // Numeric comparison: an untouched `3` equals a stored `3.0`.
+                let source = if inputs[*key].as_f64() != old["inputs"][*key].as_f64() {
                     "user"
                 } else {
                     old["inputSources"][*key]
@@ -459,15 +480,17 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
         } else {
             "mixed"
         });
-        if kind == "rcBeam" && !a["mechanics"].is_null() {
+        let sectional = ["rcBeam", "rcColumn"].contains(&kind.as_str());
+        if sectional && !a["mechanics"].is_null() {
             let old: Option<SectionMechanicsInputs> =
                 serde_json::from_value(v["designPreviews"][index]["mechanics"].clone()).ok();
             v["designPreviews"][index]["mechanics"] =
-                serde_json::to_value(edit_mechanics(old.as_ref(), &a["mechanics"])?).unwrap();
-        } else if kind != "rcBeam" && !a["mechanics"].is_null() {
+                serde_json::to_value(edit_mechanics(&kind, old.as_ref(), &a["mechanics"])?)
+                    .unwrap();
+        } else if !sectional && !a["mechanics"].is_null() {
             return Err(err(
                 "INVALID_SCHEMA",
-                "Section mechanics apply only to RC beam drafts",
+                "Section mechanics apply only to RC beam and column drafts",
             ));
         }
         if kind == "slab" && !a["plate"].is_null() {
@@ -512,6 +535,150 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
         }
     }
     Ok(())
+}
+/// The explicit concrete and steel laws recorded on a draft (ADR 0012).
+fn mechanics_laws(m: &SectionMechanicsInputs) -> (ConcreteLaw, SteelLaw) {
+    let mi = &m.inputs;
+    let steel = SteelLaw {
+        yield_strength: mi["steelYieldStrength"],
+        modulus: mi["steelModulus"],
+    };
+    let law = if m.law == "rectangularBlock" {
+        ConcreteLaw::RectangularBlock {
+            intensity: mi["blockIntensity"],
+            depth_ratio: mi["blockDepthRatio"],
+            ultimate_strain: mi["ultimateStrain"],
+        }
+    } else {
+        ConcreteLaw::ParabolaRectangle {
+            peak: mi["parabolaPeak"],
+            strain_at_peak: mi["strainAtPeak"],
+            ultimate_strain: mi["ultimateStrain"],
+            exponent: mi["parabolaExponent"],
+        }
+    };
+    (law, steel)
+}
+
+/// Perimeter bars of an rcColumn draft: `barsAlongWidth` on each ±z face,
+/// `barsAlongDepth` on each ±y face (corners shared), centres inset by
+/// cover + link + half a bar. Origin at the section centre.
+fn column_bars(v: &std::collections::BTreeMap<String, f64>) -> Vec<rc_column::ColumnBar> {
+    let dia = v["barDiameter"];
+    let inset = v["cover"] + v["linkDiameter"] + dia / 2.;
+    let (a, c) = (v["width"] / 2. - inset, v["depth"] / 2. - inset);
+    let (nw, nd) = (v["barsAlongWidth"] as usize, v["barsAlongDepth"] as usize);
+    let area = std::f64::consts::PI * dia * dia / 4.;
+    let at = |k: usize, n: usize, half: f64| -half + 2. * half * k as f64 / (n - 1) as f64;
+    let mut bars = vec![];
+    for z in [-c, c] {
+        for k in 0..nw {
+            bars.push(rc_column::ColumnBar {
+                y: at(k, nw, a),
+                z,
+                area,
+            });
+        }
+    }
+    for y in [-a, a] {
+        for k in 1..nd - 1 {
+            bars.push(rc_column::ColumnBar {
+                y,
+                z: at(k, nd, c),
+                area,
+            });
+        }
+    }
+    bars
+}
+
+/// Biaxial section mechanics of an rcColumn draft (ADR 0022): the axial
+/// range, M_Rd(N_Ed, θ_Ed) and a mechanics utilisation at every key station
+/// of the bound member (model mode), and the resistance contour at the
+/// governing axial force. Never a code resistance or a check status.
+fn column_mechanics(d: &DesignPreview, stations: Option<&[KeyStation]>) -> Value {
+    let Some(m) = &d.mechanics else {
+        return json!({"status":"notConfigured","reason":"No explicit section-mechanics material law is recorded for this draft"});
+    };
+    let (concrete, steel) = mechanics_laws(m);
+    let section = rc_column::ColumnSection {
+        width: d.inputs["width"],
+        depth: d.inputs["depth"],
+        bars: column_bars(&d.inputs),
+    };
+    let column = match rc_column::Column::new(rc_column::ColumnInputs {
+        section: section.clone(),
+        concrete,
+        steel,
+        limits: rc_column::StrainLimits {
+            full_compression_strain: m.inputs["fullCompressionStrain"],
+            steel_strain_limit: None,
+        },
+    }) {
+        Ok(c) => c,
+        Err(e) => return json!({"status":"unsupported","code":e.code,"reason":e.message}),
+    };
+    let range = column.axial_range();
+    let mut rows = vec![];
+    let mut governing: Option<(usize, f64)> = None;
+    let mut beyond = false;
+    for (i, st) in stations.unwrap_or(&[]).iter().enumerate() {
+        // Frame N is tension positive; the section works compression positive.
+        let (n_ed, my_ed, mz_ed) = (-st.actions[0], st.actions[4], st.actions[5]);
+        let base = json!({"station":st.station,"kind":st.kind,"side":st.side,"actions":st.actions,"nEd":n_ed,"myEd":my_ed,"mzEd":mz_ed,"mEd":my_ed.hypot(mz_ed)});
+        let row = match column.check(n_ed, my_ed, mz_ed) {
+            Ok(c) => match c.utilisation.filter(|u| u.is_finite()) {
+                Some(u) => {
+                    if governing.is_none_or(|(_, g)| u > g) {
+                        governing = Some((i, u));
+                    }
+                    merge(
+                        base,
+                        json!({"status":"evaluated","utilisation":u,"axialRatio":c.axial_ratio,"capacity":c.capacity}),
+                    )
+                }
+                None => {
+                    beyond = true;
+                    merge(
+                        base,
+                        json!({"status":"beyondAxialRange","utilisation":null,"axialRatio":c.axial_ratio}),
+                    )
+                }
+            },
+            Err(e) => merge(
+                base,
+                json!({"status":"refused","utilisation":null,"code":e.code,"reason":e.message}),
+            ),
+        };
+        rows.push(row);
+    }
+    // The contour is drawn at the governing station's N_Ed, or at N = 0
+    // without model actions.
+    let n_contour = governing.map_or(0., |(i, _)| rows[i]["nEd"].as_f64().unwrap());
+    let contour = column.interaction_contour(n_contour, 72).map_or_else(
+        |e| json!({"status":"unavailable","code":e.code,"reason":e.message}),
+        |pts| json!({"status":"evaluated","nEd":n_contour,"points":pts.iter().map(|r| [r.my, r.mz]).collect::<Vec<_>>()}),
+    );
+    json!({
+        "status": "evaluated",
+        "basis": "mechanics",
+        "codeProfile": null,
+        "kernel": "workbench-design::rc_column",
+        "formulation": "docs/formulations/rc-column.md",
+        "section": {"width":section.width,"depth":section.depth,"bars":section.bars,"barCount":section.bars.len(),
+            "steelArea":section.bars.iter().map(|b| b.area).sum::<f64>()},
+        "law": m.law,
+        "materialInputs": m.inputs,
+        "materialSources": m.input_sources,
+        "axialRange": range,
+        "convention": "N compression positive (N = −N_frame); frame My and Mz unchanged: My < 0 compresses the +z face, Mz > 0 the +y face; θ = atan2(Mz, My)",
+        "demand": if stations.is_some() {json!({"status":"evaluated","basis":"modelKeyStations"})} else {json!({"status":"unavailable","reason":"Station actions need a bound member and the current model case/combination"})},
+        "stations": rows,
+        "governing": governing.map(|(i, u)| json!({"index":i,"station":rows[i]["station"],"utilisation":u,"nEd":rows[i]["nEd"],"mEd":rows[i]["mEd"],"mRd":rows[i]["capacity"]["mRd"]})),
+        "beyondAxialRange": beyond,
+        "contour": contour,
+        "limitations": ["Checked at the member's key stations (ends, component extrema, discontinuities) only","No slenderness, second-order moments, minimum eccentricity, partial factors or detailing"],
+    })
 }
 /// Code-agnostic section mechanics for an rcBeam draft (ADR 0012). Each face
 /// has one row of its own bars; `cover` is taken to the link. Sagging puts
@@ -561,24 +728,7 @@ fn section_mechanics(d: &DesignPreview, demand: &Value) -> Value {
         width: v["width"],
         depth: v["depth"],
     };
-    let steel = SteelLaw {
-        yield_strength: mi["steelYieldStrength"],
-        modulus: mi["steelModulus"],
-    };
-    let law = if m.law == "rectangularBlock" {
-        ConcreteLaw::RectangularBlock {
-            intensity: mi["blockIntensity"],
-            depth_ratio: mi["blockDepthRatio"],
-            ultimate_strain: mi["ultimateStrain"],
-        }
-    } else {
-        ConcreteLaw::ParabolaRectangle {
-            peak: mi["parabolaPeak"],
-            strain_at_peak: mi["strainAtPeak"],
-            ultimate_strain: mi["ultimateStrain"],
-            exponent: mi["parabolaExponent"],
-        }
-    };
+    let (law, steel) = mechanics_laws(m);
     // Layers are ordered [compression-face row, opposite row] with depths from
     // the compression face.
     let state = |name: &str,
@@ -950,6 +1100,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         source = json!({"kind":"syntheticFixture","mock":true,"fixtureId":"slab-plate-actions-v1","units":"N m/m","rawPlateActions":{"mx":-62000,"my":-31000,"mxy":8500},"designTransform":"unavailable","meshConvergence":"notChecked","note":"No validated plate/shell analysis; never use a frame-member result as a slab action"});
     }
     let mut plate = Value::Null;
+    let mut stations: Option<Vec<KeyStation>> = None;
     if draft.kind == "slab" {
         plate = json!({"status":"notRun","reason":"Choose the plate analysis source to solve this panel"});
     }
@@ -985,7 +1136,18 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
             ));
         }
         source = json!({"kind":"modelAnalysis","mock":false,"resultId":a.result_id,"modelHash":a.model_hash,"sourceRevision":a.source_revision,"solverBuildHash":a.solver_build_hash,"settingsHash":a.settings_hash,"combinationId":case,"targetId":target});
-        if draft.kind == "rcBeam" {
+        if draft.kind == "rcColumn" {
+            let m = a
+                .members
+                .iter()
+                .find(|m| &m.id == target)
+                .ok_or_else(|| err("DANGLING_REFERENCE", "Member result unavailable"))?;
+            source["stations"] = serde_json::to_value(&m.key_stations).unwrap();
+            stations = Some(m.key_stations.clone());
+            source["note"] = json!(
+                "Actual model actions at the member's key stations; the draft section is not applied to frame stiffness"
+            );
+        } else if draft.kind == "rcBeam" {
             let m = a
                 .members
                 .iter()
@@ -1020,6 +1182,14 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         ));
     }
     let checks: Vec<&str> = match draft.kind.as_str() {
+        // Biaxial section mechanics are reported under `columnMechanics`.
+        "rcColumn" => vec![
+            "Axial and biaxial bending",
+            "Slenderness and second-order effects",
+            "Minimum eccentricity",
+            "Shear",
+            "Detailing",
+        ],
         "rcBeam" => vec![
             "Flexure",
             "Shear",
@@ -1062,6 +1232,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
         "codeProfilePreview":if draft.kind=="rcBeam"{code}else{Value::Null},
         "plateAnalysis":plate,
+        "columnMechanics":if draft.kind=="rcColumn"{column_mechanics(draft,stations.as_deref())}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
     run["previewRunId"] = json!(digest(&serde_json::to_vec(&run).unwrap()));
     Ok(run)

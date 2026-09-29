@@ -129,7 +129,7 @@ pub fn reconcile(v: &mut Value) -> Result<()> {
         .retain(|x| !x.analytical_member_ids.is_empty());
     for d in &mut p.design_previews {
         let exists = d.target_id.as_ref().is_none_or(|id| {
-            if d.kind == "rcBeam" {
+            if d.binds_member() {
                 p.members.iter().any(|m| &m.id == id)
             } else {
                 p.supports.iter().any(|s| &s.id == id)

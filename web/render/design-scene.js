@@ -67,7 +67,7 @@ export function sceneGeometry(
   const bar = (a, b, color = [0.12, 0.35, 0.67, 1], width = 2.5) =>
     bars.push({ a, b, color, width });
   const v = draft.inputs;
-  if (draft.kind === "rcBeam") {
+  if (draft.kind === "rcBeam" || draft.kind === "rcColumn") {
     const m = project.members.find((m) => m.id === draft.targetId),
       start = project.nodes.find((n) => n.id === m?.start)?.position || [
         0, 0, 0,
@@ -89,7 +89,36 @@ export function sceneGeometry(
       [0.6, 0.71, 0.84, mode === "both" ? 0.16 : 0.88],
       tr,
     );
-    if (mode !== "concrete") {
+    if (mode !== "concrete" && draft.kind === "rcColumn") {
+      // Perimeter bars at the kernel's positions (cover + link + half a bar).
+      const inset = v.cover + v.linkDiameter + v.barDiameter / 2,
+        a = v.width / 2 - inset,
+        c = v.depth / 2 - inset,
+        at = (k, n, half) => -half + (2 * half * k) / (n - 1),
+        points = [];
+      for (const z of [-c, c])
+        for (let k = 0; k < v.barsAlongWidth; k++)
+          points.push([at(k, v.barsAlongWidth, a), z]);
+      for (const y of [-a, a])
+        for (let k = 1; k < v.barsAlongDepth - 1; k++)
+          points.push([y, at(k, v.barsAlongDepth, c)]);
+      for (const [y, z] of points)
+        bar(
+          tr([v.cover, y, z]),
+          tr([length - v.cover, y, z]),
+          [0.13, 0.36, 0.72, 1],
+          3.2,
+        );
+      const count = Math.min(90, Math.max(2, Math.ceil(length / 0.3))),
+        y = v.width / 2 - v.cover - v.linkDiameter / 2,
+        z = v.depth / 2 - v.cover - v.linkDiameter / 2;
+      for (let i = 0; i <= count; i++) {
+        const x = v.cover + ((length - 2 * v.cover) * i) / count,
+          p = [tr([x, -y, -z]), tr([x, y, -z]), tr([x, y, z]), tr([x, -y, z])];
+        for (let j = 0; j < 4; j++)
+          bar(p[j], p[(j + 1) % 4], [0.36, 0.42, 0.49, 0.95], 1.35);
+      }
+    } else if (mode !== "concrete") {
       for (const [z, n] of [
         [-v.depth / 2 + v.cover, v.bottomBarCount],
         [v.depth / 2 - v.cover, v.topBarCount],
@@ -123,7 +152,7 @@ export function sceneGeometry(
     labels.push(
       {
         point: tr([length / 2, 0, v.depth / 2 + 0.3]),
-        text: `${draft.targetId || "RC beam"} · illustrative reinforcement`,
+        text: `${draft.targetId || (draft.kind === "rcColumn" ? "RC column" : "RC beam")} · illustrative reinforcement`,
       },
       {
         point: tr([length / 2, 0, -v.depth / 2 - 0.3]),

@@ -409,7 +409,7 @@ impl Project {
             }
             if let Some(id) = &draft.target_id {
                 let exists = match draft.kind.as_str() {
-                    "rcBeam" => self.members.iter().any(|m| &m.id == id),
+                    "rcBeam" | "rcColumn" => self.members.iter().any(|m| &m.id == id),
                     "padFooting" => self.supports.iter().any(|s| &s.id == id),
                     _ => false,
                 };
