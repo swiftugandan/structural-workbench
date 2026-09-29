@@ -1,4 +1,4 @@
-> **Layout brief only.** Captions/mockups may show Eurocode — not the code pin. Schedule: [M10-SHELL](../../agent-tasks/M10-SHELL.md) after M10 engineering. ADR 0008.
+> **Layout brief only.** Captions/mockups may show Eurocode — not the code pin. Schedule: [M10-SHELL](../../../agent-tasks/M10-SHELL.md) after M10 engineering. ADR 0008.
 
 Concrete slab design would use the same approved Structural Workbench shell, but the central engineering object changes from a **member** to a **2D design surface**.
 

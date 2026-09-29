@@ -1,6 +1,6 @@
 # M10 slab design — design pack
 
-> **Layout / interaction reference only.** Captions describe mockup chrome and may mention **EN 1992** — that is not the executable code pin. Numerical slab design waits on M10 engineering + `R-SHELL-BENCHMARKS`. Delivery: [M10-SHELL](../../agent-tasks/M10-SHELL.md) after M10 + M07-F. Binding: ADR 0008.
+> **Layout / interaction reference only.** Captions describe mockup chrome and may mention **EN 1992** — that is not the executable code pin. Numerical slab design waits on M10 engineering + `R-SHELL-BENCHMARKS`. Delivery: [M10-SHELL](../../../agent-tasks/M10-SHELL.md) after M10 + M07-F. Binding: ADR 0008.
 
 Source: [ChatGPT share — Steel Design Workflow](https://chatgpt.com/share/6ab4c946-7764-83eb-b1c1-ada00c4d4642) (slab turns).
 
@@ -24,4 +24,4 @@ If the PNGs become available later (owner export), place them as `screens/0N-…
 
 ## Delivery
 
-[`../../agent-tasks/M10-SHELL.md`](../../agent-tasks/M10-SHELL.md) after M10 engineering + M07-F.
+[`../../agent-tasks/M10-SHELL.md`](../../../agent-tasks/M10-SHELL.md) after M10 engineering + M07-F.

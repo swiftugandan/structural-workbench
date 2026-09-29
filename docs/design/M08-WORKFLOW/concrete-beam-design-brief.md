@@ -1,4 +1,4 @@
-> **Layout brief only.** Code pin for M08 is SPEC/`SOURCES.md` (proposed ACI 318-19), not any Eurocode labels that appear in mockups. Schedule: [M08-SHELL](../../agent-tasks/M08-SHELL.md) after M08 engineering. ADR 0008.
+> **Layout brief only.** Code pin for M08 is SPEC/`SOURCES.md` (proposed ACI 318-19), not any Eurocode labels that appear in mockups. Schedule: [M08-SHELL](../../../agent-tasks/M08-SHELL.md) after M08 engineering. ADR 0008.
 
 I’d keep the **same application shell we just approved for steel**, but concrete would feel less like “pick a catalogue section” and more like **“design reinforcement inside a fixed concrete member.”**
 

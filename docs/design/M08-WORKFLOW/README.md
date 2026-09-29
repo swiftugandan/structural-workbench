@@ -1,6 +1,6 @@
 # M08 concrete beam design — design pack
 
-> **Layout / interaction reference only.** Executable code pin is whatever M08 locks (proposed **ACI 318-19** per `SOURCES.md` / SPEC). Mockup and caption text that says **EN 1992 / Eurocode 2** is illustrative fiction — do not implement it as the profile. Delivery: [M08-SHELL](../../agent-tasks/M08-SHELL.md) after M08 engineering + M07-F. Binding: ADR 0008.
+> **Layout / interaction reference only.** Executable code pin is whatever M08 locks (proposed **ACI 318-19** per `SOURCES.md` / SPEC). Mockup and caption text that says **EN 1992 / Eurocode 2** is illustrative fiction — do not implement it as the profile. Delivery: [M08-SHELL](../../../agent-tasks/M08-SHELL.md) after M08 engineering + M07-F. Binding: ADR 0008.
 
 Source: [ChatGPT share — Steel Design Workflow](https://chatgpt.com/share/6ab4c946-7764-83eb-b1c1-ada00c4d4642) (concrete module turn).
 
@@ -22,4 +22,4 @@ Per-screen model captions from the share sit beside each PNG as `*.caption.md` (
 
 ## Delivery
 
-[`../../agent-tasks/M08-SHELL.md`](../../agent-tasks/M08-SHELL.md) after M08 engineering + M07-F.
+[`../../agent-tasks/M08-SHELL.md`](../../../agent-tasks/M08-SHELL.md) after M08 engineering + M07-F.

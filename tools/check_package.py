@@ -74,9 +74,26 @@ def arithmetic(expr,values):
     return walk(ast.parse(expr,mode='eval'))
 for path in (ROOT/'contracts').glob('*.schema.json'):
     PackageSchemaValidator.check_schema(json.loads(path.read_text()));counts['schemas']+=1
-validator=PackageSchemaValidator(read('contracts/project.schema.json'))
+# Each fixture is validated against the project schema of its own version:
+# the current contract, or the frozen snapshot contracts/project-vX.Y.schema.json.
+# Import-only legacy versions without a snapshot (0.9.0) are covered by the
+# kernel's migration tests instead and are only counted here.
+current=read('contracts/project.schema.json');CURRENT=current['properties']['schemaVersion']['const']
+LEGACY_IMPORT_ONLY={'0.9.0'}
+def fixture_validator(version):
+    if version==CURRENT:return PackageSchemaValidator(current)
+    snapshot=ROOT/'contracts'/('project-v'+'.'.join(str(version).split('.')[:2])+'.schema.json')
+    if snapshot.is_file():
+        schema=json.loads(snapshot.read_text())
+        if schema['properties']['schemaVersion'].get('const')==version:return PackageSchemaValidator(schema)
+    return None
+counts['legacy_import_fixtures']=0
 for path in sorted((ROOT/'fixtures/models').glob('*.json')):
-    m=json.loads(path.read_text());errs=list(validator.iter_errors(m));require(not errs,f'{path.name}: schema errors {[e.message for e in errs]}')
+    m=json.loads(path.read_text());version=m.get('schemaVersion');validator=fixture_validator(version)
+    if validator is None:
+        require(version in LEGACY_IMPORT_ONLY,f'{path.name}: no schema for version {version}');counts['legacy_import_fixtures']+=1
+    else:
+        errs=list(validator.iter_errors(m));require(not errs,f'{path.name}: schema errors {[e.message for e in errs]}')
     counts['models']+=1
     entities={kind:{x['id']:x for x in m[kind]} for kind in ['materials','sections','nodes','members','supports','loadCases','combinations']}
     for kind,items in entities.items():require(len(items)==len(m[kind]),f'{path.name}: duplicate {kind}')
@@ -116,7 +133,13 @@ for m in milestones:
     require(f"### {m['id']} " in (ROOT/'SPECIFICATION.md').read_text(),f"{m['id']}: missing detailed definition")
     for r in m['resourceGates']:require(r in (ROOT/'SOURCES.md').read_text(),f"{m['id']}: missing resource {r}")
 # Check local links, where present; headings are validated separately above.
-for path in ROOT.rglob('*.md'):
+# Only the package's own documents: dependencies, build and test outputs,
+# tool environments and private resources are not part of it.
+EXCLUDED=('node_modules','target','dist','dist-previous','test-results','playwright-report','.git','.claude','resources/private','tools/oracle-env')
+def in_package(path):
+    rel=path.relative_to(ROOT).as_posix()
+    return not any(rel==e or rel.startswith(e+'/') for e in EXCLUDED)
+for path in filter(in_package,ROOT.rglob('*.md')):
     for target in re.findall(r'\]\(([^)]+)\)',path.read_text()):
         if '://' not in target and not target.startswith('#'):
             require((path.parent/target.split('#')[0]).exists(),f'{path.name}: broken local link {target}');counts['local_references']+=1

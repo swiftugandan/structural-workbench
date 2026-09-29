@@ -1,4 +1,4 @@
-> **Layout brief only.** Mockup labels are not the code pin. Schedule: [M11-SHELL](../../agent-tasks/M11-SHELL.md) after M11 engineering. ADR 0008.
+> **Layout brief only.** Mockup labels are not the code pin. Schedule: [M11-SHELL](../../../agent-tasks/M11-SHELL.md) after M11 engineering. ADR 0008.
 
 Foundation design should also reuse the same approved Structural Workbench shell, but its mental model is:
 

@@ -1,6 +1,6 @@
 # M11 pad footing design — design pack
 
-> **Layout / interaction reference only.** Mockup labels are not the code pin; pin follows M11 engineering + SPEC/`SOURCES.md`. Delivery: [M11-SHELL](../../agent-tasks/M11-SHELL.md) after M11 + M07-F. Binding: ADR 0008.
+> **Layout / interaction reference only.** Mockup labels are not the code pin; pin follows M11 engineering + SPEC/`SOURCES.md`. Delivery: [M11-SHELL](../../../agent-tasks/M11-SHELL.md) after M11 + M07-F. Binding: ADR 0008.
 
 Source: [ChatGPT share — Steel Design Workflow](https://chatgpt.com/share/6ab4c946-7764-83eb-b1c1-ada00c4d4642) (foundation turns).
 
@@ -21,4 +21,4 @@ Source: [ChatGPT share — Steel Design Workflow](https://chatgpt.com/share/6ab4
 
 ## Delivery
 
-[`../../agent-tasks/M11-SHELL.md`](../../agent-tasks/M11-SHELL.md) after M11 engineering + M07-F.
+[`../../agent-tasks/M11-SHELL.md`](../../../agent-tasks/M11-SHELL.md) after M11 engineering + M07-F.
