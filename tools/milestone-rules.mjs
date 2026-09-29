@@ -83,6 +83,13 @@ export const m07 = [
   "m07-browser",
   "m07-acceptance",
 ];
+export const m09 = [
+  "build",
+  "stability-native",
+  "stability-protocol",
+  "m09-browser",
+  "m09-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -161,6 +168,19 @@ export const requiredIds = {
     "M06 stress screen: B02 shows elastic fibre stresses with disclaimer",
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
     "M06 release tour: analyse, stress screen, ledger, save and report",
+  ],
+  "m09-acceptance": [
+    "M09-EULER",
+    "M09-PDELTA-PORTAL",
+    "M09-SIGN-NORMALISATION",
+    "M09-NONCONVERGENCE",
+    "M09-SEPARATE-TYPES",
+    "M09-UI-JOURNEY",
+    "M09-NOT-A-VERDICT",
+    "M09-ORACLE-PROVENANCE",
+  ],
+  "m09-browser": [
+    "M09 stability: buckling modes, first- vs second-order sway, over-critical failure, stale and record",
   ],
   "m07-acceptance": [
     "M07-S2-FIXTURES",
@@ -291,7 +311,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
         ? requiredIds["native-m03"]
         : milestone === "M02" && name === "browser-suite"
           ? requiredIds["browser-suite-m02"]
-          : ["M01", "M01-UX", "M02", "M03", "M04", "M05", "M06", "M07"].includes(milestone)
+          : ["M01", "M01-UX", "M02", "M03", "M04", "M05", "M06", "M07", "M09"].includes(milestone)
             ? requiredIds[name] || []
             : [];
   for (const id of ids)
@@ -339,6 +359,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 5)
   )
     errors.push(`${name}: failed, skipped or incomplete M07 browser journey`);
+  if (
+    name === "m09-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 2)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M09 browser journey`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);

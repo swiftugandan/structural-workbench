@@ -270,16 +270,20 @@
     },
     {
       "id": "R-STABILITY-ORACLE",
-      "status": "not_acquired",
+      "status": "acquired",
       "requiredBy": [
         "M09"
       ],
       "definition": "SOURCES.md section 3",
-      "sourceEdition": null,
-      "sourceHash": null,
-      "rightsStatus": "unverified",
-      "localPath": null,
-      "validationEvidence": []
+      "sourceEdition": "stability-v1 project oracle",
+      "sourceHash": "177c499f5f9872014289cd80b759fac132252cadf6656d898a631a2a00bbe669",
+      "rightsStatus": "project_generated_redistributable",
+      "localPath": "fixtures/stability/stability-oracle.json",
+      "validationEvidence": [
+        "resources.lock.json#R-STABILITY-ORACLE",
+        "docs/formulations/stability.md",
+        "evidence/M09/full/ACCEPTANCE.md"
+      ]
     },
     {
       "id": "R-STEEL-EXAMPLES",

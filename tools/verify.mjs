@@ -1,46 +1,26 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { sourceHash } from "./build.mjs";
-import { common, m01, m01ux, m02, m03, m04, m05, m06, m07, recordIssues } from "./milestone-rules.mjs";
+import { common, m01, m01ux, m02, m03, m04, m05, m06, m07, m09, recordIssues } from "./milestone-rules.mjs";
 import { evidenceDir } from "./evidence.mjs";
 const milestone = process.argv[2] || "M00";
-const dir = evidenceDir(
-  milestone === "M01-UX"
-    ? "evidence/M01/ux"
-    : milestone === "M01"
-      ? "evidence/M01/full"
-      : milestone === "M02"
-        ? "evidence/M02/full"
-        : milestone === "M03"
-          ? "evidence/M03/full"
-          : milestone === "M04"
-            ? "evidence/M04/full"
-            : milestone === "M05"
-              ? "evidence/M05/full"
-              : milestone === "M06"
-                ? "evidence/M06/full"
-                : milestone === "M07"
-                  ? "evidence/M07/full"
-                  : "evidence/M00/current",
-);
-const required =
-  milestone === "M01-UX"
-    ? m01ux
-    : milestone === "M01"
-      ? m01
-      : milestone === "M02"
-        ? m02
-        : milestone === "M03"
-          ? m03
-          : milestone === "M04"
-            ? m04
-            : milestone === "M05"
-              ? m05
-              : milestone === "M06"
-                ? m06
-                : milestone === "M07"
-                  ? m07
-                  : common;
+/** Parent gates: evidence directory and required records per milestone. */
+const gates = {
+  "M01-UX": ["evidence/M01/ux", m01ux],
+  M01: ["evidence/M01/full", m01],
+  M02: ["evidence/M02/full", m02],
+  M03: ["evidence/M03/full", m03],
+  M04: ["evidence/M04/full", m04],
+  M05: ["evidence/M05/full", m05],
+  M06: ["evidence/M06/full", m06],
+  M07: ["evidence/M07/full", m07],
+  M09: ["evidence/M09/full", m09],
+};
+const [fallbackDir, required] = gates[milestone] || [
+  "evidence/M00/current",
+  common,
+];
+const dir = evidenceDir(fallbackDir);
 const issues = [];
 const build = JSON.parse(await readFile("dist/build.json"));
 const hash = await sourceHash();
@@ -70,11 +50,7 @@ for (const name of required) {
     );
   }
 }
-if (
-  !["M00", "M01", "M01-UX", "M02", "M03", "M04", "M05", "M06", "M07"].includes(
-    milestone,
-  )
-)
+if (milestone !== "M00" && !gates[milestone])
   issues.push(
     `${milestone}: remaining milestone-specific gates are not implemented`,
   );

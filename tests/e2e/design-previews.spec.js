@@ -1,6 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+
+/** Runs the active preview and waits for the run to finish, so a pane chosen
+ * next is not reset to the summary by the arriving result. */
+async function runPreview(page) {
+  await page.locator("#preview-run").click();
+  await expect(page.locator("#workspace")).not.toHaveAttribute("aria-busy", "true");
+}
 const dir = "evidence/design-previews";
 for (const kind of ["rcBeam", "slab", "padFooting"])
   test(`Concrete preview ${kind}: source, stale, undo, persistence and export`, async ({
@@ -24,7 +31,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     await page.locator("#preview-create").click();
     await expect(page.locator("#preview-run")).toBeEnabled();
     await expect(page.locator("#model-nav [data-preview]")).toHaveCount(1);
-    await page.locator("#preview-run").click();
+    await runPreview(page);
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
       "UNSUPPORTED",
     );
@@ -51,7 +58,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
       await expect(page.locator("#preview-run")).toBeDisabled();
       await page.locator("#analyse").click();
       await expect(page.locator("#preview-run")).toBeEnabled();
-      await page.locator("#preview-run").click();
+      await runPreview(page);
       await expect(page.locator("[data-testid=preview-result]")).toContainText(
         "Actual model analysis",
       );
@@ -156,7 +163,7 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   // a Worker round trip bounded by the 30 s transport timeout, not the 5 s
   // display budget; under batch load it has exceeded 5 s.
   const runAndOpen = async () => {
-    await page.locator("#preview-run").click();
+    await runPreview(page);
     await expect(page.locator("[data-testid=preview-stale]")).toHaveCount(0, {
       timeout: 30000,
     });
@@ -279,7 +286,7 @@ for (const [localY, orientation, sagging, hogging] of [
     await page.locator("[data-inspector-tab=concrete]").click();
     await page.locator("#preview-kind").selectOption("rcBeam");
     await page.locator("#preview-create").click();
-    await page.locator("#preview-run").click();
+    await runPreview(page);
     await page.locator('[data-preview-pane="mechanics"]').click();
     const pane = page.locator("[data-testid=preview-result]");
     await expect(page.locator("[data-testid=demand-status]")).toContainText(
@@ -290,7 +297,7 @@ for (const [localY, orientation, sagging, hogging] of [
     await page.locator("#preview-source").selectOption("model");
     await page.locator("#analyse").click();
     await expect(page.locator("#preview-run")).toBeEnabled();
-    await page.locator("#preview-run").click();
+    await runPreview(page);
     await page.locator('[data-preview-pane="mechanics"]').click();
     await expect(
       page.locator("[data-testid=demand-moment-sagging]"),
@@ -405,7 +412,7 @@ for (const [localY, orientation, sagging, hogging] of [
       "UNSUPPORTED",
     );
     await page.locator("#preview-source").selectOption("synthetic");
-    await page.locator("#preview-run").click();
+    await runPreview(page);
     await expect(page.locator("[data-testid=preview-result]")).toContainText(
       "SYNTHETIC FIXTURE",
     );
@@ -455,7 +462,7 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   await page.locator("#preview-create").click();
   await expect(page.locator("#preview-linkLegs")).toHaveValue("2");
   await expect(page.locator("#preview-anchorage")).not.toBeChecked();
-  await page.locator("#preview-run").click();
+  await runPreview(page);
   await page.locator('[data-preview-pane="ec2"]').click();
   await expect(page.locator("[data-testid=ec2-status]")).toContainText(
     "Unavailable",
@@ -465,7 +472,7 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   await page.locator("#preview-source").selectOption("model");
   await page.locator("#analyse").click();
   await expect(page.locator("#preview-run")).toBeEnabled();
-  await page.locator("#preview-run").click();
+  await runPreview(page);
   await page.locator('[data-preview-pane="ec2"]').click();
   await expect(page.locator("[data-testid=ec2-banner]")).toContainText(
     "DISABLED PROFILE PREVIEW",
@@ -498,7 +505,7 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   await page.locator("#preview-save").click();
   await page.locator("#analyse").click();
   await expect(page.locator("#preview-run")).toBeEnabled();
-  await page.locator("#preview-run").click();
+  await runPreview(page);
   await page.locator('[data-preview-pane="ec2"]').click();
   await expect(page.locator("[data-testid=ec2-anchorage]")).toHaveText(
     "confirmed by you",

@@ -1,0 +1,22 @@
+{
+  "test": "M09 stability journey",
+  "oracle": "fixtures/stability/stability-oracle.json",
+  "bucklingFactor": {
+    "measured": 1.9999669978807468,
+    "expected": 2,
+    "tolerance": 0.0001
+  },
+  "secondOrderSway": {
+    "measured": 0.0001609186198629019,
+    "expected": 0.0001609027692531934,
+    "tolerance": 0.001
+  },
+  "amplification": {
+    "measured": 1.989,
+    "expected": 1.9890992833465082,
+    "tolerance": 0.001
+  },
+  "overCritical": "TANGENT_NOT_POSITIVE_DEFINITE, no payload",
+  "reopenedSwayIdentical": true,
+  "modelHash": "69233341cbdd · f64"
+}

@@ -820,6 +820,8 @@ $("#home").onclick = () => {
 };
 function setBusy(value) {
   busy = value;
+  // Announces running commands to assistive technology; tests wait on it.
+  $("#workspace").setAttribute("aria-busy", String(value));
   for (const id of [
     "analyse",
     "undo",

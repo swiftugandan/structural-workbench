@@ -440,7 +440,7 @@
       "rightsStatus": "Public.Resource.Org 'Published Under the Rule of Law' posting; BSI copyright notice retained; rights contested; user-approved 2026-09-28 as local reference only; not redistributed",
       "localPath": "resources/private/bs-na-en-1992-1-1-uk-national-annex.pdf",
       "retrievedAt": "2026-09-28",
-      "validationUse": "UK NDP values for R-EC2-UK-STANDARDS at the 2009 amendment state; superseded by NA+A2:2014 \u2014 differences must be reconciled before any current-UK profile is enabled"
+      "validationUse": "UK NDP values for R-EC2-UK-STANDARDS at the 2009 amendment state; superseded by NA+A2:2014 — differences must be reconciled before any current-UK profile is enabled"
     },
     {
       "id": "R-EC2-EN-1992-1-1-2004",
@@ -453,6 +453,17 @@
       "localPath": "resources/private/en-1992-1-1-2004-incl-ac2008-ac2010.pdf",
       "retrievedAt": "2026-09-28",
       "validationUse": "EN 1992-1-1 clause text for the M08-B clause dossier with R-EC2-UK-NA-2009 NDPs and R-EC2-JRC-EXAMPLES reconciliation. A1:2014 and NA+A2:2014 are not included: any clause they change must be identified and reconciled before a current-UK profile is enabled"
+    },
+    {
+      "id": "R-STABILITY-ORACLE",
+      "version": "stability-v1",
+      "authoritativeOrigin": "Project-generated: closed-form Euler and exact beam-column (stability functions) solutions by tools/oracles/stability_oracle.py, cross-checked with OpenSeesPy 3.4.0 (R-OPENSees-ORACLE, PDelta and Corotational transformations)",
+      "fixture": "fixtures/stability/stability-oracle.json",
+      "fixtureSha256": "177c499f5f9872014289cd80b759fac132252cadf6656d898a631a2a00bbe669",
+      "generatorSha256": "58ab5af508b9911a3012a954643be4518128f433703e8a6ae06c4dc7e6db50fc",
+      "formulation": "docs/formulations/stability.md",
+      "rightsStatus": "Project-authored, redistributable with the repository",
+      "validationUse": "M09 elastic buckling and second-order kernel, protocol and browser acceptance"
     }
   ],
   "unresolved": [
@@ -474,7 +485,6 @@
     "R-PRESTRESS-CODE",
     "R-PROKON-LICENSED-CORPUS",
     "R-SEISMIC-CODE",
-    "R-SHELL-BENCHMARKS",
-    "R-STABILITY-ORACLE"
+    "R-SHELL-BENCHMARKS"
   ]
 }

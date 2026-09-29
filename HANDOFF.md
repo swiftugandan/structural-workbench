@@ -1,3 +1,11 @@
+## Latest: M09 stability accepted
+
+M09 (stability-v1) passed its parent gate: `node tools/run-m09-parent.mjs` → `evidence/M09/full/gate-M09.json` and `ACCEPTANCE.md`. The Stability results tab runs elastic buckling or second-order P-Δ-δ analysis on one case or combination, draws buckling modes (violet, normalised) or the second-order shape (teal, at the deformation scale, overlaying the first-order shape), compares first- and second-order sway, and puts the run in the calculation record. Over-critical loads fail with no numbers. A critical factor is never a member resistance or code verdict. Torsional/lateral-torsional modes, large displacement and member end releases stay excluded.
+
+The two batch flakes of TEST-BATCH-FLAKE-02 were test races, now fixed: `#workspace[aria-busy]` announces running commands (and gives tests a completion signal), and the spatial-crossing loop waits for each import's own hash. Full batch: 108/109. `model-visibility.spec.js:6` failed once with WebGPU still initialising under load and passed alone (TEST-GPU-INIT-FLAKE-03, open).
+
+Next: M14 modal analysis. Formulation `docs/formulations/modal.md`, ADR 0018.
+
 ## Latest: refreshed validation and Preview 10
 
 Current source `90067de` passed 112 real AMD GPU browser tests and the complete native/WASM/oracle corpus. Default release evidence is fresh; the only release-verifier issue is the unimplemented remaining milestone gates. See `evidence/revalidation/README.md` and `evidence/revalidation/release-current/`. Preserve engineering STALE semantics. UK Eurocode/NA concrete resources and physical detailing remain blocked.

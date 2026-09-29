@@ -241,7 +241,7 @@
     {
       "id": "M09",
       "name": "Evaluate frame stability and second order sway",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M06"
       ],
@@ -260,7 +260,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Priority raised: unrestricted steel beam-column design beyond declared effective-length workflows depends on this milestone (see PARITY_ROADMAP.md \u00a73.1)."
+      "acceptanceDefinition": "stability-v1 accepted (evidence/M09/full): flexural elastic buckling and linearised P-\u0394-\u03b4 second-order analysis of one case or combination, with the independent oracle fixtures/stability/stability-oracle.json. Torsional/lateral-torsional instability, large displacement and member end releases remain excluded; a critical factor is never a code verdict."
     },
     {
       "id": "M10",

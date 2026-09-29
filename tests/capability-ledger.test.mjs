@@ -34,15 +34,23 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
       (c) => (c.comparisonStatus || ledger.comparisonStatus) === "UNKNOWN",
     ),
   );
-  // stability-v1 is kernel-verified only until the M09 journey is accepted.
+  // stability-v1 is accepted by the M09 parent gate and keeps its
+  // flexural-only and not-a-resistance limitations.
   for (const id of ["elastic-buckling", "second-order-p-delta"]) {
     const row = ledger.capabilities.find((c) => c.capabilityId === id);
-    assert.equal(row.implementationStatus, "partial", id);
+    assert.equal(row.implementationStatus, "implemented", id);
+    assert.equal(row.verificationStatus, "parent-gate-pass", id);
+    assert.ok(row.evidenceReferences.includes("evidence/M09/full/gate-M09.json"), id);
     assert.ok(
-      row.limitations.some((l) => /M09/.test(l)),
+      row.limitations.some((l) => /Flexural instability only/.test(l)),
       id,
     );
   }
+  assert.ok(
+    ledger.capabilities
+      .find((c) => c.capabilityId === "elastic-buckling")
+      .limitations.some((l) => /not a member resistance/.test(l)),
+  );
   assert.deepEqual(ledger.supportedDomain.analysisTypes, [
     "linearStatic",
     "elasticBuckling",

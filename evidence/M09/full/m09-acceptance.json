@@ -1,0 +1,176 @@
+{
+  "taskId": "M09-parent",
+  "milestone": "M09",
+  "sourceHash": "3e89c30fc55bf793b4bc8a020c71eb4de330cfe2034367da841a29e211c0e45a",
+  "buildHash": "12ad0d64876b7052f6b4bb14faa02fd6e237ae251f65c27dcbd2178c4d620b69",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T07:44:13.628Z",
+  "status": "PASS",
+  "testCount": 8,
+  "testIds": [
+    "M09-EULER",
+    "M09-PDELTA-PORTAL",
+    "M09-SIGN-NORMALISATION",
+    "M09-NONCONVERGENCE",
+    "M09-SEPARATE-TYPES",
+    "M09-UI-JOURNEY",
+    "M09-NOT-A-VERDICT",
+    "M09-ORACLE-PROVENANCE"
+  ],
+  "command": [
+    "node",
+    "tools/record-m09-acceptance.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "M09-EULER",
+      "title": "Euler-column analytical loads and mesh refinement",
+      "evidence": "kernel_validation",
+      "tests": {
+        "stability-native": [
+          "euler_struts_converge_from_above_to_the_closed_form",
+          "both_bending_planes_appear_with_their_own_loads_and_shapes",
+          "chain_with_uniform_compression_matches_the_closed_form"
+        ]
+      },
+      "observation": "Four end conditions in both bending planes within 1e-4 of π²EI/(KL)² at 16 elements; refinement 1→16 decreases monotonically from above with 8→16 error ratio ≥ 8.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-PDELTA-PORTAL",
+      "title": "Independent P-Δ portal reference",
+      "evidence": "kernel_validation",
+      "tests": {
+        "stability-native": [
+          "portal_sway_buckling_matches_the_characteristic_equation",
+          "portal_p_delta_matches_the_exact_beam_column_solution",
+          "column_moments_follow_the_exact_p_delta_shape",
+          "equilibrium_holds_in_the_deformed_geometry",
+          "the_first_order_record_is_the_linear_response_to_the_same_loads"
+        ],
+        "stability-protocol": [
+          "elasticBuckling returns the portal sway factor with disclosures",
+          "secondOrder reproduces the exact P-Delta sway and records convergence"
+        ],
+        "m09-browser": [
+          "M09 stability: buckling modes, first- vs second-order sway, over-critical failure, stale and record"
+        ]
+      },
+      "observation": "Portal sway factor and P-Δ sway at 0.2/0.5/0.8 Pcr match the exact beam-column oracle (fixtures/stability/stability-oracle.json, OpenSees cross-check) natively, through WASM and in the browser.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-SIGN-NORMALISATION",
+      "title": "Sign/load reversal; eigenvector sign and normalisation",
+      "evidence": "kernel_validation",
+      "tests": {
+        "stability-native": [
+          "reversing_the_reference_load_negates_the_spectrum",
+          "a_strut_in_tension_has_no_critical_factor",
+          "mode_shapes_are_normalised_to_a_unit_positive_peak",
+          "tension_only_has_no_positive_factor_and_reports_the_reversal"
+        ]
+      },
+      "observation": "Reversing the reference load negates the spectrum; negative factors are never critical; shapes are normalised to a unit positive peak and compared by MAC, so eigenvector sign cannot affect comparison.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-NONCONVERGENCE",
+      "title": "Near-critical and nonconvergent cases",
+      "evidence": "failure_path",
+      "tests": {
+        "stability-native": [
+          "near_critical_portal_converges_with_large_amplification",
+          "over_critical_portal_fails_without_a_response",
+          "releases_and_envelopes_are_rejected",
+          "releases_envelopes_and_bad_settings_are_rejected"
+        ],
+        "stability-protocol": [
+          "an over-critical secondOrder fails with its reason and no payload",
+          "malformed or ambiguous stability requests are refused"
+        ],
+        "m09-browser": [
+          "M09 stability: buckling modes, first- vs second-order sway, over-critical failure, stale and record"
+        ]
+      },
+      "observation": "0.99 Pcr converges with the exact amplification; 1.01 Pcr ends NONCONVERGED/TANGENT_NOT_POSITIVE_DEFINITE with no numbers in kernel, protocol and UI; envelopes, releases and bad settings are refused.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-SEPARATE-TYPES",
+      "title": "Separate analysis types, explicit imperfection, no superposition",
+      "evidence": "kernel_validation",
+      "tests": {
+        "stability-native": [
+          "sway_imperfection_is_explicit_and_listed",
+          "without_axial_force_second_order_is_the_linear_analysis",
+          "settings_enter_the_result_identity"
+        ],
+        "stability-protocol": [
+          "capabilities advertise the stability types with precise exclusions"
+        ]
+      },
+      "observation": "elasticBuckling and secondOrder are distinct analyse types on one real case or combination; imperfections are never implied and are listed as equivalent nodal forces; settings enter the result identity.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-UI-JOURNEY",
+      "title": "Compare first/second-order sway and inspect modes in the browser",
+      "evidence": "ui_journey, save_and_reopen, exported_outcome",
+      "tests": {
+        "m09-browser": [
+          "M09 stability: buckling modes, first- vs second-order sway, over-critical failure, stale and record"
+        ]
+      },
+      "observation": "Portal journey: buckling factor and drawn modes, first- vs second-order sway and amplification, stale on edit and case change, record and run JSON export, save and reopen reproduces the sway exactly.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-NOT-A-VERDICT",
+      "title": "A buckling factor is not a code member-resistance verdict",
+      "evidence": "capability_ledger",
+      "tests": {
+        "stability-protocol": [
+          "capabilities advertise the stability types with precise exclusions",
+          "capabilities.json publishes UNKNOWN parity and SPEC exclusions"
+        ],
+        "m09-browser": [
+          "M09 stability: buckling modes, first- vs second-order sway, over-critical failure, stale and record",
+          "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions"
+        ]
+      },
+      "observation": "Panel, legend, report banner, protocol disclosures and ledger all state that a critical factor is an elastic load multiplier, flexural only, not a resistance, effective length or code check.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M09-ORACLE-PROVENANCE",
+      "title": "Independent oracle generated by the recorded script",
+      "evidence": "regression_results",
+      "observation": "tools/oracles/stability_oracle.py sha256 58ab5af508b9911a3012a954643be4518128f433703e8a6ae06c4dc7e6db50fc; recorded 58ab5af508b9911a3012a954643be4518128f433703e8a6ae06c4dc7e6db50fc; OpenSees 3.4.0 cross-check.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "stability-v1 is flexural only (no torsional, flexural-torsional or lateral-torsional modes), small rotations about the undeformed geometry, proportional loading, one real case or combination, and no member end moment releases. A critical factor is never a member resistance or code verdict. Commercial PROKON parity remains UNKNOWN."
+}

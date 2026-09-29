@@ -1,0 +1,15 @@
+{
+  "milestone": "M09",
+  "status": "PASS",
+  "sourceHash": "3e89c30fc55bf793b4bc8a020c71eb4de330cfe2034367da841a29e211c0e45a",
+  "buildHash": "12ad0d64876b7052f6b4bb14faa02fd6e237ae251f65c27dcbd2178c4d620b69",
+  "required": [
+    "build",
+    "stability-native",
+    "stability-protocol",
+    "m09-browser",
+    "m09-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-29T07:44:14.037Z"
+}

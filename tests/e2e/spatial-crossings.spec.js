@@ -8,6 +8,8 @@ test("Crossing diagnostics distinguish spatial separation from disconnected inte
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
+  // Both imports have the same counts, so each waits for its own model hash.
+  let previousHash = null;
   for (const [offset, expected] of [
     [1, "0"],
     [0, "1"],
@@ -26,6 +28,8 @@ test("Crossing diagnostics distinguish spatial separation from disconnected inte
     await expect(page.locator("#model-count")).toHaveText(
       "4 nodes · 2 members",
     );
+    if (previousHash)
+      await expect(page.locator("#hash-status")).not.toHaveText(previousHash);
     if (
       (await page.locator("#model-crossings").getAttribute("aria-pressed")) !==
       "true"
@@ -35,6 +39,7 @@ test("Crossing diagnostics distinguish spatial separation from disconnected inte
       await page.locator("#model-crossings").click();
     }
     const hash = await page.locator("#hash-status").textContent();
+    previousHash = hash;
     for (const view of ["elevation", "plan", "3d"]) {
       await page.locator(`#view-${view}`).click();
       await expect(page.locator("#viewport")).toHaveAttribute(

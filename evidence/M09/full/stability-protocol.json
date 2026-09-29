@@ -1,0 +1,40 @@
+{
+  "taskId": "M09-parent",
+  "milestone": "M09",
+  "sourceHash": "3e89c30fc55bf793b4bc8a020c71eb4de330cfe2034367da841a29e211c0e45a",
+  "buildHash": "12ad0d64876b7052f6b4bb14faa02fd6e237ae251f65c27dcbd2178c4d620b69",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T07:43:42.109Z",
+  "status": "PASS",
+  "testCount": 7,
+  "testIds": [
+    "capabilities.json publishes UNKNOWN parity and SPEC exclusions",
+    "ledger helpers render disclosures without inventing parity",
+    "capabilities advertise the stability types with precise exclusions",
+    "elasticBuckling returns the portal sway factor with disclosures",
+    "secondOrder reproduces the exact P-Delta sway and records convergence",
+    "an over-critical secondOrder fails with its reason and no payload",
+    "malformed or ambiguous stability requests are refused"
+  ],
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "tests/stability-protocol.test.mjs",
+    "tests/capability-ledger.test.mjs"
+  ],
+  "artifacts": []
+}
