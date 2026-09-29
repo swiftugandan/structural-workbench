@@ -4211,7 +4211,10 @@
       "sourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
       "buildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
       "acceptedAt": "2026-09-29T12:14:50.052Z",
-      "nextAction": "None"
+      "nextAction": "None",
+      "regression": {
+        "fullBrowserBatch": "115/115 passed on the final build (WORKBENCH_TEST_TIMEOUT_MS=120000)"
+      }
     }
   },
   "blockers": [
@@ -4266,5 +4269,5 @@
   "nextAction": "Unblocked: Windows/Linux real-GPU evidence; segment-level Cb for members with interior bracing points (needs a bracing-point input). Resource-blocked milestones unchanged.",
   "handoffPath": "HANDOFF.md",
   "lastVerifiedSourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
-  "lastVerifiedScope": "M07-LTB (with DW-LTB1-CB), M07-S and M07 parent gates on the same build."
+  "lastVerifiedScope": "M07-LTB (with DW-LTB1-CB), M07-S and M07 parent gates on the same build. Full browser batch 115/115 on this build."
 }
