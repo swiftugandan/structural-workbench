@@ -282,6 +282,53 @@
       ]
     },
     {
+      "capabilityId": "slab-plate-analysis",
+      "scopeKey": "M10 numerical family / plate-v1 / flat rectangular slab panel with one opening / Q4 membrane + MITC4",
+      "implementationStatus": "partial",
+      "verificationStatus": "numerical-family-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [
+        "M08-concrete-resources"
+      ],
+      "limitations": [
+        "Flat rectangular panels with at most one rectangular opening, uniform downward pressure, linear elastic isotropic material, free/simple (hard)/clamped edges; general and curved shells remain excluded",
+        "Not connected to the frame model: no frame–slab coupling, column point supports, cracking or long-term effects",
+        "Unsmoothed element-centre actions are the design values; smoothed values are display only; the convergence indicator is not a proof and stays high at re-entrant opening corners",
+        "Wood–Armer moments are moments to resist, not reinforcement; reinforcement areas, punching, detailing and deflection limits need the slab code profile (M08 resources) and are UNSUPPORTED; M10 is not accepted"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/plate.md",
+        "docs/adr/0021-slab-plate-analysis.md",
+        "fixtures/plate/plate-oracle.json",
+        "crates/plate/tests/plate_v1.rs",
+        "evidence/M10/plate/m10-plate-acceptance.json",
+        "evidence/M10/plate/ACCEPTANCE.md"
+      ]
+    },
+    {
+      "capabilityId": "rc-column-mechanics",
+      "scopeKey": "M12 numerical family / rc-column / biaxial strain-compatibility section mechanics at model key stations",
+      "implementationStatus": "partial",
+      "verificationStatus": "numerical-family-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [
+        "M08-concrete-resources"
+      ],
+      "limitations": [
+        "Solid rectangular sections with perimeter bars; explicit concrete (rectangular block or parabola-rectangle) and steel laws and caller strain limits, never code values",
+        "M_Rd(N_Ed, θ) along the demand direction at the bound member's key stations only; a mechanics utilisation is not a code check",
+        "Slenderness and second-order moments, minimum eccentricity, partial factors, shear and detailing need the column code profile (M08 resources) and are UNSUPPORTED; M12 is not accepted"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/rc-column.md",
+        "docs/adr/0022-biaxial-column-section.md",
+        "fixtures/column/column-oracle.json",
+        "crates/design/tests/rc_column.rs",
+        "evidence/M12/column/m12-column-acceptance.json",
+        "evidence/M12/column/ACCEPTANCE.md"
+      ]
+    },
+    {
       "capabilityId": "concrete-code",
       "scopeKey": "M08 / ACI 318-19 proposed",
       "implementationStatus": "excluded",
@@ -303,7 +350,8 @@
       "comparisonStatus": "UNKNOWN",
       "resourceBlockers": [],
       "limitations": [
-        "Outside analysis MVP; see PARITY_ROADMAP.md"
+        "Outside analysis MVP; see PARITY_ROADMAP.md",
+        "The M10 plate-v1 and M12 rc-column numerical families are listed separately; their code checks remain outside"
       ],
       "evidenceReferences": []
     }
