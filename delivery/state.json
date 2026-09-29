@@ -4165,6 +4165,53 @@
       "buildHash": "f0da657bb175395079888f253aaf3fee114cb8e4a3d4aeaa2fedb15372d0d1c6",
       "acceptedAt": "2026-09-29T11:58:13.638Z",
       "nextAction": "None"
+    },
+    "M07-LTB-CB": {
+      "id": "M07-LTB-CB",
+      "useCase": "Cb derived from each member's strong-axis moment diagram (Spec F1-1), Cb = 1.0 for a free cantilever end",
+      "dependencies": [
+        "M07-LTB"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/model/src/design_inputs.rs",
+        "crates/design/src/native.rs",
+        "crates/wasm-api/src/design_workspace.rs",
+        "crates/wasm-api/tests/design_workspace.rs",
+        "web/steel-design.js",
+        "tests/e2e/native-steel-design.spec.js",
+        "tools/run-m07-ltb.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "m07-ltb-acceptance (DW-LTB1-CB)",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/ltb/m07-ltb-acceptance.json"
+        },
+        {
+          "check": "m07-s-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/serviceability/m07-s-acceptance.json"
+        },
+        {
+          "check": "gate-M07",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/full/gate-M07.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Example F.1-2B modelled as three members: derived Cb 1.0136 (published 1.01) and 1.46 (published 1.46); centre flexure equals evaluate_ltb with derived Cb and exact Lb (published 304 kip-ft uses rounded Cb 1.01 and Lb 11.7 ft)",
+        "Derivation requires Lb = member length; free cantilever end gives Cb = 1.0 (F1) instead of F1-1's unconservative 1.67"
+      ],
+      "evidencePaths": [
+        "evidence/M07/ltb",
+        "evidence/M07/serviceability",
+        "evidence/M07/full"
+      ],
+      "sourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
+      "buildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
+      "acceptedAt": "2026-09-29T12:14:50.052Z",
+      "nextAction": "None"
     }
   },
   "blockers": [
@@ -4215,9 +4262,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "f0da657bb175395079888f253aaf3fee114cb8e4a3d4aeaa2fedb15372d0d1c6",
-  "nextAction": "Unblocked: Cb from the model's moment diagram per unbraced segment; Windows/Linux real-GPU evidence. Resource-blocked milestones unchanged (see resources.required.json).",
+  "lastVerifiedBuildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
+  "nextAction": "Unblocked: Windows/Linux real-GPU evidence; segment-level Cb for members with interior bracing points (needs a bracing-point input). Resource-blocked milestones unchanged.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "4a62662f29be6748d814d13b1f51cb5676ffe0404087d02aab6fc2916449213c",
-  "lastVerifiedScope": "M09 gate (with M09-HINGES) on the same build; cargo 197, contracts 14."
+  "lastVerifiedSourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
+  "lastVerifiedScope": "M07-LTB (with DW-LTB1-CB), M07-S and M07 parent gates on the same build."
 }

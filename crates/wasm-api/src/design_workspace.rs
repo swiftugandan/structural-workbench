@@ -82,12 +82,51 @@ fn evaluate_analysis(
     case: &str,
     analysis: &workbench_results::Analysis,
 ) -> Result<Value> {
-    let context = native::context(p, id)?;
+    let mut context = native::context(p, id)?;
     let m = analysis
         .members
         .iter()
         .find(|m| m.id == id)
         .ok_or_else(|| err("DANGLING_REFERENCE", "Result member is missing"))?;
+    // Cb from the member's own strong-axis moment diagram (F1-1); readiness has
+    // already required the member to be the unbraced segment. The 41 exact
+    // samples include the quarter points; key stations add interior extrema.
+    let design = native::member(p, id)?.steel_design.as_ref().unwrap();
+    let cb_derivation = if native::cb_from_model(design) {
+        let at = |t: f64| {
+            m.samples
+                .iter()
+                .find(|s| (s.station - t).abs() < 1e-12)
+                .map(|s| s.actions[5].abs())
+                .ok_or_else(|| err("INTERNAL", "Quarter-point sample missing"))
+        };
+        let m_max = m
+            .samples
+            .iter()
+            .map(|s| s.actions[5].abs())
+            .chain(m.key_stations.iter().map(|k| k.actions[5].abs()))
+            .fold(0.0, f64::max);
+        let (ma, mb, mc) = (at(0.25)?, at(0.5)?, at(0.75)?);
+        // Spec F1: a cantilever or overhang with an unbraced free end takes
+        // Cb = 1.0. A free end has no support and no other member.
+        let member = native::member(p, id)?;
+        let free = |node: &str| {
+            !p.supports.iter().any(|s| s.node == node)
+                && p.members.iter().filter(|x| x.start == node || x.end == node).count() == 1
+        };
+        let cantilever = free(&member.start) || free(&member.end);
+        let (cb, rule) = if cantilever {
+            (1.0, "F1: cantilever with an unbraced free end")
+        } else if m_max > 0.0 {
+            (native::cb_f1_1(m_max, ma, mb, mc), "F1-1")
+        } else {
+            (1.0, "F1-1: no strong-axis moment")
+        };
+        context.cb = cb;
+        Some(json!({"source":"derived","equation":rule,"Cb":cb,"Mmax":m_max,"MA":ma,"MB":mb,"MC":mc,"combinationId":case}))
+    } else {
+        None
+    };
     let registry = workbench_design::default_registry();
     let mut points: Vec<(f64, Option<String>, [f64; 6])> = m
         .key_stations
@@ -203,6 +242,7 @@ fn evaluate_analysis(
         "designSettingsHash":settings_hash,"inputs":settings,"catalogue":native::catalogue()["source"],"catalogueSourceHash":native::catalogue()["sourceSha256"],
         "stabilityBasis":"First-order analysis with user effective-length factors; no second-order / direct-analysis compliance claim",
         "bracingSegments":[{"start":0.0,"end":1.0,"kind":settings.bracing,"source":"user"}],
+        "cbDerivation":cb_derivation,
         "serviceability":serviceability(p, id)?,"warnings":["Only the selected case/combination is checked; load completeness is the user's responsibility"],
         "limitations":["Bounded AISC 360-22 strength checks (S2, S3 flexure)", "Tension details, weak-axis actions, noncompact webs and second-order stability remain unsupported", "Serviceability is a user deflection criterion, reported separately from strength; no connection design"]});
     out["designRunId"] = json!(digest(&serde_json::to_vec(&out).unwrap()));

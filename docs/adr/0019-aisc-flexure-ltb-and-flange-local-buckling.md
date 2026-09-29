@@ -42,3 +42,12 @@ and noncompact-flange local buckling (F.3B).
 - Model-native members with Lb > 0 and bracing other than continuous receive
   a governed flexure result instead of UNSUPPORTED.
 - Parent M07 S2 regressions still pass on the same build.
+
+## Amendment (2026-09-29): Cb from the model
+
+Decision 4 is extended: Cb may be stored as `{value: null, source:
+"derived"}`. It is then evaluated per run by F1-1 from |Mz| at the member's
+exact quarter-point samples and its maximum (samples and key stations), only
+when Lb equals the member length, and set to 1.0 for a member with an
+unbraced free end. Example F.1-2B modelled as three members gives 1.01 and
+1.46 as published; the run records `cbDerivation`.

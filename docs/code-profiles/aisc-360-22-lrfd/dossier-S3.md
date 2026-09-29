@@ -28,8 +28,11 @@ Machine fixtures: `fixtures/design/aisc-360-22-lrfd/S3-*.json`; regressions in
   rectangular flanges), so rts² = Iy ho/(2 Sx). Derived from the catalogue's
   Table 1-1 d, tf, Iy and Sx, this reproduces the published W18×50 values
   rts = 1.98 in. and ho = 17.4 in.
-- Cb is a user input (F1-1 is not evaluated from the model yet); Cb < 1 is
-  refused.
+- Cb is a user input (≥ 1), or derived from the member's own strong-axis
+  moment diagram by F1-1 when the member is the unbraced segment (Lb equal to
+  its length); a member with an unbraced free end (cantilever, overhang) takes
+  Cb = 1.0 per Section F1. Modelling Example F.1-2B's third-point bracing as
+  three members reproduces the published Cb = 1.01 (centre) and 1.46 (ends).
 
 ## Unsupported (fail-closed)
 

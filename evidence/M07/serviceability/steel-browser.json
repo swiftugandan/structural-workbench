@@ -1,8 +1,8 @@
 {
   "taskId": "M07-S",
   "milestone": "M07",
-  "sourceHash": "fdfd1aee6f75c574b52d69897412ea9983c49811a43234d48641f92160f883b6",
-  "buildHash": "90222244eeafd9743a7d3dc890d6ab6d7c0952d4daa4b174017edb493c33fc6e",
+  "sourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
+  "buildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
   "lockHashes": {
     "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,7 +10,7 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "7af3eb94da63d546563f0d44ff5679259f4724f8c7a437b5e7d2ff76f11c1a35"
+    "playwright-results.json": "70a76aa4109777a065fc4a07eb761dfa5ede353af91bb8405d7b37075b709775"
   },
   "runner": {
     "platform": "darwin",
@@ -19,13 +19,14 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T11:17:24.854Z",
+  "observedAt": "2026-09-29T12:15:32.686Z",
   "status": "PASS",
-  "testCount": 4,
+  "testCount": 5,
   "testIds": [
     "DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen",
     "DW-F4: fail reaches governing station and clause; LTB governs once Lb exceeds Lp",
     "DW-SVc1: a deflection criterion is a separate serviceability status",
+    "Derived Cb: the model's moment diagram sets Cb, with Cb = 1 for a free cantilever end",
     "M07-G overview: complete membership, exact records, row selection, stale and export"
   ],
   "command": [
@@ -36,9 +37,9 @@
     "tests/e2e/steel-overview.spec.js"
   ],
   "stats": {
-    "startTime": "2026-09-29T11:16:57.172Z",
-    "duration": 27657.213,
-    "expected": 4,
+    "startTime": "2026-09-29T12:14:53.840Z",
+    "duration": 38810.474,
+    "expected": 5,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

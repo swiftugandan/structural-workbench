@@ -1,3 +1,7 @@
+## Latest: Cb from the model
+
+Steel members can derive Cb from their own strong-axis moment diagram (Spec F1-1) when the member is the unbraced segment (Lb = member length). A member with an unbraced free end takes Cb = 1.0 (Section F1), not F1-1's unconservative 1.67. Example F.1-2B's third-point bracing, modelled as three members, gives the published Cb = 1.01 and 1.46. The run records the derivation (Mmax, MA, MB, MC) and the panel shows it. Members with interior bracing points still need a user Cb. Gates M07-LTB (new criterion DW-LTB1-CB), M07-S and M07 pass on one build.
+
 ## Latest: end releases in buckling and modal analysis
 
 Elastic buckling and modal analysis now accept My/Mz member end releases. Each released end rotation is an independent hinge DOF, not a condensation, so both eigenproblems stay linear. A fixed strut with released ends reproduces the pinned strut to 1e-9. A portal with a pinned beam buckles as two flagpoles (π²EI/4h²) and sways at √(6EI/h³ / 2m). Released fixed bars reproduce the simply supported frequencies. Second-order analysis carries the hinges through iteration and recovery: the pinned-beam portal sways within 1e-3 of the exact cantilever beam-column, with zero hinge moments. The M09 gate (new criterion M09-HINGES) and the M14 gate pass.

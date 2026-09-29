@@ -1,8 +1,8 @@
 {
   "taskId": "M07-S",
   "milestone": "M07",
-  "sourceHash": "fdfd1aee6f75c574b52d69897412ea9983c49811a43234d48641f92160f883b6",
-  "buildHash": "90222244eeafd9743a7d3dc890d6ab6d7c0952d4daa4b174017edb493c33fc6e",
+  "sourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
+  "buildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
   "lockHashes": {
     "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,19 +17,22 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T11:16:56.109Z",
+  "observedAt": "2026-09-29T12:14:52.596Z",
   "status": "PASS",
-  "testCount": 10,
+  "testCount": 13,
   "testIds": [
+    "cb_from_the_model_needs_the_member_to_be_the_unbraced_segment",
+    "a_cantilever_with_a_free_end_takes_cb_of_one",
     "invalid_settings_fail_atomically_and_provenance_changes_hash",
     "mismatched_section_invalidates_readiness_and_forged_result_is_rejected",
     "native_binding_readiness_persistence_and_exact_undo",
     "native_no_seed_flexure_and_shear_have_exact_station_provenance",
+    "cb_from_the_model_matches_example_f1_2b_for_third_point_bracing",
     "overview_keeps_unready_members_and_matches_exact_member_runs",
     "noncompact_flanges_and_ltb_use_their_clauses_and_missing_tension_details_never_pass",
     "serviceability_refuses_strength_combinations_and_dangling_references",
-    "serviceability_is_a_separate_deflection_status_against_the_closed_form",
     "weak_axis_and_zero_actions_are_fail_closed",
+    "serviceability_is_a_separate_deflection_status_against_the_closed_form",
     "catalogue_study_reanalyses_self_weight_without_mutating_baseline"
   ],
   "command": [

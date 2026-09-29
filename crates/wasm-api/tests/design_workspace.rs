@@ -444,3 +444,157 @@ fn serviceability_refuses_strength_combinations_and_dangling_references() {
         &req(&mut k, "getSnapshot", json!({}))["payload"]["project"]["members"][0]["steelDesign"];
     assert_eq!(d["serviceability"]["limitRatio"], 360.0);
 }
+
+/// Example F.1-2B as a model: a simply supported 35 ft W18×50 under
+/// wu = 1.74 kip/ft, braced at the ends and third points, as three members.
+fn third_point_beam() -> Kernel {
+    let ft = 0.3048;
+    let span = 35.0 * ft;
+    let wu = 1.74 * 4448.2216152605 / ft;
+    let node = |id: &str, x: f64| json!({"id": id, "position": [x, 0.0, 0.0]});
+    let member = |id: &str, a: &str, b: &str| {
+        json!({"id": id, "start": a, "end": b, "material": "mat1", "section": "sec1",
+               "localY": [0.0, 0.0, 1.0],
+               "releaseStart": {"my": false, "mz": false}, "releaseEnd": {"my": false, "mz": false}})
+    };
+    let loads: Vec<Value> = ["m1", "m2", "m3"]
+        .iter()
+        .map(|m| {
+            json!({"id": format!("w{m}"), "case": "LC1", "type": "uniform",
+                   "member": m, "axes": "global", "forcePerLength": [0.0, 0.0, -wu]})
+        })
+        .collect();
+    let p = json!({
+        "schemaVersion": "1.0.0", "id": "f12b", "name": "F.1-2B beam", "revision": 0,
+        "displayUnits": "SI", "analysisMode": "spatial", "gravity": [0, 0, -9.80665],
+        "materials": [{"id": "mat1", "name": "steel", "E": 200e9, "nu": 0.3, "density": 0}],
+        "sections": [{"id": "sec1", "name": "placeholder", "A": 0.01, "Iy": 1e-5, "Iz": 1e-4, "J": 1e-6,
+                      "cy": 0.1, "cz": 0.1, "provenance": "replaced by the catalogue"}],
+        "nodes": [node("n1", 0.0), node("n2", span / 3.0), node("n3", 2.0 * span / 3.0), node("n4", span)],
+        "members": [member("m1", "n1", "n2"), member("m2", "n2", "n3"), member("m3", "n3", "n4")],
+        "supports": [
+            {"id": "s1", "node": "n1", "fixed": [true, true, true, true, false, false], "prescribed": [0, 0, 0, 0, 0, 0]},
+            {"id": "s2", "node": "n4", "fixed": [false, true, true, false, false, false], "prescribed": [0, 0, 0, 0, 0, 0]}
+        ],
+        "loadCases": [{"id": "LC1", "name": "1.2D+1.6L", "category": "other"}],
+        "loads": loads,
+        "combinations": [],
+        "analysisSettings": {"type": "linearStatic", "formulation": "eulerBernoulli3D",
+            "mergeTolerance": 1e-6, "timeoutMs": 30000, "memoryLimitMiB": 512},
+        "metadata": {"description": "AISC Example F.1-2B", "createdBy": "tests"}
+    });
+    let mut k = Kernel::new();
+    assert_eq!(
+        req(&mut k, "createProject", json!({"project": p}))["status"],
+        "ok"
+    );
+    for id in ["m1", "m2", "m3"] {
+        let r = command(
+            &mut k,
+            "AssignSteelCatalogue",
+            json!({"id": id, "sectionRef": "aisc-shapes-v16.0-subset-1:W18X50", "materialRef": "astm-a992-50-65-v1"}),
+        );
+        assert_eq!(r["status"], "ok", "{r}");
+        let mut d = req(&mut k, "getSnapshot", json!({}))["payload"]["project"]["members"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|m| m["id"] == id)
+            .unwrap()["steelDesign"]
+            .clone();
+        for (key, value) in [("ky", 1.0), ("kz", 1.0), ("lb", span / 3.0)] {
+            d[key] = json!({"value": value, "source": "user"});
+        }
+        d["cb"] = json!({"value": null, "source": "derived"});
+        d["stabilityBasis"] = json!("firstOrderUserEffectiveLength");
+        d["bracing"] = json!("unbraced");
+        let r = command(&mut k, "SetSteelDesign", json!({"id": id, "design": d}));
+        assert_eq!(r["status"], "ok", "{r}");
+    }
+    k
+}
+
+fn evaluate_member(k: &mut Kernel, id: &str) -> Value {
+    let a = req(k, "analyse", json!({"caseIds": ["LC1"]}));
+    assert_eq!(a["status"], "ok", "{a}");
+    let r = req(
+        k,
+        "evaluateModelDesign",
+        json!({"memberId": id, "modelHash": a["modelHash"], "caseId": "LC1", "resultId": a["payload"]["resultId"]}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    r["payload"].clone()
+}
+
+#[test]
+fn cb_from_the_model_matches_example_f1_2b_for_third_point_bracing() {
+    let mut k = third_point_beam();
+    // Published F.1-2B: centre segment Cb = 1.01, end segments Cb = 1.46.
+    let centre = evaluate_member(&mut k, "m2");
+    let cb = centre["cbDerivation"]["Cb"].as_f64().unwrap();
+    assert!((cb - 1.01).abs() <= 0.005, "centre Cb {cb}");
+    let end = evaluate_member(&mut k, "m1");
+    let cb_end = end["cbDerivation"]["Cb"].as_f64().unwrap();
+    assert!((cb_end - 1.46).abs() <= 0.005, "end Cb {cb_end}");
+    // The centre segment governs with inelastic LTB, evaluated with the
+    // derived Cb (F1-1 gives 1.0136, which the example rounds to 1.01) and the
+    // exact third-point Lb (11.67 ft, rounded to 11.7 ft in the example).
+    // The published 304 kip-ft with the rounded inputs is fixture S3-F12B.
+    let flex = governing_flexure(&centre);
+    assert_eq!(flex["clause"], "F2-2");
+    let (_, _, section) = workbench_design::native::resolve(
+        &format!("{}:W18X50", workbench_design::native::CATALOGUE_ID),
+        workbench_design::native::MATERIAL_ID,
+    )
+    .unwrap();
+    let lb = 35.0 * 0.3048 / 3.0;
+    let ltb = workbench_design::evaluate_ltb(&section, 50.0 * 6_894_757.293_168_361, lb, cb);
+    let expected = 0.9 * ltb.mn.unwrap();
+    assert!((flex["resistance"].as_f64().unwrap() / expected - 1.0).abs() <= 1e-12);
+    let phi_mn = expected / 1355.8179483314;
+    assert!((phi_mn / 304.0 - 1.0).abs() <= 0.01, "φbMn {phi_mn} kip-ft");
+}
+
+#[test]
+fn cb_from_the_model_needs_the_member_to_be_the_unbraced_segment() {
+    let mut k = third_point_beam();
+    let mut d =
+        req(&mut k, "getSnapshot", json!({}))["payload"]["project"]["members"][1]["steelDesign"]
+            .clone();
+    d["lb"] = json!({"value": 1.0, "source": "user"});
+    command(&mut k, "SetSteelDesign", json!({"id": "m2", "design": d}));
+    let ready = req(&mut k, "steelReadiness", json!({"memberId": "m2"}))["payload"].clone();
+    assert_eq!(ready["status"], "incomplete");
+    assert!(
+        ready["missing"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|m| m.as_str().unwrap().contains("Cb from the model"))
+    );
+}
+
+#[test]
+fn a_cantilever_with_a_free_end_takes_cb_of_one() {
+    // B04 is a 3 m cantilever; F1-1 on its linear diagram would give 1.67,
+    // but Spec F1 sets Cb = 1.0 for an unbraced free end.
+    let mut k = open();
+    assign(&mut k, "W18X50");
+    inputs(&mut k, 3.0);
+    let mut d =
+        req(&mut k, "getSnapshot", json!({}))["payload"]["project"]["members"][0]["steelDesign"]
+            .clone();
+    d["cb"] = json!({"value": null, "source": "derived"});
+    assert_eq!(
+        command(&mut k, "SetSteelDesign", json!({"id": "m1", "design": d}))["status"],
+        "ok"
+    );
+    let run = evaluate(&mut k);
+    assert_eq!(run["cbDerivation"]["Cb"], 1.0);
+    assert!(
+        run["cbDerivation"]["equation"]
+            .as_str()
+            .unwrap()
+            .contains("cantilever")
+    );
+}

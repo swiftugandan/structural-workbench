@@ -105,6 +105,23 @@ const criteria = [
       "Slender flanges (F3-2), noncompact webs (F4), missing classification, missing torsional properties for Lb > 0 and Cb < 1 are UNSUPPORTED; the slender-flange seed shows UNSUPPORTED in the browser.",
   },
   {
+    id: "DW-LTB1-CB",
+    title: "Cb from the model's moment diagram (F1-1)",
+    evidence: "kernel_validation",
+    tests: {
+      "design-workspace": [
+        "cb_from_the_model_matches_example_f1_2b_for_third_point_bracing",
+        "cb_from_the_model_needs_the_member_to_be_the_unbraced_segment",
+        "a_cantilever_with_a_free_end_takes_cb_of_one",
+      ],
+      "steel-browser": [
+        "Derived Cb: the model's moment diagram sets Cb, with Cb = 1 for a free cantilever end",
+      ],
+    },
+    observation:
+      "Example F.1-2B modelled as three members gives the published Cb = 1.01 (centre) and 1.46 (ends); derivation needs Lb equal to the member length; a free cantilever end takes Cb = 1.0 per F1.",
+  },
+  {
     id: "DW-LTB1-S2-REGRESSION",
     title: "S2 fixture regressions still pass",
     evidence: "regression_results",
@@ -123,7 +140,7 @@ const criteria = [
 ];
 const { rows, issues } = await evaluateCriteria(dir, build, criteria);
 const limitations =
-  "Doubly symmetric W-shapes with compact webs; Cb is a user input; slender flanges, noncompact/slender webs, HSS, channels, weak-axis flexure, torsion and non-prismatic members stay unsupported. Not a claim of full AISC 360 coverage or commercial parity.";
+  "Doubly symmetric W-shapes with compact webs; Cb is user input or derived per member segment; slender flanges, noncompact/slender webs, HSS, channels, weak-axis flexure, torsion and non-prismatic members stay unsupported. Not a claim of full AISC 360 coverage or commercial parity.";
 await record("m07-ltb-acceptance", {
   status: issues.length ? "FAIL" : "PASS",
   testCount: rows.length,

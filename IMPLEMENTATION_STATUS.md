@@ -57,7 +57,7 @@ and their records in `delivery/state.json`.
 | Milestone | Status | Scope delivered | Still outside scope |
 | --- | --- | --- | --- |
 | M00–M06 | Accepted | Analysis MVP: cantilever and portal journeys, CAD authoring, loads/combinations/envelopes, spatial frames, recovery/offline/migration, sections/variants, elastic stress screen | Windows/Linux real-GPU platform evidence |
-| M07 | Accepted (+ M07-E/F/G, M07-LTB, M07-S) | AISC 360-22 LRFD for doubly symmetric W-shapes: S2 checks; flexure with flange local buckling (F3) and lateral-torsional buckling (F2.2) from published examples; model-native catalogue, review and study; user deflection serviceability, reported separately | Cb from the model, noncompact/slender webs, HSS, torsion, full-code claims |
+| M07 | Accepted (+ M07-E/F/G, M07-LTB, M07-S) | AISC 360-22 LRFD for doubly symmetric W-shapes: S2 checks; flexure with flange local buckling (F3) and lateral-torsional buckling (F2.2) from published examples, with Cb entered or derived by F1-1; model-native catalogue, review and study; user deflection serviceability, reported separately | Segment Cb for interior bracing points, noncompact/slender webs, HSS, torsion, full-code claims |
 | M08 | Blocked (resources) | Concrete mechanics previews and a disabled EC2 UK profile | EN 1992-1-1 A1:2014 and UK NA + A2:2014 |
 | M09 | Accepted | Elastic flexural buckling and linearised P-Δ-δ second order with My/Mz end releases as hinge DOFs; first- vs second-order comparison; stability-v1 oracle | Torsional/LTB modes, large displacement |
 | M14 | Accepted | Modal analysis with declared mass sources (schema 1.4.0), consistent/lumped mass, hinge DOFs for end releases, participation and omitted-mode reporting, vibration report; dynamics-v1 oracle | Damping, response spectra (M15) |
@@ -88,8 +88,8 @@ into external-resource blockers.
 
 ## Next concrete work
 
-Unblocked slices: derive Cb from the model's moment diagram for each unbraced
-segment; Windows/Linux real-GPU evidence. Other milestones
+Unblocked slices: Cb for members with interior bracing points (needs a
+bracing-point input); Windows/Linux real-GPU evidence. Other milestones
 need the external resources listed in `resources.required.json`.
 
 Authoritative hashes and task history: `delivery/state.json`; the latest narrative

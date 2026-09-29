@@ -212,3 +212,31 @@ test("DW-SVc1: a deflection criterion is a separate serviceability status", asyn
   expect(record.serviceability.basis).toBe("absolute");
   expect(errors).toEqual([]);
 });
+
+test("Derived Cb: the model's moment diagram sets Cb, with Cb = 1 for a free cantilever end", async ({
+  page,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await openModel(page);
+  // B04 is a 3 m cantilever: unbraced over its length, Cb derived.
+  await page.locator("#design-lb").fill("3");
+  await page.locator("#design-bracing").selectOption("unbraced");
+  await page.locator("#design-cb-model").check();
+  await expect(page.locator("#design-cb")).toBeDisabled();
+  await page.locator("#design-save").click();
+  await expect(page.locator("[data-testid='design-readiness']")).toHaveText(
+    "READY",
+  );
+  await page.locator("#analyse").click();
+  await expect(page.locator("#design-run")).toBeEnabled();
+  await page.locator("#design-run").click();
+  await expect(page.locator("[data-testid='cb-derivation']")).toContainText(
+    "Cᵦ = 1 derived",
+  );
+  await expect(page.locator("[data-testid='cb-derivation']")).toContainText(
+    "cantilever",
+  );
+  await expect(page.locator("[data-check-id='flexure']")).toContainText("F2-2");
+  expect(errors).toEqual([]);
+});

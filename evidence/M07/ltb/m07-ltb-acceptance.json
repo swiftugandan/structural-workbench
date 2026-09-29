@@ -1,8 +1,8 @@
 {
   "taskId": "M07-LTB",
   "milestone": "M07",
-  "sourceHash": "657deef23600df5428fe185e311e5d913aec83f0ba0d3e4eddf41f9d9f28bac8",
-  "buildHash": "57d135fbe116c35c1b96f40ff1dd503b1e71dfce2da178df522617fba46c97c6",
+  "sourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
+  "buildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
   "lockHashes": {
     "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,13 +17,14 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T10:44:29.060Z",
+  "observedAt": "2026-09-29T12:14:50.052Z",
   "status": "PASS",
-  "testCount": 4,
+  "testCount": 5,
   "testIds": [
     "DW-LTB1-F2.2",
     "DW-LTB1-F3",
     "DW-LTB1-UNSUPPORTED",
+    "DW-LTB1-CB",
     "DW-LTB1-S2-REGRESSION"
   ],
   "command": [
@@ -90,6 +91,24 @@
       "missing": []
     },
     {
+      "id": "DW-LTB1-CB",
+      "title": "Cb from the model's moment diagram (F1-1)",
+      "evidence": "kernel_validation",
+      "tests": {
+        "design-workspace": [
+          "cb_from_the_model_matches_example_f1_2b_for_third_point_bracing",
+          "cb_from_the_model_needs_the_member_to_be_the_unbraced_segment",
+          "a_cantilever_with_a_free_end_takes_cb_of_one"
+        ],
+        "steel-browser": [
+          "Derived Cb: the model's moment diagram sets Cb, with Cb = 1 for a free cantilever end"
+        ]
+      },
+      "observation": "Example F.1-2B modelled as three members gives the published Cb = 1.01 (centre) and 1.46 (ends); derivation needs Lb equal to the member length; a free cantilever end takes Cb = 1.0 per F1.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
       "id": "DW-LTB1-S2-REGRESSION",
       "title": "S2 fixture regressions still pass",
       "evidence": "regression_results",
@@ -107,5 +126,5 @@
       "missing": []
     }
   ],
-  "limitations": "Doubly symmetric W-shapes with compact webs; Cb is a user input; slender flanges, noncompact/slender webs, HSS, channels, weak-axis flexure, torsion and non-prismatic members stay unsupported. Not a claim of full AISC 360 coverage or commercial parity."
+  "limitations": "Doubly symmetric W-shapes with compact webs; Cb is user input or derived per member segment; slender flanges, noncompact/slender webs, HSS, channels, weak-axis flexure, torsion and non-prismatic members stay unsupported. Not a claim of full AISC 360 coverage or commercial parity."
 }

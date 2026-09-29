@@ -309,7 +309,9 @@ impl SteelDesign {
                     ),
                 ));
             }
-            if v.value.is_some() == (v.source == DesignSource::NotProvided) {
+            // Cb alone may be derived from the analysis (F1-1): no stored value.
+            let derived = key == "Cb" && v.value.is_none() && v.source == DesignSource::Derived;
+            if !derived && v.value.is_some() == (v.source == DesignSource::NotProvided) {
                 return Err(err(
                     "INVALID_SCHEMA",
                     format!("{key} value and source disagree"),

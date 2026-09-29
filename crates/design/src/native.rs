@@ -1,7 +1,7 @@
 //! Model-native input resolution. Catalogue conversions and readiness are Rust-owned.
 use crate::{MemberContext, PROFILE_AISC_360_22_LRFD, WSectionProps};
 use serde_json::{Value, json};
-use workbench_model::{Material, Member, Project, Result, Section, SteelDesign, err};
+use workbench_model::{DesignSource, Material, Member, Project, Result, Section, SteelDesign, err};
 
 pub const CATALOGUE_ID: &str = "aisc-shapes-v16.0-subset-1";
 pub const MATERIAL_ID: &str = "astm-a992-50-65-v1";
@@ -85,6 +85,23 @@ pub fn resolve(
     Ok((section, material, props))
 }
 
+/// Cb is derived from the analysis moment diagram (Spec F1-1) rather than entered.
+pub fn cb_from_model(d: &SteelDesign) -> bool {
+    d.cb.value.is_none() && d.cb.source == DesignSource::Derived
+}
+
+pub fn member_length(p: &Project, m: &Member) -> f64 {
+    let a = p.nodes.iter().find(|n| n.id == m.start).unwrap().position;
+    let b = p.nodes.iter().find(|n| n.id == m.end).unwrap().position;
+    (0..3).map(|i| (b[i] - a[i]).powi(2)).sum::<f64>().sqrt()
+}
+
+/// Spec Eq. F1-1 over one unbraced segment from |M| at its quarter points and
+/// its largest |M|: Cb = 12.5 Mmax / (2.5 Mmax + 3 MA + 4 MB + 3 MC).
+pub fn cb_f1_1(m_max: f64, ma: f64, mb: f64, mc: f64) -> f64 {
+    12.5 * m_max / (2.5 * m_max + 3.0 * ma + 4.0 * mb + 3.0 * mc)
+}
+
 pub fn member<'a>(p: &'a Project, id: &str) -> Result<&'a Member> {
     p.members
         .iter()
@@ -122,10 +139,22 @@ pub fn readiness(p: &Project, id: &str) -> Result<Value> {
         if d.stability_basis != BASIS {
             missing.push("Confirm first-order analysis with user effective-length factors".into());
         }
-        for (name, value) in [("Ky", &d.ky), ("Kz", &d.kz), ("Lb", &d.lb), ("Cb", &d.cb)] {
+        for (name, value) in [("Ky", &d.ky), ("Kz", &d.kz), ("Lb", &d.lb)] {
             if value.value.is_none() {
                 missing.push(format!("{name} is not provided"));
             }
+        }
+        if cb_from_model(d) {
+            // F1-1 over the member's own moment diagram: the member must be
+            // the unbraced segment.
+            let length = member_length(p, m);
+            if !d.lb.value.is_some_and(|lb| (lb - length).abs() <= 1e-6 * length) {
+                missing.push(
+                    "Cb from the model needs Lb equal to the member length; enter Cb for shorter segments".into(),
+                );
+            }
+        } else if d.cb.value.is_none() {
+            missing.push("Cb is not provided".into());
         }
         if d.bracing == "notProvided" {
             missing.push("Bracing assumption is not provided".into());
@@ -167,7 +196,8 @@ pub fn context(p: &Project, id: &str) -> Result<MemberContext> {
         ky: d.ky.value.unwrap(),
         kz: d.kz.value.unwrap(),
         lb: d.lb.value.unwrap(),
-        cb: d.cb.value.unwrap(),
+        // A derived Cb is set from the analysis before any check runs.
+        cb: d.cb.value.unwrap_or(f64::NAN),
         section: Some(section),
         ..MemberContext::default()
     })
