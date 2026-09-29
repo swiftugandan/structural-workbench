@@ -1,0 +1,481 @@
+{
+  "formulation": "docs/formulations/modal.md (dynamics-v1)",
+  "generator": "tools/oracles/modal_oracle.py",
+  "generatorSha256": "5298246abb3b636e9bc4fa329d5ae4fde40164278c548b1e86ab864475c94137",
+  "opensees": {
+    "package": "openseespy",
+    "version": "3.4.0",
+    "eigen": "-fullGenLapack",
+    "spatial": "elasticBeamColumn 3D, lumped (-mass rho*A), nodal translational masses",
+    "planar": "elasticBeamColumn 2D, consistent (-cMass)"
+  },
+  "units": "SI (N, m, kg, Pa, rad/s)",
+  "sdof": {
+    "id": "D-SDOF",
+    "L": 5.0,
+    "E": 210000000000.0,
+    "section": {
+      "A": 0.005381,
+      "Iy": 6.038e-06,
+      "Iz": 8.356e-05,
+      "J": 2.01e-07
+    },
+    "tipMass": 1500.0,
+    "omegaWeak": 4.50418472090122,
+    "omegaStrong": 16.755942229549493,
+    "omegaAxial": 388.15976092325695,
+    "tolerance": 1e-09
+  },
+  "cantilever": {
+    "id": "D-CANT",
+    "support": "fixedFree",
+    "L": 5.0,
+    "E": 210000000000.0,
+    "nu": 0.3,
+    "density": 7850.0,
+    "section": {
+      "A": 0.005381,
+      "Iy": 6.038e-06,
+      "Iz": 8.356e-05,
+      "J": 2.01e-07
+    },
+    "betaL": [
+      1.8751040687119613,
+      4.694091132974172,
+      7.854757438237611
+    ],
+    "omegaWeak": [
+      24.366919076811946,
+      152.70487522199076,
+      427.5780723560305
+    ],
+    "omegaStrong": [
+      90.64696802254494,
+      568.0748517077427,
+      1590.6260340020592
+    ],
+    "tolerance": 0.0001,
+    "subdivisions": 16
+  },
+  "simplySupported": {
+    "id": "D-SS",
+    "support": "pinnedPinned",
+    "L": 5.0,
+    "E": 210000000000.0,
+    "nu": 0.3,
+    "density": 7850.0,
+    "section": {
+      "A": 0.005381,
+      "Iy": 6.038e-06,
+      "Iz": 8.356e-05,
+      "J": 2.01e-07
+    },
+    "omegaWeak": [
+      68.39897821720197,
+      273.5959128688079,
+      615.5908039548177
+    ],
+    "omegaStrong": [
+      254.44989461674098,
+      1017.7995784669639,
+      2290.049051550669
+    ],
+    "tolerance": 0.0001,
+    "subdivisions": 16
+  },
+  "axial": {
+    "id": "D-AXIAL",
+    "support": "fixedFree",
+    "L": 5.0,
+    "E": 210000000000.0,
+    "density": 7850.0,
+    "omega": [
+      1624.8927154114372,
+      4874.6781462343115
+    ],
+    "tolerance": 0.001,
+    "subdivisions": 16
+  },
+  "torsion": {
+    "id": "D-TORSION",
+    "support": "fixedFree",
+    "L": 5.0,
+    "G": 80769230769.23077,
+    "density": 7850.0,
+    "polarMassPerLength": 0.7033443,
+    "omega": [
+      47.72950042007499
+    ],
+    "tolerance": 0.001,
+    "subdivisions": 16
+  },
+  "shearFrame": {
+    "id": "D-SHEAR2",
+    "storeyHeight": 3.0,
+    "bay": 6.0,
+    "E": 210000000000.0,
+    "nu": 0.3,
+    "column": {
+      "A": 1000.0,
+      "Iy": 8e-05,
+      "Iz": 8e-05,
+      "J": 0.0001
+    },
+    "beam": {
+      "A": 1000.0,
+      "Iy": 1000.0,
+      "Iz": 1000.0,
+      "J": 0.0001
+    },
+    "storeyMass": [
+      20000.0,
+      12000.0
+    ],
+    "nodalMassPerBeamEnd": [
+      10000.0,
+      6000.0
+    ],
+    "storeyStiffness": 14933333.333333336,
+    "omega": [
+      19.923521450744673,
+      48.38213586417507
+    ],
+    "tolerance": 1e-05,
+    "openSeesOmega": [
+      19.923519017369788,
+      48.38213205083775
+    ]
+  },
+  "massScaling": {
+    "id": "D-SCALE",
+    "massFactor": 4.0,
+    "omegaFactor": 0.5,
+    "tolerance": 1e-12
+  },
+  "spatialFrame": {
+    "id": "D-FRAME-OS",
+    "E": 210000000000.0,
+    "nu": 0.3,
+    "density": 7850.0,
+    "massMatrix": "lumped",
+    "subdivisions": 4,
+    "nodes": {
+      "n000": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "n001": [
+        0.0,
+        4.5,
+        0.0
+      ],
+      "n010": [
+        6.0,
+        0.0,
+        0.0
+      ],
+      "n011": [
+        6.0,
+        4.5,
+        0.0
+      ],
+      "n100": [
+        0.0,
+        0.0,
+        3.5
+      ],
+      "n101": [
+        0.0,
+        4.5,
+        3.5
+      ],
+      "n110": [
+        6.0,
+        0.0,
+        3.5
+      ],
+      "n111": [
+        6.0,
+        4.5,
+        3.5
+      ],
+      "n200": [
+        0.0,
+        0.0,
+        7.0
+      ],
+      "n201": [
+        0.0,
+        4.5,
+        7.0
+      ],
+      "n210": [
+        6.0,
+        0.0,
+        7.0
+      ],
+      "n211": [
+        6.0,
+        4.5,
+        7.0
+      ]
+    },
+    "members": [
+      {
+        "id": "c000",
+        "start": "n000",
+        "end": "n100",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "c001",
+        "start": "n001",
+        "end": "n101",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "c010",
+        "start": "n010",
+        "end": "n110",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "c011",
+        "start": "n011",
+        "end": "n111",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "c100",
+        "start": "n100",
+        "end": "n200",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "c101",
+        "start": "n101",
+        "end": "n201",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "c110",
+        "start": "n110",
+        "end": "n210",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "c111",
+        "start": "n111",
+        "end": "n211",
+        "section": "col",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "bx10",
+        "start": "n100",
+        "end": "n110",
+        "section": "beam",
+        "localY": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      },
+      {
+        "id": "bx11",
+        "start": "n101",
+        "end": "n111",
+        "section": "beam",
+        "localY": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      },
+      {
+        "id": "by10",
+        "start": "n100",
+        "end": "n101",
+        "section": "beam",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "by11",
+        "start": "n110",
+        "end": "n111",
+        "section": "beam",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "bx20",
+        "start": "n200",
+        "end": "n210",
+        "section": "beam",
+        "localY": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      },
+      {
+        "id": "bx21",
+        "start": "n201",
+        "end": "n211",
+        "section": "beam",
+        "localY": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      },
+      {
+        "id": "by20",
+        "start": "n200",
+        "end": "n201",
+        "section": "beam",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": "by21",
+        "start": "n210",
+        "end": "n211",
+        "section": "beam",
+        "localY": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "sections": {
+      "col": {
+        "A": 0.012,
+        "Iy": 0.00012,
+        "Iz": 9e-05,
+        "J": 5e-06
+      },
+      "beam": {
+        "A": 0.008,
+        "Iy": 0.0002,
+        "Iz": 3e-05,
+        "J": 2e-06
+      }
+    },
+    "supports": [
+      "n000",
+      "n001",
+      "n010",
+      "n011"
+    ],
+    "nodalMasses": {
+      "n100": 4000.0,
+      "n200": 2500.0,
+      "n101": 4250.0,
+      "n201": 2800.0,
+      "n110": 4500.0,
+      "n210": 2500.0,
+      "n111": 4750.0,
+      "n211": 2800.0
+    },
+    "omega": [
+      18.007353199330804,
+      20.032665025440274,
+      20.783975356715867,
+      26.439562879921468,
+      50.575619724694334,
+      53.33302603506861
+    ],
+    "omegaAt8": [
+      18.00836549995771,
+      20.048699169840436,
+      20.785068085975844,
+      26.439495415479154,
+      50.583308673965476,
+      53.360584546220515
+    ],
+    "tolerance": 1e-06
+  },
+  "portal": {
+    "id": "D-PORTAL-OS",
+    "E": 210000000000.0,
+    "nu": 0.3,
+    "density": 7850.0,
+    "massMatrix": "consistent",
+    "subdivisions": 8,
+    "height": 4.0,
+    "span": 7.0,
+    "column": {
+      "A": 0.0091,
+      "Iy": 0.00015,
+      "Iz": 0.00015,
+      "J": 3e-06
+    },
+    "beam": {
+      "A": 0.0076,
+      "Iy": 0.00022,
+      "Iz": 0.00022,
+      "J": 2e-06
+    },
+    "nodalMass": 3000.0,
+    "omega": [
+      34.549840612546944,
+      258.9939504536889,
+      380.71934490713306,
+      387.38622225907807
+    ],
+    "tolerance": 1e-06
+  },
+  "failures": []
+}
