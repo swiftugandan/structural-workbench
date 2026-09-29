@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.5.0"
+      "const": "1.4.0"
     },
     "id": {
       "type": "string",
@@ -1283,119 +1283,6 @@
         "tensionAnchorageConfirmed": {
           "description": "rcBeam only. User confirmation that longitudinal tension steel extends at least l_bd + d beyond the checked sections (EN 1992-1-1 Fig. 6.3). Absent means not confirmed (ADR 0016).",
           "type": "boolean"
-        },
-        "plate": {
-          "description": "slab only. plate-v1 panel analysis inputs (schema 1.5.0, ADR 0021): edges at x = 0, x = Lx, y = 0, y = Ly; SI inputs (pressure Pa downward, elasticModulus Pa, poissonRatio, openingX/openingY m to the opening corner nearest the origin). Absent means not configured.",
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "edges",
-            "includeOpening",
-            "inputs",
-            "inputSources"
-          ],
-          "properties": {
-            "edges": {
-              "type": "array",
-              "minItems": 4,
-              "maxItems": 4,
-              "items": {
-                "enum": [
-                  "free",
-                  "simple",
-                  "clamped"
-                ]
-              }
-            },
-            "includeOpening": {
-              "type": "boolean"
-            },
-            "inputs": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "pressure",
-                "elasticModulus",
-                "poissonRatio",
-                "openingX",
-                "openingY"
-              ],
-              "properties": {
-                "pressure": {
-                  "type": "number"
-                },
-                "elasticModulus": {
-                  "type": "number"
-                },
-                "poissonRatio": {
-                  "type": "number"
-                },
-                "openingX": {
-                  "type": "number"
-                },
-                "openingY": {
-                  "type": "number"
-                }
-              }
-            },
-            "inputSources": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "pressure",
-                "elasticModulus",
-                "poissonRatio",
-                "openingX",
-                "openingY",
-                "edges",
-                "includeOpening"
-              ],
-              "properties": {
-                "pressure": {
-                  "enum": [
-                    "syntheticFixture",
-                    "user"
-                  ]
-                },
-                "elasticModulus": {
-                  "enum": [
-                    "syntheticFixture",
-                    "user"
-                  ]
-                },
-                "poissonRatio": {
-                  "enum": [
-                    "syntheticFixture",
-                    "user"
-                  ]
-                },
-                "openingX": {
-                  "enum": [
-                    "syntheticFixture",
-                    "user"
-                  ]
-                },
-                "openingY": {
-                  "enum": [
-                    "syntheticFixture",
-                    "user"
-                  ]
-                },
-                "edges": {
-                  "enum": [
-                    "syntheticFixture",
-                    "user"
-                  ]
-                },
-                "includeOpening": {
-                  "enum": [
-                    "syntheticFixture",
-                    "user"
-                  ]
-                }
-              }
-            }
-          }
         }
       }
     },

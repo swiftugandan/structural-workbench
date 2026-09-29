@@ -10,12 +10,12 @@ mod section_props;
 pub use residential::residential_reference;
 pub mod structure;
 pub use design_inputs::{
-    DesignPreview, DesignSource, DesignValue, MECHANICS_COMMON_KEYS, SectionMechanicsInputs,
-    SteelDesign, SteelServiceability,
+    DesignPreview, DesignSource, DesignValue, MECHANICS_COMMON_KEYS, SLAB_EDGE_CONDITIONS,
+    SLAB_PLATE_KEYS, SectionMechanicsInputs, SlabPlateInputs, SteelDesign, SteelServiceability,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
-    import_project,
+    SCHEMA_1_4, import_project,
 };
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;
@@ -177,7 +177,9 @@ pub enum MassSource {
 impl MassSource {
     pub fn id(&self) -> &str {
         match self {
-            Self::SelfMass { id, .. } | Self::LoadCase { id, .. } | Self::NodalMass { id, .. } => id,
+            Self::SelfMass { id, .. } | Self::LoadCase { id, .. } | Self::NodalMass { id, .. } => {
+                id
+            }
         }
     }
 }
@@ -227,7 +229,10 @@ impl Project {
             ),
             (
                 "ms",
-                self.mass_sources.iter().map(|x| x.id().to_string()).collect(),
+                self.mass_sources
+                    .iter()
+                    .map(|x| x.id().to_string())
+                    .collect(),
             ),
         ];
         let mut used = BTreeSet::new();
@@ -488,7 +493,9 @@ impl Project {
                     if combination.is_some_and(|c| c.purpose == "strength") {
                         return Err(err(
                             "INVALID_LOAD",
-                            format!("{id} is a strength combination; serviceability needs a service case or combination"),
+                            format!(
+                                "{id} is a strength combination; serviceability needs a service case or combination"
+                            ),
                         ));
                     }
                 }
@@ -686,7 +693,9 @@ fn validate_mass_sources(p: &Project) -> Result<()> {
         match s {
             MassSource::SelfMass { id, factor } => {
                 if !(factor.is_finite() && *factor > 0.) {
-                    return Err(invalid(format!("Mass source {id}: factor must be positive")));
+                    return Err(invalid(format!(
+                        "Mass source {id}: factor must be positive"
+                    )));
                 }
                 self_mass += 1;
                 if self_mass > 1 {
@@ -695,10 +704,15 @@ fn validate_mass_sources(p: &Project) -> Result<()> {
             }
             MassSource::LoadCase { id, case, factor } => {
                 if !(factor.is_finite() && *factor > 0.) {
-                    return Err(invalid(format!("Mass source {id}: factor must be positive")));
+                    return Err(invalid(format!(
+                        "Mass source {id}: factor must be positive"
+                    )));
                 }
                 if !p.load_cases.iter().any(|c| &c.id == case) {
-                    return Err(err("DANGLING_REFERENCE", format!("Mass source {id}: {case}")));
+                    return Err(err(
+                        "DANGLING_REFERENCE",
+                        format!("Mass source {id}: {case}"),
+                    ));
                 }
                 if !cases.insert(case.as_str()) {
                     return Err(invalid(format!("Load case {case} is a mass source twice")));
@@ -709,7 +723,10 @@ fn validate_mass_sources(p: &Project) -> Result<()> {
                     return Err(invalid(format!("Mass source {id}: mass must be positive")));
                 }
                 if !p.nodes.iter().any(|n| &n.id == node) {
-                    return Err(err("DANGLING_REFERENCE", format!("Mass source {id}: {node}")));
+                    return Err(err(
+                        "DANGLING_REFERENCE",
+                        format!("Mass source {id}: {node}"),
+                    ));
                 }
                 if !nodes.insert(node.as_str()) {
                     return Err(invalid(format!(

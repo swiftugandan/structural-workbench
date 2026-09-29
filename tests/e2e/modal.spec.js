@@ -234,7 +234,7 @@ test("M14 modal: declare mass, frequencies against the oracle, participation, st
   const projectDownload = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = await readFile(await (await projectDownload).path(), "utf8");
-  expect(JSON.parse(saved).schemaVersion).toBe("1.4.0");
+  expect(JSON.parse(saved).schemaVersion).toBe("1.5.0");
   expect(JSON.parse(saved).massSources).toHaveLength(3);
   await writeFile(`${dir}/project.json`, saved);
   await page.goto("/");

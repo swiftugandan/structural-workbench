@@ -357,7 +357,7 @@ fn schema_1_1_rc_beam_drafts_migrate_to_equal_top_and_bottom_rows() {
     let r = req(&mut reopened, "importProject", json!({"jsonUtf8":legacy.to_string()}));
     assert_eq!(r["status"], "ok", "{r}");
     let migrated = &r["payload"]["project"];
-    assert_eq!(migrated["schemaVersion"], "1.4.0");
+    assert_eq!(migrated["schemaVersion"], "1.5.0");
     let m = &migrated["designPreviews"][0];
     assert_eq!(m["inputs"]["linkLegs"], 2.0);
     for face in ["top", "bottom"] {
@@ -613,7 +613,7 @@ fn schema_1_2_rc_beam_drafts_gain_two_synthetic_link_legs() {
     let r = req(&mut Kernel::new(), "importProject", json!({"jsonUtf8":legacy.to_string()}));
     assert_eq!(r["status"], "ok", "{r}");
     let m = &r["payload"]["project"]["designPreviews"][0];
-    assert_eq!(r["payload"]["project"]["schemaVersion"], "1.4.0");
+    assert_eq!(r["payload"]["project"]["schemaVersion"], "1.5.0");
     assert_eq!(m["inputs"]["linkLegs"], 2.0);
     assert_eq!(m["inputSources"]["linkLegs"], "syntheticFixture");
     assert_eq!(m["inputs"]["linkSpacing"], 0.15);

@@ -55,7 +55,7 @@ test("M04 migration: 0.9.0 imports, retains original, unknown schema refused", a
   expect(originalRecord).toBeTruthy();
   expect(originalRecord.sha256).toBe(legacySha);
   expect(originalRecord.fromSchema).toBe("0.9.0");
-  expect(originalRecord.toSchema).toBe("1.4.0");
+  expect(originalRecord.toSchema).toBe("1.5.0");
   expect(originalRecord.originalUtf8).toBe(legacy);
 
   await page.goto("/");

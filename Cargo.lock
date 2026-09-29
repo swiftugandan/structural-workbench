@@ -568,6 +568,7 @@ dependencies = [
  "workbench-exchange",
  "workbench-geometry",
  "workbench-model",
+ "workbench-plate",
  "workbench-results",
  "workbench-units",
 ]

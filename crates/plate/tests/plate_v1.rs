@@ -508,3 +508,76 @@ fn convergence_indicator_exposes_reentrant_corners() {
     println!("opening: {changes:?}");
     assert!(changes.iter().all(|c| *c > 0.05), "{changes:?}");
 }
+
+/// The oracle's checkerboard distortion of interior nodes.
+fn distort(mesh: &mut Mesh, amplitude: f64) {
+    let (nx, ny) = (mesh.xs.len() - 1, mesh.ys.len() - 1);
+    let (hx, hy) = (mesh.xs[1] - mesh.xs[0], mesh.ys[1] - mesh.ys[0]);
+    for (k, &(i, j)) in mesh.node_grid.iter().enumerate() {
+        if i == 0 || i == nx || j == 0 || j == ny {
+            continue;
+        }
+        let sign = if (i + j) % 2 == 0 { 1. } else { -1. };
+        mesh.nodes[k] = [
+            mesh.xs[i] + sign * amplitude * hx,
+            mesh.ys[j] + sign * amplitude * hy,
+        ];
+    }
+}
+
+#[test]
+fn p_distort_navier_and_opensees() {
+    let o = oracle();
+    let c = &o["distorted"];
+    let (a, t, q) = (f(c, "a"), f(c, "t"), f(c, "q"));
+    let m = PlateMaterial {
+        e: f(c, "E"),
+        nu: f(c, "nu"),
+        t,
+    };
+    let amplitude = f(&c["distortion"], "amplitude");
+    let p = panel(a, a, Edge::Simple, None);
+    let solve_distorted = |n: usize| {
+        let mut mesh = Mesh::structured(&p, uniform(a, n), uniform(a, n)).unwrap();
+        distort(&mut mesh, amplitude);
+        solve_mesh(&p, mesh, &m, q, BUDGET).unwrap()
+    };
+    let mut errors = vec![];
+    for point in c["navierCentre"].as_array().unwrap() {
+        let n = point["mesh"].as_u64().unwrap() as usize;
+        let s = solve_distorted(n);
+        assert!(s.balance <= 1e-9, "balance {}", s.balance);
+        let k = s.mesh.node_at(n / 2, n / 2).unwrap();
+        assert!((s.mesh.nodes[k][0] - f(point, "x")).abs() < 1e-12);
+        errors.push(rel(s.displacements[k][2], f(point, "w")));
+    }
+    println!("distorted Navier w errors {errors:?}");
+    assert!(errors.windows(2).all(|e| e[1] < e[0]), "{errors:?}");
+    assert!(errors[2] <= f(&c["navierGate"], "w"), "{errors:?}");
+    // OpenSees ShellMITC4 on the identical meshes: converging discretisations
+    // (Bathe–Dvorkin 1985 element-constant shear angles versus pointwise J⁻¹).
+    let mut differences = vec![];
+    for level in c["openSees"].as_array().unwrap() {
+        let n = level["mesh"].as_u64().unwrap() as usize;
+        let s = solve_distorted(n);
+        let mut worst = 0f64;
+        for (key, want) in level["nodeW"].as_object().unwrap() {
+            let (i, j) = key.split_once(',').unwrap();
+            let k = s
+                .mesh
+                .node_at(i.parse().unwrap(), j.parse().unwrap())
+                .unwrap();
+            worst = worst.max(rel(s.displacements[k][2], want.as_f64().unwrap()));
+        }
+        differences.push(worst);
+    }
+    println!("distorted OpenSees differences {differences:?}");
+    assert!(
+        differences.windows(2).all(|d| d[1] < d[0]),
+        "{differences:?}"
+    );
+    assert!(
+        differences[2] <= f(&c["openSeesGate"], "w"),
+        "{differences:?}"
+    );
+}

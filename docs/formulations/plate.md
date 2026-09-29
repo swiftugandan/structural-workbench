@@ -83,6 +83,8 @@ against the applied load; a relative imbalance above 1e-8 is
   re-entrant corners where the plate moments are singular; the extremes there
   grow with refinement and the indicator stays high, which is the correct
   report: peak moments at re-entrant corners are mesh-dependent.
+  The run labels the change `withinLimit` at 5 % or less. This is a display
+  classification, not an acceptance gate.
 - **Design actions (Wood–Armer, mechanics):** from the unsmoothed moments, per
   element, bottom mx* = mx + |mxy|, my* = my + |mxy|, with the standard
   corrections when one is negative (mx* = 0, my* = my + |mxy²/mx|, and the

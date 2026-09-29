@@ -22,6 +22,89 @@ pub struct DesignPreview {
     /// confirmed; it is never defaulted by the application.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tension_anchorage_confirmed: Option<bool>,
+    /// slab only: plate-v1 panel analysis inputs (schema 1.5.0, ADR 0021).
+    /// Absent means the plate analysis is not configured.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub plate: Option<SlabPlateInputs>,
+}
+
+/// Plate analysis inputs of a slab draft. The panel is the draft's
+/// length × width at its thickness and target mesh size; these add the load,
+/// the elastic material, the edge conditions and the opening position.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct SlabPlateInputs {
+    /// Edge conditions at x = 0, x = Lx, y = 0, y = Ly.
+    pub edges: [String; 4],
+    /// Whether the draft's opening is cut from the panel.
+    pub include_opening: bool,
+    /// SI values keyed by `SLAB_PLATE_KEYS`.
+    pub inputs: std::collections::BTreeMap<String, f64>,
+    /// Provenance of every numeric key and of `edges` and `includeOpening`.
+    pub input_sources: std::collections::BTreeMap<String, String>,
+}
+
+/// pressure (Pa, uniform, downward), elasticModulus (Pa), poissonRatio,
+/// openingX / openingY (m, the opening's corner nearest the origin).
+pub const SLAB_PLATE_KEYS: &[&str] = &[
+    "pressure",
+    "elasticModulus",
+    "poissonRatio",
+    "openingX",
+    "openingY",
+];
+pub const SLAB_EDGE_CONDITIONS: &[&str] = &["free", "simple", "clamped"];
+
+impl SlabPlateInputs {
+    pub fn validate(&self) -> Result<()> {
+        if self
+            .edges
+            .iter()
+            .any(|e| !SLAB_EDGE_CONDITIONS.contains(&e.as_str()))
+        {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Slab edges must be free, simple or clamped",
+            ));
+        }
+        if self.inputs.len() != SLAB_PLATE_KEYS.len()
+            || SLAB_PLATE_KEYS
+                .iter()
+                .any(|k| self.inputs.get(*k).is_none_or(|v| !v.is_finite()))
+        {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Plate inputs must be complete and finite",
+            ));
+        }
+        let v = |k: &str| self.inputs[k];
+        if v("pressure") <= 0.0 || v("elasticModulus") <= 0.0 {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Plate pressure and elastic modulus must be positive",
+            ));
+        }
+        if !(0.0..0.5).contains(&v("poissonRatio")) {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Poisson's ratio must be at least 0 and below 0.5",
+            ));
+        }
+        let keys = SLAB_PLATE_KEYS
+            .iter()
+            .copied()
+            .chain(["edges", "includeOpening"]);
+        if self.input_sources.len() != SLAB_PLATE_KEYS.len() + 2
+            || keys.into_iter().any(|k| {
+                self.input_sources
+                    .get(k)
+                    .is_none_or(|s| !["syntheticFixture", "user"].contains(&s.as_str()))
+            })
+        {
+            return Err(err("INVALID_SCHEMA", "Incomplete plate input provenance"));
+        }
+        Ok(())
+    }
 }
 
 /// Material law and fit inputs for code-agnostic RC section mechanics. Keys are
@@ -109,6 +192,15 @@ impl DesignPreview {
                 ));
             }
             m.validate()?;
+        }
+        if let Some(plate) = &self.plate {
+            if self.kind != "slab" {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Plate analysis inputs apply only to slab drafts",
+                ));
+            }
+            plate.validate()?;
         }
         if self.tension_anchorage_confirmed.is_some() && self.kind != "rcBeam" {
             return Err(err(
@@ -219,6 +311,19 @@ impl DesignPreview {
                 "INVALID_SCHEMA",
                 "Preview opening must lie inside the slab boundary",
             ));
+        }
+        if let Some(plate) = self.plate.as_ref().filter(|p| p.include_opening) {
+            let (x0, y0) = (plate.inputs["openingX"], plate.inputs["openingY"]);
+            if x0 <= 0.0
+                || y0 <= 0.0
+                || x0 + self.inputs["openingLength"] >= self.inputs["length"]
+                || y0 + self.inputs["openingWidth"] >= self.inputs["width"]
+            {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "The analysed opening must lie strictly inside the slab panel",
+                ));
+            }
         }
         Ok(())
     }
@@ -332,7 +437,10 @@ impl SteelDesign {
                 ));
             }
             if s.combination_id.is_empty() || s.combination_id.len() > 64 {
-                return Err(err("INVALID_SCHEMA", "Service case or combination is required"));
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Service case or combination is required",
+                ));
             }
         }
         Ok(())

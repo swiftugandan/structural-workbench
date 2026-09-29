@@ -144,7 +144,7 @@ test("a legacy import migrates to 1.4.0 with no mass, and modal refuses to run",
       "set schemaVersion 1.4.0 (no mass sources declared)",
     ),
   );
-  assert.equal(p.schemaVersion, "1.4.0");
+  assert.equal(p.schemaVersion, "1.5.0");
   assert.equal(p.massSources, undefined);
   assert.ok(projectSchema(p), JSON.stringify(projectSchema.errors));
   const r = ask("analyse", {

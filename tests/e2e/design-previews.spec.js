@@ -6,7 +6,10 @@ import { menuCommand } from "../menu-helpers.js";
  * next is not reset to the summary by the arriving result. */
 async function runPreview(page) {
   await page.locator("#preview-run").click();
-  await expect(page.locator("#workspace")).not.toHaveAttribute("aria-busy", "true");
+  await expect(page.locator("#workspace")).not.toHaveAttribute(
+    "aria-busy",
+    "true",
+  );
 }
 const dir = "evidence/design-previews";
 for (const kind of ["rcBeam", "slab", "padFooting"])
@@ -39,7 +42,12 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
       "MOCK WORKFLOW",
     );
     if (kind === "slab") {
-      await expect(page.locator("#preview-source option")).toHaveCount(1);
+      // The panel's own plate analysis is the default source (ADR 0021).
+      await expect(page.locator("#preview-source option")).toHaveCount(2);
+      await expect(page.locator("#preview-source")).toHaveValue("plate");
+      await expect(page.locator("[data-testid=preview-result]")).toContainText(
+        "Plate analysis (plate-v1)",
+      );
       for (const face of ["Top X", "Top Y", "Bottom X", "Bottom Y"]) {
         await page.locator("#preview-face").selectOption(face);
         await expect(page.locator("#design-preview-scene")).toContainText(face);
@@ -95,7 +103,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
         (c) => c.status === "unsupported" && c.utilisation === null,
       ),
     ).toBe(true);
-    expect(run.sourceProvenance.mock).toBe(kind === "slab");
+    expect(run.sourceProvenance.mock).toBe(false);
     if (kind === "rcBeam") {
       const d = page.waitForEvent("download");
       await page.locator("#preview-schedule").click();
@@ -234,7 +242,7 @@ test("RC beam section mechanics: per-face oracle values, law switch, provenance,
   const p = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
-  expect(saved.schemaVersion).toBe("1.4.0");
+  expect(saved.schemaVersion).toBe("1.5.0");
   expect(saved.designPreviews[0].inputs.topBarCount).toBe(2);
   expect(saved.designPreviews[0].inputs.bottomBarDiameter).toBe(0.025);
   expect(saved.designPreviews[0].mechanics.law).toBe("parabolaRectangle");
@@ -556,7 +564,7 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   const saved = JSON.parse(
     await readFile(await (await download).path(), "utf8"),
   );
-  expect(saved.schemaVersion).toBe("1.4.0");
+  expect(saved.schemaVersion).toBe("1.5.0");
   expect(saved.designPreviews[0].tensionAnchorageConfirmed).toBe(true);
   expect(saved.designPreviews[0].inputs.linkLegs).toBe(2);
   expect(errors).toEqual([]);

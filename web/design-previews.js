@@ -6,6 +6,7 @@ import {
 } from "./design-presentation.js";
 /** Workflow illustrations only. Validation, units and action provenance belong to Rust. */
 import { escape as esc } from "./reports/report.js";
+import { plateArgs, plateSection, platePane } from "./slab-plate.js";
 const names = { rcBeam: "RC beam", slab: "Slab", padFooting: "Pad footing" };
 const sourceName = (value) =>
   ({
@@ -29,6 +30,9 @@ function submittedValue(input, unit) {
     ? Number(input.dataset.si)
     : fieldInput(input.value, unit);
 }
+/** The action source a draft opens with: slabs solve their own panel. */
+const defaultSource = (d) =>
+  d?.kind === "slab" ? "plate" : d?.targetId ? "model" : "synthetic";
 export function previewState(run, ctx) {
   if (!run) return "NOT CHECKED";
   return ctx.dirty ||
@@ -79,6 +83,9 @@ export function concreteWorkspace({
     templates,
     generation = 0,
     face = "Top X",
+    plateField = "mx",
+    // A refused run's reason, kept across the re-render that follows it.
+    runError = null,
     sourceMode = "synthetic",
     mechanicsLaw;
   let projectId;
@@ -182,10 +189,15 @@ export function concreteWorkspace({
       ["schedule", "Schedule"],
       ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
     ];
-    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${previewPane({ run, state, d, pane, checkIndex, sketch: illustration(d, face) })}</div></section>`;
+    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${d.kind === "slab" && pane === "actions" && run?.plateAnalysis?.status === "evaluated" ? platePane(run, plateField) : previewPane({ run, state, d, pane, checkIndex, sketch: illustration(d, face) })}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
       b.onclick = () => {
         pane = b.dataset.previewPane;
+        results(host);
+      };
+    for (const b of host.querySelectorAll("[data-plate-field]"))
+      b.onclick = () => {
+        plateField = b.dataset.plateField;
         results(host);
       };
     for (const b of host.querySelectorAll("[data-preview-check]"))
@@ -237,9 +249,7 @@ export function concreteWorkspace({
       if (projectId !== ctx.project?.id) {
         projectId = ctx.project?.id;
         active = ds.find((d) => d.targetId === ctx.selected)?.id || ds[0]?.id;
-        sourceMode = ds.find((d) => d.id === active)?.targetId
-          ? "model"
-          : "synthetic";
+        sourceMode = defaultSource(ds.find((d) => d.id === active));
       }
       if (!ds.some((d) => d.id === active)) active = undefined;
       const d = draft(),
@@ -255,7 +265,10 @@ export function concreteWorkspace({
         ctx,
         face,
         sketch: d ? illustration(d, face) : "",
+        plateHtml: d ? plateSection(d, t) : "",
       });
+      if (runError && runError.draft === active)
+        $("#preview-error").textContent = runError.message;
       const fail = (e) => {
         $("#preview-error").textContent = e.message;
         onError(e.message);
@@ -269,7 +282,7 @@ export function concreteWorkspace({
           active = getContext().project.designPreviews.find(
             (d) => !previous.has(d.id),
           )?.id;
-          sourceMode = "synthetic";
+          sourceMode = defaultSource(draft());
           await render();
         } catch (e) {
           fail(e);
@@ -279,12 +292,12 @@ export function concreteWorkspace({
         $("#preview-active").onchange = () => {
           active = $("#preview-active").value;
           pane = "summary";
-          sourceMode = draft()?.targetId ? "model" : "synthetic";
+          sourceMode = defaultSource(draft());
           void render().then(showResults);
         };
       if (d) {
         $("#preview-source").value =
-          d.kind === "slab" ? "synthetic" : sourceMode;
+          d.kind === "slab" && sourceMode === "model" ? "plate" : sourceMode;
         const readiness = () => {
           const c = getContext(),
             model = $("#preview-source").value === "model",
@@ -295,9 +308,11 @@ export function concreteWorkspace({
                 c.result?.analysisType !== "envelope" &&
                 !c.failed);
           $("#preview-run").disabled = c.locked || c.dirty || !ready;
-          $("#preview-readiness").textContent = ready
-            ? "Workflow available · every design check remains UNSUPPORTED"
-            : "Bind a target, save, then analyse a single current case/combination.";
+          $("#preview-readiness").textContent = !ready
+            ? "Bind a target, save, then analyse a single current case/combination."
+            : $("#preview-source").value === "plate"
+              ? "Plate analysis available · code checks remain UNSUPPORTED"
+              : "Workflow available · every design check remains UNSUPPORTED";
         };
         $("#preview-source").onchange = () => {
           sourceMode = $("#preview-source").value;
@@ -314,6 +329,7 @@ export function concreteWorkspace({
         $("#preview-form").onsubmit = async (e) => {
           e.preventDefault();
           try {
+            const plate = plateArgs(host, d, t, submittedValue);
             const inputs = Object.fromEntries(
               t.fields.map((f) => [
                 f.key,
@@ -328,6 +344,7 @@ export function concreteWorkspace({
               ...(d.kind === "rcBeam" && {
                 tensionAnchorageConfirmed: $("#preview-anchorage").checked,
               }),
+              ...(plate && { plate }),
               ...(t.mechanics && {
                 mechanics: {
                   law: mechanicsLaw,
@@ -379,6 +396,7 @@ export function concreteWorkspace({
           };
         $("#preview-run").onclick = async () => {
           onRunning(true);
+          runError = null;
           try {
             const c = getContext(),
               run = await gateway.send("evaluateDesignPreview", {
@@ -392,6 +410,7 @@ export function concreteWorkspace({
             pane = "summary";
             showResults();
           } catch (e) {
+            runError = { draft: d.id, message: e.message };
             fail(e);
           } finally {
             onRunning(false);
@@ -420,14 +439,14 @@ export function concreteWorkspace({
       projectId = getContext().project?.id;
       active = id;
       pane = "summary";
-      sourceMode = draft()?.targetId ? "model" : "synthetic";
+      sourceMode = defaultSource(draft());
     },
     followSelection: (id) => {
       projectId = getContext().project?.id;
       active = getContext().project?.designPreviews?.find(
         (d) => d.targetId === id,
       )?.id;
-      sourceMode = draft()?.targetId ? "model" : "synthetic";
+      sourceMode = defaultSource(draft());
     },
   };
 }

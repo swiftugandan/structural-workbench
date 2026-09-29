@@ -1,8 +1,8 @@
+mod analysis_request;
 mod cad;
 mod design_workspace;
 mod preview_workspace;
 mod snap;
-mod analysis_request;
 mod structure_workspace;
 mod topology;
 mod view;
@@ -758,7 +758,7 @@ fn domain_disclosure() -> Value {
 fn capabilities_payload() -> Value {
     json!({
         "protocolVersion": 1,
-        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0"],
+        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0"],
         "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder", "modal"],
         "designProfiles": workbench_design::default_registry()
             .metadata()

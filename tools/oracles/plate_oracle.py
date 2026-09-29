@@ -4,7 +4,8 @@
 Navier double series give the Kirchhoff and Mindlin (hard simple support)
 solutions of uniformly loaded rectangular plates; Timoshenko & Woinowsky-
 Krieger's published coefficients give the clamped square; OpenSees ShellMITC4
-gives clamped and perforated panels on meshes identical to the kernel's.
+gives clamped, perforated and distorted panels on meshes identical to the
+kernel's.
 Nothing here imports the Rust kernel. Run with tools/oracle-env/bin/python.
 
 Sign convention (docs/formulations/plate.md): global Z up, pressure q > 0
@@ -115,9 +116,42 @@ clamped_tim = {
 import openseespy.opensees as ops
 
 
-def opensees_plate(a, b, t, nx, ny, edges, nu=NU, opening=None):
+def distorted(xs, ys, i, j, amplitude):
+    """Checkerboard distortion of interior node (i, j): each interior node
+    moves by amplitude x (cell size) in x and y with sign (-1)^(i+j), so every
+    cell stays a non-parallelogram quadrilateral at any refinement."""
+    nx, ny = len(xs) - 1, len(ys) - 1
+    if amplitude == 0.0 or i in (0, nx) or j in (0, ny):
+        return xs[i], ys[j]
+    sign = 1.0 if (i + j) % 2 == 0 else -1.0
+    return (xs[i] + sign * amplitude * (xs[1] - xs[0]),
+            ys[j] + sign * amplitude * (ys[1] - ys[0]))
+
+
+def consistent_pressure(corners):
+    """q * integral of the bilinear shape functions over a quadrilateral
+    (2 x 2 Gauss, exact for bilinear N and linear det J)."""
+    g = 1.0 / math.sqrt(3.0)
+    nat = [(-1, -1), (1, -1), (1, 1), (-1, 1)]
+    out = [0.0] * 4
+    for r in (-g, g):
+        for s_ in (-g, g):
+            dr = [0.25 * c[0] * (1 + s_ * c[1]) for c in nat]
+            ds = [0.25 * c[1] * (1 + r * c[0]) for c in nat]
+            jxr = sum(dr[k] * corners[k][0] for k in range(4))
+            jyr = sum(dr[k] * corners[k][1] for k in range(4))
+            jxs = sum(ds[k] * corners[k][0] for k in range(4))
+            jys = sum(ds[k] * corners[k][1] for k in range(4))
+            det = jxr * jys - jyr * jxs
+            for k in range(4):
+                out[k] += Q * 0.25 * (1 + r * nat[k][0]) * (1 + s_ * nat[k][1]) * det
+    return out
+
+
+def opensees_plate(a, b, t, nx, ny, edges, nu=NU, opening=None, distortion=0.0):
     """Structured nx x ny mesh; `opening` = (x0, x1, y0, y1) removes cells.
-    edges: 'simple' (hard) or 'clamped' on the outer boundary; opening edges free."""
+    edges: 'simple' (hard) or 'clamped' on the outer boundary; opening edges free.
+    `distortion` moves interior nodes by the checkerboard pattern of `distorted`."""
     ops.wipe()
     ops.model("basic", "-ndm", 3, "-ndf", 6)
     ops.section("ElasticMembranePlateSection", 1, E, nu, t, 0.0)
@@ -135,7 +169,7 @@ def opensees_plate(a, b, t, nx, ny, edges, nu=NU, opening=None):
     tag = {}
     for (i, j) in sorted(used):
         tag[(i, j)] = len(tag) + 1
-        ops.node(tag[(i, j)], xs[i], ys[j], 0.0)
+        ops.node(tag[(i, j)], *distorted(xs, ys, i, j, distortion), 0.0)
     for (i, j), n in tag.items():
         outer = i in (0, nx) or j in (0, ny)
         if not outer:
@@ -159,11 +193,12 @@ def opensees_plate(a, b, t, nx, ny, edges, nu=NU, opening=None):
     # Drilling DOFs of interior nodes are free; OpenSees stabilises them.
     ops.timeSeries("Linear", 1)
     ops.pattern("Plain", 1, 1)
-    # Consistent bilinear pressure load: q A / 4 per cell corner.
+    # Consistent bilinear pressure load (q A / 4 per corner on a rectangle).
     load = {}
     for i, j in cells:
-        share = Q * (xs[i + 1] - xs[i]) * (ys[j + 1] - ys[j]) / 4
-        for c in [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]:
+        corners = [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]
+        shares = consistent_pressure([distorted(xs, ys, ci, cj, distortion) for ci, cj in corners])
+        for c, share in zip(corners, shares):
             load[c] = load.get(c, 0.0) + share
     for c, f in load.items():
         ops.load(tag[c], 0.0, 0.0, -f, 0.0, 0.0, 0.0)
@@ -222,6 +257,36 @@ opening_os = {
     "tolerance": 1e-6,
 }
 
+# Distorted meshes (SOURCES.md R-SHELL-BENCHMARKS): the thin SS square with
+# every interior node moved by 0.2 of the cell size in the checkerboard
+# pattern, so no cell is a parallelogram. Navier at the displaced centre node
+# for 8, 16, 32. OpenSees ShellMITC4 on the identical meshes: it maps the tied
+# shear strains with Bathe & Dvorkin's (1985) element-constant r/s angles,
+# plate-v1 with the pointwise J^-1; the two coincide on parallelograms only,
+# so on these meshes they are compared as converging discretisations
+# (deflections only: ShellMITC4 reports moments in rotated element axes).
+DISTORTION = 0.2
+distorted_navier = []
+distorted_os = []
+for n in [8, 16, 32]:
+    xs_n = [6.0 * i / n for i in range(n + 1)]
+    x, y = distorted(xs_n, xs_n, n // 2, n // 2, DISTORTION)
+    ref = navier(6.0, 6.0, 0.2, x, y)["w"]
+    distorted_navier.append({"mesh": n, "x": x, "y": y, "w": ref})
+    od = opensees_plate(6.0, 6.0, 0.2, n, n, "simple", distortion=DISTORTION)
+    q4 = f"{n // 4},{n // 4}"
+    distorted_os.append({"mesh": n, "nodeW": pick(od["w"], [f"{n // 2},{n // 2}", q4, f"{n // 4},{n // 2}"])})
+    check(abs(od["w"][f"{n // 2},{n // 2}"] / ref - 1) < 3e-2, f"OpenSees distorted {n} vs Navier")
+distorted_case = {
+    "id": "P-DISTORT", "a": 6.0, "b": 6.0, "t": 0.2, "E": E, "nu": NU, "q": Q, "edges": "hardSimple",
+    "distortion": {"pattern": "checkerboard (-1)^(i+j) on interior nodes", "amplitude": DISTORTION},
+    "navierCentre": distorted_navier,
+    "navierGate": {"mesh": 32, "w": 1e-2, "monotone": True},
+    "openSees": distorted_os,
+    "openSeesGate": {"basis": "converging discretisations: the largest nodal relative difference falls with each refinement and is at most 1e-3 at 32 x 32",
+                     "mesh": 32, "w": 1e-3},
+}
+
 # MacNeal-Harder distorted patch (0.24 x 0.12) for membrane and bending patch
 # tests; the exact fields are linear (membrane) and quadratic (bending).
 patch = {
@@ -246,6 +311,7 @@ oracle = {
     "clampedTimoshenko": clamped_tim,
     "clampedOpenSees": clamped_os,
     "openingOpenSees": opening_os,
+    "distorted": distorted_case,
     "patch": patch,
     "failures": failures,
 }
@@ -254,5 +320,5 @@ with open(OUT, "w") as f:
     json.dump(oracle, f, indent=2)
     f.write("\n")
 print(json.dumps({"failures": failures, "thickCentreW": ss_thick["centre"]["w"], "osThickW": os_thick["w"]["8,8"],
-                  "osClampedW": cl["w"]["8,8"], "openW": op["w"]["12,10"]}, indent=1))
+                  "osClampedW": cl["w"]["8,8"], "openW": op["w"]["12,10"], "distortedW": distorted_os[-1]["nodeW"]["16,16"]}, indent=1))
 sys.exit(1 if failures else 0)
