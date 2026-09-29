@@ -90,8 +90,10 @@ test("Camera-facing points have smaller WebGPU depth than rear points", async ()
     extent: 10,
     factor: 50,
   });
-  const normal = view.basis()[2];
-  assert.ok(
-    view.projectPoint(normal)[2] < view.projectPoint(normal.map((v) => -v))[2],
-  );
+  // The camera sits where the picking ray starts, origin − extent·basis[2],
+  // looking along +basis[2]; the point on its side must be nearer.
+  const axis = view.basis()[2];
+  const near = axis.map((v) => -v),
+    far = axis;
+  assert.ok(view.projectPoint(near)[2] < view.projectPoint(far)[2]);
 });
