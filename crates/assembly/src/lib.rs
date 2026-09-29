@@ -123,6 +123,57 @@ fn member_load_density(
     q
 }
 
+/// Exact section actions [N, Vy, Vz, T, My, Mz] of one member at normalised
+/// stations, for one case or combination. Within an analysis piece the
+/// actions are the closed form of its end actions and uniform load, so any
+/// station is exact (not interpolated). At a point-load station the actions
+/// of both adjacent pieces are returned (left, then right).
+pub fn member_actions_at(
+    project: &Project,
+    case: &str,
+    member: &str,
+    stations: &[f64],
+) -> Result<Vec<Vec<[f64; 6]>>> {
+    project.validate()?;
+    let mut original = project.clone();
+    original.canonicalise();
+    if !original.members.iter().any(|m| m.id == member) {
+        return Err(err("DANGLING_REFERENCE", "Unknown member"));
+    }
+    let (expanded, splits) = expand_point_loads(&original)?;
+    let analysis = analyse_assembled(&expanded, case)?;
+    let mut p = expanded.clone();
+    p.canonicalise();
+    let factors = case_factors(&p, case)?;
+    let position = |id: &str| p.nodes.iter().find(|n| n.id == id).map(|n| n.position).unwrap();
+    let pieces = stability::pieces(&splits, member);
+    stations
+        .iter()
+        .map(|&t| {
+            if !(0. ..=1.).contains(&t) {
+                return Err(err("INVALID_SETTINGS", "Stations must lie in [0, 1]"));
+            }
+            let mut out = vec![];
+            for (child, t0, t1) in &pieces {
+                if t < t0 - 1e-12 || t > t1 + 1e-12 {
+                    continue;
+                }
+                let m = p.members.iter().find(|m| &m.id == child).unwrap();
+                let (l, r) = workbench_geometry::axes(position(&m.start), position(&m.end), m.local_y);
+                let result = analysis
+                    .members
+                    .iter()
+                    .find(|x| &x.id == child)
+                    .ok_or_else(|| err("INTERNAL", "Missing analysis piece"))?;
+                let q = member_load_density(&p, m, r, &factors);
+                let x = ((t - t0) / (t1 - t0)).clamp(0., 1.) * l;
+                out.push(section_actions(&result.end_actions, q, x));
+            }
+            Ok(out)
+        })
+        .collect()
+}
+
 pub fn analyse(project: &Project, case: &str) -> Result<Analysis> {
     project.validate()?;
     let mut original = project.clone();

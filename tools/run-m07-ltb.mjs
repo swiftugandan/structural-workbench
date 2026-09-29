@@ -122,6 +122,22 @@ const criteria = [
       "Example F.1-2B modelled as three members gives the published Cb = 1.01 (centre) and 1.46 (ends); derivation needs Lb equal to the member length; a free cantilever end takes Cb = 1.0 per F1.",
   },
   {
+    id: "DW-LTB1-SEGMENTS",
+    title: "Bracing points: Lb and Cb per unbraced segment (ADR 0024)",
+    evidence: "kernel_validation",
+    tests: {
+      "design-workspace": [
+        "one_member_braced_at_thirds_matches_the_three_member_model",
+        "bracing_points_are_validated",
+      ],
+      "steel-browser": [
+        "Bracing points: each segment gets its own Lb and Cb, with Cb = 1 at the free end",
+      ],
+    },
+    observation:
+      "Example F.1-2B as one member braced at its thirds gives segments with Lb = L/3 and Cb 1.46, 1.01, 1.46, and the governing F2-2 resistance and centre Cb equal the three-member model's to 1e-9. Bracing points without the points assumption, an entered Lb, unordered stations and stations at the ends are refused. In the browser, the B04 cantilever braced at mid-length gives Lb = 1.5 m per segment, Cb = 1.25 (F1-1 on the linear diagram) at the fixed end and 1.0 at the free end.",
+  },
+  {
     id: "DW-LTB1-S2-REGRESSION",
     title: "S2 fixture regressions still pass",
     evidence: "regression_results",

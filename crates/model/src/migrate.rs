@@ -261,10 +261,15 @@ fn migrate_1_5_to_1_6(raw: &mut Value) -> Result<Vec<String>> {
             d["plate"].get("columns").is_some() || d["plate"].get("placement").is_some()
         })
     });
-    if raw.get("responseSpectra").is_some() || slab_columns {
+    let bracing_points = raw["members"].as_array().is_some_and(|ms| {
+        ms.iter().any(|m| {
+            m["steelDesign"].get("bracingPoints").is_some() || m["steelDesign"]["bracing"] == "points"
+        })
+    });
+    if raw.get("responseSpectra").is_some() || slab_columns || bracing_points {
         return Err(err(
             "INVALID_SCHEMA",
-            "Schema 1.5.0 projects cannot carry response spectra or slab columns",
+            "Schema 1.5.0 projects cannot carry response spectra, slab columns or bracing points",
         ));
     }
     raw["schemaVersion"] = json!(CURRENT_SCHEMA);

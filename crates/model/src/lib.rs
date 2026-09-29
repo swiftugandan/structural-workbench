@@ -10,7 +10,8 @@ mod section_props;
 pub use residential::residential_reference;
 pub mod structure;
 pub use design_inputs::{
-    DesignPreview, DesignSource, DesignValue, MAX_SLAB_COLUMNS, MECHANICS_COMMON_KEYS,
+    DesignPreview, DesignSource, DesignValue, MAX_BRACING_POINTS, MAX_SLAB_COLUMNS,
+    MECHANICS_COMMON_KEYS,
     SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs, SlabColumn, SlabPlateInputs,
     SteelDesign, SteelServiceability,
 };

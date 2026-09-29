@@ -88,42 +88,58 @@ fn evaluate_analysis(
         .iter()
         .find(|m| m.id == id)
         .ok_or_else(|| err("DANGLING_REFERENCE", "Result member is missing"))?;
-    // Cb from the member's own strong-axis moment diagram (F1-1); readiness has
-    // already required the member to be the unbraced segment. The 41 exact
-    // samples include the quarter points; key stations add interior extrema.
-    let design = native::member(p, id)?.steel_design.as_ref().unwrap();
-    let cb_derivation = if native::cb_from_model(design) {
-        let at = |t: f64| {
-            m.samples
+    // Unbraced segments: the whole member, or the stretches between its
+    // bracing points. Each has its own Lb (its length when braced at points)
+    // and Cb (entered, or F1-1 over that segment's strong-axis moment
+    // diagram with exact quarter-point moments). A segment ending at an
+    // unbraced free end takes Cb = 1.0 (Spec F1).
+    let design = native::member(p, id)?.steel_design.as_ref().unwrap().clone();
+    let member = native::member(p, id)?;
+    let length = native::member_length(p, member);
+    let braced_at_points = design.bracing == "points";
+    let mut bounds = vec![0.0];
+    bounds.extend(design.bracing_points.iter().copied());
+    bounds.push(1.0);
+    let free = |node: &str| {
+        !p.supports.iter().any(|s| s.node == node)
+            && p.members.iter().filter(|x| x.start == node || x.end == node).count() == 1
+    };
+    let (start_free, end_free) = (free(&member.start), free(&member.end));
+    let mut segments = vec![];
+    for w in bounds.windows(2) {
+        let (a, b) = (w[0], w[1]);
+        let lb = if braced_at_points { (b - a) * length } else { context.lb };
+        let (cb, derivation) = if native::cb_from_model(&design) {
+            let quarter: Vec<f64> = (0..=4).map(|k| a + (b - a) * k as f64 / 4.).collect();
+            let exact = workbench_assembly::member_actions_at(p, case, id, &quarter)?;
+            // At a point-load station the larger side governs.
+            let at = |k: usize| exact[k].iter().map(|x| x[5].abs()).fold(0.0, f64::max);
+            let (ma, mb, mc) = (at(1), at(2), at(3));
+            let within = |t: f64| t >= a - 1e-12 && t <= b + 1e-12;
+            let m_max = m
+                .samples
                 .iter()
-                .find(|s| (s.station - t).abs() < 1e-12)
+                .filter(|s| within(s.station))
                 .map(|s| s.actions[5].abs())
-                .ok_or_else(|| err("INTERNAL", "Quarter-point sample missing"))
-        };
-        let m_max = m
-            .samples
-            .iter()
-            .map(|s| s.actions[5].abs())
-            .chain(m.key_stations.iter().map(|k| k.actions[5].abs()))
-            .fold(0.0, f64::max);
-        let (ma, mb, mc) = (at(0.25)?, at(0.5)?, at(0.75)?);
-        // Spec F1: a cantilever or overhang with an unbraced free end takes
-        // Cb = 1.0. A free end has no support and no other member.
-        let member = native::member(p, id)?;
-        let free = |node: &str| {
-            !p.supports.iter().any(|s| s.node == node)
-                && p.members.iter().filter(|x| x.start == node || x.end == node).count() == 1
-        };
-        let cantilever = free(&member.start) || free(&member.end);
-        let (cb, rule) = if cantilever {
-            (1.0, "F1: cantilever with an unbraced free end")
-        } else if m_max > 0.0 {
-            (native::cb_f1_1(m_max, ma, mb, mc), "F1-1")
+                .chain(m.key_stations.iter().filter(|k| within(k.station)).map(|k| k.actions[5].abs()))
+                .chain([at(0), ma, mb, mc, at(4)])
+                .fold(0.0, f64::max);
+            let cantilever = (a == 0.0 && start_free) || (b == 1.0 && end_free);
+            let (cb, rule) = if cantilever {
+                (1.0, "F1: cantilever with an unbraced free end")
+            } else if m_max > 0.0 {
+                (native::cb_f1_1(m_max, ma, mb, mc), "F1-1")
+            } else {
+                (1.0, "F1-1: no strong-axis moment")
+            };
+            (cb, Some(json!({"source":"derived","equation":rule,"Cb":cb,"Mmax":m_max,"MA":ma,"MB":mb,"MC":mc,"combinationId":case,"segment":[a, b]})))
         } else {
-            (1.0, "F1-1: no strong-axis moment")
+            (context.cb, None)
         };
-        context.cb = cb;
-        Some(json!({"source":"derived","equation":rule,"Cb":cb,"Mmax":m_max,"MA":ma,"MB":mb,"MC":mc,"combinationId":case}))
+        segments.push((a, b, lb, cb, derivation));
+    }
+    let cb_derivation = if segments.len() == 1 {
+        segments[0].4.clone()
     } else {
         None
     };
@@ -158,8 +174,14 @@ fn evaluate_analysis(
             station,
             combination_id: case.into(),
         };
+        for (segment, &(a, b, lb, cb, _)) in segments.iter().enumerate() {
+        if station < a - 1e-12 || station > b + 1e-12 {
+            continue;
+        }
         let mut ctx = context.clone();
         ctx.torsion_present = t != 0.0;
+        ctx.lb = lb;
+        ctx.cb = cb;
         let mut run = registry
             .evaluate(workbench_design::PROFILE_AISC_360_22_LRFD, &demand, &ctx)
             .map_err(|e| err("UNSUPPORTED_FEATURE", e))?;
@@ -195,8 +217,10 @@ fn evaluate_analysis(
             out["combinationId"] = json!(case);
             out["actions"] = json!(actions);
             out["formulaId"] = json!(c.clause);
+            out["segment"] = json!(segment);
             all.push(out);
             outcomes.push(c.clone());
+        }
         }
     }
     let overall = if outcomes.is_empty() {
@@ -241,7 +265,7 @@ fn evaluate_analysis(
         "resultId":analysis.result_id,"solverBuildHash":analysis.solver_build_hash,"analysisSettingsHash":analysis.settings_hash,
         "designSettingsHash":settings_hash,"inputs":settings,"catalogue":native::catalogue()["source"],"catalogueSourceHash":native::catalogue()["sourceSha256"],
         "stabilityBasis":"First-order analysis with user effective-length factors; no second-order / direct-analysis compliance claim",
-        "bracingSegments":[{"start":0.0,"end":1.0,"kind":settings.bracing,"source":"user"}],
+        "bracingSegments":segments.iter().map(|(a, b, lb, cb, derivation)| json!({"start":a,"end":b,"kind":settings.bracing,"lb":lb,"cb":cb,"source":if braced_at_points {"bracingPoints"} else {"user"},"cbDerivation":derivation})).collect::<Vec<_>>(),
         "cbDerivation":cb_derivation,
         "serviceability":serviceability(p, id)?,"warnings":["Only the selected case/combination is checked; load completeness is the user's responsibility"],
         "limitations":["Bounded AISC 360-22 strength checks (S2, S3 flexure)", "Tension details, weak-axis actions, noncompact webs and second-order stability remain unsupported", "Serviceability is a user deflection criterion, reported separately from strength; no connection design"]});

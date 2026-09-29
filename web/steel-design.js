@@ -30,7 +30,7 @@ export function provenanceHtml(run) {
 export function designResultsHtml(run, state) {
   if (!run)
     return '<div class="empty-results"><strong>Steel design · NOT CHECKED</strong><p>Select a member and complete its design inputs in the Selection Inspector.</p></div>';
-  return `<section data-testid="native-design-result" class="native-design-workspace"><div class="design-result-tabs"><button data-steel-pane="summary" aria-pressed="true">Design summary</button><button data-steel-pane="details" aria-pressed="false">Calculation details</button><button data-steel-pane="provenance" aria-pressed="false">Provenance</button><span class="spacer"></span><button id="design-why">Show governing location</button><button id="design-download">Download design record</button></div><div data-steel-view="summary" class="steel-summary-pane">${renderResult({ ...run, overall: state })}${serviceabilityHtml(run.serviceability, state)}<aside class="design-notes"><h4>Design basis</h4><p class="design-note">${state === "stale" ? "STALE — recorded model or result has changed." : "Model-native checks · selected case/combination only."}</p><p>${esc(run.stabilityBasis)}</p>${run.cbDerivation ? `<p data-testid="cb-derivation">Cᵦ = ${Number(run.cbDerivation.Cb.toPrecision(4))} derived from this member's moment diagram (${esc(run.cbDerivation.equation)}).</p>` : ""}<p>Serviceability: ${run.serviceability?.status === "notChecked" || !run.serviceability ? "NOT CHECKED — no user criterion is set." : "user deflection criterion, reported separately from strength."}</p><p>Flexure: yielding, flange local buckling (F3) and lateral-torsional buckling (F2.2) with your Lb and Cb; noncompact webs remain unsupported. No full-code compliance claim.</p></aside></div><div data-steel-view="details" class="design-pane" hidden></div><div data-steel-view="provenance" class="design-pane" hidden>${provenanceHtml(run)}<p>Download the exact record for all ${run.stationChecks.length} station checks.</p></div></section>`;
+  return `<section data-testid="native-design-result" class="native-design-workspace"><div class="design-result-tabs"><button data-steel-pane="summary" aria-pressed="true">Design summary</button><button data-steel-pane="details" aria-pressed="false">Calculation details</button><button data-steel-pane="provenance" aria-pressed="false">Provenance</button><span class="spacer"></span><button id="design-why">Show governing location</button><button id="design-download">Download design record</button></div><div data-steel-view="summary" class="steel-summary-pane">${renderResult({ ...run, overall: state })}${serviceabilityHtml(run.serviceability, state)}<aside class="design-notes"><h4>Design basis</h4><p class="design-note">${state === "stale" ? "STALE — recorded model or result has changed." : "Model-native checks · selected case/combination only."}</p><p>${esc(run.stabilityBasis)}</p>${run.cbDerivation ? `<p data-testid="cb-derivation">Cᵦ = ${Number(run.cbDerivation.Cb.toPrecision(4))} derived from this member's moment diagram (${esc(run.cbDerivation.equation)}).</p>` : ""}${run.bracingSegments?.length > 1 ? `<table data-testid="bracing-segments"><thead><tr><th>Segment (x/L)</th><th>Lᵦ (m)</th><th>Cᵦ</th></tr></thead><tbody>${run.bracingSegments.map((s) => `<tr><td>${Number(s.start.toPrecision(4))}–${Number(s.end.toPrecision(4))}</td><td data-si="${s.lb}">${Number(s.lb.toPrecision(4))}</td><td data-si="${s.cb}">${Number(s.cb.toPrecision(4))}${s.cbDerivation ? ` · ${esc(s.cbDerivation.equation)}` : ""}</td></tr>`).join("")}</tbody></table>` : ""}<p>Serviceability: ${run.serviceability?.status === "notChecked" || !run.serviceability ? "NOT CHECKED — no user criterion is set." : "user deflection criterion, reported separately from strength."}</p><p>Flexure: yielding, flange local buckling (F3) and lateral-torsional buckling (F2.2) with your Lb and Cb; noncompact webs remain unsupported. No full-code compliance claim.</p></aside></div><div data-steel-view="details" class="design-pane" hidden></div><div data-steel-view="provenance" class="design-pane" hidden>${provenanceHtml(run)}<p>Download the exact record for all ${run.stationChecks.length} station checks.</p></div></section>`;
 }
 /** The member's user deflection criterion (ADR 0020), separate from strength. */
 export function serviceabilityHtml(s, state) {
@@ -138,7 +138,7 @@ export function steelDesignWorkspace({
       <section class="design-section"><h3>1. Section and material</h3><label class="design-field"><span>Section</span><select id="design-section">${cat.shapes.map((s) => `<option value="${cat.id}:${s.designation}" ${shape === s ? "selected" : ""}>${s.designation}</option>`).join("")}</select></label>
       <div class="steel-section-card"><svg viewBox="0 0 100 110" role="img" aria-label="W section schematic"><path d="M20 10H80V22H57V86H80V98H20V86H43V22H20Z" fill="#aab7c4" stroke="#405369"/><path d="M25 15H75M48 27V82M25 92H75" stroke="#dce5ee" stroke-width="3"/></svg><div><strong>${esc(shape.designation)}</strong><small>AISC Shapes Database v16</small><dl><dt>Depth</dt><dd>${(shape.d * 25.4).toFixed(1)} mm</dd><dt>Flange width</dt><dd>${(shape.bf * 25.4).toFixed(1)} mm</dd><dt>Material</dt><dd>ASTM A992</dd></dl></div></div><div class="design-inline"><span>Fy 50 ksi · Fu 65 ksi</span><button id="design-assign">Assign section and material</button></div>
       <details class="catalogue-browser"><summary>Browse section catalogue · 5 verified records</summary><table><thead><tr><th>Section</th><th>d mm</th><th>bf mm</th></tr></thead><tbody>${cat.shapes.map((s) => `<tr><td><button data-catalogue-choice="${cat.id}:${s.designation}">${esc(s.designation)}</button></td><td>${(s.d * 25.4).toFixed(1)}</td><td>${(s.bf * 25.4).toFixed(1)}</td></tr>`).join("")}</tbody></table><small>${esc(cat.source)}</small></details></section>
-      <form id="design-inputs"><section class="design-section"><h3>2. Design inputs</h3>${valueField("ky", "Effective length, Kᵧ")}${valueField("kz", "Effective length, K𝓏")}${valueField("lb", "Unbraced length, Lᵦ", "m")}${valueField("cb", "Moment gradient, Cᵦ")}<label class="design-basis-check"><input id="design-cb-model" type="checkbox" ${d?.cb?.source === "derived" ? "checked" : ""}>Derive Cᵦ from this member's moment diagram (F1-1; Lᵦ = member length, Cᵦ = 1 for a free cantilever end)</label><label class="design-field"><span>Bracing</span><select id="design-bracing"><option value="notProvided">Not provided</option><option value="continuous">Continuous lateral bracing</option><option value="unbraced">Unbraced length supplied</option></select></label><small>U · user specified. Missing assumptions are never defaulted.</small></section>
+      <form id="design-inputs"><section class="design-section"><h3>2. Design inputs</h3>${valueField("ky", "Effective length, Kᵧ")}${valueField("kz", "Effective length, K𝓏")}${valueField("lb", "Unbraced length, Lᵦ", "m")}${valueField("cb", "Moment gradient, Cᵦ")}<label class="design-basis-check"><input id="design-cb-model" type="checkbox" ${d?.cb?.source === "derived" ? "checked" : ""}>Derive Cᵦ from this member's moment diagram (F1-1; Lᵦ = member length, Cᵦ = 1 for a free cantilever end)</label><label class="design-field"><span>Bracing</span><select id="design-bracing"><option value="notProvided">Not provided</option><option value="continuous">Continuous lateral bracing</option><option value="unbraced">Unbraced length supplied</option><option value="points">Braced at points along the member</option></select></label><label class="design-field" id="design-points-field"><span>Bracing points, x/L</span><span class="design-field-control"><input id="design-bracing-points" value="${esc((d?.bracingPoints || []).map((t) => Number(t.toPrecision(12))).join(", "))}" placeholder="e.g. 0.3333, 0.6667"></span></label><small>U · user specified. Missing assumptions are never defaulted. Braced at points: each segment between the points and the member ends is checked with Lᵦ = its length and its own Cᵦ.</small></section>
       <section class="design-section"><h3>Serviceability · your criterion</h3><label class="design-field"><span>Service case or combination</span><select id="design-service-case"><option value="">Not checked</option>${ctx.project.loadCases.map((c) => `<option value="${esc(c.id)}">${esc(c.name)} · load case</option>`).join("")}${ctx.project.combinations
         .filter((c) => c.purpose !== "strength")
         .map(
@@ -158,6 +158,14 @@ export function steelDesignWorkspace({
           $("#design-section").dispatchEvent(new Event("change"));
         };
       $("#design-bracing").value = d?.bracing || "notProvided";
+      const syncBracing = () => {
+        const points = $("#design-bracing").value === "points";
+        $("#design-points-field").hidden = !points;
+        $("#design-lb").disabled = points;
+        if (points) $("#design-lb").placeholder = "Per segment";
+      };
+      syncBracing();
+      $("#design-bracing").onchange = syncBracing;
       $("#design-cb").disabled = $("#design-cb-model").checked;
       $("#design-cb-model").onchange = () => {
         $("#design-cb").disabled = $("#design-cb-model").checked;
@@ -208,11 +216,21 @@ export function steelDesignWorkspace({
           ...d,
           ky: val("ky"),
           kz: val("kz"),
-          lb: val("lb"),
+          lb:
+            $("#design-bracing").value === "points"
+              ? { value: null, source: "derived" }
+              : val("lb"),
           cb: $("#design-cb-model").checked
             ? { value: null, source: "derived" }
             : val("cb"),
           bracing: $("#design-bracing").value,
+          bracingPoints:
+            $("#design-bracing").value === "points"
+              ? $("#design-bracing-points")
+                  .value.split(/[,;\s]+/)
+                  .filter(Boolean)
+                  .map(Number)
+              : [],
           stabilityBasis: $("#design-basis").checked
             ? "firstOrderUserEffectiveLength"
             : "notProvided",

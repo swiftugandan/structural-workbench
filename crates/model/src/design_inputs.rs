@@ -508,7 +508,15 @@ pub struct SteelDesign {
     /// User serviceability criteria (ADR 0020); absent means not checked.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub serviceability: Option<SteelServiceability>,
+    /// Lateral-torsional bracing points (normalised stations strictly inside
+    /// the member) for bracing "points": each segment between them and the
+    /// member ends is checked with its own Lb and Cb (schema 1.6.0).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub bracing_points: Vec<f64>,
 }
+
+/// Most bracing points on one member.
+pub const MAX_BRACING_POINTS: usize = 20;
 
 /// A deflection limit L/n under one service case or combination, measured
 /// relative to the member chord or from the undeformed position (ADR 0020).
@@ -535,8 +543,30 @@ impl SteelDesign {
                 return Err(err("INVALID_SCHEMA", "Design reference exceeds 256 bytes"));
             }
         }
-        if !["notProvided", "continuous", "unbraced"].contains(&self.bracing.as_str()) {
+        if !["notProvided", "continuous", "unbraced", "points"].contains(&self.bracing.as_str()) {
             return Err(err("INVALID_SCHEMA", "Unknown bracing assumption"));
+        }
+        let points = self.bracing == "points";
+        if points
+            != !self.bracing_points.is_empty()
+            || self.bracing_points.len() > MAX_BRACING_POINTS
+            || self.bracing_points.iter().any(|t| !(t.is_finite() && *t > 0. && *t < 1.))
+            || self.bracing_points.windows(2).any(|w| w[1] <= w[0])
+        {
+            return Err(err(
+                "INVALID_SCHEMA",
+                format!(
+                    "Bracing \"points\" needs 1–{MAX_BRACING_POINTS} increasing stations strictly between 0 and 1, and only that assumption takes them"
+                ),
+            ));
+        }
+        // With bracing points Lb is each segment's length: derived, not entered.
+        let lb_derived = self.lb.value.is_none() && self.lb.source == DesignSource::Derived;
+        if lb_derived != points {
+            return Err(err(
+                "INVALID_SCHEMA",
+                "Lb is derived exactly when the member is braced at points",
+            ));
         }
         for (key, v) in [
             ("Ky", &self.ky),
@@ -559,8 +589,11 @@ impl SteelDesign {
                     ),
                 ));
             }
-            // Cb alone may be derived from the analysis (F1-1): no stored value.
-            let derived = key == "Cb" && v.value.is_none() && v.source == DesignSource::Derived;
+            // Cb may be derived from the analysis (F1-1), and Lb from bracing
+            // points: no stored value.
+            let derived = (key == "Cb" || (key == "Lb" && points))
+                && v.value.is_none()
+                && v.source == DesignSource::Derived;
             if !derived && v.value.is_some() == (v.source == DesignSource::NotProvided) {
                 return Err(err(
                     "INVALID_SCHEMA",

@@ -1145,7 +1145,8 @@
           "enum": [
             "notProvided",
             "continuous",
-            "unbraced"
+            "unbraced",
+            "points"
           ]
         },
         "ky": {
@@ -1187,6 +1188,16 @@
             "basis"
           ],
           "additionalProperties": false
+        },
+        "bracingPoints": {
+          "description": "Lateral-torsional bracing stations (0, 1), increasing, for bracing \"points\" (schema 1.6.0).",
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "exclusiveMaximum": 1
+          }
         }
       },
       "required": [

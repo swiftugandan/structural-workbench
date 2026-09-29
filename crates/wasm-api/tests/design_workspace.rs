@@ -598,3 +598,114 @@ fn a_cantilever_with_a_free_end_takes_cb_of_one() {
             .contains("cantilever")
     );
 }
+
+/// Example F.1-2B as one 35 ft member braced at its third points: the same
+/// segments, Lb and Cb as the three-member model, from bracing points.
+fn braced_beam(points: Value, lb: Value, bracing: &str) -> (Kernel, Value) {
+    let ft = 0.3048;
+    let span = 35.0 * ft;
+    let wu = 1.74 * 4448.2216152605 / ft;
+    let p = json!({
+        "schemaVersion": "1.0.0", "id": "f12b-one", "name": "F.1-2B one member", "revision": 0,
+        "displayUnits": "SI", "analysisMode": "spatial", "gravity": [0, 0, -9.80665],
+        "materials": [{"id": "mat1", "name": "steel", "E": 200e9, "nu": 0.3, "density": 0}],
+        "sections": [{"id": "sec1", "name": "placeholder", "A": 0.01, "Iy": 1e-5, "Iz": 1e-4, "J": 1e-6,
+                      "cy": 0.1, "cz": 0.1, "provenance": "replaced by the catalogue"}],
+        "nodes": [{"id": "n1", "position": [0.0, 0.0, 0.0]}, {"id": "n2", "position": [span, 0.0, 0.0]}],
+        "members": [{"id": "m1", "start": "n1", "end": "n2", "material": "mat1", "section": "sec1",
+                     "localY": [0.0, 0.0, 1.0], "releaseStart": {"my": false, "mz": false},
+                     "releaseEnd": {"my": false, "mz": false}}],
+        "supports": [
+            {"id": "s1", "node": "n1", "fixed": [true, true, true, true, false, false], "prescribed": [0, 0, 0, 0, 0, 0]},
+            {"id": "s2", "node": "n2", "fixed": [false, true, true, false, false, false], "prescribed": [0, 0, 0, 0, 0, 0]}
+        ],
+        "loadCases": [{"id": "LC1", "name": "1.2D+1.6L", "category": "other"}],
+        "loads": [{"id": "w", "case": "LC1", "type": "uniform", "member": "m1", "axes": "global",
+                   "forcePerLength": [0.0, 0.0, -wu]}],
+        "combinations": [],
+        "analysisSettings": {"type": "linearStatic", "formulation": "eulerBernoulli3D",
+            "mergeTolerance": 1e-6, "timeoutMs": 30000, "memoryLimitMiB": 512},
+        "metadata": {"description": "AISC Example F.1-2B", "createdBy": "tests"}
+    });
+    let mut k = Kernel::new();
+    assert_eq!(
+        req(&mut k, "createProject", json!({"project": p}))["status"],
+        "ok"
+    );
+    assign(&mut k, "W18X50");
+    let mut d =
+        req(&mut k, "getSnapshot", json!({}))["payload"]["project"]["members"][0]["steelDesign"]
+            .clone();
+    for key in ["ky", "kz"] {
+        d[key] = json!({"value": 1.0, "source": "user"});
+    }
+    d["lb"] = lb;
+    d["cb"] = json!({"value": null, "source": "derived"});
+    d["stabilityBasis"] = json!("firstOrderUserEffectiveLength");
+    d["bracing"] = json!(bracing);
+    d["bracingPoints"] = points;
+    let r = command(&mut k, "SetSteelDesign", json!({"id": "m1", "design": d}));
+    (k, r)
+}
+
+#[test]
+fn one_member_braced_at_thirds_matches_the_three_member_model() {
+    let (mut k, r) = braced_beam(
+        json!([1.0 / 3.0, 2.0 / 3.0]),
+        json!({"value": null, "source": "derived"}),
+        "points",
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let ready = req(&mut k, "steelReadiness", json!({"memberId": "m1"}))["payload"].clone();
+    assert_eq!(ready["status"], "ready", "{ready}");
+    let run = evaluate_member(&mut k, "m1");
+    let segments = run["bracingSegments"].as_array().unwrap().clone();
+    assert_eq!(segments.len(), 3);
+    let span = 35.0 * 0.3048;
+    for (s, want) in segments.iter().zip([1.46, 1.01, 1.46]) {
+        let cb = s["cb"].as_f64().unwrap();
+        assert!((cb - want).abs() <= 0.005, "{s}");
+        assert!((s["lb"].as_f64().unwrap() - span / 3.0).abs() <= 1e-12 * span);
+        assert_eq!(s["cbDerivation"]["equation"], "F1-1");
+    }
+    // The governing flexure is the three-member model's centre segment.
+    let three = evaluate_member(&mut third_point_beam(), "m2");
+    let (one, centre) = (governing_flexure(&run), governing_flexure(&three));
+    assert_eq!(one["clause"], "F2-2");
+    assert!(
+        (one["resistance"].as_f64().unwrap() / centre["resistance"].as_f64().unwrap() - 1.0).abs()
+            <= 1e-9,
+        "{one} vs {centre}"
+    );
+    assert!(
+        (segments[1]["cb"].as_f64().unwrap() / three["cbDerivation"]["Cb"].as_f64().unwrap() - 1.0)
+            .abs()
+            <= 1e-9
+    );
+    assert!(
+        run["stationChecks"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|c| c["segment"] == 2)
+    );
+}
+
+#[test]
+fn bracing_points_are_validated() {
+    let derived = json!({"value": null, "source": "derived"});
+    for (points, lb, bracing) in [
+        (
+            json!([0.5]),
+            json!({"value": 3.0, "source": "user"}),
+            "points",
+        ),
+        (json!([0.5]), derived.clone(), "unbraced"),
+        (json!([0.6, 0.4]), derived.clone(), "points"),
+        (json!([1.0]), derived.clone(), "points"),
+        (json!([]), derived.clone(), "points"),
+    ] {
+        let (_, r) = braced_beam(points.clone(), lb, bracing);
+        assert_eq!(r["status"], "error", "{points} {bracing}: {r}");
+    }
+}

@@ -312,7 +312,7 @@
       "limitations": [
         "AISC 360-22 LRFD S2 enabled after resources.lock + fixture corpus verification",
         "S2 covers classification, tension, compression E3, flexure F2, shear G2.1, H1",
-        "S3 flexure: flange local buckling of noncompact flanges (F3-1) and lateral-torsional buckling (F2.2) with user Lb and Cb, fixtures F.1-2B, F.1-3B, F.3B; Cb is user input or derived from the member's moment diagram by F1-1 (Cb = 1 for a free cantilever end)",
+        "S3 flexure: flange local buckling of noncompact flanges (F3-1) and lateral-torsional buckling (F2.2) with user Lb and Cb, fixtures F.1-2B, F.1-3B, F.3B; Cb is user input or derived by F1-1 per unbraced segment, with bracing points along a member giving each segment its own Lb and Cb (Cb = 1 at a free cantilever end)",
         "Serviceability: a user deflection criterion L/n under one service case or combination (chord or absolute basis), reported separately from strength; not an AISC 360 requirement (ADR 0020)",
         "Slender flanges (F3-2), noncompact/slender webs (F4/F5), HSS, torsion, weak-axis flexure and non-prismatic members return unsupported; H1 is formula-checked with published φ capacities",
         "Not a claim of commercial PROKON parity or professional code certification"
@@ -324,7 +324,8 @@
         "fixtures/design/aisc-360-22-lrfd/",
         "resources.lock.json",
         "docs/code-profiles/aisc-360-22-lrfd/dossier-S3.md",
-        "docs/adr/0020-steel-serviceability-deflection.md"
+        "docs/adr/0020-steel-serviceability-deflection.md",
+        "docs/adr/0024-steel-bracing-points.md"
       ]
     },
     {

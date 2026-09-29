@@ -240,3 +240,43 @@ test("Derived Cb: the model's moment diagram sets Cb, with Cb = 1 for a free can
   await expect(page.locator("[data-check-id='flexure']")).toContainText("F2-2");
   expect(errors).toEqual([]);
 });
+
+test("Bracing points: each segment gets its own Lb and Cb, with Cb = 1 at the free end", async ({
+  page,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await openModel(page);
+  // B04 (3 m cantilever) braced at mid-length: segment 0–0.5 has the linear
+  // diagram 3P→1.5P, so F1-1 gives 12.5·3 / (7.5 + 7.875 + 9 + 5.625) = 1.25;
+  // segment 0.5–1 ends at the free tip, Cb = 1.
+  await page.locator("#design-bracing").selectOption("points");
+  await expect(page.locator("#design-lb")).toBeDisabled();
+  await page.locator("#design-bracing-points").fill("0.5");
+  await page.locator("#design-cb-model").check();
+  await page.locator("#design-save").click();
+  await expect(page.locator("[data-testid='design-readiness']")).toHaveText(
+    "READY",
+  );
+  await page.locator("#analyse").click();
+  await expect(page.locator("#design-run")).toBeEnabled();
+  await page.locator("#design-run").click();
+  await expect(
+    page.locator("[data-testid='bracing-segments'] tbody tr"),
+  ).toHaveCount(2);
+  const rows = await page
+    .locator("[data-testid='bracing-segments'] tbody tr")
+    .evaluateAll((trs) =>
+      trs.map((tr) =>
+        [...tr.querySelectorAll("td[data-si]")].map((td) =>
+          Number(td.dataset.si),
+        ),
+      ),
+    );
+  expect(rows).toHaveLength(2);
+  for (const [lb] of rows)
+    expect(Math.abs(lb - 1.5)).toBeLessThanOrEqual(1e-12);
+  expect(Math.abs(rows[0][1] - 1.25)).toBeLessThanOrEqual(1e-9);
+  expect(rows[1][1]).toBe(1);
+  expect(errors).toEqual([]);
+});

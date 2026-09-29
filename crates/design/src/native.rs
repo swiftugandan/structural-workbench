@@ -139,16 +139,18 @@ pub fn readiness(p: &Project, id: &str) -> Result<Value> {
         if d.stability_basis != BASIS {
             missing.push("Confirm first-order analysis with user effective-length factors".into());
         }
+        let points = d.bracing == "points";
         for (name, value) in [("Ky", &d.ky), ("Kz", &d.kz), ("Lb", &d.lb)] {
-            if value.value.is_none() {
+            // With bracing points each segment's Lb is its length.
+            if value.value.is_none() && !(name == "Lb" && points) {
                 missing.push(format!("{name} is not provided"));
             }
         }
         if cb_from_model(d) {
-            // F1-1 over the member's own moment diagram: the member must be
-            // the unbraced segment.
+            // F1-1 over a moment diagram needs the unbraced segment: the
+            // member itself, or each segment between bracing points.
             let length = member_length(p, m);
-            if !d.lb.value.is_some_and(|lb| (lb - length).abs() <= 1e-6 * length) {
+            if !points && !d.lb.value.is_some_and(|lb| (lb - length).abs() <= 1e-6 * length) {
                 missing.push(
                     "Cb from the model needs Lb equal to the member length; enter Cb for shorter segments".into(),
                 );
@@ -195,7 +197,8 @@ pub fn context(p: &Project, id: &str) -> Result<MemberContext> {
         length,
         ky: d.ky.value.unwrap(),
         kz: d.kz.value.unwrap(),
-        lb: d.lb.value.unwrap(),
+        // Braced at points: each segment sets its own Lb before a check.
+        lb: d.lb.value.unwrap_or(f64::NAN),
         // A derived Cb is set from the analysis before any check runs.
         cb: d.cb.value.unwrap_or(f64::NAN),
         section: Some(section),
