@@ -50,6 +50,7 @@ import {
   bindSteelResultViews,
 } from "./steel-design.js";
 import { concreteWorkspace } from "./design-previews.js";
+import { stabilityWorkspace } from "./stability.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -235,6 +236,29 @@ const concrete = concreteWorkspace({
     $("#show-results").click();
   },
   download,
+});
+const stability = stabilityWorkspace({
+  gateway,
+  viewport,
+  download,
+  onError: message,
+  onRunning: (v) => {
+    setAnalysing(v);
+    setBusy(v);
+  },
+  getContext: () => {
+    const eng = project?.displayUnits === "engineeringMetric";
+    return {
+      modelHash,
+      caseId: $("#result-case").value,
+      casePayload: analysisPayload(),
+      dirty: formDirty,
+      locked: busy || readOnly || analysing || !project,
+      label: (id) => label(id),
+      length: (v) => `${format(eng ? v * 1000 : v)} ${eng ? "mm" : "m"}`,
+      moment: (v) => `${format(eng ? v / 1000 : v)} ${eng ? "kN·m" : "N·m"}`,
+    };
+  },
 });
 const modelTools = modeling({
   getProject: () => project,
@@ -1409,6 +1433,11 @@ function renderResults() {
     concrete.results($("#results-content"));
     return;
   }
+  if (tab === "stability") {
+    $("#export-csv").disabled = true;
+    stability.render($("#results-content"));
+    return;
+  }
   if (tab === "steel-overview") {
     $("#export-csv").disabled = true;
     overview.render($("#results-content"));
@@ -1641,6 +1670,7 @@ function renderResults() {
 for (const b of document.querySelectorAll("[data-tab]"))
   b.onclick = () => {
     tab = b.dataset.tab;
+    if (tab !== "stability") stability.hide();
     if ($("#results-content").hidden) $("#toggle-results")?.click();
     document
       .querySelectorAll("[data-tab]")
@@ -1893,6 +1923,8 @@ $("#export-report").onclick = () => {
               run.sourceProvenance.kind === "modelAnalysis" &&
               run.sourceProvenance.resultId === result.resultId,
           ),
+        // A stability run of the current model, whichever case it analysed.
+        stabilityRun: stability.current(modelHash),
       }),
       "text/html",
     );

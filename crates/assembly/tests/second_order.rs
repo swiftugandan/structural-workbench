@@ -298,3 +298,46 @@ fn column_moments_follow_the_exact_p_delta_shape() {
         }
     }
 }
+
+#[test]
+fn the_first_order_record_is_the_linear_response_to_the_same_loads() {
+    // Without an imperfection, iteration 0 is the linear analysis (exactly, for
+    // nodal loads, although it runs on the subdivided mesh: 1e-10 allows for
+    // rounding across the two meshes), so second-order over first-order sway
+    // is the exact amplification.
+    let case = oracle()["secondOrder"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|c| c["id"] == "S-POR-PD-050")
+        .unwrap()
+        .clone();
+    let model = lateral_portal(case["PPerColumn"].as_f64().unwrap());
+    let r = second_order(&model, "LC1", &settings(8)).unwrap();
+    let linear = analyse(&model, "LC1").unwrap();
+    let first = &r.numerical_checks["firstOrder"];
+    for (i, a) in linear.node_displacements.iter().enumerate() {
+        let b = first["nodeDisplacements"][i].as_f64().unwrap();
+        assert!(
+            (a - b).abs() <= 1e-10 * a.abs().max(1e-9),
+            "{i}: {a} vs {b}"
+        );
+    }
+    for (i, a) in linear.reactions.iter().enumerate() {
+        let b = first["reactions"][i].as_f64().unwrap();
+        assert!((a - b).abs() <= 1e-9 * a.abs().max(1.), "{i}: {a} vs {b}");
+    }
+    let first_sway = 0.5
+        * (first["nodeDisplacements"][r.node_ids.iter().position(|n| n == "tl").unwrap() * 6]
+            .as_f64()
+            .unwrap()
+            + first["nodeDisplacements"][r.node_ids.iter().position(|n| n == "tr").unwrap() * 6]
+                .as_f64()
+                .unwrap());
+    let amplification = sway(&r) / first_sway;
+    let exact = case["exact"]["amplification"].as_f64().unwrap();
+    assert!(
+        (amplification / exact - 1.).abs() <= 1e-3,
+        "{amplification} vs {exact}"
+    );
+}

@@ -1154,6 +1154,56 @@ export class Viewport {
           line(curve[i - 1], curve[i], 2.5, blue);
       }
     }
+    // Stability overlays (stability-v1), drawn only while they belong to the
+    // current model and no action diagram is shown:
+    // - a buckling mode is a normalised shape, not a response; its largest
+    //   translation is drawn at 12 % of the model extent;
+    // - a second-order response is drawn at the deformation scale, so it
+    //   overlays the first-order shape of the same case one to one.
+    const overlay =
+      !component && this.stabilityOverlay?.modelHash === this.currentModelHash
+        ? this.stabilityOverlay
+        : null;
+    delete this.canvas.dataset.modeShape;
+    delete this.canvas.dataset.secondOrderShape;
+    if (overlay?.kind === "mode") {
+      const violet = [0.45, 0.24, 0.66, 1];
+      const k = this.extent * 0.12;
+      for (const member of overlay.members) {
+        if (!this.isVisible(member.id)) continue;
+        const points = member.stations.map((s) =>
+          this.projectPoint(s.position.map((v, a) => v + k * s.displacement[a])),
+        );
+        for (let i = 1; i < points.length; i++)
+          line(points[i - 1], points[i], 2.5, violet);
+      }
+      this.canvas.dataset.modeShape = overlay.label;
+    } else if (overlay?.kind === "secondOrder") {
+      const teal = [0.03, 0.52, 0.52, 1];
+      for (const member of overlay.members) {
+        if (!this.isVisible(member.id) || !member.samples?.length) continue;
+        const curve = deformationProjection(
+          member.samples,
+          (p) => this.projectPoint(p),
+          this.scale,
+        );
+        for (let i = 1; i < curve.length; i++)
+          line(curve[i - 1], curve[i], 2.5, teal);
+      }
+      this.canvas.dataset.secondOrderShape = overlay.label;
+    }
+    const overlayLegend = document.querySelector("#stability-legend");
+    if (overlayLegend) {
+      overlayLegend.hidden = !overlay;
+      overlayLegend.querySelector("i").className =
+        `legend-line ${overlay?.kind === "secondOrder" ? "teal" : "violet"}`;
+      overlayLegend.querySelector("output").textContent =
+        overlay?.kind === "secondOrder"
+          ? `${overlay.label} × ${this.scale}`
+          : overlay
+            ? `${overlay.label} · shape only`
+            : "";
+    }
     if (this.snapPreview) {
       const p = this.projectPoint(this.snapPreview.position);
       p[2] = 0.05;

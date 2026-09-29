@@ -649,6 +649,11 @@ small {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* Reads above model labels that reach the corner. */
+  z-index: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 92%);
 }
 .view-legend > span {
   display: flex;
@@ -659,6 +664,12 @@ small {
   width: 25px;
   height: 2px;
   background: #51667c;
+}
+.legend-line.violet {
+  background: rgb(115 61 168);
+}
+.legend-line.teal {
+  background: rgb(8 133 133);
 }
 .legend-line.blue {
   background: #3275e1;
@@ -906,6 +917,13 @@ th {
   font-weight: 500;
   position: sticky;
   top: 0;
+}
+/* Row headers scroll with their row; only column headers stay pinned. */
+tbody th {
+  position: static;
+  background: none;
+  font-size: 12px;
+  color: inherit;
 }
 th:first-child,
 td:first-child {
@@ -4062,4 +4080,23 @@ body.design-workspace {
 .physical-object {
   content-visibility: auto;
   contain-intrinsic-size: auto 64px;
+}
+
+/* Stability results workspace (M09) */
+.stability-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: end;
+  margin: 8px 0 12px;
+}
+.stability-settings fieldset {
+  display: flex;
+  gap: 12px;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.stability-settings input[type="number"] {
+  width: 7em;
 }

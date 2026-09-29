@@ -272,6 +272,9 @@ pub fn second_order(
 
     let mut axial = vec![0.; elements.len()];
     let mut previous: Option<Vec<f64>> = None;
+    // Iteration 0 solves K u = F with the same loads (imperfection included)
+    // on the same mesh: the first-order response the second-order one amplifies.
+    let mut first_order: Option<Vec<f64>> = None;
     let mut history: Vec<Value> = vec![];
     let mut growing = 0;
     let mut last_increment = f64::INFINITY;
@@ -295,6 +298,9 @@ pub fn second_order(
                 Err(e) => return Err(e),
             };
             workbench_model::finite(&u)?;
+            if iteration == 0 {
+                first_order = Some(u.clone());
+            }
             let next: Vec<f64> = elements.iter().map(|e| e.axial(&u)).collect();
             let (dt, dr) = match &previous {
                 Some(prev) => (
@@ -348,25 +354,31 @@ pub fn second_order(
         ));
     };
 
-    // Recovery with the axial forces of the converged tangent.
-    let ends: Vec<[f64; 12]> = elements
-        .iter()
-        .zip(&axial)
-        .map(|(e, &n)| e.end_actions(&u, n))
-        .collect();
-    let mut reactions = f.iter().map(|v| -v).collect::<Vec<_>>();
-    for (e, end) in elements.iter().zip(&ends) {
-        let ids = e.ids();
-        for block in 0..4 {
-            let v = global(
-                e.r,
-                [end[block * 3], end[block * 3 + 1], end[block * 3 + 2]],
-            );
-            for a in 0..3 {
-                reactions[ids[block * 3 + a]] += v[a];
+    // Support reactions of a displacement field with the given axial forces:
+    // element end actions assembled globally, minus the applied loads.
+    let reactions_of = |u: &[f64], axial: &[f64]| -> (Vec<[f64; 12]>, Vec<f64>) {
+        let ends: Vec<[f64; 12]> = elements
+            .iter()
+            .zip(axial)
+            .map(|(e, &n)| e.end_actions(u, n))
+            .collect();
+        let mut reactions = f.iter().map(|v| -v).collect::<Vec<_>>();
+        for (e, end) in elements.iter().zip(&ends) {
+            let ids = e.ids();
+            for block in 0..4 {
+                let v = global(
+                    e.r,
+                    [end[block * 3], end[block * 3 + 1], end[block * 3 + 2]],
+                );
+                for a in 0..3 {
+                    reactions[ids[block * 3 + a]] += v[a];
+                }
             }
         }
-    }
+        (ends, reactions)
+    };
+    // Recovery with the axial forces of the converged tangent.
+    let (ends, reactions) = reactions_of(&u, &axial);
     // Global balance of applied loads and support reactions, forces and
     // moments, with moments taken about the origin in the deformed geometry.
     let mut balance = [0.; 6];
@@ -574,21 +586,38 @@ pub fn second_order(
             workbench_model::finite(&s.actions)?;
         }
     }
-    let node_displacements: Vec<f64> = original
-        .nodes
-        .iter()
-        .flat_map(|n| (0..6).map(|a| u[d.node[&n.id] * 6 + a]).collect::<Vec<_>>())
-        .collect();
-    let mut support_values = vec![];
-    for s in &original.supports {
-        for a in 0..6 {
-            support_values.push(if s.fixed[a] {
-                reactions[d.node[&s.node] * 6 + a]
-            } else {
-                0.
-            });
-        }
-    }
+    let physical_displacements = |u: &[f64]| -> Vec<f64> {
+        original
+            .nodes
+            .iter()
+            .flat_map(|n| (0..6).map(|a| u[d.node[&n.id] * 6 + a]).collect::<Vec<_>>())
+            .collect()
+    };
+    let support_reactions = |reactions: &[f64]| -> Vec<f64> {
+        original
+            .supports
+            .iter()
+            .flat_map(|s| {
+                (0..6)
+                    .map(|a| {
+                        if s.fixed[a] {
+                            reactions[d.node[&s.node] * 6 + a]
+                        } else {
+                            0.
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .collect()
+    };
+    let first_u = first_order.expect("iteration 0 always runs");
+    let (_, first_reactions) = reactions_of(&first_u, &vec![0.; elements.len()]);
+    let first_order_json = json!({
+        "nodeDisplacements": physical_displacements(&first_u),
+        "reactions": support_reactions(&first_reactions),
+    });
+    let node_displacements = physical_displacements(&u);
+    let support_values = support_reactions(&reactions);
     let mut generated = vec![];
     if original.analysis_mode == "planarXZ" {
         for n in &original.nodes {
@@ -658,6 +687,7 @@ pub fn second_order(
             "balanceScale": scale,
             "axialForces": axial_forces,
             "imperfection": {"settings": imperfection_json, "equivalentNodalForces": sway_forces},
+            "firstOrder": first_order_json,
         }),
         diagnostics: vec![
             json!({"code": "FLEXURAL_ONLY", "severity": "info", "message": "Flexural second-order effects only; torsional and lateral-torsional effects are excluded"}),
