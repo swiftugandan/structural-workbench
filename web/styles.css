@@ -4167,3 +4167,26 @@ body.design-workspace {
     grid-template-columns: 1fr;
   }
 }
+
+/* Dynamic response (response-v1, ADR 0023). */
+.response-plot {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  margin: 6px 0 10px;
+}
+.response-pick {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 6px 0;
+}
+.response-workspace textarea {
+  width: 100%;
+  font-family: ui-monospace, monospace;
+}
+.response-workspace tr.governing td,
+.response-workspace tr.governing th {
+  font-weight: 600;
+}

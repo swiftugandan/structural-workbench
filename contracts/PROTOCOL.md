@@ -14,7 +14,7 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 | applyCommand | {command: CommandV1} | new revision, modelHash, affected IDs, undo availability and render delta |
 | undo / redo | {} | same shape as command acknowledgement |
 | validateModel | {} | diagnostics[], canAnalyse and estimated memory |
-| analyse | {caseIds: string[], combinationIds: string[], analysisType?: "linearStatic" \| "elasticBuckling" \| "secondOrder" \| "modal", stability?: {…}, modal?: {…}} | jobId and accepted snapshot hash; completion arrives as an event. Stability types: see "Stability analyses (stability-v1)"; modal: see "Modal analysis (dynamics-v1)" |
+| analyse | {caseIds: string[], combinationIds: string[], analysisType?: "linearStatic" \| "elasticBuckling" \| "secondOrder" \| "modal" \| "harmonic" \| "responseSpectrum", stability?: {…}, modal?: {…}, harmonic?: {…}, responseSpectrum?: {…}} | jobId and accepted snapshot hash; completion arrives as an event. Stability types: see "Stability analyses (stability-v1)"; modal: see "Modal analysis (dynamics-v1)"; harmonic and responseSpectrum: see "Dynamic response (response-v1)" |
 | cancelAnalysis | {jobId: string} | job status cancelled or alreadyFinished |
 | getSnapshot | {includeView: boolean} | ProjectV1 plus separate optional view state |
 | queryGeometry | {kind: ray or snap or measure, query: object, viewRevision: integer} | entity IDs, f64 positions/distances and matching viewRevision |
@@ -34,7 +34,7 @@ From M03 the browser hosts two Workers: a durable model Worker owns create/impor
 
 ## 2 Command vocabulary
 
-CommandV1 is {id, type, args}. Supported types and args are AddNode(node), AddMember(member), SetNodePosition({id,position}), SetMaterial(material), SetSection(section), SetSupport(support), SetLoadCase(loadCase), SetLoad(load), SetCombination(combination), SetMassSource(massSource), SetGravity({gravity}), SetAnalysisMode({mode}), MoveNodes({ids,delta}), CopySelection({ids,delta,connectToExisting:false}), CopyBay({ids,delta,count,includeSupports:true,tieUnsupportedNodes:true,setSpatial?,stabilizeBases?}), SplitMember({id,stations}), MergeNodes({sourceIds,targetId}), DeleteEntities({ids,cascade:false}) (including mass sources) and Batch({commands}). Envelope names in parentheses are records, not executable functions.
+CommandV1 is {id, type, args}. Supported types and args are AddNode(node), AddMember(member), SetNodePosition({id,position}), SetMaterial(material), SetSection(section), SetSupport(support), SetLoadCase(loadCase), SetLoad(load), SetCombination(combination), SetMassSource(massSource), SetResponseSpectrum(responseSpectrum), SetGravity({gravity}), SetAnalysisMode({mode}), MoveNodes({ids,delta}), CopySelection({ids,delta,connectToExisting:false}), CopyBay({ids,delta,count,includeSupports:true,tieUnsupportedNodes:true,setSpatial?,stabilizeBases?}), SplitMember({id,stations}), MergeNodes({sourceIds,targetId}), DeleteEntities({ids,cascade:false}) (including mass sources and response spectra) and Batch({commands}). Envelope names in parentheses are records, not executable functions.
 
 Upsert-style Set operations must specify expected entity existence as create/update to detect accidental overwrites. Batch uses one model revision and one undo entry; nested Batch is rejected. Import commands do not bypass validation. Member splitting preserves member-load total and physical-parent provenance; IDs of new entities are deterministic from the command ID and ordinal. Undo stores sufficient inverse data to restore exact engineering values and IDs.
 
@@ -299,3 +299,48 @@ response buffers. Failures (`NO_MASS`, `NEGATIVE_MASS`,
 `UNSTABLE_MODEL`, `STURM_MISMATCH`) end in
 `analysisFailed` with no payload. A frequency or participation ratio is never
 a floor-vibration or code serviceability verdict.
+
+## Dynamic response (response-v1, M15)
+
+Formulation: `docs/formulations/response.md`; decisions: ADR 0023. Both
+types use the `analyse` job lifecycle and the dynamics-v1 mass (declared
+`massSources`; `NO_MASS` otherwise).
+
+**Harmonic.** `analysisType: "harmonic"` takes exactly one case or
+combination: the load amplitude F, applied as F cos(Ωt). `harmonic` is
+`{frequencies: [Hz…] | sweep: {from, to, count: 2–200, spacing?:
+"linear" | "log"}, damping: {ratio, frequencies: [f₁, f₂]} | {a0, a1},
+massMatrix?, subdivisions?}`. A sweep is expanded in Rust. Up to 200
+frequencies, each > 0, and at most 200 000 node-frequency pairs. The ratio
+form needs 0 < ζ < 1 and 0 < f₁ < f₂; the coefficient form needs a0 ≥ 0 and
+a1 > 0. Each frequency is solved directly (complex LDLᵀ) with a residual
+check (`RESIDUAL_FAILURE` above 1e-8). The result has `analysisType:
+"harmonic"`, the ResultHeader identity fields, `caseId`, `subdivisions`,
+`massMatrix`, `damping {a0, a1, ratio, frequencies}`, `nodeIds`,
+`supportIds`, `frequencies[] {frequency, omega, dampingRatio, residual,
+displacementRe[6n], displacementIm[6n], reactionRe[6s], reactionIm[6s]}`
+(u(t) = Re(U e^{iΩt})), `numericalChecks`, `disclosures` and `diagnostics`.
+Member actions are not reported.
+
+**Response spectrum.** `analysisType: "responseSpectrum"` takes no case.
+`responseSpectrum` is `{spectrumId, direction: "X" | "Y" | "Z", scale?: > 0
+(default 1), combination?: "srss" | "cqc" (default cqc), modes?,
+massMatrix?, subdivisions?, participationTarget?}`. A mode whose period
+exceeds the spectrum is `SPECTRUM_RANGE`. No mass in the direction is
+`NO_MASS`, and an unknown spectrum is `DANGLING_REFERENCE`. The result has
+`analysisType: "responseSpectrum"`, identity fields, `spectrumId`,
+`direction`, `scale`, `combination`, `dampingRatio`, `modes[] {mode, omega,
+frequency, period, sa, participationFactor, effectiveMass,
+effectiveMassRatio, baseShear}`, `participation` (as modal, one direction),
+`nodeIds`, `nodeDisplacements[6n]`, `supportIds`, `reactions[6s]`,
+`baseReaction[3]`, `members[] {id, stations[] {station, side?, actions[6]}}`
+(`|N|, |Vy|, |Vz|, |T|, |My|, |Mz|`), `numericalChecks`, `disclosures` and
+`diagnostics`. Every combined value is a non-negative peak magnitude.
+
+**Spectra (schema 1.6.0).** A project `responseSpectra[]` entry is `{id,
+name, points: [[T, Sa]…], dampingRatio, reference}`. It has 2–200 points,
+T strictly increasing from 0 s, Sa ≥ 0 in m/s², 0 < ζ < 1, and a label
+prefix `rs`. `SetResponseSpectrum` follows the `existence` rule and accepts
+`saUnit: "m/s2" | "g"`; Rust converts the value and stores SI only. Invalid
+tables are `INVALID_SPECTRUM`. 1.5.0 projects migrate with no spectra. A
+spectrum is the engineer's input and never a code spectrum.

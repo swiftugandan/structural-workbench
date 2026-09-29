@@ -52,6 +52,7 @@ import {
 import { concreteWorkspace } from "./design-previews.js";
 import { stabilityWorkspace } from "./stability.js";
 import { modalWorkspace, describeSource } from "./modal.js";
+import { responseWorkspace } from "./response.js";
 import { studyWorkspace } from "./study.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
@@ -277,6 +278,23 @@ const modalView = modalWorkspace({
         "Apply or cancel property changes before editing mass sources.",
       );
     entityList("massSources");
+  },
+  getContext: () => ({
+    project,
+    modelHash,
+    dirty: formDirty,
+    locked: busy || readOnly || analysing || !project,
+    label: (id) => label(id),
+  }),
+});
+const responseView = responseWorkspace({
+  gateway,
+  command,
+  download,
+  onError: message,
+  onRunning: (v) => {
+    setAnalysing(v);
+    setBusy(v);
   },
   getContext: () => ({
     project,
@@ -1492,6 +1510,13 @@ function renderResults() {
     $("#export-csv").disabled = true;
     stability.hide();
     modalView.render($("#results-content"));
+    return;
+  }
+  if (tab === "response") {
+    $("#export-csv").disabled = true;
+    stability.hide();
+    modalView.hide();
+    responseView.render($("#results-content"));
     return;
   }
   if (tab === "steel-overview") {

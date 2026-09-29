@@ -227,6 +227,52 @@
       ]
     },
     {
+      "capabilityId": "harmonic-response",
+      "scopeKey": "M15 numerical family / response-v1 / steady-state harmonic response with Rayleigh damping / direct complex solve",
+      "implementationStatus": "partial",
+      "verificationStatus": "numerical-family-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Beyond the analysis MVP (whose SPEC exclusions still list response spectrum, time-history and harmonic analysis); time-history analysis remains excluded",
+        "One load case or combination applied in phase as F cos(Ωt); Rayleigh damping with a₁ > 0",
+        "Complex displacements and support reactions per frequency; member actions are not reported",
+        "Not a vibration serviceability or comfort check"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/response.md",
+        "docs/adr/0023-harmonic-and-response-spectrum.md",
+        "fixtures/dynamics/response-oracle.json",
+        "crates/assembly/tests/response.rs",
+        "evidence/M15/response-gate/m15-response-acceptance.json",
+        "evidence/M15/response-gate/ACCEPTANCE.md"
+      ]
+    },
+    {
+      "capabilityId": "response-spectrum",
+      "scopeKey": "M15 numerical family / response-v1 / user spectrum, one direction, SRSS or CQC modal combination",
+      "implementationStatus": "partial",
+      "verificationStatus": "numerical-family-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [
+        "R-SEISMIC-CODE"
+      ],
+      "limitations": [
+        "The spectrum is the engineer's table (T, Sa); no code spectrum, behaviour factor or accidental torsion is supplied",
+        "One direction per run; directional combination is not provided",
+        "Combined values are peak magnitudes (signs and simultaneity lost); no missing-mass correction",
+        "Not a seismic code check; the M15 parent is not accepted"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/response.md",
+        "docs/adr/0023-harmonic-and-response-spectrum.md",
+        "fixtures/dynamics/response-oracle.json",
+        "crates/assembly/tests/response.rs",
+        "evidence/M15/response-gate/m15-response-acceptance.json",
+        "evidence/M15/response-gate/ACCEPTANCE.md"
+      ]
+    },
+    {
       "capabilityId": "webgpu-viewport",
       "scopeKey": "WebGPU / orthographic 3D / GPU ID / Rust screen picking",
       "implementationStatus": "implemented",
@@ -351,7 +397,7 @@
       "resourceBlockers": [],
       "limitations": [
         "Outside analysis MVP; see PARITY_ROADMAP.md",
-        "The M10 plate-v1 and M12 rc-column numerical families are listed separately; their code checks remain outside"
+        "The M10 plate-v1, M12 rc-column and M15 response-v1 numerical families are listed separately; their code checks remain outside"
       ],
       "evidenceReferences": []
     }

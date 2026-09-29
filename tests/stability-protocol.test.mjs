@@ -136,6 +136,8 @@ test("capabilities advertise the stability types with precise exclusions", () =>
     "elasticBuckling",
     "secondOrder",
     "modal",
+    "harmonic",
+    "responseSpectrum",
   ]);
   assert.ok(
     caps.excludedDomains.includes(

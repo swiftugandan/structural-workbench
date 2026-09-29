@@ -224,7 +224,7 @@ impl Kernel {
                 if !kind.takes_cases() && !ids.is_empty() {
                     return Err(err(
                         "INVALID_LOAD",
-                        "Modal analysis takes no load case or combination; its mass comes from the declared mass sources",
+                        "Modal and response-spectrum analyses take no load case or combination; their mass comes from the declared mass sources",
                     ));
                 }
                 if kind.takes_cases() && ids.is_empty() {
@@ -239,7 +239,7 @@ impl Kernel {
                 {
                     return Err(err(
                         "INVALID_LOAD",
-                        "Stability analyses take exactly one case or combination; envelopes are not valid inputs",
+                        "Stability and harmonic analyses take exactly one case or combination; envelopes are not valid inputs",
                     ));
                 }
                 match kind {
@@ -261,6 +261,14 @@ impl Kernel {
                     }
                     analysis_request::AnalysisKind::Modal(settings) => {
                         let result = workbench_assembly::modal(p, &settings)?;
+                        Ok(serde_json::to_value(result).unwrap())
+                    }
+                    analysis_request::AnalysisKind::Harmonic(settings) => {
+                        let result = workbench_assembly::harmonic(p, &ids[0], &settings)?;
+                        Ok(serde_json::to_value(result).unwrap())
+                    }
+                    analysis_request::AnalysisKind::ResponseSpectrum(settings) => {
+                        let result = workbench_assembly::response_spectrum(p, &settings)?;
                         Ok(serde_json::to_value(result).unwrap())
                     }
                 }
@@ -582,6 +590,12 @@ fn apply_inner(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
             }
             "massSources"
         }
+        "SetResponseSpectrum" => {
+            if v.get("responseSpectra").is_none() {
+                v["responseSpectra"] = json!([]);
+            }
+            "responseSpectra"
+        }
         "SetGravity" => {
             v["gravity"] = a["gravity"].clone();
             return Ok(());
@@ -604,6 +618,7 @@ fn apply_inner(v: &mut Value, c: &Value, nested: bool) -> Result<()> {
                 "loads",
                 "combinations",
                 "massSources",
+                "responseSpectra",
             ] {
                 if let Some(items) = v.get_mut(k).and_then(Value::as_array_mut) {
                     items.retain(|item| !ids.contains(&item["id"]));
@@ -696,6 +711,35 @@ fn normalise_units(kind: &str, a: &mut Value) -> Result<()> {
                 }
             }
         }
+        "SetResponseSpectrum" => {
+            // Sa in m/s² (default) or g; periods in seconds. Rust converts and
+            // stores SI only.
+            let g = match a.get("saUnit").and_then(Value::as_str) {
+                None | Some("m/s2") => 1.,
+                Some("g") => 9.80665,
+                _ => {
+                    return Err(err(
+                        "INVALID_SCHEMA",
+                        "saUnit must be \"m/s2\" or \"g\"",
+                    ));
+                }
+            };
+            if let Some(object) = a.as_object_mut() {
+                object.remove("saUnit");
+            }
+            if let Some(points) = a.get_mut("points").and_then(Value::as_array_mut) {
+                for point in points {
+                    let pair = point
+                        .as_array_mut()
+                        .filter(|p| p.len() == 2)
+                        .ok_or_else(|| err("INVALID_SPECTRUM", "Each point must be [T, Sa]"))?;
+                    let sa = pair[1]
+                        .as_f64()
+                        .ok_or_else(|| err("INVALID_SPECTRUM", "Sa must be a number"))?;
+                    pair[1] = json!(sa * g);
+                }
+            }
+        }
         "SetMassSource" => {
             if a.get("factor").is_some() {
                 quantity(&mut a["factor"], "dimensionless")?;
@@ -759,7 +803,7 @@ fn capabilities_payload() -> Value {
     json!({
         "protocolVersion": 1,
         "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0"],
-        "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder", "modal"],
+        "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder", "modal", "harmonic", "responseSpectrum"],
         "designProfiles": workbench_design::default_registry()
             .metadata()
             .into_iter()
