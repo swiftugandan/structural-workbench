@@ -14,7 +14,7 @@
     {
       "id": "M00",
       "name": "Solve and save a cantilever",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [],
       "release": "analysis-mvp",
       "resourceGates": [],
@@ -34,12 +34,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet. Accepted by its parent gate (evidence/M01/full/gate-M00.json, PASS 2026-09-23); recorded in delivery/state.json acceptedMilestones."
     },
     {
       "id": "M01",
       "name": "Draw and analyse a planar portal",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M00"
       ],
@@ -59,12 +59,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet. Accepted by its parent gate (evidence/M01/full/gate-M01.json, PASS 2026-09-23); recorded in delivery/state.json acceptedMilestones."
     },
     {
       "id": "M02",
       "name": "Compare service and strength load scenarios",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M01"
       ],
@@ -87,12 +87,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet. Accepted by its parent gate (evidence/M02/full/gate-M02.json, PASS 2026-09-23); recorded in delivery/state.json acceptedMilestones."
     },
     {
       "id": "M03",
       "name": "Model a spatial building frame",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M02"
       ],
@@ -109,12 +109,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet. Accepted by its parent gate (evidence/M03/full/gate-M03.json, PASS 2026-09-23); recorded in delivery/state.json acceptedMilestones."
     },
     {
       "id": "M04",
       "name": "Recover work and issue a calculation record",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M03"
       ],
@@ -131,12 +131,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet. Accepted by its parent gate (evidence/M04/full/gate-M04.json, PASS 2026-09-23); recorded in delivery/state.json acceptedMilestones."
     },
     {
       "id": "M05",
       "name": "Reuse geometry and compare sections",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M04"
       ],
@@ -153,12 +153,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet. Accepted by its parent gate (evidence/M05/full/gate-M05.json, PASS 2026-09-23); recorded in delivery/state.json acceptedMilestones."
     },
     {
       "id": "M06",
       "name": "Deliver the analysis MVP with elastic stress screening",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M05"
       ],
@@ -177,7 +177,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet. Accepted by its parent gate (evidence/M06/full/gate-M06.json, PASS 2026-09-23); recorded in delivery/state.json acceptedMilestones."
     },
     {
       "id": "M07",
