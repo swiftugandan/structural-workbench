@@ -13,6 +13,10 @@ async function openModel(page, load = 10000) {
     buffer: Buffer.from(JSON.stringify(model)),
   });
   await expect(page.locator("#kernel-status")).toContainText("ready");
+  // Viewport markers are drawn only once WebGPU is ready.
+  await expect(page.locator("#gpu-status")).toContainText("WEBGPU", {
+    timeout: 60000,
+  });
   await page.locator("[data-inspector-tab='steel']").click();
   await expect(page.locator("[data-testid='design-readiness']")).toHaveText(
     "INCOMPLETE",

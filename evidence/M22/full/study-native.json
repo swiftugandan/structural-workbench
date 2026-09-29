@@ -1,0 +1,40 @@
+{
+  "taskId": "M22-parent",
+  "milestone": "M22",
+  "sourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
+  "buildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T09:16:40.708Z",
+  "status": "PASS",
+  "testCount": 5,
+  "testIds": [
+    "errors_name_the_variant_step_path_and_stage",
+    "each_variant_matches_the_manual_edit_then_analyse_workflow",
+    "a_study_cannot_bypass_validation_or_capability_guards",
+    "studies_stay_within_their_budgets_before_any_analysis",
+    "replaying_a_study_reproduces_every_hash_and_value_exactly"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "workbench-assembly",
+    "--test",
+    "study"
+  ],
+  "artifacts": []
+}

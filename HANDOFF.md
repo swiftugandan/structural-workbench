@@ -1,3 +1,9 @@
+## Latest: M22 declarative studies accepted
+
+M22 passed its parent gate: `node tools/run-m22-parent.mjs` → `evidence/M22/full`. Studies (Analysis › Run study…, or `workbench-cli study`) are strict JSON-pointer sweeps applied to the validated open project, exactly like manual edits. They are budgeted (50 variants, 100 steps per variant, 1000 per study, sharing the analysis time limit) and cancellable from the toolbar. Every failure names its variant, step, path and stage. The new Study results tab shows observed values, ratios and full hashes. The HTML report embeds the study document with its replay identity (study digest, base model hash, solver build). The CLI replays byte for byte.
+
+GPU-readiness flakes (TEST-GPU-INIT-FLAKE-03): viewport assertions in model-visibility and native-steel-design now wait for `#gpu-status` to report WEBGPU.
+
 ## Latest: M14 modal analysis accepted
 
 M14 (dynamics-v1) passed its parent gate: `node tools/run-m14-parent.mjs` → `evidence/M14/full/gate-M14.json` and `ACCEPTANCE.md`. Projects (schema 1.4.0; 1.3.0 migrates by version) declare mass sources — self mass, a load case's gravity loads ÷ g, or nodal masses — under Model → Mass sources…, the explorer, or the Modal tab. Nothing is implied and self mass is never counted twice. The Modal tab runs consistent or lumped mass with a chosen mesh and mode count and lists frequencies, periods and effective-mass ratios with cumulative totals. It states per direction whether the participation target is met and how much mass sits in omitted modes, draws any mode (violet, shape only), and exports a vibration report (HTML, exact SI, mode-shape elevations) and the run JSON. The solver is the stability-v1 subspace iteration with a Sturm check on K + λ(−M).

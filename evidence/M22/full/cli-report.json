@@ -1,0 +1,37 @@
+{
+  "baseModelHash": "0867f6f9037cb9cd37cae3239b00ae48c979b00192f0c1069bac562b8de9cc1b",
+  "baseProject": "../models/B02.json",
+  "caseId": "LC1",
+  "solverBuildHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
+  "status": "ok",
+  "studyDigest": "9afc869fd954d74610266a90315e56ee0aa553f75767d9ecfd4fae928628d4df",
+  "studyId": "S22-E",
+  "studyName": "B02 material stiffness sweep",
+  "variantCount": 2,
+  "variants": [
+    {
+      "modelHash": "0867f6f9037cb9cd37cae3239b00ae48c979b00192f0c1069bac562b8de9cc1b",
+      "observed": {
+        "dof": "uz",
+        "nodeId": "n2",
+        "value": -0.04499999999999999
+      },
+      "resultId": "0867f6f9037cb9cd-LC1",
+      "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+      "steps": 1,
+      "variantId": "E200"
+    },
+    {
+      "modelHash": "d94bde41cf7ebf69a47ac50cbc4ed6ba81383aba293df110179e3d84ba1ab5a3",
+      "observed": {
+        "dof": "uz",
+        "nodeId": "n2",
+        "value": -0.0428571428571428
+      },
+      "resultId": "d94bde41cf7ebf69-LC1",
+      "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+      "steps": 1,
+      "variantId": "E210"
+    }
+  ]
+}

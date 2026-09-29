@@ -14,6 +14,10 @@ test("Inspect one storey's return stairs in plan, side and 3D without changing e
   await expect(page.locator("#model-count")).toHaveText(
     "447 nodes · 642 members",
   );
+  // The viewport publishes its scope once WebGPU is ready to draw.
+  await expect(page.locator("#gpu-status")).toContainText("WEBGPU", {
+    timeout: 60000,
+  });
   const hash = await page.locator("#hash-status").textContent();
   await page.locator("#view-storey").selectOption("level1");
   await page.locator("#view-layer").selectOption("layerstair");

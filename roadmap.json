@@ -571,7 +571,7 @@
     {
       "id": "M22",
       "name": "Automate a repeatable engineering study",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M06"
       ],
@@ -588,7 +588,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "Declarative studies accepted (evidence/M22/full): restricted JSON-pointer sweeps of linear static analysis on one Rust core from the native CLI and the browser, with deterministic replay identity, cancellation, budgets, step-located errors, validation/capability guards and manual-workflow equivalence. General scripting and multilingual reports deferred."
     },
     {
       "id": "M23",

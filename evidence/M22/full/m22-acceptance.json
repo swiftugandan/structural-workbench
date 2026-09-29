@@ -1,0 +1,164 @@
+{
+  "taskId": "M22-parent",
+  "milestone": "M22",
+  "sourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
+  "buildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
+  "lockHashes": {
+    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-29T09:17:11.314Z",
+  "status": "PASS",
+  "testCount": 8,
+  "testIds": [
+    "M22-INTERFACE",
+    "M22-REPLAY",
+    "M22-CANCELLATION",
+    "M22-BUDGETS",
+    "M22-LOCATED-ERRORS",
+    "M22-MANUAL-MATCH",
+    "M22-GUARDS",
+    "M22-EXPORT"
+  ],
+  "command": [
+    "node",
+    "tools/record-m22-acceptance.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "M22-INTERFACE",
+      "title": "Documented command JSON interface and native CLI on the same core",
+      "evidence": "ui_journey",
+      "tests": {
+        "study-cli": [
+          "tests::s22_e_sweep_changes_hash_and_tip"
+        ],
+        "study-cli-replay": [
+          "CLI report carries the build's solver source hash"
+        ],
+        "m22-browser": [
+          "M22-B: load study JSON, compare variants, download report"
+        ]
+      },
+      "observation": "The same execute_study_document runs from workbench-cli and from Analysis › Run study on the analysis Worker (contracts/PROTOCOL.md §1.1); the browser loads a declarative document, compares variants and downloads the report.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M22-REPLAY",
+      "title": "Deterministic replay",
+      "evidence": "regression_results",
+      "tests": {
+        "study-native": [
+          "replaying_a_study_reproduces_every_hash_and_value_exactly"
+        ],
+        "study-cli-replay": [
+          "CLI replay reproduces the report byte for byte",
+          "CLI report carries the study digest and base model hash"
+        ]
+      },
+      "observation": "Replaying a study reproduces every model/result/settings hash and observed value exactly; reports carry the study digest, base model hash and solver build that define the replay identity.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M22-CANCELLATION",
+      "title": "Cancellation",
+      "evidence": "failure_path",
+      "tests": {
+        "m22-browser": [
+          "M22-C: a running study can be cancelled and the Worker recovers"
+        ]
+      },
+      "observation": "A 50-variant study on the 447-node UKR01 model is cancelled from the toolbar; no partial report is kept, the open model is unchanged and the respawned Worker runs the next study.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M22-BUDGETS",
+      "title": "Resource budgets",
+      "evidence": "failure_path",
+      "tests": {
+        "study-native": [
+          "studies_stay_within_their_budgets_before_any_analysis"
+        ]
+      },
+      "observation": "At most 50 variants, 100 steps per variant and 1000 steps per study, checked before any analysis (STUDY_BUDGET); the whole run shares the project's analysis time limit and memory budget.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M22-LOCATED-ERRORS",
+      "title": "Errors tied to input steps",
+      "evidence": "failure_path",
+      "tests": {
+        "study-native": [
+          "errors_name_the_variant_step_path_and_stage"
+        ],
+        "m22-browser": [
+          "M22-C: study failures name the variant and step; guards are not bypassed"
+        ]
+      },
+      "observation": "Every failure names the variant, step, JSON pointer and stage (set, validate, analyse, observe) in its message and in details.studyLocation; the UI shows the location and no partial results.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M22-MANUAL-MATCH",
+      "title": "Results match manual workflows",
+      "evidence": "kernel_validation",
+      "tests": {
+        "study-native": [
+          "each_variant_matches_the_manual_edit_then_analyse_workflow"
+        ],
+        "m22-browser": [
+          "M22-C: a study variant matches the same edit made by hand"
+        ]
+      },
+      "observation": "A variant has the model hash, result id and bit-identical displacement of the same edit made by hand; in the browser the materials editor reaches the variant's hash and the analysed tip displacement matches.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M22-GUARDS",
+      "title": "No script bypasses validation or unsupported-capability guards",
+      "evidence": "failure_path",
+      "tests": {
+        "study-native": [
+          "a_study_cannot_bypass_validation_or_capability_guards"
+        ],
+        "m22-browser": [
+          "M22-C: study failures name the variant and step; guards are not bypassed"
+        ]
+      },
+      "observation": "Solver overrides, schema/identity/metadata targets, unsupported analysis settings and releases, dangling references, unknown study fields and no-op variants are refused through the same validation as manual edits.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M22-EXPORT",
+      "title": "Comparative report with every model/result hash",
+      "evidence": "exported_outcome",
+      "tests": {
+        "m22-browser": [
+          "M22-B: load study JSON, compare variants, download report"
+        ]
+      },
+      "observation": "The downloaded HTML report lists each variant's steps, observed value, ratio, model, result and settings hashes, and embeds the study document verbatim with its replay identity.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "Studies are restricted declarative JSON-pointer sweeps of linear static analysis on one case or combination; no general scripting language or Python runtime. Multilingual reports are deferred. Commercial PROKON parity remains UNKNOWN."
+}

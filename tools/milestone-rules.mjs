@@ -97,6 +97,14 @@ export const m14 = [
   "m14-browser",
   "m14-acceptance",
 ];
+export const m22 = [
+  "build",
+  "study-native",
+  "study-cli",
+  "study-cli-replay",
+  "m22-browser",
+  "m22-acceptance",
+];
 export const requiredIds = {
   "ux-acceptance": [
     "UX-01",
@@ -175,6 +183,22 @@ export const requiredIds = {
     "M06 stress screen: B02 shows elastic fibre stresses with disclaimer",
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
     "M06 release tour: analyse, stress screen, ledger, save and report",
+  ],
+  "m22-acceptance": [
+    "M22-INTERFACE",
+    "M22-REPLAY",
+    "M22-CANCELLATION",
+    "M22-BUDGETS",
+    "M22-LOCATED-ERRORS",
+    "M22-MANUAL-MATCH",
+    "M22-GUARDS",
+    "M22-EXPORT",
+  ],
+  "m22-browser": [
+    "M22-B: load study JSON, compare variants, download report",
+    "M22-C: a study variant matches the same edit made by hand",
+    "M22-C: study failures name the variant and step; guards are not bypassed",
+    "M22-C: a running study can be cancelled and the Worker recovers",
   ],
   "m14-acceptance": [
     "M14-SDOF-CANTILEVER",
@@ -403,6 +427,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 2)
   )
     errors.push(`${name}: failed, skipped or incomplete M14 browser journey`);
+  if (
+    name === "m22-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 4)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M22 browser journeys`);
   if (name === "hardware-windows-linux") {
     if (!["win32", "linux", "darwin"].includes(e.runner?.platform))
       errors.push(`${name}: required real-GPU runner OS missing`);

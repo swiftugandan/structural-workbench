@@ -1,0 +1,16 @@
+{
+  "milestone": "M22",
+  "status": "PASS",
+  "sourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
+  "buildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
+  "required": [
+    "build",
+    "study-native",
+    "study-cli",
+    "study-cli-replay",
+    "m22-browser",
+    "m22-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-29T09:17:11.792Z"
+}

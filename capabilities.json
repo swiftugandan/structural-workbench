@@ -119,6 +119,27 @@
       ]
     },
     {
+      "capabilityId": "declarative-studies",
+      "scopeKey": "M22 / JSON-pointer variant sweeps / linear static / native CLI and browser on one core",
+      "implementationStatus": "implemented",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "Restricted declarative JSON-pointer sweeps; no general scripting language or Python runtime",
+        "Linear static analysis of one case or combination per study",
+        "At most 50 variants, 100 steps per variant and 1000 steps per study; the run shares the project's analysis time limit",
+        "Multilingual reports are deferred"
+      ],
+      "evidenceReferences": [
+        "contracts/PROTOCOL.md",
+        "crates/assembly/tests/study.rs",
+        "tests/e2e/study.spec.js",
+        "evidence/M22/full/gate-M22.json",
+        "evidence/M22/full/ACCEPTANCE.md"
+      ]
+    },
+    {
       "capabilityId": "elastic-stress-screen",
       "scopeKey": "M06 / mechanics-v1 fibre stress / non-code disclaimer",
       "implementationStatus": "implemented",
@@ -272,7 +293,7 @@
     },
     {
       "capabilityId": "advanced-suite",
-      "scopeKey": "M10–M13, M15–M23",
+      "scopeKey": "M10–M13, M15–M21, M23",
       "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
       "comparisonStatus": "UNKNOWN",

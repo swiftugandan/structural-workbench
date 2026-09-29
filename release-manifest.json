@@ -1,5 +1,5 @@
 {
-  "sourceHash": "d7a6f89704619ef9bd94fb11c5c23244dd8f8682c7b7ab026c769996bf3fe28a",
+  "sourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
   "hashAlgorithmVersion": 1,
   "exclusions": [
     "evidence",
@@ -12,12 +12,12 @@
     "release-manifest.json"
   ],
   "files": {
-    "app.html": "018164819780f8c66744f2c4c62c3a982a67d7bb01ce10482704af01b1f46642",
-    "app.js": "a19333b7505c0040ef7445dc7fde78873a82db0fa3693320dc3cab2a3e887355",
+    "app.html": "4f71418163222b651b11293a093545feecb60e990b6cc6dc65b8f83ae2442a5f",
+    "app.js": "1974f870cfd7f9e01e057270ada8f162892f5ca919f6a2430382ee594ce793d9",
     "cad.js": "820cc8d27d9909e83bbc30b59c90330e46447336e3e81636ebf51b77c73ff68a",
     "canvas-tools.js": "521b224d56358812afb68b9349b6b66f6b05e67612bd42914102ea40a6f8d8e3",
     "capabilities-ledger.js": "abe15bb20ae34ddda443a18840254504331fe232e3c4f6560f7e2a6e11c1b272",
-    "capabilities.json": "ff61ed04c399a2c43f54e563ecb73fac50083ece6599c18a32637704255f5d33",
+    "capabilities.json": "4472bf628b7f3b50f7d7a886073378abf78f1b3b82b7b4b6c6d70a08acbd41ce",
     "command-menu.js": "28fd5ff5603bb65a7f3495ad26d8e08af6ac01b9f3423e6fd1ec71ff8d76b73b",
     "design-presentation.js": "fb0ed22c7c9fb1bcd1b97b3d916b421b8a613dba5749c42f0a7222815f0560be",
     "design-previews.js": "3da59102f62889dcd039ba9076b8e3f99a7f9af0577b32d61c4402f7e84bf562",
@@ -58,7 +58,7 @@
     "offline.js": "bcccfca2f33f5df48ae12b262aa2d7d3441113ba09b29394de42ef726a594834",
     "pkg/workbench_wasm_api.d.ts": "d10548e8886826f217301ea775d654b1313cf5023892fd6e1b353bab99af99ec",
     "pkg/workbench_wasm_api.js": "8d461be86b99c83069b2232716e82b8352e83177d85111840c9c539828d475f1",
-    "pkg/workbench_wasm_api_bg.wasm": "82b6c426884e204884c3ed60ddb5c1a8853e9a46afabf2c5da6ac27fc4084336",
+    "pkg/workbench_wasm_api_bg.wasm": "72248fa520bdaaca9ac559cfa438acacffc87809e39141feb2a683ae78ee8b02",
     "pkg/workbench_wasm_api_bg.wasm.d.ts": "7d6c878bc238330c0dee9958c135a644e7307ca9dd9b3e43aa71faab9cb4a1d7",
     "render/action-diagrams.js": "f967acbbb14ada645a52829f10074742f04d262f691b8c63c9b557856b3a0520",
     "render/connections.js": "718307212938168507007eb994bdf7fde2f71d6fe4d5bdbfd1696c44f550c0ba",
@@ -69,6 +69,7 @@
     "render/support-symbols.js": "f20ac5999120b6ef48dad26111012cd32e81770fc6598fce457ef29dd44d4ad3",
     "render/viewport.js": "74c24636b28f3068bc31028a772907653ab018cc287fbfa77fc22b01e1ec6326",
     "reports/report.js": "ea96351c66fd94372244dab673bc3cf6319be4cae3472f50d8c4b9a168f59a45",
+    "reports/study.js": "99bca8691feecd1e03129aca8ee2453b24929bf85336e286cdaf0be1d1a02c1b",
     "reports/vibration.js": "d67e45c6c0fb329e698b52ce6d14079404d5ae017c19712167aa3a2adde41302",
     "request-validator.js": "4ddeca886d0754675e3526a7a91a353ca609975e91249d77d5f9a1f57d3e188c",
     "response-validator.js": "f45bf00551b0b8afa449fee75c641d74c2b25adc025d060636d7d4a7fab4eb89",
@@ -84,13 +85,14 @@
     "steel-overview.js": "f643eb200841b813992220118c1769ed78323c4b435a39d6c63a3c1e1db7b303",
     "structural-icons.js": "8d4dde99cf08ad51a162d1c412f507fb33dc06063e4287eed8cd4df4c7f2aedf",
     "structure-workspace.js": "8abe0db3dd1667d67ef9aa154b9c109f4a7d2636e33f418da5443a8030fb8de8",
+    "study.js": "6cc08a08fd2abe86840615654e80ea1bf5b343c06cc6934031050fd64e8e3ffe",
     "styles.css": "281a9cf8a24b9a3844d81d86cbf99f472f454562b38f373bc9a2cf0ba7a4a8dc",
-    "sw.js": "b5863246b5f401decb635e7a9757139a8ef500c54cc0cc23625d83084f3a8b79",
+    "sw.js": "ab5bc2f0a6f367a78d41e13d39d2047043175cfc55bfd736c5c901baebc411b8",
     "topology.js": "1723af43311ec50b120967a09bc04ea472e7ec88d746a7cf6932ec6ebc533b84",
     "variants.js": "e7be206d5557d058a6364b1c78706ccc3cf92852e6ab5ef8f49a010a700d243b",
     "worker.js": "0a5a85384eb205ab89693d076af596d85e9a47da0aa08c7eb31aefb845b89e24",
     "workspace-ui.js": "3d9c8a9f0b73c688de5c994a6d56ce80fac92b7a11ec04b4878db61630cd6ef6"
   },
-  "buildHash": "4e5f4ec963cd94e7bf4307f54fde4c4f3dcf73b50ede29b14d8653e13ca1783c",
+  "buildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
   "releaseStatus": "working-preview-not-accepted"
 }

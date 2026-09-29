@@ -1,8 +1,8 @@
 {
   "stateVersion": 1,
   "specVersion": "1.0",
-  "activeMilestone": "M22",
-  "activeTask": "M22-A",
+  "activeMilestone": null,
+  "activeTask": null,
   "acceptedMilestones": [
     "M01",
     "M00",
@@ -13,7 +13,8 @@
     "M06",
     "M07",
     "M09",
-    "M14"
+    "M14",
+    "M22"
   ],
   "tasks": {
     "M00-A": {
@@ -3804,11 +3805,16 @@
       "id": "TEST-GPU-INIT-FLAKE-03",
       "useCase": "model-visibility.spec.js:6 waited 5 s for data-visible-members on UKR01 while the software WebGPU adapter was still initialising under full-batch load; passed alone",
       "dependencies": [],
-      "status": "READY",
+      "status": "ACCEPTED",
       "observed": [
         "2026-09-29 full batch: screenshot shows 'Initialising WebGPU\u2026'; isolated rerun passed"
       ],
-      "nextAction": "Decide whether the viewport scope attribute should be published before GPU readiness, or the journey should wait for #gpu-status ready; reproduce with --repeat-each under load"
+      "nextAction": "None",
+      "actualOutcomes": [
+        "Cause: viewport scope attributes and design markers are drawn only after the WebGPU device is ready; under full-batch load the software adapter took longer than the 5 s assertion window",
+        "Fix: model-visibility:6 and the native-steel-design journeys wait for #gpu-status to report WEBGPU (the UI's existing readiness signal) before viewport assertions, as study.spec already did",
+        "Both passed 2/2 alone before and after the change"
+      ]
     },
     "M14-A": {
       "id": "M14-A",
@@ -3928,6 +3934,78 @@
       "acceptedAt": "2026-09-29T08:35:40.895Z",
       "acceptanceMeaning": "dynamics-v1: undamped modal analysis with declared mass sources, consistent/lumped mass, translational participation, omitted-mode and target reporting and a vibration report. Criteria SDOF-CANTILEVER, MASS-MATRIX, MASS-SCALING, ORTHOGONALITY, EFFECTIVE-MASS, FRAME-BENCHMARK, MASS-SOURCES, FAILURE-PATHS, UI-JOURNEY, NOT-A-VERDICT, ORACLE-PROVENANCE. Damping, response spectra (M15), rotary inertia, releases and serviceability verdicts remain out of scope.",
       "nextAction": "M15 needs R-SEISMIC-CODE for code spectra; M13/M19/M20 blocked on resources; M21/M22 dependency-ready"
+    },
+    "M22-C": {
+      "id": "M22-C",
+      "useCase": "Study hardening: strict documents, budgets, step-located errors, guards, replay identity, cancellation, manual-workflow equivalence; Study results tab and report",
+      "dependencies": [
+        "M22-B"
+      ],
+      "status": "ACCEPTED",
+      "acceptedVia": "M22-parent",
+      "ownedPaths": [
+        "crates/assembly/src/study.rs",
+        "crates/assembly/tests/study.rs",
+        "web/study.js",
+        "web/reports/study.js",
+        "web/app.js",
+        "web/app.html",
+        "tests/e2e/study.spec.js",
+        "contracts/PROTOCOL.md"
+      ],
+      "actualOutcomes": [
+        "Study variants now apply steps to the validated base in the current schema, exactly like edits",
+        "STUDY_BUDGET: 50 variants, 100 steps/variant, 1000 steps/study before any analysis",
+        "details.studyLocation {variantIndex, variantId, stepIndex, path, stage} on every failure",
+        "Protected targets /schemaVersion /id /metadata /solverOverride; unknown fields refused",
+        "Report: studyDigest, baseModelHash, solverBuildHash; CLI replay byte-identical"
+      ],
+      "nextAction": "None"
+    },
+    "M22-parent": {
+      "id": "M22-parent",
+      "useCase": "Same-build M22 packaging: study native + CLI + CLI replay + browser journeys + acceptance criteria",
+      "dependencies": [
+        "M22-C"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "tools/run-m22-parent.mjs",
+        "tools/record-m22-acceptance.mjs",
+        "evidence/M22/full"
+      ],
+      "acceptanceIds": [
+        "SPECIFICATION-M22"
+      ],
+      "requiredCommands": [
+        "node tools/run-m22-parent.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "gate-M22",
+          "status": "PASS",
+          "evidencePath": "evidence/M22/full/gate-M22.json"
+        },
+        {
+          "check": "m22-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M22/full/m22-acceptance.json"
+        }
+      ],
+      "regression": {
+        "cargoWorkspace": "185 pass",
+        "contracts": "13 pass",
+        "fullBrowserBatchOnM14Build": "108/110; model-visibility:6 and native-steel-design:134 failed under load with WebGPU still initialising and passed alone 2/2; both now wait for #gpu-status ready"
+      },
+      "evidencePaths": [
+        "evidence/M22/full"
+      ],
+      "sourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
+      "buildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
+      "attempts": [],
+      "acceptedAt": "2026-09-29T09:17:11.792Z",
+      "acceptanceMeaning": "Restricted declarative JSON-pointer sweeps of linear static analysis, native CLI and browser on one core, with replay identity, cancellation, budgets, located errors, guards and manual-workflow equivalence. Criteria INTERFACE, REPLAY, CANCELLATION, BUDGETS, LOCATED-ERRORS, MANUAL-MATCH, GUARDS, EXPORT. General scripting, other analysis types in studies and multilingual reports are out of scope.",
+      "nextAction": "Remaining milestones need external resources or depend on blocked ones"
     }
   },
   "blockers": [
@@ -3978,9 +4056,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "90067de",
-  "lastVerifiedBuildHash": "4e5f4ec963cd94e7bf4307f54fde4c4f3dcf73b50ede29b14d8653e13ca1783c",
-  "nextAction": "Choose the next dependency-ready milestone whose resources exist: M22 (repeatable study automation) or M21 (BIM/CAD exchange, R-EXCHANGE-CORPUS not acquired). M08/M10/M11/M13/M15/M19/M20 need external resources.",
+  "lastVerifiedBuildHash": "b9f84f4ffa29441280b7a20d7542324e857ce82a64eb52734e94eb0dca2bc3ec",
+  "nextAction": "All dependency-ready milestones without external resource needs are accepted (M00-M07, M09, M14, M22). Blocked on resources: M08 (EC2 A1:2014 + UK NA+A2:2014), M10 (shell benchmarks), M11, M12, M13 (connection code/examples), M15 (seismic code), M16-M20, M21 (exchange corpus). Next without new resources: M07-LTB/S steel expansions within the acquired AISC resources, or the hinge-DOF slice that lifts the release limitation of stability-v1 and dynamics-v1.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "d7a6f89704619ef9bd94fb11c5c23244dd8f8682c7b7ab026c769996bf3fe28a",
-  "lastVerifiedScope": "M14 parent gate (modal native, protocol on built WASM, browser journey, acceptance criteria) on the same build; cargo workspace 180, contracts 13, security 2, numerical/WASM 33, affected browser specs 23."
+  "lastVerifiedSourceHash": "e192cfb3e433a7b46f80673c35a849f5dcbc3143d58eae4fcaf979548eb8f9a3",
+  "lastVerifiedScope": "M22 parent gate on the same build (study native, CLI, CLI replay, 4 browser journeys, acceptance); cargo workspace 185, contracts 13."
 }
