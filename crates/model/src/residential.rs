@@ -205,7 +205,9 @@ pub fn residential_reference() -> Result<Project> {
         ] {
             let id = member(&mut p, a, b, "flight", "stair", Some(9));
             // Step wedges: mean height half a riser over horizontal projection.
-            let slope = 2.4_f64.hypot(1.5);
+            // sqrt is correctly rounded everywhere; libm's hypot is not, so
+            // the generated model would differ in the last bit by platform.
+            let slope = (2.4_f64 * 2.4 + 1.5 * 1.5).sqrt();
             let projection = 2.4 / slope;
             udl(
                 &mut p,
