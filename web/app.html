@@ -82,6 +82,14 @@
             Pick up where you left off.<br />Import a portable project file.
           </p>
           <span class="card-link">Choose JSON file →</span></button
+        ><button class="start-card" id="import-exchange">
+          <span class="card-icon">⇄</span>
+          <h2>Import IFC or DXF</h2>
+          <p>
+            Bring in an IFC4 structural analysis model<br />or a DXF wireframe,
+            with a conversion review.
+          </p>
+          <span class="card-link">Choose IFC or DXF file →</span></button
         ><button class="start-card" id="worked-examples">
           <span class="card-icon">▱</span>
           <h2>Worked examples</h2>
@@ -498,6 +506,15 @@
       accept=".json,application/json"
       hidden
     />
+    <input
+      type="file"
+      id="exchange-file"
+      accept=".ifc,.dxf"
+      hidden
+      data-testid="exchange-file"
+    />
+    <button id="export-ifc" type="button" hidden>Export IFC</button>
+    <button id="export-dxf" type="button" hidden>Export DXF</button>
     <input
       type="file"
       id="study-file"

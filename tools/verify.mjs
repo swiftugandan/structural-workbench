@@ -13,6 +13,7 @@ import {
   m07,
   m09,
   m14,
+  m21,
   m22,
   recordIssues,
 } from "./milestone-rules.mjs";
@@ -30,6 +31,7 @@ const gates = {
   M07: ["evidence/M07/full", m07],
   M09: ["evidence/M09/full", m09],
   M14: ["evidence/M14/full", m14],
+  M21: ["evidence/M21/full", m21],
   M22: ["evidence/M22/full", m22],
 };
 const [fallbackDir, required] = gates[milestone] || [

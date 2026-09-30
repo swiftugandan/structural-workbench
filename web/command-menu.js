@@ -56,6 +56,9 @@ export function commandMenu({
           blocked: hasDraft,
         }),
         cmd("Open project…", "#open-project", "Mod+O", { blocked: hasDraft }),
+        cmd("Import IFC or DXF…", "#import-exchange", null, {
+          blocked: hasDraft,
+        }),
         cmd("Worked examples…", "#worked-examples", null, {
           blocked: hasDraft,
         }),
@@ -75,6 +78,12 @@ export function commandMenu({
         }),
         cmd("Export calculation report", "#export-report", "Mod+Shift+E"),
         cmd("Export results CSV", "#export-csv"),
+        cmd("Export IFC (analysis model)", "#export-ifc", null, {
+          blocked: () => !getProject(),
+        }),
+        cmd("Export DXF (wireframe)", "#export-dxf", null, {
+          blocked: () => !getProject(),
+        }),
         null,
         cmd("Projects home", "#home", null, {
           blocked: () => hasDraft() || $("#new-project").disabled,

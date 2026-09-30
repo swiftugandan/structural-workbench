@@ -11,9 +11,8 @@ pub use residential::residential_reference;
 pub mod structure;
 pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, MAX_BRACING_POINTS, MAX_SLAB_COLUMNS,
-    MECHANICS_COMMON_KEYS,
-    SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs, SlabColumn, SlabPlateInputs,
-    SteelDesign, SteelServiceability,
+    MECHANICS_COMMON_KEYS, SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs,
+    SlabColumn, SlabPlateInputs, SteelDesign, SteelServiceability,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
@@ -228,10 +227,7 @@ impl ResponseSpectrum {
             }
         }
         if self.points.windows(2).any(|w| w[1][0] <= w[0][0]) {
-            return Err(err(
-                "INVALID_SPECTRUM",
-                "Periods must increase strictly",
-            ));
+            return Err(err("INVALID_SPECTRUM", "Periods must increase strictly"));
         }
         if !(self.damping_ratio > 0. && self.damping_ratio < 1.) {
             return Err(err(
@@ -349,6 +345,12 @@ impl Project {
         self.response_spectra.sort_by(|a, b| a.id.cmp(&b.id));
         for c in &mut self.combinations {
             c.terms.sort_by(|a, b| a.case.cmp(&b.case));
+        }
+        // A self weight's members are a set: order must not change the hash.
+        for l in &mut self.loads {
+            if let Load::SelfWeight { members, .. } = l {
+                members.sort();
+            }
         }
     }
     pub fn hash(&self) -> String {

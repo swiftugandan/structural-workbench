@@ -11,6 +11,9 @@ requestId is unique for the session. expectedRevision is null only for capabilit
 | capabilities | {} | protocolVersion, schemaVersions[], analysisTypes[], limits (nodes/members/cases/combinations/activeDofs/memoryMiB), gpu status, designProfiles[] (each: id, standard, edition, designMethod, enabled, resourceGate, supportedSectionFamilies, supportedChecks, limitations), comparisonStatus (`UNKNOWN` until licensed commercial comparisons exist), supportedDomains[], excludedDomains[], domainDisclosure, limitations[] |
 | createProject | {project: ProjectV1} | snapshot header and render delta |
 | importProject | {jsonUtf8: string, replaceCurrent: boolean} | validated snapshot header, migration report and render delta |
+| exchangeRead | {format: "ifc" \| "dxf", fileName: string, text: string} | Read report: source {format, fileName, sha256, bytes, schema}, units[], counts, decisions[], ledger[], blocking[]. Needs no project and changes nothing. See "Model exchange (exchange-v1, M21)" |
+| exchangeImport | {format, fileName, text, mapping: {format: "workbench-exchange-mapping-v1", sourceSha256, answers}} | Snapshot of the imported project plus conversionRecord; replaces the session atomically like importProject |
+| exchangeExport | {format: "ifc" \| "dxf", timestamp?: string} | {fileName, mediaType, text, sha256, ledger[], projectHash} |
 | applyCommand | {command: CommandV1} | new revision, modelHash, affected IDs, undo availability and render delta |
 | undo / redo | {} | same shape as command acknowledgement |
 | validateModel | {} | diagnostics[], canAnalyse and estimated memory |
@@ -54,7 +57,7 @@ Buffers are little-endian when serialised to files; in-memory typed arrays follo
 
 ## 4 Diagnostic registry
 
-Minimum stable codes: INVALID_SCHEMA, UNSUPPORTED_SCHEMA, DUPLICATE_ID, DANGLING_REFERENCE, ZERO_LENGTH_MEMBER, INVALID_SECTION, INVALID_MATERIAL, INVALID_LOCAL_AXIS, INVALID_RESTRAINT, INVALID_LOAD, DUPLICATE_SELF_WEIGHT, UNSUPPORTED_FEATURE, REVISION_CONFLICT, UNSTABLE_MODEL, UNRESTRAINED_DOF, UNUSED_DOF, ILL_CONDITIONED, NONFINITE_RESULT, RESIDUAL_FAILURE, EQUILIBRIUM_FAILURE, MEMORY_LIMIT, TIMEOUT, CANCELLED, STALE_RESULT, STORAGE_QUOTA, STUDY_BUDGET, GPU_UNAVAILABLE and GPU_DEVICE_LOST.
+Minimum stable codes: INVALID_SCHEMA, UNSUPPORTED_SCHEMA, INVALID_EXCHANGE_FILE, NOTHING_TO_IMPORT, INVALID_MAPPING, MAPPING_MISMATCH, DECISION_REQUIRED, DUPLICATE_ID, DANGLING_REFERENCE, ZERO_LENGTH_MEMBER, INVALID_SECTION, INVALID_MATERIAL, INVALID_LOCAL_AXIS, INVALID_RESTRAINT, INVALID_LOAD, DUPLICATE_SELF_WEIGHT, UNSUPPORTED_FEATURE, REVISION_CONFLICT, UNSTABLE_MODEL, UNRESTRAINED_DOF, UNUSED_DOF, ILL_CONDITIONED, NONFINITE_RESULT, RESIDUAL_FAILURE, EQUILIBRIUM_FAILURE, MEMORY_LIMIT, TIMEOUT, CANCELLED, STALE_RESULT, STORAGE_QUOTA, STUDY_BUDGET, GPU_UNAVAILABLE and GPU_DEVICE_LOST.
 
 Schema-level failures may use INVALID_SCHEMA and include a semantic subcode from the registry when available; negative-case tests accept the named semantic code in diagnostics or its nested cause. Diagnostic messages are human readable, but tests assert codes/entity IDs instead of brittle prose. Localise messages later without changing identifiers.
 
@@ -345,3 +348,57 @@ prefix `rs`. `SetResponseSpectrum` follows the `existence` rule and accepts
 `saUnit: "m/s2" | "g"`; Rust converts the value and stores SI only. Invalid
 tables are `INVALID_SPECTRUM`. 1.5.0 projects migrate with no spectra. A
 spectrum is the engineer's input and never a code spectrum.
+
+## Model exchange (exchange-v1, M21)
+
+Contract: `docs/formulations/exchange.md`; decisions: ADR 0025.
+
+**Formats.**
+- **IFC4 (ISO 16739-1:2018):** clear-text STEP holding an
+  IfcStructuralAnalysisModel. IFC2X3 and IFC4X3 are `UNSUPPORTED_FEATURE`.
+- **ASCII DXF:** LINE, LWPOLYLINE and POLYLINE in model space; binary DXF is
+  refused.
+
+`capabilities.exchangeFormats` lists them. This is browser-only file
+exchange, not a native authoring-tool adapter.
+
+**Two steps, one mapping.**
+- `exchangeRead` states:
+  - the file's SHA-256 (of its text in UTF-8; ISO 8859-1 when not UTF-8);
+  - the units it defines;
+  - counts;
+  - a ledger `{disposition: notImported | converted | skipped, subject,
+    count, reason, examples[]}`;
+  - `blocking[]` diagnostics: content that cannot be imported in any form;
+  - `decisions[] {id, kind, question, choices[] {value, label}, fields[]
+    {name, label, unit, found, rule}, entities[]}`.
+- `exchangeImport` refuses, in order:
+  1. blocking content (its first diagnostic, with all of them in
+     `details.blocking`);
+  2. a mapping for another file (`MAPPING_MISMATCH`);
+  3. a malformed mapping, or answers the file does not need
+     (`INVALID_MAPPING`);
+  4. an unanswered decision (`DECISION_REQUIRED`, listing the IDs).
+
+  Every refusal leaves the session unchanged. An answer is `{choice,
+  values?}`; `values` holds exactly the decision's fields, in SI, when the
+  choice is `values`.
+- The CLI (`workbench-cli exchange read|import|export`) runs the same code
+  with the same manifest.
+
+**Identity.**
+- Imported objects keep their GUIDs as entity IDs (`g` + GUID, `$` → `-`),
+  and exports write them back.
+- Other entities get GUIDs derived from the project and entity IDs.
+- Workbench property sets (`Workbench_Identity`, `Workbench_Project`,
+  `Workbench_Section`) make the workbench's own IFC re-import to the same
+  model hash.
+- `exchangeExport` writes a canonicalised copy, so the file depends only on
+  the model and the timestamp.
+
+**Ledgers.**
+- Import ledgers appear in the conversion record.
+- Export ledgers (`notExported`, `converted`) list what the file cannot
+  carry. IFC: support settlements, design data, mass sources, spectra,
+  results, the physical hierarchy and partial-member self weight. DXF:
+  everything but geometry.

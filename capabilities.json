@@ -273,6 +273,31 @@
       ]
     },
     {
+      "capabilityId": "model-exchange",
+      "scopeKey": "M21 / exchange-v1 / IFC4 structural analysis model and DXF wireframe import and export with a conversion review, mapping manifests and loss ledgers",
+      "implementationStatus": "implemented",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "IFC4 (ISO 16739-1:2018) IfcStructuralAnalysisModel only; IFC2X3 and IFC4X3 are refused by name",
+        "Frame items only: surface members, curve and surface connections, varying or curved members, eccentric connections, composite or tapered profile sets are refused or skipped by explicit decision",
+        "DXF is geometry: every analysis property comes from explicit per-layer decisions; DXF export is R12 with $INSUNITS",
+        "Nothing undefined is assumed: unassigned units, elastic or unset conditions, unknown combination purposes and skipped content are decisions; batch imports need a mapping manifest",
+        "Support settlements, design data, mass sources, response spectra and results are not exported to IFC (listed in the export ledger)",
+        "Browser-only file exchange; no native Revit, Tekla or analysis-program adapter and no Prodesk equivalence"
+      ],
+      "evidenceReferences": [
+        "docs/formulations/exchange.md",
+        "docs/adr/0025-model-exchange.md",
+        "fixtures/exchange/exchange-oracle.json",
+        "crates/exchange/tests/corpus.rs",
+        "crates/exchange/tests/round_trip.rs",
+        "evidence/M21/full/gate-M21.json",
+        "evidence/M21/full/ACCEPTANCE.md"
+      ]
+    },
+    {
       "capabilityId": "webgpu-viewport",
       "scopeKey": "WebGPU / orthographic 3D / GPU ID / Rust screen picking",
       "implementationStatus": "implemented",

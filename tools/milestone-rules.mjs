@@ -97,6 +97,14 @@ export const m14 = [
   "m14-browser",
   "m14-acceptance",
 ];
+export const m21 = [
+  "build",
+  "exchange-native",
+  "exchange-protocol",
+  "exchange-cli",
+  "m21-browser",
+  "m21-acceptance",
+];
 export const m22 = [
   "build",
   "study-native",
@@ -199,6 +207,24 @@ export const requiredIds = {
     "M22-C: a study variant matches the same edit made by hand",
     "M22-C: study failures name the variant and step; guards are not bypassed",
     "M22-C: a running study can be cancelled and the Worker recovers",
+  ],
+  "m21-acceptance": [
+    "M21-FORMATS",
+    "M21-UNITS-ORIENTATION",
+    "M21-REFERENCE-CORPUS",
+    "M21-SEMANTIC-ROUND-TRIP",
+    "M21-LOSS-LEDGER",
+    "M21-DECISIONS-AND-MANIFEST",
+    "M21-FAILURE-PATHS",
+    "M21-EXPORT-VALIDATED",
+    "M21-UI-JOURNEY",
+    "M21-SCOPE-DISCLOSURE",
+    "M21-ORACLE-PROVENANCE",
+  ],
+  "m21-browser": [
+    "IFC import: conversion review, mapping manifest, analysis, save and reopen",
+    "DXF import answered in the form; refusals keep the project",
+    "IFC and DXF export: the files the independent tools checked, with their ledgers",
   ],
   "m14-acceptance": [
     "M14-SDOF-CANTILEVER",
@@ -366,6 +392,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
                 "M07",
                 "M09",
                 "M14",
+                "M21",
               ].includes(milestone)
             ? requiredIds[name] || []
             : [];
@@ -428,6 +455,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 2)
   )
     errors.push(`${name}: failed, skipped or incomplete M14 browser journey`);
+  if (
+    name === "m21-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 4)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M21 browser journeys`);
   if (
     name === "m22-browser" &&
     (e.stats?.unexpected !== 0 ||

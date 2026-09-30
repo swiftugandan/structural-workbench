@@ -1,0 +1,945 @@
+{
+  "version": "exchange-v1",
+  "generator": "tools/oracles/exchange_oracle.py",
+  "generatorSha256": "a47944f4e4019f9ae5865f2c826499ecc5d92e35ab63a69026c18f93ab656d04",
+  "tools": {
+    "ifcopenshell": "0.9.0",
+    "ezdxf": "1.4.4",
+    "python": "3.14.6"
+  },
+  "schema": "IFC4 ADD2 TC1 (ISO 16739-1:2018), buildingSMART IFC4_ADD2_TC1.exp",
+  "tolerance": 1e-09,
+  "corpus": [
+    {
+      "file": "X-PORTAL-MM.ifc",
+      "description": "IfcOpenShell-authored portal in mm and kN with derived units, a rotated and translated shared placement, Axis orientation, supports, a hinge, self weight, true and projected linear loads, local/global point actions, a discrete curve action and two combinations",
+      "analysisMode": "spatial",
+      "mapping": {},
+      "decisions": [],
+      "blocking": [],
+      "nodes": {
+        "g2loyE3O6HNeRCJ3B_tq2Tf": [
+          1.0,
+          2.0,
+          0.5
+        ],
+        "g3ZWLwP0y9PjQOHVQCpTa5c": [
+          1.0,
+          2.0,
+          4.5
+        ],
+        "g0D4q6FpnnUe9u335aheZm_": [
+          3.598076211353316,
+          3.5,
+          5.5
+        ],
+        "g3EV-8zNF1QIxGbvgNujCXF": [
+          6.196152422706632,
+          5.0,
+          4.5
+        ],
+        "g2e7Vyn7UfGqBiAKI1Zm7Eg": [
+          6.196152422706632,
+          5.0,
+          0.5
+        ],
+        "g3NkV45nT9OsBUsZ80m9Uae": [
+          -0.4999999999999998,
+          4.598076211353316,
+          4.5
+        ]
+      },
+      "supports": {
+        "g2loyE3O6HNeRCJ3B_tq2Tf": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "g2e7Vyn7UfGqBiAKI1Zm7Eg": [
+          true,
+          true,
+          true,
+          false,
+          false,
+          false
+        ],
+        "g3NkV45nT9OsBUsZ80m9Uae": [
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ]
+      },
+      "members": {
+        "g2Ti_ion5LHS9D7B0qamhiw": {
+          "start": "g2loyE3O6HNeRCJ3B_tq2Tf",
+          "end": "g3ZWLwP0y9PjQOHVQCpTa5c",
+          "localY": [
+            0.49999999999999994,
+            -0.8660254037844387,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            false,
+            false
+          ],
+          "material": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7849.999999999999
+          },
+          "section": {
+            "A": 0.005381,
+            "Iy": 8.355999999999999e-05,
+            "Iz": 6.038e-06,
+            "J": 2.012e-07,
+            "cy": 0.07500621118012422,
+            "cz": 0.14999102495063724
+          }
+        },
+        "g2JOFB0xQHV5QmCEN77lrAP": {
+          "start": "g3ZWLwP0y9PjQOHVQCpTa5c",
+          "end": "g0D4q6FpnnUe9u335aheZm_",
+          "localY": [
+            -0.5,
+            0.8660254037844386,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            false,
+            false
+          ],
+          "material": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7849.999999999999
+          },
+          "section": {
+            "A": 0.005381,
+            "Iy": 8.355999999999999e-05,
+            "Iz": 6.038e-06,
+            "J": 2.012e-07,
+            "cy": 0.07500621118012422,
+            "cz": 0.14999102495063724
+          }
+        },
+        "g31kg4-fKrNr884X6Eli_en": {
+          "start": "g0D4q6FpnnUe9u335aheZm_",
+          "end": "g3EV-8zNF1QIxGbvgNujCXF",
+          "localY": [
+            -0.5,
+            0.8660254037844386,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            false,
+            false
+          ],
+          "material": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7849.999999999999
+          },
+          "section": {
+            "A": 0.005381,
+            "Iy": 8.355999999999999e-05,
+            "Iz": 6.038e-06,
+            "J": 2.012e-07,
+            "cy": 0.07500621118012422,
+            "cz": 0.14999102495063724
+          }
+        },
+        "g3Ukf5Q32PUqx8EplvorT-p": {
+          "start": "g3EV-8zNF1QIxGbvgNujCXF",
+          "end": "g2e7Vyn7UfGqBiAKI1Zm7Eg",
+          "localY": [
+            0.49999999999999994,
+            -0.8660254037844387,
+            0.0
+          ],
+          "releaseStart": [
+            true,
+            false
+          ],
+          "releaseEnd": [
+            false,
+            false
+          ],
+          "material": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7849.999999999999
+          },
+          "section": {
+            "A": 0.005381,
+            "Iy": 8.355999999999999e-05,
+            "Iz": 6.038e-06,
+            "J": 2.012e-07,
+            "cy": 0.07500621118012422,
+            "cz": 0.14999102495063724
+          }
+        },
+        "g2kmNE2_SvQdvJAkluaZ7ZD": {
+          "start": "g3ZWLwP0y9PjQOHVQCpTa5c",
+          "end": "g3NkV45nT9OsBUsZ80m9Uae",
+          "localY": [
+            -0.8660254037844387,
+            -0.49999999999999994,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            false,
+            false
+          ],
+          "material": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7849.999999999999
+          },
+          "section": {
+            "A": 0.005381,
+            "Iy": 8.355999999999999e-05,
+            "Iz": 6.038e-06,
+            "J": 2.012e-07,
+            "cy": 0.07500621118012422,
+            "cz": 0.14999102495063724
+          }
+        }
+      },
+      "cases": {
+        "g2craQ9_SjGfwkp-_K6-v8O": "dead",
+        "g3SL1YDZF5HAB2CNaBdWRR9": "live",
+        "g3JmTRp35vNqxSVz1t3nkIe": "wind"
+      },
+      "combinations": {
+        "g20dPBdrEHQQwQXm7Xs-UHs": {
+          "purpose": "strength",
+          "terms": {
+            "g2craQ9_SjGfwkp-_K6-v8O": 1.35,
+            "g3SL1YDZF5HAB2CNaBdWRR9": 1.5
+          }
+        },
+        "g1KjJ4wn0rH19humbfzD8uE": {
+          "purpose": "service",
+          "terms": {
+            "g2craQ9_SjGfwkp-_K6-v8O": 1.0,
+            "g3SL1YDZF5HAB2CNaBdWRR9": 1.0
+          }
+        }
+      },
+      "loads": [
+        {
+          "case": "g2craQ9_SjGfwkp-_K6-v8O",
+          "type": "selfWeight",
+          "factor": 1.0
+        },
+        {
+          "case": "g2craQ9_SjGfwkp-_K6-v8O",
+          "type": "uniform",
+          "member": "g2JOFB0xQHV5QmCEN77lrAP",
+          "axes": "global",
+          "values": [
+            0.0,
+            0.0,
+            -2500.0
+          ]
+        },
+        {
+          "case": "g2craQ9_SjGfwkp-_K6-v8O",
+          "type": "uniform",
+          "member": "g31kg4-fKrNr884X6Eli_en",
+          "axes": "global",
+          "values": [
+            0.0,
+            0.0,
+            -2846.049894151541
+          ]
+        },
+        {
+          "case": "g3SL1YDZF5HAB2CNaBdWRR9",
+          "type": "point",
+          "member": "g2kmNE2_SvQdvJAkluaZ7ZD",
+          "axes": "local",
+          "station": 0.4,
+          "values": [
+            0.0,
+            0.0,
+            -10000.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "g3SL1YDZF5HAB2CNaBdWRR9",
+          "type": "nodal",
+          "node": "g0D4q6FpnnUe9u335aheZm_",
+          "values": [
+            4330.127018922193,
+            2499.9999999999995,
+            0.0,
+            -999.9999999999999,
+            1732.0508075688774,
+            0.0
+          ]
+        },
+        {
+          "case": "g3SL1YDZF5HAB2CNaBdWRR9",
+          "type": "uniform",
+          "member": "g2Ti_ion5LHS9D7B0qamhiw",
+          "axes": "local",
+          "values": [
+            0.0,
+            1500.0,
+            0.0
+          ]
+        },
+        {
+          "case": "g3JmTRp35vNqxSVz1t3nkIe",
+          "type": "point",
+          "member": "g31kg4-fKrNr884X6Eli_en",
+          "axes": "global",
+          "station": 0.31622776601683794,
+          "values": [
+            1732.0508075688774,
+            999.9999999999999,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "case": "g3JmTRp35vNqxSVz1t3nkIe",
+          "type": "point",
+          "member": "g31kg4-fKrNr884X6Eli_en",
+          "axes": "global",
+          "station": 0.6324555320336759,
+          "values": [
+            1732.0508075688774,
+            999.9999999999999,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "ledgerSubjects": [
+        "load per projected length",
+        "discrete curve action"
+      ],
+      "sha256": "ec98e66df990ae17774ea7e7db26ffefce2c7d38537d0c0ad5af203c90026228",
+      "validationIssues": []
+    },
+    {
+      "file": "X-FEET-KIP.ifc",
+      "description": "IfcOpenShell-authored frame in feet and kips with no derived units, a parametric rectangle profile, an elastic support, unset and missing end conditions, a nested load group with a coefficient, an unsupported linear distribution, a surface member, a physical beam, a reaction and a 'ULS' purpose",
+      "analysisMode": "spatial",
+      "mapping": {
+        "units:modulusOfElasticity": {
+          "choice": "derived"
+        },
+        "units:massDensity": {
+          "choice": "derived"
+        },
+        "units:linearForce": {
+          "choice": "derived"
+        },
+        "units:torque": {
+          "choice": "derived"
+        },
+        "units:linearStiffness": {
+          "choice": "derived"
+        },
+        "supports:elastic": {
+          "choice": "fixed"
+        },
+        "connections:unset": {
+          "choice": "pinned"
+        },
+        "skip:surfaces": {
+          "choice": "skip"
+        },
+        "skip:loads": {
+          "choice": "skip"
+        },
+        "purpose:ULS": {
+          "choice": "strength"
+        }
+      },
+      "decisions": [
+        "connections:unset",
+        "purpose:ULS",
+        "skip:loads",
+        "skip:surfaces",
+        "supports:elastic",
+        "units:linearForce",
+        "units:linearStiffness",
+        "units:massDensity",
+        "units:modulusOfElasticity",
+        "units:torque"
+      ],
+      "blocking": [],
+      "nodes": {
+        "g1nTuxEQgbHOR0wVMSpmEic": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "g0c1BKsqqXM0e63u8VOypm6": [
+          0.0,
+          0.0,
+          3.6576000000000004
+        ],
+        "g1QAzi8ygfGN9LQAQ9rMZmb": [
+          6.096,
+          0.0,
+          3.6576000000000004
+        ],
+        "g1IpPKpjhnSJew-JryoUkZi": [
+          6.096,
+          0.0,
+          0.0
+        ]
+      },
+      "supports": {
+        "g1nTuxEQgbHOR0wVMSpmEic": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "g1IpPKpjhnSJew-JryoUkZi": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "members": {
+        "g3E5Fj77HDNJeMQasTg1vhy": {
+          "start": "g1nTuxEQgbHOR0wVMSpmEic",
+          "end": "g0c1BKsqqXM0e63u8VOypm6",
+          "localY": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            false,
+            false
+          ],
+          "material": {
+            "E": 24821126255.4061,
+            "nu": 0.2,
+            "density": 2402.7695060940205
+          },
+          "section": {
+            "A": 0.18580608,
+            "Iy": 0.005753983227494402,
+            "Iz": 0.0014384958068736004,
+            "J": 0.003950918639566273,
+            "cy": 0.1524,
+            "cz": 0.3048
+          }
+        },
+        "g14d9f2FrTU996fF_KZ8FZg": {
+          "start": "g0c1BKsqqXM0e63u8VOypm6",
+          "end": "g1QAzi8ygfGN9LQAQ9rMZmb",
+          "localY": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            true,
+            false
+          ],
+          "material": {
+            "E": 24821126255.4061,
+            "nu": 0.2,
+            "density": 2402.7695060940205
+          },
+          "section": {
+            "A": 0.18580608,
+            "Iy": 0.005753983227494402,
+            "Iz": 0.0014384958068736004,
+            "J": 0.003950918639566273,
+            "cy": 0.1524,
+            "cz": 0.3048
+          }
+        },
+        "g3N69Pjry9Rnxu1Fa-3MTP_": {
+          "start": "g1QAzi8ygfGN9LQAQ9rMZmb",
+          "end": "g1IpPKpjhnSJew-JryoUkZi",
+          "localY": [
+            -0.0,
+            1.0,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            true,
+            true
+          ],
+          "material": {
+            "E": 24821126255.4061,
+            "nu": 0.2,
+            "density": 2402.7695060940205
+          },
+          "section": {
+            "A": 0.18580608,
+            "Iy": 0.005753983227494402,
+            "Iz": 0.0014384958068736004,
+            "J": 0.003950918639566273,
+            "cy": 0.1524,
+            "cz": 0.3048
+          }
+        }
+      },
+      "cases": {
+        "g2cAi6XRsrL4OQMjfPUFEOi": "dead"
+      },
+      "combinations": {
+        "g1QSP7IwfnINQQPysaZi-e1": {
+          "purpose": "strength",
+          "terms": {
+            "g2cAi6XRsrL4OQMjfPUFEOi": 1.4
+          }
+        }
+      },
+      "loads": [
+        {
+          "case": "g2cAi6XRsrL4OQMjfPUFEOi",
+          "type": "uniform",
+          "member": "g14d9f2FrTU996fF_KZ8FZg",
+          "axes": "global",
+          "values": [
+            0.0,
+            0.0,
+            -14593.902937206363
+          ]
+        },
+        {
+          "case": "g2cAi6XRsrL4OQMjfPUFEOi",
+          "type": "nodal",
+          "node": "g1QAzi8ygfGN9LQAQ9rMZmb",
+          "values": [
+            8896.443230521,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "ledgerSubjects": [
+        "IfcBeam",
+        "IfcStructuralPointReaction",
+        "IfcStructuralSurfaceMember",
+        "IfcStructuralCurveAction",
+        "elastic support"
+      ],
+      "sha256": "ac781a606867070329895c2d389530be88200ae347cf93f028401f235e95b844",
+      "validationIssues": []
+    },
+    {
+      "file": "X-BLOCKED.ifc",
+      "description": "a released member-end translation, which cannot be represented",
+      "blocking": [
+        "UNSUPPORTED_FEATURE"
+      ],
+      "blockingEntities": [
+        "1lZw77fU1NWweLbBNPuPS7"
+      ],
+      "sha256": "6e062b3240d0fe958b263a1fe88048c6ff361aed860f09c4da3c50f628625e53",
+      "validationIssues": []
+    },
+    {
+      "file": "X-PLANAR.ifc",
+      "description": "IN_PLANE_LOADING_2D in the XZ plane, \u03bd from E and G, and a circular hollow profile computed from its geometry",
+      "analysisMode": "planarXZ",
+      "mapping": {},
+      "decisions": [],
+      "blocking": [],
+      "nodes": {
+        "g0QPWhs0uLN_u54W-r8Unqe": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "g2_yO1EfwPJZw8Ir9W_nB0E": [
+          5.0,
+          0.0,
+          0.0
+        ]
+      },
+      "supports": {
+        "g0QPWhs0uLN_u54W-r8Unqe": [
+          true,
+          true,
+          true,
+          false,
+          false,
+          false
+        ],
+        "g2_yO1EfwPJZw8Ir9W_nB0E": [
+          false,
+          true,
+          true,
+          false,
+          false,
+          false
+        ]
+      },
+      "members": {
+        "g3cXcayxUrQy9iq2Vmebyis": {
+          "start": "g0QPWhs0uLN_u54W-r8Unqe",
+          "end": "g2_yO1EfwPJZw8Ir9W_nB0E",
+          "localY": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "releaseStart": [
+            false,
+            false
+          ],
+          "releaseEnd": [
+            false,
+            false
+          ],
+          "material": {
+            "E": 200000000000.0,
+            "nu": 0.3,
+            "density": 7850.0
+          },
+          "section": {
+            "A": 0.004028778418963555,
+            "Iy": 1.2972711832819855e-05,
+            "Iz": 1.2972711832819855e-05,
+            "J": 2.594542366563971e-05,
+            "cy": 0.08415,
+            "cz": 0.08415
+          }
+        }
+      },
+      "cases": {
+        "g1AgS0pLlzPBxrPf8GdPAQP": "other"
+      },
+      "combinations": {},
+      "loads": [
+        {
+          "case": "g1AgS0pLlzPBxrPf8GdPAQP",
+          "type": "uniform",
+          "member": "g3cXcayxUrQy9iq2Vmebyis",
+          "axes": "global",
+          "values": [
+            0.0,
+            0.0,
+            -1000.0
+          ]
+        }
+      ],
+      "ledgerSubjects": [],
+      "sha256": "3acc5e927401b4855ab205a2558f29fb314e7ed8748555e351adb67d7af28e23",
+      "validationIssues": []
+    },
+    {
+      "file": "X-DXF-MM.dxf",
+      "description": "ezdxf-authored R2018 drawing in mm: LINEs, an LWPOLYLINE in a mirrored OCS at elevation, a 2D POLYLINE in an arbitrary OCS, a 3D POLYLINE, a zero-length and a duplicate line, text, a circle, a block reference and an arc-segment polyline",
+      "mapping": {
+        "layer:BEAM": {
+          "choice": "values",
+          "values": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7850.0,
+            "A": 0.005,
+            "Iy": 8e-05,
+            "Iz": 6e-06,
+            "J": 2e-07,
+            "cy": 0.075,
+            "cz": 0.15
+          }
+        },
+        "layer:BRACE": {
+          "choice": "values",
+          "values": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7850.0,
+            "A": 0.005,
+            "Iy": 8e-05,
+            "Iz": 6e-06,
+            "J": 2e-07,
+            "cy": 0.075,
+            "cz": 0.15
+          }
+        },
+        "layer:COLUMN": {
+          "choice": "values",
+          "values": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7850.0,
+            "A": 0.005,
+            "Iy": 8e-05,
+            "Iz": 6e-06,
+            "J": 2e-07,
+            "cy": 0.075,
+            "cz": 0.15
+          }
+        },
+        "nodes:tolerance": {
+          "choice": "values",
+          "values": {
+            "tolerance": 1e-06
+          }
+        },
+        "supports": {
+          "choice": "pinnedLowest"
+        }
+      },
+      "decisions": [
+        "layer:BEAM",
+        "layer:BRACE",
+        "layer:COLUMN",
+        "nodes:tolerance",
+        "supports"
+      ],
+      "members": [
+        {
+          "layer": "COLUMN",
+          "a": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "b": [
+            0.0,
+            0.0,
+            3.0
+          ]
+        },
+        {
+          "layer": "COLUMN",
+          "a": [
+            6.0,
+            0.0,
+            0.0
+          ],
+          "b": [
+            6.0,
+            0.0,
+            3.0
+          ]
+        },
+        {
+          "layer": "BEAM",
+          "a": [
+            0.0,
+            0.0,
+            3.0
+          ],
+          "b": [
+            3.0,
+            0.0,
+            3.0
+          ]
+        },
+        {
+          "layer": "BEAM",
+          "a": [
+            3.0,
+            0.0,
+            3.0
+          ],
+          "b": [
+            6.0,
+            0.0,
+            3.0
+          ]
+        },
+        {
+          "layer": "BRACE",
+          "a": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "b": [
+            2.4,
+            1.8,
+            3.0
+          ]
+        },
+        {
+          "layer": "BEAM",
+          "a": [
+            6.0,
+            0.0,
+            3.0
+          ],
+          "b": [
+            6.0,
+            4.0,
+            3.0
+          ]
+        },
+        {
+          "layer": "BEAM",
+          "a": [
+            6.0,
+            4.0,
+            3.0
+          ],
+          "b": [
+            0.0,
+            4.0,
+            3.0
+          ]
+        },
+        {
+          "layer": "BEAM",
+          "a": [
+            0.0,
+            4.0,
+            3.0
+          ],
+          "b": [
+            0.0,
+            0.0,
+            3.0
+          ]
+        }
+      ],
+      "supports": 2,
+      "ledgerSubjects": [
+        "zero-length segment",
+        "duplicate segment",
+        "TEXT entity",
+        "CIRCLE entity",
+        "block reference (INSERT)",
+        "polyline with arc segments"
+      ],
+      "sha256": "cb274245d6a927ad2d8f16a94ef604b7679fb0b49caa0087e9944a935db97cdf"
+    },
+    {
+      "file": "X-DXF-NOUNITS.dxf",
+      "description": "an R12 drawing with $INSUNITS = 0: the length unit must be decided",
+      "mapping": {
+        "units:length": {
+          "choice": "ft"
+        },
+        "layer:A": {
+          "choice": "values",
+          "values": {
+            "E": 210000000000.0,
+            "nu": 0.3,
+            "density": 7850.0,
+            "A": 0.005,
+            "Iy": 8e-05,
+            "Iz": 6e-06,
+            "J": 2e-07,
+            "cy": 0.075,
+            "cz": 0.15
+          }
+        },
+        "nodes:tolerance": {
+          "choice": "values",
+          "values": {
+            "tolerance": 0.001
+          }
+        },
+        "supports": {
+          "choice": "none"
+        }
+      },
+      "decisions": [
+        "layer:A",
+        "nodes:tolerance",
+        "supports",
+        "units:length"
+      ],
+      "members": [
+        {
+          "layer": "A",
+          "a": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "b": [
+            3.048,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "supports": 0,
+      "ledgerSubjects": [],
+      "sha256": "9d4d716057e272f23bba252a2fcba33d8f8e1ca16200ca8c1454be1a816fcebd"
+    }
+  ],
+  "exportChecks": [
+    {
+      "project": "X-FRAME",
+      "ifcSha256": "0c016447a887029d083f0f8608384e4c68687645ea7d4d1a841f9ebd9ab41ca4",
+      "ifcValidationIssues": [],
+      "ifcEntities": 197,
+      "ifcReadBack": "IfcOpenShell read nodes, member frames, section and material properties, releases and supports in SI and matched the project within 1e-12",
+      "dxfSha256": "391d08aabd70c5b81b8f47bd813ea6481989b16aeb3831ec092b7c38ee8192fb",
+      "dxfAuditErrors": 0,
+      "dxfLines": 17
+    },
+    {
+      "project": "UKR01",
+      "ifcSha256": "aeade860280082edface3022e94fffba2410643cf713cc215d89f53af4d69e1e",
+      "ifcValidationIssues": [],
+      "ifcEntities": 6089,
+      "ifcReadBack": "IfcOpenShell read nodes, member frames, section and material properties, releases and supports in SI and matched the project within 1e-12",
+      "dxfSha256": "d0ffd605e5348587e63fc5bc9b97bb985aa6fa8508ac7e57ebf8dfe199984246",
+      "dxfAuditErrors": 0,
+      "dxfLines": 642
+    }
+  ]
+}

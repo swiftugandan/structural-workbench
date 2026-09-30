@@ -1,0 +1,823 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "xframe",
+  "name": "Exchange frame X-FRAME",
+  "revision": 0,
+  "displayUnits": "engineeringMetric",
+  "analysisMode": "spatial",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "materials": [
+    {
+      "id": "steel",
+      "name": "S355 steel",
+      "E": 210000000000.0,
+      "nu": 0.3,
+      "density": 7850.0
+    },
+    {
+      "id": "conc",
+      "name": "C30/37 concrete",
+      "E": 32800000000.0,
+      "nu": 0.2,
+      "density": 2500.0
+    }
+  ],
+  "sections": [
+    {
+      "id": "secB",
+      "name": "UB 406x178x60",
+      "A": 0.00765,
+      "Iy": 0.000215,
+      "Iz": 1.2e-05,
+      "J": 3.3e-07,
+      "cy": 0.0888,
+      "cz": 0.2032,
+      "provenance": "exchange fixture"
+    },
+    {
+      "id": "secR",
+      "name": "RHS 200x100x8",
+      "A": 0.00448,
+      "Iy": 2.29e-05,
+      "Iz": 7.74e-06,
+      "J": 1.8e-05,
+      "cy": 0.05,
+      "cz": 0.1,
+      "provenance": "exchange fixture"
+    },
+    {
+      "id": "secC",
+      "name": "Column 400x400",
+      "A": 0.16,
+      "Iy": 0.0021333333333333334,
+      "Iz": 0.0021333333333333334,
+      "J": 0.0036,
+      "cy": 0.2,
+      "cz": 0.2,
+      "provenance": "exchange fixture"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        6.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "n3",
+      "position": [
+        0.0,
+        5.0,
+        0.0
+      ]
+    },
+    {
+      "id": "n4",
+      "position": [
+        6.0,
+        5.0,
+        0.0
+      ]
+    },
+    {
+      "id": "n5",
+      "position": [
+        0.0,
+        0.0,
+        3.5
+      ]
+    },
+    {
+      "id": "n6",
+      "position": [
+        6.0,
+        0.0,
+        3.5
+      ]
+    },
+    {
+      "id": "n7",
+      "position": [
+        0.0,
+        5.0,
+        3.5
+      ]
+    },
+    {
+      "id": "n8",
+      "position": [
+        6.0,
+        5.0,
+        3.5
+      ]
+    },
+    {
+      "id": "n9",
+      "position": [
+        0.0,
+        0.0,
+        7.0
+      ]
+    },
+    {
+      "id": "n10",
+      "position": [
+        6.0,
+        0.0,
+        7.0
+      ]
+    },
+    {
+      "id": "n11",
+      "position": [
+        0.0,
+        5.0,
+        7.0
+      ]
+    },
+    {
+      "id": "n12",
+      "position": [
+        6.0,
+        5.0,
+        7.0
+      ]
+    },
+    {
+      "id": "n13",
+      "position": [
+        3.0,
+        0.0,
+        3.5
+      ]
+    }
+  ],
+  "members": [
+    {
+      "id": "col1",
+      "start": "n1",
+      "end": "n5",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "col2",
+      "start": "n2",
+      "end": "n6",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "col3",
+      "start": "n3",
+      "end": "n7",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "col4",
+      "start": "n4",
+      "end": "n8",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "col5",
+      "start": "n5",
+      "end": "n9",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "col6",
+      "start": "n6",
+      "end": "n10",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "col7",
+      "start": "n7",
+      "end": "n11",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "col8",
+      "start": "n8",
+      "end": "n12",
+      "material": "conc",
+      "section": "secC",
+      "localY": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "bx1a",
+      "start": "n5",
+      "end": "n13",
+      "material": "steel",
+      "section": "secB",
+      "localY": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "parentMemberId": "bx1",
+      "stationRange": [
+        0.0,
+        0.5
+      ]
+    },
+    {
+      "id": "bx1b",
+      "start": "n13",
+      "end": "n6",
+      "material": "steel",
+      "section": "secB",
+      "localY": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "parentMemberId": "bx1",
+      "stationRange": [
+        0.5,
+        1.0
+      ]
+    },
+    {
+      "id": "bx2",
+      "start": "n7",
+      "end": "n8",
+      "material": "steel",
+      "section": "secB",
+      "localY": [
+        0.3,
+        1.0,
+        0.2
+      ],
+      "releaseStart": {
+        "my": true,
+        "mz": true
+      },
+      "releaseEnd": {
+        "my": true,
+        "mz": true
+      }
+    },
+    {
+      "id": "by1",
+      "start": "n5",
+      "end": "n7",
+      "material": "steel",
+      "section": "secB",
+      "localY": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": true,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "by2",
+      "start": "n6",
+      "end": "n8",
+      "material": "steel",
+      "section": "secB",
+      "localY": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "bx3",
+      "start": "n9",
+      "end": "n10",
+      "material": "steel",
+      "section": "secR",
+      "localY": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "bx4",
+      "start": "n11",
+      "end": "n12",
+      "material": "steel",
+      "section": "secR",
+      "localY": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": true,
+        "mz": false
+      }
+    },
+    {
+      "id": "by3",
+      "start": "n9",
+      "end": "n11",
+      "material": "steel",
+      "section": "secR",
+      "localY": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    },
+    {
+      "id": "by4",
+      "start": "n10",
+      "end": "n12",
+      "material": "steel",
+      "section": "secR",
+      "localY": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      }
+    }
+  ],
+  "supports": [
+    {
+      "id": "s1",
+      "node": "n1",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s2",
+      "node": "n2",
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s3",
+      "node": "n3",
+      "fixed": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "s4",
+      "node": "n4",
+      "fixed": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true
+      ],
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "loadCases": [
+    {
+      "id": "G",
+      "name": "Permanent",
+      "category": "dead"
+    },
+    {
+      "id": "Q",
+      "name": "Imposed",
+      "category": "live"
+    },
+    {
+      "id": "W",
+      "name": "Wind +X",
+      "category": "wind"
+    },
+    {
+      "id": "T",
+      "name": "Other",
+      "category": "other"
+    }
+  ],
+  "loads": [
+    {
+      "id": "g-sw",
+      "case": "G",
+      "type": "selfWeight",
+      "members": [
+        "col1",
+        "col2",
+        "col3",
+        "col4",
+        "col5",
+        "col6",
+        "col7",
+        "col8",
+        "bx1a",
+        "bx1b",
+        "bx2",
+        "by1",
+        "by2",
+        "bx3",
+        "bx4",
+        "by3",
+        "by4"
+      ],
+      "factor": 1.0
+    },
+    {
+      "id": "g-bx3",
+      "case": "G",
+      "type": "uniform",
+      "member": "bx3",
+      "axes": "global",
+      "forcePerLength": [
+        0,
+        0,
+        -5000.0
+      ]
+    },
+    {
+      "id": "g-bx4",
+      "case": "G",
+      "type": "uniform",
+      "member": "bx4",
+      "axes": "global",
+      "forcePerLength": [
+        0,
+        0,
+        -5000.0
+      ]
+    },
+    {
+      "id": "q-bx2",
+      "case": "Q",
+      "type": "uniform",
+      "member": "bx2",
+      "axes": "local",
+      "forcePerLength": [
+        0,
+        0,
+        -3000.0
+      ]
+    },
+    {
+      "id": "q-p1",
+      "case": "Q",
+      "type": "point",
+      "member": "by3",
+      "axes": "local",
+      "station": 0.3,
+      "values": [
+        0,
+        0,
+        -12000.0,
+        0,
+        1500.0,
+        0
+      ]
+    },
+    {
+      "id": "q-p2",
+      "case": "Q",
+      "type": "point",
+      "member": "bx1a",
+      "axes": "global",
+      "station": 0.5,
+      "values": [
+        1000.0,
+        0,
+        -8000.0,
+        0,
+        0,
+        250.0
+      ]
+    },
+    {
+      "id": "w-1",
+      "case": "W",
+      "type": "nodal",
+      "node": "n9",
+      "values": [
+        15000.0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "w-2",
+      "case": "W",
+      "type": "nodal",
+      "node": "n11",
+      "values": [
+        15000.0,
+        -500.0,
+        0,
+        1200.0,
+        0,
+        -300.0
+      ]
+    },
+    {
+      "id": "t-1",
+      "case": "T",
+      "type": "uniform",
+      "member": "by1",
+      "axes": "global",
+      "forcePerLength": [
+        0,
+        2000.0,
+        0
+      ]
+    }
+  ],
+  "combinations": [
+    {
+      "id": "uls",
+      "name": "1.35G + 1.5Q",
+      "purpose": "strength",
+      "terms": [
+        {
+          "case": "G",
+          "factor": 1.35
+        },
+        {
+          "case": "Q",
+          "factor": 1.5
+        }
+      ]
+    },
+    {
+      "id": "sls",
+      "name": "G + Q",
+      "purpose": "service",
+      "terms": [
+        {
+          "case": "G",
+          "factor": 1.0
+        },
+        {
+          "case": "Q",
+          "factor": 1.0
+        }
+      ]
+    },
+    {
+      "id": "gw",
+      "name": "G + W",
+      "purpose": "analysis",
+      "terms": [
+        {
+          "case": "G",
+          "factor": 1.0
+        },
+        {
+          "case": "W",
+          "factor": 1.0
+        },
+        {
+          "case": "T",
+          "factor": 0.5
+        }
+      ]
+    }
+  ],
+  "analysisSettings": {
+    "type": "linearStatic",
+    "formulation": "eulerBernoulli3D",
+    "mergeTolerance": 1e-06,
+    "timeoutMs": 20000,
+    "memoryLimitMiB": 256
+  },
+  "metadata": {
+    "description": "exchange-v1 round-trip fixture: supports, releases, skewed localY, split member provenance, every load type in both axes, self weight, three combination purposes",
+    "createdBy": "exchange fixture"
+  }
+}

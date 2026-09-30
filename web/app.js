@@ -54,6 +54,7 @@ import { stabilityWorkspace } from "./stability.js";
 import { modalWorkspace, describeSource } from "./modal.js";
 import { responseWorkspace } from "./response.js";
 import { studyWorkspace } from "./study.js";
+import { exchangeWorkspace } from "./exchange.js";
 const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
@@ -455,6 +456,8 @@ function modal(title, html) {
     "Invalid project",
     "Project too large",
     "Kernel unavailable",
+    "Conversion review",
+    "Unable to import",
   ].includes(title);
   const dialog = $("#modal");
   const opener = document.activeElement;
@@ -720,10 +723,13 @@ async function open(p, options = {}) {
   try {
     setBusy(true);
     const originalUtf8 = options.originalUtf8 ?? JSON.stringify(p);
-    const s = await gateway.send("importProject", {
-      jsonUtf8: originalUtf8,
-      replaceCurrent: true,
-    });
+    // An exchange import arrives as the kernel's snapshot (exchange.js).
+    const s =
+      options.snapshot ??
+      (await gateway.send("importProject", {
+        jsonUtf8: originalUtf8,
+        replaceCurrent: true,
+      }));
     await claimLease(s.project.id);
     project = s.project;
     project.name = p.name ?? project.name;
@@ -843,6 +849,18 @@ $("#worked-examples").onclick = () => {
       example(b.dataset.example, b.querySelector("strong").textContent);
 };
 $("#open-project").onclick = () => $("#import-file").click();
+const exchange = exchangeWorkspace({
+  gateway,
+  modal,
+  download,
+  message,
+  setBusy,
+  getProject: () => project,
+  adopt: (s) => open(s.project, { snapshot: s }),
+});
+$("#import-exchange").onclick = () => exchange.pick();
+$("#export-ifc").onclick = () => exchange.exportIfc();
+$("#export-dxf").onclick = () => exchange.exportDxf();
 $("#import-file").onchange = async (e) => {
   const file = e.target.files[0];
   e.target.value = "";
@@ -885,6 +903,7 @@ function setBusy(value) {
     "new-portal",
     "draw-toggle",
     "open-project",
+    "import-exchange",
     "worked-examples",
     "analysis-mode",
   ])

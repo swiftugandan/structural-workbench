@@ -5,4 +5,6 @@ edition = "2024"
 license = "MIT"
 [dependencies]
 workbench-model = { path = "../model" }
+serde.workspace = true
 serde_json.workspace = true
+sha2.workspace = true

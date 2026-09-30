@@ -6,4 +6,5 @@ license = "MIT"
 [dependencies]
 workbench-model = { path = "../model" }
 workbench-assembly = { path = "../assembly" }
+workbench-exchange = { path = "../exchange" }
 serde_json.workspace = true

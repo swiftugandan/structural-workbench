@@ -64,6 +64,19 @@ impl Kernel {
         if op == "steelCatalogue" {
             return Ok(workbench_design::native::catalogue());
         }
+        if op == "exchangeRead" {
+            // exchange-v1 (ADR 0025): what a file holds and what it needs
+            // decided. Pure; no project is needed or touched.
+            let payload = &r["payload"];
+            let report = workbench_exchange::read(
+                payload["format"].as_str().unwrap_or(""),
+                payload["fileName"].as_str().unwrap_or("import"),
+                payload["text"]
+                    .as_str()
+                    .ok_or_else(|| err("INVALID_SCHEMA", "Missing file text"))?,
+            )?;
+            return Ok(serde_json::to_value(report).unwrap());
+        }
         if op == "designPreviewTemplates" {
             return Ok(json!({"templates":preview_workspace::templates()}));
         }
@@ -96,7 +109,7 @@ impl Kernel {
         }
         if let Some(p) = &self.project {
             let expected = r.get("expectedRevision");
-            let force_replace = matches!(op, "importProject" | "createProject")
+            let force_replace = matches!(op, "importProject" | "createProject" | "exchangeImport")
                 && expected.map(|v| v.is_null()).unwrap_or(true);
             if !force_replace && expected.and_then(|v| v.as_u64()) != Some(p.revision) {
                 return Err(err(
@@ -107,6 +120,7 @@ impl Kernel {
         } else if ![
             "createProject",
             "importProject",
+            "exchangeImport",
             "evaluateDesign",
             "runStudy",
         ]
@@ -163,6 +177,37 @@ impl Kernel {
                 snap["migrationReport"] = serde_json::to_value(migration).unwrap();
                 snap["domainDisclosure"] = domain_disclosure();
                 Ok(snap)
+            }
+            "exchangeImport" => {
+                // The mapping answers every decision exchangeRead stated;
+                // the import is atomic: a refusal leaves the session as it was.
+                let (mut p, record) = workbench_exchange::commit(
+                    payload["format"].as_str().unwrap_or(""),
+                    payload["fileName"].as_str().unwrap_or("import"),
+                    payload["text"]
+                        .as_str()
+                        .ok_or_else(|| err("INVALID_SCHEMA", "Missing file text"))?,
+                    &payload["mapping"],
+                )?;
+                p.canonicalise();
+                if let Some(old) = &self.project {
+                    p.revision = old.revision + 1;
+                }
+                self.project = Some(p);
+                self.undo.clear();
+                self.redo.clear();
+                let mut snap = self.snapshot();
+                snap["conversionRecord"] = serde_json::to_value(record).unwrap();
+                snap["domainDisclosure"] = domain_disclosure();
+                Ok(snap)
+            }
+            "exchangeExport" => {
+                let e = workbench_exchange::export_as(
+                    self.project.as_ref().unwrap(),
+                    payload["format"].as_str().unwrap_or(""),
+                    payload["timestamp"].as_str().unwrap_or(""),
+                )?;
+                Ok(serde_json::to_value(e).unwrap())
             }
             "getSnapshot" | "exportProject" => Ok(self.snapshot()),
             "validateModel" => {
@@ -720,10 +765,7 @@ fn normalise_units(kind: &str, a: &mut Value) -> Result<()> {
                 None | Some("m/s2") => 1.,
                 Some("g") => 9.80665,
                 _ => {
-                    return Err(err(
-                        "INVALID_SCHEMA",
-                        "saUnit must be \"m/s2\" or \"g\"",
-                    ));
+                    return Err(err("INVALID_SCHEMA", "saUnit must be \"m/s2\" or \"g\""));
                 }
             };
             if let Some(object) = a.as_object_mut() {
@@ -806,6 +848,12 @@ fn capabilities_payload() -> Value {
         "protocolVersion": 1,
         "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0"],
         "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder", "modal", "harmonic", "responseSpectrum"],
+        // exchange-v1 (ADR 0025): browser-only file exchange, not a native
+        // authoring-tool adapter.
+        "exchangeFormats": [
+            {"format": "ifc", "read": ["IFC4"], "write": "IFC4 structural analysis model (SI)"},
+            {"format": "dxf", "read": ["ASCII DXF: LINE, LWPOLYLINE, POLYLINE"], "write": "R12 ASCII wireframe (metres)"}
+        ],
         "designProfiles": workbench_design::default_registry()
             .metadata()
             .into_iter()

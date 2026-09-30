@@ -483,6 +483,7 @@ version = "0.1.0"
 dependencies = [
  "serde_json",
  "workbench-assembly",
+ "workbench-exchange",
  "workbench-model",
 ]
 
@@ -500,7 +501,9 @@ dependencies = [
 name = "workbench-exchange"
 version = "0.1.0"
 dependencies = [
+ "serde",
  "serde_json",
+ "sha2",
  "workbench-model",
 ]
 
