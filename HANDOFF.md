@@ -20,7 +20,10 @@
 - **In the app:** "Import IFC or DXF" on the landing page and in the File menu (conversion review, load or save a mapping, conversion record), plus File → Export IFC / Export DXF with the loss ledger.
 - **Gate:** `node tools/run-m21-parent.mjs` → evidence/M21/full, 11 criteria PASS.
 
-**Fixed along the way:** a self-weight load's member list is now canonically sorted, so its order no longer changes the model hash.
+**Fixed along the way:**
+
+- A self-weight load's member list is now canonically sorted, so its order no longer changes the model hash.
+- The UKR01 generator used libm `hypot`, which is not correctly rounded, so the generated model differed between macOS and glibc by the last bit. Linux CI caught it through the hash-bound export check. With `sqrt` the model is platform-independent, and the long-standing difference between the hosted and local `examples/UKR01.json` is gone. Only the WASM binary still differs byte-wise.
 
 **Known limitation found:** a member-end release at a node whose rotation is otherwise free leaves that rotation without stiffness. The solver refuses such models as UNSTABLE_MODEL, whether imported or drawn. SPECIFICATION allows excluding such DOFs with an UNUSED_DOF diagnostic, which is not implemented yet. The pattern is common in IFC exports (hinges at pinned supports).
 

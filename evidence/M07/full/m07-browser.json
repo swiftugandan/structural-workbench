@@ -1,8 +1,8 @@
 {
   "taskId": "M07-parent",
   "milestone": "M07",
-  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
-  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
+  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,7 +10,7 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "f36a603f06c794f7fe9ae06dd4fa75643251845e108333c68815ce24d2803870"
+    "playwright-results.json": "e13f6731aaa459dcdbeefc1a36d723e63d2fb222098d6286bee4f954d3a0e722"
   },
   "runner": {
     "platform": "darwin",
@@ -19,7 +19,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T09:36:11.661Z",
+  "observedAt": "2026-09-30T10:18:04.887Z",
   "status": "PASS",
   "testCount": 5,
   "testIds": [

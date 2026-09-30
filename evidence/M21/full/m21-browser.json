@@ -1,8 +1,8 @@
 {
   "taskId": "M21-parent",
   "milestone": "M21",
-  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
-  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
+  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,16 +10,16 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "323ee476ee039dadc516fdd05646faae17cada44e18f31241f012c88dc80d708",
+    "playwright-results.json": "b1d67dc64799a0b675f3c60aeb6fbf6877aef1ef9f89e82c60769eb8b1f9b26b",
     "ifc-review.png": "041018cac9adc3c5b7273b634ecd412dd537138230c47e35e9ae2ff7f7b2ad56",
-    "ifc-analysed.png": "06c9cba9b4a4dd09ec69a86d2c245c331de7489f3ad6b44367aca076f1111027",
+    "ifc-analysed.png": "857f71a57553a3ccef77c098b02d8d53612918f2e309c3c53c242adf2c512831",
     "ifc-conversion-record.json": "749e59a618182ab03a60aa5a4ea7faec3eee2bde87ece6c3178ce0477330f01e",
     "ifc-imported-project.json": "e4fa1f620268f9cd837e6cde221cd82a66f97a54f9eac4e7f78817e35ad54fa6",
     "blocked.png": "adeca8586678ad559cb810d1d2aa78de1c0748cd83959e5730e7219d45b911cc",
-    "X-FRAME.ifc": "5a4562f12ea3067d84985eadcf56d24b914d95102aef6ba0fa0461058094f56c",
-    "X-FRAME.ifc.ledger.json": "2023a28ba4518a691a71d95787113bf4ae02f3f4084803986a81ad4635875dc0",
+    "X-FRAME.ifc": "179be70dced2b8b6844c32c148fea9fedeb1cf3e0e6b02cd13a956fb139c70f1",
+    "X-FRAME.ifc.ledger.json": "0099ea2ec082b36f7eac3910f311a5fb1493dccfe690cbad3e6f8a10c64cbe49",
     "X-FRAME.dxf": "391d08aabd70c5b81b8f47bd813ea6481989b16aeb3831ec092b7c38ee8192fb",
-    "ifc-export.png": "9b2f24d35e1f769e41951f6f1243aead23018761846e4268b15d8614d062af5a"
+    "ifc-export.png": "0cb0dedadee4506638b09801315e19299d88daa21b008eff45d5653424942c1c"
   },
   "runner": {
     "platform": "darwin",
@@ -28,7 +28,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T09:35:05.213Z",
+  "observedAt": "2026-09-30T10:17:10.653Z",
   "status": "PASS",
   "testCount": 4,
   "testIds": [
@@ -45,8 +45,8 @@
     "tests/e2e/capability-ledger.spec.js"
   ],
   "stats": {
-    "startTime": "2026-09-30T09:34:35.926Z",
-    "duration": 29259.801,
+    "startTime": "2026-09-30T10:16:38.465Z",
+    "duration": 32161.611,
     "expected": 4,
     "skipped": 0,
     "unexpected": 0,

@@ -1,8 +1,8 @@
 {
   "taskId": "M21-parent",
   "milestone": "M21",
-  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
-  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
+  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T09:34:20.596Z",
+  "observedAt": "2026-09-30T10:16:28.336Z",
   "status": "PASS",
   "testCount": 36,
   "testIds": [
@@ -37,8 +37,8 @@
     "imported_guids_survive_a_round_trip",
     "export_ledger_names_what_ifc_cannot_carry",
     "ifc_round_trip_preserves_the_analysis_model",
-    "section_props::tests::rectangle_swaps_inertias_with_axes",
     "section_props::tests::custom_j_overrides_saint_venant",
+    "section_props::tests::rectangle_swaps_inertias_with_axes",
     "section_props::tests::square_matches_exact_second_moments",
     "section_props::tests::rejects_non_positive",
     "residential::tests::return_stairs_have_connected_floor_and_turning_landings",
@@ -54,8 +54,8 @@
     "plate_inputs_round_trip",
     "plate_inputs_are_validated",
     "rejects_unknown_and_negative_fields",
-    "geometry_diagnostics",
     "labels_units_revision_do_not_change_hash",
+    "geometry_diagnostics",
     "negative_seed_diagnostics"
   ],
   "command": [

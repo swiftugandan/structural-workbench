@@ -1,11 +1,11 @@
 {
-  "modelHash": "db6039e4e946d9019959674bf14a952b5779dcac8235b01a2ce3297b3607cf15",
+  "modelHash": "0531b0d30f0bcff613eaa663efc0a1f7234be619258473b5534cedb4dabb6b86",
   "request": {
     "caseIds": [],
     "combinationIds": [],
     "analysisType": "responseSpectrum",
     "responseSpectrum": {
-      "spectrumId": "rs-munx33js",
+      "spectrumId": "rs-munylj8q",
       "direction": "Z",
       "scale": 1,
       "combination": "srss",
@@ -135,7 +135,7 @@
         ]
       }
     ],
-    "modelHash": "db6039e4e946d9019959674bf14a952b5779dcac8235b01a2ce3297b3607cf15",
+    "modelHash": "0531b0d30f0bcff613eaa663efc0a1f7234be619258473b5534cedb4dabb6b86",
     "modes": [
       {
         "baseShear": 3009.438432044465,
@@ -220,18 +220,18 @@
       3.829600259401345e-11
     ],
     "requestedModes": 3,
-    "resultId": "db6039e4e946d901-spectrum-0471ee43",
+    "resultId": "0531b0d30f0bcff6-spectrum-02174926",
     "scale": 1,
     "schemaVersion": "1.0.0",
-    "settingsHash": "0471ee43558f20769abca5412e64b0e3ae29cf3da04f20b5e37ebd8aa4b604db",
-    "solverBuildHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+    "settingsHash": "021749268534665ffc50b1ea4c7aa9dcc9ae0528bee05281340be28935c910fd",
+    "solverBuildHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
     "sourceRevision": 2,
-    "spectrumId": "rs-munx33js",
+    "spectrumId": "rs-munylj8q",
     "subdivisions": 4,
     "supportIds": [
       "s1"
     ],
-    "acceptedSnapshotHash": "db6039e4e946d9019959674bf14a952b5779dcac8235b01a2ce3297b3607cf15"
+    "acceptedSnapshotHash": "0531b0d30f0bcff613eaa663efc0a1f7234be619258473b5534cedb4dabb6b86"
   },
   "currentState": "current"
 }

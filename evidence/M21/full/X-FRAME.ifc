@@ -1,7 +1,7 @@
 ISO-10303-21;
 HEADER;
 FILE_DESCRIPTION(('ViewDefinition [NotAssigned]','Structural Workbench exchange-v1'),'2;1');
-FILE_NAME('Exchange_frame_X-FRAME.ifc','2026-09-30T09:34:59',(''),(''),'Structural Workbench exchange-v1','Structural Workbench','');
+FILE_NAME('Exchange_frame_X-FRAME.ifc','2026-09-30T10:17:04',(''),(''),'Structural Workbench exchange-v1','Structural Workbench','');
 FILE_SCHEMA(('IFC4'));
 ENDSEC;
 DATA;

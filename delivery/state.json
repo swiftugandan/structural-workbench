@@ -4544,14 +4544,15 @@
         "Every fixture model, X-FRAME and UKR01 round-trip through IFC to the same analysis model with byte-identical re-export; foreign GUIDs preserved",
         "Workbench IFC exports pass IfcOpenShell validation (schema + EXPRESS rules) and read-back; DXF exports pass the ezdxf audit; hash-bound",
         "Found and fixed: IFC4 enum is IN_PLANE_LOADING_2D (not LOADING_2D); self-weight member lists now canonically sorted so order no longer changes the model hash",
-        "Found (not fixed, recorded): a member-end release at a node with otherwise free rotation is singular (unused-DOF exclusion not implemented)"
+        "Found (not fixed, recorded): a member-end release at a node with otherwise free rotation is singular (unused-DOF exclusion not implemented)",
+        "Found and fixed: the UKR01 generator used libm hypot (not correctly rounded), so the model differed by platform; Linux CI caught it via the hash-bound export check. sqrt makes it platform-independent, and hosted and local examples/UKR01.json now agree"
       ],
       "evidencePaths": [
         "evidence/M21/full"
       ],
-      "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
-      "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
-      "acceptedAt": "2026-09-30T09:35:05.269Z",
+      "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
+      "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
+      "acceptedAt": "2026-09-30T10:17:10.711Z",
       "regression": {
         "summary": "full browser batch 126/126, cargo workspace 283/283, node unit/security 54/54, check_package PASS",
         "fullBrowserBatch": "126/126",
@@ -4610,10 +4611,10 @@
       "partiallyClearedAt": "2026-09-28"
     }
   ],
-  "lastVerifiedSourceRevision": "2564a05",
-  "lastVerifiedBuildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "lastVerifiedSourceRevision": "b96101a",
+  "lastVerifiedBuildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
   "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents; R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence; solver UNUSED_DOF exclusion (common in IFC imports).",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+  "lastVerifiedSourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
   "lastVerifiedScope": "M21 parent and, on the same source, M07 parent and LTB, M09, M14, M22 parents, M10-PLATE, M12-COLUMN, M15-RESPONSE; full browser batch 126/126, cargo workspace 283/283, node unit/security 54/54, check_package PASS"
 }
