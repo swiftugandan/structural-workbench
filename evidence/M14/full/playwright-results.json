@@ -94,12 +94,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4124,
+                  "duration": 3870,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:20:17.531Z",
+                  "startTime": "2026-09-30T13:11:22.586Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -115,7 +115,7 @@
           ],
           "id": "6495f811da1e1b026d63-e03b805e2a6853e6bdb6",
           "file": "e2e/capability-ledger.spec.js",
-          "line": 11,
+          "line": 14,
           "column": 1
         }
       ]
@@ -142,12 +142,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16784,
+                  "duration": 46183,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:20:22.088Z",
+                  "startTime": "2026-09-30T13:11:26.893Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -171,8 +171,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-30T10:20:16.541Z",
-    "duration": 22672.099000000002,
+    "startTime": "2026-09-30T13:11:21.625Z",
+    "duration": 52533.153,
     "expected": 2,
     "skipped": 0,
     "unexpected": 0,

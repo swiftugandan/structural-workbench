@@ -1,8 +1,8 @@
 {
   "taskId": "M10-PLATE",
   "milestone": "M10",
-  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
-  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
+  "sourceHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
+  "buildHash": "24dd5702f2c585b9b24dd068446b349859582e407f7f189a9b590f0e70ebc077",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,14 +17,14 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T10:21:23.078Z",
+  "observedAt": "2026-09-30T13:13:07.976Z",
   "status": "PASS",
   "testCount": 14,
   "testIds": [
     "p_cl_opensees_identical_mesh",
     "p_balance_mixed_edges_and_target_mesh",
-    "convergence_indicator_exposes_reentrant_corners",
     "convergence_indicator_falls_with_refinement",
+    "convergence_indicator_exposes_reentrant_corners",
     "p_patch_membrane_and_bending",
     "p_open_opensees_identical_mesh",
     "p_rigid_six_zero_eigenvalues",

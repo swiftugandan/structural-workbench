@@ -93,12 +93,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3446,
+                  "duration": 5131,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:20:44.852Z",
+                  "startTime": "2026-09-30T13:12:28.895Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -133,12 +133,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4174,
+                  "duration": 6416,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:20:48.715Z",
+                  "startTime": "2026-09-30T13:12:34.792Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -173,12 +173,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2340,
+                  "duration": 4711,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:20:53.044Z",
+                  "startTime": "2026-09-30T13:12:41.453Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -213,12 +213,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7012,
+                  "duration": 13916,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:20:55.519Z",
+                  "startTime": "2026-09-30T13:12:46.438Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -242,8 +242,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-30T10:20:43.907Z",
-    "duration": 18900.088,
+    "startTime": "2026-09-30T13:12:27.094Z",
+    "duration": 33879.69,
     "expected": 4,
     "skipped": 0,
     "unexpected": 0,

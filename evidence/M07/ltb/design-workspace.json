@@ -1,8 +1,8 @@
 {
   "taskId": "M07-LTB",
   "milestone": "M07",
-  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
-  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
+  "sourceHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
+  "buildHash": "24dd5702f2c585b9b24dd068446b349859582e407f7f189a9b590f0e70ebc077",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,25 +17,25 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T10:18:11.549Z",
+  "observedAt": "2026-09-30T13:08:57.634Z",
   "status": "PASS",
   "testCount": 15,
   "testIds": [
     "bracing_points_are_validated",
     "a_cantilever_with_a_free_end_takes_cb_of_one",
-    "cb_from_the_model_needs_the_member_to_be_the_unbraced_segment",
     "invalid_settings_fail_atomically_and_provenance_changes_hash",
+    "cb_from_the_model_needs_the_member_to_be_the_unbraced_segment",
     "mismatched_section_invalidates_readiness_and_forged_result_is_rejected",
     "native_binding_readiness_persistence_and_exact_undo",
     "native_no_seed_flexure_and_shear_have_exact_station_provenance",
     "cb_from_the_model_matches_example_f1_2b_for_third_point_bracing",
     "noncompact_flanges_and_ltb_use_their_clauses_and_missing_tension_details_never_pass",
     "overview_keeps_unready_members_and_matches_exact_member_runs",
-    "serviceability_refuses_strength_combinations_and_dangling_references",
     "one_member_braced_at_thirds_matches_the_three_member_model",
-    "serviceability_is_a_separate_deflection_status_against_the_closed_form",
+    "catalogue_study_reanalyses_self_weight_without_mutating_baseline",
+    "serviceability_refuses_strength_combinations_and_dangling_references",
     "weak_axis_and_zero_actions_are_fail_closed",
-    "catalogue_study_reanalyses_self_weight_without_mutating_baseline"
+    "serviceability_is_a_separate_deflection_status_against_the_closed_form"
   ],
   "command": [
     "cargo",

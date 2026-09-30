@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><title>Modal portal — vibration report</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:8px}th:first-child,td:first-child{text-align:left}.banner{padding:20px;background:#fff3d6}.stale{padding:20px;background:#ffe9e4}small{overflow-wrap:anywhere}.shapes{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}figure{margin:0}svg{width:100%;height:auto;background:#f7f9fb}figcaption{font-size:12px;color:#53667c}@media print{body{margin:0;padding:0}tr,figure{break-inside:avoid}}</style>
-<header><p>STRUCTURAL WORKBENCH / VIBRATION REPORT</p><h1>Modal portal</h1><p>Modal analysis (dynamics-v1) · consistent mass · 8 elements per member · SI units</p><small>Model SHA-256: 143d7ab0b9236398a2ae71ff019a65e7ab71595fcca40f0ded058ff9d134fd16<br>Solver source: b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260<br>Settings: bfbabf766c24dc5086511b498bc651672f7ddf2c72de1c79ce76176fbe3d3bcf<br>Result: 143d7ab0b9236398-modal-bfbabf76<br>Created 2026-09-30T10:24:58.440Z</small></header>
+<header><p>STRUCTURAL WORKBENCH / VIBRATION REPORT</p><h1>Modal portal</h1><p>Modal analysis (dynamics-v1) · consistent mass · 8 elements per member · SI units</p><small>Model SHA-256: 13265f467b48d9629a0424038dc1f0345bbac3969cb1319225ace4acd6b0ab57<br>Solver source: 0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8<br>Settings: bfbabf766c24dc5086511b498bc651672f7ddf2c72de1c79ce76176fbe3d3bcf<br>Result: 13265f467b48d962-modal-bfbabf76<br>Created 2026-09-30T13:18:34.073Z</small></header>
 
 <p class="banner" data-testid="vibration-banner">Undamped free vibration of the elastic Euler–Bernoulli model with its declared mass. Rotary inertia of sections is neglected and participation is reported for global translations only. Frequencies and participation ratios are not a floor-vibration, comfort or code serviceability verdict. Commercial numerical parity is UNKNOWN.</p>
 <h2>Mass</h2><table data-testid="vibration-mass"><tr><th>Source</th><th>Kind</th><th>Definition</th><th>Mass (kg)</th></tr><tr><th>ms1</th><td>Self mass (ρA of every member)</td><td>factor 1</td><td data-si="989.0999999999996">989.1</td></tr><tr><th>ms2</th><td>Nodal mass</td><td>at n3</td><td data-si="3000">3000</td></tr><tr><th>ms3</th><td>Nodal mass</td><td>at n4</td><td data-si="3000">3000</td></tr><tr><th>Total (each direction)</th><td></td><td></td><td data-si="6989.099999999999">6989.1</td></tr></table>
@@ -101,21 +101,21 @@
   ],
   &quot;massSources&quot;: [
     {
-      &quot;id&quot;: &quot;m28549be1&quot;,
-      &quot;kind&quot;: &quot;nodalMass&quot;,
-      &quot;mass&quot;: 3000,
-      &quot;node&quot;: &quot;tl&quot;
+      &quot;factor&quot;: 1,
+      &quot;id&quot;: &quot;m148a57b1&quot;,
+      &quot;kind&quot;: &quot;selfMass&quot;
     },
     {
-      &quot;id&quot;: &quot;m3d9465ce&quot;,
+      &quot;id&quot;: &quot;m4c365ba2&quot;,
       &quot;kind&quot;: &quot;nodalMass&quot;,
       &quot;mass&quot;: 3000,
       &quot;node&quot;: &quot;tr&quot;
     },
     {
-      &quot;factor&quot;: 1,
-      &quot;id&quot;: &quot;m8b8bd3ed&quot;,
-      &quot;kind&quot;: &quot;selfMass&quot;
+      &quot;id&quot;: &quot;m7e1563f3&quot;,
+      &quot;kind&quot;: &quot;nodalMass&quot;,
+      &quot;mass&quot;: 3000,
+      &quot;node&quot;: &quot;tl&quot;
     }
   ],
   &quot;materials&quot;: [
@@ -203,9 +203,9 @@
       &quot;col&quot;: &quot;sec1&quot;,
       &quot;cr&quot;: &quot;m2&quot;,
       &quot;g1&quot;: &quot;l1&quot;,
-      &quot;m28549be1&quot;: &quot;ms2&quot;,
-      &quot;m3d9465ce&quot;: &quot;ms3&quot;,
-      &quot;m8b8bd3ed&quot;: &quot;ms1&quot;,
+      &quot;m148a57b1&quot;: &quot;ms1&quot;,
+      &quot;m4c365ba2&quot;: &quot;ms3&quot;,
+      &quot;m7e1563f3&quot;: &quot;ms2&quot;,
       &quot;mat1&quot;: &quot;mat1&quot;,
       &quot;s1&quot;: &quot;s1&quot;,
       &quot;s2&quot;: &quot;s2&quot;,

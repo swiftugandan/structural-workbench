@@ -1,8 +1,8 @@
 {
   "taskId": "M21-parent",
   "milestone": "M21",
-  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
-  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
+  "sourceHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
+  "buildHash": "24dd5702f2c585b9b24dd068446b349859582e407f7f189a9b590f0e70ebc077",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T10:16:34.482Z",
+  "observedAt": "2026-09-30T13:07:28.498Z",
   "status": "PASS",
   "testCount": 13,
   "testIds": [
@@ -27,9 +27,9 @@
     "engineering_units_are_parsed_in_rust_and_fail_atomically",
     "analyse_multiple_ids_returns_envelope_with_provenance",
     "force_replace_import_with_null_revision",
+    "snapping_is_authoritative_and_does_not_change_topology",
     "member_creation_batch_is_one_atomic_history_step",
     "cached_hash_tracks_replacements_history_and_read_only_queries",
-    "snapping_is_authoritative_and_does_not_change_topology",
     "load_variant_unit_conversion_preserves_exact_schema",
     "a_refused_import_leaves_the_project_unchanged",
     "exports_carry_their_ledger_and_reimport",

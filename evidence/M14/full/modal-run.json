@@ -1,5 +1,5 @@
 {
-  "modelHash": "de2cda4d33e0c384b29a1231ef9eae23d95befbbebc6dc5d4c954b70075abb72",
+  "modelHash": "7b6f3232341830aac4ae96a4e1350d821d398a93d17812d561bfd800831ea86f",
   "request": {
     "caseIds": [],
     "combinationIds": [],
@@ -24,25 +24,25 @@
     "mass": {
       "sources": [
         {
-          "id": "m1e7ca362",
+          "id": "m35af70ea",
           "kind": "nodalMass",
           "mass": 3000
         },
         {
-          "id": "mb99c06ea",
+          "id": "m412050aa",
+          "kind": "nodalMass",
+          "mass": 3000
+        },
+        {
+          "id": "mdd3f95e9",
           "kind": "selfMass",
           "mass": 989.0999999999996
-        },
-        {
-          "id": "mc292bc0e",
-          "kind": "nodalMass",
-          "mass": 3000
         }
       ],
       "total": 6989.099999999999
     },
     "massMatrix": "consistent",
-    "modelHash": "de2cda4d33e0c384b29a1231ef9eae23d95befbbebc6dc5d4c954b70075abb72",
+    "modelHash": "7b6f3232341830aac4ae96a4e1350d821d398a93d17812d561bfd800831ea86f",
     "modes": [
       {
         "cumulativeRatio": [
@@ -5224,13 +5224,13 @@
       }
     ],
     "requestedModes": 12,
-    "resultId": "de2cda4d33e0c384-modal-bfbabf76",
+    "resultId": "7b6f3232341830aa-modal-bfbabf76",
     "schemaVersion": "1.0.0",
     "settingsHash": "bfbabf766c24dc5086511b498bc651672f7ddf2c72de1c79ce76176fbe3d3bcf",
-    "solverBuildHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
+    "solverBuildHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
     "sourceRevision": 3,
     "subdivisions": 8,
-    "acceptedSnapshotHash": "de2cda4d33e0c384b29a1231ef9eae23d95befbbebc6dc5d4c954b70075abb72"
+    "acceptedSnapshotHash": "7b6f3232341830aac4ae96a4e1350d821d398a93d17812d561bfd800831ea86f"
   },
   "currentState": "current"
 }

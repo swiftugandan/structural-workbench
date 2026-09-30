@@ -94,12 +94,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6663,
+                  "duration": 16073,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:21:28.763Z",
+                  "startTime": "2026-09-30T13:13:14.854Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -115,7 +115,7 @@
           ],
           "id": "6e4a453773548216eeeb-09f43fa081fcc1a6ac9b",
           "file": "e2e/design-previews.spec.js",
-          "line": 17,
+          "line": 18,
           "column": 3
         },
         {
@@ -134,12 +134,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5089,
+                  "duration": 10737,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:21:36.047Z",
+                  "startTime": "2026-09-30T13:13:31.658Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -155,7 +155,7 @@
           ],
           "id": "6e4a453773548216eeeb-f1cdb8647810d372f1c3",
           "file": "e2e/design-previews.spec.js",
-          "line": 17,
+          "line": 18,
           "column": 3
         },
         {
@@ -174,12 +174,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5973,
+                  "duration": 15861,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:21:41.321Z",
+                  "startTime": "2026-09-30T13:13:42.760Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -195,7 +195,7 @@
           ],
           "id": "6e4a453773548216eeeb-4cb4173f09d60386c561",
           "file": "e2e/design-previews.spec.js",
-          "line": 17,
+          "line": 18,
           "column": 3
         },
         {
@@ -214,12 +214,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7603,
+                  "duration": 22387,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:21:47.489Z",
+                  "startTime": "2026-09-30T13:13:58.902Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -235,7 +235,7 @@
           ],
           "id": "6e4a453773548216eeeb-d24412791d7b53d60a49",
           "file": "e2e/design-previews.spec.js",
-          "line": 144,
+          "line": 145,
           "column": 1
         },
         {
@@ -254,12 +254,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5887,
+                  "duration": 11966,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:21:55.317Z",
+                  "startTime": "2026-09-30T13:14:21.663Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -275,7 +275,7 @@
           ],
           "id": "6e4a453773548216eeeb-c2a4272bca0cdeaed5e1",
           "file": "e2e/design-previews.spec.js",
-          "line": 275,
+          "line": 276,
           "column": 3
         },
         {
@@ -294,12 +294,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5896,
+                  "duration": 14814,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:22:01.415Z",
+                  "startTime": "2026-09-30T13:14:33.952Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -315,7 +315,7 @@
           ],
           "id": "6e4a453773548216eeeb-aacaa10f7eca9b598316",
           "file": "e2e/design-previews.spec.js",
-          "line": 275,
+          "line": 276,
           "column": 3
         },
         {
@@ -334,12 +334,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6805,
+                  "duration": 15535,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:22:07.543Z",
+                  "startTime": "2026-09-30T13:14:49.335Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -355,7 +355,7 @@
           ],
           "id": "6e4a453773548216eeeb-4383763256d0664a6a47",
           "file": "e2e/design-previews.spec.js",
-          "line": 435,
+          "line": 436,
           "column": 1
         }
       ]
@@ -382,12 +382,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10123,
+                  "duration": 20156,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:22:14.595Z",
+                  "startTime": "2026-09-30T13:15:05.157Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -403,7 +403,7 @@
           ],
           "id": "74605352641469c40734-dae84abe0f19ec65d38d",
           "file": "e2e/slab-plate.spec.js",
-          "line": 41,
+          "line": 42,
           "column": 1
         },
         {
@@ -422,12 +422,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4138,
+                  "duration": 5418,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:22:24.955Z",
+                  "startTime": "2026-09-30T13:15:25.848Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -443,7 +443,7 @@
           ],
           "id": "74605352641469c40734-5873522f4660ddf667db",
           "file": "e2e/slab-plate.spec.js",
-          "line": 203,
+          "line": 204,
           "column": 1
         },
         {
@@ -462,12 +462,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7270,
+                  "duration": 12678,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:22:29.289Z",
+                  "startTime": "2026-09-30T13:15:31.477Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -483,7 +483,7 @@
           ],
           "id": "74605352641469c40734-24f81198b51e60c854e2",
           "file": "e2e/slab-plate.spec.js",
-          "line": 302,
+          "line": 303,
           "column": 1
         }
       ]
@@ -491,8 +491,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-30T10:21:27.744Z",
-    "duration": 69124.799,
+    "startTime": "2026-09-30T13:13:13.503Z",
+    "duration": 151147.21000000002,
     "expected": 10,
     "skipped": 0,
     "unexpected": 0,

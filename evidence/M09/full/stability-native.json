@@ -1,8 +1,8 @@
 {
   "taskId": "M09-parent",
   "milestone": "M09",
-  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
-  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
+  "sourceHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
+  "buildHash": "24dd5702f2c585b9b24dd068446b349859582e407f7f189a9b590f0e70ebc077",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -17,7 +17,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T10:19:43.899Z",
+  "observedAt": "2026-09-30T13:10:44.405Z",
   "status": "PASS",
   "testCount": 33,
   "testIds": [
@@ -29,15 +29,15 @@
     "member_results_carry_second_order_moments_on_the_physical_member",
     "near_critical_portal_converges_with_large_amplification",
     "sway_imperfection_is_explicit_and_listed",
-    "the_first_order_record_is_the_linear_response_to_the_same_loads",
     "without_axial_force_second_order_is_the_linear_analysis",
-    "column_moments_follow_the_exact_p_delta_shape",
+    "the_first_order_record_is_the_linear_response_to_the_same_loads",
     "portal_p_delta_matches_the_exact_beam_column_solution",
+    "column_moments_follow_the_exact_p_delta_shape",
     "a_strut_in_tension_has_no_critical_factor",
     "a_portal_with_a_pinned_beam_buckles_as_two_flagpoles",
     "both_bending_planes_appear_with_their_own_loads_and_shapes",
-    "mode_shapes_are_normalised_to_a_unit_positive_peak",
     "end_releases_on_a_fixed_strut_are_the_pinned_strut",
+    "mode_shapes_are_normalised_to_a_unit_positive_peak",
     "releases_envelopes_and_bad_settings_are_rejected",
     "portal_sway_buckling_matches_the_characteristic_equation",
     "settings_enter_the_result_identity",

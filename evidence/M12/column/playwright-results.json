@@ -93,12 +93,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6844,
+                  "duration": 14735,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:23:19.205Z",
+                  "startTime": "2026-09-30T13:15:56.182Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -114,7 +114,7 @@
           ],
           "id": "631b29d92d4b0a5ea7ce-30abf641c4edf31cf0c7",
           "file": "e2e/rc-column.spec.js",
-          "line": 11,
+          "line": 12,
           "column": 1
         },
         {
@@ -133,12 +133,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4450,
+                  "duration": 16053,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-30T10:23:26.482Z",
+                  "startTime": "2026-09-30T13:16:11.424Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -154,7 +154,7 @@
           ],
           "id": "631b29d92d4b0a5ea7ce-59b33b7ea5ff46cb9758",
           "file": "e2e/rc-column.spec.js",
-          "line": 158,
+          "line": 159,
           "column": 1
         }
       ]
@@ -162,8 +162,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-30T10:23:18.259Z",
-    "duration": 12919.853,
+    "startTime": "2026-09-30T13:15:54.599Z",
+    "duration": 33253.505,
     "expected": 2,
     "skipped": 0,
     "unexpected": 0,

@@ -1,8 +1,8 @@
 {
   "taskId": "M10-PLATE",
   "milestone": "M10",
-  "sourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
-  "buildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
+  "sourceHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
+  "buildHash": "24dd5702f2c585b9b24dd068446b349859582e407f7f189a9b590f0e70ebc077",
   "lockHashes": {
     "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,7 +10,7 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "a787f846b2f8266bb24a9d48461ed01d38f516e17c760900788faad671395936"
+    "playwright-results.json": "c31ddae91aaa2ebe7ab2d1510042b206c74f146a4fabb3b51ff38b3b8ba07c85"
   },
   "runner": {
     "platform": "darwin",
@@ -19,7 +19,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T10:22:36.891Z",
+  "observedAt": "2026-09-30T13:15:44.677Z",
   "status": "PASS",
   "testCount": 10,
   "testIds": [
@@ -42,8 +42,8 @@
     "tests/e2e/design-previews.spec.js"
   ],
   "stats": {
-    "startTime": "2026-09-30T10:21:27.744Z",
-    "duration": 69124.799,
+    "startTime": "2026-09-30T13:13:13.503Z",
+    "duration": 151147.21000000002,
     "expected": 10,
     "skipped": 0,
     "unexpected": 0,

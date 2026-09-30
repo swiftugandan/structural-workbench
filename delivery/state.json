@@ -4611,10 +4611,10 @@
       "partiallyClearedAt": "2026-09-28"
     }
   ],
-  "lastVerifiedSourceRevision": "b96101a",
-  "lastVerifiedBuildHash": "3319e2a0766c582f4d7b19cae5910f11233c40d5beb3d023eb9495b30e06bd7d",
+  "lastVerifiedSourceRevision": "ccd4ada",
+  "lastVerifiedBuildHash": "24dd5702f2c585b9b24dd068446b349859582e407f7f189a9b590f0e70ebc077",
   "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents; R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence; solver UNUSED_DOF exclusion (common in IFC imports).",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "b50c22294fd2c3366ed0c929d221ec9804fc0491178ce1216ccea6627c885260",
-  "lastVerifiedScope": "M21 parent and, on the same source, M07 parent and LTB, M09, M14, M22 parents, M10-PLATE, M12-COLUMN, M15-RESPONSE; full browser batch 126/126, cargo workspace 283/283, node unit/security 54/54, check_package PASS"
+  "lastVerifiedSourceHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
+  "lastVerifiedScope": "M21, M07 parent and LTB, M09, M14, M22 parents, M10-PLATE, M12-COLUMN, M15-RESPONSE on the same source; browser suite via npm run test:regression 125/126 with the warehouse WebGPU-initialisation flake passing on rerun (committed evidence untouched), cargo workspace 283/283, node unit/security 54/54"
 }
