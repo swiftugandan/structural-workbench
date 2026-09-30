@@ -1,8 +1,8 @@
 # M07-LTB acceptance record
 
-Source hash: `c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4`
-Build hash: `b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876`
-Observed: 2026-09-30T06:51:12.206Z
+Source hash: `83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599`
+Build hash: `fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab`
+Observed: 2026-09-30T09:37:29.255Z
 Status: **PASS**
 
 | ID | Title | Evidence | Status | Observation |

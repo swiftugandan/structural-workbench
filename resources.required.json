@@ -140,16 +140,22 @@
     },
     {
       "id": "R-EXCHANGE-CORPUS",
-      "status": "not_acquired",
+      "status": "acquired",
       "requiredBy": [
         "M21"
       ],
       "definition": "SOURCES.md section 3",
-      "sourceEdition": null,
-      "sourceHash": null,
-      "rightsStatus": "unverified",
-      "localPath": null,
-      "validationEvidence": []
+      "sourceEdition": "exchange-v1 project corpus (IFC4 ADD2 TC1; ASCII DXF)",
+      "sourceHash": "449c8514e101776341f81bb8dbdd25148c860c191e7fcaa8142b8fd9fd70b135",
+      "rightsStatus": "project_generated_redistributable",
+      "localPath": "fixtures/exchange/exchange-oracle.json",
+      "validationEvidence": [
+        "resources.lock.json#R-EXCHANGE-CORPUS",
+        "docs/formulations/exchange.md",
+        "docs/adr/0025-model-exchange.md",
+        "evidence/M21/full/ACCEPTANCE.md"
+      ],
+      "note": "IFC4 structural analysis models and DXF wireframes. Native authoring-tool adapters (Revit and others) are separately scoped and not part of this corpus."
     },
     {
       "id": "R-FOUNDATION-EXAMPLES",

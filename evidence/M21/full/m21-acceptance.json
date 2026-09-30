@@ -1,0 +1,232 @@
+{
+  "taskId": "M21-parent",
+  "milestone": "M21",
+  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-30T09:35:05.269Z",
+  "status": "PASS",
+  "testCount": 11,
+  "testIds": [
+    "M21-FORMATS",
+    "M21-UNITS-ORIENTATION",
+    "M21-REFERENCE-CORPUS",
+    "M21-SEMANTIC-ROUND-TRIP",
+    "M21-LOSS-LEDGER",
+    "M21-DECISIONS-AND-MANIFEST",
+    "M21-FAILURE-PATHS",
+    "M21-EXPORT-VALIDATED",
+    "M21-UI-JOURNEY",
+    "M21-SCOPE-DISCLOSURE",
+    "M21-ORACLE-PROVENANCE"
+  ],
+  "command": [
+    "node",
+    "tools/record-m21-acceptance.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "M21-FORMATS",
+      "title": "Explicitly supported readers and writers",
+      "evidence": "kernel_validation",
+      "tests": {
+        "exchange-native": [
+          "step::tests::reals_round_trip_in_step_form",
+          "step::tests::strings_round_trip_with_quotes_and_unicode",
+          "step::tests::parses_typed_values_lists_enums_and_comments",
+          "step::tests::refuses_malformed_files",
+          "guid::tests::buildingsmart_example_encodes",
+          "guid::tests::entity_ids_round_trip_guids",
+          "refusals_name_the_reason"
+        ]
+      },
+      "observation": "ISO 10303-21 reals and strings (quotes, \\X2\\ Unicode) round-trip; IfcGloballyUniqueId matches the buildingSMART example; IFC4 is read and written, IFC2X3/IFC4X3, binary DXF, non-STEP text and files with nothing to import are refused by name.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-UNITS-ORIENTATION",
+      "title": "Units and orientation fixtures",
+      "evidence": "kernel_validation",
+      "tests": {
+        "exchange-native": [
+          "ifc_corpus_imports_to_the_expected_si_models",
+          "dxf_corpus_imports_segments_in_metres",
+          "a_member_without_axis_takes_the_workbench_default_and_says_so"
+        ]
+      },
+      "observation": "mm/kN with prefixed and derived units, feet/kips via conversion-based units (derived units decided), a 30°-rotated and translated shared placement, Axis-defined local axes, local and global loads, loads per projected length, and DXF in a mirrored and an arbitrary OCS all import to the oracle's SI model within 1e-9. A member without Axis takes the workbench default and says so.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-REFERENCE-CORPUS",
+      "title": "Reference corpus from independent tools",
+      "evidence": "kernel_validation",
+      "tests": {
+        "exchange-native": [
+          "ifc_corpus_imports_to_the_expected_si_models",
+          "dxf_corpus_imports_segments_in_metres"
+        ],
+        "exchange-protocol": [
+          "imported_ifc_models_are_the_project_and_analyse"
+        ]
+      },
+      "observation": "IfcOpenShell-authored IFC4 files (schema- and EXPRESS-rule-valid) and ezdxf-authored DXF files, with expectations computed by the oracle from its own inputs, import exactly as expected; every imported corpus model analyses in every case and combination through the protocol.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-SEMANTIC-ROUND-TRIP",
+      "title": "Semantic round trips with identity",
+      "evidence": "save_and_reopen",
+      "tests": {
+        "exchange-native": [
+          "ifc_round_trip_preserves_the_analysis_model",
+          "imported_guids_survive_a_round_trip",
+          "dxf_round_trip_with_explicit_layer_decisions"
+        ],
+        "exchange-protocol": [
+          "exports_carry_their_ledger_and_reimport"
+        ],
+        "m21-browser": [
+          "IFC import: conversion review, mapping manifest, analysis, save and reopen",
+          "IFC and DXF export: the files the independent tools checked, with their ledgers"
+        ]
+      },
+      "observation": "Every fixture model, X-FRAME and UKR01 go project → IFC → project to the same analysis model (reals within 1e-12) and re-export byte-identically; an export re-imports to the same model hash; foreign GUIDs are kept as IDs and written back after save and reopen; DXF round-trips its geometry with explicit layer decisions.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-LOSS-LEDGER",
+      "title": "Missing-object and conversion ledger",
+      "evidence": "exported_outcome",
+      "tests": {
+        "exchange-native": [
+          "export_ledger_names_what_ifc_cannot_carry",
+          "ifc_corpus_imports_to_the_expected_si_models",
+          "dxf_corpus_imports_segments_in_metres"
+        ],
+        "m21-browser": [
+          "IFC import: conversion review, mapping manifest, analysis, save and reopen",
+          "IFC and DXF export: the files the independent tools checked, with their ledgers"
+        ]
+      },
+      "observation": "Imports list physical elements, reactions, surface members, unsupported loads, elastic conditions, projected loads and discrete actions with counts and examples; exports list settlements, design data, mass sources, spectra, results and partial self weight. The ledgers are shown and downloadable, and the conversion record keeps the mapping.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-DECISIONS-AND-MANIFEST",
+      "title": "Deterministic forms and explicit batch manifests",
+      "evidence": "ui_journey",
+      "tests": {
+        "exchange-native": [
+          "dxf_round_trip_with_explicit_layer_decisions"
+        ],
+        "exchange-cli": [
+          "tests::batch_exchange_import_needs_an_explicit_mapping"
+        ],
+        "m21-browser": [
+          "IFC import: conversion review, mapping manifest, analysis, save and reopen",
+          "DXF import answered in the form; refusals keep the project"
+        ]
+      },
+      "observation": "Every undefined unit, elastic or unset condition, unknown purpose and skipped content is a decision; the review preselects nothing and Import waits for every answer; the form's manifest equals a loaded one; the CLI refuses a manifest without answers and writes the project and conversion record with one.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-FAILURE-PATHS",
+      "title": "Atomic refusals",
+      "evidence": "failure_path",
+      "tests": {
+        "exchange-native": [
+          "a_connection_between_member_ends_blocks_at_read",
+          "refusals_name_the_reason"
+        ],
+        "exchange-protocol": [
+          "a_refused_import_leaves_the_project_unchanged"
+        ],
+        "m21-browser": [
+          "DXF import answered in the form; refusals keep the project"
+        ]
+      },
+      "observation": "Blocking content (released translations, mid-member connections) is shown at review and refused at import; unanswered decisions, mappings for another file and malformed mappings are refused; the model hash and revision are unchanged after each refusal.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-EXPORT-VALIDATED",
+      "title": "Exports validated by independent tools, hash-bound",
+      "evidence": "exported_outcome",
+      "tests": {
+        "exchange-native": [
+          "workbench_exports_are_the_ones_the_independent_tools_checked"
+        ],
+        "exchange-protocol": [
+          "exports_carry_their_ledger_and_reimport"
+        ],
+        "m21-browser": [
+          "IFC and DXF export: the files the independent tools checked, with their ledgers"
+        ]
+      },
+      "observation": "The IFC files the kernel, the protocol and the browser write for X-FRAME and UKR01 are byte-identical (at the oracle's timestamp) to the ones IfcOpenShell validated with no issues and read back in SI; the DXF files are the ones ezdxf audited with no errors.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-UI-JOURNEY",
+      "title": "Import, resolve mappings, analyse and export in the browser",
+      "evidence": "ui_journey",
+      "tests": {
+        "m21-browser": [
+          "IFC import: conversion review, mapping manifest, analysis, save and reopen",
+          "DXF import answered in the form; refusals keep the project",
+          "IFC and DXF export: the files the independent tools checked, with their ledgers"
+        ]
+      },
+      "observation": "Import from the landing page or File menu, review, answer or load a manifest, import, analyse to a current result, save and reopen, export IFC and DXF with their ledgers, and re-import the exported IFC with no decisions.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-SCOPE-DISCLOSURE",
+      "title": "Browser-only exchange is not a native adapter",
+      "evidence": "capability_ledger",
+      "tests": {
+        "m21-browser": [
+          "IFC import: conversion review, mapping manifest, analysis, save and reopen",
+          "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions"
+        ]
+      },
+      "observation": "The review states browser-only file exchange, not a native Revit or authoring-tool round trip; the capability ledger lists model-exchange with its limitations and UNKNOWN comparison, and Revit plugins stay excluded.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M21-ORACLE-PROVENANCE",
+      "title": "Independent corpus generated by the recorded script",
+      "evidence": "regression_results",
+      "observation": "tools/oracles/exchange_oracle.py sha256 a47944f4e4019f9ae5865f2c826499ecc5d92e35ab63a69026c18f93ab656d04; recorded a47944f4e4019f9ae5865f2c826499ecc5d92e35ab63a69026c18f93ab656d04; IfcOpenShell 0.9.0, ezdxf 1.4.4; 6 corpus files; export checks clean.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "exchange-v1 is browser-only file exchange of IFC4 structural analysis models and DXF wireframes into the frame model. IFC2X3/IFC4X3, physical-only IFC models, surface members, curved or varying members, eccentric connections and composite profiles are refused or skipped by explicit decision. DXF carries geometry only. Support settlements, design data, mass sources, spectra and results are not exported to IFC. There is no native Revit or other authoring-tool adapter and no Prodesk equivalence. A member-end release at a node with free rotation leaves that rotation without stiffness; the solver refuses such models (unused-DOF exclusion is not implemented). Commercial PROKON parity remains UNKNOWN."
+}

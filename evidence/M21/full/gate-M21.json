@@ -1,0 +1,16 @@
+{
+  "milestone": "M21",
+  "status": "PASS",
+  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "required": [
+    "build",
+    "exchange-native",
+    "exchange-protocol",
+    "exchange-cli",
+    "m21-browser",
+    "m21-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-30T09:35:05.667Z"
+}

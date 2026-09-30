@@ -1,0 +1,144 @@
+{
+  "exchange": "exchange-v1",
+  "ledger": [
+    {
+      "count": 1,
+      "disposition": "converted",
+      "examples": [
+        "1IpPKpjhnSJew$JryoUkZi"
+      ],
+      "reason": "elastic directions imported as fixed",
+      "subject": "elastic support"
+    },
+    {
+      "count": 1,
+      "disposition": "notImported",
+      "examples": [
+        "19sCICrdzPixjAn83SJMFM"
+      ],
+      "reason": "not part of the structural analysis model (physical or other elements are not imported)",
+      "subject": "IfcBeam"
+    },
+    {
+      "count": 1,
+      "disposition": "notImported",
+      "examples": [
+        "0sgbUV5sLLMQi$BvsLQ20i"
+      ],
+      "reason": "analysis results are recomputed, not imported",
+      "subject": "IfcStructuralPointReaction"
+    },
+    {
+      "count": 1,
+      "disposition": "skipped",
+      "examples": [
+        "193CguxCHNOeeU8Zv_Z_tl"
+      ],
+      "reason": "the load type or distribution cannot be represented (constant linear forces and single forces only)",
+      "subject": "IfcStructuralCurveAction"
+    },
+    {
+      "count": 1,
+      "disposition": "skipped",
+      "examples": [
+        "2YTArXudnSfeBl056skB8O"
+      ],
+      "reason": "surface items and curve/surface connections are outside a frame model",
+      "subject": "IfcStructuralSurfaceMember"
+    }
+  ],
+  "mapping": {
+    "answers": {
+      "connections:unset": {
+        "choice": "pinned"
+      },
+      "purpose:ULS": {
+        "choice": "strength"
+      },
+      "skip:loads": {
+        "choice": "skip"
+      },
+      "skip:surfaces": {
+        "choice": "skip"
+      },
+      "supports:elastic": {
+        "choice": "fixed"
+      },
+      "units:linearForce": {
+        "choice": "derived"
+      },
+      "units:linearStiffness": {
+        "choice": "derived"
+      },
+      "units:massDensity": {
+        "choice": "derived"
+      },
+      "units:modulusOfElasticity": {
+        "choice": "derived"
+      },
+      "units:torque": {
+        "choice": "derived"
+      }
+    },
+    "format": "workbench-exchange-mapping-v1",
+    "sourceSha256": "ac781a606867070329895c2d389530be88200ae347cf93f028401f235e95b844"
+  },
+  "projectHash": "aca16b67897817b25e4a0d76997bf3fa6765ccba4f140696d42f2deeffa403c6",
+  "source": {
+    "bytes": 6777,
+    "fileName": "X-FEET-KIP.ifc",
+    "format": "ifc",
+    "schema": "IFC4",
+    "sha256": "ac781a606867070329895c2d389530be88200ae347cf93f028401f235e95b844"
+  },
+  "units": [
+    {
+      "factor": 0.3048,
+      "label": "1 file unit = 0.3048 m",
+      "quantity": "length",
+      "source": "assigned"
+    },
+    {
+      "factor": 4448.2216152605,
+      "label": "1 file unit = 4448.2216152605 N",
+      "quantity": "force",
+      "source": "assigned"
+    },
+    {
+      "factor": 0.45359237,
+      "label": "1 file unit = 0.45359237 kg",
+      "quantity": "mass",
+      "source": "assigned"
+    },
+    {
+      "factor": null,
+      "label": "not assigned by the file",
+      "quantity": "modulusOfElasticity",
+      "source": "undefined"
+    },
+    {
+      "factor": null,
+      "label": "not assigned by the file",
+      "quantity": "massDensity",
+      "source": "undefined"
+    },
+    {
+      "factor": null,
+      "label": "not assigned by the file",
+      "quantity": "linearForce",
+      "source": "undefined"
+    },
+    {
+      "factor": null,
+      "label": "not assigned by the file",
+      "quantity": "torque",
+      "source": "undefined"
+    },
+    {
+      "factor": null,
+      "label": "not assigned by the file",
+      "quantity": "linearStiffness",
+      "source": "undefined"
+    }
+  ]
+}

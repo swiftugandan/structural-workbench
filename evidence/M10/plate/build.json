@@ -1,10 +1,10 @@
 {
   "taskId": "M10-PLATE",
   "milestone": "M10",
-  "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
-  "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
+  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
   "lockHashes": {
-    "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
@@ -17,9 +17,9 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T06:52:27.303Z",
+  "observedAt": "2026-09-30T09:38:52.040Z",
   "status": "PASS",
-  "testCount": 84,
+  "testCount": 85,
   "testIds": [
     "app.html",
     "app.js",
@@ -52,6 +52,7 @@
     "examples/UKR01.json",
     "examples/V01.json",
     "examples/W01.json",
+    "exchange.js",
     "force-inspector.js",
     "hierarchy.js",
     "icons.js",

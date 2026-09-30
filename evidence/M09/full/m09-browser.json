@@ -1,23 +1,23 @@
 {
   "taskId": "M09-parent",
   "milestone": "M09",
-  "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
-  "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
+  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
   "lockHashes": {
-    "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "46094d82729f6c9477d2ccdfeeb3a28334ff0b463a61321dadaa23784cd88e78",
+    "playwright-results.json": "3f4b06b92e56c9d14462fc53e1a966aa634b46d13c8afe4a5207ce5eea593bb7",
     "journey.json": "f8a8fc7fa6be2c34e325d541557619c2a113c7e573e4a2fb813bc276513ad03d",
-    "record.html": "db0058fbb8ca121fe7697b99b3241055374c413be1ccfd6e9df016f72f4de9f7",
-    "second-order-run.json": "eb68d9ec031d6962a5da149235377b208f17ffa3c97388317aca6ad6101c58ea",
+    "record.html": "6075d6fc150076ae9a92ec4924ba1b0cb953d887fd31c7e9eabd188e4c1b4905",
+    "second-order-run.json": "91729925e6c6cb2e7cd816a697ab823d9ac4b8fbf40418049a500f9ebbfe058f",
     "project.json": "74fe4938abad455660077d0b3eb6d5e94cf8da1d9594d5a213b0615ddbcf7f6a",
-    "buckling-mode.png": "94e92db4e7d4b050bba8f479a0f5869aee122ec1f34da31c264fe5769be3cb68",
-    "second-order.png": "81663aa0fd4ef1f9ad2c1acd7751d077d1c4c4bbf3922a5e590b4d19dbc1f64e",
-    "sway-comparison.png": "9bfd6773087f92a096e00a08a1a37e61fd962544032f81a0b53711a60231a194",
+    "buckling-mode.png": "f86e3ecda77773b29b12d06e871b7186c89c9e928973e8b66cb35127fc41b0d0",
+    "second-order.png": "d8a0fb66b9f5c32124f5c5ae81864954ef648452801b8c8abf688cabd63eeada",
+    "sway-comparison.png": "5dbb7829856cdbf0f05f474482f00da4cc5be8256de25436401cb1e8d75a34cb",
     "over-critical.png": "a27ca8153e56607e78239ddb6105c21947ec0fccc2e9f99350c163996b6cdffd"
   },
   "runner": {
@@ -27,7 +27,7 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-30T06:51:46.621Z",
+  "observedAt": "2026-09-30T09:37:57.404Z",
   "status": "PASS",
   "testCount": 2,
   "testIds": [
@@ -42,8 +42,8 @@
     "tests/e2e/capability-ledger.spec.js"
   ],
   "stats": {
-    "startTime": "2026-09-30T06:51:23.492Z",
-    "duration": 23094.672,
+    "startTime": "2026-09-30T09:37:34.784Z",
+    "duration": 22590.734999999997,
     "expected": 2,
     "skipped": 0,
     "unexpected": 0,

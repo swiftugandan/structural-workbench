@@ -57,20 +57,20 @@
   ],
   "massSources": [
     {
-      "id": "m25e6e9e1",
-      "kind": "nodalMass",
-      "mass": 3000,
-      "node": "tr"
-    },
-    {
-      "id": "m873011a0",
+      "id": "m2d666150",
       "kind": "nodalMass",
       "mass": 3000,
       "node": "tl"
     },
     {
+      "id": "m527359b2",
+      "kind": "nodalMass",
+      "mass": 3000,
+      "node": "tr"
+    },
+    {
       "factor": 1,
-      "id": "mb3723ae7",
+      "id": "mbd6bf3fe",
       "kind": "selfMass"
     }
   ],
@@ -159,10 +159,10 @@
       "col": "sec1",
       "cr": "m2",
       "g1": "l1",
-      "m25e6e9e1": "ms3",
-      "m873011a0": "ms2",
+      "m2d666150": "ms2",
+      "m527359b2": "ms3",
       "mat1": "mat1",
-      "mb3723ae7": "ms1",
+      "mbd6bf3fe": "ms1",
       "s1": "s1",
       "s2": "s2",
       "tl": "n3",

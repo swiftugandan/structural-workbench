@@ -1,3 +1,31 @@
+## Latest: M21 model exchange (IFC4 and DXF) accepted
+
+**exchange-v1 (ADR 0025, `docs/formulations/exchange.md`).**
+
+- **Formats.**
+  - IFC4 (ISO 16739-1:2018) IfcStructuralAnalysisModel is read and written. IFC2X3 and IFC4X3 are refused by name.
+  - ASCII DXF LINE, LWPOLYLINE and POLYLINE are read (the arbitrary-axis OCS is applied), and R12 wireframes are written.
+  - New `crates/exchange`: a STEP reader and writer, IFC GUIDs, unit resolution (SI prefixes, conversion-based and derived units), the IFC reader and writer, and DXF.
+- **Two pure steps on the file.** `exchangeRead` states the units, counts, loss ledger, blocking content and every decision. `exchangeImport` applies a mapping manifest (`workbench-exchange-mapping-v1`, bound to the file's SHA-256) and replaces the session atomically. The browser's conversion review preselects nothing, and the CLI's `workbench-cli exchange import` needs the same manifest.
+- **Nothing undefined is assumed.** Decisions cover unassigned units, elastic or unset support and connection conditions, unknown combination purposes, skipping surfaces or unrepresentable loads, and DXF layer properties, tolerance and supports.
+- **Identity and round trips.** Imported GUIDs become entity IDs and are written back. Workbench identity property sets make the workbench's own IFC re-import to the same model hash. Every fixture model, X-FRAME and UKR01 round-trip, and the re-export is byte-identical.
+- **Ledgers.**
+  - Imports list what was not imported, converted or skipped.
+  - IFC exports list settlements, design data, mass sources, spectra, results and partial self weight.
+  - DXF exports list everything but geometry.
+- **Independent corpus (R-EXCHANGE-CORPUS acquired):** `tools/oracles/exchange_oracle.py` → `fixtures/exchange/exchange-oracle.json`.
+  - IfcOpenShell 0.9.0 authored the IFC files: mm/kN with derived units and a 30° rotated, translated placement; feet/kips with undefined derived units, an elastic support, unset conditions, a nested load group and unsupported content; a blocked file; an in-plane 2D file.
+  - ezdxf 1.4.4 authored the DXF files: mirrored and arbitrary OCS, and R12 without units.
+  - The workbench's IFC exports pass IfcOpenShell validation (schema and EXPRESS rules) and read back in SI; the DXF exports pass the ezdxf audit. Both checks are hash-bound.
+- **In the app:** "Import IFC or DXF" on the landing page and in the File menu (conversion review, load or save a mapping, conversion record), plus File → Export IFC / Export DXF with the loss ledger.
+- **Gate:** `node tools/run-m21-parent.mjs` → evidence/M21/full, 11 criteria PASS.
+
+**Fixed along the way:** a self-weight load's member list is now canonically sorted, so its order no longer changes the model hash.
+
+**Known limitation found:** a member-end release at a node whose rotation is otherwise free leaves that rotation without stiffness. The solver refuses such models as UNSTABLE_MODEL, whether imported or drawn. SPECIFICATION allows excluding such DOFs with an UNUSED_DOF diagnostic, which is not implemented yet. The pattern is common in IFC exports (hinges at pinned supports).
+
+**M22:** multilingual reporting stays deferred by decision (2026-09-30); M22 was already accepted.
+
 ## Latest: M15 dynamic response, slabs on columns, steel bracing points
 
 **M15 dynamic response (response-v1, ADR 0023).**

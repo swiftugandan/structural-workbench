@@ -1,0 +1,67 @@
+{
+  "taskId": "M21-parent",
+  "milestone": "M21",
+  "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+  "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "playwright-results.json": "323ee476ee039dadc516fdd05646faae17cada44e18f31241f012c88dc80d708",
+    "ifc-review.png": "041018cac9adc3c5b7273b634ecd412dd537138230c47e35e9ae2ff7f7b2ad56",
+    "ifc-analysed.png": "06c9cba9b4a4dd09ec69a86d2c245c331de7489f3ad6b44367aca076f1111027",
+    "ifc-conversion-record.json": "749e59a618182ab03a60aa5a4ea7faec3eee2bde87ece6c3178ce0477330f01e",
+    "ifc-imported-project.json": "e4fa1f620268f9cd837e6cde221cd82a66f97a54f9eac4e7f78817e35ad54fa6",
+    "blocked.png": "adeca8586678ad559cb810d1d2aa78de1c0748cd83959e5730e7219d45b911cc",
+    "X-FRAME.ifc": "5a4562f12ea3067d84985eadcf56d24b914d95102aef6ba0fa0461058094f56c",
+    "X-FRAME.ifc.ledger.json": "2023a28ba4518a691a71d95787113bf4ae02f3f4084803986a81ad4635875dc0",
+    "X-FRAME.dxf": "391d08aabd70c5b81b8f47bd813ea6481989b16aeb3831ec092b7c38ee8192fb",
+    "ifc-export.png": "9b2f24d35e1f769e41951f6f1243aead23018761846e4268b15d8614d062af5a"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-30T09:35:05.213Z",
+  "status": "PASS",
+  "testCount": 4,
+  "testIds": [
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+    "IFC import: conversion review, mapping manifest, analysis, save and reopen",
+    "DXF import answered in the form; refusals keep the project",
+    "IFC and DXF export: the files the independent tools checked, with their ledgers"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/exchange.spec.js",
+    "tests/e2e/capability-ledger.spec.js"
+  ],
+  "stats": {
+    "startTime": "2026-09-30T09:34:35.926Z",
+    "duration": 29259.801,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifacts": [
+    "playwright-results.json",
+    "ifc-review.png",
+    "ifc-analysed.png",
+    "ifc-conversion-record.json",
+    "ifc-imported-project.json",
+    "blocked.png",
+    "X-FRAME.ifc",
+    "X-FRAME.ifc.ledger.json",
+    "X-FRAME.dxf",
+    "ifc-export.png"
+  ]
+}

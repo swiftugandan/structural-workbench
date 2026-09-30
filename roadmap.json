@@ -547,7 +547,7 @@
     {
       "id": "M21",
       "name": "Exchange a structural model with BIM and CAD",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M04"
       ],
@@ -566,7 +566,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "exchange-v1 accepted (evidence/M21/full): IFC4 IfcStructuralAnalysisModel and ASCII DXF wireframe import and export on one Rust core from the browser and the CLI; conversion review with explicit decisions and SHA-bound mapping manifests (no defaults); GUID-preserving semantic round trips; units and orientation fixtures; import and export loss ledgers; IfcOpenShell- and ezdxf-authored reference corpus with exports validated by both tools. Native Revit or other authoring-tool adapters remain separately scoped; browser-only exchange is not Prodesk-equivalent."
     },
     {
       "id": "M22",
@@ -588,7 +588,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "Declarative studies accepted (evidence/M22/full): restricted JSON-pointer sweeps of linear static analysis on one Rust core from the native CLI and the browser, with deterministic replay identity, cancellation, budgets, step-located errors, validation/capability guards and manual-workflow equivalence. General scripting and multilingual reports deferred."
+      "acceptanceDefinition": "Declarative studies accepted (evidence/M22/full): restricted JSON-pointer sweeps of linear static analysis on one Rust core from the native CLI and the browser, with deterministic replay identity, cancellation, budgets, step-located errors, validation/capability guards and manual-workflow equivalence. General scripting deferred; multilingual reporting deferred by decision (2026-09-30)."
     },
     {
       "id": "M23",

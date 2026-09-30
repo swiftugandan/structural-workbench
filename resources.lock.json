@@ -505,6 +505,33 @@
       "formulation": "docs/formulations/rc-column.md",
       "rightsStatus": "Project-authored, redistributable with the repository",
       "validationUse": "M12 biaxial section kernel, rcColumn protocol and browser numerical-family gate; slenderness cases not covered"
+    },
+    {
+      "id": "R-EXCHANGE-CORPUS",
+      "version": "exchange-v1",
+      "authoritativeOrigin": "Project-generated corpus: IFC4 files authored by IfcOpenShell 0.9.0 (typed entity creation, validated against the IFC4 ADD2 TC1 schema and EXPRESS rules) and DXF files authored by ezdxf 1.4.4, with expected SI analysis models computed by tools/oracles/exchange_oracle.py from its own inputs; IfcOpenShell validation and read-back and ezdxf audit and read-back of the workbench's exports. Schema sources: buildingSMART IFC4.3.x-development repository (commit 5d08761e63557bd3ded140139eede665ec31511c) reference_schemas/IFC4_ADD2_TC1.exp and psd_IFC4_ADD2_TC1 Pset_ProfileMechanical, Pset_MaterialMechanical, Pset_MaterialCommon, plus the structural analysis entity documentation",
+      "fixture": "fixtures/exchange/exchange-oracle.json",
+      "fixtureSha256": "449c8514e101776341f81bb8dbdd25148c860c191e7fcaa8142b8fd9fd70b135",
+      "generatorSha256": "a47944f4e4019f9ae5865f2c826499ecc5d92e35ab63a69026c18f93ab656d04",
+      "corpusFiles": {
+        "fixtures/exchange/X-PORTAL-MM.ifc": "ec98e66df990ae17774ea7e7db26ffefce2c7d38537d0c0ad5af203c90026228",
+        "fixtures/exchange/X-FEET-KIP.ifc": "ac781a606867070329895c2d389530be88200ae347cf93f028401f235e95b844",
+        "fixtures/exchange/X-BLOCKED.ifc": "6e062b3240d0fe958b263a1fe88048c6ff361aed860f09c4da3c50f628625e53",
+        "fixtures/exchange/X-PLANAR.ifc": "3acc5e927401b4855ab205a2558f29fb314e7ed8748555e351adb67d7af28e23",
+        "fixtures/exchange/X-DXF-MM.dxf": "cb274245d6a927ad2d8f16a94ef604b7679fb0b49caa0087e9944a935db97cdf",
+        "fixtures/exchange/X-DXF-NOUNITS.dxf": "9d4d716057e272f23bba252a2fcba33d8f8e1ca16200ca8c1454be1a816fcebd",
+        "fixtures/exchange/X-FRAME.json": "2de20b93e611766fbcbb20d07fbaa38f58bd76c64d4dee07854a0a3a4a1fc4d3"
+      },
+      "schemaSources": {
+        "resources/private/exchange/IFC4_ADD2_TC1.exp": "a2704ba20a1b3d0b7d9b61d6fd37d0baa3b4996ba3e90d968a1d2ca2819d1046",
+        "resources/private/exchange/Pset_ProfileMechanical.xml": "fb62f972049632e55da7da9ca5da40499b44c6c1afa605f26cfc13bdbb3f3681",
+        "resources/private/exchange/Pset_MaterialMechanical.xml": "d0e9441b882b6ae00d0fbd8b8d6f51660cd8074744e30cc17d6ae4d5721a4ff6",
+        "resources/private/exchange/Pset_MaterialCommon.xml": "104edb355c7b29515cc04ae716db37c9cf9f05ba755a2f43fcb1e5ae789043db",
+        "resources/private/exchange/LICENSE.md": "32739bd890d2dcc05f09021b03c066d145842fbb409bc1139f3780ef7cbc041e"
+      },
+      "formulation": "docs/formulations/exchange.md",
+      "rightsStatus": "Corpus project-authored, redistributable with the repository. buildingSMART schema and PSD files are used for software development with attribution under the buildingSMART copyright notice and are not redistributed (resources/private). IfcOpenShell (LGPL-3.0) and ezdxf (MIT) are oracle tools only, not shipped.",
+      "validationUse": "M21 exchange kernel, protocol, CLI and browser acceptance"
     }
   ],
   "unresolved": [
@@ -515,7 +542,6 @@
     "R-CONNECTION-CODE",
     "R-CONNECTION-EXAMPLES",
     "R-DETAILING",
-    "R-EXCHANGE-CORPUS",
     "R-FOUNDATION-EXAMPLES",
     "R-FULL-INVENTORY",
     "R-GEOTECH-BENCHMARKS",

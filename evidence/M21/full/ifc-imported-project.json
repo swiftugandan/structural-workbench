@@ -1,0 +1,329 @@
+{
+  "analysisMode": "spatial",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [
+    {
+      "id": "g1QSP7IwfnINQQPysaZi-e1",
+      "name": "Ultimate",
+      "purpose": "strength",
+      "terms": [
+        {
+          "case": "g2cAi6XRsrL4OQMjfPUFEOi",
+          "factor": 1.4
+        }
+      ]
+    }
+  ],
+  "displayUnits": "SI",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "g1ReB0y3MbMs8t_01BBMlnw",
+  "loadCases": [
+    {
+      "category": "dead",
+      "id": "g2cAi6XRsrL4OQMjfPUFEOi",
+      "name": "Dead"
+    }
+  ],
+  "loads": [
+    {
+      "axes": "global",
+      "case": "g2cAi6XRsrL4OQMjfPUFEOi",
+      "forcePerLength": [
+        0,
+        0,
+        -14593.902937206361
+      ],
+      "id": "g02IXsQTDrKIgV8h8SErSRA",
+      "member": "g14d9f2FrTU996fF_KZ8FZg",
+      "type": "uniform"
+    },
+    {
+      "case": "g2cAi6XRsrL4OQMjfPUFEOi",
+      "id": "g2Jh3UiYDzJgBVa5qSSdDlv",
+      "node": "g1QAzi8ygfGN9LQAQ9rMZmb",
+      "type": "nodal",
+      "values": [
+        8896.443230521,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "E": 24821126255.406097,
+      "density": 2402.769506094021,
+      "id": "mat1",
+      "name": "Concrete 4 ksi",
+      "nu": 0.2
+    }
+  ],
+  "members": [
+    {
+      "end": "g1QAzi8ygfGN9LQAQ9rMZmb",
+      "id": "g14d9f2FrTU996fF_KZ8FZg",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": true,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "g0c1BKsqqXM0e63u8VOypm6"
+    },
+    {
+      "end": "g0c1BKsqqXM0e63u8VOypm6",
+      "id": "g3E5Fj77HDNJeMQasTg1vhy",
+      "localY": [
+        0,
+        -1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "g1nTuxEQgbHOR0wVMSpmEic"
+    },
+    {
+      "end": "g1IpPKpjhnSJew-JryoUkZi",
+      "id": "g3N69Pjry9Rnxu1Fa-3MTP_",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "mat1",
+      "releaseEnd": {
+        "my": true,
+        "mz": true
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "sec1",
+      "start": "g1QAzi8ygfGN9LQAQ9rMZmb"
+    }
+  ],
+  "metadata": {
+    "createdBy": "exchange-v1 IFC import",
+    "description": "Imported from X-FEET-KIP.ifc (IFC4, SHA-256 ac781a6068670703)",
+    "entityLabels": {
+      "g02IXsQTDrKIgV8h8SErSRA": "l1",
+      "g0c1BKsqqXM0e63u8VOypm6": "n2",
+      "g14d9f2FrTU996fF_KZ8FZg": "m2",
+      "g1IpPKpjhnSJew-JryoUkZi": "n4",
+      "g1QAzi8ygfGN9LQAQ9rMZmb": "n3",
+      "g1QSP7IwfnINQQPysaZi-e1": "c1",
+      "g1nTuxEQgbHOR0wVMSpmEic": "n1",
+      "g2Jh3UiYDzJgBVa5qSSdDlv": "l2",
+      "g2cAi6XRsrL4OQMjfPUFEOi": "lc1",
+      "g3E5Fj77HDNJeMQasTg1vhy": "m1",
+      "g3N69Pjry9Rnxu1Fa-3MTP_": "m3",
+      "mat1": "mat1",
+      "sec1": "sec1",
+      "sg1IpPKpjhnSJew-JryoUkZi": "s2",
+      "sg1nTuxEQgbHOR0wVMSpmEic": "s1"
+    }
+  },
+  "name": "X-FEET-KIP",
+  "nodes": [
+    {
+      "id": "g0c1BKsqqXM0e63u8VOypm6",
+      "position": [
+        0,
+        0,
+        3.6576000000000004
+      ]
+    },
+    {
+      "id": "g1IpPKpjhnSJew-JryoUkZi",
+      "position": [
+        6.096,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "g1QAzi8ygfGN9LQAQ9rMZmb",
+      "position": [
+        6.096,
+        0,
+        3.6576000000000004
+      ]
+    },
+    {
+      "id": "g1nTuxEQgbHOR0wVMSpmEic",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "revision": 0,
+  "schemaVersion": "1.6.0",
+  "sections": [
+    {
+      "A": 0.18580608,
+      "Iy": 0.005753983227494402,
+      "Iz": 0.0014384958068736004,
+      "J": 0.003950918639566273,
+      "cy": 0.1524,
+      "cz": 0.3048,
+      "id": "sec1",
+      "name": "12x24",
+      "provenance": "IFC import: profile geometry"
+    }
+  ],
+  "structure": {
+    "designObjects": [],
+    "grids": [],
+    "groups": [],
+    "joints": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt016036400ad5bfd19d05",
+        "name": "Joint g1IpPKpjhnSJew-JryoUkZi",
+        "nodeId": "g1IpPKpjhnSJew-JryoUkZi",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt4ccc3ccfef604f8b89cc",
+        "name": "Joint g1QAzi8ygfGN9LQAQ9rMZmb",
+        "nodeId": "g1QAzi8ygfGN9LQAQ9rMZmb",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jteb5e4edc6b9fe3edd143",
+        "name": "Joint g1nTuxEQgbHOR0wVMSpmEic",
+        "nodeId": "g1nTuxEQgbHOR0wVMSpmEic",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtfd90cfc1f34b605b9832",
+        "name": "Joint g0c1BKsqqXM0e63u8VOypm6",
+        "nodeId": "g0c1BKsqqXM0e63u8VOypm6",
+        "storeyId": null
+      }
+    ],
+    "layers": [],
+    "physicalMembers": [
+      {
+        "analyticalMemberIds": [
+          "g3E5Fj77HDNJeMQasTg1vhy"
+        ],
+        "id": "pm1623d81881632f1a6f3d",
+        "name": "g3E5Fj77HDNJeMQasTg1vhy",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "g3N69Pjry9Rnxu1Fa-3MTP_"
+        ],
+        "id": "pmc452b81f7012b9acbbd9",
+        "name": "g3N69Pjry9Rnxu1Fa-3MTP_",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "g14d9f2FrTU996fF_KZ8FZg"
+        ],
+        "id": "pmc5d57a32d117928175bc",
+        "name": "g14d9f2FrTU996fF_KZ8FZg",
+        "role": "unassigned",
+        "storeyId": null
+      }
+    ],
+    "storeys": [],
+    "supportDetails": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd9b01bb27ebc14de0421b",
+        "name": "Support sg1nTuxEQgbHOR0wVMSpmEic",
+        "supportId": "sg1nTuxEQgbHOR0wVMSpmEic"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sda5579745fd932d58abef",
+        "name": "Support sg1IpPKpjhnSJew-JryoUkZi",
+        "supportId": "sg1IpPKpjhnSJew-JryoUkZi"
+      }
+    ]
+  },
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "sg1IpPKpjhnSJew-JryoUkZi",
+      "node": "g1IpPKpjhnSJew-JryoUkZi",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "sg1nTuxEQgbHOR0wVMSpmEic",
+      "node": "g1nTuxEQgbHOR0wVMSpmEic",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

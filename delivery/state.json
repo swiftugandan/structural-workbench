@@ -14,7 +14,8 @@
     "M07",
     "M09",
     "M14",
-    "M22"
+    "M22",
+    "M21"
   ],
   "tasks": {
     "M00-A": {
@@ -4005,7 +4006,8 @@
       "attempts": [],
       "acceptedAt": "2026-09-29T09:17:11.792Z",
       "acceptanceMeaning": "Restricted declarative JSON-pointer sweeps of linear static analysis, native CLI and browser on one core, with replay identity, cancellation, budgets, located errors, guards and manual-workflow equivalence. Criteria INTERFACE, REPLAY, CANCELLATION, BUDGETS, LOCATED-ERRORS, MANUAL-MATCH, GUARDS, EXPORT. General scripting, other analysis types in studies and multilingual reports are out of scope.",
-      "nextAction": "Remaining milestones need external resources or depend on blocked ones"
+      "nextAction": "Remaining milestones need external resources or depend on blocked ones",
+      "deferredByDecision": "Multilingual reporting deferred by user decision (2026-09-30)"
     },
     "M07-LTB": {
       "id": "M07-LTB",
@@ -4486,6 +4488,79 @@
       "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
       "acceptedAt": "2026-09-30T06:57:22.591Z",
       "nextAction": "None"
+    },
+    "M21-parent": {
+      "id": "M21-parent",
+      "useCase": "Exchange a structural model with BIM and CAD (SPECIFICATION M21): exchange-v1 IFC4 structural analysis model and DXF wireframe import/export with conversion review, mapping manifests, loss ledgers and an independent reference corpus",
+      "dependencies": [
+        "M04"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/exchange",
+        "crates/cli/src/main.rs",
+        "crates/wasm-api/src/lib.rs",
+        "crates/wasm-api/tests/exchange.rs",
+        "web/exchange.js",
+        "tests/e2e/exchange.spec.js",
+        "tools/oracles/exchange_oracle.py",
+        "fixtures/exchange",
+        "docs/formulations/exchange.md",
+        "docs/adr/0025-model-exchange.md",
+        "tools/run-m21-parent.mjs",
+        "tools/record-m21-acceptance.mjs",
+        "evidence/M21/full"
+      ],
+      "acceptanceIds": [
+        "M21-FORMATS",
+        "M21-UNITS-ORIENTATION",
+        "M21-REFERENCE-CORPUS",
+        "M21-SEMANTIC-ROUND-TRIP",
+        "M21-LOSS-LEDGER",
+        "M21-DECISIONS-AND-MANIFEST",
+        "M21-FAILURE-PATHS",
+        "M21-EXPORT-VALIDATED",
+        "M21-UI-JOURNEY",
+        "M21-SCOPE-DISCLOSURE",
+        "M21-ORACLE-PROVENANCE"
+      ],
+      "requiredCommands": [
+        "node tools/run-m21-parent.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "gate-M21",
+          "status": "PASS",
+          "evidencePath": "evidence/M21/full/gate-M21.json"
+        },
+        {
+          "check": "m21-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M21/full/m21-acceptance.json"
+        }
+      ],
+      "actualOutcomes": [
+        "IfcOpenShell-authored IFC4 corpus (mm/kN rotated placement, feet/kips with undefined derived units, planar, blocked) and ezdxf-authored DXF corpus (mirrored/arbitrary OCS, unitless R12) import to the oracle's SI models within 1e-9",
+        "Every fixture model, X-FRAME and UKR01 round-trip through IFC to the same analysis model with byte-identical re-export; foreign GUIDs preserved",
+        "Workbench IFC exports pass IfcOpenShell validation (schema + EXPRESS rules) and read-back; DXF exports pass the ezdxf audit; hash-bound",
+        "Found and fixed: IFC4 enum is IN_PLANE_LOADING_2D (not LOADING_2D); self-weight member lists now canonically sorted so order no longer changes the model hash",
+        "Found (not fixed, recorded): a member-end release at a node with otherwise free rotation is singular (unused-DOF exclusion not implemented)"
+      ],
+      "evidencePaths": [
+        "evidence/M21/full"
+      ],
+      "sourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+      "buildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+      "acceptedAt": "2026-09-30T09:35:05.269Z",
+      "regression": {
+        "summary": "full browser batch 126/126, cargo workspace 283/283, node unit/security 54/54, check_package PASS",
+        "fullBrowserBatch": "126/126",
+        "cargoWorkspace": "283/283",
+        "nodeUnitSecurity": "54/54",
+        "sameSourceGates": "M07 parent and LTB, M09, M14, M22 parents, M10-PLATE, M12-COLUMN, M15-RESPONSE all PASS"
+      },
+      "acceptanceMeaning": "Browser-only file exchange; no native Revit or authoring-tool adapter; not Prodesk-equivalent. IFC2X3/IFC4X3, physical-only IFC, surfaces, curved/varying members and eccentric connections are refused or skipped by explicit decision.",
+      "nextAction": "None; optional follow-ups: IFC2X3/IFC4X3 readers, member splitting at interior connections, UNUSED_DOF exclusion in the solver"
     }
   },
   "blockers": [
@@ -4535,10 +4610,10 @@
       "partiallyClearedAt": "2026-09-28"
     }
   ],
-  "lastVerifiedSourceRevision": "0ff8ae3",
-  "lastVerifiedBuildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
-  "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents; R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence.",
+  "lastVerifiedSourceRevision": "2564a05",
+  "lastVerifiedBuildHash": "fb51d59eedce6877434409489a30b59af8f4e8c945f523e12f8fad0f4a35e0ab",
+  "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents; R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence; solver UNUSED_DOF exclusion (common in IFC imports).",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
-  "lastVerifiedScope": "M07 parent and LTB, M09 parent, M14 parent, M10-PLATE, M12-COLUMN and M15-RESPONSE gates on the same build; full browser batch 123/123, cargo workspace 262/262, node unit/security 54/54"
+  "lastVerifiedSourceHash": "83eb37b6ab55668782eca0c60e69694f51fde7643be8e68da7e5a46c5ba75599",
+  "lastVerifiedScope": "M21 parent and, on the same source, M07 parent and LTB, M09, M14, M22 parents, M10-PLATE, M12-COLUMN, M15-RESPONSE; full browser batch 126/126, cargo workspace 283/283, node unit/security 54/54, check_package PASS"
 }
