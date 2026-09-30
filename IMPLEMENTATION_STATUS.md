@@ -62,9 +62,10 @@ and their records in `delivery/state.json`.
 | M09 | Accepted | Elastic flexural buckling and linearised P-Δ-δ second order with My/Mz end releases as hinge DOFs; first- vs second-order comparison; stability-v1 oracle | Torsional/LTB modes, large displacement |
 | M14 | Accepted | Modal analysis with declared mass sources (schema 1.4.0), consistent/lumped mass, hinge DOFs for end releases, participation and omitted-mode reporting, vibration report; dynamics-v1 oracle | Damping, response spectra (M15) |
 | M22 | Accepted | Declarative JSON-pointer studies from the CLI and the browser on one core: replay identity, cancellation, budgets, located errors, guards | General scripting, multilingual reports |
-| M10 | Numerical family gated; parent blocked on M08 | plate-v1 slab panel analysis (MITC4 flat shell, one opening, free/simple/clamped edges), Wood–Armer design moments, clamped-edge moments, convergence indicator, contour maps, calculation record | Reinforcement, punching and deflection checks (slab code profile); frame–slab coupling; column supports |
+| M10 | Numerical family gated; parent blocked on M08 | plate-v1 slab panel analysis (MITC4 flat shell, one opening, free/simple/clamped edges, column supports), columns from the frame model and column loads back to it, Wood–Armer design moments, clamped-edge moments, convergence indicator, contour maps, calculation record | Reinforcement, punching and deflection checks (slab code profile); coupled frame–shell analysis |
 | M12 | Numerical family gated; parent blocked on M08 | Biaxial RC column section mechanics: exact integration, M_Rd(N, θ) at model key stations, interaction contour, calculation record | Partial factors, slenderness and second-order moments, minimum eccentricity, shear, detailing (column code profile) |
-| M11, M13, M15–M21, M23 | Not started or blocked | — | External standards, benchmarks or exchange corpora (see `resources.required.json`) |
+| M15 | Numerical family gated; parent blocked on R-SEISMIC-CODE | Harmonic (steady-state) response with Rayleigh damping by direct complex solve; response-spectrum analysis with user spectra (SRSS/CQC), reactions, member actions, report | Code spectra, behaviour factors, accidental torsion, directional combination, time history |
+| M11, M13, M16–M21, M23 | Not started or blocked | — | External standards, benchmarks or exchange corpora (see `resources.required.json`) |
 
 My/Mz end releases use static condensation. Interior point actions expand
 deterministically at analyse time (physical model hash preserved). Axial/shear/

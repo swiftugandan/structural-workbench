@@ -1,0 +1,155 @@
+{
+  "taskId": "M15-RESPONSE",
+  "milestone": "M15",
+  "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+  "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
+  "lockHashes": {
+    "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-30T06:57:22.591Z",
+  "status": "PASS",
+  "testCount": 7,
+  "testIds": [
+    "M15-R1-FACTOR",
+    "M15-R2-HARMONIC",
+    "M15-R3-SPECTRUM",
+    "M15-R4-REFUSALS",
+    "M15-R5-PROTOCOL",
+    "M15-R6-BROWSER",
+    "M15-R7-REGRESSION"
+  ],
+  "command": [
+    "node",
+    "tools/run-m15-response.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "M15-R1-FACTOR",
+      "title": "Sparse complex-symmetric LDLᵀ",
+      "evidence": "kernel_validation",
+      "tests": {
+        "complex-factor": [
+          "damped_pencil_matches_dense_elimination_across_resonance",
+          "a_real_pencil_agrees_with_the_real_sparse_factor",
+          "stiffness_proportional_damping_keeps_resonance_factorisable",
+          "a_singular_stiffness_is_refused_and_the_budget_is_enforced"
+        ]
+      },
+      "observation": "Against dense complex elimination the factor agrees to 1e-11 of the solution scale at six frequencies across resonance, with residuals ≤ 1e-12. A real pencil reproduces the real sparse LDLᵀ to 1e-12. With a stiffness-proportional term the undamped singular point factorises. A singular stiffness is UNSTABLE_MODEL, and the memory budget is enforced.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M15-R2-HARMONIC",
+      "title": "Harmonic response against closed forms and OpenSees",
+      "evidence": "kernel_validation",
+      "tests": {
+        "response-kernel": [
+          "h_sdof_matches_the_closed_form_through_resonance",
+          "h_static_limit_is_the_linear_static_solution",
+          "h_frame_matches_the_opensees_matrices_direct_solve"
+        ]
+      },
+      "observation": "The tip-mass cantilever matches U = F/(k(1+iΩa₁) − mΩ² + iΩa₀m) to 1e-9 at seven frequencies including resonance, with consistent and lumped mass, and its support reaction carries the elastic and damping force. At 1e-9 Hz it equals linear static to 1e-8. On the OpenSees spatial frame, with K and M from GimmeMCK, complex nodal amplitudes at five frequencies agree to 1e-6 of the peak.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M15-R3-SPECTRUM",
+      "title": "Response-spectrum analysis against closed forms and OpenSees",
+      "evidence": "kernel_validation",
+      "tests": {
+        "response-kernel": [
+          "r_sdof_matches_the_closed_form",
+          "r_shear_frame_matches_srss_and_cqc_by_hand",
+          "r_frame_matches_opensees_modal_combination"
+        ]
+      },
+      "observation": "SDOF: tip displacement Sa/ω², base shear m·Sa and base moment m·Sa·L to 1e-9. Two-storey shear frame: SRSS and CQC floor displacements and base shear by hand to 1e-5. OpenSees spatial frame, X and Y, SRSS and CQC over 12 modes: member end forces (setNodeDisp + localForce), support reactions, node displacements and base reaction all to 1e-6 of each group's largest value.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M15-R4-REFUSALS",
+      "title": "Refusals and spectra validation",
+      "evidence": "failure_path",
+      "tests": {
+        "response-kernel": [
+          "refusals",
+          "spectra_are_validated_as_project_data"
+        ],
+        "response-protocol": [
+          "requests_are_validated"
+        ],
+        "response-browser": [
+          "M15 response refusals: a spectrum too short for the modes and invalid tables"
+        ]
+      },
+      "observation": "Refusals: a₁ = 0, non-positive or excess frequencies and reversed damping frequencies are INVALID_SETTINGS. Unknown cases and unloaded cases are INVALID_LOAD, and no mass is NO_MASS. Unknown spectra are DANGLING_REFERENCE, and a spectrum shorter than a mode period is SPECTRUM_RANGE. Tables that do not start at T = 0, are unordered or have negative Sa are INVALID_SPECTRUM. The browser shows each reason and reports no numbers.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M15-R5-PROTOCOL",
+      "title": "Protocol, schema 1.6.0 and persistence",
+      "evidence": "save_and_reopen",
+      "tests": {
+        "response-protocol": [
+          "spectra_are_project_data_edited_by_command",
+          "harmonic_and_spectrum_run_through_analyse"
+        ],
+        "schema-1-6": [
+          "a_1_3_project_migrates_by_version_only",
+          "a_1_4_project_migrates_by_version_only"
+        ]
+      },
+      "observation": "SetResponseSpectrum stores SI (g converted in Rust) with an rs label; invalid tables leave the project unchanged. A log sweep is expanded in Rust. A flat spectrum gives base shear m·Sa through analyse. 1.3/1.4/1.5 projects migrate by version to 1.6.0.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M15-R6-BROWSER",
+      "title": "Browser journey, report and persistence on the same build",
+      "evidence": "ui_journey",
+      "tests": {
+        "response-browser": [
+          "M15 response: harmonic sweep and spectrum against the closed forms, stale, report and persistence"
+        ]
+      },
+      "observation": "In the browser build, a 41-frequency sweep of the tip-mass cantilever matches the closed form |U| to 1e-9 at every frequency. The spectrum entered in the editor gives the closed-form base shear to 1e-9, and the report carries the same value in data-si. A new name keeps the result current; a new damping ratio makes it stale. The project downloads and reopens with its spectrum.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M15-R7-REGRESSION",
+      "title": "Modal analysis and second order unchanged",
+      "evidence": "regression_results",
+      "tests": {
+        "response-kernel": [
+          "spatial_frame_matches_opensees_with_lumped_mass",
+          "planar_portal_matches_opensees_with_consistent_mass",
+          "member_loads_at_supports_and_released_ends_match_linear_static"
+        ],
+        "response-browser": [
+          "M14 modal: declare mass, frequencies against the oracle, participation, stale, failure, reopen and report"
+        ]
+      },
+      "observation": "Modal analysis now builds through the shared dynamic model and still matches OpenSees to 1e-6. The second-order fix passes for member loads at supports and released ends: previously EQUILIBRIUM_FAILURE; now equal to linear static without axial force.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "response-v1 mechanics only: linear elastic frames with declared mass, Rayleigh damping (a₁ > 0) for steady-state harmonic response of one load case (displacements and reactions, no member actions), and modal SRSS/CQC combination of a user spectrum in one direction (peak magnitudes, no missing-mass correction). Code spectra, behaviour factors, accidental torsion and directional combination need R-SEISMIC-CODE; the M15 parent is not accepted."
+}

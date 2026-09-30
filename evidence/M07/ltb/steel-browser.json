@@ -1,16 +1,16 @@
 {
   "taskId": "M07-LTB",
   "milestone": "M07",
-  "sourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
-  "buildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
+  "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+  "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
   "lockHashes": {
-    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "c06da978537768dd8880c7ff2d85d2ebdb642f550aa247395bdd29757451df65"
+    "playwright-results.json": "e058fb4a3a4784cacaff7f0d07b2559a8611b1a17b816099b0d1a164677cf67e"
   },
   "runner": {
     "platform": "darwin",
@@ -19,14 +19,15 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T12:14:50.049Z",
+  "observedAt": "2026-09-30T06:51:12.201Z",
   "status": "PASS",
-  "testCount": 9,
+  "testCount": 10,
   "testIds": [
     "DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen",
     "DW-F4: fail reaches governing station and clause; LTB governs once Lb exceeds Lp",
     "DW-SVc1: a deflection criterion is a separate serviceability status",
     "Derived Cb: the model's moment diagram sets Cb, with Cb = 1 for a free cantilever end",
+    "Bracing points: each segment gets its own Lb and Cb, with Cb = 1 at the free end",
     "standalone S2-D1 steel check passes via evaluateDesign UI",
     "complete-member matrix: ≥3 pass and ≥3 fail seeds",
     "steel check remains usable in a narrow viewport",
@@ -41,9 +42,9 @@
     "tests/e2e/native-steel-design.spec.js"
   ],
   "stats": {
-    "startTime": "2026-09-29T12:13:29.873Z",
-    "duration": 80145.57699999999,
-    "expected": 9,
+    "startTime": "2026-09-30T06:49:58.210Z",
+    "duration": 73960.118,
+    "expected": 10,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

@@ -1,10 +1,10 @@
 {
   "taskId": "M07-LTB",
   "milestone": "M07",
-  "sourceHash": "deaa5248905a81bf21ebf46cc0c4eb7ca8129593a7bf34569f9d85074fac3349",
-  "buildHash": "af96ae310eff0fc5bb7f1533c4bd7af4b3b37552929b2274db1b2ac72a4496f5",
+  "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+  "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
   "lockHashes": {
-    "Cargo.lock": "fff2e24aef1158b0cd11e0ec700327796a6a690c36eaeea4c2495c79fe75adef",
+    "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
@@ -17,23 +17,25 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T12:13:28.586Z",
+  "observedAt": "2026-09-30T06:49:56.598Z",
   "status": "PASS",
-  "testCount": 13,
+  "testCount": 15,
   "testIds": [
-    "cb_from_the_model_needs_the_member_to_be_the_unbraced_segment",
+    "bracing_points_are_validated",
     "a_cantilever_with_a_free_end_takes_cb_of_one",
     "invalid_settings_fail_atomically_and_provenance_changes_hash",
     "mismatched_section_invalidates_readiness_and_forged_result_is_rejected",
+    "cb_from_the_model_needs_the_member_to_be_the_unbraced_segment",
     "native_binding_readiness_persistence_and_exact_undo",
     "native_no_seed_flexure_and_shear_have_exact_station_provenance",
     "cb_from_the_model_matches_example_f1_2b_for_third_point_bracing",
     "noncompact_flanges_and_ltb_use_their_clauses_and_missing_tension_details_never_pass",
     "overview_keeps_unready_members_and_matches_exact_member_runs",
+    "catalogue_study_reanalyses_self_weight_without_mutating_baseline",
     "serviceability_refuses_strength_combinations_and_dangling_references",
+    "one_member_braced_at_thirds_matches_the_three_member_model",
     "weak_axis_and_zero_actions_are_fail_closed",
-    "serviceability_is_a_separate_deflection_status_against_the_closed_form",
-    "catalogue_study_reanalyses_self_weight_without_mutating_baseline"
+    "serviceability_is_a_separate_deflection_status_against_the_closed_form"
   ],
   "command": [
     "cargo",

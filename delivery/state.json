@@ -4218,24 +4218,26 @@
     },
     "M10-PLATE": {
       "id": "M10-PLATE",
-      "useCase": "plate-v1 numerical family: slab panel plate analysis (Q4 membrane + MITC4, one opening, free/simple/clamped edges), Wood-Armer design moments, clamped-edge line moments, convergence indicator; slab drafts solve their panel (schema 1.5.0) with contours and calculation record",
+      "useCase": "plate-v1 numerical family: slab panel plate analysis (Q4 membrane + MITC4, one opening, free/simple/clamped edges), Wood-Armer design moments, clamped-edge line moments, convergence indicator; slab drafts solve their panel (schema 1.5.0) with contours and calculation record; point (column) supports pinned/fixed/spring with a one-way link to the frame model (derive column stiffness, apply column loads)",
       "dependencies": [
         "M06"
       ],
       "status": "ACCEPTED",
       "scope": "Numerical family only; the M10 parent needs the slab code profile (M08)",
       "ownedPaths": [
-        "docs/formulations/plate.md",
-        "docs/adr/0021-slab-plate-analysis.md",
-        "tools/oracles/plate_oracle.py",
-        "fixtures/plate/plate-oracle.json",
-        "crates/plate",
-        "crates/wasm-api/src/preview_workspace.rs",
         "crates/model/src/design_inputs.rs",
         "crates/model/src/migrate.rs",
-        "web/slab-plate.js",
+        "crates/plate",
+        "crates/wasm-api/src/preview_workspace.rs",
+        "crates/wasm-api/tests/slab_plate.rs",
+        "docs/adr/0021-slab-plate-analysis.md",
+        "docs/formulations/plate.md",
+        "fixtures/plate/plate-oracle.json",
         "tests/e2e/slab-plate.spec.js",
-        "tools/run-m10-plate.mjs"
+        "tools/oracles/plate_oracle.py",
+        "tools/run-m10-plate.mjs",
+        "web/design-previews.js",
+        "web/slab-plate.js"
       ],
       "acceptanceIds": [
         "M10-P1-ELEMENT",
@@ -4245,7 +4247,8 @@
         "M10-P5-EQUILIBRIUM",
         "M10-P6-PROTOCOL",
         "M10-P7-SCHEMA",
-        "M10-P8-BROWSER"
+        "M10-P8-BROWSER",
+        "M10-P9-COLUMNS"
       ],
       "requiredCommands": [
         "node tools/run-m10-plate.mjs"
@@ -4262,15 +4265,16 @@
         "Timoshenko clamped square: w 0.001271 (0.00126), centre mx 0.02286 (0.0231), edge line moment from reactions -0.05122 (-0.0513)",
         "OpenSees ShellMITC4 identical rectilinear meshes (clamped; 6 x 5 m with opening, 464 elements) within 1e-6",
         "Distorted meshes: plate-v1 (pointwise J^-1) and OpenSees (Bathe-Dvorkin 1985 element-constant angles) converge together (9.7e-4 -> 5.4e-4); gate defined after the variant was traced (ADR 0021 item 10)",
-        "Found and fixed: refused preview runs lost their reason on re-render"
+        "Found and fixed: refused preview runs lost their reason on re-render",
+        "Flat slab on six columns (pinned, fixed, springs) matches OpenSees ShellMITC4 + zeroLength on the identical mesh within 1e-6 (deflections, moments, column reactions); collinear/single/off-slab columns refused; derived column springs kz = EA/L, krx/kry = 4EI/L; applied column loads make the frame base carry the slab exactly"
       ],
       "evidencePaths": [
         "evidence/M10/plate",
         "evidence/M10/slab-plate"
       ],
-      "sourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
-      "buildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
-      "acceptedAt": "2026-09-29T17:04:03.337Z",
+      "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+      "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
+      "acceptedAt": "2026-09-30T06:57:22.591Z",
       "nextAction": "M10 parent: reinforcement areas, punching and deflection once the M08 slab code profile is enabled; frame-slab coupling and column supports are later slices",
       "regression": {
         "fullBrowserBatch": "119/119 passed on the final build (WORKBENCH_TEST_TIMEOUT_MS=180000)",
@@ -4361,6 +4365,127 @@
         "UKR01-EC-resources"
       ],
       "nextAction": "Needs the column code profile: EN 1992-1-1 A1:2014 and UK NA + A2:2014 (partial factors, slenderness, minimum eccentricity); R-COLUMN-EXAMPLES slenderness cases follow from it."
+    },
+    "M15-RESPONSE": {
+      "id": "M15-RESPONSE",
+      "useCase": "response-v1 numerical family: steady-state harmonic response (modal/Rayleigh damping, sparse complex-symmetric LDL^T) and user-defined response spectra (SRSS/CQC) on the dynamics-v1 model; Response tab, plots and report section (schema 1.6.0)",
+      "dependencies": [
+        "M14-parent"
+      ],
+      "status": "ACCEPTED",
+      "scope": "Numerical family only; code design spectra need R-SEISMIC-CODE (M15 parent)",
+      "ownedPaths": [
+        "docs/formulations/response.md",
+        "docs/adr/0023-harmonic-and-response-spectrum.md",
+        "tools/oracles/response_oracle.py",
+        "fixtures/dynamics/response-oracle.json",
+        "crates/solver/src/complex.rs",
+        "crates/assembly/src/dynamic.rs",
+        "crates/assembly/src/response.rs",
+        "crates/wasm-api/src/analysis_request.rs",
+        "web/response.js",
+        "web/reports/response.js",
+        "tests/e2e/response.spec.js",
+        "tools/run-m15-response.mjs"
+      ],
+      "acceptanceIds": [
+        "M15-R1",
+        "M15-R2",
+        "M15-R3",
+        "M15-R4",
+        "M15-R5",
+        "M15-R6",
+        "M15-R7"
+      ],
+      "requiredCommands": [
+        "node tools/run-m15-response.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "m15-response-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M15/response-gate/m15-response-acceptance.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Closed-form SDOF harmonic amplitude/phase and SDOF/shear-frame spectrum (SRSS, CQC) within 1e-9",
+        "Spatial frame harmonic response and spectrum vs OpenSeesPy K and M solved in complex arithmetic within 1e-6",
+        "Static limit at 1e-9 Hz reproduces linear static; complex LDL^T cannot break down for a1 > 0",
+        "Latent second-order bug fixed on the way: reactions double-counted member-load equivalents and member-load end moments missed hinge DOFs"
+      ],
+      "evidencePaths": [
+        "evidence/M15/response-gate"
+      ],
+      "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+      "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
+      "acceptedAt": "2026-09-30T06:57:22.591Z",
+      "regression": {
+        "summary": "full browser batch 123/123, cargo workspace 262/262, node unit/security 54/54",
+        "fullBrowserBatch": "123/123",
+        "cargoWorkspace": "262/262",
+        "nodeUnitSecurity": "54/54"
+      },
+      "nextAction": "M15 parent: code design spectra need R-SEISMIC-CODE"
+    },
+    "M15-parent": {
+      "id": "M15-parent",
+      "useCase": "Dynamic response to code design spectra (SPECIFICATION M15)",
+      "dependencies": [
+        "M15-RESPONSE"
+      ],
+      "status": "BLOCKED_RESOURCE",
+      "blockedBy": [
+        "R-SEISMIC-CODE"
+      ],
+      "nextAction": "Needs the seismic code (e.g. EN 1998-1 with UK NA) for design spectra, behaviour factors and directional combination; user spectra already work."
+    },
+    "M07-LTB-SEGMENTS": {
+      "id": "M07-LTB-SEGMENTS",
+      "useCase": "Bracing points along a member: each segment checked with its own Lb and F1-1 Cb from exact quarter-point moments (ADR 0024)",
+      "dependencies": [
+        "M07-LTB-CB"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "docs/adr/0024-steel-bracing-points.md",
+        "crates/model/src/design_inputs.rs",
+        "crates/design/src/native.rs",
+        "crates/assembly/src/lib.rs",
+        "crates/wasm-api/src/design_workspace.rs",
+        "web/steel-design.js",
+        "tests/e2e/native-steel-design.spec.js",
+        "tools/run-m07-ltb.mjs"
+      ],
+      "acceptanceIds": [
+        "DW-LTB1-SEGMENTS"
+      ],
+      "requiredCommands": [
+        "node tools/run-m07-ltb.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "m07-ltb-acceptance (DW-LTB1-SEGMENTS)",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/ltb/m07-ltb-acceptance.json"
+        },
+        {
+          "check": "gate-M07",
+          "status": "PASS",
+          "evidencePath": "evidence/M07/full/gate-M07.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Example F.1-2B as one member braced at thirds reproduces the three-member model's Cb (1.46, 1.01, 1.46) and resistance within 1e-9",
+        "A segment ending at an unbraced free end takes Cb = 1.0"
+      ],
+      "evidencePaths": [
+        "evidence/M07/ltb",
+        "evidence/M07/full"
+      ],
+      "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+      "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
+      "acceptedAt": "2026-09-30T06:57:22.591Z",
+      "nextAction": "None"
     }
   },
   "blockers": [
@@ -4410,10 +4535,10 @@
       "partiallyClearedAt": "2026-09-28"
     }
   ],
-  "lastVerifiedSourceRevision": "12e1889",
-  "lastVerifiedBuildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
-  "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents. Unblocked: Windows/Linux real-GPU evidence; segment-level Cb for interior bracing.",
+  "lastVerifiedSourceRevision": "0ff8ae3",
+  "lastVerifiedBuildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
+  "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents; R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
-  "lastVerifiedScope": "M10-PLATE and M12-COLUMN numerical-family gates on the same build; full browser batch 119/119, cargo workspace 240/240, node unit/security 54/54"
+  "lastVerifiedSourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+  "lastVerifiedScope": "M07 parent and LTB, M09 parent, M14 parent, M10-PLATE, M12-COLUMN and M15-RESPONSE gates on the same build; full browser batch 123/123, cargo workspace 262/262, node unit/security 54/54"
 }

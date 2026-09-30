@@ -1,3 +1,31 @@
+## Latest: M15 dynamic response, slabs on columns, steel bracing points
+
+**M15 dynamic response (response-v1, ADR 0023).**
+
+- **Harmonic response.** A load case or combination is applied as F cos(Ωt) over a sweep (linear or log, up to 200 frequencies). Rayleigh damping is given by ζ at two frequencies, or by a₀/a₁ with a₁ > 0. Each frequency is solved directly with a new sparse complex LDLᵀ, which cannot break down even at resonance, and a residual check. The results are complex nodal displacements and support reactions.
+- **Response spectrum.** Project spectra (schema 1.6.0: a T–Sa table from 0 s, a damping ratio and a reference) are edited in the Response tab. A run takes one direction and combines modes by SRSS or CQC (Der Kiureghian), giving peak displacements, reactions, base reaction and member section actions, with the modal table and participation.
+- **Validation** (`fixtures/dynamics/response-oracle.json`):
+  - the SDOF closed form through resonance, to 1e-9;
+  - the static limit;
+  - the OpenSees spatial frame, where OpenSees K, M and modes feed a pure-Python complex solve and SRSS/CQC combination: member end forces, reactions and displacements to 1e-6;
+  - the shear frame, by hand.
+- **In the app:** the Response tab has frequency-response and phase plots, a spectrum editor with a plot, tables, a standalone response report and run records.
+- **Gate:** `node tools/run-m15-response.mjs` → evidence/M15/response-gate. The M15 parent stays blocked on R-SEISMIC-CODE: code spectra, behaviour factors and directional combination.
+
+**Slabs on columns (M10-D, ADR 0021 item 11).**
+
+- **Kernel:** plate-v1 point supports (pinned, fixed, springs), with an exact rank-based stability test. It is validated against OpenSees ShellMITC4 plus zeroLength springs on a six-column slab, to 1e-6.
+- **Frame link:** "Take columns from the model" derives the columns at the slab level as EA/L and 4EI/L springs. "Apply column loads to the frame" writes the slab's column reactions as nodal loads in a load case. It is a one-way link, not a coupled shell–frame model.
+
+**Steel bracing points (ADR 0024).** A member braced at points is checked segment by segment: Lb = the segment length, and Cb by F1-1 over that segment with exact quarter-point moments (a new `member_actions_at`). Example F.1-2B as one member reproduces the three-member model to 1e-9.
+
+**Fixed along the way:**
+
+- **Second order refused member loads at supports.** It counted member-load equivalents twice in its reactions, and never loaded a released end's hinge DOF. Any member load reaching a support was refused with EQUILIBRIUM_FAILURE.
+- **`check_package.py` now passes.** Fixtures are validated against their own schema version, the link scan is limited to the package, and the design-brief links to `agent-tasks/` are fixed.
+- **Roadmap:** M00–M06 are recorded as accepted.
+- **Tests read the current schema from the contract,** so schema bumps no longer need test edits.
+
 ## Latest: slab plate analysis (M10) and RC column mechanics (M12), numerical families
 
 Both milestones depend on M08, whose concrete code profile is blocked until EN 1992-1-1 A1:2014 and the UK NA + A2:2014 are held. What does not need them is built, validated and gated on its own. Both parents stay planned.

@@ -94,12 +94,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4719,
+                  "duration": 4596,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T11:43:32.216Z",
+                  "startTime": "2026-09-30T06:51:55.898Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -142,12 +142,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22592,
+                  "duration": 23721,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T11:43:37.374Z",
+                  "startTime": "2026-09-30T06:52:00.884Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -163,7 +163,7 @@
           ],
           "id": "9167c283b271a7f079ef-f5ce024cf2240d68c521",
           "file": "e2e/modal.spec.js",
-          "line": 106,
+          "line": 107,
           "column": 1
         }
       ]
@@ -171,8 +171,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-29T11:43:30.719Z",
-    "duration": 29572.201,
+    "startTime": "2026-09-30T06:51:54.916Z",
+    "duration": 30074.564,
     "expected": 2,
     "skipped": 0,
     "unexpected": 0,

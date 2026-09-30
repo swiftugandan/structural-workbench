@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><title>Modal portal — vibration report</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:8px}th:first-child,td:first-child{text-align:left}.banner{padding:20px;background:#fff3d6}.stale{padding:20px;background:#ffe9e4}small{overflow-wrap:anywhere}.shapes{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}figure{margin:0}svg{width:100%;height:auto;background:#f7f9fb}figcaption{font-size:12px;color:#53667c}@media print{body{margin:0;padding:0}tr,figure{break-inside:avoid}}</style>
-<header><p>STRUCTURAL WORKBENCH / VIBRATION REPORT</p><h1>Modal portal</h1><p>Modal analysis (dynamics-v1) · consistent mass · 8 elements per member · SI units</p><small>Model SHA-256: 468d3e183ba1ef40b5918021f11327a8dc785136f3e10eaa143077e097d730aa<br>Solver source: 50660ba5ffa57ef02c4ac16e914ae0ea447bf38069da32b1a72e86570753b521<br>Settings: bfbabf766c24dc5086511b498bc651672f7ddf2c72de1c79ce76176fbe3d3bcf<br>Result: 468d3e183ba1ef40-modal-bfbabf76<br>Created 2026-09-29T11:43:48.970Z</small></header>
+<header><p>STRUCTURAL WORKBENCH / VIBRATION REPORT</p><h1>Modal portal</h1><p>Modal analysis (dynamics-v1) · consistent mass · 8 elements per member · SI units</p><small>Model SHA-256: ab36281e46cc32f82cd87323311323d7f93fad2905d45f3c501578c1565ae0c5<br>Solver source: c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4<br>Settings: bfbabf766c24dc5086511b498bc651672f7ddf2c72de1c79ce76176fbe3d3bcf<br>Result: ab36281e46cc32f8-modal-bfbabf76<br>Created 2026-09-30T06:52:10.727Z</small></header>
 
 <p class="banner" data-testid="vibration-banner">Undamped free vibration of the elastic Euler–Bernoulli model with its declared mass. Rotary inertia of sections is neglected and participation is reported for global translations only. Frequencies and participation ratios are not a floor-vibration, comfort or code serviceability verdict. Commercial numerical parity is UNKNOWN.</p>
 <h2>Mass</h2><table data-testid="vibration-mass"><tr><th>Source</th><th>Kind</th><th>Definition</th><th>Mass (kg)</th></tr><tr><th>ms1</th><td>Self mass (ρA of every member)</td><td>factor 1</td><td data-si="989.0999999999996">989.1</td></tr><tr><th>ms2</th><td>Nodal mass</td><td>at n3</td><td data-si="3000">3000</td></tr><tr><th>ms3</th><td>Nodal mass</td><td>at n4</td><td data-si="3000">3000</td></tr><tr><th>Total (each direction)</th><td></td><td></td><td data-si="6989.099999999999">6989.1</td></tr></table>
@@ -101,21 +101,21 @@
   ],
   &quot;massSources&quot;: [
     {
-      &quot;id&quot;: &quot;m22da9216&quot;,
+      &quot;id&quot;: &quot;m25e6e9e1&quot;,
+      &quot;kind&quot;: &quot;nodalMass&quot;,
+      &quot;mass&quot;: 3000,
+      &quot;node&quot;: &quot;tr&quot;
+    },
+    {
+      &quot;id&quot;: &quot;m873011a0&quot;,
       &quot;kind&quot;: &quot;nodalMass&quot;,
       &quot;mass&quot;: 3000,
       &quot;node&quot;: &quot;tl&quot;
     },
     {
       &quot;factor&quot;: 1,
-      &quot;id&quot;: &quot;mc8b248d2&quot;,
+      &quot;id&quot;: &quot;mb3723ae7&quot;,
       &quot;kind&quot;: &quot;selfMass&quot;
-    },
-    {
-      &quot;id&quot;: &quot;mfeca65f8&quot;,
-      &quot;kind&quot;: &quot;nodalMass&quot;,
-      &quot;mass&quot;: 3000,
-      &quot;node&quot;: &quot;tr&quot;
     }
   ],
   &quot;materials&quot;: [
@@ -203,10 +203,10 @@
       &quot;col&quot;: &quot;sec1&quot;,
       &quot;cr&quot;: &quot;m2&quot;,
       &quot;g1&quot;: &quot;l1&quot;,
-      &quot;m22da9216&quot;: &quot;ms2&quot;,
+      &quot;m25e6e9e1&quot;: &quot;ms3&quot;,
+      &quot;m873011a0&quot;: &quot;ms2&quot;,
       &quot;mat1&quot;: &quot;mat1&quot;,
-      &quot;mc8b248d2&quot;: &quot;ms1&quot;,
-      &quot;mfeca65f8&quot;: &quot;ms3&quot;,
+      &quot;mb3723ae7&quot;: &quot;ms1&quot;,
       &quot;s1&quot;: &quot;s1&quot;,
       &quot;s2&quot;: &quot;s2&quot;,
       &quot;tl&quot;: &quot;n3&quot;,
@@ -250,7 +250,7 @@
     }
   ],
   &quot;revision&quot;: 3,
-  &quot;schemaVersion&quot;: &quot;1.4.0&quot;,
+  &quot;schemaVersion&quot;: &quot;1.6.0&quot;,
   &quot;sections&quot;: [
     {
       &quot;A&quot;: 0.0076,

@@ -414,7 +414,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Numerical family response-v1 (harmonic response and user-spectrum modal combination) gated on its own (evidence/M15/response-gate, ADR 0023, response oracle); the parent stays planned until R-SEISMIC-CODE supplies code spectra and seismic combination rules."
     },
     {
       "id": "M16",

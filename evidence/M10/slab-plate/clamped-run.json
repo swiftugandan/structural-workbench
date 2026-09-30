@@ -36,11 +36,11 @@
   "columnMechanics": null,
   "contactState": "notApplicable",
   "contractVersion": 1,
-  "draftId": "dpf7ec47dcab021f07",
+  "draftId": "dp9a1839e67434f7d7",
   "flexuralDemand": null,
-  "inputHash": "74909f7e82e2a81666bc1e8068ab7fa1a30afea2f53f548772e6e17483624617",
+  "inputHash": "d52b7aa23af1f0028079371304c7fd2bc232807808d4e4af0296336589c98f87",
   "inputs": {
-    "id": "dpf7ec47dcab021f07",
+    "id": "dp9a1839e67434f7d7",
     "inputSource": "mixed",
     "inputSources": {
       "concreteStrength": "syntheticFixture",
@@ -99,11 +99,12 @@
     "Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"
   ],
   "mock": true,
-  "modelHash": "01ecd6cbefc0df16b1b80bac274d6154eee8dc42dd5b64399d0bb033f6759ab8",
+  "modelHash": "bd5041905eb00bad7bebde8828291848f4d4b3bd130061617a1ef2dfce8db1c6",
   "overall": "unsupported",
   "plateAnalysis": {
     "basis": "mechanics",
     "codeProfile": null,
+    "columns": [],
     "convergence": {
       "change": 0.15439093527196743,
       "coarseElements": 120,
@@ -9279,6 +9280,7 @@
       "lengthX": 6,
       "lengthY": 5,
       "opening": null,
+      "placement": null,
       "targetMeshSize": 0.25,
       "thickness": 0.2
     },
@@ -9292,7 +9294,7 @@
       "shear": "N/m"
     }
   },
-  "previewRunId": "130b2f7f27c7fd844bbf140b9870ec081b0833370b20c0ab5f912b934d5e107b",
+  "previewRunId": "787acc3c152e97bab48ad1a8c52ded34cffd67be058a170cb396681054f7291b",
   "reinforcementFields": [
     "Top X",
     "Top Y",

@@ -468,21 +468,29 @@
     {
       "id": "R-DYNAMIC-ORACLE",
       "version": "dynamics-v1",
-      "authoritativeOrigin": "Project-generated: closed-form SDOF, cantilever, simply supported, axial and torsional bar frequencies and a two-storey shear frame by tools/oracles/modal_oracle.py; spatial frame (lumped) and planar portal (consistent) eigenvalues from OpenSeesPy 3.4.0 (R-OPENSees-ORACLE)",
+      "authoritativeOrigin": "Project-generated: closed-form SDOF, cantilever, simply supported, axial and torsional bar frequencies and a two-storey shear frame by tools/oracles/modal_oracle.py; spatial frame (lumped) and planar portal (consistent) eigenvalues from OpenSeesPy 3.4.0 (R-OPENSees-ORACLE); harmonic and response-spectrum oracles (closed-form SDOF, two-storey shear frame SRSS/CQC, and a spatial frame with OpenSeesPy 3.4.0 K and M solved in complex arithmetic) by tools/oracles/response_oracle.py",
       "fixture": "fixtures/dynamics/modal-oracle.json",
       "fixtureSha256": "30677e61c0a2003294f8f8bd34526cdbf113c7139f52641c2930278da3d7f106",
       "generatorSha256": "392e041c48afc9925dc8e1a79fa0bb2e85dba787b9e6dddd2b075942775d9eec",
       "formulation": "docs/formulations/modal.md",
       "rightsStatus": "Project-authored, redistributable with the repository",
-      "validationUse": "M14 modal kernel, protocol and browser acceptance"
+      "validationUse": "M14 modal and M15 harmonic/response-spectrum kernel, protocol and browser acceptance",
+      "additionalFixtures": [
+        {
+          "fixture": "fixtures/dynamics/response-oracle.json",
+          "fixtureSha256": "48dfa5f29399daf479afabb3fe398898d2efef16a01d66bc2d09484b38dcbdce",
+          "generatorSha256": "38519d21cce5272ec1feb6efca3bca580428889844357ca741e8fd128e974500",
+          "formulation": "docs/formulations/response.md"
+        }
+      ]
     },
     {
       "id": "R-SHELL-BENCHMARKS",
       "version": "plate-v1",
-      "authoritativeOrigin": "Project-generated: Mindlin/Kirchhoff Navier series, Timoshenko & Woinowsky-Krieger Table 35 clamped-plate coefficients, the MacNeal–Harder distorted patch, and OpenSeesPy 3.4.0 ShellMITC4 on identical rectilinear and checkerboard-distorted meshes, by tools/oracles/plate_oracle.py",
+      "authoritativeOrigin": "Project-generated: Mindlin/Kirchhoff Navier series, Timoshenko & Woinowsky-Krieger Table 35 clamped-plate coefficients, the MacNeal–Harder distorted patch, and OpenSeesPy 3.4.0 ShellMITC4 on identical rectilinear and checkerboard-distorted meshes and a flat slab on pinned, fixed and spring point supports (zeroLength springs), by tools/oracles/plate_oracle.py",
       "fixture": "fixtures/plate/plate-oracle.json",
-      "fixtureSha256": "c697c0b6fe1d1a3a79cd3310bdbef42975f1a875e5595d5d0fed8837ff414bfe",
-      "generatorSha256": "1aad6c822ad634961fa7460595b709b7d55c62d1fb37fe526aa0d1688cec6832",
+      "fixtureSha256": "5760e6b988cdc7678abf2f0a593c0fea20499126fbadca6814561fe99cd7c868",
+      "generatorSha256": "a7348d268d38aad0cf3936bbaa6c0be8dd5a441d7f093ebdd8e19b059cb04ddc",
       "formulation": "docs/formulations/plate.md",
       "rightsStatus": "Project-authored, redistributable with the repository (published coefficients cited, not reproduced beyond three values)",
       "validationUse": "M10 plate-v1 kernel, slab protocol and browser numerical-family gate"

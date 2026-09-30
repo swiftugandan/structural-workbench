@@ -1,8 +1,8 @@
 {
   "taskId": "M10-PLATE",
   "milestone": "M10",
-  "sourceHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
-  "buildHash": "e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409",
+  "sourceHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+  "buildHash": "b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876",
   "lockHashes": {
     "Cargo.lock": "856668e4dcb447fdfe910e390c63f9e63dc840c4bf83e60e4d4678c586058ef7",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
@@ -10,7 +10,7 @@
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
   },
   "artifactHashes": {
-    "playwright-results.json": "bcab1b32636ba6e13afdedbe73436a4afdcaf2705d2e7f4cc63e9687a9c23f09"
+    "playwright-results.json": "f7e79ede3c4f62d4cd253d29895d4ea2155a129cd246f8f1b4744ae512e90568"
   },
   "runner": {
     "platform": "darwin",
@@ -19,9 +19,9 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-29T17:04:03.334Z",
+  "observedAt": "2026-09-30T06:54:16.928Z",
   "status": "PASS",
-  "testCount": 9,
+  "testCount": 10,
   "testIds": [
     "Concrete preview rcBeam: source, stale, undo, persistence and export",
     "Concrete preview slab: source, stale, undo, persistence and export",
@@ -31,7 +31,8 @@
     "RC beam model design moments beside mechanics capacities (top face points DOWN)",
     "RC beam EC2 checks: disabled-profile preview at governing stations, explicit anchorage, overall unsupported",
     "Slab plate analysis reproduces the opening oracle, shows contours and persists",
-    "Slab plate refusals keep the project and explain the reason"
+    "Slab plate refusals keep the project and explain the reason",
+    "Slab on model columns: derive the columns, solve and apply the column loads to the frame"
   ],
   "command": [
     "npx",
@@ -41,9 +42,9 @@
     "tests/e2e/design-previews.spec.js"
   ],
   "stats": {
-    "startTime": "2026-09-29T17:03:01.768Z",
-    "duration": 61538.669,
-    "expected": 9,
+    "startTime": "2026-09-30T06:52:54.884Z",
+    "duration": 82012.14899999999,
+    "expected": 10,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

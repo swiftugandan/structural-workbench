@@ -1,0 +1,237 @@
+{
+  "modelHash": "e8a34a55efa45554084c79b5a1da8afa550f8a4a1f989022fac13b9a957c0336",
+  "request": {
+    "caseIds": [],
+    "combinationIds": [],
+    "analysisType": "responseSpectrum",
+    "responseSpectrum": {
+      "spectrumId": "rs-munr5xtv",
+      "direction": "Z",
+      "scale": 1,
+      "combination": "srss",
+      "modes": 3,
+      "massMatrix": "consistent",
+      "subdivisions": 4,
+      "participationTarget": 0.9
+    }
+  },
+  "result": {
+    "analysisType": "responseSpectrum",
+    "baseReaction": [
+      1.7333335823714788e-15,
+      7.659200518802634e-12,
+      3009.4384320443787
+    ],
+    "combination": "srss",
+    "converged": true,
+    "dampingRatio": 0.05,
+    "diagnostics": [],
+    "direction": "Z",
+    "disclosures": [
+      "USER_SPECTRUM_NOT_A_CODE_SPECTRUM",
+      "PEAK_MAGNITUDES_SIGNS_LOST",
+      "ONE_DIRECTION",
+      "NO_MISSING_MASS_CORRECTION"
+    ],
+    "massMatrix": "consistent",
+    "members": [
+      {
+        "id": "m1",
+        "stations": [
+          {
+            "actions": [
+              1.7333335823714788e-15,
+              7.659200518802634e-12,
+              3009.4384320443787,
+              0,
+              15047.192160222243,
+              3.829600259401345e-11
+            ],
+            "station": 0
+          },
+          {
+            "actions": [
+              1.7333335823714788e-15,
+              7.659200518802634e-12,
+              3009.4384320443787,
+              0,
+              11285.394120166755,
+              2.87220019455101e-11
+            ],
+            "side": "left",
+            "station": 0.25
+          },
+          {
+            "actions": [
+              1.7333335823714788e-15,
+              7.659200518802749e-12,
+              3009.4384320443205,
+              0,
+              11285.394120166755,
+              2.872200194551006e-11
+            ],
+            "side": "right",
+            "station": 0.25
+          },
+          {
+            "actions": [
+              1.7333335823714788e-15,
+              7.659200518802749e-12,
+              3009.4384320443205,
+              0,
+              7523.596080111311,
+              1.9148001297006594e-11
+            ],
+            "side": "left",
+            "station": 0.5
+          },
+          {
+            "actions": [
+              1.7333335823714792e-15,
+              7.659200518802471e-12,
+              3009.438432044408,
+              0,
+              7523.59608011134,
+              1.914800129700649e-11
+            ],
+            "side": "right",
+            "station": 0.5
+          },
+          {
+            "actions": [
+              1.7333335823714792e-15,
+              7.659200518802471e-12,
+              3009.438432044408,
+              0,
+              3761.7980400558736,
+              9.574000648503063e-12
+            ],
+            "side": "left",
+            "station": 0.75
+          },
+          {
+            "actions": [
+              1.7333335823714792e-15,
+              7.659200518802394e-12,
+              3009.4384320445242,
+              0,
+              3761.798040055728,
+              9.574000648503144e-12
+            ],
+            "side": "right",
+            "station": 0.75
+          },
+          {
+            "actions": [
+              1.7333335823714792e-15,
+              7.659200518802394e-12,
+              3009.4384320445242,
+              0,
+              5.820766091346741e-11,
+              1.1560200495865536e-25
+            ],
+            "station": 1
+          }
+        ]
+      }
+    ],
+    "modelHash": "e8a34a55efa45554084c79b5a1da8afa550f8a4a1f989022fac13b9a957c0336",
+    "modes": [
+      {
+        "baseShear": 3009.438432044465,
+        "effectiveMass": 1500,
+        "effectiveMassRatio": 1,
+        "frequency": 0.716863262930416,
+        "mode": 1,
+        "omega": 4.504184720901207,
+        "participationFactor": 38.72983346207417,
+        "period": 1.3949661695762854,
+        "sa": 2.0062922880296434
+      },
+      {
+        "baseShear": 6.737057788007161e-27,
+        "effectiveMass": 1.347411557601432e-27,
+        "effectiveMassRatio": 8.98274371734288e-31,
+        "frequency": 2.6667910319950145,
+        "mode": 2,
+        "omega": 16.755942229549362,
+        "participationFactor": 3.6707105001640104e-14,
+        "period": 0.3749825119412916,
+        "sa": 5
+      },
+      {
+        "baseShear": 4.879307558033863e-34,
+        "effectiveMass": 1.9630195385347124e-34,
+        "effectiveMassRatio": 1.3086796923564748e-37,
+        "frequency": 61.777544660304656,
+        "mode": 3,
+        "omega": 388.1597609232569,
+        "participationFactor": -1.4010779915960112e-17,
+        "period": 0.01618711144152275,
+        "sa": 2.4856133432456824
+      }
+    ],
+    "nodeDisplacements": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      7.669549748991066e-24,
+      1.8186723822637342e-17,
+      0.09889214971991155,
+      0,
+      0.029667644915973672,
+      5.456017146791186e-18
+    ],
+    "nodeIds": [
+      "n1",
+      "n2"
+    ],
+    "numericalChecks": {
+      "freeDofs": 24,
+      "iterations": 2,
+      "residuals": [
+        4.170886174165648e-14,
+        4.484723454146508e-14,
+        1.0889715590463344e-15
+      ],
+      "sturm": {
+        "negativePivots": 2,
+        "sigma": 150667.84933199993
+      }
+    },
+    "participation": {
+      "achieved": true,
+      "cumulativeRatio": 1,
+      "direction": "Z",
+      "nonParticipatingMass": 0,
+      "omittedRatio": 0,
+      "participatingMass": 1500,
+      "target": 0.9
+    },
+    "reactions": [
+      1.7333335823714788e-15,
+      7.659200518802634e-12,
+      3009.4384320443787,
+      0,
+      15047.192160222243,
+      3.829600259401345e-11
+    ],
+    "requestedModes": 3,
+    "resultId": "e8a34a55efa45554-spectrum-4b7bfde3",
+    "scale": 1,
+    "schemaVersion": "1.0.0",
+    "settingsHash": "4b7bfde36925b2d6644dd55913f129986dde289976a0d16de5000d3791267ff3",
+    "solverBuildHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
+    "sourceRevision": 2,
+    "spectrumId": "rs-munr5xtv",
+    "subdivisions": 4,
+    "supportIds": [
+      "s1"
+    ],
+    "acceptedSnapshotHash": "e8a34a55efa45554084c79b5a1da8afa550f8a4a1f989022fac13b9a957c0336"
+  },
+  "currentState": "current"
+}

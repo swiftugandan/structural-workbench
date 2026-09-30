@@ -94,12 +94,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6986,
+                  "duration": 16676,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:02.836Z",
+                  "startTime": "2026-09-30T06:52:55.963Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -115,7 +115,7 @@
           ],
           "id": "6e4a453773548216eeeb-09f43fa081fcc1a6ac9b",
           "file": "e2e/design-previews.spec.js",
-          "line": 16,
+          "line": 17,
           "column": 3
         },
         {
@@ -134,12 +134,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5310,
+                  "duration": 5331,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:10.283Z",
+                  "startTime": "2026-09-30T06:53:13.393Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -155,7 +155,7 @@
           ],
           "id": "6e4a453773548216eeeb-f1cdb8647810d372f1c3",
           "file": "e2e/design-previews.spec.js",
-          "line": 16,
+          "line": 17,
           "column": 3
         },
         {
@@ -174,12 +174,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5889,
+                  "duration": 6842,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:15.747Z",
+                  "startTime": "2026-09-30T06:53:18.889Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -195,7 +195,7 @@
           ],
           "id": "6e4a453773548216eeeb-4cb4173f09d60386c561",
           "file": "e2e/design-previews.spec.js",
-          "line": 16,
+          "line": 17,
           "column": 3
         },
         {
@@ -214,12 +214,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8361,
+                  "duration": 8766,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:21.812Z",
+                  "startTime": "2026-09-30T06:53:25.927Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -235,7 +235,7 @@
           ],
           "id": "6e4a453773548216eeeb-d24412791d7b53d60a49",
           "file": "e2e/design-previews.spec.js",
-          "line": 143,
+          "line": 144,
           "column": 1
         },
         {
@@ -254,12 +254,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5897,
+                  "duration": 5953,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:30.381Z",
+                  "startTime": "2026-09-30T06:53:34.924Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -275,7 +275,7 @@
           ],
           "id": "6e4a453773548216eeeb-c2a4272bca0cdeaed5e1",
           "file": "e2e/design-previews.spec.js",
-          "line": 274,
+          "line": 275,
           "column": 3
         },
         {
@@ -294,12 +294,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5927,
+                  "duration": 5822,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:36.439Z",
+                  "startTime": "2026-09-30T06:53:41.051Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -315,7 +315,7 @@
           ],
           "id": "6e4a453773548216eeeb-aacaa10f7eca9b598316",
           "file": "e2e/design-previews.spec.js",
-          "line": 274,
+          "line": 275,
           "column": 3
         },
         {
@@ -334,12 +334,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6888,
+                  "duration": 6993,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:42.551Z",
+                  "startTime": "2026-09-30T06:53:47.048Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -355,7 +355,7 @@
           ],
           "id": "6e4a453773548216eeeb-4383763256d0664a6a47",
           "file": "e2e/design-previews.spec.js",
-          "line": 434,
+          "line": 435,
           "column": 1
         }
       ]
@@ -382,12 +382,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 9401,
+                  "duration": 10842,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:49.667Z",
+                  "startTime": "2026-09-30T06:53:54.363Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -403,7 +403,7 @@
           ],
           "id": "74605352641469c40734-dae84abe0f19ec65d38d",
           "file": "e2e/slab-plate.spec.js",
-          "line": 40,
+          "line": 41,
           "column": 1
         },
         {
@@ -422,12 +422,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3722,
+                  "duration": 4368,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-29T17:03:59.328Z",
+                  "startTime": "2026-09-30T06:54:05.463Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -443,7 +443,47 @@
           ],
           "id": "74605352641469c40734-5873522f4660ddf667db",
           "file": "e2e/slab-plate.spec.js",
-          "line": 202,
+          "line": 203,
+          "column": 1
+        },
+        {
+          "title": "Slab on model columns: derive the columns, solve and apply the column loads to the frame",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6597,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-30T06:54:09.990Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-slab-plate-Slab-on-mod-c7c2c-e-column-loads-to-the-frame/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74605352641469c40734-24f81198b51e60c854e2",
+          "file": "e2e/slab-plate.spec.js",
+          "line": 302,
           "column": 1
         }
       ]
@@ -451,9 +491,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-29T17:03:01.768Z",
-    "duration": 61538.669,
-    "expected": 9,
+    "startTime": "2026-09-30T06:52:54.884Z",
+    "duration": 82012.14899999999,
+    "expected": 10,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

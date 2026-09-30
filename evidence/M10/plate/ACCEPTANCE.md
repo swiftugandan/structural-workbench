@@ -1,8 +1,8 @@
 # M10-PLATE acceptance record
 
-Source hash: `85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c`
-Build hash: `e073e097a44111d2bd0424182da2a18bf37c46cfb089a685231100e4ea30f409`
-Observed: 2026-09-29T17:04:03.338Z
+Source hash: `c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4`
+Build hash: `b53b4d67bb1b45ff7bfd33c77c5644ec1c2639c4de3013893ad928dd6dd40876`
+Observed: 2026-09-30T06:54:16.937Z
 Status: **PASS**
 
 | ID | Title | Evidence | Status | Observation |
@@ -15,5 +15,6 @@ Status: **PASS**
 | M10-P6-PROTOCOL | Slab drafts solve their panel through the protocol | kernel_validation | PASS | The kernel's evaluateDesignPreview with sourceMode plate reproduces P-OPEN-OS to 1e-6 and is deterministic. Wood–Armer governing values equal the field maxima. Every slab code check stays UNSUPPORTED and overall stays unsupported. |
 | M10-P7-SCHEMA | Schema 1.5.0 and migration | save_and_reopen | PASS | Plate inputs round-trip with per-field provenance, invalid or out-of-panel values are INVALID_SCHEMA, and 1.4.0 projects migrate by version only with unconfigured slabs. A 1.4.0 file carrying plate inputs is refused. |
 | M10-P8-BROWSER | Browser journey on the same build | ui_journey | PASS | In the browser build, the P-OPEN-OS panel reproduces the oracle to 1e-6 from the downloaded run record. The browser test switches the contours through mx, my, Top X, Bottom Y and w. Edits make the run STALE, and clamped edges show line moments. The project downloads and reopens with its plate inputs. A mechanism and an invalid Poisson's ratio are refused with their reasons shown. |
+| M10-P9-COLUMNS | Slabs on columns and the link to the frame | kernel_validation | PASS | A 12 × 10 m flat slab on six columns (pinned, fixed, springs) matches OpenSees ShellMITC4 with zeroLength springs on the identical mesh to 1e-6: deflections, element moments and column reactions. Collinear columns, a single column, off-slab and repeated columns are refused. From the model, four columns become springs with kz = EA/L and krx, kry = 4EI/L (local axes mapped to global). The slab's reactions sum to q·A. Applying them writes four nodal loads (idempotent), and the frame's base then carries the slab exactly. Inclined members, missing columns and unknown cases are refused. |
 
-Limitations: plate-v1 mechanics only: flat rectangular panels with one rectangular opening, uniform pressure, linear elastic isotropic material, free/simple/clamped edges, no frame–slab coupling, column supports, cracking or long-term effects. Reinforcement areas, punching, detailing and deflection limits need the slab code profile (M08 resources) and stay UNSUPPORTED; the M10 parent is not accepted.
+Limitations: plate-v1 mechanics only: flat rectangular panels with one rectangular opening, uniform pressure, linear elastic isotropic material, free/simple/clamped edges and pinned/fixed/spring column supports; the frame link is one-way (columns and their stiffness from the model, column loads back to it), not a coupled frame–shell model; no cracking or long-term effects. Reinforcement areas, punching, detailing and deflection limits need the slab code profile (M08 resources) and stay UNSUPPORTED; the M10 parent is not accepted.

@@ -1,0 +1,22 @@
+{
+  "test": "M14 modal journey",
+  "oracle": "fixtures/dynamics/modal-oracle.json#portal",
+  "frequenciesHz": [
+    5.498777916521998,
+    41.220167445598975,
+    60.59336567267838,
+    61.6544321582276
+  ],
+  "expectedHz": [
+    5.498777916523964,
+    41.22016744560202,
+    60.59336567267844,
+    61.65443215822789
+  ],
+  "tolerance": 0.000001,
+  "totalMass": 6989.099999999999,
+  "fourModesReachXTarget": true,
+  "reopenedIdentical": true,
+  "negativeMass": "NEGATIVE_MASS, no frequencies",
+  "modelHash": "ec4400730e1c · f64"
+}

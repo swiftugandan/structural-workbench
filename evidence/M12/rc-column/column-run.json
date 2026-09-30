@@ -510,11 +510,11 @@
   },
   "contactState": "notApplicable",
   "contractVersion": 1,
-  "draftId": "dpfab9d3ed357a6fc5",
+  "draftId": "dpd3a605a563f69a01",
   "flexuralDemand": null,
-  "inputHash": "b8d30f0b011b4fb289d44ccf1f85befbfec1b120a0271896f7c51c18cd716a14",
+  "inputHash": "3ede7cd46942ebb3ff153abd4400d27b22fcd37257cb5637442ba0b4f95085ba",
   "inputs": {
-    "id": "dpfab9d3ed357a6fc5",
+    "id": "dpd3a605a563f69a01",
     "inputSource": "mixed",
     "inputSources": {
       "barDiameter": "syntheticFixture",
@@ -576,10 +576,10 @@
     "Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"
   ],
   "mock": true,
-  "modelHash": "6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63",
+  "modelHash": "36caf05609f4db90ef423b2a100b0b3ee1def26a65d11ee7a618b2817c472935",
   "overall": "unsupported",
   "plateAnalysis": null,
-  "previewRunId": "62d556c72d7d18830a1638fa5df35c897da1b50cca8f8e3e7ce0fb491387c568",
+  "previewRunId": "26df7991f78e26cfbb23fa1d98cdbd22f73d98354a995e06fb5793a58f4b7cc2",
   "reinforcementFields": [
     "Top X",
     "Top Y",
@@ -593,11 +593,11 @@
     "combinationId": "LC1",
     "kind": "modelAnalysis",
     "mock": false,
-    "modelHash": "6a4bd0c7ff1a943fdb5d82ff04a936ecf0c8ba76f3599d2e4e2f9b7fe9579d63",
+    "modelHash": "36caf05609f4db90ef423b2a100b0b3ee1def26a65d11ee7a618b2817c472935",
     "note": "Actual model actions at the member's key stations; the draft section is not applied to frame stiffness",
-    "resultId": "6a4bd0c7ff1a943f-LC1",
+    "resultId": "36caf05609f4db90-LC1",
     "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
-    "solverBuildHash": "85f7d63ffa3288620adeca5f6381448672cf572c48e47960c019f6ca1257420c",
+    "solverBuildHash": "c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4",
     "sourceRevision": 2,
     "stations": [
       {

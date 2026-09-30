@@ -1,0 +1,236 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Response report · Response SDOF</title><style>body{font:14px/1.45 system-ui,sans-serif;margin:24px;color:#142b44}table{border-collapse:collapse;margin:8px 0 16px}th,td{border:1px solid #dce3eb;padding:3px 8px;text-align:right}th[scope=row]{text-align:left}.banner{background:#fff7e6;border:1px solid #e8c77f;padding:8px 12px}.response-plot{max-width:640px;width:100%}</style></head><body>
+<h1>Dynamic response report</h1>
+<p class="banner" data-testid="report-response-banner">MECHANICS ONLY (response-v1). Linear elastic model with declared mass; the spectrum is the user's input, not a code spectrum. Combined values are peak magnitudes: signs and simultaneity are lost. This is not a seismic, vibration or serviceability code check.</p>
+<p>Project Response SDOF · model e8a34a55efa45554084c79b5a1da8afa550f8a4a1f989022fac13b9a957c0336 · result e8a34a55efa45554-spectrum-4b7bfde3 · settings 4b7bfde36925b2d6644dd55913f129986dde289976a0d16de5000d3791267ff3 · solver c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4</p>
+<h2>Response-spectrum analysis</h2>
+<p>Direction Z, scale 1, SRSS combination (ζ = 5 %), 3 modes, consistent mass, 4 elements per member.</p>
+<p data-testid="report-spectrum-base">Combined base reaction in Z: <strong data-si="3009.4384320443787">3.0094 kN</strong>. Participation 100.0 % against a 90.0 % target (met).</p>
+<table><thead><tr><th scope="col">T (s)</th><th>Sa (m/s²)</th></tr></thead><tbody><tr><td data-si="0">0</td><td data-si="2">2</td></tr><tr><td data-si="0.1">0.1</td><td data-si="5">5</td></tr><tr><td data-si="0.5">0.5</td><td data-si="5">5</td></tr><tr><td data-si="1">1</td><td data-si="2.5">2.5</td></tr><tr><td data-si="2">2</td><td data-si="1.25">1.25</td></tr><tr><td data-si="4">4</td><td data-si="0.625">0.625</td></tr></tbody></table><p>Spectrum rs1 · Oracle spectrum · ζ = 5 % · reference: response-v1 oracle table</p>
+<h3>Modal contributions</h3>
+<table data-testid="report-spectrum-modes"><thead><tr><th scope="col">Mode</th><th>T (s)</th><th>Sa (m/s²)</th><th>Γ</th><th>Mass</th><th>Base shear (kN)</th></tr></thead><tbody><tr><th scope="row">1</th><td data-si="1.3949661695762854">1.39497</td><td data-si="2.0062922880296434">2.00629</td><td data-si="38.72983346207417">38.7298</td><td>100.00 %</td><td data-si="3009.438432044465">3.00944</td></tr><tr><th scope="row">2</th><td data-si="0.3749825119412916">0.374983</td><td data-si="5">5</td><td data-si="3.6707105001640104e-14">3.67071e-14</td><td>0.00 %</td><td data-si="6.737057788007161e-27">6.73706e-30</td></tr><tr><th scope="row">3</th><td data-si="0.01618711144152275">0.0161871</td><td data-si="2.4856133432456824">2.48561</td><td data-si="-1.4010779915960112e-17">-1.40108e-17</td><td>0.00 %</td><td data-si="4.879307558033863e-34">4.87931e-37</td></tr></tbody></table>
+<h3>Support reactions (peak magnitudes, kN and kN·m)</h3>
+<table><thead><tr><th scope="col">Support</th><th>Fx</th><th>Fy</th><th>Fz</th><th>Mx</th><th>My</th><th>Mz</th></tr></thead><tbody><tr><th scope="row">s1</th><td data-si="1.7333335823714788e-15">1.73333e-18</td><td data-si="7.659200518802634e-12">7.6592e-15</td><td data-si="3009.4384320443787">3.00944</td><td data-si="0">0</td><td data-si="15047.192160222243">15.0472</td><td data-si="3.829600259401345e-11">3.8296e-14</td></tr></tbody></table>
+<h3>Member section actions (largest along each member; kN, kN·m)</h3>
+<table><thead><tr><th scope="col">Member</th><th>|N|</th><th>|Vy|</th><th>|Vz|</th><th>|T|</th><th>|My|</th><th>|Mz|</th></tr></thead><tbody><tr data-testid="report-spectrum-member"><th scope="row">m1</th><td data-si="1.7333335823714792e-15">1.73333e-18</td><td data-si="7.659200518802749e-12">7.6592e-15</td><td data-si="3009.4384320445242">3.00944</td><td data-si="0">0</td><td data-si="15047.192160222243">15.0472</td><td data-si="3.829600259401345e-11">3.8296e-14</td></tr></tbody></table>
+<h3>Node displacements (peak magnitudes, mm)</h3>
+<table><thead><tr><th scope="col">Node</th><th>|ux|</th><th>|uy|</th><th>|uz|</th></tr></thead><tbody><tr><th scope="row">n1</th><td data-si="0">0</td><td data-si="0">0</td><td data-si="0">0</td></tr><tr><th scope="row">n2</th><td data-si="7.669549748991066e-24">7.66955e-21</td><td data-si="1.8186723822637342e-17">1.81867e-14</td><td data-si="0.09889214971991155">98.8921</td></tr></tbody></table>
+<p>Disclosures: USER_SPECTRUM_NOT_A_CODE_SPECTRUM, PEAK_MAGNITUDES_SIGNS_LOST, ONE_DIRECTION, NO_MISSING_MASS_CORRECTION.</p>
+<details><summary>Complete result record</summary><pre>{
+  &quot;analysisType&quot;: &quot;responseSpectrum&quot;,
+  &quot;baseReaction&quot;: [
+    1.7333335823714788e-15,
+    7.659200518802634e-12,
+    3009.4384320443787
+  ],
+  &quot;combination&quot;: &quot;srss&quot;,
+  &quot;converged&quot;: true,
+  &quot;dampingRatio&quot;: 0.05,
+  &quot;diagnostics&quot;: [],
+  &quot;direction&quot;: &quot;Z&quot;,
+  &quot;disclosures&quot;: [
+    &quot;USER_SPECTRUM_NOT_A_CODE_SPECTRUM&quot;,
+    &quot;PEAK_MAGNITUDES_SIGNS_LOST&quot;,
+    &quot;ONE_DIRECTION&quot;,
+    &quot;NO_MISSING_MASS_CORRECTION&quot;
+  ],
+  &quot;massMatrix&quot;: &quot;consistent&quot;,
+  &quot;members&quot;: [
+    {
+      &quot;id&quot;: &quot;m1&quot;,
+      &quot;stations&quot;: [
+        {
+          &quot;actions&quot;: [
+            1.7333335823714788e-15,
+            7.659200518802634e-12,
+            3009.4384320443787,
+            0,
+            15047.192160222243,
+            3.829600259401345e-11
+          ],
+          &quot;station&quot;: 0
+        },
+        {
+          &quot;actions&quot;: [
+            1.7333335823714788e-15,
+            7.659200518802634e-12,
+            3009.4384320443787,
+            0,
+            11285.394120166755,
+            2.87220019455101e-11
+          ],
+          &quot;side&quot;: &quot;left&quot;,
+          &quot;station&quot;: 0.25
+        },
+        {
+          &quot;actions&quot;: [
+            1.7333335823714788e-15,
+            7.659200518802749e-12,
+            3009.4384320443205,
+            0,
+            11285.394120166755,
+            2.872200194551006e-11
+          ],
+          &quot;side&quot;: &quot;right&quot;,
+          &quot;station&quot;: 0.25
+        },
+        {
+          &quot;actions&quot;: [
+            1.7333335823714788e-15,
+            7.659200518802749e-12,
+            3009.4384320443205,
+            0,
+            7523.596080111311,
+            1.9148001297006594e-11
+          ],
+          &quot;side&quot;: &quot;left&quot;,
+          &quot;station&quot;: 0.5
+        },
+        {
+          &quot;actions&quot;: [
+            1.7333335823714792e-15,
+            7.659200518802471e-12,
+            3009.438432044408,
+            0,
+            7523.59608011134,
+            1.914800129700649e-11
+          ],
+          &quot;side&quot;: &quot;right&quot;,
+          &quot;station&quot;: 0.5
+        },
+        {
+          &quot;actions&quot;: [
+            1.7333335823714792e-15,
+            7.659200518802471e-12,
+            3009.438432044408,
+            0,
+            3761.7980400558736,
+            9.574000648503063e-12
+          ],
+          &quot;side&quot;: &quot;left&quot;,
+          &quot;station&quot;: 0.75
+        },
+        {
+          &quot;actions&quot;: [
+            1.7333335823714792e-15,
+            7.659200518802394e-12,
+            3009.4384320445242,
+            0,
+            3761.798040055728,
+            9.574000648503144e-12
+          ],
+          &quot;side&quot;: &quot;right&quot;,
+          &quot;station&quot;: 0.75
+        },
+        {
+          &quot;actions&quot;: [
+            1.7333335823714792e-15,
+            7.659200518802394e-12,
+            3009.4384320445242,
+            0,
+            5.820766091346741e-11,
+            1.1560200495865536e-25
+          ],
+          &quot;station&quot;: 1
+        }
+      ]
+    }
+  ],
+  &quot;modelHash&quot;: &quot;e8a34a55efa45554084c79b5a1da8afa550f8a4a1f989022fac13b9a957c0336&quot;,
+  &quot;modes&quot;: [
+    {
+      &quot;baseShear&quot;: 3009.438432044465,
+      &quot;effectiveMass&quot;: 1500,
+      &quot;effectiveMassRatio&quot;: 1,
+      &quot;frequency&quot;: 0.716863262930416,
+      &quot;mode&quot;: 1,
+      &quot;omega&quot;: 4.504184720901207,
+      &quot;participationFactor&quot;: 38.72983346207417,
+      &quot;period&quot;: 1.3949661695762854,
+      &quot;sa&quot;: 2.0062922880296434
+    },
+    {
+      &quot;baseShear&quot;: 6.737057788007161e-27,
+      &quot;effectiveMass&quot;: 1.347411557601432e-27,
+      &quot;effectiveMassRatio&quot;: 8.98274371734288e-31,
+      &quot;frequency&quot;: 2.6667910319950145,
+      &quot;mode&quot;: 2,
+      &quot;omega&quot;: 16.755942229549362,
+      &quot;participationFactor&quot;: 3.6707105001640104e-14,
+      &quot;period&quot;: 0.3749825119412916,
+      &quot;sa&quot;: 5
+    },
+    {
+      &quot;baseShear&quot;: 4.879307558033863e-34,
+      &quot;effectiveMass&quot;: 1.9630195385347124e-34,
+      &quot;effectiveMassRatio&quot;: 1.3086796923564748e-37,
+      &quot;frequency&quot;: 61.777544660304656,
+      &quot;mode&quot;: 3,
+      &quot;omega&quot;: 388.1597609232569,
+      &quot;participationFactor&quot;: -1.4010779915960112e-17,
+      &quot;period&quot;: 0.01618711144152275,
+      &quot;sa&quot;: 2.4856133432456824
+    }
+  ],
+  &quot;nodeDisplacements&quot;: [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    7.669549748991066e-24,
+    1.8186723822637342e-17,
+    0.09889214971991155,
+    0,
+    0.029667644915973672,
+    5.456017146791186e-18
+  ],
+  &quot;nodeIds&quot;: [
+    &quot;n1&quot;,
+    &quot;n2&quot;
+  ],
+  &quot;numericalChecks&quot;: {
+    &quot;freeDofs&quot;: 24,
+    &quot;iterations&quot;: 2,
+    &quot;residuals&quot;: [
+      4.170886174165648e-14,
+      4.484723454146508e-14,
+      1.0889715590463344e-15
+    ],
+    &quot;sturm&quot;: {
+      &quot;negativePivots&quot;: 2,
+      &quot;sigma&quot;: 150667.84933199993
+    }
+  },
+  &quot;participation&quot;: {
+    &quot;achieved&quot;: true,
+    &quot;cumulativeRatio&quot;: 1,
+    &quot;direction&quot;: &quot;Z&quot;,
+    &quot;nonParticipatingMass&quot;: 0,
+    &quot;omittedRatio&quot;: 0,
+    &quot;participatingMass&quot;: 1500,
+    &quot;target&quot;: 0.9
+  },
+  &quot;reactions&quot;: [
+    1.7333335823714788e-15,
+    7.659200518802634e-12,
+    3009.4384320443787,
+    0,
+    15047.192160222243,
+    3.829600259401345e-11
+  ],
+  &quot;requestedModes&quot;: 3,
+  &quot;resultId&quot;: &quot;e8a34a55efa45554-spectrum-4b7bfde3&quot;,
+  &quot;scale&quot;: 1,
+  &quot;schemaVersion&quot;: &quot;1.0.0&quot;,
+  &quot;settingsHash&quot;: &quot;4b7bfde36925b2d6644dd55913f129986dde289976a0d16de5000d3791267ff3&quot;,
+  &quot;solverBuildHash&quot;: &quot;c1d2a43150be31898ad2794d6728314b3f551227263e292c2af3ca4dbef59bd4&quot;,
+  &quot;sourceRevision&quot;: 2,
+  &quot;spectrumId&quot;: &quot;rs-munr5xtv&quot;,
+  &quot;subdivisions&quot;: 4,
+  &quot;supportIds&quot;: [
+    &quot;s1&quot;
+  ],
+  &quot;acceptedSnapshotHash&quot;: &quot;e8a34a55efa45554084c79b5a1da8afa550f8a4a1f989022fac13b9a957c0336&quot;
+}</pre></details>
+</body></html>

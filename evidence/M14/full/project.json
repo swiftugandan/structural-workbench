@@ -57,21 +57,21 @@
   ],
   "massSources": [
     {
-      "id": "m22da9216",
+      "id": "m25e6e9e1",
+      "kind": "nodalMass",
+      "mass": 3000,
+      "node": "tr"
+    },
+    {
+      "id": "m873011a0",
       "kind": "nodalMass",
       "mass": 3000,
       "node": "tl"
     },
     {
       "factor": 1,
-      "id": "mc8b248d2",
+      "id": "mb3723ae7",
       "kind": "selfMass"
-    },
-    {
-      "id": "mfeca65f8",
-      "kind": "nodalMass",
-      "mass": 3000,
-      "node": "tr"
     }
   ],
   "materials": [
@@ -159,10 +159,10 @@
       "col": "sec1",
       "cr": "m2",
       "g1": "l1",
-      "m22da9216": "ms2",
+      "m25e6e9e1": "ms3",
+      "m873011a0": "ms2",
       "mat1": "mat1",
-      "mc8b248d2": "ms1",
-      "mfeca65f8": "ms3",
+      "mb3723ae7": "ms1",
       "s1": "s1",
       "s2": "s2",
       "tl": "n3",
@@ -206,7 +206,7 @@
     }
   ],
   "revision": 5,
-  "schemaVersion": "1.4.0",
+  "schemaVersion": "1.6.0",
   "sections": [
     {
       "A": 0.0076,
