@@ -1,14 +1,17 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 import { CURRENT_SCHEMA } from "../schema-version.js";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M04/full";
-process.env.WORKBENCH_TASK_ID ||= "M04-parent";
-process.env.WORKBENCH_MILESTONE ||= "M04";
+const context = evidenceContext({
+  dir: "evidence/M04/full",
+  taskId: "M04-parent",
+  milestone: "M04",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M04/full");
+const evidence = () => context.dir;
 
 test("M04 record: export/import equivalence and report matches displayed results", async ({
   page,

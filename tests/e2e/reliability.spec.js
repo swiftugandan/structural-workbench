@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M04/reliability";
-process.env.WORKBENCH_TASK_ID ||= "M04-D";
-process.env.WORKBENCH_MILESTONE ||= "M04";
+const context = evidenceContext({
+  dir: "evidence/M04/reliability",
+  taskId: "M04-D",
+  milestone: "M04",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M04/reliability");
+const evidence = () => context.dir;
 
 test.describe("M04 reliability matrix", () => {
   test("corrupt latest snapshot recovers verified history revision", async ({
@@ -86,43 +89,43 @@ test.describe("M04 reliability matrix", () => {
     });
   });
 
-test("model Worker crash restores last confirmed in-memory model", async ({
-  page,
-  context,
-}) => {
-  // Avoid a stale service-worker controlling the page during Worker respawn.
-  await context.addInitScript(() => {
-    navigator.serviceWorker
-      ?.getRegistrations?.()
-      .then((regs) => regs.forEach((r) => r.unregister()));
-  });
-  await page.goto("/");
-  await page.evaluate(async () => {
-    const regs = await navigator.serviceWorker?.getRegistrations?.();
-    if (regs) await Promise.all(regs.map((r) => r.unregister()));
-  });
-  await page.locator("#new-project").click();
-  await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
-  await page.locator("#analyse").click();
-  await expect(page.locator("#result-status")).toHaveText("✓ Current");
-  const hash = await page.locator("#hash-status").textContent();
+  test("model Worker crash restores last confirmed in-memory model", async ({
+    page,
+    context,
+  }) => {
+    // Avoid a stale service-worker controlling the page during Worker respawn.
+    await context.addInitScript(() => {
+      navigator.serviceWorker
+        ?.getRegistrations?.()
+        .then((regs) => regs.forEach((r) => r.unregister()));
+    });
+    await page.goto("/");
+    await page.evaluate(async () => {
+      const regs = await navigator.serviceWorker?.getRegistrations?.();
+      if (regs) await Promise.all(regs.map((r) => r.unregister()));
+    });
+    await page.locator("#new-project").click();
+    await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
+    await page.locator("#analyse").click();
+    await expect(page.locator("#result-status")).toHaveText("✓ Current");
+    const hash = await page.locator("#hash-status").textContent();
 
-  await page.evaluate(async () => {
-    await window.__workbenchTest.crashModelWorker();
-  });
-  await expect(page.locator("#message")).toContainText(
-    /Model Worker stopped|Restored the last confirmed/i,
-  );
-  await expect(page.locator("#hash-status")).toHaveText(hash);
-  await page.locator("#analyse").click();
-  await expect(page.locator("#result-status")).toHaveText("✓ Current");
-  await expect(page.locator("#results-content")).toContainText("-45");
+    await page.evaluate(async () => {
+      await window.__workbenchTest.crashModelWorker();
+    });
+    await expect(page.locator("#message")).toContainText(
+      /Model Worker stopped|Restored the last confirmed/i,
+    );
+    await expect(page.locator("#hash-status")).toHaveText(hash);
+    await page.locator("#analyse").click();
+    await expect(page.locator("#result-status")).toHaveText("✓ Current");
+    await expect(page.locator("#results-content")).toContainText("-45");
 
-  await record("model-worker-crash", {
-    status: "PASS",
-    hashPrefix: hash?.slice(0, 12),
+    await record("model-worker-crash", {
+      status: "PASS",
+      hashPrefix: hash?.slice(0, 12),
+    });
   });
-});
 
   test("persistence denied warns without blocking export", async ({ page }) => {
     await page.addInitScript(() => {

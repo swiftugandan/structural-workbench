@@ -1,14 +1,17 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 import { CURRENT_SCHEMA, migratedTo } from "../schema-version.js";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M04/migrations";
-process.env.WORKBENCH_TASK_ID ||= "M04-C";
-process.env.WORKBENCH_MILESTONE ||= "M04";
+const context = evidenceContext({
+  dir: "evidence/M04/migrations",
+  taskId: "M04-C",
+  milestone: "M04",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M04/migrations");
+const evidence = () => context.dir;
 
 test("M04 migration: 0.9.0 imports, retains original, unknown schema refused", async ({
   page,

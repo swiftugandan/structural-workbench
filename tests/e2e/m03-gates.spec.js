@@ -4,13 +4,16 @@ import { test, expect } from "@playwright/test";
 // Worker fault injection must intercept fresh workers, including repeat analyses.
 test.use({ serviceWorkers: "block" });
 import { mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M03/gates";
-process.env.WORKBENCH_TASK_ID ||= "M03-gaps";
-process.env.WORKBENCH_MILESTONE ||= "M03";
+const context = evidenceContext({
+  dir: "evidence/M03/gates",
+  taskId: "M03-gaps",
+  milestone: "M03",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M03/gates");
+const evidence = () => context.dir;
 
 async function blockAnalyse(page, ms = 2500) {
   await page.route("**/worker.js", async (route) => {

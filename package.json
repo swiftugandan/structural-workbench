@@ -14,6 +14,7 @@
     "test:numerical": "node tools/numerical.mjs",
     "test:oracle": "node tools/oracle.mjs",
     "test:e2e": "playwright test tests/e2e",
+    "test:regression": "node tools/run-regression.mjs",
     "test:a11y": "playwright test tests/accessibility",
     "test:security": "node --test tests/security/*.test.mjs",
     "test:performance": "playwright test tests/performance.spec.js",

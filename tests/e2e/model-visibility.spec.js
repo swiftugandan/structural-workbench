@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { mkdir, readFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
-const dir = "evidence/model-visibility";
+import { evidenceDir } from "../../tools/evidence.mjs";
+const dir = evidenceDir("evidence/model-visibility");
 
 test("Inspect one storey's return stairs in plan, side and 3D without changing engineering data", async ({
   page,

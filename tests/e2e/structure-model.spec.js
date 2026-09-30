@@ -2,6 +2,9 @@ import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
 import { CURRENT_SCHEMA } from "../schema-version.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const evidenceRoot = evidenceDir("evidence/structure-model");
 async function exported(page) {
   const pending = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
@@ -90,10 +93,10 @@ test("Authored structure survives save, undo, topology and reopen; invalid bindi
       .evaluate((el) => el.scrollWidth <= el.clientWidth + 1),
   ).toBe(true);
 
-  await mkdir("evidence/structure-model", { recursive: true });
-  await page.screenshot({ path: "evidence/structure-model/authored-tree.png" });
+  await mkdir(evidenceRoot, { recursive: true });
+  await page.screenshot({ path: `${evidenceRoot}/authored-tree.png` });
   await writeFile(
-    "evidence/structure-model/project.json",
+    `${evidenceRoot}/project.json`,
     JSON.stringify(await exported(page), null, 2),
   );
   expect(errors).toEqual([]);

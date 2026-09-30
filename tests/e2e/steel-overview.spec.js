@@ -1,5 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const evidenceRoot = evidenceDir("evidence/M07/overview");
 
 test("M07-G overview: complete membership, exact records, row selection, stale and export", async ({
   page,
@@ -14,13 +17,11 @@ test("M07-G overview: complete membership, exact records, row selection, stale a
   p.members.push({ ...p.members[0], id: "m2", start: "n3", end: "n4" });
   p.supports.push({ ...p.supports[0], id: "s2", node: "n3" });
   await page.goto("/");
-  await page
-    .locator("#import-file")
-    .setInputFiles({
-      name: "review.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(p)),
-    });
+  await page.locator("#import-file").setInputFiles({
+    name: "review.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(p)),
+  });
   await page.locator("[data-inspector-tab=steel]").click();
   await expect(page.locator("#design-assign")).toBeVisible();
   await page
@@ -80,13 +81,13 @@ test("M07-G overview: complete membership, exact records, row selection, stale a
   await page.locator("#steel-review-threshold").fill("");
   await page.locator("#steel-review-threshold").press("Tab");
   await expect(page.locator("[data-review-member]")).toHaveCount(2);
-  await mkdir("evidence/M07/overview", { recursive: true });
+  await mkdir(evidenceRoot, { recursive: true });
   await page.screenshot({
-    path: "evidence/M07/overview/overview.png",
+    path: `${evidenceRoot}/overview.png`,
     fullPage: true,
   });
   await writeFile(
-    "evidence/M07/overview/review.json",
+    `${evidenceRoot}/review.json`,
     JSON.stringify(review, null, 2),
   );
 });

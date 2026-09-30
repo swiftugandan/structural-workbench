@@ -2,11 +2,12 @@ import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
 import { CURRENT_SCHEMA } from "../schema-version.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
 
 /** M12 RC column section mechanics (ADR 0022) through the browser build: a
  * draft bound to a model member reproduces the column oracle's SQ-PARABOLA
  * capacity at the fixed-end station. */
-const dir = "evidence/M12/rc-column";
+const dir = evidenceDir("evidence/M12/rc-column");
 
 test("RC column mechanics match the oracle at model station actions, go stale and persist", async ({
   page,

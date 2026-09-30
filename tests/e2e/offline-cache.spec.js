@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M04/offline-cache";
-process.env.WORKBENCH_TASK_ID ||= "M04-B";
-process.env.WORKBENCH_MILESTONE ||= "M04";
+const context = evidenceContext({
+  dir: "evidence/M04/offline-cache",
+  taskId: "M04-B",
+  milestone: "M04",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M04/offline-cache");
+const evidence = () => context.dir;
 
 async function waitForServiceWorker(page) {
   await expect

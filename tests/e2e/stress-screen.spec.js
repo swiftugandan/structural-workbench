@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M06/stress-screen";
-process.env.WORKBENCH_TASK_ID ||= "M06-A";
-process.env.WORKBENCH_MILESTONE ||= "M06";
+const context = evidenceContext({
+  dir: "evidence/M06/stress-screen",
+  taskId: "M06-A",
+  milestone: "M06",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M06/stress-screen");
+const evidence = () => context.dir;
 
 test("M06 stress screen: B02 shows elastic fibre stresses with disclaimer", async ({
   page,

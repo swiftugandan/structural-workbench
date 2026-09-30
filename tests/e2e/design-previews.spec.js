@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
 import { CURRENT_SCHEMA } from "../schema-version.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
 
 /** Runs the active preview and waits for the run to finish, so a pane chosen
  * next is not reset to the summary by the arriving result. */
@@ -12,7 +13,7 @@ async function runPreview(page) {
     "true",
   );
 }
-const dir = "evidence/design-previews";
+const dir = evidenceDir("evidence/design-previews");
 for (const kind of ["rcBeam", "slab", "padFooting"])
   test(`Concrete preview ${kind}: source, stale, undo, persistence and export`, async ({
     page,

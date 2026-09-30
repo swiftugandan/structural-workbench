@@ -2,11 +2,12 @@ import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
 import { CURRENT_SCHEMA } from "../schema-version.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
 
 /** M10 slab plate analysis (plate-v1, ADR 0021) through the browser build:
  * inputs, solve, contour display, oracle agreement, refusals, stale state and
  * persistence. */
-const dir = "evidence/M10/slab-plate";
+const dir = evidenceDir("evidence/M10/slab-plate");
 
 async function openSlab(page, id) {
   const model = JSON.parse(await readFile("fixtures/models/B04.json", "utf8"));

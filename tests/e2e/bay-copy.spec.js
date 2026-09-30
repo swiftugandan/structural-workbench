@@ -1,13 +1,16 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M03/bay-copy";
-process.env.WORKBENCH_TASK_ID ||= "M03-A";
-process.env.WORKBENCH_MILESTONE ||= "M03";
+const context = evidenceContext({
+  dir: "evidence/M03/bay-copy",
+  taskId: "M03-A",
+  milestone: "M03",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M03/bay-copy");
+const evidence = () => context.dir;
 
 function tdNumbers(row) {
   return row
@@ -47,7 +50,9 @@ test("M03 copy portal into bays, analyse and inspect My Mz torsion", async ({
   // CopyBay does not copy loads — apply spatial nodal actions on a roof joint.
   const pending = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
-  const spatial = JSON.parse(await readFile(await (await pending).path(), "utf8"));
+  const spatial = JSON.parse(
+    await readFile(await (await pending).path(), "utf8"),
+  );
   const roof = spatial.nodes.reduce((a, b) =>
     b.position[2] > a.position[2] ||
     (b.position[2] === a.position[2] && b.position[1] >= a.position[1])

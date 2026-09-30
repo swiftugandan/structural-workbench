@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
-const dir = "evidence/design-fidelity";
+import { evidenceDir } from "../../tools/evidence.mjs";
+const dir = evidenceDir("evidence/design-fidelity");
 async function open(page) {
   const model = JSON.parse(await readFile("fixtures/models/B04.json", "utf8"));
   model.id = "design-fidelity";

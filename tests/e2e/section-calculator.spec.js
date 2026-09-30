@@ -1,13 +1,16 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M05/section-calculator";
-process.env.WORKBENCH_TASK_ID ||= "M05-A";
-process.env.WORKBENCH_MILESTONE ||= "M05";
+const context = evidenceContext({
+  dir: "evidence/M05/section-calculator",
+  taskId: "M05-A",
+  milestone: "M05",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M05/section-calculator");
+const evidence = () => context.dir;
 
 async function edit(page, key, id) {
   await page.locator(`[data-group="${key}"]`).click();
@@ -48,7 +51,9 @@ test("M05 section calculator: rectangle stiffens tip deflection and clears stale
     buffer: Buffer.from(JSON.stringify(fixture)),
   });
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
-  await expect(page.locator("#model-count")).toContainText("2 nodes · 1 members");
+  await expect(page.locator("#model-count")).toContainText(
+    "2 nodes · 1 members",
+  );
 
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
@@ -62,7 +67,9 @@ test("M05 section calculator: rectangle stiffens tip deflection and clears stale
   await expect(page.locator('#entity-form [name="provenance"]')).toHaveValue(
     /Computed solid rectangle/,
   );
-  await expect(page.locator('#entity-form [name="Iy"]')).not.toHaveValue("10000000");
+  await expect(page.locator('#entity-form [name="Iy"]')).not.toHaveValue(
+    "10000000",
+  );
   await save(page);
 
   await expect(page.locator("#result-status")).not.toHaveText("✓ Current");
@@ -82,8 +89,8 @@ test("M05 section calculator: rectangle stiffens tip deflection and clears stale
 
   const exported = await model(page);
   expect(exported.sections[0].provenance).toMatch(/Computed solid rectangle/);
-  expect(exported.sections[0].Iy).toBeCloseTo(0.1 * 0.2 ** 3 / 12, 12);
-  expect(exported.sections[0].Iz).toBeCloseTo(0.2 * 0.1 ** 3 / 12, 12);
+  expect(exported.sections[0].Iy).toBeCloseTo((0.1 * 0.2 ** 3) / 12, 12);
+  expect(exported.sections[0].Iz).toBeCloseTo((0.2 * 0.1 ** 3) / 12, 12);
 
   await record("section-calculator-browser", {
     status: "PASS",

@@ -1,13 +1,16 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M05/variants";
-process.env.WORKBENCH_TASK_ID ||= "M05-B";
-process.env.WORKBENCH_MILESTONE ||= "M05";
+const context = evidenceContext({
+  dir: "evidence/M05/variants",
+  taskId: "M05-B",
+  milestone: "M05",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M05/variants");
+const evidence = () => context.dir;
 
 async function edit(page, key, id) {
   await page.locator(`[data-group="${key}"]`).click();
@@ -55,7 +58,9 @@ test("M05 variants: duplicate, stiffen, compare retains both hashes and reports"
   await save(page);
 
   await menuCommand(page, "File", "Compare with baseline…");
-  await expect(page.locator(".variant-compare")).toBeVisible({ timeout: 60000 });
+  await expect(page.locator(".variant-compare")).toBeVisible({
+    timeout: 60000,
+  });
   await expect(page.locator(".variant-compare")).toContainText("Model hash");
   const hashes = await page.locator(".variant-compare code").allTextContents();
   expect(hashes.length).toBe(2);

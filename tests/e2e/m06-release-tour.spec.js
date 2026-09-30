@@ -1,14 +1,17 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 import { CURRENT_SCHEMA } from "../schema-version.js";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M06/full";
-process.env.WORKBENCH_TASK_ID ||= "M06-parent";
-process.env.WORKBENCH_MILESTONE ||= "M06";
+const context = evidenceContext({
+  dir: "evidence/M06/full",
+  taskId: "M06-parent",
+  milestone: "M06",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M06/full");
+const evidence = () => context.dir;
 
 test("M06 release tour: analyse, stress screen, ledger, save and report", async ({
   page,

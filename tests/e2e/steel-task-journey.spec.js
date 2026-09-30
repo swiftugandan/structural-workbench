@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const evidenceRoot = evidenceDir("evidence/M07/task-journey");
 
 test("Steel task: find failure, compare, apply, reanalyse, review colours and export", async ({
   page,
@@ -10,13 +13,11 @@ test("Steel task: find failure, compare, apply, reanalyse, review colours and ex
   p.name = "Synthetic steel task · 300 kN";
   p.loads[0].values = [0, 300000, 0, 0, 0, 0];
   await page.goto("/");
-  await page
-    .locator("#import-file")
-    .setInputFiles({
-      name: "task.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(p)),
-    });
+  await page.locator("#import-file").setInputFiles({
+    name: "task.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(p)),
+  });
   await page.locator("[data-inspector-tab=steel]").click();
   await expect(page.locator("#design-assign")).toBeVisible();
   await page
@@ -88,14 +89,14 @@ test("Steel task: find failure, compare, apply, reanalyse, review colours and ex
     "data-device-generation",
     /\d+/,
   );
-  await mkdir("evidence/M07/task-journey", { recursive: true });
+  await mkdir(evidenceRoot, { recursive: true });
   await page.screenshot({
-    path: "evidence/M07/task-journey/review-pass.png",
+    path: `${evidenceRoot}/review-pass.png`,
     fullPage: true,
   });
-  await writeFile("evidence/M07/task-journey/report.html", html);
+  await writeFile(`${evidenceRoot}/report.html`, html);
   await writeFile(
-    "evidence/M07/task-journey/design-run.json",
+    `${evidenceRoot}/design-run.json`,
     JSON.stringify(run, null, 2),
   );
   await page.locator("#steel-colour-toggle").uncheck();

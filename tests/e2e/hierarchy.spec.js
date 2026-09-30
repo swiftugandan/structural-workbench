@@ -1,13 +1,16 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M03/hierarchy";
-process.env.WORKBENCH_TASK_ID ||= "M03-F";
-process.env.WORKBENCH_MILESTONE ||= "M03";
+const context = evidenceContext({
+  dir: "evidence/M03/hierarchy",
+  taskId: "M03-F",
+  milestone: "M03",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M03/hierarchy");
+const evidence = () => context.dir;
 
 async function exported(page) {
   const pending = page.waitForEvent("download");
@@ -32,7 +35,9 @@ test("M03 hierarchy: split shows physical parent and analytical children", async
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(fixture)),
   });
-  await expect(page.locator("#model-count")).toContainText("2 nodes · 1 members");
+  await expect(page.locator("#model-count")).toContainText(
+    "2 nodes · 1 members",
+  );
   await expect(page.locator("#model-nav .hierarchy-group")).toHaveCount(0);
 
   await page.locator("#topology").click();
@@ -60,9 +65,7 @@ test("M03 hierarchy: split shows physical parent and analytical children", async
   await expect(page.locator("#selected-status")).toContainText("physical m1");
 
   await page.locator('[data-group="members"]').click();
-  await expect(
-    page.locator('#modal [data-physical="m1"]'),
-  ).toHaveCount(3);
+  await expect(page.locator('#modal [data-physical="m1"]')).toHaveCount(3);
   await page.locator("#close-modal").click();
 
   await page.locator("#analyse").click();

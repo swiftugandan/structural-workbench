@@ -1,13 +1,16 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M04/recovery";
-process.env.WORKBENCH_TASK_ID ||= "M04-A";
-process.env.WORKBENCH_MILESTONE ||= "M04";
+const context = evidenceContext({
+  dir: "evidence/M04/recovery",
+  taskId: "M04-A",
+  milestone: "M04",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M04/recovery");
+const evidence = () => context.dir;
 
 test("M04 recovery: restore committed revision; refuse while form dirty", async ({
   page,

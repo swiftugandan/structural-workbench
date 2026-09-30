@@ -2,7 +2,8 @@ import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { readFile, mkdir } from "node:fs/promises";
-const evidence = "evidence/M01/guided-inputs";
+import { evidenceDir } from "../../tools/evidence.mjs";
+const evidence = evidenceDir("evidence/M01/guided-inputs");
 async function start(page) {
   await page.goto("/");
   await page.locator("#new-portal").click();

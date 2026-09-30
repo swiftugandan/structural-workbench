@@ -1,5 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const dir = evidenceDir("evidence/connections-3d");
 test("3D joint/support presentation preserves restraints, picking and view switching", async ({
   page,
 }) => {
@@ -36,11 +39,8 @@ test("3D joint/support presentation preserves restraints, picking and view switc
         end: `b${i}`,
       });
   }
-  await mkdir("evidence/connections-3d", { recursive: true });
-  await writeFile(
-    "evidence/connections-3d/review-model.json",
-    JSON.stringify(p, null, 2),
-  );
+  await mkdir(dir, { recursive: true });
+  await writeFile(`${dir}/review-model.json`, JSON.stringify(p, null, 2));
   await page.setViewportSize({ width: 1600, height: 1000 });
   await page.goto("/");
   await page.locator("#import-file").setInputFiles({
@@ -68,7 +68,7 @@ test("3D joint/support presentation preserves restraints, picking and view switc
       /Illustrative restraint geometry/,
     );
   }
-  await page.screenshot({ path: "evidence/connections-3d/three-supports.png" });
+  await page.screenshot({ path: `${dir}/three-supports.png` });
   await page.locator("#view-elevation").click();
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-support-display",

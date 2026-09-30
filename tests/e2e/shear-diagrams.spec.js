@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
+import { evidenceDir } from "../../tools/evidence.mjs";
 async function open(page, name, edit = () => {}) {
   const p = JSON.parse(await readFile(`fixtures/models/${name}.json`, "utf8"));
   edit(p);
@@ -120,7 +121,7 @@ test("Member forces table exposes signed shear at every station and exports it",
   expect(csv).toContain("Shear Vz [N]");
   expect(csv).toContain("30000");
   await page.screenshot({
-    path: `${process.env.WORKBENCH_EVIDENCE_DIR}/shear-table.png`,
+    path: `${evidenceDir()}/shear-table.png`,
   });
   await page.locator('[data-tab="forces"]').click();
   await expect(page.locator("#results-content")).toContainText("nodal actions");

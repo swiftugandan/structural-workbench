@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M06/capability-ledger";
-process.env.WORKBENCH_TASK_ID ||= "M06-B";
-process.env.WORKBENCH_MILESTONE ||= "M06";
+const context = evidenceContext({
+  dir: "evidence/M06/capability-ledger",
+  taskId: "M06-B",
+  milestone: "M06",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M06/capability-ledger");
+const evidence = () => context.dir;
 
 test("M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions", async ({
   page,
@@ -19,7 +22,11 @@ test("M06 capability ledger: View capabilities shows UNKNOWN parity and exclusio
   const ledger = JSON.parse(await readFile("capabilities.json", "utf8"));
   expect(ledger.comparisonStatus).toBe("UNKNOWN");
   expect(ledger.excludedDomains).toEqual(
-    expect.arrayContaining(["shells", "plasticity", "DWG/native PROKON formats"]),
+    expect.arrayContaining([
+      "shells",
+      "plasticity",
+      "DWG/native PROKON formats",
+    ]),
   );
 
   const fixture = JSON.parse(
@@ -52,9 +59,9 @@ test("M06 capability ledger: View capabilities shows UNKNOWN parity and exclusio
   await expect(
     page.locator('[data-capability-id="elastic-stress-screen"]'),
   ).toBeVisible();
-  await expect(
-    page.locator('[data-capability-id="steel-code"]'),
-  ).toContainText("partial");
+  await expect(page.locator('[data-capability-id="steel-code"]')).toContainText(
+    "partial",
+  );
 
   const capsRes = await page.request.get("/capabilities.json");
   expect(capsRes.ok()).toBeTruthy();

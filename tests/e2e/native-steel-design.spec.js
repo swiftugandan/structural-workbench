@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const dir = evidenceDir("evidence/M07/native-inputs");
 
 async function openModel(page, load = 10000) {
   const model = JSON.parse(await readFile("fixtures/models/B04.json", "utf8"));
@@ -119,15 +122,12 @@ test("DW-E/F: model-native catalogue, check, provenance, stale, undo and reopen"
   await expect(page.locator("[data-testid='native-design-state']")).toHaveText(
     "PASS",
   );
-  await mkdir("evidence/M07/native-inputs", { recursive: true });
+  await mkdir(dir, { recursive: true });
   await page.screenshot({
-    path: "evidence/M07/native-inputs/member-steel-pass.png",
+    path: `${dir}/member-steel-pass.png`,
     fullPage: true,
   });
-  await writeFile(
-    "evidence/M07/native-inputs/design-run.json",
-    JSON.stringify(record, null, 2),
-  );
+  await writeFile(`${dir}/design-run.json`, JSON.stringify(record, null, 2));
   await info.attach("native-design-record", {
     body: JSON.stringify(record),
     contentType: "application/json",

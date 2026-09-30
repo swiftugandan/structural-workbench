@@ -1,3 +1,13 @@
+## Latest: browser regression no longer rewrites committed evidence
+
+- **Full-suite runs:** `npm run test:regression` runs the browser suite with every spec writing to the ignored `test-results/evidence`. A full run leaves all 1,885 files under `evidence/` byte-identical.
+- **Gates** still set `WORKBENCH_EVIDENCE_DIR` for their own folders.
+- **What was wrong:**
+  - 16 specs assigned `process.env.WORKBENCH_EVIDENCE_DIR` at load. In the single-worker suite, the first to load redirected every later spec, which is how other journeys' files ended up in `evidence/M03/bay-copy`.
+  - About 20 more specs hard-coded their folders and ignored the variable.
+- **The fix:** specs now take a local context from `evidenceContext()`/`recorder()` or `evidenceDir(default)`, and nothing assigns the environment.
+- **Known flakes under heavy machine load:** "M03 GPU loss during blocked analysis", "M03 analyse click keeps UI event-loop gaps ≤100ms", orientation, result-picker and robustness GPU destruction. Each passed on rerun or in an unloaded full run.
+
 ## Latest: M21 model exchange (IFC4 and DXF) accepted
 
 **exchange-v1 (ADR 0025, `docs/formulations/exchange.md`).**

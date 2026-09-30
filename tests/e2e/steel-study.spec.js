@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const evidenceRoot = evidenceDir("evidence/M07/catalogue-study");
 
 test("M07-G catalogue study reanalyses self weight, applies explicitly and undoes", async ({
   page,
@@ -98,13 +101,13 @@ test("M07-G catalogue study reanalyses self weight, applies explicitly and undoe
     "data-device-generation",
     /\d+/,
   );
-  await mkdir("evidence/M07/catalogue-study", { recursive: true });
+  await mkdir(evidenceRoot, { recursive: true });
   await page.screenshot({
-    path: "evidence/M07/catalogue-study/study.png",
+    path: `${evidenceRoot}/study.png`,
     fullPage: true,
   });
   await writeFile(
-    "evidence/M07/catalogue-study/study.json",
+    `${evidenceRoot}/study.json`,
     JSON.stringify(report, null, 2),
   );
 });

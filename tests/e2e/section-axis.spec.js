@@ -1,13 +1,16 @@
 import { menuCommand } from "../menu-helpers.js";
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M03/section-axis";
-process.env.WORKBENCH_TASK_ID ||= "M03-E";
-process.env.WORKBENCH_MILESTONE ||= "M03";
+const context = evidenceContext({
+  dir: "evidence/M03/section-axis",
+  taskId: "M03-E",
+  milestone: "M03",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M03/section-axis");
+const evidence = () => context.dir;
 
 function tdNumbers(row) {
   return row
@@ -47,7 +50,9 @@ test("M03 section-axis: edit localY roll swaps My/Mz end actions", async ({
     buffer: Buffer.from(JSON.stringify(fixture)),
   });
   await expect(page.locator("#gpu-status")).toContainText("WEBGPU");
-  await expect(page.locator("#model-count")).toContainText("2 nodes · 1 members");
+  await expect(page.locator("#model-count")).toContainText(
+    "2 nodes · 1 members",
+  );
 
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
@@ -75,12 +80,11 @@ test("M03 section-axis: edit localY roll swaps My/Mz end actions", async ({
 
   const pending = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
-  const exported = JSON.parse(await readFile(await (await pending).path(), "utf8"));
-  expect(exported.members[0].localY).toEqual([0, 0, 1]);
-  await writeFile(
-    `${dir}/rolled-project.json`,
-    JSON.stringify(exported),
+  const exported = JSON.parse(
+    await readFile(await (await pending).path(), "utf8"),
   );
+  expect(exported.members[0].localY).toEqual([0, 0, 1]);
+  await writeFile(`${dir}/rolled-project.json`, JSON.stringify(exported));
 
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");

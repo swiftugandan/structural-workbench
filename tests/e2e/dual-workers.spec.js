@@ -3,11 +3,14 @@ import { test, expect } from "@playwright/test";
 // Worker fault injection must intercept fresh workers, including repeat analyses.
 test.use({ serviceWorkers: "block" });
 import { mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M03/dual-workers";
-process.env.WORKBENCH_TASK_ID ||= "M03-B";
-process.env.WORKBENCH_MILESTONE ||= "M03";
+const context = evidenceContext({
+  dir: "evidence/M03/dual-workers",
+  taskId: "M03-B",
+  milestone: "M03",
+});
+const record = recorder(context);
 
 test("M03 dual Workers: cancel leaves model intact; superseded solve stays stale", async ({
   page,
@@ -53,7 +56,7 @@ test("M03 dual Workers: cancel leaves model intact; superseded solve stays stale
     timeout: 15000,
   });
 
-  await mkdir(evidenceDir(), { recursive: true });
+  await mkdir(context.dir, { recursive: true });
   await record("dual-workers-browser", {
     status: "PASS",
     testCount: 1,

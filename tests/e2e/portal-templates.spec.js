@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
-import { evidenceDir, record } from "../../tools/evidence.mjs";
+import { evidenceContext, recorder } from "../../tools/evidence.mjs";
 
-process.env.WORKBENCH_EVIDENCE_DIR ||= "evidence/M05/portal-templates";
-process.env.WORKBENCH_TASK_ID ||= "M05-C";
-process.env.WORKBENCH_MILESTONE ||= "M05";
+const context = evidenceContext({
+  dir: "evidence/M05/portal-templates",
+  taskId: "M05-C",
+  milestone: "M05",
+});
+const record = recorder(context);
 
-const evidence = () => evidenceDir("evidence/M05/portal-templates");
+const evidence = () => context.dir;
 
 test("M05 portal templates: save dimensions and reuse on a new portal", async ({
   page,
@@ -27,7 +30,9 @@ test("M05 portal templates: save dimensions and reuse on a new portal", async ({
   await page
     .getByRole("button", { name: "Create portal", exact: true })
     .click();
-  await expect(page.locator("#model-count")).toContainText("4 nodes · 3 members");
+  await expect(page.locator("#model-count")).toContainText(
+    "4 nodes · 3 members",
+  );
   await expect(page.locator("#message")).toContainText(/Template/);
 
   await page.locator("#home").click();
@@ -49,13 +54,17 @@ test("M05 portal templates: save dimensions and reuse on a new portal", async ({
   await page
     .getByRole("button", { name: "Create portal", exact: true })
     .click();
-  await expect(page.locator("#model-count")).toContainText("4 nodes · 3 members");
+  await expect(page.locator("#model-count")).toContainText(
+    "4 nodes · 3 members",
+  );
   await expect(page.locator("#project-name")).toHaveValue("Wide portal reuse");
 
   // Span 6 m → n3.x = 6, n4.x = 6
   const n3 = page.locator('[data-edit="n3"]');
   await page.locator('[data-group="nodes"]').click();
-  await expect(page.locator("#entity-list, [data-edit='n3']").first()).toBeVisible();
+  await expect(
+    page.locator("#entity-list, [data-edit='n3']").first(),
+  ).toBeVisible();
 
   await record("portal-templates-browser", {
     status: "PASS",

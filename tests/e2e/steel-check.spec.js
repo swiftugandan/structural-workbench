@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { menuCommand } from "../menu-helpers.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
 
 async function record(name, body) {
-  const dir = "evidence/M07/steel-ui";
+  const dir = evidenceDir("evidence/M07/steel-ui");
   await mkdir(dir, { recursive: true });
   await writeFile(`${dir}/${name}.json`, JSON.stringify(body, null, 2));
 }

@@ -1,6 +1,9 @@
 import { test } from "@playwright/test";
 // Full reference model: assertions use the documented full-model budget.
 import { expect, FULL_MODEL_TEST_TIMEOUT_MS } from "../full-model-helpers.js";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const dir = evidenceDir("evidence/model-coherence");
 
 test("One selection identity follows a bound footing, its support and physical members", async ({
   page,
@@ -69,7 +72,7 @@ test("One selection identity follows a bound footing, its support and physical m
   await page.locator("#undo").click();
   await expect(page.locator("#selection-tag")).toHaveText(name);
   await page.screenshot({
-    path: "evidence/model-coherence/physical-selection.png",
+    path: `${dir}/physical-selection.png`,
   });
   expect(errors).toEqual([]);
 });

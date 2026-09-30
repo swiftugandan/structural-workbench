@@ -1,5 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
+import { evidenceDir } from "../../tools/evidence.mjs";
+
+const dir = evidenceDir("evidence/structure-model");
 test("Reference Explorer: nested elements, search, disclosure state and selection", async ({
   page,
 }) => {
@@ -71,6 +74,6 @@ test("Reference Explorer: nested elements, search, disclosure state and selectio
   await page.locator("[data-inspector-tab=steel]").click();
   await expect(page.locator("#steel-design-inspector h2")).toContainText("m2");
   await page.locator("#view-3d").click();
-  await mkdir("evidence/structure-model", { recursive: true });
-  await page.screenshot({ path: "evidence/structure-model/hierarchy.png" });
+  await mkdir(dir, { recursive: true });
+  await page.screenshot({ path: `${dir}/hierarchy.png` });
 });
