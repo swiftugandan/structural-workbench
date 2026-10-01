@@ -44,6 +44,40 @@ function submittedValue(input, unit) {
 /** The action source a draft opens with: slabs solve their own panel. */
 const defaultSource = (d) =>
   d?.kind === "slab" ? "plate" : d?.targetId ? "model" : "synthetic";
+/** The code-input fields present for the draft kind; blanks are null. */
+function readCodeInputs() {
+  const value = (id) => document.getElementById(id)?.value.trim() || null;
+  const yesNo = (id) => {
+    const v = value(id);
+    return v == null ? null : v === "yes";
+  };
+  const pair = (id) => {
+    const a = value(`${id}-1`),
+      b = value(`${id}-2`);
+    if (a == null && b == null) return null;
+    if (a == null || b == null)
+      throw new Error("Enter both k1 and k2, or leave both blank");
+    return [Number(a), Number(b)];
+  };
+  const out = {
+    exposureClass: value("code-exposure"),
+    minimumCoverDurability: value("code-cover"),
+    aggregateSize: value("code-aggregate"),
+  };
+  if (document.getElementById("code-system")) {
+    out.structuralSystem = value("code-system");
+    out.partitionsSensitive = yesNo("code-partitions");
+  }
+  if (document.getElementById("code-qp"))
+    out.quasiPermanentCombinationId = value("code-qp");
+  if (document.getElementById("code-braced")) {
+    out.braced = yesNo("code-braced");
+    out.restraintY = pair("code-ky");
+    out.restraintZ = pair("code-kz");
+    out.effectiveCreepRatio = value("code-creep");
+  }
+  return out;
+}
 export function previewState(run, ctx) {
   if (!run) return "NOT CHECKED";
   return ctx.dirty ||
@@ -218,7 +252,12 @@ export function concreteWorkspace({
             ["ec2", "EC2 checks"],
           ]
         : []),
-      ...(d.kind === "rcColumn" ? [["mechanics", "Section mechanics"]] : []),
+      ...(d.kind === "rcColumn"
+        ? [
+            ["mechanics", "Section mechanics"],
+            ["ec2", "EC2 checks"],
+          ]
+        : []),
       ["schedule", "Schedule"],
       ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
     ];
@@ -387,7 +426,7 @@ export function concreteWorkspace({
             ? "Bind a target, save, then analyse a single current case/combination."
             : $("#preview-source").value === "plate"
               ? "Plate analysis available · code checks remain UNSUPPORTED"
-              : d.kind === "rcBeam"
+              : ["rcBeam", "rcColumn"].includes(d.kind)
                 ? $("#preview-source").value === "model"
                   ? "Workflow available · EC2 checks run on the model actions (demonstration)"
                   : "Synthetic actions · EC2 checks need model actions"
@@ -424,18 +463,8 @@ export function concreteWorkspace({
               soilReference: $("#preview-soil")?.value ?? d.soilReference,
               ...(d.kind === "rcBeam" && {
                 tensionAnchorageConfirmed: $("#preview-anchorage").checked,
-                codeInputs: {
-                  exposureClass: $("#code-exposure").value || null,
-                  minimumCoverDurability: $("#code-cover").value.trim() || null,
-                  aggregateSize: $("#code-aggregate").value.trim() || null,
-                  structuralSystem: $("#code-system").value || null,
-                  partitionsSensitive:
-                    $("#code-partitions").value === ""
-                      ? null
-                      : $("#code-partitions").value === "yes",
-                  quasiPermanentCombinationId: $("#code-qp").value || null,
-                },
               }),
+              ...($("#code-exposure") && { codeInputs: readCodeInputs() }),
               ...(plate && { plate }),
               ...(t.mechanics && {
                 mechanics: {

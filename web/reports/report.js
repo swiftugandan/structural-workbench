@@ -243,17 +243,42 @@ function columnRunsHtml(project, runs, e) {
             `<tr><th scope="row">${e(k)}</th><td>${v}</td><td>${e(cm.materialSources?.[k] || "")}</td></tr>`,
         )
         .join("");
+      const cp = run.codeProfilePreview;
+      const unitsOf = {
+        N: [1e3, "kN"],
+        "N m": [1e3, "kN·m"],
+        m2: [1e-6, "mm²"],
+        m: [1e-3, "mm"],
+        "-": [1, ""],
+      };
+      const val = (v, u) => {
+        if (typeof v !== "number") return "—";
+        const [scale, unit] = unitsOf[u] || [1, u];
+        return `<span data-si="${v}">${(v / scale).toPrecision(6)}${unit ? ` ${unit}` : ""}</span>`;
+      };
+      const ec2 =
+        cp?.status === "evaluated"
+          ? `<h4>EC2 column checks · ${e(cp.profileId)}</h4><p class="banner" data-testid="report-ec2-banner">DEMONSTRATION. ${e(cp.edition)}. ${e((cp.unreconciledAmendments || []).join(", "))} not reconciled. ${e(cp.certification)}.</p><p>N<sub>Ed</sub> ${val(cp.actions.nEd, "N")} · end My ${cp.actions.myEnds.map((m) => val(m, "N m")).join(" / ")} · end Mz ${cp.actions.mzEnds.map((m) => val(m, "N m")).join(" / ")} · ${e(cp.combinationId)}</p><table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody>${cp.checks.map((c) => `<tr data-testid="report-ec2-check" data-check-id="${e(c.checkId)}"><th scope="row">${e(c.checkId)}</th><td>${e(c.clause)}</td><td>${e(c.status.toUpperCase())}</td><td>${val(c.demand, c.units)}</td><td>${val(c.resistance, c.units)}</td><td>${c.utilisation == null ? "—" : c.utilisation.toPrecision(4)}</td><td>${e(c.message)}</td></tr>`).join("")}</tbody></table>${(() => {
+              const b = cp.checks.find(
+                (c) => c.checkId === "ec2.column.biaxial.y",
+              )?.intermediates;
+              return b?.y
+                ? `<table data-testid="report-column-slenderness"><thead><tr><th>Direction</th><th>l0 (m)</th><th>λ</th><th>λlim</th><th>e_i (m)</th><th>e0 (m)</th><th>e2 (m)</th><th>M_Ed with imperfection</th></tr></thead><tbody>${["y", "z"].map((a) => `<tr><th scope="row">About ${a}</th><td>${b[a].l0}</td><td>${b[a].lambda}</td><td>${b[a].lambdaLim ?? "—"}</td><td>${b[a].ei}</td><td>${b[a].e0}</td><td>${b[a].e2}</td><td>${val(b[a].mEdWithImperfection, "N m")}</td></tr>`).join("")}</tbody></table>`
+                : "";
+            })()}`
+          : "";
       return `<section data-testid="report-column-preview" data-draft-id="${e(run.draftId)}"><h3>RC column draft ${e(run.draftId)} · member ${e(entityLabel(project, src.targetId))}</h3>
-<p>Overall <strong>${e(String(run.overall).toUpperCase())}</strong> · code profile unavailable · ${e(cm.law)} · ${cm.section.width} m × ${cm.section.depth} m, ${cm.section.barCount} bars, A<sub>s</sub> ${cm.section.steelArea} m²</p>
+<p>Overall <strong data-testid="report-column-overall">${e(String(run.overall).toUpperCase())}</strong> · code profile ${run.codeProfile ? `${e(run.codeProfile.id)} · ${e(run.codeProfile.edition)} · DEMONSTRATION` : "unavailable"} · ${e(cm.law)} · ${cm.section.width} m × ${cm.section.depth} m, ${cm.section.barCount} bars, A<sub>s</sub> ${cm.section.steelArea} m²</p>
 <p>Preview run ${e(run.previewRunId)} · input ${e(run.inputHash)} · result ${e(src.resultId)} · combination ${e(src.combinationId)} · model ${e(run.modelHash)}</p>
 <p>Axial range ${siCell(cm.axialRange.tension, 1e3, "kN")} … ${siCell(cm.axialRange.squash, 1e3, "kN")} (compression positive). ${e(cm.convention)}.</p>
 <table><thead><tr><th>Station</th><th>N<sub>Ed</sub></th><th>My</th><th>Mz</th><th>M<sub>Rd</sub>(N, θ)</th><th>M<sub>Ed</sub>/M<sub>Rd</sub> (mechanics)</th></tr></thead><tbody>${rows}</tbody></table>
 <h4>Material-law inputs (SI)</h4><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody>${inputs}</tbody></table>
 <ul>${cm.limitations.map((l) => `<li>${e(l)}</li>`).join("")}</ul>
+${ec2}
 <details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
     })
     .join("");
-  return `<section data-testid="report-column-previews"><h2>RC column section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. Explicit material law and strain limits; no partial factors, slenderness, second-order moments or minimum eccentricity (ADR 0022). A mechanics utilisation is not a code check; overall design remains UNSUPPORTED.</p>${body}</section>`;
+  return `<section data-testid="report-column-previews"><h2>RC column design (EC2 UK, demonstration)</h2><p class="banner">The section mechanics use the draft's explicit material law and are not a code resistance (ADR 0022). The EC2 column checks apply partial factors, slenderness, imperfections, second-order moments and the minimum eccentricity; they are a demonstration of EN 1992-1-1:2004+AC:2010 with the UK NA (2009), A1:2014 and NA+A2:2014 not reconciled, and not a certified design (ADR 0027).</p>${body}</section>`;
 }
 
 /** Slab plate analyses (plate-v1, ADR 0021): solution quality, extremes,

@@ -2,7 +2,9 @@ use crate::{Project, Result, digest, err};
 use serde_json::{Value, json};
 
 /// Current engineering project schema written by the application.
-pub const CURRENT_SCHEMA: &str = "1.7.0";
+pub const CURRENT_SCHEMA: &str = "1.8.0";
+/// rcBeam code inputs only; rcColumn drafts have no link spacing (ADR 0026, ADR 0027).
+pub const SCHEMA_1_7: &str = "1.7.0";
 /// No rcBeam code inputs (ADR 0026).
 pub const SCHEMA_1_6: &str = "1.6.0";
 /// No response spectra (ADR 0023).
@@ -72,6 +74,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
     }
     let (mut steps, report_from) = match version.as_str() {
         CURRENT_SCHEMA => (Vec::new(), CURRENT_SCHEMA.to_string()),
+        SCHEMA_1_7 => (Vec::new(), SCHEMA_1_7.to_string()),
         SCHEMA_1_6 => (Vec::new(), SCHEMA_1_6.to_string()),
         SCHEMA_1_5 => (Vec::new(), SCHEMA_1_5.to_string()),
         SCHEMA_1_4 => (Vec::new(), SCHEMA_1_4.to_string()),
@@ -84,7 +87,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
                 format!(
-                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {SCHEMA_1_2}, {SCHEMA_1_3}, {SCHEMA_1_4}, {SCHEMA_1_5}, {SCHEMA_1_6}, {CURRENT_SCHEMA}"
+                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {SCHEMA_1_2}, {SCHEMA_1_3}, {SCHEMA_1_4}, {SCHEMA_1_5}, {SCHEMA_1_6}, {SCHEMA_1_7}, {CURRENT_SCHEMA}"
                 ),
             ));
         }
@@ -106,23 +109,26 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
         steps.push("set schemaVersion 1.1.0".into());
     }
     let newer = |versions: &[&str]| versions.contains(&version.as_str());
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3, SCHEMA_1_2]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3, SCHEMA_1_2]) {
         steps.extend(migrate_1_1_to_1_2(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3]) {
         steps.extend(migrate_1_2_to_1_3(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4]) {
         steps.extend(migrate_1_3_to_1_4(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_6, SCHEMA_1_5]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5]) {
         steps.extend(migrate_1_4_to_1_5(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_6]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_7, SCHEMA_1_6]) {
         steps.extend(migrate_1_5_to_1_6(&mut raw)?);
     }
-    if version != CURRENT_SCHEMA {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_7]) {
         steps.extend(migrate_1_6_to_1_7(&mut raw)?);
+    }
+    if version != CURRENT_SCHEMA {
+        steps.extend(migrate_1_7_to_1_8(&mut raw)?);
     }
     let text = serde_json::to_string(&raw).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let project = Project::parse_current(&text)?;
@@ -289,8 +295,47 @@ fn migrate_1_6_to_1_7(raw: &mut Value) -> Result<Vec<String>> {
     if code_inputs {
         return Err(err("INVALID_SCHEMA", "Schema 1.6.0 projects cannot carry RC beam code inputs"));
     }
-    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    raw["schemaVersion"] = json!(SCHEMA_1_7);
     Ok(vec!["set schemaVersion 1.7.0 (no RC beam code inputs)".into()])
+}
+
+/// 1.7.0 → 1.8.0 (ADR 0027): code inputs extend to columns, slabs and pad
+/// footings, and rcColumn drafts gain a link spacing. Existing column drafts
+/// get 200 mm with synthetic provenance; 1.7.0 files carrying either 1.8.0
+/// addition are refused, not guessed.
+fn migrate_1_7_to_1_8(raw: &mut Value) -> Result<Vec<String>> {
+    let mut added = 0;
+    if let Some(drafts) = raw.get_mut("designPreviews").and_then(|v| v.as_array_mut()) {
+        for d in drafts.iter_mut() {
+            if d["kind"] != "rcBeam" && d.get("codeInputs").is_some() {
+                return Err(err("INVALID_SCHEMA", "Schema 1.7.0 code inputs apply only to RC beam drafts"));
+            }
+            if d["kind"] != "rcColumn" {
+                continue;
+            }
+            let inputs = d
+                .get_mut("inputs")
+                .and_then(|v| v.as_object_mut())
+                .ok_or_else(|| err("INVALID_SCHEMA", "RC column draft is missing inputs"))?;
+            if inputs.contains_key("linkSpacing") {
+                return Err(err("INVALID_SCHEMA", "Schema 1.7.0 RC column drafts cannot already define link spacing"));
+            }
+            inputs.insert("linkSpacing".into(), json!(0.2));
+            if let Some(sources) = d.get_mut("inputSources").and_then(|v| v.as_object_mut())
+                && !sources.is_empty()
+            {
+                sources.insert("linkSpacing".into(), json!("syntheticFixture"));
+            }
+            added += 1;
+        }
+    }
+    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    let mut steps = Vec::new();
+    if added > 0 {
+        steps.push(format!("record 200 mm link spacing (synthetic) on {added} RC column draft(s)"));
+    }
+    steps.push("set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)".into());
+    Ok(steps)
 }
 
 fn migrate_0_9_to_1_0(raw: &mut Value) -> Result<Vec<String>> {

@@ -16,7 +16,8 @@
     "M14",
     "M22",
     "M21",
-    "M08"
+    "M08",
+    "M12"
   ],
   "tasks": {
     "M00-A": {
@@ -4352,13 +4353,77 @@
     },
     "M12-parent": {
       "id": "M12-parent",
-      "useCase": "Design a column family (SPECIFICATION M12)",
+      "useCase": "Design a column family (SPECIFICATION M12): EC2 UK column checks (slenderness, imperfections, nominal curvature, biaxial bending on the exact section, minimum eccentricity, shear, detailing) at the bound member, with a least-steel proposal and calculation record",
       "dependencies": [
         "M12-COLUMN",
         "M08-B"
       ],
-      "status": "READY",
-      "nextAction": "M08 accepted: add the column checks to the ec2-uk-na demonstration profile from the held text (ADR 0026)"
+      "status": "ACCEPTED",
+      "nextAction": "Accepted. Circular sections and the nominal stiffness method are later slices.",
+      "ownedPaths": [
+        "crates/design/src/profile/ec2uk/column.rs",
+        "crates/design/src/profile/ec2uk/column_tests.rs",
+        "tools/oracles/ec2_column_oracle.py",
+        "fixtures/design/ec2-uk-na/jrc-column-b2.published.json",
+        "fixtures/design/ec2-uk-na/column.reconciliation.json",
+        "crates/model/src/design_inputs.rs",
+        "crates/model/src/migrate.rs",
+        "crates/model/tests/code_inputs_1_8.rs",
+        "crates/wasm-api/src/preview_workspace.rs",
+        "crates/wasm-api/tests/rc_column_preview.rs",
+        "web/design-presentation.js",
+        "web/design-previews.js",
+        "web/reports/report.js",
+        "tests/e2e/rc-column.spec.js",
+        "contracts/project.schema.json",
+        "contracts/project-v1.7.schema.json",
+        "docs/adr/0027-ec2-column-checks-and-schema-1-8.md",
+        "docs/code-profiles/ec2-uk-na/dossier-column.md",
+        "tools/run-m12-parent.mjs",
+        "tools/record-m12-acceptance.mjs",
+        "evidence/M12/full"
+      ],
+      "acceptanceIds": [
+        "M12-ENDPOINTS-SYMMETRY",
+        "M12-INTEGRATION-CONVERGENCE",
+        "M12-INDEPENDENT-BIAXIAL",
+        "M12-NO-OVERSTATED-SURFACE",
+        "M12-SLENDERNESS-BOUNDARY",
+        "M12-MINIMUM-ECCENTRICITY",
+        "M12-SHEAR-DETAILING",
+        "M12-INPUTS-NEVER-ASSUMED",
+        "M12-MODEL-REVISE-REPORT",
+        "M12-PERSISTENCE",
+        "M12-LEDGER",
+        "M12-ORACLE-PROVENANCE"
+      ],
+      "requiredCommands": [
+        "node tools/run-m12-parent.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "gate-M12",
+          "status": "PASS",
+          "evidencePath": "evidence/M12/full/gate-M12.json"
+        },
+        {
+          "check": "m12-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M12/full/m12-acceptance.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Independent column oracle (pure Python) reproduced to 1e-9 for 7 cases: braced single/double curvature, unbraced, transverse load, minimum eccentricity, one-axis slender rectangle",
+        "JRC Column B2: l0, n, \u03bb_lim, K_r, A_s,min/max reconcile; four publication discrepancies documented (\u03bb printed 22.5, e_i from l, 0.25d in (5.34), e0 = b/20)",
+        "Biaxial check uses the exact kernel surface for both imperfection directions; never the (5.39) interpolation",
+        "Least-steel column proposal; the next smaller bar fails; applied in the browser and rerun to PASS",
+        "Schema 1.8.0: code inputs for every RC kind validated per kind; rcColumn linkSpacing (1.7.0 drafts get 200 mm, synthetic)"
+      ],
+      "evidencePaths": [
+        "evidence/M12/full"
+      ],
+      "verifiedSourceHash": "ebc1dc77e91ca92977a416e8db52d6f5be2144394d815152eadd94f3542643e6",
+      "verifiedBuildHash": "6abfcc6d3cb244d39f9d9b0b8dd4473d016e2ad09c8f283b43d12e26dcc8b1d2"
     },
     "M15-RESPONSE": {
       "id": "M15-RESPONSE",
@@ -4674,9 +4739,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "ccd4ada",
-  "lastVerifiedBuildHash": "9e0fa0da90546c4807e2b3fb4479c0ae8881735a7c12c1e878dacfa16e5b96b6",
-  "nextAction": "M10 slab checks, then M11 footing, M12 column, M16 detailing, M18 prestress on the ec2-uk-na demonstration profile (ADR 0026); M13 AISC connections from the held Chapter J. R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence; solver UNUSED_DOF exclusion.",
+  "lastVerifiedBuildHash": "6abfcc6d3cb244d39f9d9b0b8dd4473d016e2ad09c8f283b43d12e26dcc8b1d2",
+  "nextAction": "M11 pad footing (contact, bearing, EC2 bending/tie/anchorage/shear/punching, sized bars, schedule), then M10 slab design, M16 detailing, M18 prestress, M13 AISC connections; the demonstration pattern of ADR 0026.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef",
-  "lastVerifiedScope": "M08 parent on source c1204f1e: gate 11/11; browser suite via npm run test:regression 134/135 with the model-coherence tree-label race passing on rerun (spec unchanged from HEAD), cargo workspace 299/299, node contracts/security 16/16"
+  "lastVerifiedSourceHash": "ebc1dc77e91ca92977a416e8db52d6f5be2144394d815152eadd94f3542643e6",
+  "lastVerifiedScope": "M12 parent on source ebc1dc77: gate 12/12; cargo workspace 309/309, node contracts/security 16/16; column and beam browser journeys pass (full browser suite reruns before the next release)"
 }

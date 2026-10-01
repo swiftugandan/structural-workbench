@@ -31,7 +31,7 @@ pub struct DesignPreview {
     /// inputs for the code profile. Every value is the engineer's; absent
     /// fields leave the checks that need them indeterminate.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub code_inputs: Option<RcBeamCodeInputs>,
+    pub code_inputs: Option<CodeInputs>,
 }
 
 /// Exposure classes of EN 206 / EN 1992-1-1 Table 4.1.
@@ -39,11 +39,11 @@ pub const EXPOSURE_CLASSES: &[&str] = &[
     "X0", "XC1", "XC2", "XC3", "XC4", "XD1", "XD2", "XD3", "XS1", "XS2", "XS3",
 ];
 /// Structural systems of EN 1992-1-1 Table 7.4N / UK NA Table NA.5 (beams).
-pub const STRUCTURAL_SYSTEMS: &[&str] = &["simplySupported", "endSpan", "interiorSpan", "cantilever"];
+pub const STRUCTURAL_SYSTEMS: &[&str] = &["simplySupported", "endSpan", "interiorSpan", "cantilever", "flatSlab"];
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Default)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct RcBeamCodeInputs {
+pub struct CodeInputs {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub exposure_class: Option<String>,
     /// c_min,dur (m) from the durability standard for the exposure class.
@@ -60,10 +60,47 @@ pub struct RcBeamCodeInputs {
     /// The case or combination taken as quasi-permanent for crack control.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub quasi_permanent_combination_id: Option<String>,
+    /// rcColumn: whether the column is braced against sway (5.8.3.2(3)).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub braced: Option<bool>,
+    /// rcColumn: relative flexibilities k1, k2 of the end restraints for
+    /// bending about local y (buckling across the depth), 5.8.3.2(3).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub restraint_y: Option<[f64; 2]>,
+    /// rcColumn: the same for bending about local z (across the width).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub restraint_z: Option<[f64; 2]>,
+    /// rcColumn: effective creep ratio φ_ef (5.8.4).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub effective_creep_ratio: Option<f64>,
 }
 
-impl RcBeamCodeInputs {
-    pub fn validate(&self) -> Result<()> {
+impl CodeInputs {
+    /// Values in range, and only the fields that apply to the draft kind:
+    /// exposure, cover and aggregate for every RC kind; structural system and
+    /// partitions for beams and slabs (flat slab only for slabs); the
+    /// quasi-permanent case for beams; restraint and creep for columns.
+    pub fn validate(&self, kind: &str) -> Result<()> {
+        let beam_or_slab = matches!(kind, "rcBeam" | "slab");
+        let misplaced = (!beam_or_slab && (self.structural_system.is_some() || self.partitions_sensitive.is_some()))
+            || (kind != "rcBeam" && self.quasi_permanent_combination_id.is_some())
+            || (kind != "slab" && self.structural_system.as_deref() == Some("flatSlab"))
+            || (kind != "rcColumn"
+                && (self.braced.is_some()
+                    || self.restraint_y.is_some()
+                    || self.restraint_z.is_some()
+                    || self.effective_creep_ratio.is_some()));
+        if misplaced {
+            return Err(err("INVALID_SCHEMA", format!("Code input not applicable to a {kind} draft")));
+        }
+        for k in self.restraint_y.iter().chain(self.restraint_z.iter()).flatten() {
+            if !(k.is_finite() && (0.0..=1000.0).contains(k)) {
+                return Err(err("INVALID_SCHEMA", "End restraint flexibility k must lie in [0, 1000]"));
+            }
+        }
+        if self.effective_creep_ratio.is_some_and(|c| !(c.is_finite() && (0.0..=10.0).contains(&c))) {
+            return Err(err("INVALID_SCHEMA", "Effective creep ratio must lie in [0, 10]"));
+        }
         if self.exposure_class.as_deref().is_some_and(|e| !EXPOSURE_CLASSES.contains(&e)) {
             return Err(err("INVALID_SCHEMA", "Unknown exposure class"));
         }
@@ -360,10 +397,7 @@ impl DesignPreview {
             plate.validate()?;
         }
         if let Some(c) = &self.code_inputs {
-            if self.kind != "rcBeam" {
-                return Err(err("INVALID_SCHEMA", "Code inputs apply only to RC beam drafts"));
-            }
-            c.validate()?;
+            c.validate(&self.kind)?;
         }
         if self.tension_anchorage_confirmed.is_some() && self.kind != "rcBeam" {
             return Err(err(
@@ -396,6 +430,7 @@ impl DesignPreview {
                 "barsAlongWidth",
                 "barsAlongDepth",
                 "linkDiameter",
+                "linkSpacing",
             ],
             "slab" => &[
                 "length",

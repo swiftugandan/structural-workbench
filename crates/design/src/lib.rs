@@ -13,6 +13,7 @@ pub use profile::aisc36022::{
     Aisc36022LrfdProfile, Ltb, aisc_s2_resources_verified, evaluate_ltb,
     verify_vault_pdfs_if_present,
 };
+pub use profile::ec2uk::column::{ColumnActions, RcColumnContext, RcColumnDetailing, checks as column_checks};
 pub use profile::ec2uk::{Ec2Ndp, Ec2UkNaProfile};
 pub use profile::{
     CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,

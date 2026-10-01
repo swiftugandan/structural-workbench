@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.8.0"
+      "const": "1.7.0"
     },
     "id": {
       "type": "string",
@@ -1485,7 +1485,7 @@
         "codeInputs": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Schema 1.8.0 (ADR 0026, ADR 0027): code-profile inputs for RC drafts. exposureClass, minimumCoverDurability and aggregateSize apply to every RC kind; structuralSystem and partitionsSensitive to rcBeam and slab (flatSlab only for slab); quasiPermanentCombinationId to rcBeam; braced, restraintY, restraintZ and effectiveCreepRatio to rcColumn. Absent fields leave the checks that need them indeterminate.",
+          "description": "rcBeam only (schema 1.7.0, ADR 0026): detailing and serviceability inputs for the code profile; absent fields leave the checks that need them indeterminate.",
           "properties": {
             "exposureClass": {
               "enum": [
@@ -1517,8 +1517,7 @@
                 "simplySupported",
                 "endSpan",
                 "interiorSpan",
-                "cantilever",
-                "flatSlab"
+                "cantilever"
               ]
             },
             "partitionsSensitive": {
@@ -1527,36 +1526,6 @@
             "quasiPermanentCombinationId": {
               "type": "string",
               "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
-            },
-            "braced": {
-              "type": "boolean"
-            },
-            "restraintY": {
-              "type": "array",
-              "minItems": 2,
-              "maxItems": 2,
-              "items": {
-                "type": "number",
-                "minimum": 0,
-                "maximum": 1000
-              },
-              "description": "Relative end-restraint flexibilities k1, k2 (5.8.3.2(3)); 0 rigid, 1000 a pin"
-            },
-            "restraintZ": {
-              "type": "array",
-              "minItems": 2,
-              "maxItems": 2,
-              "items": {
-                "type": "number",
-                "minimum": 0,
-                "maximum": 1000
-              },
-              "description": "Relative end-restraint flexibilities k1, k2 (5.8.3.2(3)); 0 rigid, 1000 a pin"
-            },
-            "effectiveCreepRatio": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 10
             }
           }
         }

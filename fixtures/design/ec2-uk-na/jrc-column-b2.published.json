@@ -1,0 +1,93 @@
+{
+  "fixtureVersion": 1,
+  "source": "JRC89037 (2014) 'Eurocode 2: Background & Applications, Design of concrete buildings - worked examples', 3.2.2.4 Column B2, pp. 75-83 (R-EC2-JRC-EXAMPLES)",
+  "inputs": {
+    "b": 0.5,
+    "h": 0.5,
+    "fck": 30e6,
+    "fyk": 500e6,
+    "gammaC": 1.5,
+    "gammaS": 1.15,
+    "alphaCC": 1.0,
+    "height": 4.0,
+    "braced": true,
+    "k1": 0.53,
+    "k2": 0.53,
+    "NEd": 4384000,
+    "MEd": 42000,
+    "d1": 0.046,
+    "d": 0.454,
+    "rhoAssumed": 0.03,
+    "defaults": {
+      "A": 0.7,
+      "B": 1.1,
+      "C": 0.7
+    }
+  },
+  "published": {
+    "l0": {
+      "value": 3.1,
+      "unit": "m",
+      "page": 79,
+      "rounding": 0.05
+    },
+    "n": {
+      "value": 0.88,
+      "page": 79,
+      "rounding": 0.005
+    },
+    "lambdaLim": {
+      "value": 11.5,
+      "page": 79,
+      "rounding": 0.05
+    },
+    "Kr": {
+      "value": 0.62,
+      "page": 82,
+      "rounding": 0.005
+    },
+    "MtotFromStatedEccentricities": {
+      "value": 214.82,
+      "unit": "kN m",
+      "page": 82,
+      "e0": 0.025,
+      "ei": 0.010,
+      "e2": 0.014,
+      "rounding": 0.01
+    },
+    "AsMin": {
+      "value": 1008,
+      "unit": "mm2",
+      "page": 82,
+      "rounding": 0.5
+    },
+    "AsMax": {
+      "value": 10000,
+      "unit": "mm2",
+      "page": 82,
+      "rounding": 0.5
+    }
+  },
+  "discrepancies": [
+    {
+      "id": "JRC-B2-LAMBDA",
+      "published": 22.5,
+      "note": "λ = 3.46 l0/h with l0 = 3.1 m and h = 0.5 m is 21.5; the report prints 22.5. Neither value changes the slender verdict against λ_lim = 11.5."
+    },
+    {
+      "id": "JRC-B2-EI",
+      "published": 0.010,
+      "note": "e_i is computed as θ_i l/2 with the actual height 4 m; 5.2(7) (5.2) uses the effective length l0 (θ_i l0/2 = 7.75 mm)."
+    },
+    {
+      "id": "JRC-B2-E2",
+      "published": 0.014,
+      "note": "e2 = 14 mm follows from 0.25 d in the curvature denominator; (5.34) is 1/r0 = ε_yd/(0.45 d), which with the report's K_r = 0.62, K_φ = 1.14 and d = 454 mm gives about 7.3 mm for l0 = 3.1 m (7.8 mm with the 3.2 m the report substitutes)."
+    },
+    {
+      "id": "JRC-B2-E0",
+      "published": 0.025,
+      "note": "The report takes e0 = b/20 = 25 mm; 6.1(4) gives e0 = h/30 = 16.7 mm, not less than 20 mm."
+    }
+  ]
+}

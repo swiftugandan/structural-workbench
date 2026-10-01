@@ -1,3 +1,18 @@
+## Latest: M12 RC column design accepted (EC2 UK demonstration)
+
+- **What it does.** `ec2uk/column.rs` (ADR 0027, `dossier-column.md`) checks a column bound to a member under one combination:
+  - effective length (5.15)/(5.16) from the engineer's k1, k2, slenderness and λ_lim (5.13N);
+  - the 5.2 imperfection, nominal curvature (5.8.8) and minimum eccentricity (6.1(4));
+  - both 5.8.9(2) imperfection directions against the exact biaxial kernel surface;
+  - shear with σ_cp, 9.5.2/9.5.3 detailing (φ_min 12 mm UK, the 150 mm restraint rule), cover and spacing.
+- **Engineer inputs.** braced, k per direction and φ_ef are the engineer's; a missing one is INDETERMINATE and named.
+- **Proposal.** "Propose reinforcement" works for columns: the least steel area with no failing check.
+- **Verification.**
+  - `tools/oracles/ec2_column_oracle.py`, 7 cases, reproduced to 1e-9.
+  - JRC Column B2 reconciled where self-consistent, with 4 discrepancies documented.
+  - Gate: `node tools/run-m12-parent.mjs` → evidence/M12/full, 12/12 PASS on ebc1dc77.
+- **Schema 1.8.0.** `codeInputs` applies to every RC kind, validated per kind; rcColumn gains `linkSpacing`; 1.7.0 column drafts migrate to 200 mm, synthetic.
+
 ## Latest: M08 concrete beam accepted as an edition-labelled EC2 demonstration
 
 **Product decision (2026-09-30, ADR 0026).** A code the project does not hold under licence no longer blocks the software. The reasoning is that providers license more readily once they see it working.

@@ -91,6 +91,14 @@ export const m08 = [
   "m08-browser",
   "m08-acceptance",
 ];
+export const m12 = [
+  "build",
+  "column-native",
+  "column-model",
+  "column-protocol",
+  "m12-browser",
+  "m12-acceptance",
+];
 export const m09 = [
   "build",
   "stability-native",
@@ -235,6 +243,26 @@ export const requiredIds = {
     "RC beam model design moments beside mechanics capacities (top face points up)",
     "RC beam model design moments beside mechanics capacities (top face points DOWN)",
     "RC beam EC2 checks: demonstration profile at governing stations, code inputs, explicit anchorage, report",
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+  ],
+  "m12-acceptance": [
+    "M12-ENDPOINTS-SYMMETRY",
+    "M12-INTEGRATION-CONVERGENCE",
+    "M12-INDEPENDENT-BIAXIAL",
+    "M12-NO-OVERSTATED-SURFACE",
+    "M12-SLENDERNESS-BOUNDARY",
+    "M12-MINIMUM-ECCENTRICITY",
+    "M12-SHEAR-DETAILING",
+    "M12-INPUTS-NEVER-ASSUMED",
+    "M12-MODEL-REVISE-REPORT",
+    "M12-PERSISTENCE",
+    "M12-LEDGER",
+    "M12-ORACLE-PROVENANCE",
+  ],
+  "m12-browser": [
+    "RC column mechanics match the oracle at model station actions, go stale and persist",
+    "RC column refusals: bar count and axial force beyond the section",
+    "RC column EC2 checks: code inputs, slenderness, proposal, report and persistence",
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
   ],
   "m21-acceptance": [
@@ -421,6 +449,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
                 "M07",
                 "M08",
                 "M09",
+                "M12",
                 "M14",
                 "M21",
               ].includes(milestone)
@@ -478,6 +507,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 8)
   )
     errors.push(`${name}: failed, skipped or incomplete M08 browser journeys`);
+  if (
+    name === "m12-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 4)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M12 browser journeys`);
   if (
     name === "m09-browser" &&
     (e.stats?.unexpected !== 0 ||

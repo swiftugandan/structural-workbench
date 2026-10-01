@@ -1,0 +1,1115 @@
+{
+  "checks": [
+    {
+      "checkIds": [
+        "ec2.column.biaxial.y",
+        "ec2.column.biaxial.z"
+      ],
+      "name": "Axial and biaxial bending",
+      "reason": "5.2, 5.8.3, 5.8.8, 5.8.9, 6.1; 5.2, 5.8.3, 5.8.8, 5.8.9, 6.1",
+      "status": "pass",
+      "utilisation": 0.9997737315103635
+    },
+    {
+      "checkIds": [
+        "ec2.column.shear.y",
+        "ec2.column.shear.z"
+      ],
+      "name": "Shear",
+      "reason": "6.2.2(1), 6.2.3; UK NA 6.2.3(3); 6.2.2(1), 6.2.3; UK NA 6.2.3(3)",
+      "status": "pass",
+      "utilisation": 0.18423560695564212
+    },
+    {
+      "checkIds": [
+        "ec2.column.bar-diameter",
+        "ec2.column.as-min",
+        "ec2.column.as-max"
+      ],
+      "name": "Longitudinal reinforcement",
+      "reason": "9.5.2(1); UK NA φ_min = 12 mm; 9.5.2(2); 9.5.2(3)",
+      "status": "pass",
+      "utilisation": 0.48
+    },
+    {
+      "checkIds": [
+        "ec2.column.links",
+        "ec2.column.restraint"
+      ],
+      "name": "Links and bar restraint",
+      "reason": "9.5.3(1), (3); UK NA s_cl,tmax; 9.5.3(6)",
+      "status": "pass",
+      "utilisation": 1
+    },
+    {
+      "checkIds": [
+        "ec2.cover",
+        "ec2.bar-spacing"
+      ],
+      "name": "Cover and spacing",
+      "reason": "4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P; 8.2(2); UK NA 8.2(2)",
+      "status": "pass",
+      "utilisation": 0.813953488372093
+    }
+  ],
+  "codeProfile": {
+    "certification": "Demonstration, not a certified design",
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "id": "ec2-uk-na",
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "codeProfilePreview": {
+    "actions": {
+      "convention": "N compression positive; end moments are the frame's internal My, Mz at stations 0 and 1",
+      "myEnds": [
+        -90000,
+        0
+      ],
+      "myMax": 90000,
+      "mzEnds": [
+        0,
+        0
+      ],
+      "mzMax": 0,
+      "nEd": 1500000,
+      "vyMax": 0,
+      "vzMax": 30000
+    },
+    "basis": "codeProfile",
+    "certification": "Demonstration, not a certified design",
+    "checks": [
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.biaxial.y",
+        "clause": "5.2, 5.8.3, 5.8.8, 5.8.9, 6.1",
+        "demand": 228600.2333727531,
+        "intermediates": {
+          "axialRange": {
+            "squash": 3848028.1121795857,
+            "tension": -1280540.4838001875
+          },
+          "combinationId": "LC1",
+          "epsilonC2": 0.002,
+          "epsilonCu2": 0.0035,
+          "imperfectionAbout": "y",
+          "law": "parabolaRectangle",
+          "myEd": 206003.87046891847,
+          "mzEd": 99098.29488897501,
+          "nEd": 1500000,
+          "y": {
+            "axis": "y",
+            "braced": false,
+            "clearHeight": 3,
+            "curvature": {
+              "c": 10,
+              "d": 0.34450000000000003,
+              "iS": 0.14450000000000005,
+              "inverseRadius": 0.014247707083434424,
+              "kphi": 1.1834301517844354,
+              "kr": 0.8585427387905572
+            },
+            "e0": 0.02,
+            "e2": 0.06098045092684658,
+            "ei": 0.01635546271909908,
+            "i": 0.11547005383792516,
+            "k": [
+              0,
+              1000
+            ],
+            "kUsed": [
+              0.1,
+              1000
+            ],
+            "l0": 6.542185087639632,
+            "lambda": 56.65698482155645,
+            "lambdaLim": 20.206936040914435,
+            "m01": 0,
+            "m02": -90000,
+            "m2": 91470.67639026986,
+            "mEdWithImperfection": 206003.87046891847,
+            "mEdWithoutImperfection": 181470.67639026986,
+            "n": 0.551470588235294,
+            "omega": 0.47078694257359827,
+            "rm": 1,
+            "slender": true,
+            "thetaI": 0.005
+          },
+          "z": {
+            "axis": "z",
+            "braced": false,
+            "clearHeight": 3,
+            "curvature": {
+              "c": 10,
+              "d": 0.3179837559440565,
+              "iS": 0.11798375594405644,
+              "inverseRadius": 0.015435804497845772,
+              "kphi": 1.1834301517844354,
+              "kr": 0.8585427387905572
+            },
+            "e0": 0.02,
+            "e2": 0.06606552992598334,
+            "ei": 0.01635546271909908,
+            "i": 0.11547005383792516,
+            "k": [
+              0,
+              1000
+            ],
+            "kUsed": [
+              0.1,
+              1000
+            ],
+            "l0": 6.542185087639632,
+            "lambda": 56.65698482155645,
+            "lambdaLim": 20.206936040914435,
+            "m01": 0,
+            "m02": 0,
+            "m2": 99098.29488897501,
+            "mEdWithImperfection": 123631.48896762363,
+            "mEdWithoutImperfection": 99098.29488897501,
+            "n": 0.551470588235294,
+            "omega": 0.47078694257359827,
+            "rm": 1,
+            "slender": true,
+            "thetaI": 0.005
+          }
+        },
+        "message": "N_Ed 1500000 N, M_Ed (206004, 99098) N m with imperfection about y",
+        "resistance": 229726.70098059403,
+        "status": "pass",
+        "units": "N m",
+        "utilisation": 0.9950964881181309
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.biaxial.z",
+        "clause": "5.2, 5.8.3, 5.8.8, 5.8.9, 6.1",
+        "demand": 219582.2202590494,
+        "intermediates": {
+          "axialRange": {
+            "squash": 3848028.1121795857,
+            "tension": -1280540.4838001875
+          },
+          "combinationId": "LC1",
+          "epsilonC2": 0.002,
+          "epsilonCu2": 0.0035,
+          "imperfectionAbout": "z",
+          "law": "parabolaRectangle",
+          "myEd": 181470.67639026986,
+          "mzEd": 123631.48896762363,
+          "nEd": 1500000,
+          "y": {
+            "axis": "y",
+            "braced": false,
+            "clearHeight": 3,
+            "curvature": {
+              "c": 10,
+              "d": 0.34450000000000003,
+              "iS": 0.14450000000000005,
+              "inverseRadius": 0.014247707083434424,
+              "kphi": 1.1834301517844354,
+              "kr": 0.8585427387905572
+            },
+            "e0": 0.02,
+            "e2": 0.06098045092684658,
+            "ei": 0.01635546271909908,
+            "i": 0.11547005383792516,
+            "k": [
+              0,
+              1000
+            ],
+            "kUsed": [
+              0.1,
+              1000
+            ],
+            "l0": 6.542185087639632,
+            "lambda": 56.65698482155645,
+            "lambdaLim": 20.206936040914435,
+            "m01": 0,
+            "m02": -90000,
+            "m2": 91470.67639026986,
+            "mEdWithImperfection": 206003.87046891847,
+            "mEdWithoutImperfection": 181470.67639026986,
+            "n": 0.551470588235294,
+            "omega": 0.47078694257359827,
+            "rm": 1,
+            "slender": true,
+            "thetaI": 0.005
+          },
+          "z": {
+            "axis": "z",
+            "braced": false,
+            "clearHeight": 3,
+            "curvature": {
+              "c": 10,
+              "d": 0.3179837559440565,
+              "iS": 0.11798375594405644,
+              "inverseRadius": 0.015435804497845772,
+              "kphi": 1.1834301517844354,
+              "kr": 0.8585427387905572
+            },
+            "e0": 0.02,
+            "e2": 0.06606552992598334,
+            "ei": 0.01635546271909908,
+            "i": 0.11547005383792516,
+            "k": [
+              0,
+              1000
+            ],
+            "kUsed": [
+              0.1,
+              1000
+            ],
+            "l0": 6.542185087639632,
+            "lambda": 56.65698482155645,
+            "lambdaLim": 20.206936040914435,
+            "m01": 0,
+            "m02": 0,
+            "m2": 99098.29488897501,
+            "mEdWithImperfection": 123631.48896762363,
+            "mEdWithoutImperfection": 99098.29488897501,
+            "n": 0.551470588235294,
+            "omega": 0.47078694257359827,
+            "rm": 1,
+            "slender": true,
+            "thetaI": 0.005
+          }
+        },
+        "message": "N_Ed 1500000 N, M_Ed (181471, 123631) N m with imperfection about z",
+        "resistance": 219631.91604096798,
+        "status": "pass",
+        "units": "N m",
+        "utilisation": 0.9997737315103635
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.shear.z",
+        "clause": "6.2.2(1), 6.2.3; UK NA 6.2.3(3)",
+        "demand": 30000,
+        "intermediates": {
+          "AswOverS": 0.0002513274122871834,
+          "VRdLinks": 84700.0697604796,
+          "VRdc": 162834.9725426476,
+          "VRdmax": 383863.2827586208,
+          "alphaCw": 1,
+          "assumptions": [
+            "Longitudinal bars are continuous through the section, so ρ_l counts the tension-face bars",
+            "The perimeter link gives two legs in each direction"
+          ],
+          "bw": 0.4,
+          "cotTheta": 2.5,
+          "d": 0.3445,
+          "k": 1.7619393177594596,
+          "nu1": 0.528,
+          "rhoL": 0.010686658609362958,
+          "sigmaCp": 3400000,
+          "ukVRdMaxCap": 32000000,
+          "z": 0.31005
+        },
+        "message": "V_Ed ≤ V_Rd,c",
+        "resistance": 162834.9725426476,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.18423560695564212
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.shear.y",
+        "clause": "6.2.2(1), 6.2.3; UK NA 6.2.3(3)",
+        "demand": 0,
+        "intermediates": {
+          "AswOverS": 0.0002513274122871834,
+          "VRdLinks": 84700.0697604796,
+          "VRdc": 151133.96308839094,
+          "VRdmax": 383863.2827586208,
+          "alphaCw": 1,
+          "assumptions": [
+            "Longitudinal bars are continuous through the section, so ρ_l counts the tension-face bars",
+            "The perimeter link gives two legs in each direction"
+          ],
+          "bw": 0.4,
+          "cotTheta": 2.5,
+          "d": 0.3445,
+          "k": 1.7619393177594596,
+          "nu1": 0.528,
+          "rhoL": 0.007124439072908639,
+          "sigmaCp": 3400000,
+          "ukVRdMaxCap": 32000000,
+          "z": 0.31005
+        },
+        "message": "V_Ed ≤ V_Rd,c",
+        "resistance": 151133.96308839094,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.bar-diameter",
+        "clause": "9.5.2(1); UK NA φ_min = 12 mm",
+        "demand": 0.012,
+        "intermediates": {
+          "phiMin": 0.012
+        },
+        "message": "Demand is φ_min, resistance the bar diameter",
+        "resistance": 0.025,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.48
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.as-min",
+        "clause": "9.5.2(2)",
+        "demand": 0.000345,
+        "intermediates": {
+          "ac": 0.16000000000000003,
+          "fyd": 434782608.6956522,
+          "nEd": 1500000
+        },
+        "message": "Demand is A_s,min, resistance the provided area",
+        "resistance": 0.002945243112740431,
+        "status": "pass",
+        "units": "m2",
+        "utilisation": 0.11713803811563497
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.as-max",
+        "clause": "9.5.2(3)",
+        "demand": 0.002945243112740431,
+        "intermediates": {
+          "ac": 0.16000000000000003,
+          "note": "Outside laps; 0.08 A_c applies at laps",
+          "ratio": 0.04
+        },
+        "message": "Demand is the provided area, resistance A_s,max",
+        "resistance": 0.006400000000000001,
+        "status": "pass",
+        "units": "m2",
+        "utilisation": 0.46019423636569223
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.links",
+        "clause": "9.5.3(1), (3); UK NA s_cl,tmax",
+        "demand": 1,
+        "intermediates": {
+          "linkDiameter": 0.008,
+          "linkSpacing": 0.4,
+          "note": "Within max(b, h) of a beam or slab and at laps of bars over 14 mm, 9.5.3(4) reduces s_cl,tmax by 0.6",
+          "phiTMin": 0.00625,
+          "reducedNearBeamsAndLaps": 0.24,
+          "sClTMax": 0.4
+        },
+        "message": "Demand is the larger of φ_t,min/φ_t and s/s_cl,tmax",
+        "resistance": 1,
+        "status": "pass",
+        "units": "-",
+        "utilisation": 1
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.column.restraint",
+        "clause": "9.5.3(6)",
+        "demand": 0.14450000000000002,
+        "intermediates": {
+          "pitchDepth": 0.28900000000000003,
+          "pitchWidth": 0.14450000000000002,
+          "restrainedBars": "corners (one perimeter link)"
+        },
+        "message": "Demand is the largest distance from a bar to the nearest restrained (corner) bar",
+        "resistance": 0.15,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.9633333333333335
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.cover",
+        "clause": "4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P",
+        "demand": 0.813953488372093,
+        "intermediates": {
+          "aggregateSize": 0.02,
+          "cMinDur": 0.015,
+          "deltaCDev": 0.01,
+          "links": {
+            "cNomRequired": 0.025,
+            "diameter": 0.008,
+            "provided": 0.035
+          },
+          "mainBars": {
+            "cNomRequired": 0.035,
+            "diameter": 0.025,
+            "provided": 0.043000000000000003
+          }
+        },
+        "message": "Demand is the larger of c_nom,required/c_provided for the links and the main bars",
+        "resistance": 1,
+        "status": "pass",
+        "units": "-",
+        "utilisation": 0.813953488372093
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.bar-spacing",
+        "clause": "8.2(2); UK NA 8.2(2)",
+        "demand": 0.025,
+        "intermediates": {
+          "aggregateSize": 0.02,
+          "clearSpacing": 0.11950000000000002,
+          "minimum": 0.025
+        },
+        "message": "Demand is the minimum clear gap, resistance the smallest gap between adjacent bars",
+        "resistance": 0.11950000000000002,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.20920502092050206
+      }
+    ],
+    "codeInputs": {
+      "aggregateSize": 0.02,
+      "braced": false,
+      "effectiveCreepRatio": 1.5,
+      "exposureClass": "XC1",
+      "minimumCoverDurability": 0.015,
+      "restraintY": [
+        0,
+        1000
+      ],
+      "restraintZ": [
+        0,
+        1000
+      ]
+    },
+    "combinationId": "LC1",
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "interpretation": {
+      "concreteStrength": "fck (characteristic cylinder strength)",
+      "rebarStrength": "fyk for longitudinal bars and links"
+    },
+    "limitations": [
+      "A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them",
+      "Rectangular sections, fck <= 50 MPa, vertical links, one layer of equal bars per face",
+      "Beams: pure bending about local y with shear Vz; N, T, Vy and Mz must be zero",
+      "Columns: rectangular, constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and φ_ef; the node-to-node length is the clear height",
+      "Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation",
+      "Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer's confirmation",
+      "UK NA VRd,max <= 200 bw² applied as N with bw in mm at every section (the NA states no units)"
+    ],
+    "ndp": "UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)",
+    "profileEnabled": true,
+    "profileId": "ec2-uk-na",
+    "resourceGate": "R-EC2-EN-1992-1-1-2004+R-EC2-UK-NA-2009+R-EC2-JRC-EXAMPLES",
+    "span": 3,
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "status": "evaluated",
+    "transverseLoad": false,
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "columnMechanics": {
+    "axialRange": {
+      "squash": 4319192.3828413645,
+      "tension": -1354811.8318605984,
+      "tensionAttained": false
+    },
+    "basis": "mechanics",
+    "beyondAxialRange": false,
+    "codeProfile": null,
+    "contour": {
+      "nEd": 1500000,
+      "points": [
+        [
+          0,
+          263196.0142952081
+        ],
+        [
+          -22546.43858528752,
+          252748.62591639924
+        ],
+        [
+          -43176.62310450426,
+          242836.25304792123
+        ],
+        [
+          -61889.268748589326,
+          232973.79940931377
+        ],
+        [
+          -80226.63763862962,
+          222884.18802573544
+        ],
+        [
+          -99031.70313266278,
+          212047.3174751361
+        ],
+        [
+          -118164.43373024074,
+          199959.24366473273
+        ],
+        [
+          -137563.96725510145,
+          186502.36026246194
+        ],
+        [
+          -157939.0170294516,
+          170677.81490337435
+        ],
+        [
+          -178112.3187935023,
+          153452.5957964338
+        ],
+        [
+          -197687.3289610727,
+          135503.6011006918
+        ],
+        [
+          -215984.80458991005,
+          117345.4307029826
+        ],
+        [
+          -232026.3740747468,
+          100250.04901310499
+        ],
+        [
+          -246878.61141219176,
+          83546.7135557107
+        ],
+        [
+          -260682.84593545547,
+          67371.33926586475
+        ],
+        [
+          -274013.50230810564,
+          51335.373622420004
+        ],
+        [
+          -287390.0168660097,
+          35055.75330803532
+        ],
+        [
+          -301350.771264227,
+          18113.252934156946
+        ],
+        [
+          -316535.1378875488,
+          9.542855754663726e-12
+        ],
+        [
+          -301350.7712642271,
+          -18113.252934156895
+        ],
+        [
+          -287390.0168660098,
+          -35055.753308035295
+        ],
+        [
+          -274013.5023081056,
+          -51335.37362241997
+        ],
+        [
+          -260682.84593545547,
+          -67371.33926586469
+        ],
+        [
+          -246878.61141219176,
+          -83546.71355571064
+        ],
+        [
+          -232026.37407474685,
+          -100250.04901310499
+        ],
+        [
+          -215984.80458991003,
+          -117345.43070298259
+        ],
+        [
+          -197687.3289610727,
+          -135503.6011006918
+        ],
+        [
+          -178112.3187935023,
+          -153452.59579643383
+        ],
+        [
+          -157939.0170294516,
+          -170677.8149033743
+        ],
+        [
+          -137563.96725510136,
+          -186502.36026246197
+        ],
+        [
+          -118164.43373024087,
+          -199959.24366473273
+        ],
+        [
+          -99031.70313266278,
+          -212047.31747513608
+        ],
+        [
+          -80226.6376386297,
+          -222884.18802573544
+        ],
+        [
+          -61889.268748589326,
+          -232973.79940931377
+        ],
+        [
+          -43176.62310450425,
+          -242836.2530479213
+        ],
+        [
+          -22546.43858528749,
+          -252748.62591639918
+        ],
+        [
+          -6.163773057793697e-11,
+          -263196.01429520815
+        ],
+        [
+          22546.438585287447,
+          -252748.6259163993
+        ],
+        [
+          43176.623104504186,
+          -242836.25304792126
+        ],
+        [
+          61889.26874858925,
+          -232973.7994093138
+        ],
+        [
+          80226.63763862963,
+          -222884.18802573544
+        ],
+        [
+          99031.70313266263,
+          -212047.31747513617
+        ],
+        [
+          118164.4337302408,
+          -199959.24366473276
+        ],
+        [
+          137563.96725510136,
+          -186502.36026246197
+        ],
+        [
+          157939.01702945144,
+          -170677.8149033744
+        ],
+        [
+          178112.31879350223,
+          -153452.59579643383
+        ],
+        [
+          197687.3289610727,
+          -135503.60110069183
+        ],
+        [
+          215984.80458991026,
+          -117345.4307029825
+        ],
+        [
+          232026.3740747467,
+          -100250.0490131051
+        ],
+        [
+          246878.6114121917,
+          -83546.71355571074
+        ],
+        [
+          260682.84593545544,
+          -67371.33926586469
+        ],
+        [
+          274013.5023081057,
+          -51335.37362241997
+        ],
+        [
+          287390.0168660098,
+          -35055.75330803529
+        ],
+        [
+          301350.77126422705,
+          -18113.25293415694
+        ],
+        [
+          316535.13788754866,
+          -6.38809016732337e-11
+        ],
+        [
+          301350.7712642271,
+          18113.25293415685
+        ],
+        [
+          287390.0168660098,
+          35055.75330803524
+        ],
+        [
+          274013.5023081058,
+          51335.37362241988
+        ],
+        [
+          260682.8459354554,
+          67371.33926586484
+        ],
+        [
+          246878.61141219188,
+          83546.71355571054
+        ],
+        [
+          232026.37407474697,
+          100250.04901310481
+        ],
+        [
+          215984.80458991014,
+          117345.43070298259
+        ],
+        [
+          197687.32896107275,
+          135503.60110069174
+        ],
+        [
+          178112.31879350235,
+          153452.59579643374
+        ],
+        [
+          157939.01702945164,
+          170677.81490337424
+        ],
+        [
+          137563.96725510154,
+          186502.36026246185
+        ],
+        [
+          118164.43373024071,
+          199959.2436647328
+        ],
+        [
+          99031.70313266286,
+          212047.317475136
+        ],
+        [
+          80226.63763862963,
+          222884.1880257355
+        ],
+        [
+          61889.26874858931,
+          232973.79940931377
+        ],
+        [
+          43176.62310450428,
+          242836.2530479213
+        ],
+        [
+          22546.438585287568,
+          252748.62591639918
+        ]
+      ],
+      "status": "evaluated"
+    },
+    "convention": "N compression positive (N = −N_frame); frame My and Mz unchanged: My < 0 compresses the +z face, Mz > 0 the +y face; θ = atan2(Mz, My)",
+    "demand": {
+      "basis": "modelKeyStations",
+      "status": "evaluated"
+    },
+    "formulation": "docs/formulations/rc-column.md",
+    "governing": {
+      "index": 0,
+      "mEd": 90000,
+      "mRd": 316535.13788754866,
+      "nEd": 1500000,
+      "station": 0,
+      "utilisation": 0.2843286233579955
+    },
+    "kernel": "workbench-design::rc_column",
+    "law": "rectangularBlock",
+    "limitations": [
+      "Checked at the member's key stations (ends, component extrema, discontinuities) only",
+      "No slenderness, second-order moments, minimum eccentricity, partial factors or detailing"
+    ],
+    "materialInputs": {
+      "blockDepthRatio": 0.75,
+      "blockIntensity": 20000000,
+      "concreteModulus": 30000000000,
+      "concreteTensileStrength": 2800000,
+      "fullCompressionStrain": 0.002,
+      "minimumClearSpacing": 0.025,
+      "steelModulus": 200000000000,
+      "steelYieldStrength": 460000000,
+      "ultimateStrain": 0.003
+    },
+    "materialSources": {
+      "blockDepthRatio": "syntheticFixture",
+      "blockIntensity": "syntheticFixture",
+      "concreteModulus": "syntheticFixture",
+      "concreteTensileStrength": "syntheticFixture",
+      "fullCompressionStrain": "syntheticFixture",
+      "minimumClearSpacing": "syntheticFixture",
+      "steelModulus": "syntheticFixture",
+      "steelYieldStrength": "syntheticFixture",
+      "ultimateStrain": "syntheticFixture"
+    },
+    "section": {
+      "barCount": 6,
+      "bars": [
+        {
+          "area": 0.0004908738521234052,
+          "y": -0.14450000000000002,
+          "z": -0.14450000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0,
+          "z": -0.14450000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0.14450000000000002,
+          "z": -0.14450000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": -0.14450000000000002,
+          "z": 0.14450000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0,
+          "z": 0.14450000000000002
+        },
+        {
+          "area": 0.0004908738521234052,
+          "y": 0.14450000000000002,
+          "z": 0.14450000000000002
+        }
+      ],
+      "depth": 0.4,
+      "steelArea": 0.002945243112740431,
+      "width": 0.4
+    },
+    "stations": [
+      {
+        "actions": [
+          -1500000,
+          0,
+          30000,
+          0,
+          -90000,
+          0
+        ],
+        "axialRatio": 0.3472871470043737,
+        "capacity": {
+          "angleIterations": 47,
+          "axialResidual": 2.156242399193183e-16,
+          "depthIterations": 47,
+          "directionError": 0,
+          "mRd": 316535.13788754866,
+          "my": -316535.13788754866,
+          "mz": -7.722248702752263e-11,
+          "n": 1499999.999999999,
+          "neutralAxisAngle": 1.570796326794897,
+          "neutralAxisDepth": 0.223702399562381,
+          "pivot": "ultimateCompression",
+          "plane": {
+            "e0": 0.0003178651584705688,
+            "ky": -5.1343687502904846e-18,
+            "kz": 0.01341067420764715
+          }
+        },
+        "kind": "end",
+        "mEd": 90000,
+        "myEd": -90000,
+        "mzEd": 0,
+        "nEd": 1500000,
+        "side": null,
+        "station": 0,
+        "status": "evaluated",
+        "utilisation": 0.2843286233579955
+      },
+      {
+        "actions": [
+          -1500000,
+          0,
+          30000,
+          0,
+          0,
+          0
+        ],
+        "axialRatio": 0.3472871470043737,
+        "capacity": null,
+        "kind": "end",
+        "mEd": 0,
+        "myEd": 0,
+        "mzEd": 0,
+        "nEd": 1500000,
+        "side": null,
+        "station": 1,
+        "status": "evaluated",
+        "utilisation": 0
+      }
+    ],
+    "status": "evaluated"
+  },
+  "contactState": "notApplicable",
+  "contractVersion": 1,
+  "draftId": "dp48fa206c1b1a9dc1",
+  "flexuralDemand": null,
+  "inputHash": "e6ffebf4c2601cc1e7eb385dc60fec8c5b8910a516f387274e945e6ac57a7fa0",
+  "inputs": {
+    "codeInputs": {
+      "aggregateSize": 0.02,
+      "braced": false,
+      "effectiveCreepRatio": 1.5,
+      "exposureClass": "XC1",
+      "minimumCoverDurability": 0.015,
+      "restraintY": [
+        0,
+        1000
+      ],
+      "restraintZ": [
+        0,
+        1000
+      ]
+    },
+    "id": "dp48fa206c1b1a9dc1",
+    "inputSource": "mixed",
+    "inputSources": {
+      "barDiameter": "syntheticFixture",
+      "barsAlongDepth": "user",
+      "barsAlongWidth": "syntheticFixture",
+      "concreteStrength": "syntheticFixture",
+      "cover": "syntheticFixture",
+      "depth": "syntheticFixture",
+      "linkDiameter": "user",
+      "linkSpacing": "user",
+      "rebarStrength": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "barDiameter": 0.025,
+      "barsAlongDepth": 2,
+      "barsAlongWidth": 3,
+      "concreteStrength": 30000000,
+      "cover": 0.035,
+      "depth": 0.4,
+      "linkDiameter": 0.008,
+      "linkSpacing": 0.4,
+      "rebarStrength": 500000000,
+      "width": 0.4
+    },
+    "kind": "rcColumn",
+    "mechanics": {
+      "inputSources": {
+        "blockDepthRatio": "syntheticFixture",
+        "blockIntensity": "syntheticFixture",
+        "concreteModulus": "syntheticFixture",
+        "concreteTensileStrength": "syntheticFixture",
+        "fullCompressionStrain": "syntheticFixture",
+        "minimumClearSpacing": "syntheticFixture",
+        "steelModulus": "syntheticFixture",
+        "steelYieldStrength": "syntheticFixture",
+        "ultimateStrain": "syntheticFixture"
+      },
+      "inputs": {
+        "blockDepthRatio": 0.75,
+        "blockIntensity": 20000000,
+        "concreteModulus": 30000000000,
+        "concreteTensileStrength": 2800000,
+        "fullCompressionStrain": 0.002,
+        "minimumClearSpacing": 0.025,
+        "steelModulus": 200000000000,
+        "steelYieldStrength": 460000000,
+        "ultimateStrain": 0.003
+      },
+      "law": "rectangularBlock"
+    },
+    "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+    "targetId": "m1"
+  },
+  "kind": "rcColumn",
+  "limitations": [
+    "DEMONSTRATION — EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009); EN 1992-1-1:2004/A1:2014, UK NA + A2:2014 not reconciled; Demonstration, not a certified design",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Schedule and illustrations are indicative; curtailment and laps are the engineer's detailing"
+  ],
+  "mock": true,
+  "modelHash": "d2bf04ad5708b7d781397352c55fb1df456512222ba73fd103facfe8d53fb5e1",
+  "overall": "pass",
+  "plateAnalysis": null,
+  "previewRunId": "6cdc7a40d28d69b94ef0c8a16c03019ad14e7dc9dbb173b9b642b78dced03634",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "reinforcementProposal": null,
+  "schedule": [],
+  "sectionMechanics": null,
+  "soilProvenance": null,
+  "sourceProvenance": {
+    "combinationId": "LC1",
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "d2bf04ad5708b7d781397352c55fb1df456512222ba73fd103facfe8d53fb5e1",
+    "note": "Actual model actions at the member's key stations; the draft section is not applied to frame stiffness",
+    "resultId": "d2bf04ad5708b7d7-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "ebc1dc77e91ca92977a416e8db52d6f5be2144394d815152eadd94f3542643e6",
+    "sourceRevision": 4,
+    "stations": [
+      {
+        "actions": [
+          -1500000,
+          0,
+          30000,
+          0,
+          -90000,
+          0
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 0
+      },
+      {
+        "actions": [
+          -1500000,
+          0,
+          30000,
+          0,
+          0,
+          0
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 1
+      }
+    ],
+    "targetId": "m1"
+  },
+  "sourceRevision": 4,
+  "currentState": "PASS"
+}

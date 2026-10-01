@@ -379,17 +379,18 @@
     },
     {
       "capabilityId": "rc-column-mechanics",
-      "scopeKey": "M12 numerical family / rc-column / biaxial strain-compatibility section mechanics at model key stations",
+      "scopeKey": "M12 / rc-column biaxial section + ec2-uk-na column checks (demonstration)",
       "implementationStatus": "partial",
-      "verificationStatus": "numerical-family-gate-pass",
+      "verificationStatus": "parent-gate-pass",
       "comparisonStatus": "UNKNOWN",
-      "resourceBlockers": [
-        "M08-concrete-resources"
-      ],
+      "resourceBlockers": [],
       "limitations": [
-        "Solid rectangular sections with perimeter bars; explicit concrete (rectangular block or parabola-rectangle) and steel laws and caller strain limits, never code values",
-        "M_Rd(N_Ed, θ) along the demand direction at the bound member's key stations only; a mechanics utilisation is not a code check",
-        "Slenderness and second-order moments, minimum eccentricity, partial factors, shear and detailing need the column code profile (M08 resources) and are UNSUPPORTED; M12 is not accepted"
+        "EC2 column checks are a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 not reconciled; not a certified design (ADR 0027)",
+        "Solid rectangular sections with perimeter bars and one perimeter link; exact biaxial resistance M_Rd(N, θ) from strain compatibility, never the (5.39) interpolation",
+        "Slenderness by (5.15)/(5.16) from the engineer's end restraints; imperfections (5.2), nominal curvature (5.8.8) and minimum eccentricity (6.1(4)), the imperfection in one direction at a time",
+        "Shear with σ_cp, 9.5.2/9.5.3 detailing, cover and spacing; least-steel reinforcement proposal",
+        "Circular sections, nominal stiffness method, global second order (5.8.3.3), walls, laps and fck > 50 MPa are unsupported",
+        "Not a claim of commercial PROKON parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/formulations/rc-column.md",
@@ -397,12 +398,16 @@
         "fixtures/column/column-oracle.json",
         "crates/design/tests/rc_column.rs",
         "evidence/M12/column/m12-column-acceptance.json",
-        "evidence/M12/column/ACCEPTANCE.md"
+        "evidence/M12/column/ACCEPTANCE.md",
+        "docs/adr/0027-ec2-column-checks-and-schema-1-8.md",
+        "docs/code-profiles/ec2-uk-na/dossier-column.md",
+        "fixtures/design/ec2-uk-na/column.reconciliation.json",
+        "evidence/M12/full/gate-M12.json"
       ]
     },
     {
       "capabilityId": "concrete-code",
-      "scopeKey": "M08 / ec2-uk-na / rectangular RC beam: EN 1992-1-1:2004 incl. AC:2008/AC:2010 with UK NA incl. Amd 1 (2009), demonstration",
+      "scopeKey": "M08 / M12 / ec2-uk-na / rectangular RC beams and columns: EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009), demonstration",
       "implementationStatus": "partial",
       "verificationStatus": "parent-gate-pass",
       "comparisonStatus": "UNKNOWN",

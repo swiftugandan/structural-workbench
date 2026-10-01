@@ -1,0 +1,23 @@
+# M12 acceptance record
+
+Source hash: `ebc1dc77e91ca92977a416e8db52d6f5be2144394d815152eadd94f3542643e6`
+Build hash: `6abfcc6d3cb244d39f9d9b0b8dd4473d016e2ad09c8f283b43d12e26dcc8b1d2`
+Observed: 2026-10-01T23:22:55.011Z
+Status: **PASS**
+
+| ID | Title | Evidence | Status | Observation |
+| --- | --- | --- | --- | --- |
+| M12-ENDPOINTS-SYMMETRY | Axial and pure bending endpoints, symmetry | kernel_validation | PASS | Squash and tension resistances equal their closed forms, the moment resistance vanishes at both axial limits, a square section is symmetric under 90° rotation and reflection, and the steel-strain pivot range is attained. |
+| M12-INTEGRATION-CONVERGENCE | Integration exact and convergent | kernel_validation | PASS | Exact concrete integration matches a reference integration to round-off, and an 800² fibre model converges to it within its measured refinement error. |
+| M12-INDEPENDENT-BIAXIAL | Independent biaxial examples | kernel_validation | PASS | 48 biaxial capacities of the independent column oracle within 1e-9; the uniaxial case agrees with the rc_section kernel; model station actions reach the kernel with the documented signs and the browser reproduces the oracle at a model station. |
+| M12-NO-OVERSTATED-SURFACE | No interpolation overstates the verified surface | kernel_validation | PASS | Both EC2 design moment vectors (imperfection about y, about z) are checked against the exact M_Rd(N, θ) along their own direction; the (5.39) interpolation is never used, and every drawn contour point is a computed capacity. |
+| M12-SLENDERNESS-BOUNDARY | Slenderness boundary and second order effects | kernel_validation | PASS | Second order moments start exactly at λ = λ_lim; effective length, λ, λ_lim, e_i, e2 and design moments match the independent oracle within 1e-9 for braced, unbraced, double-curvature, transversely loaded and one-axis-slender columns; JRC Column B2 l0, n, λ_lim and K_r reconcile, with four publication discrepancies documented and confirmed to disagree. |
+| M12-MINIMUM-ECCENTRICITY | Minimum eccentricity boundary | kernel_validation | PASS | M_Ed = N e0 with e0 = max(h/30, 20 mm) when first-order moments are small, applied with the imperfection in one direction at a time. |
+| M12-SHEAR-DETAILING | Shear with axial force and column detailing | kernel_validation | PASS | V_Rd,c with σ_cp matches the hand value; A_s,min/max, φ_min 12 mm (UK NA), link diameter and s_cl,tmax, and the 150 mm restraint rule match hand values, including a failing 600 mm face. |
+| M12-INPUTS-NEVER-ASSUMED | Missing engineer inputs are named, never assumed | failure_path | PASS | Without braced/restraint inputs the bending checks are INDETERMINATE and name them; a slender column without φ_ef stays INDETERMINATE; column inputs on beams and invalid k are refused atomically; N beyond the squash load is reported, not rated. |
+| M12-MODEL-REVISE-REPORT | Check from the model, revise reinforcement, traceable report | ui_journey | PASS | On model actions the column runs the EC2 checks; the least-steel proposal passes every check while the next smaller bar fails; in the browser the proposal is applied as one undoable command, re-analysed and rerun to PASS, and the calculation record carries the demonstration banner, every check and the slenderness table. |
+| M12-PERSISTENCE | Schema 1.8.0 save, reopen and migrate | save_and_reopen | PASS | 1.7.0 column drafts gain a synthetic 200 mm link spacing and cannot already carry 1.8.0 content; code inputs are validated per kind; the downloaded project keeps the column code inputs and reopens. |
+| M12-LEDGER | Capability ledger | capability_ledger | PASS | The capability ledger lists the EC2 column checks with their demonstration label and UNKNOWN comparison. |
+| M12-ORACLE-PROVENANCE | Independent column oracle is the recorded script | regression_results | PASS | tools/oracles/ec2_column_oracle.py sha256 d4c4b4463ef5a7fd1d3d018d03972c2564d1d9509881e6a4a90d451dd71dd9f2 (recorded d4c4b4463ef5a7fd1d3d018d03972c2564d1d9509881e6a4a90d451dd71dd9f2); 7 cases; 0 failures; 4 JRC discrepancies confirmed. |
+
+Limitations: ec2-uk-na column checks are a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular columns of constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and creep ratio; the node-to-node length as the clear height; one perimeter link. Circular sections, the nominal stiffness method, global second order (5.8.3.3), walls, laps and fck > 50 MPa are unsupported. Commercial PROKON parity remains UNKNOWN.

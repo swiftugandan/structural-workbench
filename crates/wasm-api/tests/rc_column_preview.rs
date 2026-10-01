@@ -56,7 +56,7 @@ fn column(k: &mut Kernel) -> Value {
         "SetDesignPreview",
         json!({"id":d["id"],"targetId":"m1","soilReference":"",
             "inputs":{"width":"400 mm","depth":"400 mm","cover":"27.5 mm","barDiameter":"25 mm","barsAlongWidth":"3","barsAlongDepth":"3",
-                "linkDiameter":"10 mm","concreteStrength":"30 MPa","rebarStrength":"500 MPa"},
+                "linkDiameter":"10 mm","linkSpacing":"200 mm","concreteStrength":"30 MPa","rebarStrength":"500 MPa"},
             "mechanics":{"law":"parabolaRectangle","inputs":{"parabolaPeak":"17 MPa","strainAtPeak":"0.002","parabolaExponent":"2",
                 "ultimateStrain":"0.0035","steelYieldStrength":"435 MPa","steelModulus":"200 GPa","concreteModulus":"30 GPa",
                 "concreteTensileStrength":"2.8 MPa","minimumClearSpacing":"25 mm","fullCompressionStrain":"0.002"}}}),
@@ -211,7 +211,8 @@ fn model_station_actions_reach_the_kernel_with_the_documented_signs() {
     // (up to the frame's round-off moment there).
     assert!(tip["utilisation"].as_f64().unwrap() <= 1e-12, "{tip}");
     assert_eq!(run["sourceProvenance"]["kind"], "modelAnalysis");
-    assert_eq!(run["overall"], "unsupported");
+    // The EC2 column checks need the engineer's inputs (ADR 0027).
+    assert_eq!(run["overall"], "indeterminate");
     // Deterministic.
     let snap = req(&mut k, "getSnapshot", json!({}));
     let again = req(
@@ -375,4 +376,88 @@ fn untouched_integer_inputs_keep_their_provenance() {
         .clone();
     assert_eq!(saved["inputSources"]["topBarCount"], "syntheticFixture");
     assert_eq!(saved["inputSources"]["linkLegs"], "syntheticFixture");
+}
+
+/// EC2 column checks on model actions (ADR 0027): B04 as a 3 m cantilever
+/// column with 1500 kN axial compression and 30 kN transverse at the tip, so
+/// N_Ed = 1500 kN and |My| = 90 kN m at the fixed end, zero at the tip.
+fn column_inputs() -> Value {
+    json!({"exposureClass":"XC1","minimumCoverDurability":"15 mm","aggregateSize":"20 mm",
+        "braced":false,"restraintY":[0.0, 1000.0],"restraintZ":[0.0, 1000.0],"effectiveCreepRatio":"1.5"})
+}
+
+fn set_code(k: &mut Kernel, d: &Value, inputs: &Value, code: Value) -> Value {
+    let r = cmd(k, "SetDesignPreview", json!({"id":d["id"],"targetId":"m1","soilReference":"","inputs":inputs,"codeInputs":code}));
+    assert_eq!(r["status"], "ok", "{r}");
+    r["payload"]["project"]["designPreviews"][0].clone()
+}
+
+fn evaluate_with(k: &mut Kernel, d: &Value, propose: bool) -> Value {
+    let a = req(k, "analyse", json!({"caseIds":["LC1"]}));
+    assert_eq!(a["status"], "ok", "{a}");
+    let r = req(k, "evaluateDesignPreview", json!({"draftId":d["id"],"modelHash":a["modelHash"],"sourceMode":"model",
+        "caseId":"LC1","resultId":a["payload"]["resultId"],"propose":propose}));
+    assert_eq!(r["status"], "ok", "{r}");
+    r["payload"].clone()
+}
+
+#[test]
+fn ec2_column_checks_run_on_model_actions_and_propose_reinforcement() {
+    let mut k = open([-1.5e6, 0., 30e3, 0., 0., 0.]);
+    let d = column(&mut k);
+    // Without the engineer's inputs the bending checks name what is missing.
+    let run = evaluate(&mut k, &d, "model");
+    let code = &run["codeProfilePreview"];
+    assert_eq!(code["status"], "evaluated", "{code}");
+    assert_eq!(code["basis"], "codeProfile");
+    assert_eq!(code["certification"], "Demonstration, not a certified design");
+    assert!((code["actions"]["nEd"].as_f64().unwrap() - 1.5e6).abs() < 1e-6, "{}", code["actions"]);
+    let ends = &code["actions"]["myEnds"];
+    let base = ends[0].as_f64().unwrap().abs().max(ends[1].as_f64().unwrap().abs());
+    assert!((base - 90e3).abs() < 1e-6 * 90e3, "{ends}");
+    let rows: Vec<&str> = run["checks"].as_array().unwrap().iter().map(|c| c["name"].as_str().unwrap()).collect();
+    assert_eq!(rows, ["Axial and biaxial bending", "Shear", "Longitudinal reinforcement", "Links and bar restraint", "Cover and spacing"]);
+    assert_eq!(run["checks"][0]["status"], "indeterminate");
+    assert_eq!(run["overall"], "indeterminate");
+    assert_eq!(run["codeProfile"]["id"], "ec2-uk-na");
+    // With them, every check resolves: unbraced cantilever l0 ≈ 2.18 l (k1 → 0.1).
+    let inputs = d["inputs"].clone();
+    let d = set_code(&mut k, &d, &inputs, column_inputs());
+    let run = evaluate_with(&mut k, &d, true);
+    let checks = run["codeProfilePreview"]["checks"].as_array().unwrap().clone();
+    let biaxial = checks.iter().find(|c| c["checkId"] == "ec2.column.biaxial.y").unwrap();
+    let y = &biaxial["intermediates"]["y"];
+    // (5.16) with k1 = 0.1 (the recommended minimum) and k2 = 1000.
+    let (k1, k2) = (0.1f64, 1000f64);
+    let want_l0 = 3.0 * (1. + 10. * k1 * k2 / (k1 + k2)).sqrt().max((1. + k1 / (1. + k1)) * (1. + k2 / (1. + k2)));
+    assert!((y["l0"].as_f64().unwrap() - want_l0).abs() < 1e-9, "{y}");
+    assert_eq!(y["slender"], true);
+    assert!(checks.iter().all(|c| c["status"] != "indeterminate"), "{checks:?}");
+    // The proposal passes every check, and the next lighter arrangement fails.
+    let proposal = &run["reinforcementProposal"];
+    assert_eq!(proposal["status"], "proposed", "{proposal}");
+    let mut applied = inputs.clone();
+    for (key, v) in proposal["inputs"].as_object().unwrap() {
+        applied[key] = v.clone();
+    }
+    let d = set_code(&mut k, &d, &applied, column_inputs());
+    let after = evaluate_with(&mut k, &d, false);
+    assert!(after["checks"].as_array().unwrap().iter().all(|c| c["status"] == "pass"), "{}", after["checks"]);
+    let phi = applied["barDiameter"].as_f64().unwrap();
+    let smaller = [0.012, 0.016, 0.020, 0.025, 0.032, 0.040].into_iter().rev().find(|b| *b < phi - 1e-12);
+    if let Some(s) = smaller {
+        let mut lighter = applied.clone();
+        lighter["barDiameter"] = json!(s);
+        lighter["linkDiameter"] = json!([0.008, 0.010, 0.012].into_iter().find(|t| *t >= (0.006f64).max(s / 4.)).unwrap());
+        let d = set_code(&mut k, &d, &lighter, column_inputs());
+        let r = evaluate_with(&mut k, &d, false);
+        assert!(r["checks"].as_array().unwrap().iter().any(|c| c["status"] == "fail"), "lighter passes: {lighter}");
+    }
+    // Column code inputs are refused on beams, and beam inputs on columns.
+    let bad = cmd(&mut k, "SetDesignPreview", json!({"id":d["id"],"targetId":"m1","soilReference":"","inputs":applied,
+        "codeInputs":{"quasiPermanentCombinationId":"LC1"}}));
+    assert_eq!(bad["status"], "error");
+    let bad = cmd(&mut k, "SetDesignPreview", json!({"id":d["id"],"targetId":"m1","soilReference":"","inputs":applied,
+        "codeInputs":{"restraintY":[-1.0, 0.5]}}));
+    assert_eq!(bad["status"], "error");
 }

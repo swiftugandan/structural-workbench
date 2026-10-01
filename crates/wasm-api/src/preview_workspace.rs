@@ -5,8 +5,8 @@ use workbench_design::rc_section::{
     self, BarLayer, BarRow, ConcreteLaw, ElasticInputs, RcRectangle, SteelLaw,
 };
 use workbench_design::{
-    CodeProfile, DesignDemand, DesignRun, Ec2UkNaProfile, MemberContext, ProfileApplicability,
-    RcBarRow, RcBeamContext, RcFace, RcLinks,
+    CodeProfile, ColumnActions, DesignDemand, DesignRun, Ec2UkNaProfile, MemberContext, ProfileApplicability,
+    RcBarRow, RcBeamContext, RcColumnContext, RcColumnDetailing, RcFace, RcLinks,
 };
 use workbench_model::{
     DesignPreview, Project, Result, SectionMechanicsInputs, SlabColumn, SlabPlateInputs, digest,
@@ -43,6 +43,7 @@ fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64
             ("barsAlongWidth", "Bars along width (per face)", 3., "", 1.),
             ("barsAlongDepth", "Bars along depth (per face)", 3., "", 1.),
             ("linkDiameter", "Link diameter", 0.01, "mm", 1000.),
+            ("linkSpacing", "Link spacing", 0.2, "mm", 1000.),
         ],
         "slab" => vec![
             ("length", "Length X", 6., "m", 1.),
@@ -826,13 +827,12 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                     .remove("tensionAnchorageConfirmed");
             }
         }
-        // Code inputs (schema 1.7.0, ADR 0026): replaced when sent, cleared by
-        // an explicit null, kept when omitted. Lengths accept units.
+        // Code inputs (schema 1.7.0/1.8.0, ADR 0026/0027): replaced when sent,
+        // cleared by an explicit null, kept when omitted. Lengths accept units;
+        // fields not applicable to the kind are refused.
         if let Some(ci) = a.get("codeInputs") {
             if ci.is_null() {
                 v["designPreviews"][index].as_object_mut().unwrap().remove("codeInputs");
-            } else if kind != "rcBeam" {
-                return Err(err("INVALID_SCHEMA", "Code inputs apply only to RC beam drafts"));
             } else {
                 let mut out = serde_json::Map::new();
                 for key in ["minimumCoverDurability", "aggregateSize"] {
@@ -848,12 +848,26 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                         out.insert(key.into(), json!(t));
                     }
                 }
-                if let Some(b) = ci["partitionsSensitive"].as_bool() {
-                    out.insert("partitionsSensitive".into(), json!(b));
+                for key in ["partitionsSensitive", "braced"] {
+                    if let Some(b) = ci[key].as_bool() {
+                        out.insert(key.into(), json!(b));
+                    }
                 }
-                let parsed: workbench_model::RcBeamCodeInputs = serde_json::from_value(Value::Object(out))
+                for key in ["restraintY", "restraintZ"] {
+                    if !ci[key].is_null() {
+                        out.insert(key.into(), ci[key].clone());
+                    }
+                }
+                if !ci["effectiveCreepRatio"].is_null() && ci["effectiveCreepRatio"] != json!("") {
+                    let mut x = ci["effectiveCreepRatio"].clone();
+                    if let Some(t) = x.as_str() {
+                        x = json!(t.trim().parse::<f64>().map_err(|_| err("INVALID_SCHEMA", "Effective creep ratio must be a number"))?);
+                    }
+                    out.insert("effectiveCreepRatio".into(), x);
+                }
+                let parsed: workbench_model::CodeInputs = serde_json::from_value(Value::Object(out))
                     .map_err(|e| err("INVALID_SCHEMA", format!("Code inputs: {e}")))?;
-                parsed.validate()?;
+                parsed.validate(&kind)?;
                 v["designPreviews"][index]["codeInputs"] = serde_json::to_value(parsed).unwrap();
             }
         }
@@ -1524,7 +1538,12 @@ fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
     if code["status"] != "evaluated" || code["profileEnabled"] != true {
         return None;
     }
-    let rows: [(&str, &[&str]); 6] = [
+    // Beams carry checks per governing station; columns one set per member.
+    let checks: Vec<&Value> = match code["governing"].as_array() {
+        Some(g) => g.iter().flat_map(|g| g["checks"].as_array().unwrap().iter()).collect(),
+        None => code["checks"].as_array()?.iter().collect(),
+    };
+    let beam: [(&str, &[&str]); 6] = [
         ("Flexure", &["ec2.flexure", "ec2.actions"]),
         ("Shear", &["ec2.shear", "ec2.links-min", "ec2.links-spacing"]),
         ("Minimum/maximum reinforcement", &["ec2.as-min", "ec2.as-max.top", "ec2.as-max.bottom", "ec2.crack-min"]),
@@ -1532,13 +1551,26 @@ fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
         ("Anchorage", &["ec2.anchorage"]),
         ("Serviceability", &["ec2.crack-control", "ec2.deflection"]),
     ];
+    let column: [(&str, &[&str]); 5] = [
+        ("Axial and biaxial bending", &["ec2.column.biaxial.y", "ec2.column.biaxial.z"]),
+        ("Shear", &["ec2.column.shear.y", "ec2.column.shear.z"]),
+        ("Longitudinal reinforcement", &["ec2.column.bar-diameter", "ec2.column.as-min", "ec2.column.as-max"]),
+        ("Links and bar restraint", &["ec2.column.links", "ec2.column.restraint"]),
+        ("Cover and spacing", &["ec2.cover", "ec2.bar-spacing"]),
+    ];
+    let rows: &[(&str, &[&str])] = if code["governing"].is_array() { &beam } else { &column };
+    Some(rows_from(&checks, rows))
+}
+
+/// Named rows, each the worst status and largest utilisation of its checks;
+/// overall is the worst row (fail > unsupported > indeterminate > pass).
+fn rows_from(checks: &[&Value], rows: &[(&str, &[&str])]) -> (Vec<Value>, &'static str) {
     let rank = |s: &str| match s {
         "fail" => 3,
         "unsupported" => 2,
         "indeterminate" => 1,
         _ => 0,
     };
-    let checks: Vec<&Value> = code["governing"].as_array()?.iter().flat_map(|g| g["checks"].as_array().unwrap().iter()).collect();
     let mut worst_all = "pass";
     let out = rows
         .iter()
@@ -1566,8 +1598,135 @@ fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
             json!({"name":name,"status":status,"utilisation":utilisation,"reason":reason,"checkIds":ids})
         })
         .collect();
-    Some((out, worst_all))
+    (out, worst_all)
 }
+
+/// EC2 UK NA column checks (M12, ADR 0027) for an rcColumn draft bound to a
+/// member: first-order actions of the one bound combination from the key
+/// stations (N compression positive, end moments, largest moments and
+/// shears), the draft's bars and the engineer's code inputs.
+fn column_code(p: &Project, d: &DesignPreview, stations: &[KeyStation], combination: &str) -> Value {
+    let mut base = code_base(d);
+    base.as_object_mut().unwrap().remove("tensionAnchorageConfirmed");
+    let profile = Ec2UkNaProfile::default();
+    let v = &d.inputs;
+    let Some(length) = member_length(p, d.target_id.as_ref()) else {
+        return merge(base, json!({"status":"unavailable","reason":"The column must be bound to a model member"}));
+    };
+    if stations.is_empty() {
+        return merge(base, json!({"status":"unavailable","reason":"No key stations for the bound member"}));
+    }
+    let target = d.target_id.clone().unwrap_or_default();
+    let transverse_load = p.loads.iter().any(|l| match l {
+        workbench_model::Load::Uniform { member, .. } | workbench_model::Load::Point { member, .. } => member == &target,
+        _ => false,
+    });
+    let ci = d.code_inputs.clone().unwrap_or_default();
+    let ctx = RcColumnContext {
+        width: v["width"],
+        depth: v["depth"],
+        cover_to_link: v["cover"],
+        fck: v["concreteStrength"],
+        fyk: v["rebarStrength"],
+        bar_diameter: v["barDiameter"],
+        bars_along_width: v["barsAlongWidth"] as u32,
+        bars_along_depth: v["barsAlongDepth"] as u32,
+        link_diameter: v["linkDiameter"],
+        link_spacing: v["linkSpacing"],
+        bars: column_bars(v),
+        length,
+        transverse_load,
+        detailing: RcColumnDetailing {
+            exposure_class: ci.exposure_class.clone(),
+            cover_durability: ci.minimum_cover_durability,
+            aggregate_size: ci.aggregate_size,
+            braced: ci.braced,
+            restraint_y: ci.restraint_y,
+            restraint_z: ci.restraint_z,
+            creep_ratio: ci.effective_creep_ratio,
+        },
+    };
+    let first = stations.iter().min_by(|a, b| a.station.total_cmp(&b.station)).unwrap();
+    let last = stations.iter().max_by(|a, b| a.station.total_cmp(&b.station)).unwrap();
+    let peak = |k: usize| stations.iter().map(|s| s.actions[k].abs()).fold(0., f64::max);
+    // Frame N is tension positive; the column works compression positive.
+    let actions = ColumnActions {
+        n_ed: stations.iter().map(|s| -s.actions[0]).fold(f64::NEG_INFINITY, f64::max),
+        my_ends: [first.actions[4], last.actions[4]],
+        mz_ends: [first.actions[5], last.actions[5]],
+        my_max: peak(4),
+        mz_max: peak(5),
+        vy_max: peak(1),
+        vz_max: peak(2),
+        combination_id: combination.into(),
+    };
+    let checks = workbench_design::column_checks(&profile.ndp, &ctx, &actions);
+    merge(
+        base,
+        json!({"status":"evaluated","combinationId":combination,"span":length,"transverseLoad":transverse_load,
+            "actions":{"nEd":actions.n_ed,"myEnds":actions.my_ends,"mzEnds":actions.mz_ends,"myMax":actions.my_max,
+                "mzMax":actions.mz_max,"vyMax":actions.vy_max,"vzMax":actions.vz_max,
+                "convention":"N compression positive; end moments are the frame's internal My, Mz at stations 0 and 1"},
+            "checks":checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()}),
+    )
+}
+
+/// Column bar sizes the proposal enumerates (BS 8666 preferred, ≥ 12 mm UK NA 9.5.2(1)).
+const COLUMN_BARS: [f64; 6] = [0.012, 0.016, 0.020, 0.025, 0.032, 0.040];
+
+/// Discrete column reinforcement (ADR 0027): the least longitudinal steel
+/// over COLUMN_BARS with 2 to 6 bars along each face, each with the smallest
+/// link of 8, 10 or 12 mm meeting 9.5.3(1) at the largest 25 mm multiple
+/// within s_cl,tmax, such that no check fails. Needs the bending checks
+/// evaluated (braced, restraint and, when slender, creep entered).
+fn propose_column(p: &Project, d: &DesignPreview, stations: &[KeyStation], combination: &str) -> Value {
+    let mut candidates = vec![];
+    for phi in COLUMN_BARS {
+        for nw in 2..=6u32 {
+            for nd in 2..=6u32 {
+                let n = 2 * nw + 2 * (nd - 2);
+                candidates.push((n as f64 * std::f64::consts::PI * phi * phi / 4., n, phi, nw, nd));
+            }
+        }
+    }
+    candidates.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.cmp(&b.1)).then(b.2.total_cmp(&a.2)));
+    let mut evaluated = 0usize;
+    for (area, _, phi, nw, nd) in candidates {
+        let Some(link) = [0.008, 0.010, 0.012].into_iter().find(|t| *t >= (0.006f64).max(phi / 4.) - 1e-12) else {
+            continue;
+        };
+        let s_max = (20. * phi).min(d.inputs["width"].min(d.inputs["depth"])).min(0.4);
+        let spacing = (s_max / 0.025 + 1e-9).floor() * 0.025;
+        let mut c = d.clone();
+        for (k, x) in [("barDiameter", phi), ("barsAlongWidth", nw as f64), ("barsAlongDepth", nd as f64), ("linkDiameter", link), ("linkSpacing", spacing)] {
+            c.inputs.insert(k.into(), x);
+        }
+        // Bars that consume the section are not candidates.
+        if c.validate().is_err() {
+            continue;
+        }
+        evaluated += 1;
+        let code = column_code(p, &c, stations, combination);
+        let Some(checks) = code["checks"].as_array() else { continue };
+        if evaluated == 1 && checks.iter().any(|x| x["checkId"].as_str().is_some_and(|i| i.starts_with("ec2.column.biaxial")) && x["status"] == "indeterminate") {
+            return json!({"status":"none","candidatesEvaluated":evaluated,
+                "reason":"Enter whether the column is braced, the end restraints and (for a slender column) φ_ef before proposing reinforcement"});
+        }
+        if checks.iter().any(|x| x["status"] == "fail") {
+            continue;
+        }
+        let (rows, overall) = code_rows(&code).unwrap_or_else(|| (vec![], "unsupported"));
+        return json!({"status":"proposed","inputs":{"barDiameter":phi,"barsAlongWidth":nw,"barsAlongDepth":nd,"linkDiameter":link,"linkSpacing":spacing},
+            "steelArea":area,"overall":overall,"checks":rows,"candidatesEvaluated":evaluated,
+            "basis":{"objective":"Least longitudinal steel area","barDiameters":COLUMN_BARS,"barsPerFace":[2, 6],
+                "links":"Smallest of 8, 10, 12 mm with φ_t ≥ max(6 mm, φ/4) at the largest 25 mm multiple within s_cl,tmax",
+                "fixed":["width","depth","cover","concreteStrength","rebarStrength","codeInputs"],
+                "acceptance":"No EC2 check fails; indeterminate checks are reported, not assumed"}});
+    }
+    json!({"status":"none","candidatesEvaluated":evaluated,
+        "reason":"No enumerated arrangement passes every EC2 check at this section size; enlarge the section or change the materials"})
+}
+
 /// plate-v1 analysis of a slab draft's panel (ADR 0021): mechanics only, never
 /// a check status. Element-centre (unsmoothed) actions are the design values;
 /// Wood–Armer moments are moments to resist, not reinforcement.
@@ -1720,6 +1879,10 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
                 .ok_or_else(|| err("DANGLING_REFERENCE", "Member result unavailable"))?;
             source["stations"] = serde_json::to_value(&m.key_stations).unwrap();
             stations = Some(m.key_stations.clone());
+            code = column_code(p, draft, &m.key_stations, case);
+            if input["propose"] == true && code["status"] == "evaluated" && code["profileEnabled"] == true {
+                proposal = propose_column(p, draft, &m.key_stations, case);
+            }
             source["note"] = json!(
                 "Actual model actions at the member's key stations; the draft section is not applied to frame stiffness"
             );
@@ -1804,7 +1967,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
     };
     // ADR 0026: an evaluated, enabled code profile replaces the unsupported
     // rows with its checks, labelled as a demonstration of the held edition.
-    let coded = if draft.kind == "rcBeam" { code_rows(&code) } else { None };
+    let coded = if ["rcBeam", "rcColumn"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
     let mut run = json!({"contractVersion":1,"draftId":id,"kind":draft.kind,"overall":"unsupported","mock":true,"codeProfile":null,"modelHash":p.hash(),"sourceRevision":p.revision,
         "inputHash":digest(&serde_json::to_vec(draft).unwrap()),"inputs":draft,"sourceProvenance":source,"schedule":schedule,
         "checks":checks.iter().map(|name|json!({"name":name,"status":"unsupported","utilisation":null,"reason":if *name=="Flexure"&&draft.kind=="rcBeam"{"Code profile unavailable. Section mechanics are reported separately and are not a code resistance"}else{"Required numerical family or locked code/example resources are unavailable"}})).collect::<Vec<_>>(),
@@ -1813,7 +1976,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
-        "codeProfilePreview":if draft.kind=="rcBeam"{code.clone()}else{Value::Null},
+        "codeProfilePreview":if ["rcBeam","rcColumn"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
         "plateAnalysis":plate,
         "columnMechanics":if draft.kind=="rcColumn"{column_mechanics(draft,stations.as_deref())}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});

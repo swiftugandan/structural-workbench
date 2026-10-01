@@ -11,13 +11,13 @@ pub use residential::residential_reference;
 pub mod structure;
 pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, EXPOSURE_CLASSES, MAX_BRACING_POINTS, MAX_SLAB_COLUMNS,
-    RcBeamCodeInputs, STRUCTURAL_SYSTEMS,
+    CodeInputs, STRUCTURAL_SYSTEMS,
     MECHANICS_COMMON_KEYS, SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs,
     SlabColumn, SlabPlateInputs, SteelDesign, SteelServiceability,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
-    SCHEMA_1_4, SCHEMA_1_5, SCHEMA_1_6, import_project,
+    SCHEMA_1_4, SCHEMA_1_5, SCHEMA_1_6, SCHEMA_1_7, import_project,
 };
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;

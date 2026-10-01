@@ -1,0 +1,16 @@
+{
+  "milestone": "M12",
+  "status": "PASS",
+  "sourceHash": "ebc1dc77e91ca92977a416e8db52d6f5be2144394d815152eadd94f3542643e6",
+  "buildHash": "6abfcc6d3cb244d39f9d9b0b8dd4473d016e2ad09c8f283b43d12e26dcc8b1d2",
+  "required": [
+    "build",
+    "column-native",
+    "column-model",
+    "column-protocol",
+    "m12-browser",
+    "m12-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-10-01T23:22:55.493Z"
+}

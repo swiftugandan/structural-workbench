@@ -320,7 +320,7 @@
     {
       "id": "M12",
       "name": "Design a column family",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M08",
         "M09"
@@ -340,7 +340,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Numerical family rc-column (biaxial section mechanics at model stations) gated on its own (evidence/M12/column, ADR 0022, R-COLUMN-EXAMPLES partially acquired); the parent stays planned until the M08 column code profile supplies partial factors, slenderness and minimum eccentricity."
+      "acceptanceDefinition": "Accepted (evidence/M12/full) as an edition-labelled EC2 UK demonstration (ADR 0026, 0027): rectangular RC columns on the exact biaxial kernel with slenderness (5.8.3), imperfections (5.2), nominal curvature (5.8.8), minimum eccentricity (6.1(4)), shear with axial force, 9.5 detailing and a least-steel proposal. Circular sections and the nominal stiffness method remain later slices."
     },
     {
       "id": "M13",

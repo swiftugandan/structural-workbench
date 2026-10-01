@@ -20,9 +20,9 @@ const DELTA_C_DEV: f64 = 0.010;
 /// 4.4.1.2(2): c_min is at least 10 mm.
 const C_MIN_FLOOR: f64 = 0.010;
 /// UK NA 8.2(2): k1 = 1, k2 = 5 mm; and the 20 mm floor.
-const SPACING_K1: f64 = 1.0;
-const SPACING_K2: f64 = 0.005;
-const SPACING_FLOOR: f64 = 0.020;
+pub(crate) const SPACING_K1: f64 = 1.0;
+pub(crate) const SPACING_K2: f64 = 0.005;
+pub(crate) const SPACING_FLOOR: f64 = 0.020;
 /// UK NA 3.1.6(2)P: α_ct.
 const ALPHA_CT: f64 = 1.0;
 /// UK NA Table NA.4: reinforced members, quasi-permanent combination. The
@@ -33,7 +33,7 @@ const EXPOSURE_CLASSES: &[&str] = &[
 const W_MAX_RC: f64 = 0.3e-3;
 
 /// An input the engineer must provide is missing: the check names it.
-fn indeterminate(id: &str, clause: &str, reason: impl Into<String>) -> CheckOutcome {
+pub(crate) fn indeterminate(id: &str, clause: &str, reason: impl Into<String>) -> CheckOutcome {
     CheckOutcome { status: CheckStatus::Indeterminate, ..CheckOutcome::unsupported(id, clause, reason) }
 }
 
@@ -61,21 +61,27 @@ fn clear_spacing(rc: &RcBeamContext, diameter: f64, count: u32) -> Option<f64> {
 /// the links and for the main bars (Δc_dur,γ, Δc_dur,st, Δc_dur,add = 0,
 /// UK NA 4.4.1.2(6)-(8)).
 pub fn cover(rc: &RcBeamContext) -> CheckOutcome {
+    let link = rc.links.as_ref().map_or(0., |l| l.diameter);
+    let bar = rc.rows.iter().filter_map(|r| r.bars.map(|b| b.diameter)).fold(0., f64::max);
+    cover_for(rc.cover_to_link, link, bar, rc.detailing.cover_durability, rc.detailing.aggregate_size)
+}
+
+/// The 4.4.1 cover check for links of diameter `link` over main bars of
+/// diameter `bar`, with `cover_to_link` the cover to the links.
+pub(crate) fn cover_for(cover_to_link: f64, link: f64, bar: f64, c_dur: Option<f64>, dg: Option<f64>) -> CheckOutcome {
     let clause = "4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P";
-    let (Some(c_dur), Some(dg)) = (rc.detailing.cover_durability, rc.detailing.aggregate_size) else {
+    let (Some(c_dur), Some(dg)) = (c_dur, dg) else {
         return indeterminate(
             "ec2.cover",
             clause,
             "Enter c_min,dur for the exposure class (BS 8500-1 Tables A.4/A.5, UK NA 4.4.1.2(5)) and the maximum aggregate size",
         );
     };
-    let link = rc.links.as_ref().map_or(0., |l| l.diameter);
-    let bar = rc.rows.iter().filter_map(|r| r.bars.map(|b| b.diameter)).fold(0., f64::max);
     // 4.4.1.2(3) Table 4.2: c_min,b = bar diameter (separated bars), +5 mm when dg > 32 mm.
     let aggregate = if dg > 0.032 { 0.005 } else { 0. };
     let required = |phi: f64| (phi + aggregate).max(c_dur).max(C_MIN_FLOOR) + DELTA_C_DEV;
     let (link_req, bar_req) = (required(link), required(bar));
-    let (link_prov, bar_prov) = (rc.cover_to_link, rc.cover_to_link + link);
+    let (link_prov, bar_prov) = (cover_to_link, cover_to_link + link);
     let ratio = (link_req / link_prov).max(bar_req / bar_prov);
     CheckOutcome::result(
         "ec2.cover",

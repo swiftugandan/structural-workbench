@@ -3374,6 +3374,14 @@ body.design-workspace {
   padding: 10px 12px;
   font-size: 11px;
 }
+.design-pair {
+  display: flex;
+  gap: 6px;
+}
+.design-pair input {
+  width: 50%;
+  min-width: 0;
+}
 .design-proposal h4 {
   margin: 0 0 8px;
   font-size: 12px;
