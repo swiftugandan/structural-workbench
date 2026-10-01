@@ -713,6 +713,8 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
             // Never defaulted: only the user can confirm anchorage (ADR 0016).
             tension_anchorage_confirmed: None,
             plate: (kind == "slab").then(default_plate),
+            // Never defaulted: the engineer enters them (ADR 0026).
+            code_inputs: None,
         };
         v["designPreviews"]
             .as_array_mut()
@@ -822,6 +824,37 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                     .as_object_mut()
                     .unwrap()
                     .remove("tensionAnchorageConfirmed");
+            }
+        }
+        // Code inputs (schema 1.7.0, ADR 0026): replaced when sent, cleared by
+        // an explicit null, kept when omitted. Lengths accept units.
+        if let Some(ci) = a.get("codeInputs") {
+            if ci.is_null() {
+                v["designPreviews"][index].as_object_mut().unwrap().remove("codeInputs");
+            } else if kind != "rcBeam" {
+                return Err(err("INVALID_SCHEMA", "Code inputs apply only to RC beam drafts"));
+            } else {
+                let mut out = serde_json::Map::new();
+                for key in ["minimumCoverDurability", "aggregateSize"] {
+                    let mut x = ci[key].clone();
+                    if x.is_null() || x == json!("") {
+                        continue;
+                    }
+                    super::quantity(&mut x, "length")?;
+                    out.insert(key.into(), x);
+                }
+                for key in ["exposureClass", "structuralSystem", "quasiPermanentCombinationId"] {
+                    if let Some(t) = ci[key].as_str().filter(|t| !t.is_empty()) {
+                        out.insert(key.into(), json!(t));
+                    }
+                }
+                if let Some(b) = ci["partitionsSensitive"].as_bool() {
+                    out.insert("partitionsSensitive".into(), json!(b));
+                }
+                let parsed: workbench_model::RcBeamCodeInputs = serde_json::from_value(Value::Object(out))
+                    .map_err(|e| err("INVALID_SCHEMA", format!("Code inputs: {e}")))?;
+                parsed.validate()?;
+                v["designPreviews"][index]["codeInputs"] = serde_json::to_value(parsed).unwrap();
             }
         }
         v["designPreviews"][index]["soilReference"] =
@@ -1133,86 +1166,38 @@ fn flexural_demand(
         "limitations":["Governing key stations of the one bound case/combination; no envelope across combinations","Axial force, shear, torsion and Mz at these stations are not considered by the pure-flexure mechanics","No utilisation ratio or status: the capacity is mechanics, not a code resistance"]}),
     )
 }
-/// EC2 UK NA beam checks for an rcBeam draft at the governing sagging,
-/// hogging and shear key stations of the one bound combination (ADR 0016).
-/// The profile is disabled: its checks run for review only, are labelled as a
-/// disabled-profile preview and never change the preview's checks or overall.
-fn code_profile_preview(
-    d: &DesignPreview,
-    demand: &Value,
-    stations: &[KeyStation],
-    combination: &str,
-) -> Value {
+/// The metadata every EC2 run and proposal carries.
+fn code_base(d: &DesignPreview) -> Value {
     let profile = Ec2UkNaProfile::default();
     let meta = profile.metadata();
-    let v = &d.inputs;
-    let base = json!({"profileId":meta.id,"profileEnabled":meta.enabled,"basis":"disabledProfilePreview",
+    json!({"profileId":meta.id,"profileEnabled":meta.enabled,
+        "basis":if meta.enabled {"codeProfile"} else {"disabledProfilePreview"},
+        "standard":meta.standard,"edition":meta.edition,"certification":meta.certification,
+        "unreconciledAmendments":meta.unreconciled_amendments,
         "resourceGate":meta.resource_gate,"ndp":profile.ndp.label,
         "interpretation":{"concreteStrength":"fck (characteristic cylinder strength)","rebarStrength":"fyk for longitudinal bars and links"},
         "tensionAnchorageConfirmed":d.tension_anchorage_confirmed == Some(true),
-        "limitations":meta.limitations});
-    let Some(m) = &d.mechanics else {
-        return merge(
-            base,
-            json!({"status":"unavailable","reason":"The draft has no section-mechanics inputs (minimum clear spacing)"}),
-        );
-    };
-    let fit = |face: &str| {
-        rc_section::row_fit(&BarRow {
-            width: v["width"],
-            side_cover: v["cover"],
-            link_diameter: v["linkDiameter"],
-            bar_diameter: v[&format!("{face}BarDiameter")],
-            count: v[&format!("{face}BarCount")] as u32,
-            minimum_clear_spacing: m.inputs["minimumClearSpacing"],
-        })
-    };
-    let (top, bottom) = match (fit("top"), fit("bottom")) {
-        (Ok(t), Ok(b)) if t.fits && b.fits => (t, b),
-        (Ok(_), Ok(_)) => {
-            return merge(
-                base,
-                json!({"status":"unavailable","reason":"A bar row does not fit the width; code checks not evaluated"}),
-            );
-        }
-        (Err(e), _) | (_, Err(e)) => {
-            return merge(base, json!({"status":"unavailable","reason":e.message}));
-        }
-    };
-    let ctx = MemberContext {
-        member_id: demand["memberId"].as_str().unwrap_or("").into(),
-        section_family: "RC rectangle".into(),
-        rc_beam: Some(RcBeamContext {
-            width: v["width"],
-            depth: v["depth"],
-            cover_to_link: v["cover"],
-            fck: v["concreteStrength"],
-            fyk: v["rebarStrength"],
-            rows: vec![
-                RcBarRow {
-                    face: RcFace::Top,
-                    area: top.area,
-                    centroid_from_face: top.depth_from_face,
-                },
-                RcBarRow {
-                    face: RcFace::Bottom,
-                    area: bottom.area,
-                    centroid_from_face: bottom.depth_from_face,
-                },
-            ],
-            links: Some(RcLinks {
-                legs: v["linkLegs"] as u32,
-                diameter: v["linkDiameter"],
-                spacing: v["linkSpacing"],
-                fyk: v["rebarStrength"],
-            }),
-            tension_steel_anchored: d.tension_anchorage_confirmed,
-        }),
-        ..Default::default()
-    };
-    if let ProfileApplicability::Unsupported(reason) = profile.applicability(&ctx) {
-        return merge(base, json!({"status":"unsupported","reason":reason}));
-    }
+        "codeInputs":d.code_inputs,
+        "limitations":meta.limitations})
+}
+
+/// A key station the EC2 checks run at: the roles it governs, its recorded
+/// station, and the quasi-permanent My on the same side. Independent of the
+/// bars, so a proposal search prepares these once.
+struct CodeStation {
+    roles: Vec<&'static str>,
+    at: Value,
+    quasi_permanent_my: Option<f64>,
+}
+
+fn member_length(p: &Project, target: Option<&String>) -> Option<f64> {
+    let m = p.members.iter().find(|m| Some(&m.id) == target)?;
+    let pos = |id: &str| p.nodes.iter().find(|n| n.id == id).map(|n| n.position);
+    let (a, b) = (pos(&m.start)?, pos(&m.end)?);
+    Some(((0..3).map(|i| (b[i] - a[i]).powi(2)).sum::<f64>()).sqrt())
+}
+
+fn code_stations(p: &Project, d: &DesignPreview, demand: &Value, stations: &[KeyStation]) -> Result<Vec<CodeStation>> {
     // Governing shear: the key station with the largest |Vz|; ties keep the first.
     let shear = stations
         .iter()
@@ -1244,9 +1229,124 @@ fn code_profile_preview(
             None => stations_by_role.push((vec![role], g)),
         }
     }
-    let governing: Vec<Value> = stations_by_role
+    // The quasi-permanent My at each governing station, on the same side.
+    let target = d.target_id.clone().unwrap_or_default();
+    let qp_moments: Vec<Option<f64>> = match d.code_inputs.as_ref().and_then(|c| c.quasi_permanent_combination_id.as_ref()) {
+        Some(qp) => {
+            let at: Vec<f64> = stations_by_role.iter().map(|(_, g)| g["station"].as_f64().unwrap()).collect();
+            let actions = workbench_assembly::member_actions_at(p, qp, &target, &at)?;
+            stations_by_role
+                .iter()
+                .zip(actions)
+                .map(|((_, g), sides)| {
+                    let pick = if g["side"] == "right" { sides.last() } else { sides.first() };
+                    pick.map(|a| a[4])
+                })
+                .collect()
+        }
+        None => vec![None; stations_by_role.len()],
+    };
+    Ok(stations_by_role
         .into_iter()
-        .map(|(roles, g)| {
+        .zip(qp_moments)
+        .map(|((roles, g), qp)| CodeStation { roles, at: g.clone(), quasi_permanent_my: qp })
+        .collect())
+}
+
+/// EC2 UK NA beam checks for an rcBeam draft at the governing sagging,
+/// hogging and shear key stations of the one bound combination (ADR 0016,
+/// ADR 0026). The profile is enabled as a labelled demonstration of the held
+/// edition: every run states the edition, the unreconciled amendments and
+/// that it is not a certified design. Detailing and serviceability inputs
+/// come from the draft's `codeInputs`; checks lacking one are indeterminate.
+fn code_evaluate(p: &Project, d: &DesignPreview, demand: &Value, governing: &[CodeStation], combination: &str) -> Value {
+    let profile = Ec2UkNaProfile::default();
+    let v = &d.inputs;
+    let base = code_base(d);
+    let Some(m) = &d.mechanics else {
+        return merge(
+            base,
+            json!({"status":"unavailable","reason":"The draft has no section-mechanics inputs (minimum clear spacing)"}),
+        );
+    };
+    let fit = |face: &str| {
+        rc_section::row_fit(&BarRow {
+            width: v["width"],
+            side_cover: v["cover"],
+            link_diameter: v["linkDiameter"],
+            bar_diameter: v[&format!("{face}BarDiameter")],
+            count: v[&format!("{face}BarCount")] as u32,
+            minimum_clear_spacing: m.inputs["minimumClearSpacing"],
+        })
+    };
+    let (top, bottom) = match (fit("top"), fit("bottom")) {
+        (Ok(t), Ok(b)) if t.fits && b.fits => (t, b),
+        (Ok(_), Ok(_)) => {
+            return merge(
+                base,
+                json!({"status":"unavailable","reason":"A bar row does not fit the width; code checks not evaluated"}),
+            );
+        }
+        (Err(e), _) | (_, Err(e)) => {
+            return merge(base, json!({"status":"unavailable","reason":e.message}));
+        }
+    };
+    let span = member_length(p, d.target_id.as_ref());
+    let ci = d.code_inputs.clone().unwrap_or_default();
+    let bars = |face: &str| {
+        Some(workbench_design::RcBars { diameter: v[&format!("{face}BarDiameter")], count: v[&format!("{face}BarCount")] as u32 })
+    };
+    let detailing = workbench_design::RcBeamDetailing {
+        exposure_class: ci.exposure_class.clone(),
+        cover_durability: ci.minimum_cover_durability,
+        aggregate_size: ci.aggregate_size,
+        structural_system: ci.structural_system.clone(),
+        partitions_sensitive: ci.partitions_sensitive,
+        span,
+        quasi_permanent_moment: None,
+        quasi_permanent_combination: ci.quasi_permanent_combination_id.clone(),
+    };
+    let ctx = MemberContext {
+        member_id: demand["memberId"].as_str().unwrap_or("").into(),
+        section_family: "RC rectangle".into(),
+        rc_beam: Some(RcBeamContext {
+            width: v["width"],
+            depth: v["depth"],
+            cover_to_link: v["cover"],
+            fck: v["concreteStrength"],
+            fyk: v["rebarStrength"],
+            rows: vec![
+                RcBarRow {
+                    face: RcFace::Top,
+                    area: top.area,
+                    centroid_from_face: top.depth_from_face,
+                    bars: bars("top"),
+                },
+                RcBarRow {
+                    face: RcFace::Bottom,
+                    area: bottom.area,
+                    centroid_from_face: bottom.depth_from_face,
+                    bars: bars("bottom"),
+                },
+            ],
+            links: Some(RcLinks {
+                legs: v["linkLegs"] as u32,
+                diameter: v["linkDiameter"],
+                spacing: v["linkSpacing"],
+                fyk: v["rebarStrength"],
+            }),
+            tension_steel_anchored: d.tension_anchorage_confirmed,
+            detailing,
+        }),
+        ..Default::default()
+    };
+    if let ProfileApplicability::Unsupported(reason) = profile.applicability(&ctx) {
+        return merge(base, json!({"status":"unsupported","reason":reason}));
+    }
+    let governing: Vec<Value> = governing
+        .iter()
+        .map(|CodeStation { roles, at: g, quasi_permanent_my: qp }| {
+            let qp = *qp;
             let a: Vec<f64> = g["actions"].as_array().unwrap().iter().map(|x| x.as_f64().unwrap()).collect();
             let station = DesignDemand {
                 n: a[0],
@@ -1258,16 +1358,215 @@ fn code_profile_preview(
                 combination_id: combination.into(),
                 station: g["station"].as_f64().unwrap(),
             };
-            let checks = profile.run_checks(&station, &ctx);
+            let mut local = ctx.clone();
+            local.rc_beam.as_mut().unwrap().detailing.quasi_permanent_moment = qp;
+            let checks = profile.run_checks(&station, &local);
             json!({"roles":roles,"station":g["station"],"kind":g["kind"],"side":g["side"],"actions":a,
+                "quasiPermanentMy":qp,
                 "overall":DesignRun::overall_from_checks(&checks).as_str(),
                 "checks":checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()})
         })
         .collect();
     merge(
         base,
-        json!({"status":"evaluated","combinationId":combination,"governing":governing}),
+        json!({"status":"evaluated","combinationId":combination,"span":span,"governing":governing}),
     )
+}
+
+/// Discrete bar sizes the proposal enumerates (BS 8666 preferred sizes).
+const PROPOSAL_BARS: [f64; 6] = [0.010, 0.012, 0.016, 0.020, 0.025, 0.032];
+const PROPOSAL_LINKS: [f64; 3] = [0.008, 0.010, 0.012];
+const PROPOSAL_MAX_BARS: u32 = 8;
+const STEEL_DENSITY: f64 = 7850.;
+
+/// Closed-link cut length 2(A + B) + two 135° hook extensions of
+/// max(5φ, 50 mm) (EN 1992-1-1 Figure 8.5), A and B its outer dimensions.
+fn link_cut_length(v: &std::collections::BTreeMap<String, f64>, link: f64) -> f64 {
+    2. * (v["width"] - 2. * v["cover"] + v["depth"] - 2. * v["cover"]) + 2. * (5. * link).max(0.050)
+}
+
+/// Steel mass per metre of beam: both bar rows plus the links, each closed
+/// link giving two legs and an odd leg an open link with two hooks.
+fn steel_mass_per_metre(v: &std::collections::BTreeMap<String, f64>) -> f64 {
+    let area = |phi: f64| std::f64::consts::PI * phi * phi / 4.;
+    let bars = area(v["topBarDiameter"]) * v["topBarCount"] + area(v["bottomBarDiameter"]) * v["bottomBarCount"];
+    let link = v["linkDiameter"];
+    let legs = v["linkLegs"];
+    let closed = (legs / 2.).floor() * link_cut_length(v, link);
+    let open = if legs % 2. == 1. { v["depth"] - 2. * v["cover"] + 2. * (5. * link).max(0.050) } else { 0. };
+    (bars + area(link) * (closed + open) / v["linkSpacing"]) * STEEL_DENSITY
+}
+
+/// Discrete reinforcement enumeration (M08, ADR 0026). The least steel mass
+/// per metre, among arrangements from PROPOSAL_BARS (2 to 8 bars a face) and
+/// PROPOSAL_LINKS at 75-300 mm in 25 mm steps with the draft's legs, cover and
+/// materials, for which no EC2 check fails at the prepared key stations.
+/// Links carry shear with V_Rd = V_Rd,s (6.2.3), independent of the
+/// longitudinal bars, so for each link size the lightest longitudinal pair is
+/// found at the densest spacing and the spacing then opened to the widest that
+/// still passes. Indeterminate checks (missing inputs, unconfirmed anchorage)
+/// do not block a proposal and are reported with it.
+fn propose_reinforcement(p: &Project, d: &DesignPreview, demand: &Value, governing: &[CodeStation], combination: &str) -> Value {
+    let with = |top: (f64, u32), bottom: (f64, u32), link: f64, spacing: f64| {
+        let mut c = d.clone();
+        for (k, x) in [
+            ("topBarDiameter", top.0),
+            ("topBarCount", top.1 as f64),
+            ("bottomBarDiameter", bottom.0),
+            ("bottomBarCount", bottom.1 as f64),
+            ("linkDiameter", link),
+            ("linkSpacing", spacing),
+        ] {
+            c.inputs.insert(k.into(), x);
+        }
+        c
+    };
+    let mut evaluated = 0usize;
+    let mut passes = |c: &DesignPreview| -> Option<Value> {
+        evaluated += 1;
+        let code = code_evaluate(p, c, demand, governing, combination);
+        let fails = code["status"] != "evaluated"
+            || code["governing"].as_array().is_none_or(|g| {
+                g.iter().any(|s| s["checks"].as_array().is_some_and(|cs| cs.iter().any(|c| c["status"] == "fail")))
+            });
+        (!fails).then_some(code)
+    };
+    let area = |(phi, n): (f64, u32)| std::f64::consts::PI * phi * phi / 4. * n as f64;
+    let faces: Vec<(f64, u32)> =
+        PROPOSAL_BARS.iter().flat_map(|&phi| (2..=PROPOSAL_MAX_BARS).map(move |n| (phi, n))).collect();
+    let mut pairs: Vec<((f64, u32), (f64, u32))> =
+        faces.iter().flat_map(|&t| faces.iter().map(move |&b| (t, b))).collect();
+    // Least area first; ties to fewer bars, then the larger diameters.
+    pairs.sort_by(|a, b| {
+        (area(a.0) + area(a.1))
+            .total_cmp(&(area(b.0) + area(b.1)))
+            .then((a.0.1 + a.1.1).cmp(&(b.0.1 + b.1.1)))
+            .then(b.0.0.total_cmp(&a.0.0))
+            .then(b.1.0.total_cmp(&a.1.0))
+    });
+    let spacings: Vec<f64> = (3..=12).map(|k| k as f64 * 0.025).collect();
+    let mut best: Option<(f64, DesignPreview, Value)> = None;
+    for link in PROPOSAL_LINKS {
+        let Some(&(top, bottom)) = pairs.iter().find(|(t, b)| passes(&with(*t, *b, link, spacings[0])).is_some()) else {
+            continue;
+        };
+        let chosen = spacings.iter().rev().find_map(|&s| {
+            let c = with(top, bottom, link, s);
+            passes(&c).map(|code| (c, code))
+        });
+        if let Some((c, code)) = chosen {
+            let mass = steel_mass_per_metre(&c.inputs);
+            if best.as_ref().is_none_or(|(m, _, _)| mass < *m) {
+                best = Some((mass, c, code));
+            }
+        }
+    }
+    let basis = json!({"objective":"Least steel mass per metre (both bar rows and links)",
+        "barDiameters":PROPOSAL_BARS,"barsPerFace":[2, PROPOSAL_MAX_BARS],"linkDiameters":PROPOSAL_LINKS,
+        "linkSpacings":spacings,"fixed":["width","depth","cover","linkLegs","concreteStrength","rebarStrength","codeInputs","tensionAnchorageConfirmed"],
+        "acceptance":"No EC2 check fails at any governing key station; indeterminate checks are reported, not assumed"});
+    match best {
+        Some((mass, c, code)) => {
+            let (rows, overall) = code_rows(&code).unwrap_or((vec![], "unsupported"));
+            let keys = ["topBarCount", "topBarDiameter", "bottomBarCount", "bottomBarDiameter", "linkDiameter", "linkSpacing"];
+            json!({"status":"proposed","inputs":keys.iter().map(|k| (k.to_string(), json!(c.inputs[*k]))).collect::<serde_json::Map<_, _>>(),
+                "massPerMetre":mass,"overall":overall,"checks":rows,"candidatesEvaluated":evaluated,"basis":basis})
+        }
+        None => json!({"status":"none","candidatesEvaluated":evaluated,"basis":basis,
+            "reason":"No enumerated arrangement passes every EC2 check at this section size; change the section, materials or inputs"}),
+    }
+}
+
+/// An indicative bar schedule for an rcBeam draft bound to a member (M08,
+/// ADR 0026): straight top and bottom bars over the member length less the
+/// nominal end cover (cover + link) at each end; closed links from 50 mm off
+/// each end at the draft spacing, cut length 2(A + B) + two 135° hook
+/// extensions of max(5φ, 50 mm) (EN 1992-1-1 Figure 8.5), A and B the link's
+/// outer dimensions. Mass at 7850 kg/m³. BS 8666 shape codes are not held;
+/// curtailment and laps are the engineer's. Unbound drafts give quantities only.
+fn beam_schedule(p: &Project, d: &DesignPreview) -> Value {
+    let v = &d.inputs;
+    let length = member_length(p, d.target_id.as_ref());
+    let mass = |phi: f64, len: f64, n: f64| std::f64::consts::PI * phi * phi / 4. * len * n * STEEL_DENSITY;
+    let (cover, link) = (v["cover"], v["linkDiameter"]);
+    let mut rows = vec![];
+    for (mark, region, face) in [("T1", "Top", "top"), ("B1", "Bottom", "bottom")] {
+        let (phi, n) = (v[&format!("{face}BarDiameter")], v[&format!("{face}BarCount")]);
+        let cut = length.map(|l| l - 2. * (cover + link)).filter(|c| *c > 0.);
+        rows.push(json!({"mark":mark,"region":region,"shape":"straight","diameter":phi,"quantity":n,
+            "cutLength":cut,"massKg":cut.map(|c| mass(phi, c, n)),
+            "source":if cut.is_some() {"indicative"} else {"quantitiesOnly"},"status":"indicative",
+            "basis":"Straight bar over the member length less cover + link at each end"}));
+    }
+    let positions = length.map(|l| ((l - 0.100) / v["linkSpacing"]).floor() + 1.).filter(|n| *n >= 1.);
+    let hook = (5. * link).max(0.050);
+    let legs = v["linkLegs"];
+    let closed = (legs / 2.).floor();
+    let link_cut = link_cut_length(v, link);
+    let quantity = positions.map(|n| n * closed);
+    rows.push(json!({"mark":"L1","region":"Links","shape":"closed link, 135° hooks","diameter":link,"quantity":quantity,
+        "legs":2,"cutLength":link_cut,"massKg":quantity.map(|n| mass(link, link_cut, n)),
+        "source":if quantity.is_some() {"indicative"} else {"quantitiesOnly"},"status":"indicative",
+        "basis":"First link 50 mm from each end at the draft spacing; cut length 2(A + B) + 2 max(5φ, 50 mm), EN 1992-1-1 Fig. 8.5"}));
+    if legs % 2. == 1. {
+        let cut = v["depth"] - 2. * cover + 2. * hook;
+        rows.push(json!({"mark":"L2","region":"Links","shape":"single leg, 135° hooks","diameter":link,"quantity":positions,
+            "legs":1,"cutLength":cut,"massKg":positions.map(|n| mass(link, cut, n)),
+            "source":if positions.is_some() {"indicative"} else {"quantitiesOnly"},"status":"indicative",
+            "basis":"Odd leg count: one open link per position, B + 2 max(5φ, 50 mm)"}));
+    }
+    json!(rows)
+}
+
+/// The preview's named rows from the profile's checks, worst first: fail,
+/// unsupported, indeterminate, pass (PROTOCOL §5).
+fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
+    if code["status"] != "evaluated" || code["profileEnabled"] != true {
+        return None;
+    }
+    let rows: [(&str, &[&str]); 6] = [
+        ("Flexure", &["ec2.flexure", "ec2.actions"]),
+        ("Shear", &["ec2.shear", "ec2.links-min", "ec2.links-spacing"]),
+        ("Minimum/maximum reinforcement", &["ec2.as-min", "ec2.as-max.top", "ec2.as-max.bottom", "ec2.crack-min"]),
+        ("Cover and spacing", &["ec2.cover", "ec2.bar-spacing"]),
+        ("Anchorage", &["ec2.anchorage"]),
+        ("Serviceability", &["ec2.crack-control", "ec2.deflection"]),
+    ];
+    let rank = |s: &str| match s {
+        "fail" => 3,
+        "unsupported" => 2,
+        "indeterminate" => 1,
+        _ => 0,
+    };
+    let checks: Vec<&Value> = code["governing"].as_array()?.iter().flat_map(|g| g["checks"].as_array().unwrap().iter()).collect();
+    let mut worst_all = "pass";
+    let out = rows
+        .iter()
+        .map(|(name, ids)| {
+            let mine: Vec<&&Value> = checks.iter().filter(|c| ids.contains(&c["checkId"].as_str().unwrap_or(""))).collect();
+            let worst = mine
+                .iter()
+                .map(|c| c["status"].as_str().unwrap_or("unsupported"))
+                .max_by_key(|s| rank(s))
+                .unwrap_or("pass");
+            let status = if mine.is_empty() { "notApplicable" } else { worst };
+            if rank(status) > rank(worst_all) {
+                worst_all = match status {
+                    "fail" => "fail",
+                    "unsupported" => "unsupported",
+                    "indeterminate" => "indeterminate",
+                    _ => worst_all,
+                };
+            }
+            let utilisation = mine.iter().filter_map(|c| c["utilisation"].as_f64()).fold(None, |m: Option<f64>, u| Some(m.map_or(u, |m| m.max(u))));
+            let reason = mine
+                .iter()
+                .find(|c| c["status"] == worst && worst != "pass")
+                .map_or_else(|| mine.iter().map(|c| c["clause"].as_str().unwrap_or("")).collect::<Vec<_>>().join("; "), |c| c["message"].as_str().unwrap_or("").to_string());
+            json!({"name":name,"status":status,"utilisation":utilisation,"reason":reason,"checkIds":ids})
+        })
+        .collect();
+    Some((out, worst_all))
 }
 /// plate-v1 analysis of a slab draft's panel (ADR 0021): mechanics only, never
 /// a check status. Element-centre (unsmoothed) actions are the design values;
@@ -1381,7 +1680,8 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         plate = json!({"status":"notRun","reason":"Choose the plate analysis source to solve this panel"});
     }
     let mut demand = json!({"status":"unavailable","reason":"Model flexural demand needs a bound member and the current model case/combination; synthetic actions are illustrative"});
-    let mut code = json!({"status":"unavailable","basis":"disabledProfilePreview","reason":"EC2 checks need actual model actions from a bound member and the current case/combination"});
+    let mut code = json!({"status":"unavailable","basis":"codeProfile","reason":"EC2 checks need actual model actions from a bound member and the current case/combination"});
+    let mut proposal = Value::Null;
     if input["sourceMode"] == "plate" {
         if draft.kind != "slab" {
             return Err(err(
@@ -1431,7 +1731,11 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
                 .ok_or_else(|| err("DANGLING_REFERENCE", "Member result unavailable"))?;
             source["stations"] = serde_json::to_value(&m.key_stations).unwrap();
             demand = flexural_demand(p, target, &m.key_stations, case)?;
-            code = code_profile_preview(draft, &demand, &m.key_stations, case);
+            let governing = code_stations(p, draft, &demand, &m.key_stations)?;
+            code = code_evaluate(p, draft, &demand, &governing, case);
+            if input["propose"] == true && code["status"] == "evaluated" && code["profileEnabled"] == true {
+                proposal = propose_reinforcement(p, draft, &demand, &governing, case);
+            }
             source["note"] = json!(
                 "Actual model actions; preview section is not applied to frame stiffness, and no concrete resistance is calculated"
             );
@@ -1494,10 +1798,13 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         ],
     };
     let schedule = if draft.kind == "rcBeam" {
-        json!([("ILL-T1","Top","top"),("ILL-B1","Bottom","bottom")].iter().map(|(mark,region,face)|json!({"mark":mark,"region":region,"diameter":draft.inputs[&format!("{face}BarDiameter")],"quantity":draft.inputs[&format!("{face}BarCount")],"cutLength":null,"source":"illustrationOnly","status":"unverified"})).collect::<Vec<_>>())
+        beam_schedule(p, draft)
     } else {
         json!([])
     };
+    // ADR 0026: an evaluated, enabled code profile replaces the unsupported
+    // rows with its checks, labelled as a demonstration of the held edition.
+    let coded = if draft.kind == "rcBeam" { code_rows(&code) } else { None };
     let mut run = json!({"contractVersion":1,"draftId":id,"kind":draft.kind,"overall":"unsupported","mock":true,"codeProfile":null,"modelHash":p.hash(),"sourceRevision":p.revision,
         "inputHash":digest(&serde_json::to_vec(draft).unwrap()),"inputs":draft,"sourceProvenance":source,"schedule":schedule,
         "checks":checks.iter().map(|name|json!({"name":name,"status":"unsupported","utilisation":null,"reason":if *name=="Flexure"&&draft.kind=="rcBeam"{"Code profile unavailable. Section mechanics are reported separately and are not a code resistance"}else{"Required numerical family or locked code/example resources are unavailable"}})).collect::<Vec<_>>(),
@@ -1506,10 +1813,24 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
-        "codeProfilePreview":if draft.kind=="rcBeam"{code}else{Value::Null},
+        "codeProfilePreview":if draft.kind=="rcBeam"{code.clone()}else{Value::Null},
         "plateAnalysis":plate,
         "columnMechanics":if draft.kind=="rcColumn"{column_mechanics(draft,stations.as_deref())}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
+    if let Some((rows, overall)) = coded {
+        run["reinforcementProposal"] = proposal;
+        run["checks"] = json!(rows);
+        run["overall"] = json!(overall);
+        run["mock"] = json!(draft.input_source != "user");
+        run["codeProfile"] = json!({"id":code["profileId"],"standard":code["standard"],"edition":code["edition"],
+            "certification":code["certification"],"unreconciledAmendments":code["unreconciledAmendments"]});
+        run["limitations"] = json!([
+            format!("DEMONSTRATION — {}; {} not reconciled; {}", code["edition"].as_str().unwrap_or(""),
+                code["unreconciledAmendments"].as_array().map(|a| a.iter().filter_map(|x| x.as_str()).collect::<Vec<_>>().join(", ")).unwrap_or_default(),
+                code["certification"].as_str().unwrap_or("")),
+            "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+            "Schedule and illustrations are indicative; curtailment and laps are the engineer's detailing"]);
+    }
     run["previewRunId"] = json!(digest(&serde_json::to_vec(&run).unwrap()));
     Ok(run)
 }

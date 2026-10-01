@@ -315,18 +315,33 @@ fn rc_beam_unequal_faces_give_distinct_sagging_and_hogging_matching_oracle() {
         assert_eq!(got["compressionFace"], compression);
         let want = &case["expected"]["ultimate"];
         for key in ["neutralAxisDepth", "moment"] {
-            let (g, e) = (got["ultimate"][key].as_f64().unwrap(), want[key].as_f64().unwrap());
-            assert!((g - e).abs() <= rel * e.abs(), "{face} {key}: got {g:e} want {e:e}");
+            let (g, e) = (
+                got["ultimate"][key].as_f64().unwrap(),
+                want[key].as_f64().unwrap(),
+            );
+            assert!(
+                (g - e).abs() <= rel * e.abs(),
+                "{face} {key}: got {g:e} want {e:e}"
+            );
         }
-        assert_eq!(got["ultimate"]["classification"], want["classification"], "{face}");
-        for (l, w) in got["layers"].as_array().unwrap().iter().zip(case["layers"].as_array().unwrap()) {
+        assert_eq!(
+            got["ultimate"]["classification"], want["classification"],
+            "{face}"
+        );
+        for (l, w) in got["layers"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(case["layers"].as_array().unwrap())
+        {
             let (g, e) = (l["depth"].as_f64().unwrap(), w["depth"].as_f64().unwrap());
             assert!((g - e).abs() <= 1e-15, "{face} layer depth {g} vs {e}");
         }
     }
     let schedule = run["schedule"].as_array().unwrap();
-    assert_eq!(schedule.len(), 2);
+    assert_eq!(schedule.len(), 3);
     assert_eq!(schedule[0]["region"], "Top");
+    assert_eq!(schedule[2]["region"], "Links");
     assert_eq!(schedule[0]["quantity"], 2.0);
     assert_eq!(schedule[1]["diameter"], 0.025);
     assert_eq!(run["overall"], "unsupported");
@@ -382,7 +397,10 @@ fn model_demand(local_y: [f64; 3]) -> Value {
     let mut p: Value =
         serde_json::from_str(include_str!("../../../fixtures/models/B08.json")).unwrap();
     p["members"][0]["localY"] = json!(local_y);
-    assert_eq!(req(&mut k, "createProject", json!({"project":p}))["status"], "ok");
+    assert_eq!(
+        req(&mut k, "createProject", json!({"project":p}))["status"],
+        "ok"
+    );
     let c = create(&mut k, "rcBeam");
     let a = req(&mut k, "analyse", json!({"caseIds":["LC1"]}));
     assert_eq!(a["status"], "ok", "{a}");
@@ -392,7 +410,9 @@ fn model_demand(local_y: [f64; 3]) -> Value {
         json!({"draftId":c["payload"]["project"]["designPreviews"][0]["id"],"modelHash":a["modelHash"],"caseId":"LC1","resultId":a["payload"]["resultId"],"sourceMode":"model"}),
     );
     assert_eq!(r["status"], "ok", "{r}");
-    assert_eq!(r["payload"]["overall"], "unsupported");
+    // ADR 0026: the enabled profile runs; without the engineer's code inputs
+    // the run is indeterminate, never assumed to pass.
+    assert_eq!(r["payload"]["overall"], "indeterminate");
     r["payload"].clone()
 }
 #[test]
@@ -464,7 +484,10 @@ fn rc_beam_service_stresses_under_model_moments_match_oracle() {
         assert_eq!(st["serviceMoment"]["stressBasis"], "crackedSection");
         // Both closed-form moments are below M_cr = 58.4 kN m for this draft.
         assert_eq!(st["serviceMoment"]["belowCrackingMoment"], true);
-        close(&st["elastic"]["serviceConcreteStress"], &want["serviceConcreteStress"]);
+        close(
+            &st["elastic"]["serviceConcreteStress"],
+            &want["serviceConcreteStress"],
+        );
         for (g, w) in st["elastic"]["serviceSteelStress"]
             .as_array()
             .unwrap()
@@ -474,7 +497,9 @@ fn rc_beam_service_stresses_under_model_moments_match_oracle() {
             close(g, w);
         }
     }
-    assert_eq!(run["overall"], "unsupported");
+    // Section mechanics never set the status; the EC2 run (without code
+    // inputs) is indeterminate (ADR 0026).
+    assert_eq!(run["overall"], "indeterminate");
 }
 #[test]
 fn rc_beam_synthetic_run_has_no_service_stresses() {
@@ -488,46 +513,105 @@ fn rc_beam_synthetic_run_has_no_service_stresses() {
         assert_eq!(st["elastic"].get("serviceConcreteStress"), None, "{st}");
     }
 }
-/// M08-B3 (ADR 0016): the disabled EC2 profile runs at the governing sagging,
-/// hogging and shear key stations of the bound combination. Expected values
-/// come from the independent oracles: RC-PREVIEW-EC2-UK-DEFAULT (rc_section
-/// oracle) and designCheckTargets.previewDefaultDraftUk (EC2 beam oracle).
+/// M08 (ADR 0016, ADR 0026): the EC2 profile runs at the governing sagging,
+/// hogging and shear key stations of the bound combination, labelled as a
+/// demonstration of the held edition. Expected values come from the
+/// independent oracles: RC-PREVIEW-EC2-UK-DEFAULT (rc_section oracle) and
+/// designCheckTargets.previewDefaultDraftUk (EC2 beam oracle).
 #[test]
-fn rc_beam_ec2_preview_runs_disabled_profile_at_governing_stations() {
+fn rc_beam_ec2_profile_runs_at_governing_stations() {
     let rc: Value = serde_json::from_str(include_str!(
         "../../../fixtures/design/rc-section-mechanics/cases.json"
     ))
     .unwrap();
-    let mu = rc["cases"].as_array().unwrap().iter()
-        .find(|c| c["id"] == "RC-PREVIEW-EC2-UK-DEFAULT").unwrap()["expected"]["ultimate"]["moment"]
-        .as_f64().unwrap();
+    let mu = rc["cases"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|c| c["id"] == "RC-PREVIEW-EC2-UK-DEFAULT")
+        .unwrap()["expected"]["ultimate"]["moment"]
+        .as_f64()
+        .unwrap();
     let ec2: Value = serde_json::from_str(include_str!(
         "../../../fixtures/design/ec2-uk-na/jrc-axis2-beam.reconciliation.json"
     ))
     .unwrap();
     let t = &ec2["designCheckTargets"]["previewDefaultDraftUk"];
     let close = |got: &Value, want: f64, rel: f64, what: &str| {
-        let g = got.as_f64().unwrap_or_else(|| panic!("{what} missing: {got}"));
-        assert!((g - want).abs() <= rel * want.abs(), "{what}: {g} vs {want}");
+        let g = got
+            .as_f64()
+            .unwrap_or_else(|| panic!("{what} missing: {got}"));
+        assert!(
+            (g - want).abs() <= rel * want.abs(),
+            "{what}: {g} vs {want}"
+        );
     };
     let run = model_demand([0., 1., 0.]);
     let code = &run["codeProfilePreview"];
     assert_eq!(code["status"], "evaluated", "{code}");
     assert_eq!(code["profileId"], "ec2-uk-na");
-    assert_eq!(code["profileEnabled"], false);
-    assert_eq!(code["basis"], "disabledProfilePreview");
+    assert_eq!(code["profileEnabled"], true);
+    assert_eq!(code["basis"], "codeProfile");
+    assert_eq!(
+        code["certification"],
+        "Demonstration, not a certified design"
+    );
+    assert!(
+        code["unreconciledAmendments"]
+            .to_string()
+            .contains("A1:2014")
+    );
+    assert!(
+        code["edition"]
+            .as_str()
+            .unwrap()
+            .contains("EN 1992-1-1:2004")
+    );
     assert_eq!(code["tensionAnchorageConfirmed"], false);
-    // The preview never changes the checks or the overall status.
-    assert_eq!(run["overall"], "unsupported");
-    assert!(run["checks"].as_array().unwrap().iter().all(|c| c["status"] == "unsupported"));
+    // The run's rows come from the profile and carry the demonstration label.
+    assert_eq!(run["codeProfile"]["id"], "ec2-uk-na");
+    assert!(
+        run["limitations"][0]
+            .as_str()
+            .unwrap()
+            .starts_with("DEMONSTRATION")
+    );
+    let row = |name: &str| {
+        run["checks"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|c| c["name"] == name)
+            .unwrap()
+            .clone()
+    };
+    assert_eq!(row("Flexure")["status"], "pass");
+    assert_eq!(row("Shear")["status"], "pass");
+    assert_eq!(row("Cover and spacing")["status"], "indeterminate");
+    assert_eq!(row("Anchorage")["status"], "indeterminate");
     let governing = code["governing"].as_array().unwrap();
     // B08: hogging and shear both govern at the fixed end x/L = 0, so they share one entry.
-    let roles: Vec<Vec<&str>> = governing.iter().map(|g| g["roles"].as_array().unwrap().iter().map(|r| r.as_str().unwrap()).collect()).collect();
+    let roles: Vec<Vec<&str>> = governing
+        .iter()
+        .map(|g| {
+            g["roles"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|r| r.as_str().unwrap())
+                .collect()
+        })
+        .collect();
     assert_eq!(roles, vec![vec!["sagging"], vec!["hogging", "shear"]]);
     let has = |g: &Value, role: &str| g["roles"].as_array().unwrap().iter().any(|r| r == role);
     let check = |role: &str, id: &str| -> Value {
         let g = governing.iter().find(|g| has(g, role)).unwrap();
-        g["checks"].as_array().unwrap().iter().find(|c| c["checkId"] == id).cloned()
+        g["checks"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|c| c["checkId"] == id)
+            .cloned()
             .unwrap_or_else(|| panic!("{role} {id} missing: {g}"))
     };
     // Symmetric default draft: sagging and hogging M_Rd equal the oracle, B08 moments pass.
@@ -536,24 +620,194 @@ fn rc_beam_ec2_preview_runs_disabled_profile_at_governing_stations() {
         close(&fl["resistance"], mu, 1e-9, &format!("{role} M_Rd"));
         close(&fl["demand"], med, 1e-6, &format!("{role} M_Ed"));
         assert_eq!(fl["status"], "pass");
-        close(&check(role, "ec2.as-min")["demand"], f(&t["AsMin_mm2"]) / 1e6, 1e-9, "As,min");
+        close(
+            &check(role, "ec2.as-min")["demand"],
+            f(&t["AsMin_mm2"]) / 1e6,
+            1e-9,
+            "As,min",
+        );
     }
     // Governing shear is the first end (station 0), Vz = qL/2 = 30 kN.
     let sh_station = governing.iter().find(|g| has(g, "shear")).unwrap();
     assert_eq!(sh_station["station"], 0.0);
     let sh = check("shear", "ec2.shear");
     close(&sh["demand"], 30000., 1e-6, "V_Ed");
-    close(&sh["resistance"], f(&t["shearWithLinks"]["VRd_kN"]) * 1e3, 1e-5, "V_Rd");
-    close(&sh["intermediates"]["cotTheta"], f(&t["shearWithLinks"]["cotTheta"]), 1e-4, "cot theta");
-    assert_eq!(sh["intermediates"]["rhoL"], 0.0, "unconfirmed anchorage excludes Asl");
+    close(
+        &sh["resistance"],
+        f(&t["shearWithLinks"]["VRd_kN"]) * 1e3,
+        1e-5,
+        "V_Rd",
+    );
+    close(
+        &sh["intermediates"]["cotTheta"],
+        f(&t["shearWithLinks"]["cotTheta"]),
+        1e-4,
+        "cot theta",
+    );
+    assert_eq!(
+        sh["intermediates"]["rhoL"], 0.0,
+        "unconfirmed anchorage excludes Asl"
+    );
     let sp = check("shear", "ec2.links-spacing");
-    close(&sp["intermediates"]["st"], f(&t["st_mm"]) / 1e3, 1e-9, "s_t");
-    close(&sp["intermediates"]["slMax"], f(&t["slMax_mm"]) / 1e3, 1e-9, "s_l,max");
-    close(&check("shear", "ec2.links-min")["resistance"], f(&t["rhoW"]), 1e-9, "rho_w");
-    // Companions keep every station from passing overall.
+    close(
+        &sp["intermediates"]["st"],
+        f(&t["st_mm"]) / 1e3,
+        1e-9,
+        "s_t",
+    );
+    close(
+        &sp["intermediates"]["slMax"],
+        f(&t["slMax_mm"]) / 1e3,
+        1e-9,
+        "s_l,max",
+    );
+    close(
+        &check("shear", "ec2.links-min")["resistance"],
+        f(&t["rhoW"]),
+        1e-9,
+        "rho_w",
+    );
+    // Missing code inputs keep every station indeterminate; nothing is unsupported.
     for g in governing {
-        assert_eq!(g["overall"], "unsupported", "{}", g["roles"]);
+        assert_eq!(g["overall"], "indeterminate", "{}", g["roles"]);
+        assert!(
+            g["checks"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .all(|c| c["status"] != "unsupported")
+        );
     }
+}
+
+/// ADR 0026: the engineer's code inputs (schema 1.7.0) complete the EC2 run.
+/// B08 is fixed at both ends (an interior-span system, K = 1.5), span 6 m,
+/// q = 10 kN/m; LC1 is also taken as the quasi-permanent case.
+#[test]
+fn rc_beam_code_inputs_complete_the_ec2_run() {
+    let mut k = Kernel::new();
+    let p: Value = serde_json::from_str(include_str!("../../../fixtures/models/B08.json")).unwrap();
+    assert_eq!(
+        req(&mut k, "createProject", json!({"project":p}))["status"],
+        "ok"
+    );
+    let c = create(&mut k, "rcBeam");
+    let d = c["payload"]["project"]["designPreviews"][0].clone();
+    let set = |k: &mut Kernel, code: Value| {
+        cmd(
+            k,
+            "SetDesignPreview",
+            json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","targetId":"m1","tensionAnchorageConfirmed":true,"codeInputs":code}),
+        )
+    };
+    // Refusals: unknown exposure, a dangling combination, lengths without sense.
+    assert_eq!(
+        set(&mut k, json!({"exposureClass":"XZ9"}))["status"],
+        "error"
+    );
+    assert_eq!(
+        set(&mut k, json!({"quasiPermanentCombinationId":"nope"}))["status"],
+        "error"
+    );
+    assert_eq!(
+        set(&mut k, json!({"aggregateSize":"2 m"}))["status"],
+        "error"
+    );
+    let ok = set(
+        &mut k,
+        json!({"exposureClass":"XC1","minimumCoverDurability":"15 mm","aggregateSize":"20 mm",
+               "structuralSystem":"interiorSpan","partitionsSensitive":false,"quasiPermanentCombinationId":"LC1"}),
+    );
+    assert_eq!(ok["status"], "ok", "{ok}");
+    let stored = &ok["payload"]["project"]["designPreviews"][0]["codeInputs"];
+    assert_eq!(stored["minimumCoverDurability"], 0.015);
+    assert_eq!(stored["aggregateSize"], 0.02);
+    assert_eq!(
+        ok["payload"]["project"]["schemaVersion"],
+        workbench_model::CURRENT_SCHEMA
+    );
+    let a = req(&mut k, "analyse", json!({"caseIds":["LC1"]}));
+    let r = req(
+        &mut k,
+        "evaluateDesignPreview",
+        json!({"draftId":d["id"],"modelHash":a["modelHash"],"caseId":"LC1","resultId":a["payload"]["resultId"],"sourceMode":"model"}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let code = &r["payload"]["codeProfilePreview"];
+    assert_eq!(code["span"], 6.0);
+    let sag = code["governing"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|g| g["roles"].to_string().contains("sagging"))
+        .unwrap();
+    let check = |id: &str| {
+        sag["checks"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|c| c["checkId"] == id)
+            .unwrap()
+            .clone()
+    };
+    // The quasi-permanent moment is LC1's own at the same station.
+    assert_eq!(sag["quasiPermanentMy"], sag["actions"][4]);
+    let crack = check("ec2.crack-control");
+    assert_ne!(crack["status"], "indeterminate", "{crack}");
+    assert_eq!(crack["intermediates"]["wMax"], 0.0003);
+    // Deflection: an independent hand calculation of (7.16a), (7.17), 40K.
+    let dfl = check("ec2.deflection");
+    let i = &dfl["intermediates"];
+    let (rho, fck) = (f(&i["rho"]), 30.0f64);
+    let rho0 = fck.sqrt() * 1e-3;
+    assert!(rho <= rho0, "{rho}");
+    let basic = 1.5
+        * (11. + 1.5 * fck.sqrt() * rho0 / rho + 3.2 * fck.sqrt() * (rho0 / rho - 1.).powf(1.5));
+    let stress = (500. / (500. * f(&i["AsReq"]) / f(&i["AsProv"]))).min(1.5);
+    let allowed = (basic * stress).min(60.);
+    assert!(
+        (f(&dfl["resistance"]) - allowed).abs() <= 1e-9 * allowed,
+        "{} vs {allowed}",
+        dfl["resistance"]
+    );
+    assert!((f(&dfl["demand"]) - 6.0 / f(&i["d"])).abs() < 1e-12);
+    assert!(
+        ["pass", "fail"].contains(&r["payload"]["overall"].as_str().unwrap()),
+        "{}",
+        r["payload"]["overall"]
+    );
+    // A 1.6.0 file cannot carry code inputs.
+    let mut old = ok["payload"]["project"].clone();
+    old["schemaVersion"] = json!("1.6.0");
+    assert_eq!(
+        req(
+            &mut Kernel::new(),
+            "importProject",
+            json!({"jsonUtf8":old.to_string()})
+        )["status"],
+        "error"
+    );
+    // Omitting codeInputs keeps them; an explicit null clears them.
+    let kept = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","targetId":"m1"}),
+    );
+    assert!(
+        kept["payload"]["project"]["designPreviews"][0]
+            .get("codeInputs")
+            .is_some()
+    );
+    let cleared = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","targetId":"m1","codeInputs":null}),
+    );
+    assert!(
+        cleared["payload"]["project"]["designPreviews"][0]
+            .get("codeInputs")
+            .is_none()
+    );
 }
 fn f(v: &Value) -> f64 {
     v.as_f64().unwrap()
@@ -656,4 +910,139 @@ fn rc_beam_ec2_preview_picks_the_largest_shear_station() {
     let hog = g.iter().find(|x| has(x, "hogging")).unwrap();
     let m = hog["actions"][4].as_f64().unwrap();
     assert!((m - 45000.).abs() <= 1e-6 * 45000., "hogging My {m}");
+}
+
+/// The indicative beam schedule (ADR 0026) by hand for B08's 6 m member:
+/// straight bars L - 2(cover + link), closed links 2(A + B) + 2 max(5φ, 50 mm)
+/// every s from 50 mm off each end, mass at 7850 kg/m³.
+#[test]
+fn rc_beam_schedule_is_indicative_and_hand_checked() {
+    let mut k = Kernel::new();
+    let p: Value = serde_json::from_str(include_str!("../../../fixtures/models/B08.json")).unwrap();
+    assert_eq!(
+        req(&mut k, "createProject", json!({"project":p}))["status"],
+        "ok"
+    );
+    let c = create(&mut k, "rcBeam");
+    let d = c["payload"]["project"]["designPreviews"][0].clone();
+    let v = &d["inputs"];
+    let run = |k: &mut Kernel, hash: &Value| {
+        let r = req(
+            k,
+            "evaluateDesignPreview",
+            json!({"draftId":d["id"],"modelHash":hash,"sourceMode":"synthetic"}),
+        );
+        assert_eq!(r["status"], "ok", "{r}");
+        r["payload"]["schedule"].as_array().unwrap().clone()
+    };
+    // Unbound: quantities only, no lengths.
+    let free = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","targetId":""}),
+    );
+    assert_eq!(free["status"], "ok", "{free}");
+    let unbound = run(&mut k, &free["modelHash"]);
+    assert!(
+        unbound
+            .iter()
+            .all(|r| r["cutLength"].is_null() || r["mark"] == "L1")
+    );
+    assert!(unbound.iter().all(|r| r["source"] == "quantitiesOnly"));
+    let set = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","targetId":"m1"}),
+    );
+    assert_eq!(set["status"], "ok", "{set}");
+    let rows = run(&mut k, &set["modelHash"]);
+    let (cover, link) = (f(&v["cover"]), f(&v["linkDiameter"]));
+    let mass = |phi: f64, len: f64, n: f64| std::f64::consts::PI * phi * phi / 4. * len * n * 7850.;
+    for (row, face) in rows.iter().zip(["top", "bottom"]) {
+        let cut = 6.0 - 2. * (cover + link);
+        assert!((f(&row["cutLength"]) - cut).abs() < 1e-12, "{row}");
+        let (phi, n) = (
+            f(&v[format!("{face}BarDiameter")]),
+            f(&v[format!("{face}BarCount")]),
+        );
+        assert!((f(&row["massKg"]) - mass(phi, cut, n)).abs() < 1e-9);
+        assert_eq!(row["source"], "indicative");
+    }
+    let links = &rows[2];
+    let (a, b) = (f(&v["width"]) - 2. * cover, f(&v["depth"]) - 2. * cover);
+    let cut = 2. * (a + b) + 2. * (5. * link).max(0.05);
+    assert!((f(&links["cutLength"]) - cut).abs() < 1e-12);
+    let n = ((6.0 - 0.1) / f(&v["linkSpacing"])).floor() + 1.;
+    assert_eq!(f(&links["quantity"]), n);
+    assert!((f(&links["massKg"]) - mass(link, cut, n)).abs() < 1e-9);
+}
+
+/// Discrete reinforcement enumeration (ADR 0026) on B08 at 60 kN/m (hogging
+/// 180 kN·m, sagging 90 kN·m, V 180 kN). The proposal passes every check,
+/// and every arrangement a step lighter fails or does not fit: one fewer bar
+/// or the next smaller bar on either face, and the next wider link spacing.
+#[test]
+fn rc_beam_proposal_passes_and_every_lighter_neighbour_fails() {
+    let mut k = Kernel::new();
+    let mut p: Value = serde_json::from_str(include_str!("../../../fixtures/models/B08.json")).unwrap();
+    p["loads"][0]["forcePerLength"] = json!([0, 0, -60000]);
+    assert_eq!(req(&mut k, "createProject", json!({"project":p}))["status"], "ok");
+    let c = create(&mut k, "rcBeam");
+    let d = c["payload"]["project"]["designPreviews"][0].clone();
+    let code = json!({"exposureClass":"XC1","minimumCoverDurability":0.015,"aggregateSize":0.02,
+        "structuralSystem":"interiorSpan","partitionsSensitive":false,"quasiPermanentCombinationId":"LC1"});
+    let run_with = |k: &mut Kernel, inputs: &Value, propose: bool| {
+        let set = cmd(k, "SetDesignPreview", json!({"id":d["id"],"inputs":inputs,"soilReference":"","targetId":"m1","tensionAnchorageConfirmed":true,"codeInputs":code}));
+        assert_eq!(set["status"], "ok", "{set}");
+        let a = req(k, "analyse", json!({"caseIds":["LC1"]}));
+        let r = req(k, "evaluateDesignPreview",
+            json!({"draftId":d["id"],"modelHash":a["modelHash"],"caseId":"LC1","resultId":a["payload"]["resultId"],"sourceMode":"model","propose":propose}));
+        assert_eq!(r["status"], "ok", "{r}");
+        r["payload"].clone()
+    };
+    let run = |k: &mut Kernel, inputs: &Value| run_with(k, inputs, false);
+    // A proposal is explicit: an ordinary run carries none.
+    assert!(run(&mut k, &d["inputs"])["reinforcementProposal"].is_null());
+    let first = run_with(&mut k, &d["inputs"], true);
+    let proposal = &first["reinforcementProposal"];
+    assert_eq!(proposal["status"], "proposed", "{proposal}");
+    let mut inputs = d["inputs"].clone();
+    for (key, v) in proposal["inputs"].as_object().unwrap() {
+        inputs[key] = v.clone();
+    }
+    let applied = run(&mut k, &inputs);
+    assert!(applied["checks"].as_array().unwrap().iter().all(|c| c["status"] == "pass"), "{}", applied["checks"]);
+    assert_eq!(applied["overall"], "pass");
+    // Proposing again from the proposal reproduces it.
+    assert_eq!(run_with(&mut k, &inputs, true)["reinforcementProposal"]["inputs"], proposal["inputs"]);
+    let fails = |r: &Value| {
+        r["codeProfilePreview"]["status"] != "evaluated"
+            || r["checks"].as_array().unwrap().iter().any(|c| c["status"] == "fail")
+    };
+    let bars = [0.010, 0.012, 0.016, 0.020, 0.025, 0.032];
+    let mut lighter = vec![];
+    for face in ["top", "bottom"] {
+        let n = f(&inputs[format!("{face}BarCount")]);
+        if n > 2. {
+            let mut x = inputs.clone();
+            x[format!("{face}BarCount")] = json!(n - 1.);
+            lighter.push(x);
+        }
+        let phi = f(&inputs[format!("{face}BarDiameter")]);
+        if let Some(&smaller) = bars.iter().rev().find(|b| **b < phi) {
+            let mut x = inputs.clone();
+            x[format!("{face}BarDiameter")] = json!(smaller);
+            lighter.push(x);
+        }
+    }
+    let s = f(&inputs["linkSpacing"]);
+    if s < 0.3 - 1e-12 {
+        let mut x = inputs.clone();
+        x["linkSpacing"] = json!(s + 0.025);
+        lighter.push(x);
+    }
+    assert!(lighter.len() >= 3, "the load makes the search non-trivial: {inputs}");
+    for x in &lighter {
+        assert!(fails(&run(&mut k, x)), "lighter neighbour passes: {x}");
+    }
 }

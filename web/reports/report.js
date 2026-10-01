@@ -170,7 +170,7 @@ function concretePreviewsHtml(project, previewRuns, e) {
   };
   const ec2Html = (cp) => {
     if (!cp) return "";
-    const head = `<h4>EC2 checks · disabled profile preview</h4><p class="banner" data-testid="report-ec2-banner">DISABLED PROFILE PREVIEW. ${e(cp.profileId || "ec2-uk-na")} (${e(cp.ndp || "")}) is registered but not enabled: A1:2014 and NA+A2:2014 are not reconciled. These checks are for review only and are not a design result. Overall design remains UNSUPPORTED.</p>`;
+    const head = `<h4>EC2 checks · ${e(cp.profileId || "ec2-uk-na")}</h4><p class="banner" data-testid="report-ec2-banner">DEMONSTRATION. ${e(cp.edition || cp.ndp || "")}. ${e((cp.unreconciledAmendments || []).join(", "))} not reconciled. ${e(cp.certification || "Demonstration, not a certified design")}.</p>`;
     if (cp.status !== "evaluated")
       return `${head}<p data-testid="report-ec2-status">${e(cp.status)} · ${e(cp.reason || "")}</p>`;
     const station = (g) =>
@@ -203,7 +203,7 @@ function concretePreviewsHtml(project, previewRuns, e) {
           .join("")
       : "";
     return `<section data-testid="report-rc-preview" data-draft-id="${e(run.draftId)}"><h3>RC beam draft ${e(run.draftId)} · member ${e(entityLabel(project, fd?.memberId || src.targetId))}</h3>
-<p>Overall <strong data-testid="report-rc-overall">${e(String(run.overall).toUpperCase())}</strong> · code profile unavailable · ${e(sm?.law || "no mechanics law")}</p>
+<p>Overall <strong data-testid="report-rc-overall">${e(String(run.overall).toUpperCase())}</strong> · code profile ${run.codeProfile ? `${e(run.codeProfile.id)} · ${e(run.codeProfile.edition)} · DEMONSTRATION` : "unavailable"} · ${e(sm?.law || "no mechanics law")}</p>
 <p>Preview run ${e(run.previewRunId)} · input ${e(run.inputHash)} · result ${e(src.resultId)} · combination ${e(src.combinationId)} · model ${e(run.modelHash)} · solver ${e(src.solverBuildHash)}</p>
 ${fd?.status === "evaluated" ? `<p>${e(fd.convention)}. Top face direction ${e(fd.topFaceDirection.join(", "))} (${e(fd.topFaceOrientation)}).${fd.topFaceOrientation === "up" ? "" : ` <strong data-testid="report-rc-orientation-warning">The draft top face is not uppermost in this member: draft sagging and hogging are not the physical ones. Correct the member localY to align them.</strong>`}</p>` : ""}
 ${geometry}
@@ -213,7 +213,7 @@ ${inputs ? `<h4>Material-law inputs (SI)</h4><table><thead><tr><th>Input</th><th
 ${ec2Html(run.codeProfilePreview)}
 <details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
   });
-  return `<section data-testid="report-concrete-previews"><h2>RC beam section mechanics (preview)</h2><p class="banner">MECHANICS ONLY. The section mechanics are not a code resistance: no partial factors or code limits are applied to them, and they carry no utilisation ratio. Any EC2 checks shown come from a disabled profile, for review only (ADR 0016). Overall design remains UNSUPPORTED until a concrete code profile is enabled (ADR 0012).</p>${runs.join("")}</section>`;
+  return `<section data-testid="report-concrete-previews"><h2>RC beam design (EC2 UK, demonstration)</h2><p class="banner">MECHANICS ONLY for the section mechanics: they are not a code resistance, no partial factors or code limits are applied to them, and they carry no utilisation ratio. The EC2 checks are a demonstration of EN 1992-1-1:2004+AC:2010 with the UK NA (2009); A1:2014 and NA+A2:2014 are not reconciled, and this is not a certified design (ADR 0026).</p>${runs.join("")}</section>`;
 }
 
 const siCell = (v, scale, unit) =>

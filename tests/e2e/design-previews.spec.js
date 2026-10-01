@@ -73,6 +73,13 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
         "Actual model analysis",
       );
     }
+    // The state the run settles on: the EC2 profile runs for RC beams on
+    // model actions (ADR 0026); other families stay UNSUPPORTED.
+    const settled = await page
+      .locator("[data-testid=preview-state]")
+      .textContent();
+    if (kind === "rcBeam") expect(settled).not.toBe("UNSUPPORTED");
+    else expect(settled).toBe("UNSUPPORTED");
     const key = kind === "rcBeam" ? "depth" : "thickness";
     await page.locator(`#preview-${key}`).fill("650 mm");
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
@@ -81,7 +88,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     await expect(page.locator("#preview-run")).toBeDisabled();
     await page.locator("#preview-cancel").click();
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-      "UNSUPPORTED",
+      settled,
     );
     await page.locator(`#preview-${key}`).fill("650 mm");
     await page.locator("#preview-save").click();
@@ -90,28 +97,42 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     );
     await page.locator("#undo").click();
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-      "UNSUPPORTED",
+      settled,
     );
     const download = page.waitForEvent("download");
     await page.locator("#preview-record").click();
     const run = JSON.parse(
       await readFile(await (await download).path(), "utf8"),
     );
-    expect(run.overall).toBe("unsupported");
-    expect(run.codeProfile).toBeNull();
+    expect(run.overall).toBe(settled.toLowerCase());
     expect(run.mock).toBe(true);
-    expect(
-      run.checks.every(
-        (c) => c.status === "unsupported" && c.utilisation === null,
-      ),
-    ).toBe(true);
+    if (kind === "rcBeam") {
+      // ADR 0026: the EC2 profile's rows, labelled as a demonstration.
+      expect(run.codeProfile.id).toBe("ec2-uk-na");
+      expect(run.codeProfile.certification).toBe(
+        "Demonstration, not a certified design",
+      );
+      expect(run.checks.every((c) => c.status !== "unsupported")).toBe(true);
+    } else {
+      expect(run.codeProfile).toBeNull();
+      expect(
+        run.checks.every(
+          (c) => c.status === "unsupported" && c.utilisation === null,
+        ),
+      ).toBe(true);
+    }
     expect(run.sourceProvenance.mock).toBe(false);
     if (kind === "rcBeam") {
       const d = page.waitForEvent("download");
       await page.locator("#preview-schedule").click();
       const csv = await readFile(await (await d).path(), "utf8");
       expect(csv).toContain(run.previewRunId);
-      expect(csv).toContain(",0.02,4,,illustrationOnly,unverified");
+      // Bound to B04's member: straight bars and links with lengths (ADR 0026).
+      const bottom = run.schedule.find((r) => r.mark === "B1");
+      expect(csv).toContain(
+        `,B1,Bottom,"straight",0.02,4,${bottom.cutLength},${bottom.massKg},indicative,indicative`,
+      );
+      expect(run.schedule.map((r) => r.mark)).toEqual(["T1", "B1", "L1"]);
     }
     if (kind === "padFooting") {
       expect(run.contactState).toBe("indeterminate");
@@ -363,8 +384,9 @@ for (const [localY, orientation, sagging, hogging] of [
     const section = doc.locator("[data-testid=report-rc-preview]");
     await expect(section).toHaveCount(1);
     await expect(section).toContainText("LC1");
+    // The EC2 run without the engineer's code inputs is INDETERMINATE.
     await expect(section.locator("[data-testid=report-rc-overall]")).toHaveText(
-      "UNSUPPORTED",
+      "INDETERMINATE",
     );
     const exact = async (locator, want) => {
       const got = Number(
@@ -417,9 +439,11 @@ for (const [localY, orientation, sagging, hogging] of [
       .locator("[data-testid=mechanics-moment-sagging]")
       .textContent();
     await expect(pane.locator("tbody tr").first()).toContainText(capacity);
+    // Mechanics never set the status; the EC2 run without code inputs is
+    // INDETERMINATE (ADR 0026).
     await page.locator('[data-preview-pane="summary"]').click();
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-      "UNSUPPORTED",
+      "INDETERMINATE",
     );
     await page.locator("#preview-source").selectOption("synthetic");
     await runPreview(page);
@@ -433,12 +457,13 @@ for (const [localY, orientation, sagging, hogging] of [
     await synthetic.doc.close();
     expect(errors).toEqual([]);
   });
-test("RC beam EC2 checks: disabled-profile preview at governing stations, explicit anchorage, overall unsupported", async ({
+test("RC beam EC2 checks: demonstration profile at governing stations, code inputs, explicit anchorage, report", async ({
   page,
 }) => {
-  // ADR 0016: the disabled ec2-uk-na profile runs at the governing sagging,
-  // hogging and shear stations of B08 (fixed-fixed UDL). Expected values come
-  // from the independent oracles (RC-PREVIEW-EC2-UK-DEFAULT, previewDefaultDraftUk).
+  // ADR 0016, ADR 0026: the ec2-uk-na profile runs at the governing sagging,
+  // hogging and shear stations of B08 (fixed-fixed UDL), labelled as a
+  // demonstration of the held edition. Expected values come from the
+  // independent oracles (RC-PREVIEW-EC2-UK-DEFAULT, previewDefaultDraftUk).
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   const rc = JSON.parse(
@@ -485,7 +510,13 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   await runPreview(page);
   await page.locator('[data-preview-pane="ec2"]').click();
   await expect(page.locator("[data-testid=ec2-banner]")).toContainText(
-    "DISABLED PROFILE PREVIEW",
+    "DEMONSTRATION",
+  );
+  await expect(page.locator("[data-testid=ec2-banner]")).toContainText(
+    "A1:2014",
+  );
+  await expect(page.locator("[data-testid=ec2-banner]")).toContainText(
+    "not a certified design",
   );
   const stations = page.locator("[data-testid=ec2-station]");
   // B08: hogging and shear govern at the same fixed end, so two station tables.
@@ -507,11 +538,19 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   await expect(page.locator("[data-testid=ec2-anchorage]")).toHaveText(
     "not confirmed (ρl = 0)",
   );
+  // Without the engineer's inputs nothing is assumed: INDETERMINATE.
   for (const overall of await page.locator("[data-testid=ec2-overall]").all())
-    await expect(overall).toHaveText("UNSUPPORTED");
-  await expect(row("shear", "ec2.anchorage")).toContainText("UNSUPPORTED");
-  // Confirming anchorage is an explicit, persisted user choice.
+    await expect(overall).toHaveText("INDETERMINATE");
+  await expect(row("sagging", "ec2.anchorage")).toContainText("INDETERMINATE");
+  await expect(row("sagging", "ec2.cover")).toContainText("c_min,dur");
+  // Confirming anchorage and entering the code inputs are explicit, persisted choices.
   await page.locator("#preview-anchorage").check();
+  await page.locator("#code-exposure").selectOption("XC1");
+  await page.locator("#code-cover").fill("15 mm");
+  await page.locator("#code-aggregate").fill("20 mm");
+  await page.locator("#code-system").selectOption("interiorSpan");
+  await page.locator("#code-partitions").selectOption("no");
+  await page.locator("#code-qp").selectOption("LC1");
   await page.locator("#preview-save").click();
   await page.locator("#analyse").click();
   await expect(page.locator("#preview-run")).toBeEnabled();
@@ -520,8 +559,55 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   await expect(page.locator("[data-testid=ec2-anchorage]")).toHaveText(
     "confirmed by you",
   );
+  // Every check now resolves to PASS or FAIL; the run record carries the numbers.
+  for (const status of await page
+    .locator("[data-testid=ec2-check] .status-text")
+    .all())
+    await expect(status).toHaveText(/^(PASS|FAIL)$/);
+  const recordDownload = page.waitForEvent("download");
+  await page.locator("#preview-record").click();
+  const record = JSON.parse(
+    await readFile(await (await recordDownload).path(), "utf8"),
+  );
+  await mkdir(dir, { recursive: true });
+  await writeFile(`${dir}/ec2-run.json`, JSON.stringify(record, null, 2));
+  const v = record.inputs.inputs;
+  const sag = record.codeProfilePreview.governing.find((g) =>
+    g.roles.includes("sagging"),
+  );
+  const byId = (id) => sag.checks.find((c) => c.checkId === id);
+  // 4.4.1: c_nom,req (links) = max(φ_link, 15 mm, 10 mm) + 10 mm (UK NA Δc_dev).
+  const cover = byId("ec2.cover").intermediates;
+  expect(cover.links.cNomRequired).toBeCloseTo(
+    Math.max(v.linkDiameter, 0.015, 0.01) + 0.01,
+    12,
+  );
+  // 7.4.2 by hand: K = 1.5 (interior span), (7.16a/b), (7.17) capped 1.5, 40K.
+  const dfl = byId("ec2.deflection");
+  const i = dfl.intermediates;
+  const fck = v.concreteStrength / 1e6,
+    rho0 = Math.sqrt(fck) * 1e-3;
+  const basic =
+    i.rho <= rho0
+      ? 1.5 *
+        (11 +
+          (1.5 * Math.sqrt(fck) * rho0) / i.rho +
+          3.2 * Math.sqrt(fck) * (rho0 / i.rho - 1) ** 1.5)
+      : 1.5 * (11 + (1.5 * Math.sqrt(fck) * rho0) / i.rho);
+  const stress = Math.min(
+    500 / ((v.rebarStrength / 1e6) * (i.AsReq / i.AsProv)),
+    1.5,
+  );
+  expect(
+    Math.abs(dfl.resistance - Math.min(basic * stress, 60)),
+  ).toBeLessThanOrEqual(1e-9 * dfl.resistance);
+  expect(dfl.demand).toBeCloseTo(6 / i.d, 12);
+  expect(record.codeProfile.certification).toBe(
+    "Demonstration, not a certified design",
+  );
+  await page.screenshot({ path: `${dir}/ec2-checks.png`, fullPage: true });
   // M08-B4: the calculation record carries the same checks, labelled as a
-  // disabled-profile preview, with exact SI values.
+  // demonstration, with exact SI values.
   const reportDownload = page.waitForEvent("download");
   await menuCommand(page, "File", "Export calculation report");
   const html = await readFile(await (await reportDownload).path(), "utf8");
@@ -529,7 +615,10 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   const doc = await page.context().newPage();
   await doc.setContent(html);
   await expect(doc.locator("[data-testid=report-ec2-banner]")).toContainText(
-    "DISABLED PROFILE PREVIEW",
+    "DEMONSTRATION",
+  );
+  await expect(doc.locator("[data-testid=report-ec2-banner]")).toContainText(
+    "not reconciled",
   );
   await expect(doc.locator("[data-testid=report-ec2-anchorage]")).toHaveText(
     "confirmed by the user",
@@ -553,14 +642,46 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   expect(await si("shear", "ec2.shear", "demand")).toBeCloseTo(30000, 6);
   await expect(
     doc
-      .locator('[data-testid=report-ec2-check][data-check-id="ec2.amendments"]')
+      .locator('[data-testid=report-ec2-check][data-check-id="ec2.deflection"]')
       .first(),
-  ).toContainText("UNSUPPORTED");
+  ).toContainText(/PASS|FAIL/);
   await doc.close();
   await page.locator('[data-preview-pane="summary"]').click();
   await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-    "UNSUPPORTED",
+    record.overall.toUpperCase(),
   );
+  await expect(page.locator("[data-testid=design-basis]")).toContainText(
+    "DEMONSTRATION",
+  );
+  // Discrete enumeration proposes the lightest passing arrangement; applying
+  // it is one undoable command and the rerun passes every check.
+  await page.locator("#preview-propose").click();
+  await expect(page.locator("[data-testid=proposal-overall]")).toHaveText(
+    "PASS",
+  );
+  await page
+    .locator("[data-testid=proposal]")
+    .screenshot({ path: `${dir}/ec2-proposal.png` });
+  const proposedTop = await page
+    .locator("[data-testid=proposal-top]")
+    .textContent();
+  await page.locator("#preview-apply-proposal").click();
+  await expect(page.locator("[data-testid=preview-state]")).toHaveText("STALE");
+  await page.locator("#analyse").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  await runPreview(page);
+  await expect(page.locator("[data-testid=preview-state]")).toHaveText("PASS");
+  const [count, dia] = proposedTop.split(" Ø");
+  await expect(page.locator("#preview-topBarCount")).toHaveValue(count);
+  expect(await page.locator("#preview-topBarDiameter").inputValue()).toContain(
+    dia,
+  );
+  await page.screenshot({
+    path: `${dir}/ec2-proposal-applied.png`,
+    fullPage: true,
+  });
+  await page.locator("#undo").click();
+  await expect(page.locator("[data-testid=preview-state]")).toHaveText("STALE");
   const download = page.waitForEvent("download");
   await menuCommand(page, "File", "Download project");
   const saved = JSON.parse(
@@ -569,5 +690,13 @@ test("RC beam EC2 checks: disabled-profile preview at governing stations, explic
   expect(saved.schemaVersion).toBe(CURRENT_SCHEMA);
   expect(saved.designPreviews[0].tensionAnchorageConfirmed).toBe(true);
   expect(saved.designPreviews[0].inputs.linkLegs).toBe(2);
+  expect(saved.designPreviews[0].codeInputs).toEqual({
+    exposureClass: "XC1",
+    minimumCoverDurability: 0.015,
+    aggregateSize: 0.02,
+    structuralSystem: "interiorSpan",
+    partitionsSensitive: false,
+    quasiPermanentCombinationId: "LC1",
+  });
   expect(errors).toEqual([]);
 });

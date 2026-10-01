@@ -1,3 +1,23 @@
+## Latest: M08 concrete beam accepted as an edition-labelled EC2 demonstration
+
+**Product decision (2026-09-30, ADR 0026).** A code the project does not hold under licence no longer blocks the software. The reasoning is that providers license more readily once they see it working.
+- Codes not held use Public.Resource.Org copies on the EC2 terms: local reference, never redistributed, rights contested in `resources.lock.json`.
+- Every run, screen and report names the exact edition, lists the amendments not reconciled, and says "Demonstration, not a certified design". Checks give pass or fail.
+
+**What changed.**
+- **Profile.** `ec2-uk-na` is enabled when its locked resources verify (`verify.rs`, compile-time). The edition is EN 1992-1-1:2004 incl. AC:2008/AC:2010 with UK NA incl. Amd 1 (2009). A1:2014 and NA+A2:2014 are listed as not reconciled.
+- **New checks** (`ec2uk/detailing.rs`): cover 4.4.1, spacing 8.2, anchorage 8.4, minimum crack steel 7.3.2, crack control 7.3.3 and span/depth 7.4.2.
+  - Anchorage reproduces 84 JRC table values within 1 mm; span/depth reproduces the JRC worked values.
+  - The UK V_Rd,max ≤ 200·bw² cap is now applied, read as N with bw in mm, at every section.
+- **Schema 1.7.0.** rcBeam `codeInputs`: exposure, c_min,dur, aggregate, structural system, partitions, quasi-permanent case. Checks lacking an input are INDETERMINATE and name it.
+- **The run is a design result.** Six rows with real statuses and utilisation. Overall is INDETERMINATE until the engineer's inputs and anchorage confirmation are in.
+- **"Propose reinforcement"** (`evaluateDesignPreview {propose: true}`) returns the least steel mass per metre over Ø10–32 bars (2–8 per face) and Ø8–12 links at 75–300 mm. No check fails for it, and every lighter neighbour fails. It is applied as one undoable command.
+- **Indicative schedule.** Cut lengths, link counts (legs-aware) and masses match hand values; the CSV carries them.
+- **Gate:** `node tools/run-m08-parent.mjs` → evidence/M08/full, 11 criteria PASS on source c1204f1e.
+- **Regression:** browser suite 134/135 (the model-coherence tree-label race passed on rerun; spec unchanged), cargo 299/299.
+
+**Next:** M10 slab, M11 footing, M12 column, M16 detailing and M18 prestress on the same demonstration pattern, then M13 AISC connections (Chapter J, held).
+
 ## Latest: browser regression no longer rewrites committed evidence
 
 - **Full-suite runs:** `npm run test:regression` runs the browser suite with every spec writing to the ignored `test-results/evidence`. A full run leaves all 1,885 files under `evidence/` byte-identical.

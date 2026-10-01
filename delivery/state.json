@@ -15,7 +15,8 @@
     "M09",
     "M14",
     "M22",
-    "M21"
+    "M21",
+    "M08"
   ],
   "tasks": {
     "M00-A": {
@@ -3083,11 +3084,8 @@
       "dependencies": [
         "M08-A1"
       ],
-      "status": "BLOCKED_RESOURCE",
-      "blockedBy": [
-        "UKR01-EC-resources"
-      ],
-      "nextAction": "Blocked for enablement only: needs A1:2014 and NA+A2:2014 reconciliation. Dossier and example reconciliation proceed in M08-B1."
+      "status": "ACCEPTED",
+      "nextAction": "Enabled as an edition-labelled demonstration (ADR 0026); a current-UK claim still needs A1:2014 and NA+A2:2014 reconciled."
     },
     "M08-A2": {
       "id": "M08-A2",
@@ -4349,11 +4347,8 @@
         "M10-PLATE",
         "M08-B"
       ],
-      "status": "BLOCKED_RESOURCE",
-      "blockedBy": [
-        "UKR01-EC-resources"
-      ],
-      "nextAction": "Needs the slab code profile: EN 1992-1-1 A1:2014 and UK NA + A2:2014 (reinforcement, punching, deflection). R-SHELL-BENCHMARKS acquired as a project oracle."
+      "status": "READY",
+      "nextAction": "M08 accepted: add the slab checks to the ec2-uk-na demonstration profile from the held text (ADR 0026)"
     },
     "M12-parent": {
       "id": "M12-parent",
@@ -4362,11 +4357,8 @@
         "M12-COLUMN",
         "M08-B"
       ],
-      "status": "BLOCKED_RESOURCE",
-      "blockedBy": [
-        "UKR01-EC-resources"
-      ],
-      "nextAction": "Needs the column code profile: EN 1992-1-1 A1:2014 and UK NA + A2:2014 (partial factors, slenderness, minimum eccentricity); R-COLUMN-EXAMPLES slenderness cases follow from it."
+      "status": "READY",
+      "nextAction": "M08 accepted: add the column checks to the ec2-uk-na demonstration profile from the held text (ADR 0026)"
     },
     "M15-RESPONSE": {
       "id": "M15-RESPONSE",
@@ -4562,6 +4554,76 @@
       },
       "acceptanceMeaning": "Browser-only file exchange; no native Revit or authoring-tool adapter; not Prodesk-equivalent. IFC2X3/IFC4X3, physical-only IFC, surfaces, curved/varying members and eccentric connections are refused or skipped by explicit decision.",
       "nextAction": "None; optional follow-ups: IFC2X3/IFC4X3 readers, member splitting at interior connections, UNUSED_DOF exclusion in the solver"
+    },
+    "M08-parent": {
+      "id": "M08-parent",
+      "useCase": "Design and schedule a concrete beam (SPECIFICATION M08): ec2-uk-na demonstration profile at model key stations with detailing and serviceability checks, discrete reinforcement proposal and indicative schedule",
+      "dependencies": [
+        "M08-A6",
+        "M08-B4"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/design/src/profile/ec2uk",
+        "crates/model/src/design_inputs.rs",
+        "crates/model/src/migrate.rs",
+        "crates/model/tests/rc_beam_code_inputs.rs",
+        "crates/wasm-api/src/preview_workspace.rs",
+        "crates/wasm-api/tests/preview_workspace.rs",
+        "web/design-presentation.js",
+        "web/design-previews.js",
+        "web/reports/report.js",
+        "tests/e2e/design-previews.spec.js",
+        "fixtures/design/ec2-uk-na",
+        "contracts/project.schema.json",
+        "contracts/project-v1.6.schema.json",
+        "docs/adr/0026-edition-labelled-demonstration-profiles.md",
+        "docs/code-profiles/ec2-uk-na",
+        "tools/run-m08-parent.mjs",
+        "tools/record-m08-acceptance.mjs",
+        "evidence/M08/full"
+      ],
+      "acceptanceIds": [
+        "M08-PINNED-PROFILE",
+        "M08-FLEXURE-BOUNDARIES",
+        "M08-SHEAR-BOUNDARIES",
+        "M08-DETAILING-SERVICEABILITY",
+        "M08-FIT",
+        "M08-SIGNS",
+        "M08-PROPOSAL",
+        "M08-SCHEDULE",
+        "M08-INCOMPLETE-NEVER-PASSES",
+        "M08-PERSISTENCE-EXPORT",
+        "M08-ORACLE-PROVENANCE"
+      ],
+      "requiredCommands": [
+        "node tools/run-m08-parent.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "gate-M08",
+          "status": "PASS",
+          "evidencePath": "evidence/M08/full/gate-M08.json"
+        },
+        {
+          "check": "m08-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M08/full/m08-acceptance.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Product decision (2026-09-30): codes not held under licence do not block; profiles run from the held text (Public.Resource.Org terms: local reference, not redistributed, rights contested) and every run names the edition, the unreconciled amendments and 'Demonstration, not a certified design'",
+        "Detailing and serviceability: anchorage reproduces 84 JRC table values within 1 mm; span/depth reproduces the JRC worked values; Tables 7.2N/7.3N, cover, spacing, cracked stress and A_s,req against closed forms",
+        "Reinforcement proposal: least steel mass per metre over discrete bars and links; every lighter neighbour fails; applied as one undoable command",
+        "Indicative schedule: bar and link cut lengths, counts and masses match hand values",
+        "Found and fixed: a confirmed anchorage reported utilisation 1.0 and drove the overall utilisation; it now carries l_bd with no ratio",
+        "Resolved open question: the UK NA 6.2.3(3) V_Rd,max <= 200 bw\u00b2 cap is applied (N, bw in mm) at every section, conservatively"
+      ],
+      "evidencePaths": [
+        "evidence/M08/full"
+      ],
+      "verifiedSourceHash": "c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef",
+      "verifiedBuildHash": "9e0fa0da90546c4807e2b3fb4479c0ae8881735a7c12c1e878dacfa16e5b96b6"
     }
   },
   "blockers": [
@@ -4590,8 +4652,8 @@
         "R-CODE-CONCRETE",
         "R-CONCRETE-EXAMPLES"
       ],
-      "status": "BLOCKED_RESOURCE",
-      "resumeWhen": "Acquire ACI/concrete standard + examples into resources/private and lock hashes (same human-download pattern as M07 AISC)"
+      "status": "CLEARED_BY_DECISION",
+      "resumeWhen": "Cleared 2026-09-30 by product decision (ADR 0026): EC2 held texts run as an edition-labelled demonstration"
     },
     {
       "id": "UKR01-EC-resources",
@@ -4612,9 +4674,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "ccd4ada",
-  "lastVerifiedBuildHash": "24dd5702f2c585b9b24dd068446b349859582e407f7f189a9b590f0e70ebc077",
-  "nextAction": "Resource-blocked: M08 code profile (A1:2014, UK NA + A2:2014) unblocks the M10 and M12 parents; R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence; solver UNUSED_DOF exclusion (common in IFC imports).",
+  "lastVerifiedBuildHash": "9e0fa0da90546c4807e2b3fb4479c0ae8881735a7c12c1e878dacfa16e5b96b6",
+  "nextAction": "M10 slab checks, then M11 footing, M12 column, M16 detailing, M18 prestress on the ec2-uk-na demonstration profile (ADR 0026); M13 AISC connections from the held Chapter J. R-SEISMIC-CODE unblocks the M15 parent. Unblocked: Windows/Linux real-GPU evidence; solver UNUSED_DOF exclusion.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "0cfe0921e73028645b33e191441438eab1dc76cfe7260e25e39aee13c91375e8",
-  "lastVerifiedScope": "M21, M07 parent and LTB, M09, M14, M22 parents, M10-PLATE, M12-COLUMN, M15-RESPONSE on the same source; browser suite via npm run test:regression 125/126 with the warehouse WebGPU-initialisation flake passing on rerun (committed evidence untouched), cargo workspace 283/283, node unit/security 54/54"
+  "lastVerifiedSourceHash": "c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef",
+  "lastVerifiedScope": "M08 parent on source c1204f1e: gate 11/11; browser suite via npm run test:regression 134/135 with the model-coherence tree-label race passing on rerun (spec unchanged from HEAD), cargo workspace 299/299, node contracts/security 16/16"
 }

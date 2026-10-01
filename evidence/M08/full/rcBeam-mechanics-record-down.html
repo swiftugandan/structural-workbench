@@ -1,0 +1,1298 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>B08 — calculation record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f8;padding:20px;font-size:12px}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}code{font-size:11px;overflow-wrap:anywhere}svg{width:100%;height:220px}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / CALCULATION RECORD</p><h1>B08</h1><p>Linear elastic frame analysis · LC1 · SI units</p><small>Model SHA-256: 8ab4db59bcb13cb867c4e101ebb162331e673eeff010331406511170b9544153<br>Solver source: c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef<br>Settings: 71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da<br>Created 2026-09-30T16:16:50.182Z</small></header><p class="banner">Mechanics preview. Prismatic Euler–Bernoulli members, small displacement, isotropic material, principal axes and Saint Venant torsion. No shear deformation, buckling, material nonlinearity, connection design or building-code compliance. Commercial numerical parity is UNKNOWN.</p><h2>Excluded capabilities</h2><p>These domains are outside the analysis MVP and are not claimed by this calculation record. Commercial numerical parity is UNKNOWN.</p><ul><li>shells</li><li>solids</li><li>arbitrary CAD solids</li><li>plasticity</li><li>geometrically nonlinear (large-displacement) response</li><li>torsional and lateral-torsional instability</li><li>response spectrum, time-history and harmonic analysis</li><li>cable/tension-only members</li><li>soil contact</li><li>code-generated wind/seismic loads</li><li>code-certified member sizing</li><li>connections</li><li>reinforcement detailing</li><li>DWG/native PROKON formats</li><li>Revit plugins</li><li>live collaboration</li><li>mobile CAD editing</li></ul><h2>Model</h2><p>2 nodes · 1 members · planarXZ. Global Z up; right-hand rotations. Generated constraints fix uy, rx and rz at every node.</p><h2>Global XZ elevation</h2><p>Grey: undeformed. Blue: deformation ×10. Projection may hide out-of-plane members.</p><svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Global XZ elevation with deformation amplified ten times"><polyline points="50,150 69.5,150 89,150 108.5,150 128,150 147.5,150 167,150 186.49999999999997,150 206.00000000000003,150 225.5,150 245,150 264.5,150 284,150 303.5,150 322.99999999999994,150 342.5,150 362.00000000000006,150 381.5,150 401,150 420.49999999999994,150 440,150 459.50000000000006,150 479.00000000000006,150 498.49999999999994,150 518,150 537.5,150 557,150 576.5000000000001,150 595.9999999999999,150 615.5,150 635,150 654.5,150 674.0000000000001,150 693.4999999999999,150 713,150 732.5,150 752,150 771.5000000000001,150 790.9999999999999,150 810.5,150 830,150" fill="none" stroke="#43536b" stroke-width="2"/><polyline points="50,150 69.5,150.02606791992187 89,150.09899296875 108.5,150.21116557617188 128,150.3553875 147.5,150.52487182617188 167,150.71324296875 186.49999999999997,150.9145366699219 206.00000000000003,151.1232 225.5,151.33409135742187 245,151.54248046875 264.5,151.74404838867187 284,151.9348875 303.5,152.11150151367187 322.99999999999994,152.27080546875 342.5,152.41012573242188 362.00000000000006,152.5272 381.5,152.6201772949219 401,152.68761796875 420.49999999999994,152.72849370117189 440,152.7421875 459.50000000000006,152.72849370117189 479.00000000000006,152.68761796875 498.49999999999994,152.6201772949219 518,152.5272 537.5,152.41012573242188 557,152.27080546875 576.5000000000001,152.11150151367187 595.9999999999999,151.9348875 615.5,151.74404838867187 635,151.54248046875 654.5,151.33409135742187 674.0000000000001,151.1232 693.4999999999999,150.9145366699219 713,150.71324296875 732.5,150.52487182617188 752,150.3553875 771.5000000000001,150.21116557617188 790.9999999999999,150.09899296875 810.5,150.02606791992187 830,150" fill="none" stroke="#225dc7" stroke-width="2"/></svg><h2>Nodal displacements</h2><table><tr><th>Node</th><th>ux (m)</th><th>uy (m)</th><th>uz (m)</th><th>rx (rad)</th><th>ry (rad)</th><th>rz (rad)</th></tr><tr><th>n1</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr><tr><th>n2</th><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td><td>0.00000000</td></tr></table><h2>Physical support reactions</h2><table><tr><th>Support</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>s1</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>-30000.0000</td><td>0.00000000</td></tr><tr><th>s2</th><td>0.00000000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td></tr></table><h2>Member end actions</h2><p>Actions applied by nodes to the element, in local axes. These differ from cut-face section actions.</p><h3>m1 · 6 m</h3><table><tr><th>End</th><th>Fx (N)</th><th>Fy (N)</th><th>Fz (N)</th><th>Mx (N m)</th><th>My (N m)</th><th>Mz (N m)</th></tr><tr><th>i</th><td>0.00000000</td><td>0.00000000</td><td>-30000.0000</td><td>0.00000000</td><td>30000.0000</td><td>0.00000000</td></tr><tr><th>j</th><td>0.00000000</td><td>0.00000000</td><td>-30000.0000</td><td>0.00000000</td><td>-30000.0000</td><td>0.00000000</td></tr></table><section data-testid="report-concrete-previews"><h2>RC beam design (EC2 UK, demonstration)</h2><p class="banner">MECHANICS ONLY for the section mechanics: they are not a code resistance, no partial factors or code limits are applied to them, and they carry no utilisation ratio. The EC2 checks are a demonstration of EN 1992-1-1:2004+AC:2010 with the UK NA (2009); A1:2014 and NA+A2:2014 are not reconciled, and this is not a certified design (ADR 0026).</p><section data-testid="report-rc-preview" data-draft-id="dpeaf888018f68c796"><h3>RC beam draft dpeaf888018f68c796 · member m1</h3>
+<p>Overall <strong data-testid="report-rc-overall">INDETERMINATE</strong> · code profile ec2-uk-na · EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009) · DEMONSTRATION · rectangularBlock</p>
+<p>Preview run a172dac9574f79835cb551381d34beec0b69fdc31455839813f0ad5e20025d07 · input 2f5dd2dcd21db31cfe604793375f7eb9894573b433c6dc0571bd97f0e699cfe3 · result 8ab4db59bcb13cb8-LC1 · combination LC1 · model 8ab4db59bcb13cb867c4e101ebb162331e673eeff010331406511170b9544153 · solver c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef</p>
+<p>Draft width along local y, depth along local z; top face = local +z. My &lt; 0 compresses the top face (sagging), My &gt; 0 the bottom face (hogging). Top face direction 0, 0, -1 (down). <strong data-testid="report-rc-orientation-warning">The draft top face is not uppermost in this member: draft sagging and hogging are not the physical ones. Correct the member localY to align them.</strong></p>
+<h4>Section and bar rows (SI)</h4><p data-testid="report-rc-section">b 0.3 m × h 0.6 m · cover to link 0.035 m · link 0.01 m</p><table><thead><tr><th>Face</th><th>Bars</th><th>Area (m²)</th><th>Depth from its face (m)</th><th>Clear spacing (m)</th><th>Fits</th></tr></thead><tbody><tr><th scope="row">top</th><td>4 × 0.02 m</td><td>0.0012566370614359175</td><td>0.05500000000000001</td><td>0.043333333333333314</td><td>Yes</td></tr><tr><th scope="row">bottom</th><td>4 × 0.02 m</td><td>0.0012566370614359175</td><td>0.05500000000000001</td><td>0.043333333333333314</td><td>Yes</td></tr></tbody></table>
+<table><thead><tr><th>State</th><th>Mechanics capacity</th><th>Governing model moment</th><th>Location</th><th>Service σc (cracked)</th><th>Service σs per row (compression +)</th><th>Below M_cr</th></tr></thead><tbody><tr data-testid="report-rc-state" data-state="sagging"><th scope="row">sagging · top face in compression</th><td data-testid="report-rc-capacity"><span data-si="292229.5996717784">292.230 kN·m</span></td><td data-testid="report-rc-demand"><span data-si="30000">30.0000 kN·m</span></td><td>x/L 0 · end</td><td data-testid="report-rc-service-concrete"><span data-si="2424103.9324795343">2.42410 MPa</span></td><td data-testid="report-rc-service-steel"><span data-si="9688489.783729447">9.68849 MPa</span> / <span data-si="-47972956.011526">-47.9730 MPa</span></td><td>Yes — cracked stresses overstate</td></tr><tr data-testid="report-rc-state" data-state="hogging"><th scope="row">hogging · bottom face in compression</th><td data-testid="report-rc-capacity"><span data-si="292229.5996717784">292.230 kN·m</span></td><td data-testid="report-rc-demand"><span data-si="15000">15.0000 kN·m</span></td><td>x/L 0.5 · extremum</td><td data-testid="report-rc-service-concrete"><span data-si="1212051.9662397671">1.21205 MPa</span></td><td data-testid="report-rc-service-steel"><span data-si="4844244.8918647235">4.84424 MPa</span> / <span data-si="-23986478.005763">-23.9865 MPa</span></td><td>Yes — cracked stresses overstate</td></tr></tbody></table>
+<h4>Material-law inputs (SI)</h4><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody><tr><th scope="row">blockDepthRatio</th><td>0.75</td><td>syntheticFixture</td></tr><tr><th scope="row">blockIntensity</th><td>20000000</td><td>syntheticFixture</td></tr><tr><th scope="row">concreteModulus</th><td>30000000000</td><td>syntheticFixture</td></tr><tr><th scope="row">concreteTensileStrength</th><td>2800000</td><td>syntheticFixture</td></tr><tr><th scope="row">minimumClearSpacing</th><td>0.025</td><td>syntheticFixture</td></tr><tr><th scope="row">steelModulus</th><td>200000000000</td><td>syntheticFixture</td></tr><tr><th scope="row">steelYieldStrength</th><td>460000000</td><td>syntheticFixture</td></tr><tr><th scope="row">ultimateStrain</th><td>0.003</td><td>syntheticFixture</td></tr></tbody></table>
+<ul><li>Mechanics only — not a code resistance; no partial factors or code limits applied</li><li>Pure flexure (N = 0) about the width axis; concrete tension ignored at ultimate and in the cracked state</li><li>Material-law parameters are explicit inputs with recorded provenance</li><li>Service stresses use the cracked transformed section under the governing model moment of the one bound case/combination, which is not classified as a serviceability combination; no stress limits applied</li><li>Governing key stations of the one bound case/combination; no envelope across combinations</li><li>Axial force, shear, torsion and Mz at these stations are not considered by the pure-flexure mechanics</li><li>No utilisation ratio or status: the capacity is mechanics, not a code resistance</li></ul>
+<h4>EC2 checks · ec2-uk-na</h4><p class="banner" data-testid="report-ec2-banner">DEMONSTRATION. EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009). EN 1992-1-1:2004/A1:2014, UK NA + A2:2014 not reconciled. Demonstration, not a certified design.</p><p>Concrete strength used as fck; reinforcement strength as fyk for bars and links. Tension anchorage: <strong data-testid="report-ec2-anchorage">not confirmed (rho_l = 0)</strong>.</p><h5>Governing sagging and shear · x/L 0 · LC1 · station overall <strong>INDETERMINATE</strong></h5><p>Actions [N, Vy, Vz, T, My, Mz] = [<span data-si="0">0</span>, <span data-si="0">0</span>, <span data-si="30000">30000</span>, <span data-si="0">0</span>, <span data-si="-30000">-30000</span>, <span data-si="0">0</span>] (N, N m)</p><table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.flexure"><th scope="row">ec2.flexure</th><td>6.1, 3.1.7(3), 3.2.7(2)b</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="30000">30.0000 kN·m</span></td><td data-testid="report-ec2-resistance"><span data-si="275316.01327551866">275.316 kN·m</span></td><td>0.1090</td><td>sagging: M_Ed 30000.0 N m vs M_Rd 275316.0 N m</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.as-min"><th scope="row">ec2.as-min</th><td>9.2.1.1(1), Table 3.1</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0002462577224375119">246.258 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td>0.1960</td><td>Demand is As,min, resistance is the provided tension area</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.crack-min"><th scope="row">ec2.crack-min</th><td>7.3.2(2), (7.1), (7.2)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.00016475110858910468">164.751 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td>0.1311</td><td>Demand is As,min for crack control, resistance is the provided tension area</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.crack-control"><th scope="row">ec2.crack-control</th><td>7.3.3, Tables 7.2N/7.3N, (7.6N); UK NA Table NA.4</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Enter the exposure class</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.anchorage"><th scope="row">ec2.anchorage</th><td>8.4.2, 8.4.3, 8.4.4, Table 8.2</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Confirm the bottom bars extend at least l_bd = 706 mm beyond the section</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.deflection"><th scope="row">ec2.deflection</th><td>7.4.2, (7.16a/b), (7.17); UK NA Table NA.5</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Choose the structural system (simply supported, end span, interior span or cantilever)</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.as-max.top"><th scope="row">ec2.as-max.top</th><td>9.2.1.1(3)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0072">7200.00 mm²</span></td><td>0.1745</td><td>Outside lap locations</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.as-max.bottom"><th scope="row">ec2.as-max.bottom</th><td>9.2.1.1(3)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0072">7200.00 mm²</span></td><td>0.1745</td><td>Outside lap locations</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.shear"><th scope="row">ec2.shear</th><td>6.2.3(1)-(3)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="30000">30.0000 kN</span></td><td data-testid="report-ec2-resistance"><span data-si="418736.7382026612">418.737 kN</span></td><td>0.07164</td><td>Vertical links, cot θ = 2.5000; V_Rd = min(V_Rd,s, V_Rd,max)</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.links-min"><th scope="row">ec2.links-min</th><td>6.2.1(4), 9.2.2(5)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0008763560920082658">0.000876356</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0026179938779914945">0.00261799</span></td><td>0.3347</td><td>Demand is ρw,min, resistance is the provided ρw (α = 90°)</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.links-spacing"><th scope="row">ec2.links-spacing</th><td>9.2.2(6), 9.2.2(8)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.5382262996941896">0.538226</span></td><td data-testid="report-ec2-resistance"><span data-si="1">1.00000</span></td><td>0.5382</td><td>Demand is the larger of s/s_l,max and s_t/s_t,max</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.cover"><th scope="row">ec2.cover</th><td>4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Enter c_min,dur for the exposure class (BS 8500-1 Tables A.4/A.5, UK NA 4.4.1.2(5)) and the maximum aggregate size</td></tr><tr data-testid="report-ec2-check" data-roles="sagging shear" data-check-id="ec2.bar-spacing"><th scope="row">ec2.bar-spacing</th><td>8.2(2); UK NA 8.2(2)</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Enter the maximum aggregate size</td></tr></tbody></table><h5>Governing hogging · x/L 0.5 · LC1 · station overall <strong>INDETERMINATE</strong></h5><p>Actions [N, Vy, Vz, T, My, Mz] = [<span data-si="0">0</span>, <span data-si="0">0</span>, <span data-si="0">0</span>, <span data-si="0">0</span>, <span data-si="15000">15000</span>, <span data-si="0">0</span>] (N, N m)</p><table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.flexure"><th scope="row">ec2.flexure</th><td>6.1, 3.1.7(3), 3.2.7(2)b</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="15000">15.0000 kN·m</span></td><td data-testid="report-ec2-resistance"><span data-si="275316.01327551866">275.316 kN·m</span></td><td>0.05448</td><td>hogging: M_Ed 15000.0 N m vs M_Rd 275316.0 N m</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.as-min"><th scope="row">ec2.as-min</th><td>9.2.1.1(1), Table 3.1</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0002462577224375119">246.258 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td>0.1960</td><td>Demand is As,min, resistance is the provided tension area</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.crack-min"><th scope="row">ec2.crack-min</th><td>7.3.2(2), (7.1), (7.2)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.00016475110858910468">164.751 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td>0.1311</td><td>Demand is As,min for crack control, resistance is the provided tension area</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.crack-control"><th scope="row">ec2.crack-control</th><td>7.3.3, Tables 7.2N/7.3N, (7.6N); UK NA Table NA.4</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Enter the exposure class</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.anchorage"><th scope="row">ec2.anchorage</th><td>8.4.2, 8.4.3, 8.4.4, Table 8.2</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Confirm the top bars extend at least l_bd = 1008 mm beyond the section</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.as-max.top"><th scope="row">ec2.as-max.top</th><td>9.2.1.1(3)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0072">7200.00 mm²</span></td><td>0.1745</td><td>Outside lap locations</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.as-max.bottom"><th scope="row">ec2.as-max.bottom</th><td>9.2.1.1(3)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0012566370614359175">1256.64 mm²</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0072">7200.00 mm²</span></td><td>0.1745</td><td>Outside lap locations</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.links-min"><th scope="row">ec2.links-min</th><td>6.2.1(4), 9.2.2(5)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.0008763560920082658">0.000876356</span></td><td data-testid="report-ec2-resistance"><span data-si="0.0026179938779914945">0.00261799</span></td><td>0.3347</td><td>Demand is ρw,min, resistance is the provided ρw (α = 90°)</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.links-spacing"><th scope="row">ec2.links-spacing</th><td>9.2.2(6), 9.2.2(8)</td><td>PASS</td><td data-testid="report-ec2-demand"><span data-si="0.5382262996941896">0.538226</span></td><td data-testid="report-ec2-resistance"><span data-si="1">1.00000</span></td><td>0.5382</td><td>Demand is the larger of s/s_l,max and s_t/s_t,max</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.cover"><th scope="row">ec2.cover</th><td>4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Enter c_min,dur for the exposure class (BS 8500-1 Tables A.4/A.5, UK NA 4.4.1.2(5)) and the maximum aggregate size</td></tr><tr data-testid="report-ec2-check" data-roles="hogging" data-check-id="ec2.bar-spacing"><th scope="row">ec2.bar-spacing</th><td>8.2(2); UK NA 8.2(2)</td><td>INDETERMINATE</td><td data-testid="report-ec2-demand">—</td><td data-testid="report-ec2-resistance">—</td><td>—</td><td>Enter the maximum aggregate size</td></tr></tbody></table><ul><li>A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them</li><li>Rectangular sections, fck &lt;= 50 MPa, vertical links, one layer of equal bars per face</li><li>Pure bending about local y with shear Vz: N, T, Vy and Mz must be zero</li><li>Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation</li><li>Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer&#39;s confirmation</li><li>UK NA VRd,max &lt;= 200 bw^2 cap not applied (units not stated in the NA)</li></ul>
+<details><summary>Complete preview run record</summary><pre>{
+  &quot;checks&quot;: [
+    {
+      &quot;checkIds&quot;: [
+        &quot;ec2.flexure&quot;,
+        &quot;ec2.actions&quot;
+      ],
+      &quot;name&quot;: &quot;Flexure&quot;,
+      &quot;reason&quot;: &quot;6.1, 3.1.7(3), 3.2.7(2)b; 6.1, 3.1.7(3), 3.2.7(2)b&quot;,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;utilisation&quot;: 0.10896569234415696
+    },
+    {
+      &quot;checkIds&quot;: [
+        &quot;ec2.shear&quot;,
+        &quot;ec2.links-min&quot;,
+        &quot;ec2.links-spacing&quot;
+      ],
+      &quot;name&quot;: &quot;Shear&quot;,
+      &quot;reason&quot;: &quot;6.2.3(1)-(3); 6.2.1(4), 9.2.2(5); 9.2.2(6), 9.2.2(8); 6.2.1(4), 9.2.2(5); 9.2.2(6), 9.2.2(8)&quot;,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;utilisation&quot;: 0.5382262996941896
+    },
+    {
+      &quot;checkIds&quot;: [
+        &quot;ec2.as-min&quot;,
+        &quot;ec2.as-max.top&quot;,
+        &quot;ec2.as-max.bottom&quot;,
+        &quot;ec2.crack-min&quot;
+      ],
+      &quot;name&quot;: &quot;Minimum/maximum reinforcement&quot;,
+      &quot;reason&quot;: &quot;9.2.1.1(1), Table 3.1; 7.3.2(2), (7.1), (7.2); 9.2.1.1(3); 9.2.1.1(3); 9.2.1.1(1), Table 3.1; 7.3.2(2), (7.1), (7.2); 9.2.1.1(3); 9.2.1.1(3)&quot;,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;utilisation&quot;: 0.19596566900240978
+    },
+    {
+      &quot;checkIds&quot;: [
+        &quot;ec2.cover&quot;,
+        &quot;ec2.bar-spacing&quot;
+      ],
+      &quot;name&quot;: &quot;Cover and spacing&quot;,
+      &quot;reason&quot;: &quot;Enter c_min,dur for the exposure class (BS 8500-1 Tables A.4/A.5, UK NA 4.4.1.2(5)) and the maximum aggregate size&quot;,
+      &quot;status&quot;: &quot;indeterminate&quot;,
+      &quot;utilisation&quot;: null
+    },
+    {
+      &quot;checkIds&quot;: [
+        &quot;ec2.anchorage&quot;
+      ],
+      &quot;name&quot;: &quot;Anchorage&quot;,
+      &quot;reason&quot;: &quot;Confirm the bottom bars extend at least l_bd = 706 mm beyond the section&quot;,
+      &quot;status&quot;: &quot;indeterminate&quot;,
+      &quot;utilisation&quot;: null
+    },
+    {
+      &quot;checkIds&quot;: [
+        &quot;ec2.crack-control&quot;,
+        &quot;ec2.deflection&quot;
+      ],
+      &quot;name&quot;: &quot;Serviceability&quot;,
+      &quot;reason&quot;: &quot;Enter the exposure class&quot;,
+      &quot;status&quot;: &quot;indeterminate&quot;,
+      &quot;utilisation&quot;: null
+    }
+  ],
+  &quot;codeProfile&quot;: {
+    &quot;certification&quot;: &quot;Demonstration, not a certified design&quot;,
+    &quot;edition&quot;: &quot;EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)&quot;,
+    &quot;id&quot;: &quot;ec2-uk-na&quot;,
+    &quot;standard&quot;: &quot;EN 1992-1-1 with UK National Annex&quot;,
+    &quot;unreconciledAmendments&quot;: [
+      &quot;EN 1992-1-1:2004/A1:2014&quot;,
+      &quot;UK NA + A2:2014&quot;
+    ]
+  },
+  &quot;codeProfilePreview&quot;: {
+    &quot;basis&quot;: &quot;codeProfile&quot;,
+    &quot;certification&quot;: &quot;Demonstration, not a certified design&quot;,
+    &quot;codeInputs&quot;: {},
+    &quot;combinationId&quot;: &quot;LC1&quot;,
+    &quot;edition&quot;: &quot;EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)&quot;,
+    &quot;governing&quot;: [
+      {
+        &quot;actions&quot;: [
+          0,
+          0,
+          30000,
+          0,
+          -30000,
+          0
+        ],
+        &quot;checks&quot;: [
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.flexure&quot;,
+            &quot;clause&quot;: &quot;6.1, 3.1.7(3), 3.2.7(2)b&quot;,
+            &quot;demand&quot;: 30000,
+            &quot;intermediates&quot;: {
+              &quot;compressionFace&quot;: &quot;top&quot;,
+              &quot;depthRatio&quot;: 0.1416206318583146,
+              &quot;epsilonCu3&quot;: 0.0035,
+              &quot;eta&quot;: 1,
+              &quot;fcd&quot;: 17000000,
+              &quot;fyd&quot;: 434782608.6956522,
+              &quot;lambda&quot;: 0.8,
+              &quot;ndp&quot;: &quot;UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)&quot;,
+              &quot;neutralAxisDepth&quot;: 0.07718324436278146,
+              &quot;state&quot;: &quot;sagging&quot;,
+              &quot;tensionSteelYields&quot;: true
+            },
+            &quot;message&quot;: &quot;sagging: M_Ed 30000.0 N m vs M_Rd 275316.0 N m&quot;,
+            &quot;resistance&quot;: 275316.01327551866,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;N m&quot;,
+            &quot;utilisation&quot;: 0.10896569234415696
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.as-min&quot;,
+            &quot;clause&quot;: &quot;9.2.1.1(1), Table 3.1&quot;,
+            &quot;demand&quot;: 0.0002462577224375119,
+            &quot;intermediates&quot;: {
+              &quot;bt&quot;: 0.3,
+              &quot;d&quot;: 0.5449999999999999,
+              &quot;fctm&quot;: 2896468.153816889,
+              &quot;tensionFace&quot;: &quot;bottom&quot;
+            },
+            &quot;message&quot;: &quot;Demand is As,min, resistance is the provided tension area&quot;,
+            &quot;resistance&quot;: 0.0012566370614359175,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.19596566900240978
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.crack-min&quot;,
+            &quot;clause&quot;: &quot;7.3.2(2), (7.1), (7.2)&quot;,
+            &quot;demand&quot;: 0.00016475110858910468,
+            &quot;intermediates&quot;: {
+              &quot;Act&quot;: 0.09,
+              &quot;fctEff&quot;: 2896468.153816889,
+              &quot;k&quot;: 0.79,
+              &quot;kc&quot;: 0.4,
+              &quot;sigmaS&quot;: 500000000,
+              &quot;tensionFace&quot;: &quot;bottom&quot;
+            },
+            &quot;message&quot;: &quot;Demand is As,min for crack control, resistance is the provided tension area&quot;,
+            &quot;resistance&quot;: 0.0012566370614359175,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.1311047665591281
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.crack-control&quot;,
+            &quot;clause&quot;: &quot;7.3.3, Tables 7.2N/7.3N, (7.6N); UK NA Table NA.4&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {},
+            &quot;message&quot;: &quot;Enter the exposure class&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.anchorage&quot;,
+            &quot;clause&quot;: &quot;8.4.2, 8.4.3, 8.4.4, Table 8.2&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {
+              &quot;alpha2&quot;: 0.9875,
+              &quot;assumptions&quot;: [
+                &quot;Straight bars (α1 = 1)&quot;,
+                &quot;α3 = α4 = α5 = 1: confinement and transverse pressure ignored&quot;,
+                &quot;σsd = fyd&quot;
+              ],
+              &quot;bondCondition&quot;: &quot;good&quot;,
+              &quot;cd&quot;: 0.021666666666666657,
+              &quot;diameter&quot;: 0.02,
+              &quot;face&quot;: &quot;bottom&quot;,
+              &quot;fbd&quot;: 3041291.561507733,
+              &quot;lbRqd&quot;: 0.7147992882341522,
+              &quot;lbdCompression&quot;: 0.7147992882341522,
+              &quot;lbdTension&quot;: 0.7058642971312253,
+              &quot;sigmaSd&quot;: 434782608.6956522
+            },
+            &quot;message&quot;: &quot;Confirm the bottom bars extend at least l_bd = 706 mm beyond the section&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.deflection&quot;,
+            &quot;clause&quot;: &quot;7.4.2, (7.16a/b), (7.17); UK NA Table NA.5&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {},
+            &quot;message&quot;: &quot;Choose the structural system (simply supported, end span, interior span or cantilever)&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.as-max.top&quot;,
+            &quot;clause&quot;: &quot;9.2.1.1(3)&quot;,
+            &quot;demand&quot;: 0.0012566370614359175,
+            &quot;intermediates&quot;: {
+              &quot;Ac&quot;: 0.18,
+              &quot;face&quot;: &quot;top&quot;
+            },
+            &quot;message&quot;: &quot;Outside lap locations&quot;,
+            &quot;resistance&quot;: 0.0072,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.17453292519943298
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.as-max.bottom&quot;,
+            &quot;clause&quot;: &quot;9.2.1.1(3)&quot;,
+            &quot;demand&quot;: 0.0012566370614359175,
+            &quot;intermediates&quot;: {
+              &quot;Ac&quot;: 0.18,
+              &quot;face&quot;: &quot;bottom&quot;
+            },
+            &quot;message&quot;: &quot;Outside lap locations&quot;,
+            &quot;resistance&quot;: 0.0072,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.17453292519943298
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.shear&quot;,
+            &quot;clause&quot;: &quot;6.2.3(1)-(3)&quot;,
+            &quot;demand&quot;: 30000,
+            &quot;intermediates&quot;: {
+              &quot;AswOverS&quot;: 0.0007853981633974482,
+              &quot;CRdc&quot;: 0.12,
+              &quot;VRdc&quot;: 63778.82631968407,
+              &quot;VRdmax&quot;: 455454.6206896552,
+              &quot;VRds&quot;: 418736.7382026612,
+              &quot;assumptions&quot;: [
+                &quot;V_Ed used at the station without the 6.2.1(8) or 6.2.2(6) reductions&quot;,
+                &quot;UK NA 6.2.3(3) note, V_Rd,max &lt;= 200 bw²: read as N with bw in mm (the NA states no units; kN with bw in m would forbid ordinary beams) and applied at every section, which is conservative since the NA requires it only beyond d from a support&quot;
+              ],
+              &quot;cotTheta&quot;: 2.5,
+              &quot;d&quot;: 0.5449999999999999,
+              &quot;fcd&quot;: 17000000,
+              &quot;fywd&quot;: 434782608.6956522,
+              &quot;k&quot;: 1.6057825328153827,
+              &quot;k1&quot;: 0.15,
+              &quot;ndp&quot;: &quot;UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)&quot;,
+              &quot;nu1&quot;: 0.528,
+              &quot;rhoL&quot;: 0,
+              &quot;sigmaCp&quot;: 0,
+              &quot;tensionSteelAnchored&quot;: null,
+              &quot;ukVRdMaxCap&quot;: 18000000,
+              &quot;vmin&quot;: 0.39008456464638586,
+              &quot;z&quot;: 0.49049999999999994
+            },
+            &quot;message&quot;: &quot;Vertical links, cot θ = 2.5000; V_Rd = min(V_Rd,s, V_Rd,max)&quot;,
+            &quot;resistance&quot;: 418736.7382026612,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;N&quot;,
+            &quot;utilisation&quot;: 0.07164406000956268
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.links-min&quot;,
+            &quot;clause&quot;: &quot;6.2.1(4), 9.2.2(5)&quot;,
+            &quot;demand&quot;: 0.0008763560920082658,
+            &quot;intermediates&quot;: {
+              &quot;rhoW&quot;: 0.0026179938779914945,
+              &quot;rhoWMin&quot;: 0.0008763560920082658
+            },
+            &quot;message&quot;: &quot;Demand is ρw,min, resistance is the provided ρw (α = 90°)&quot;,
+            &quot;resistance&quot;: 0.0026179938779914945,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;-&quot;,
+            &quot;utilisation&quot;: 0.3347433694843472
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.links-spacing&quot;,
+            &quot;clause&quot;: &quot;9.2.2(6), 9.2.2(8)&quot;,
+            &quot;demand&quot;: 0.5382262996941896,
+            &quot;intermediates&quot;: {
+              &quot;d&quot;: 0.5449999999999999,
+              &quot;sl&quot;: 0.2,
+              &quot;slMax&quot;: 0.40874999999999995,
+              &quot;st&quot;: 0.21999999999999997,
+              &quot;stMax&quot;: 0.40874999999999995
+            },
+            &quot;message&quot;: &quot;Demand is the larger of s/s_l,max and s_t/s_t,max&quot;,
+            &quot;resistance&quot;: 1,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;-&quot;,
+            &quot;utilisation&quot;: 0.5382262996941896
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.cover&quot;,
+            &quot;clause&quot;: &quot;4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {},
+            &quot;message&quot;: &quot;Enter c_min,dur for the exposure class (BS 8500-1 Tables A.4/A.5, UK NA 4.4.1.2(5)) and the maximum aggregate size&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.bar-spacing&quot;,
+            &quot;clause&quot;: &quot;8.2(2); UK NA 8.2(2)&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {},
+            &quot;message&quot;: &quot;Enter the maximum aggregate size&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          }
+        ],
+        &quot;kind&quot;: &quot;end&quot;,
+        &quot;overall&quot;: &quot;indeterminate&quot;,
+        &quot;quasiPermanentMy&quot;: null,
+        &quot;roles&quot;: [
+          &quot;sagging&quot;,
+          &quot;shear&quot;
+        ],
+        &quot;side&quot;: null,
+        &quot;station&quot;: 0
+      },
+      {
+        &quot;actions&quot;: [
+          0,
+          0,
+          0,
+          0,
+          15000,
+          0
+        ],
+        &quot;checks&quot;: [
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.flexure&quot;,
+            &quot;clause&quot;: &quot;6.1, 3.1.7(3), 3.2.7(2)b&quot;,
+            &quot;demand&quot;: 15000,
+            &quot;intermediates&quot;: {
+              &quot;compressionFace&quot;: &quot;bottom&quot;,
+              &quot;depthRatio&quot;: 0.1416206318583146,
+              &quot;epsilonCu3&quot;: 0.0035,
+              &quot;eta&quot;: 1,
+              &quot;fcd&quot;: 17000000,
+              &quot;fyd&quot;: 434782608.6956522,
+              &quot;lambda&quot;: 0.8,
+              &quot;ndp&quot;: &quot;UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)&quot;,
+              &quot;neutralAxisDepth&quot;: 0.07718324436278146,
+              &quot;state&quot;: &quot;hogging&quot;,
+              &quot;tensionSteelYields&quot;: true
+            },
+            &quot;message&quot;: &quot;hogging: M_Ed 15000.0 N m vs M_Rd 275316.0 N m&quot;,
+            &quot;resistance&quot;: 275316.01327551866,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;N m&quot;,
+            &quot;utilisation&quot;: 0.05448284617207848
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.as-min&quot;,
+            &quot;clause&quot;: &quot;9.2.1.1(1), Table 3.1&quot;,
+            &quot;demand&quot;: 0.0002462577224375119,
+            &quot;intermediates&quot;: {
+              &quot;bt&quot;: 0.3,
+              &quot;d&quot;: 0.5449999999999999,
+              &quot;fctm&quot;: 2896468.153816889,
+              &quot;tensionFace&quot;: &quot;top&quot;
+            },
+            &quot;message&quot;: &quot;Demand is As,min, resistance is the provided tension area&quot;,
+            &quot;resistance&quot;: 0.0012566370614359175,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.19596566900240978
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.crack-min&quot;,
+            &quot;clause&quot;: &quot;7.3.2(2), (7.1), (7.2)&quot;,
+            &quot;demand&quot;: 0.00016475110858910468,
+            &quot;intermediates&quot;: {
+              &quot;Act&quot;: 0.09,
+              &quot;fctEff&quot;: 2896468.153816889,
+              &quot;k&quot;: 0.79,
+              &quot;kc&quot;: 0.4,
+              &quot;sigmaS&quot;: 500000000,
+              &quot;tensionFace&quot;: &quot;top&quot;
+            },
+            &quot;message&quot;: &quot;Demand is As,min for crack control, resistance is the provided tension area&quot;,
+            &quot;resistance&quot;: 0.0012566370614359175,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.1311047665591281
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.crack-control&quot;,
+            &quot;clause&quot;: &quot;7.3.3, Tables 7.2N/7.3N, (7.6N); UK NA Table NA.4&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {},
+            &quot;message&quot;: &quot;Enter the exposure class&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.anchorage&quot;,
+            &quot;clause&quot;: &quot;8.4.2, 8.4.3, 8.4.4, Table 8.2&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {
+              &quot;alpha2&quot;: 0.9875,
+              &quot;assumptions&quot;: [
+                &quot;Straight bars (α1 = 1)&quot;,
+                &quot;α3 = α4 = α5 = 1: confinement and transverse pressure ignored&quot;,
+                &quot;σsd = fyd&quot;
+              ],
+              &quot;bondCondition&quot;: &quot;poor&quot;,
+              &quot;cd&quot;: 0.021666666666666657,
+              &quot;diameter&quot;: 0.02,
+              &quot;face&quot;: &quot;top&quot;,
+              &quot;fbd&quot;: 2128904.093055413,
+              &quot;lbRqd&quot;: 1.0211418403345032,
+              &quot;lbdCompression&quot;: 1.0211418403345032,
+              &quot;lbdTension&quot;: 1.008377567330322,
+              &quot;sigmaSd&quot;: 434782608.6956522
+            },
+            &quot;message&quot;: &quot;Confirm the top bars extend at least l_bd = 1008 mm beyond the section&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.as-max.top&quot;,
+            &quot;clause&quot;: &quot;9.2.1.1(3)&quot;,
+            &quot;demand&quot;: 0.0012566370614359175,
+            &quot;intermediates&quot;: {
+              &quot;Ac&quot;: 0.18,
+              &quot;face&quot;: &quot;top&quot;
+            },
+            &quot;message&quot;: &quot;Outside lap locations&quot;,
+            &quot;resistance&quot;: 0.0072,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.17453292519943298
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.as-max.bottom&quot;,
+            &quot;clause&quot;: &quot;9.2.1.1(3)&quot;,
+            &quot;demand&quot;: 0.0012566370614359175,
+            &quot;intermediates&quot;: {
+              &quot;Ac&quot;: 0.18,
+              &quot;face&quot;: &quot;bottom&quot;
+            },
+            &quot;message&quot;: &quot;Outside lap locations&quot;,
+            &quot;resistance&quot;: 0.0072,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;m2&quot;,
+            &quot;utilisation&quot;: 0.17453292519943298
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.links-min&quot;,
+            &quot;clause&quot;: &quot;6.2.1(4), 9.2.2(5)&quot;,
+            &quot;demand&quot;: 0.0008763560920082658,
+            &quot;intermediates&quot;: {
+              &quot;rhoW&quot;: 0.0026179938779914945,
+              &quot;rhoWMin&quot;: 0.0008763560920082658
+            },
+            &quot;message&quot;: &quot;Demand is ρw,min, resistance is the provided ρw (α = 90°)&quot;,
+            &quot;resistance&quot;: 0.0026179938779914945,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;-&quot;,
+            &quot;utilisation&quot;: 0.3347433694843472
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.links-spacing&quot;,
+            &quot;clause&quot;: &quot;9.2.2(6), 9.2.2(8)&quot;,
+            &quot;demand&quot;: 0.5382262996941896,
+            &quot;intermediates&quot;: {
+              &quot;d&quot;: 0.5449999999999999,
+              &quot;sl&quot;: 0.2,
+              &quot;slMax&quot;: 0.40874999999999995,
+              &quot;st&quot;: 0.21999999999999997,
+              &quot;stMax&quot;: 0.40874999999999995
+            },
+            &quot;message&quot;: &quot;Demand is the larger of s/s_l,max and s_t/s_t,max&quot;,
+            &quot;resistance&quot;: 1,
+            &quot;status&quot;: &quot;pass&quot;,
+            &quot;units&quot;: &quot;-&quot;,
+            &quot;utilisation&quot;: 0.5382262996941896
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.cover&quot;,
+            &quot;clause&quot;: &quot;4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {},
+            &quot;message&quot;: &quot;Enter c_min,dur for the exposure class (BS 8500-1 Tables A.4/A.5, UK NA 4.4.1.2(5)) and the maximum aggregate size&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          },
+          {
+            &quot;assumptions&quot;: [],
+            &quot;checkId&quot;: &quot;ec2.bar-spacing&quot;,
+            &quot;clause&quot;: &quot;8.2(2); UK NA 8.2(2)&quot;,
+            &quot;demand&quot;: null,
+            &quot;intermediates&quot;: {},
+            &quot;message&quot;: &quot;Enter the maximum aggregate size&quot;,
+            &quot;resistance&quot;: null,
+            &quot;status&quot;: &quot;indeterminate&quot;,
+            &quot;units&quot;: &quot;&quot;,
+            &quot;utilisation&quot;: null
+          }
+        ],
+        &quot;kind&quot;: &quot;extremum&quot;,
+        &quot;overall&quot;: &quot;indeterminate&quot;,
+        &quot;quasiPermanentMy&quot;: null,
+        &quot;roles&quot;: [
+          &quot;hogging&quot;
+        ],
+        &quot;side&quot;: null,
+        &quot;station&quot;: 0.5
+      }
+    ],
+    &quot;interpretation&quot;: {
+      &quot;concreteStrength&quot;: &quot;fck (characteristic cylinder strength)&quot;,
+      &quot;rebarStrength&quot;: &quot;fyk for longitudinal bars and links&quot;
+    },
+    &quot;limitations&quot;: [
+      &quot;A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them&quot;,
+      &quot;Rectangular sections, fck &lt;= 50 MPa, vertical links, one layer of equal bars per face&quot;,
+      &quot;Pure bending about local y with shear Vz: N, T, Vy and Mz must be zero&quot;,
+      &quot;Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation&quot;,
+      &quot;Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer&#39;s confirmation&quot;,
+      &quot;UK NA VRd,max &lt;= 200 bw^2 cap not applied (units not stated in the NA)&quot;
+    ],
+    &quot;ndp&quot;: &quot;UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)&quot;,
+    &quot;profileEnabled&quot;: true,
+    &quot;profileId&quot;: &quot;ec2-uk-na&quot;,
+    &quot;resourceGate&quot;: &quot;R-EC2-EN-1992-1-1-2004+R-EC2-UK-NA-2009+R-EC2-JRC-EXAMPLES&quot;,
+    &quot;span&quot;: 6,
+    &quot;standard&quot;: &quot;EN 1992-1-1 with UK National Annex&quot;,
+    &quot;status&quot;: &quot;evaluated&quot;,
+    &quot;tensionAnchorageConfirmed&quot;: false,
+    &quot;unreconciledAmendments&quot;: [
+      &quot;EN 1992-1-1:2004/A1:2014&quot;,
+      &quot;UK NA + A2:2014&quot;
+    ]
+  },
+  &quot;columnMechanics&quot;: null,
+  &quot;contactState&quot;: &quot;notApplicable&quot;,
+  &quot;contractVersion&quot;: 1,
+  &quot;draftId&quot;: &quot;dpeaf888018f68c796&quot;,
+  &quot;flexuralDemand&quot;: {
+    &quot;actionOrder&quot;: [
+      &quot;N&quot;,
+      &quot;Vy&quot;,
+      &quot;Vz&quot;,
+      &quot;T&quot;,
+      &quot;My&quot;,
+      &quot;Mz&quot;
+    ],
+    &quot;basis&quot;: &quot;modelKeyStations&quot;,
+    &quot;combinationId&quot;: &quot;LC1&quot;,
+    &quot;component&quot;: &quot;My&quot;,
+    &quot;convention&quot;: &quot;Draft width along local y, depth along local z; top face = local +z. My &lt; 0 compresses the top face (sagging), My &gt; 0 the bottom face (hogging)&quot;,
+    &quot;hogging&quot;: {
+      &quot;actions&quot;: [
+        0,
+        0,
+        0,
+        0,
+        15000,
+        0
+      ],
+      &quot;kind&quot;: &quot;extremum&quot;,
+      &quot;moment&quot;: 15000,
+      &quot;side&quot;: null,
+      &quot;station&quot;: 0.5
+    },
+    &quot;limitations&quot;: [
+      &quot;Governing key stations of the one bound case/combination; no envelope across combinations&quot;,
+      &quot;Axial force, shear, torsion and Mz at these stations are not considered by the pure-flexure mechanics&quot;,
+      &quot;No utilisation ratio or status: the capacity is mechanics, not a code resistance&quot;
+    ],
+    &quot;memberId&quot;: &quot;m1&quot;,
+    &quot;sagging&quot;: {
+      &quot;actions&quot;: [
+        0,
+        0,
+        30000,
+        0,
+        -30000,
+        0
+      ],
+      &quot;kind&quot;: &quot;end&quot;,
+      &quot;moment&quot;: 30000,
+      &quot;side&quot;: null,
+      &quot;station&quot;: 0
+    },
+    &quot;status&quot;: &quot;evaluated&quot;,
+    &quot;topFaceDirection&quot;: [
+      0,
+      0,
+      -1
+    ],
+    &quot;topFaceOrientation&quot;: &quot;down&quot;,
+    &quot;utilisation&quot;: null
+  },
+  &quot;inputHash&quot;: &quot;2f5dd2dcd21db31cfe604793375f7eb9894573b433c6dc0571bd97f0e699cfe3&quot;,
+  &quot;inputs&quot;: {
+    &quot;codeInputs&quot;: {},
+    &quot;id&quot;: &quot;dpeaf888018f68c796&quot;,
+    &quot;inputSource&quot;: &quot;syntheticFixture&quot;,
+    &quot;inputSources&quot;: {
+      &quot;bottomBarCount&quot;: &quot;syntheticFixture&quot;,
+      &quot;bottomBarDiameter&quot;: &quot;syntheticFixture&quot;,
+      &quot;concreteStrength&quot;: &quot;syntheticFixture&quot;,
+      &quot;cover&quot;: &quot;syntheticFixture&quot;,
+      &quot;depth&quot;: &quot;syntheticFixture&quot;,
+      &quot;linkDiameter&quot;: &quot;syntheticFixture&quot;,
+      &quot;linkLegs&quot;: &quot;syntheticFixture&quot;,
+      &quot;linkSpacing&quot;: &quot;syntheticFixture&quot;,
+      &quot;rebarStrength&quot;: &quot;syntheticFixture&quot;,
+      &quot;topBarCount&quot;: &quot;syntheticFixture&quot;,
+      &quot;topBarDiameter&quot;: &quot;syntheticFixture&quot;,
+      &quot;width&quot;: &quot;syntheticFixture&quot;
+    },
+    &quot;inputs&quot;: {
+      &quot;bottomBarCount&quot;: 4,
+      &quot;bottomBarDiameter&quot;: 0.02,
+      &quot;concreteStrength&quot;: 30000000,
+      &quot;cover&quot;: 0.035,
+      &quot;depth&quot;: 0.6,
+      &quot;linkDiameter&quot;: 0.01,
+      &quot;linkLegs&quot;: 2,
+      &quot;linkSpacing&quot;: 0.2,
+      &quot;rebarStrength&quot;: 500000000,
+      &quot;topBarCount&quot;: 4,
+      &quot;topBarDiameter&quot;: 0.02,
+      &quot;width&quot;: 0.3
+    },
+    &quot;kind&quot;: &quot;rcBeam&quot;,
+    &quot;mechanics&quot;: {
+      &quot;inputSources&quot;: {
+        &quot;blockDepthRatio&quot;: &quot;syntheticFixture&quot;,
+        &quot;blockIntensity&quot;: &quot;syntheticFixture&quot;,
+        &quot;concreteModulus&quot;: &quot;syntheticFixture&quot;,
+        &quot;concreteTensileStrength&quot;: &quot;syntheticFixture&quot;,
+        &quot;minimumClearSpacing&quot;: &quot;syntheticFixture&quot;,
+        &quot;steelModulus&quot;: &quot;syntheticFixture&quot;,
+        &quot;steelYieldStrength&quot;: &quot;syntheticFixture&quot;,
+        &quot;ultimateStrain&quot;: &quot;syntheticFixture&quot;
+      },
+      &quot;inputs&quot;: {
+        &quot;blockDepthRatio&quot;: 0.75,
+        &quot;blockIntensity&quot;: 20000000,
+        &quot;concreteModulus&quot;: 30000000000,
+        &quot;concreteTensileStrength&quot;: 2800000,
+        &quot;minimumClearSpacing&quot;: 0.025,
+        &quot;steelModulus&quot;: 200000000000,
+        &quot;steelYieldStrength&quot;: 460000000,
+        &quot;ultimateStrain&quot;: 0.003
+      },
+      &quot;law&quot;: &quot;rectangularBlock&quot;
+    },
+    &quot;soilReference&quot;: &quot;Synthetic starter input; replace with a referenced geotechnical report&quot;,
+    &quot;targetId&quot;: &quot;m1&quot;
+  },
+  &quot;kind&quot;: &quot;rcBeam&quot;,
+  &quot;limitations&quot;: [
+    &quot;DEMONSTRATION — EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009); EN 1992-1-1:2004/A1:2014, UK NA + A2:2014 not reconciled; Demonstration, not a certified design&quot;,
+    &quot;Dimensions are draft inputs; frame geometry/stiffness is unchanged&quot;,
+    &quot;Schedule and illustrations are indicative; curtailment and laps are the engineer&#39;s detailing&quot;
+  ],
+  &quot;mock&quot;: true,
+  &quot;modelHash&quot;: &quot;8ab4db59bcb13cb867c4e101ebb162331e673eeff010331406511170b9544153&quot;,
+  &quot;overall&quot;: &quot;indeterminate&quot;,
+  &quot;plateAnalysis&quot;: null,
+  &quot;previewRunId&quot;: &quot;a172dac9574f79835cb551381d34beec0b69fdc31455839813f0ad5e20025d07&quot;,
+  &quot;reinforcementFields&quot;: [
+    &quot;Top X&quot;,
+    &quot;Top Y&quot;,
+    &quot;Bottom X&quot;,
+    &quot;Bottom Y&quot;
+  ],
+  &quot;reinforcementProposal&quot;: null,
+  &quot;schedule&quot;: [
+    {
+      &quot;basis&quot;: &quot;Straight bar over the member length less cover + link at each end&quot;,
+      &quot;cutLength&quot;: 5.91,
+      &quot;diameter&quot;: 0.02,
+      &quot;mark&quot;: &quot;T1&quot;,
+      &quot;massKg&quot;: 58.299791509727235,
+      &quot;quantity&quot;: 4,
+      &quot;region&quot;: &quot;Top&quot;,
+      &quot;shape&quot;: &quot;straight&quot;,
+      &quot;source&quot;: &quot;indicative&quot;,
+      &quot;status&quot;: &quot;indicative&quot;
+    },
+    {
+      &quot;basis&quot;: &quot;Straight bar over the member length less cover + link at each end&quot;,
+      &quot;cutLength&quot;: 5.91,
+      &quot;diameter&quot;: 0.02,
+      &quot;mark&quot;: &quot;B1&quot;,
+      &quot;massKg&quot;: 58.299791509727235,
+      &quot;quantity&quot;: 4,
+      &quot;region&quot;: &quot;Bottom&quot;,
+      &quot;shape&quot;: &quot;straight&quot;,
+      &quot;source&quot;: &quot;indicative&quot;,
+      &quot;status&quot;: &quot;indicative&quot;
+    },
+    {
+      &quot;basis&quot;: &quot;First link 50 mm from each end at the draft spacing; cut length 2(A + B) + 2 max(5φ, 50 mm), EN 1992-1-1 Fig. 8.5&quot;,
+      &quot;cutLength&quot;: 1.62,
+      &quot;diameter&quot;: 0.01,
+      &quot;legs&quot;: 2,
+      &quot;mark&quot;: &quot;L1&quot;,
+      &quot;massKg&quot;: 29.963725331776054,
+      &quot;quantity&quot;: 30,
+      &quot;region&quot;: &quot;Links&quot;,
+      &quot;shape&quot;: &quot;closed link, 135° hooks&quot;,
+      &quot;source&quot;: &quot;indicative&quot;,
+      &quot;status&quot;: &quot;indicative&quot;
+    }
+  ],
+  &quot;sectionMechanics&quot;: {
+    &quot;arrangement&quot;: &quot;One row per face (top and bottom bar inputs); cover measured to the link; layer depths from the compression face&quot;,
+    &quot;basis&quot;: &quot;mechanics&quot;,
+    &quot;codeProfile&quot;: null,
+    &quot;hogging&quot;: {
+      &quot;compressionFace&quot;: &quot;bottom&quot;,
+      &quot;elastic&quot;: {
+        &quot;crackedInertia&quot;: 0.001699575836998241,
+        &quot;crackedNeutralAxis&quot;: 0.1373316156671544,
+        &quot;crackingMoment&quot;: 58378.779656809085,
+        &quot;modularRatio&quot;: 6.666666666666667,
+        &quot;serviceConcreteStress&quot;: 1212051.9662397671,
+        &quot;serviceSteelStress&quot;: [
+          4844244.8918647235,
+          -23986478.005763
+        ],
+        &quot;uncrackedArea&quot;: 0.19424188669627374,
+        &quot;uncrackedCentroid&quot;: 0.3,
+        &quot;uncrackedInertia&quot;: 0.00625486924894383
+      },
+      &quot;layers&quot;: [
+        {
+          &quot;area&quot;: 0.0012566370614359175,
+          &quot;depth&quot;: 0.05500000000000001
+        },
+        {
+          &quot;area&quot;: 0.0012566370614359175,
+          &quot;depth&quot;: 0.5449999999999999
+        }
+      ],
+      &quot;serviceMoment&quot;: {
+        &quot;belowCrackingMoment&quot;: true,
+        &quot;combinationId&quot;: &quot;LC1&quot;,
+        &quot;moment&quot;: 15000,
+        &quot;side&quot;: null,
+        &quot;station&quot;: 0.5,
+        &quot;stressBasis&quot;: &quot;crackedSection&quot;
+      },
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;ultimate&quot;: {
+        &quot;classification&quot;: &quot;tensionYielded&quot;,
+        &quot;concreteForce&quot;: 363116.87954093027,
+        &quot;curvature&quot;: 0.0371781119541106,
+        &quot;depthRatio&quot;: 0.1480598897210725,
+        &quot;layers&quot;: [
+          {
+            &quot;force&quot;: 214936.16871959192,
+            &quot;steelStress&quot;: 191040768.5047833,
+            &quot;strain&quot;: 0.0009552038425239165,
+            &quot;yielded&quot;: false
+          },
+          {
+            &quot;force&quot;: -578053.0482605221,
+            &quot;steelStress&quot;: -460000000,
+            &quot;strain&quot;: -0.017262071014990277,
+            &quot;yielded&quot;: true
+          }
+        ],
+        &quot;moment&quot;: 292229.5996717784,
+        &quot;neutralAxisDepth&quot;: 0.0806926398979845,
+        &quot;relativeResidual&quot;: 1.4680568075095804e-16
+      }
+    },
+    &quot;inputSources&quot;: {
+      &quot;blockDepthRatio&quot;: &quot;syntheticFixture&quot;,
+      &quot;blockIntensity&quot;: &quot;syntheticFixture&quot;,
+      &quot;concreteModulus&quot;: &quot;syntheticFixture&quot;,
+      &quot;concreteTensileStrength&quot;: &quot;syntheticFixture&quot;,
+      &quot;minimumClearSpacing&quot;: &quot;syntheticFixture&quot;,
+      &quot;steelModulus&quot;: &quot;syntheticFixture&quot;,
+      &quot;steelYieldStrength&quot;: &quot;syntheticFixture&quot;,
+      &quot;ultimateStrain&quot;: &quot;syntheticFixture&quot;
+    },
+    &quot;inputs&quot;: {
+      &quot;blockDepthRatio&quot;: 0.75,
+      &quot;blockIntensity&quot;: 20000000,
+      &quot;concreteModulus&quot;: 30000000000,
+      &quot;concreteTensileStrength&quot;: 2800000,
+      &quot;minimumClearSpacing&quot;: 0.025,
+      &quot;steelModulus&quot;: 200000000000,
+      &quot;steelYieldStrength&quot;: 460000000,
+      &quot;ultimateStrain&quot;: 0.003
+    },
+    &quot;law&quot;: &quot;rectangularBlock&quot;,
+    &quot;limitations&quot;: [
+      &quot;Mechanics only — not a code resistance; no partial factors or code limits applied&quot;,
+      &quot;Pure flexure (N = 0) about the width axis; concrete tension ignored at ultimate and in the cracked state&quot;,
+      &quot;Material-law parameters are explicit inputs with recorded provenance&quot;,
+      &quot;Service stresses use the cracked transformed section under the governing model moment of the one bound case/combination, which is not classified as a serviceability combination; no stress limits applied&quot;
+    ],
+    &quot;rowFits&quot;: {
+      &quot;bottom&quot;: {
+        &quot;area&quot;: 0.0012566370614359175,
+        &quot;clearSpacing&quot;: 0.043333333333333314,
+        &quot;depthFromFace&quot;: 0.05500000000000001,
+        &quot;fits&quot;: true
+      },
+      &quot;top&quot;: {
+        &quot;area&quot;: 0.0012566370614359175,
+        &quot;clearSpacing&quot;: 0.043333333333333314,
+        &quot;depthFromFace&quot;: 0.05500000000000001,
+        &quot;fits&quot;: true
+      }
+    },
+    &quot;sagging&quot;: {
+      &quot;compressionFace&quot;: &quot;top&quot;,
+      &quot;elastic&quot;: {
+        &quot;crackedInertia&quot;: 0.001699575836998241,
+        &quot;crackedNeutralAxis&quot;: 0.1373316156671544,
+        &quot;crackingMoment&quot;: 58378.779656809085,
+        &quot;modularRatio&quot;: 6.666666666666667,
+        &quot;serviceConcreteStress&quot;: 2424103.9324795343,
+        &quot;serviceSteelStress&quot;: [
+          9688489.783729447,
+          -47972956.011526
+        ],
+        &quot;uncrackedArea&quot;: 0.19424188669627374,
+        &quot;uncrackedCentroid&quot;: 0.3,
+        &quot;uncrackedInertia&quot;: 0.00625486924894383
+      },
+      &quot;layers&quot;: [
+        {
+          &quot;area&quot;: 0.0012566370614359175,
+          &quot;depth&quot;: 0.05500000000000001
+        },
+        {
+          &quot;area&quot;: 0.0012566370614359175,
+          &quot;depth&quot;: 0.5449999999999999
+        }
+      ],
+      &quot;serviceMoment&quot;: {
+        &quot;belowCrackingMoment&quot;: true,
+        &quot;combinationId&quot;: &quot;LC1&quot;,
+        &quot;moment&quot;: 30000,
+        &quot;side&quot;: null,
+        &quot;station&quot;: 0,
+        &quot;stressBasis&quot;: &quot;crackedSection&quot;
+      },
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;ultimate&quot;: {
+        &quot;classification&quot;: &quot;tensionYielded&quot;,
+        &quot;concreteForce&quot;: 363116.87954093027,
+        &quot;curvature&quot;: 0.0371781119541106,
+        &quot;depthRatio&quot;: 0.1480598897210725,
+        &quot;layers&quot;: [
+          {
+            &quot;force&quot;: 214936.16871959192,
+            &quot;steelStress&quot;: 191040768.5047833,
+            &quot;strain&quot;: 0.0009552038425239165,
+            &quot;yielded&quot;: false
+          },
+          {
+            &quot;force&quot;: -578053.0482605221,
+            &quot;steelStress&quot;: -460000000,
+            &quot;strain&quot;: -0.017262071014990277,
+            &quot;yielded&quot;: true
+          }
+        ],
+        &quot;moment&quot;: 292229.5996717784,
+        &quot;neutralAxisDepth&quot;: 0.0806926398979845,
+        &quot;relativeResidual&quot;: 1.4680568075095804e-16
+      }
+    },
+    &quot;status&quot;: &quot;evaluated&quot;
+  },
+  &quot;soilProvenance&quot;: null,
+  &quot;sourceProvenance&quot;: {
+    &quot;combinationId&quot;: &quot;LC1&quot;,
+    &quot;kind&quot;: &quot;modelAnalysis&quot;,
+    &quot;mock&quot;: false,
+    &quot;modelHash&quot;: &quot;8ab4db59bcb13cb867c4e101ebb162331e673eeff010331406511170b9544153&quot;,
+    &quot;note&quot;: &quot;Actual model actions; preview section is not applied to frame stiffness, and no concrete resistance is calculated&quot;,
+    &quot;resultId&quot;: &quot;8ab4db59bcb13cb8-LC1&quot;,
+    &quot;settingsHash&quot;: &quot;71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da&quot;,
+    &quot;solverBuildHash&quot;: &quot;c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef&quot;,
+    &quot;sourceRevision&quot;: 2,
+    &quot;stations&quot;: [
+      {
+        &quot;actions&quot;: [
+          0,
+          0,
+          30000,
+          0,
+          -30000,
+          0
+        ],
+        &quot;components&quot;: [
+          &quot;N&quot;,
+          &quot;Vy&quot;,
+          &quot;Vz&quot;,
+          &quot;T&quot;,
+          &quot;My&quot;,
+          &quot;Mz&quot;
+        ],
+        &quot;kind&quot;: &quot;end&quot;,
+        &quot;station&quot;: 0
+      },
+      {
+        &quot;actions&quot;: [
+          0,
+          0,
+          0,
+          0,
+          15000,
+          0
+        ],
+        &quot;components&quot;: [
+          &quot;My&quot;
+        ],
+        &quot;kind&quot;: &quot;extremum&quot;,
+        &quot;station&quot;: 0.5
+      },
+      {
+        &quot;actions&quot;: [
+          0,
+          0,
+          -30000,
+          0,
+          -30000,
+          0
+        ],
+        &quot;components&quot;: [
+          &quot;N&quot;,
+          &quot;Vy&quot;,
+          &quot;Vz&quot;,
+          &quot;T&quot;,
+          &quot;My&quot;,
+          &quot;Mz&quot;
+        ],
+        &quot;kind&quot;: &quot;end&quot;,
+        &quot;station&quot;: 1
+      }
+    ],
+    &quot;targetId&quot;: &quot;m1&quot;
+  },
+  &quot;sourceRevision&quot;: 2
+}</pre></details></section></section><h2>Equilibrium and diagnostics</h2><pre>{
+  &quot;checks&quot;: {
+    &quot;factorNnzEstimate&quot;: 0,
+    &quot;forcePass&quot;: true,
+    &quot;globalBalance&quot;: [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    &quot;matrixNnz&quot;: 0,
+    &quot;minScaledPivot&quot;: 1,
+    &quot;momentPass&quot;: true,
+    &quot;origin&quot;: [
+      0,
+      0,
+      0
+    ],
+    &quot;scaledResidual&quot;: 0
+  },
+  &quot;diagnostics&quot;: [],
+  &quot;generatedConstraints&quot;: []
+}</pre><h2>Reproducible project input</h2><pre>{
+  &quot;analysisMode&quot;: &quot;planarXZ&quot;,
+  &quot;analysisSettings&quot;: {
+    &quot;formulation&quot;: &quot;eulerBernoulli3D&quot;,
+    &quot;memoryLimitMiB&quot;: 512,
+    &quot;mergeTolerance&quot;: 0.000001,
+    &quot;timeoutMs&quot;: 30000,
+    &quot;type&quot;: &quot;linearStatic&quot;
+  },
+  &quot;combinations&quot;: [],
+  &quot;designPreviews&quot;: [
+    {
+      &quot;codeInputs&quot;: {},
+      &quot;id&quot;: &quot;dpeaf888018f68c796&quot;,
+      &quot;inputSource&quot;: &quot;syntheticFixture&quot;,
+      &quot;inputSources&quot;: {
+        &quot;bottomBarCount&quot;: &quot;syntheticFixture&quot;,
+        &quot;bottomBarDiameter&quot;: &quot;syntheticFixture&quot;,
+        &quot;concreteStrength&quot;: &quot;syntheticFixture&quot;,
+        &quot;cover&quot;: &quot;syntheticFixture&quot;,
+        &quot;depth&quot;: &quot;syntheticFixture&quot;,
+        &quot;linkDiameter&quot;: &quot;syntheticFixture&quot;,
+        &quot;linkLegs&quot;: &quot;syntheticFixture&quot;,
+        &quot;linkSpacing&quot;: &quot;syntheticFixture&quot;,
+        &quot;rebarStrength&quot;: &quot;syntheticFixture&quot;,
+        &quot;topBarCount&quot;: &quot;syntheticFixture&quot;,
+        &quot;topBarDiameter&quot;: &quot;syntheticFixture&quot;,
+        &quot;width&quot;: &quot;syntheticFixture&quot;
+      },
+      &quot;inputs&quot;: {
+        &quot;bottomBarCount&quot;: 4,
+        &quot;bottomBarDiameter&quot;: 0.02,
+        &quot;concreteStrength&quot;: 30000000,
+        &quot;cover&quot;: 0.035,
+        &quot;depth&quot;: 0.6,
+        &quot;linkDiameter&quot;: 0.01,
+        &quot;linkLegs&quot;: 2,
+        &quot;linkSpacing&quot;: 0.2,
+        &quot;rebarStrength&quot;: 500000000,
+        &quot;topBarCount&quot;: 4,
+        &quot;topBarDiameter&quot;: 0.02,
+        &quot;width&quot;: 0.3
+      },
+      &quot;kind&quot;: &quot;rcBeam&quot;,
+      &quot;mechanics&quot;: {
+        &quot;inputSources&quot;: {
+          &quot;blockDepthRatio&quot;: &quot;syntheticFixture&quot;,
+          &quot;blockIntensity&quot;: &quot;syntheticFixture&quot;,
+          &quot;concreteModulus&quot;: &quot;syntheticFixture&quot;,
+          &quot;concreteTensileStrength&quot;: &quot;syntheticFixture&quot;,
+          &quot;minimumClearSpacing&quot;: &quot;syntheticFixture&quot;,
+          &quot;steelModulus&quot;: &quot;syntheticFixture&quot;,
+          &quot;steelYieldStrength&quot;: &quot;syntheticFixture&quot;,
+          &quot;ultimateStrain&quot;: &quot;syntheticFixture&quot;
+        },
+        &quot;inputs&quot;: {
+          &quot;blockDepthRatio&quot;: 0.75,
+          &quot;blockIntensity&quot;: 20000000,
+          &quot;concreteModulus&quot;: 30000000000,
+          &quot;concreteTensileStrength&quot;: 2800000,
+          &quot;minimumClearSpacing&quot;: 0.025,
+          &quot;steelModulus&quot;: 200000000000,
+          &quot;steelYieldStrength&quot;: 460000000,
+          &quot;ultimateStrain&quot;: 0.003
+        },
+        &quot;law&quot;: &quot;rectangularBlock&quot;
+      },
+      &quot;soilReference&quot;: &quot;Synthetic starter input; replace with a referenced geotechnical report&quot;,
+      &quot;targetId&quot;: &quot;m1&quot;
+    }
+  ],
+  &quot;displayUnits&quot;: &quot;engineeringMetric&quot;,
+  &quot;gravity&quot;: [
+    0,
+    0,
+    -9.80665
+  ],
+  &quot;id&quot;: &quot;preview-demand&quot;,
+  &quot;loadCases&quot;: [
+    {
+      &quot;category&quot;: &quot;other&quot;,
+      &quot;id&quot;: &quot;LC1&quot;,
+      &quot;name&quot;: &quot;Reference load&quot;
+    }
+  ],
+  &quot;loads&quot;: [
+    {
+      &quot;axes&quot;: &quot;global&quot;,
+      &quot;case&quot;: &quot;LC1&quot;,
+      &quot;forcePerLength&quot;: [
+        0,
+        0,
+        -10000
+      ],
+      &quot;id&quot;: &quot;l1&quot;,
+      &quot;member&quot;: &quot;m1&quot;,
+      &quot;type&quot;: &quot;uniform&quot;
+    }
+  ],
+  &quot;materials&quot;: [
+    {
+      &quot;E&quot;: 200000000000,
+      &quot;density&quot;: 7850,
+      &quot;id&quot;: &quot;mat1&quot;,
+      &quot;name&quot;: &quot;Synthetic isotropic material&quot;,
+      &quot;nu&quot;: 0.25
+    }
+  ],
+  &quot;members&quot;: [
+    {
+      &quot;end&quot;: &quot;n2&quot;,
+      &quot;id&quot;: &quot;m1&quot;,
+      &quot;localY&quot;: [
+        0,
+        -1,
+        0
+      ],
+      &quot;material&quot;: &quot;mat1&quot;,
+      &quot;releaseEnd&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;releaseStart&quot;: {
+        &quot;my&quot;: false,
+        &quot;mz&quot;: false
+      },
+      &quot;section&quot;: &quot;sec1&quot;,
+      &quot;start&quot;: &quot;n1&quot;
+    }
+  ],
+  &quot;metadata&quot;: {
+    &quot;createdBy&quot;: &quot;Specification package&quot;,
+    &quot;description&quot;: &quot;Analytical verification only&quot;,
+    &quot;entityLabels&quot;: {
+      &quot;LC1&quot;: &quot;lc1&quot;,
+      &quot;l1&quot;: &quot;l1&quot;,
+      &quot;m1&quot;: &quot;m1&quot;,
+      &quot;mat1&quot;: &quot;mat1&quot;,
+      &quot;n1&quot;: &quot;n1&quot;,
+      &quot;n2&quot;: &quot;n2&quot;,
+      &quot;s1&quot;: &quot;s1&quot;,
+      &quot;s2&quot;: &quot;s2&quot;,
+      &quot;sec1&quot;: &quot;sec1&quot;
+    }
+  },
+  &quot;name&quot;: &quot;B08&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;n1&quot;,
+      &quot;position&quot;: [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;n2&quot;,
+      &quot;position&quot;: [
+        6,
+        0,
+        0
+      ]
+    }
+  ],
+  &quot;revision&quot;: 2,
+  &quot;schemaVersion&quot;: &quot;1.7.0&quot;,
+  &quot;sections&quot;: [
+    {
+      &quot;A&quot;: 0.01,
+      &quot;Iy&quot;: 0.00008,
+      &quot;Iz&quot;: 0.00008,
+      &quot;J&quot;: 0.00002,
+      &quot;cy&quot;: 0.1,
+      &quot;cz&quot;: 0.2,
+      &quot;id&quot;: &quot;sec1&quot;,
+      &quot;name&quot;: &quot;Synthetic principal section&quot;,
+      &quot;provenance&quot;: &quot;Original analytical fixture, not a catalogue section&quot;
+    }
+  ],
+  &quot;structure&quot;: {
+    &quot;designObjects&quot;: [
+      {
+        &quot;analysisStatus&quot;: &quot;unverified&quot;,
+        &quot;id&quot;: &quot;do4214a7bd254a9c4fe50a&quot;,
+        &quot;kind&quot;: &quot;rcBeam&quot;,
+        &quot;name&quot;: &quot;RC beam&quot;,
+        &quot;physicalMemberId&quot;: &quot;pmca0df2c95aa144c1d0ff&quot;,
+        &quot;previewId&quot;: &quot;dpeaf888018f68c796&quot;,
+        &quot;storeyId&quot;: null,
+        &quot;supportId&quot;: null
+      }
+    ],
+    &quot;grids&quot;: [],
+    &quot;groups&quot;: [],
+    &quot;joints&quot;: [
+      {
+        &quot;detailStatus&quot;: &quot;notDesigned&quot;,
+        &quot;id&quot;: &quot;jt0480a93d2e9b094b89e0&quot;,
+        &quot;name&quot;: &quot;Joint n2&quot;,
+        &quot;nodeId&quot;: &quot;n2&quot;,
+        &quot;storeyId&quot;: null
+      },
+      {
+        &quot;detailStatus&quot;: &quot;notDesigned&quot;,
+        &quot;id&quot;: &quot;jt676b8bb84ce7267dd520&quot;,
+        &quot;name&quot;: &quot;Joint n1&quot;,
+        &quot;nodeId&quot;: &quot;n1&quot;,
+        &quot;storeyId&quot;: null
+      }
+    ],
+    &quot;layers&quot;: [],
+    &quot;physicalMembers&quot;: [
+      {
+        &quot;analyticalMemberIds&quot;: [
+          &quot;m1&quot;
+        ],
+        &quot;id&quot;: &quot;pmca0df2c95aa144c1d0ff&quot;,
+        &quot;name&quot;: &quot;m1&quot;,
+        &quot;role&quot;: &quot;unassigned&quot;,
+        &quot;storeyId&quot;: null
+      }
+    ],
+    &quot;storeys&quot;: [],
+    &quot;supportDetails&quot;: [
+      {
+        &quot;detailStatus&quot;: &quot;notDesigned&quot;,
+        &quot;id&quot;: &quot;sdad328846aa18b32a3358&quot;,
+        &quot;name&quot;: &quot;Support s2&quot;,
+        &quot;supportId&quot;: &quot;s2&quot;
+      },
+      {
+        &quot;detailStatus&quot;: &quot;notDesigned&quot;,
+        &quot;id&quot;: &quot;sde8bc163c82eee1873328&quot;,
+        &quot;name&quot;: &quot;Support s1&quot;,
+        &quot;supportId&quot;: &quot;s1&quot;
+      }
+    ]
+  },
+  &quot;supports&quot;: [
+    {
+      &quot;fixed&quot;: [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      &quot;id&quot;: &quot;s1&quot;,
+      &quot;node&quot;: &quot;n1&quot;,
+      &quot;prescribed&quot;: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      &quot;fixed&quot;: [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      &quot;id&quot;: &quot;s2&quot;,
+      &quot;node&quot;: &quot;n2&quot;,
+      &quot;prescribed&quot;: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}</pre></html>

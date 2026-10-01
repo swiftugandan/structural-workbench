@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.6.0"
+      "const": "1.7.0"
     },
     "id": {
       "type": "string",
@@ -1479,6 +1479,53 @@
                   }
                 }
               }
+            }
+          }
+        },
+        "codeInputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "rcBeam only (schema 1.7.0, ADR 0026): detailing and serviceability inputs for the code profile; absent fields leave the checks that need them indeterminate.",
+          "properties": {
+            "exposureClass": {
+              "enum": [
+                "X0",
+                "XC1",
+                "XC2",
+                "XC3",
+                "XC4",
+                "XD1",
+                "XD2",
+                "XD3",
+                "XS1",
+                "XS2",
+                "XS3"
+              ]
+            },
+            "minimumCoverDurability": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.1
+            },
+            "aggregateSize": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.063
+            },
+            "structuralSystem": {
+              "enum": [
+                "simplySupported",
+                "endSpan",
+                "interiorSpan",
+                "cantilever"
+              ]
+            },
+            "partitionsSensitive": {
+              "type": "boolean"
+            },
+            "quasiPermanentCombinationId": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
             }
           }
         }

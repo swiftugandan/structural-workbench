@@ -39,6 +39,7 @@ fn jrc_beam(rows: Vec<RcBarRow>, links: Option<RcLinks>) -> MemberContext {
             rows,
             links,
             tension_steel_anchored: Some(true),
+            detailing: Default::default(),
         }),
         ..Default::default()
     }
@@ -46,7 +47,7 @@ fn jrc_beam(rows: Vec<RcBarRow>, links: Option<RcLinks>) -> MemberContext {
 
 fn row(face: RcFace, area_mm2: f64) -> RcBarRow {
     // Centroid at h - d = 28 mm from its face.
-    RcBarRow { face, area: area_mm2 / 1e6, centroid_from_face: 0.028 }
+    RcBarRow { face, area: area_mm2 / 1e6, centroid_from_face: 0.028, bars: None }
 }
 
 fn links(diameter_mm: f64, spacing_mm: f64) -> Option<RcLinks> {
@@ -66,7 +67,7 @@ fn close(got: f64, want: f64, rel: f64, what: &str) {
 }
 
 fn profile(ndp: Ec2Ndp) -> Ec2UkNaProfile {
-    Ec2UkNaProfile { ndp, enabled: false }
+    Ec2UkNaProfile { ndp, enabled: true }
 }
 
 #[test]
@@ -161,7 +162,7 @@ fn sign_mapping_follows_adr_0014() {
 }
 
 #[test]
-fn out_of_scope_actions_and_companions_never_pass() {
+fn out_of_scope_actions_are_unsupported_and_missing_inputs_indeterminate() {
     let ctx = jrc_beam(vec![row(RcFace::Bottom, 565.), row(RcFace::Top, 226.)], links(6., 175.));
     let p = profile(Ec2Ndp::uk_na_2009());
     let mut d = demand(-20e3, 10e3);
@@ -169,12 +170,17 @@ fn out_of_scope_actions_and_companions_never_pass() {
     let checks = p.run_checks(&d, &ctx);
     assert_eq!(check(&checks, "ec2.actions").status, CheckStatus::Unsupported);
     assert!(checks.iter().all(|c| c.check_id != "ec2.flexure"));
-    // A section that passes every implemented check still cannot pass overall.
+    // Strength checks pass; without the engineer's detailing and service
+    // inputs the run is indeterminate, never assumed to pass (ADR 0026).
     let ok = p.run_checks(&demand(-20e3, 10e3), &ctx);
     for id in ["ec2.flexure", "ec2.shear", "ec2.as-min", "ec2.links-min", "ec2.links-spacing"] {
         assert_eq!(check(&ok, id).status, CheckStatus::Pass, "{id}");
     }
-    assert_eq!(crate::profile::DesignRun::overall_from_checks(&ok), CheckStatus::Unsupported);
+    for id in ["ec2.cover", "ec2.bar-spacing", "ec2.crack-control", "ec2.deflection"] {
+        assert_eq!(check(&ok, id).status, CheckStatus::Indeterminate, "{id}");
+    }
+    assert!(ok.iter().all(|c| c.status != CheckStatus::Unsupported));
+    assert_eq!(crate::profile::DesignRun::overall_from_checks(&ok), CheckStatus::Indeterminate);
     // No tension steel on the tension face: flexure fails with zero resistance.
     let bare = jrc_beam(vec![row(RcFace::Bottom, 565.)], links(6., 175.));
     let hog = p.run_checks(&demand(20e3, 0.), &bare);

@@ -61,6 +61,8 @@ impl CodeProfile for Aisc36022LrfdProfile {
                 "H1 uses φcPn/φbMn from prior checks or explicit context fields".into(),
                 "S2 seeds: D.1, E.1C, F.1-1B (Lb=0), G.1B, H.1B; LTB flexure deferred".into(),
             ],
+            certification: super::DEMONSTRATION.into(),
+            unreconciled_amendments: vec![],
         }
     }
 

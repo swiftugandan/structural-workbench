@@ -1,0 +1,293 @@
+{
+  "fixtureVersion": 1,
+  "profileId": "ec2-uk-na",
+  "source": {
+    "lockId": "R-EC2-JRC-EXAMPLES",
+    "title": "Eurocode 2: Background & Applications. Design of Concrete Buildings. Worked examples (JRC89037, 2014)",
+    "anchorage": "Chapter 4.1.1, Tables 4.1.2-4.1.4 (straight bars, lbd; EU recommended values, gamma_c 1.5, gamma_s 1.15, alpha_ct 1.0)",
+    "spanDepth": "Chapter 3.3.1.3-3.3.1.5 (Eqn 7.16a with K = 1.3)"
+  },
+  "tolerancePolicy": "Published values are rounded to the mm (anchorage) or 0.1 (span/depth): |computed - published| <= 1 mm or 0.05, plus one published unit where the report truncates",
+  "anchorage": {
+    "assumptions": [
+      "cd = cNom (large bar spacing)",
+      "alpha1 = alpha3 = alpha4 = alpha5 = 1",
+      "sigma_sd = fyd",
+      "UK NA equals the EU recommended values used: gamma_c, gamma_s, alpha_ct"
+    ],
+    "tables": [
+      {
+        "table": "4.1.2",
+        "element": "footings",
+        "fck": 25000000.0,
+        "fyk": 500000000.0,
+        "cNom": 0.04,
+        "columns": [
+          "tensionGood",
+          "tensionPoor",
+          "compressionGood",
+          "compressionPoor"
+        ],
+        "lbdStraightMm": {
+          "8": [
+            226,
+            323,
+            323,
+            461
+          ],
+          "10": [
+            283,
+            404,
+            404,
+            577
+          ],
+          "12": [
+            339,
+            484,
+            484,
+            692
+          ],
+          "14": [
+            408,
+            582,
+            565,
+            807
+          ],
+          "16": [
+            500,
+            715,
+            646,
+            922
+          ],
+          "20": [
+            686,
+            980,
+            807,
+            1153
+          ],
+          "25": [
+            918,
+            1312,
+            1009,
+            1441
+          ]
+        }
+      },
+      {
+        "table": "4.1.3",
+        "element": "beams and slabs",
+        "fck": 25000000.0,
+        "fyk": 500000000.0,
+        "cNom": 0.03,
+        "columns": [
+          "tensionGood",
+          "tensionPoor",
+          "compressionGood",
+          "compressionPoor"
+        ],
+        "lbdStraightMm": {
+          "8": [
+            226,
+            323,
+            323,
+            461
+          ],
+          "10": [
+            283,
+            404,
+            404,
+            577
+          ],
+          "12": [
+            375,
+            536,
+            484,
+            692
+          ],
+          "14": [
+            468,
+            669,
+            565,
+            807
+          ],
+          "16": [
+            561,
+            801,
+            646,
+            922
+          ],
+          "20": [
+            747,
+            1067,
+            807,
+            1153
+          ],
+          "25": [
+            979,
+            1398,
+            1009,
+            1441
+          ]
+        }
+      },
+      {
+        "table": "4.1.4",
+        "element": "columns",
+        "fck": 30000000.0,
+        "fyk": 500000000.0,
+        "cNom": 0.03,
+        "columns": [
+          "tensionGood",
+          "tensionPoor",
+          "compressionGood",
+          "compressionPoor"
+        ],
+        "lbdStraightMm": {
+          "8": [
+            200,
+            286,
+            286,
+            408
+          ],
+          "10": [
+            250,
+            357,
+            357,
+            511
+          ],
+          "12": [
+            332,
+            475,
+            429,
+            613
+          ],
+          "14": [
+            415,
+            592,
+            500,
+            715
+          ],
+          "16": [
+            497,
+            710,
+            572,
+            817
+          ],
+          "20": [
+            661,
+            945,
+            715,
+            1021
+          ],
+          "25": [
+            867,
+            1238,
+            893,
+            1276
+          ]
+        }
+      }
+    ]
+  },
+  "spanDepth": [
+    {
+      "case": "3.3.1.3 two-way slab",
+      "K": 1.3,
+      "fck": 25000000.0,
+      "rho": 0.0044,
+      "rhoPrime": 0.0,
+      "basic": 26.4,
+      "sigmaS": 241000000.0,
+      "adjusted": 33.9,
+      "flangeFactor": 1.0
+    },
+    {
+      "case": "3.3.1.5 ribbed slab",
+      "K": 1.3,
+      "fck": 25000000.0,
+      "rho": 0.0023,
+      "rhoPrime": 0.0,
+      "basicWithFlange": 49.6,
+      "flangeFactor": 0.8
+    }
+  ],
+  "tables7": {
+    "source": "EN 1992-1-1:2004 Tables 7.2N and 7.3N (R-EC2-EN-1992-1-1-2004)",
+    "7.2N": {
+      "sigmaMpa": [
+        160,
+        200,
+        240,
+        280,
+        320,
+        360,
+        400,
+        450
+      ],
+      "wk04": [
+        40,
+        32,
+        20,
+        16,
+        12,
+        10,
+        8,
+        6
+      ],
+      "wk03": [
+        32,
+        25,
+        16,
+        12,
+        10,
+        8,
+        6,
+        5
+      ],
+      "wk02": [
+        25,
+        16,
+        12,
+        8,
+        6,
+        5,
+        4,
+        null
+      ]
+    },
+    "7.3N": {
+      "sigmaMpa": [
+        160,
+        200,
+        240,
+        280,
+        320,
+        360
+      ],
+      "wk04": [
+        300,
+        300,
+        250,
+        200,
+        150,
+        100
+      ],
+      "wk03": [
+        300,
+        250,
+        200,
+        150,
+        100,
+        50
+      ],
+      "wk02": [
+        200,
+        150,
+        100,
+        50,
+        null,
+        null
+      ]
+    }
+  }
+}

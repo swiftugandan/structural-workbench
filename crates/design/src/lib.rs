@@ -17,7 +17,8 @@ pub use profile::ec2uk::{Ec2Ndp, Ec2UkNaProfile};
 pub use profile::{
     CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,
     PROFILE_AISC_360_22_LRFD, PROFILE_EC2_UK_NA, ProfileApplicability, ProfileMetadata,
-    ProfileRegistry, RcBarRow, RcBeamContext, RcFace, RcLinks, TensionEndProps, WSectionProps,
+    ProfileRegistry, RcBarRow, RcBars, RcBeamContext, RcBeamDetailing, RcFace, RcLinks, TensionEndProps,
+    WSectionProps,
 };
 
 use workbench_model::Section;
@@ -90,10 +91,12 @@ mod tests {
         assert_eq!(meta.len(), 2);
         assert_eq!(meta[0].id, PROFILE_AISC_360_22_LRFD);
         assert!(meta[0].enabled);
-        // EC2 is registered for capabilities but stays disabled (ADR 0015).
+        // EC2 is enabled as a labelled demonstration of the held edition (ADR 0026).
         assert_eq!(meta[1].id, PROFILE_EC2_UK_NA);
-        assert!(!meta[1].enabled);
-        assert_eq!(registry.enabled_profiles().len(), 1);
+        assert!(meta[1].enabled);
+        assert_eq!(meta[1].certification, "Demonstration, not a certified design");
+        assert!(meta[1].unreconciled_amendments.iter().any(|a| a.contains("A1:2014")));
+        assert_eq!(registry.enabled_profiles().len(), 2);
 
         let demand = DesignDemand {
             n: 0.0,
@@ -133,13 +136,13 @@ mod tests {
     }
 
     #[test]
-    fn disabled_ec2_profile_returns_only_the_resource_gate() {
+    fn ec2_profile_needs_an_rc_beam_description() {
         let run = default_registry()
             .evaluate(PROFILE_EC2_UK_NA, &DesignDemand::default(), &MemberContext::default())
             .unwrap();
         assert_eq!(run.overall, CheckStatus::Unsupported);
         assert_eq!(run.checks.len(), 1);
-        assert_eq!(run.checks[0].check_id, "profile.resources");
+        assert_eq!(run.checks[0].check_id, "profile.applicability");
     }
 
     #[test]

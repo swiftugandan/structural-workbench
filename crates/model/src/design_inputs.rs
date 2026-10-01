@@ -27,6 +27,60 @@ pub struct DesignPreview {
     /// Absent means the plate analysis is not configured.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub plate: Option<SlabPlateInputs>,
+    /// rcBeam only (schema 1.7.0, ADR 0026): detailing and serviceability
+    /// inputs for the code profile. Every value is the engineer's; absent
+    /// fields leave the checks that need them indeterminate.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub code_inputs: Option<RcBeamCodeInputs>,
+}
+
+/// Exposure classes of EN 206 / EN 1992-1-1 Table 4.1.
+pub const EXPOSURE_CLASSES: &[&str] = &[
+    "X0", "XC1", "XC2", "XC3", "XC4", "XD1", "XD2", "XD3", "XS1", "XS2", "XS3",
+];
+/// Structural systems of EN 1992-1-1 Table 7.4N / UK NA Table NA.5 (beams).
+pub const STRUCTURAL_SYSTEMS: &[&str] = &["simplySupported", "endSpan", "interiorSpan", "cantilever"];
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Default)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct RcBeamCodeInputs {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub exposure_class: Option<String>,
+    /// c_min,dur (m) from the durability standard for the exposure class.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub minimum_cover_durability: Option<f64>,
+    /// Maximum aggregate size d_g (m).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub aggregate_size: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub structural_system: Option<String>,
+    /// Whether the beam supports partitions liable to deflection damage.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub partitions_sensitive: Option<bool>,
+    /// The case or combination taken as quasi-permanent for crack control.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub quasi_permanent_combination_id: Option<String>,
+}
+
+impl RcBeamCodeInputs {
+    pub fn validate(&self) -> Result<()> {
+        if self.exposure_class.as_deref().is_some_and(|e| !EXPOSURE_CLASSES.contains(&e)) {
+            return Err(err("INVALID_SCHEMA", "Unknown exposure class"));
+        }
+        if self.structural_system.as_deref().is_some_and(|e| !STRUCTURAL_SYSTEMS.contains(&e)) {
+            return Err(err("INVALID_SCHEMA", "Unknown structural system"));
+        }
+        if self.minimum_cover_durability.is_some_and(|c| !(c.is_finite() && c > 0. && c <= 0.1)) {
+            return Err(err("INVALID_SCHEMA", "c_min,dur must lie in (0, 100] mm"));
+        }
+        if self.aggregate_size.is_some_and(|c| !(c.is_finite() && c > 0. && c <= 0.063)) {
+            return Err(err("INVALID_SCHEMA", "Aggregate size must lie in (0, 63] mm"));
+        }
+        if self.quasi_permanent_combination_id.as_deref().is_some_and(|c| c.is_empty() || c.len() > 64) {
+            return Err(err("INVALID_SCHEMA", "Invalid quasi-permanent combination reference"));
+        }
+        Ok(())
+    }
 }
 
 /// Plate analysis inputs of a slab draft. The panel is the draft's
@@ -304,6 +358,12 @@ impl DesignPreview {
                 ));
             }
             plate.validate()?;
+        }
+        if let Some(c) = &self.code_inputs {
+            if self.kind != "rcBeam" {
+                return Err(err("INVALID_SCHEMA", "Code inputs apply only to RC beam drafts"));
+            }
+            c.validate()?;
         }
         if self.tension_anchorage_confirmed.is_some() && self.kind != "rcBeam" {
             return Err(err(

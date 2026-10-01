@@ -99,12 +99,43 @@ pub enum RcFace {
 }
 
 /// One longitudinal bar row: total area (m²) and its centroid distance from
-/// its own face (m).
+/// its own face (m), and the bars when the row is a single layer of equal
+/// bars (needed for spacing, anchorage and crack control).
 #[derive(Debug, Clone, PartialEq)]
 pub struct RcBarRow {
     pub face: RcFace,
     pub area: f64,
     pub centroid_from_face: f64,
+    pub bars: Option<RcBars>,
+}
+
+/// A single layer of `count` equal bars of `diameter` (m).
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct RcBars {
+    pub diameter: f64,
+    pub count: u32,
+}
+
+/// Detailing and serviceability inputs a code needs beyond the section:
+/// every value is the engineer's; `None` means not entered, and the checks
+/// that need it report indeterminate rather than assume a value.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct RcBeamDetailing {
+    /// Exposure class (e.g. "XC1") for the crack-width limit.
+    pub exposure_class: Option<String>,
+    /// Minimum cover for durability (m), from the durability standard.
+    pub cover_durability: Option<f64>,
+    /// Maximum aggregate size (m).
+    pub aggregate_size: Option<f64>,
+    /// "simplySupported", "endSpan", "interiorSpan" or "cantilever".
+    pub structural_system: Option<String>,
+    /// Whether the member supports partitions liable to deflection damage.
+    pub partitions_sensitive: Option<bool>,
+    /// Effective span (m).
+    pub span: Option<f64>,
+    /// My at this station under the quasi-permanent combination (N m).
+    pub quasi_permanent_moment: Option<f64>,
+    pub quasi_permanent_combination: Option<String>,
 }
 
 /// Vertical links: legs per set, bar diameter (m), spacing along the member (m)
@@ -135,6 +166,7 @@ pub struct RcBeamContext {
     /// Whether the tension steel is confirmed to extend at least l_bd + d
     /// beyond the section. `None` means not confirmed.
     pub tension_steel_anchored: Option<bool>,
+    pub detailing: RcBeamDetailing,
 }
 
 /// Geometry/material/restraint inputs required by member checks.
@@ -323,7 +355,15 @@ pub struct ProfileMetadata {
     pub supported_section_families: Vec<String>,
     pub supported_checks: Vec<String>,
     pub limitations: Vec<String>,
+    /// ADR 0026: every enabled profile is a demonstration, never a certified
+    /// design; this is the label runs and reports carry.
+    pub certification: String,
+    /// Amendments to the edition that are not reconciled with this profile.
+    pub unreconciled_amendments: Vec<String>,
 }
+
+/// ADR 0026: the certification label of every profile.
+pub const DEMONSTRATION: &str = "Demonstration, not a certified design";
 
 impl ProfileMetadata {
     pub fn to_json(&self) -> Value {
@@ -338,6 +378,8 @@ impl ProfileMetadata {
             "supportedSectionFamilies": self.supported_section_families,
             "supportedChecks": self.supported_checks,
             "limitations": self.limitations,
+            "certification": self.certification,
+            "unreconciledAmendments": self.unreconciled_amendments,
         })
     }
 }

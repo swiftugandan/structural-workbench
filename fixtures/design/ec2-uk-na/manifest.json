@@ -1,0 +1,21 @@
+{
+  "profileId": "ec2-uk-na",
+  "sourceEdition": {
+    "standard": "EN 1992-1-1:2004 incl. AC:2008/AC:2010 with UK NA incl. Amd 1 (2009)",
+    "lockIds": [
+      "R-EC2-EN-1992-1-1-2004",
+      "R-EC2-UK-NA-2009",
+      "R-EC2-JRC-EXAMPLES"
+    ],
+    "unreconciled": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ],
+    "certification": "Demonstration, not a certified design"
+  },
+  "fixtures": [
+    "jrc-axis2-beam.published.json",
+    "jrc-axis2-beam.reconciliation.json",
+    "jrc-detailing.published.json"
+  ]
+}

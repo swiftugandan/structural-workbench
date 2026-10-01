@@ -65,7 +65,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     await page.screenshot({ path: `${dir}/${kind}-reinforcement.png` });
     await page.locator("[data-preview-pane=schedule]").click();
     await expect(page.locator(".design-pane")).toContainText(
-      kind === "rcBeam" ? "Unverified" : "unavailable",
+      kind === "rcBeam" ? "Not a fabrication schedule" : "unavailable",
     );
     if (kind === "padFooting") {
       await page.locator("[data-preview-pane=soil]").click();

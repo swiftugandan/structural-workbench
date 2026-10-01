@@ -1,0 +1,16 @@
+{
+  "milestone": "M08",
+  "status": "PASS",
+  "sourceHash": "c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef",
+  "buildHash": "9e0fa0da90546c4807e2b3fb4479c0ae8881735a7c12c1e878dacfa16e5b96b6",
+  "required": [
+    "build",
+    "concrete-native",
+    "concrete-model",
+    "concrete-protocol",
+    "m08-browser",
+    "m08-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-09-30T16:17:03.948Z"
+}

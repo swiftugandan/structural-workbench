@@ -3359,6 +3359,30 @@ body.design-workspace {
   font-size: 25px;
   margin-left: 15px;
 }
+.design-verdict.pass .verdict-symbol,
+.design-verdict.pass strong {
+  color: #247044;
+}
+.design-verdict.fail .verdict-symbol,
+.design-verdict.fail strong {
+  color: #9d3e2c;
+}
+.design-proposal {
+  grid-column: 1 / -1;
+  border: 1px solid #d6dee7;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 11px;
+}
+.design-proposal h4 {
+  margin: 0 0 8px;
+  font-size: 12px;
+}
+.design-proposal small {
+  display: block;
+  color: #60748a;
+  margin: 6px 0;
+}
 .design-notes h4,
 .reinforcement-layout h4,
 .mechanics-states h4 {
@@ -3406,7 +3430,7 @@ body.design-workspace {
 .status-text.unsupported {
   color: #aa721a;
 }
-/* EC2 disabled-profile preview statuses (ADR 0016); same palette as badges. */
+/* EC2 profile statuses (ADR 0016, ADR 0026); same palette as badges. */
 .status-text.pass {
   color: #247044;
 }

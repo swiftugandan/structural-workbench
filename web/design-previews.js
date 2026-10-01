@@ -51,7 +51,7 @@ export function previewState(run, ctx) {
     (run.sourceProvenance.kind === "modelAnalysis" &&
       (ctx.failed || run.sourceProvenance.resultId !== ctx.result?.resultId))
     ? "STALE"
-    : "UNSUPPORTED";
+    : String(run.overall || "unsupported").toUpperCase();
 }
 function illustration(d, face) {
   const v = d.inputs;
@@ -155,7 +155,7 @@ export function concreteWorkspace({
     $("#design-geometry-labels").hidden = !viewport.designPreview;
     onSelection(d);
     const identity = previewIdentity(getContext().project, d);
-    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(identity.text)}</strong><span class="design-tag">MOCK WORKFLOW</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
+    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(identity.text)}</strong><span class="design-tag">${runs.get(active)?.codeProfile ? "EC2 UK · DEMONSTRATION" : "MOCK WORKFLOW"}</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
       ["concrete", "Concrete"],
       ["reinforcement", "Reinforcement"],
       ["both", "Both"],
@@ -215,7 +215,7 @@ export function concreteWorkspace({
       ...(d.kind === "rcBeam"
         ? [
             ["mechanics", "Section mechanics"],
-            ["ec2", "EC2 checks · disabled"],
+            ["ec2", "EC2 checks"],
           ]
         : []),
       ...(d.kind === "rcColumn" ? [["mechanics", "Section mechanics"]] : []),
@@ -246,6 +246,24 @@ export function concreteWorkspace({
           onRunning(false);
         }
       };
+    const adopt = host.querySelector("#preview-apply-proposal");
+    if (adopt)
+      adopt.onclick = async () => {
+        // One undoable command: the draft's inputs with the proposed bars and
+        // links; code inputs, anchorage and binding are kept as drafted.
+        try {
+          await command("SetDesignPreview", {
+            id: d.id,
+            inputs: { ...d.inputs, ...run.reinforcementProposal.inputs },
+            targetId: d.targetId,
+            soilReference: d.soilReference,
+            tensionAnchorageConfirmed: d.tensionAnchorageConfirmed,
+          });
+          await render();
+        } catch (e) {
+          onError(e.message);
+        }
+      };
     for (const b of host.querySelectorAll("[data-plate-field]"))
       b.onclick = () => {
         plateField = b.dataset.plateField;
@@ -267,8 +285,8 @@ export function concreteWorkspace({
       if ($("#preview-schedule"))
         $("#preview-schedule").onclick = () =>
           download(
-            "illustrative-schedule.csv",
-            "previewRunId,currentState,mark,region,diameter_m,quantity,cutLength,source,status\n" +
+            "indicative-schedule.csv",
+            "previewRunId,currentState,mark,region,shape,diameter_m,quantity,cutLength_m,mass_kg,source,status\n" +
               run.schedule
                 .map((r) =>
                   [
@@ -276,9 +294,11 @@ export function concreteWorkspace({
                     state,
                     r.mark,
                     r.region,
+                    `"${r.shape || ""}"`,
                     r.diameter,
-                    r.quantity,
-                    "",
+                    r.quantity ?? "",
+                    r.cutLength ?? "",
+                    r.massKg ?? "",
                     r.source,
                     r.status,
                   ].join(","),
@@ -359,11 +379,19 @@ export function concreteWorkspace({
                 c.result?.analysisType !== "envelope" &&
                 !c.failed);
           $("#preview-run").disabled = c.locked || c.dirty || !ready;
+          if ($("#preview-propose"))
+            $("#preview-propose").disabled =
+              $("#preview-run").disabled ||
+              $("#preview-source").value !== "model";
           $("#preview-readiness").textContent = !ready
             ? "Bind a target, save, then analyse a single current case/combination."
             : $("#preview-source").value === "plate"
               ? "Plate analysis available · code checks remain UNSUPPORTED"
-              : "Workflow available · every design check remains UNSUPPORTED";
+              : d.kind === "rcBeam"
+                ? $("#preview-source").value === "model"
+                  ? "Workflow available · EC2 checks run on the model actions (demonstration)"
+                  : "Synthetic actions · EC2 checks need model actions"
+                : "Workflow available · every design check remains UNSUPPORTED";
         };
         $("#preview-source").onchange = () => {
           sourceMode = $("#preview-source").value;
@@ -396,6 +424,17 @@ export function concreteWorkspace({
               soilReference: $("#preview-soil")?.value ?? d.soilReference,
               ...(d.kind === "rcBeam" && {
                 tensionAnchorageConfirmed: $("#preview-anchorage").checked,
+                codeInputs: {
+                  exposureClass: $("#code-exposure").value || null,
+                  minimumCoverDurability: $("#code-cover").value.trim() || null,
+                  aggregateSize: $("#code-aggregate").value.trim() || null,
+                  structuralSystem: $("#code-system").value || null,
+                  partitionsSensitive:
+                    $("#code-partitions").value === ""
+                      ? null
+                      : $("#code-partitions").value === "yes",
+                  quasiPermanentCombinationId: $("#code-qp").value || null,
+                },
               }),
               ...(plate && { plate }),
               ...(t.mechanics && {
@@ -477,7 +516,7 @@ export function concreteWorkspace({
             face = $("#preview-face").value;
             scene();
           };
-        $("#preview-run").onclick = async () => {
+        const evaluate = async (propose) => {
           onRunning(true);
           runError = null;
           try {
@@ -488,6 +527,7 @@ export function concreteWorkspace({
                 sourceMode: $("#preview-source").value,
                 caseId: c.result?.caseId,
                 resultId: c.result?.resultId,
+                propose,
               });
             runs.set(d.id, run);
             pane = "summary";
@@ -500,6 +540,9 @@ export function concreteWorkspace({
             await render();
           }
         };
+        $("#preview-run").onclick = () => evaluate(false);
+        if ($("#preview-propose"))
+          $("#preview-propose").onclick = () => evaluate(true);
         readiness();
       }
       if (getContext().locked)

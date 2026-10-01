@@ -2,17 +2,22 @@
 //! rectangular RC beams (M08-B2). Clause reading and parameter provenance:
 //! `docs/code-profiles/ec2-uk-na/dossier-beam.md`; decisions: ADR 0015.
 //!
-//! The profile is registered **disabled**. A1:2014 and NA+A2:2014 are not
-//! held, so every run also carries unsupported companion checks and can never
-//! report an overall pass.
+//! ADR 0026: the profile is enabled as a labelled demonstration of the held
+//! edition once its resources and fixtures verify. A1:2014 and NA+A2:2014
+//! are not held; every run and report states them as unreconciled.
 
+pub mod detailing;
+#[cfg(test)]
+mod detailing_tests;
 #[cfg(test)]
 mod fixture_tests;
+mod verify;
+pub use verify::ec2_resources_verified;
 
 use serde_json::json;
 
 use super::{
-    CheckOutcome, CheckStatus, CodeProfile, DesignDemand, MemberContext, PROFILE_EC2_UK_NA,
+    CheckOutcome, CheckStatus, CodeProfile, DEMONSTRATION, DesignDemand, MemberContext, PROFILE_EC2_UK_NA,
     ProfileApplicability, ProfileMetadata, RcBeamContext, RcFace,
 };
 use crate::rc_section::{self, BarLayer, ConcreteLaw, RcRectangle, SteelLaw, TensionState};
@@ -34,6 +39,9 @@ pub struct Ec2Ndp {
     /// 6.2.3(2).
     pub cot_theta_min: f64,
     pub cot_theta_max: f64,
+    /// 6.2.3(3) UK note: V_Rd,max <= coefficient · bw² (N, bw in mm); None where
+    /// no such cap is set.
+    pub v_rd_max_bw2_cap: Option<f64>,
 }
 
 impl Ec2Ndp {
@@ -48,6 +56,7 @@ impl Ec2Ndp {
             crdc_numerator: 0.18,
             cot_theta_min: 1.0,
             cot_theta_max: 2.5,
+            v_rd_max_bw2_cap: Some(200.),
         }
     }
 
@@ -57,6 +66,7 @@ impl Ec2Ndp {
             label: "EN 1992-1-1:2004 recommended values",
             alpha_cc_flexure: 1.0,
             alpha_cc_shear: 1.0,
+            v_rd_max_bw2_cap: None,
             ..Self::uk_na_2009()
         }
     }
@@ -75,7 +85,7 @@ pub struct Ec2UkNaProfile {
 
 impl Default for Ec2UkNaProfile {
     fn default() -> Self {
-        Self { ndp: Ec2Ndp::uk_na_2009(), enabled: false }
+        Self { ndp: Ec2Ndp::uk_na_2009(), enabled: ec2_resources_verified() }
     }
 }
 
@@ -84,11 +94,11 @@ impl CodeProfile for Ec2UkNaProfile {
         ProfileMetadata {
             id: PROFILE_EC2_UK_NA.into(),
             standard: "EN 1992-1-1 with UK National Annex".into(),
-            edition: "2004 incl. AC:2008/AC:2010; NA incl. Amd 1 (2009)".into(),
+            edition: "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)".into(),
             design_method: "Partial factors (ULS)".into(),
             jurisdiction: Some("GB".into()),
             enabled: self.enabled,
-            resource_gate: "R-EC2-EN-1992-1-1-2004+R-EC2-UK-NA-2009+A1:2014+NA+A2:2014".into(),
+            resource_gate: "R-EC2-EN-1992-1-1-2004+R-EC2-UK-NA-2009+R-EC2-JRC-EXAMPLES".into(),
             supported_section_families: vec!["RC rectangle".into()],
             supported_checks: vec![
                 "flexure".into(),
@@ -97,14 +107,23 @@ impl CodeProfile for Ec2UkNaProfile {
                 "shear".into(),
                 "links-min".into(),
                 "links-spacing".into(),
+                "cover".into(),
+                "bar-spacing".into(),
+                "anchorage".into(),
+                "crack-min".into(),
+                "crack-control".into(),
+                "deflection".into(),
             ],
             limitations: vec![
-                "Disabled: A1:2014 and NA+A2:2014 are not held, so no clause is reconciled with them".into(),
-                "Rectangular sections, fck <= 50 MPa, vertical links only".into(),
+                "A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them".into(),
+                "Rectangular sections, fck <= 50 MPa, vertical links, one layer of equal bars per face".into(),
                 "Pure bending about local y with shear Vz: N, T, Vy and Mz must be zero".into(),
-                "Anchorage, serviceability, cover and bar spacing are not implemented; overall never passes".into(),
+                "Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation".into(),
+                "Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer's confirmation".into(),
                 "UK NA VRd,max <= 200 bw^2 cap not applied (units not stated in the NA)".into(),
             ],
+            certification: DEMONSTRATION.into(),
+            unreconciled_amendments: vec!["EN 1992-1-1:2004/A1:2014".into(), "UK NA + A2:2014".into()],
         }
     }
 
@@ -157,6 +176,10 @@ impl CodeProfile for Ec2UkNaProfile {
             if let Some(face) = compression {
                 checks.push(flexure(&self.ndp, rc, face, demand.my.abs()));
                 checks.push(as_min(rc, face));
+                checks.push(detailing::crack_minimum(rc, face));
+                checks.push(detailing::crack_control(rc, face));
+                checks.push(detailing::anchorage(&self.ndp, rc, face));
+                checks.extend(detailing::deflection(&self.ndp, rc, face, demand.my.abs()));
             }
             checks.extend(as_max(rc));
             if demand.vz != 0. {
@@ -164,8 +187,9 @@ impl CodeProfile for Ec2UkNaProfile {
             }
             checks.push(links_min(rc));
             checks.push(links_spacing(rc, compression));
+            checks.push(detailing::cover(rc));
+            checks.push(detailing::bar_spacing(rc));
         }
-        checks.extend(companions());
         checks
     }
 }
@@ -321,7 +345,9 @@ fn shear(ndp: &Ec2Ndp, rc: &RcBeamContext, compression: Option<RcFace>, ved: f64
     let mut intermediates = json!({"d": d, "k": k, "CRdc": crdc, "rhoL": rho, "tensionSteelAnchored": rc.tension_steel_anchored,
         "vmin": vmin, "VRdc": vrdc, "k1": K1, "sigmaCp": 0.0, "ndp": ndp.label,
         "assumptions": ["V_Ed used at the station without the 6.2.1(8) or 6.2.2(6) reductions",
-                        "UK NA VRd,max <= 200 bw^2 cap not applied (units not stated)"]});
+                        "UK NA 6.2.3(3) note, V_Rd,max <= 200 bw²: read as N with bw in mm (the NA states no units; \
+                         kN with bw in m would forbid ordinary beams) and applied at every section, which is \
+                         conservative since the NA requires it only beyond d from a support"]});
     let Some(links) = rc.links.as_ref() else {
         return CheckOutcome::result(
             "ec2.shear",
@@ -344,8 +370,11 @@ fn shear(ndp: &Ec2Ndp, rc: &RcBeamContext, compression: Option<RcFace>, ved: f64
     // min(a cotθ, c cotθ/(1+cot²θ)) peaks where they meet: cot²θ = c/a - 1.
     let cot = ((c / a - 1.).max(0.)).sqrt().clamp(ndp.cot_theta_min, ndp.cot_theta_max);
     let vrds = a * cot;
-    let vrdmax = c * cot / (1. + cot * cot);
+    // The UK cap is independent of θ, so the optimum cot θ above still maximises V_Rd.
+    let uk_cap = ndp.v_rd_max_bw2_cap.map(|k| k * bw_mm * bw_mm);
+    let vrdmax = uk_cap.map_or(c * cot / (1. + cot * cot), |cap| (c * cot / (1. + cot * cot)).min(cap));
     let vrd = vrds.min(vrdmax);
+    intermediates["ukVRdMaxCap"] = json!(uk_cap);
     intermediates["z"] = json!(z);
     intermediates["fywd"] = json!(fywd);
     intermediates["fcd"] = json!(fcd);
@@ -422,15 +451,4 @@ fn links_spacing(rc: &RcBeamContext, compression: Option<RcFace>) -> CheckOutcom
         json!({"sl": links.spacing, "slMax": sl_max, "st": st, "stMax": st_max, "d": d}),
         "Demand is the larger of s/s_l,max and s_t/s_t,max",
     )
-}
-
-/// Mandatory companions that are not implemented. They keep the overall
-/// status from ever reaching pass.
-fn companions() -> Vec<CheckOutcome> {
-    vec![
-        CheckOutcome::unsupported("ec2.anchorage", "8, 9.2.1.3-9.2.1.5", "Anchorage and curtailment are not implemented"),
-        CheckOutcome::unsupported("ec2.serviceability", "7", "Stress limits, crack control and deflection are not implemented"),
-        CheckOutcome::unsupported("ec2.cover-spacing", "4.4, 8.2", "Cover and bar spacing rules are not implemented"),
-        CheckOutcome::unsupported("ec2.amendments", "A1:2014, NA+A2:2014", "Not held; no clause is reconciled with the current amendments"),
-    ]
 }

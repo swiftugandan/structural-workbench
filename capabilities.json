@@ -402,17 +402,29 @@
     },
     {
       "capabilityId": "concrete-code",
-      "scopeKey": "M08 / ACI 318-19 proposed",
-      "implementationStatus": "excluded",
-      "verificationStatus": "not-verified",
+      "scopeKey": "M08 / ec2-uk-na / rectangular RC beam: EN 1992-1-1:2004 incl. AC:2008/AC:2010 with UK NA incl. Amd 1 (2009), demonstration",
+      "implementationStatus": "partial",
+      "verificationStatus": "parent-gate-pass",
       "comparisonStatus": "UNKNOWN",
-      "resourceBlockers": [
-        "standards-and-benchmark-bundle"
-      ],
+      "resourceBlockers": [],
       "limitations": [
-        "Outside analysis MVP; blocked pending standard/benchmark acquisition"
+        "Demonstration, not a certified design: every run names the edition used; EN 1992-1-1:2004/A1:2014 and UK NA + A2:2014 are not held and not reconciled (ADR 0026)",
+        "Rectangular RC beams with vertical links at the governing sagging, hogging and shear key stations of one bound case or combination: flexure (6.1), shear (6.2.2/6.2.3), As,min/As,max and link limits (9.2.1.1, 9.2.2), cover (4.4.1), bar spacing (8.2), anchorage length (8.4), minimum crack steel (7.3.2), crack control by Tables 7.2N/7.3N (7.3.3) and span/depth deflection (7.4.2)",
+        "Exposure, c_min,dur (BS 8500), aggregate, structural system, partitions and the quasi-permanent combination are the engineer's inputs; a check lacking one is INDETERMINATE, and anchorage passes only on the engineer's confirmation",
+        "Reinforcement proposal: least steel mass per metre over discrete bars and links for which no check fails; schedule of straight bars and closed links is indicative, not a fabrication schedule (no BS 8666 shape codes, curtailment or laps)",
+        "Redistribution (5.5), direct crack-width and deflection calculation (7.3.4, 7.4.3), torsion, axial force, flanged sections and fck > 50 MPa are unsupported",
+        "Not a claim of commercial PROKON parity or professional code certification"
       ],
-      "evidenceReferences": []
+      "evidenceReferences": [
+        "docs/adr/0026-edition-labelled-demonstration-profiles.md",
+        "docs/adr/0015-ec2-uk-beam-profile.md",
+        "docs/code-profiles/ec2-uk-na/README.md",
+        "docs/code-profiles/ec2-uk-na/dossier-beam.md",
+        "fixtures/design/ec2-uk-na/",
+        "resources.lock.json",
+        "evidence/M08/full/gate-M08.json",
+        "evidence/M08/full/ACCEPTANCE.md"
+      ]
     },
     {
       "capabilityId": "advanced-suite",

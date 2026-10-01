@@ -1,0 +1,65 @@
+{
+  "taskId": "M08-parent",
+  "milestone": "M08",
+  "sourceHash": "c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef",
+  "buildHash": "9e0fa0da90546c4807e2b3fb4479c0ae8881735a7c12c1e878dacfa16e5b96b6",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "playwright-results.json": "40a3c437f4ce929502ecfaffe0b5c60a11bf7e7963c098a534c2a0cf2221edcd",
+    "ec2-checks.png": "87ceaea988532f826c671143681f2ec9bbbdb1c98931221d1542c3465e151e57",
+    "ec2-proposal.png": "98ae2d92a6f1c5f37783b0041f355ff6f665ff66948a576a303e9e8f3baeea6a",
+    "ec2-proposal-applied.png": "89fa231b5712f5a8a4ce21adb5cf5837e9f1f56e727059981b3d506d54ac3a2a",
+    "ec2-run.json": "a04ac2ec3c69f8170034f7763475b400b732af1711ae5a5eede99e38978c5662",
+    "rcBeam-run.json": "81e237ccfe831b8568e505cd39580485d10902cb3cf5f4c316cf8729bb91f90a",
+    "rcBeam.png": "5e1e8b83cf736058e64801c8b802cdad87fc7f528762cad48d51717e812ef87f"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-09-30T16:17:03.492Z",
+  "status": "PASS",
+  "testCount": 8,
+  "testIds": [
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+    "Concrete preview rcBeam: source, stale, undo, persistence and export",
+    "Concrete preview slab: source, stale, undo, persistence and export",
+    "Concrete preview padFooting: source, stale, undo, persistence and export",
+    "RC beam section mechanics: per-face oracle values, law switch, provenance, fit failure and reopen",
+    "RC beam model design moments beside mechanics capacities (top face points up)",
+    "RC beam model design moments beside mechanics capacities (top face points DOWN)",
+    "RC beam EC2 checks: demonstration profile at governing stations, code inputs, explicit anchorage, report"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/design-previews.spec.js",
+    "tests/e2e/capability-ledger.spec.js"
+  ],
+  "stats": {
+    "startTime": "2026-09-30T16:16:08.484Z",
+    "duration": 54946.468,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifacts": [
+    "playwright-results.json",
+    "ec2-checks.png",
+    "ec2-proposal.png",
+    "ec2-proposal-applied.png",
+    "ec2-run.json",
+    "rcBeam-run.json",
+    "rcBeam.png"
+  ]
+}

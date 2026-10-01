@@ -1,6 +1,6 @@
 # EC2 beam dossier: flexure, shear, reinforcement limits (M08-B1)
 
-Code-rule dossier for a future `ec2-uk-na` concrete profile (ADR 0012, M08-B). The profile stays **disabled**. This file gives clause references, formulas in our own notation, parameters and their provenance. No standard prose is reproduced.
+Code-rule dossier for the `ec2-uk-na` concrete profile (ADR 0012, M08-B). Since ADR 0026 the profile is **enabled as an edition-labelled demonstration** of the held texts, and every run says "Demonstration, not a certified design". This file gives clause references, formulas in our own notation, parameters and their provenance. No standard prose is reproduced.
 
 ## Sources and amendment state
 
@@ -10,7 +10,7 @@ Code-rule dossier for a future `ec2-uk-na` concrete profile (ADR 0012, M08-B). T
 | `R-EC2-UK-NA-2009` | NA to BS EN 1992-1-1:2004 incorporating NA Amendment No. 1 (2009); Table NA.1 relates to the text incorporating Corrigendum No. 1 | `11ced864…` |
 | `R-EC2-JRC-EXAMPLES` | JRC89037 (2014) worked examples; uses EU recommended NDPs, not the UK NA | `06f61063…` |
 
-**Not held:** EN 1992-1-1:2004/**A1:2014** and the UK **NA+A2:2014**. Every row below is marked `A1/A2: unreconciled`. Until those texts are read, it is unknown whether any of these clauses or NDPs changed. A current-UK profile must not be enabled until each row is reconciled (blocker `UKR01-EC-resources`).
+**Not held:** EN 1992-1-1:2004/**A1:2014** and the UK **NA+A2:2014**. Every row below is marked `A1/A2: unreconciled`. Until those texts are read, it is unknown whether any of these clauses or NDPs changed. A current-UK or certified claim cannot be made until each row is reconciled (blocker `UKR01-EC-resources`). The demonstration profile names both amendments as unreconciled on every run (ADR 0026).
 
 ## Units and conventions
 
@@ -94,11 +94,26 @@ A beam design must not report an overall pass unless all of these are evaluated 
 2. As,min ≤ As ≤ As,max for each tension face (9.2.1.1).
 3. Shear: V_Ed ≤ V_Rd,c, or the link design with V_Ed ≤ V_Rd,s and V_Ed ≤ V_Rd,max, plus V_Rd,max at the support (6.2.1(8)).
 4. Link minimum ratio and spacing limits (9.2.2(5), (6), (8)).
-5. Anchorage of Asl beyond the section for ρl (6.2.2(1), Fig. 6.3) and at supports (9.2.1.4, 9.2.1.5). **Currently unsupported.** This needs anchorage rules from Section 8 that are not in this dossier.
-6. Serviceability (Section 7: stress limits, crack control, deflection). **Not in this dossier.**
-7. Cover and bar spacing (4.4, 8.2). **Not in this dossier.**
+5. Anchorage of Asl beyond the section for ρl (6.2.2(1), Fig. 6.3) and at supports (9.2.1.4, 9.2.1.5). The profile computes l_bd (8.4, below). It passes only when the engineer confirms the bars extend that far; otherwise it is indeterminate.
+6. Serviceability: minimum crack steel (7.3.2), crack control without direct calculation (7.3.3) and span/depth deflection (7.4.2), below. Stress limits (7.2) are not checked.
+7. Cover and bar spacing (4.4.1, 8.2), below.
 
-Items 5–7 are why a complete-design PASS cannot follow from this dossier alone. The first profile slice may report flexure and shear checks individually while the overall status stays unsupported.
+A complete-design PASS needs every item evaluated. Missing engineer inputs leave the run INDETERMINATE.
+
+## Detailing and serviceability (ADR 0026)
+
+All rows are `A1/A2: unreconciled`. Verification is in `crates/design/src/profile/ec2uk/detailing_tests.rs` against `fixtures/design/ec2-uk-na/jrc-detailing.published.json`.
+
+| Item | Clause | Rule used | UK NA value | Verified against |
+| --- | --- | --- | --- | --- |
+| Cover | 4.4.1.1–4.4.1.3 | c_nom = max(c_min,b, c_min,dur, 10 mm) + Δc_dev, for the links and for the main bars; c_min,b = φ, +5 mm when the aggregate exceeds 32 mm (Table 4.2); c_min,dur is the engineer's (BS 8500) | Δc_dev = 10 mm; Δc_dur,γ = Δc_dur,st = Δc_dur,add = 0 | hand values |
+| Bar spacing | 8.2(2) | clear gap ≥ max(k1 φ, d_g + k2, 20 mm) | k1 = 1, k2 = 5 mm | hand values |
+| Anchorage | 8.4.2–8.4.4 | f_bd = 2.25 η1 η2 f_ctd; l_b,rqd = (φ/4) σ_sd/f_bd with σ_sd = f_yd; α2 = 1 − 0.15(c_d − φ)/φ in [0.7, 1]; l_bd ≥ l_b,min; bottom bars good bond, top bars good only when h ≤ 250 mm | α_ct = 1.0 | JRC Tables 4.1.2–4.1.4, 84 values within 1 mm |
+| Minimum crack steel | 7.3.2 (7.1) | A_s,min = k_c k f_ct,eff A_ct/σ_s with k_c = 0.4, k = 1.0 (h ≤ 300 mm) to 0.65 (h ≥ 800 mm), f_ct,eff = f_ctm, A_ct = b h/2, σ_s = f_yk | recommended | closed form |
+| Crack control | 7.3.3, Tables 7.2N/7.3N | steel stress from the cracked transformed section (α_e = E_s/E_cm) under the quasi-permanent moment; pass if either the bar-size or the spacing table is met, reading the next higher stress row | w_max = 0.3 mm for RC in every exposure class (Table NA.4) | tables, closed-form cracked section |
+| Deflection | 7.4.2, (7.16a/b), (7.17) | basic l/d from ρ and ρ′ with ρ0 = √f_ck·10⁻³; × min(500/(f_yk A_s,req/A_s,prov), 1.5); × 7/l_eff for sensitive partitions over 7 m; ≤ 40K | K: simply supported 1.0, end span 1.3, interior 1.5, cantilever 0.4 (Table NA.5) | JRC worked values 26.4, 33.9, 49.6 |
+
+The UK NA 6.2.3(3) note caps V_Rd,max at 200 b_w² beyond d from a support. The NA states no units. It is read as N with b_w in mm, because kN with b_w in m would forbid ordinary beams. The profile applies it at every section, which is conservative.
 
 ## Examples and independence
 
@@ -106,13 +121,13 @@ Items 5–7 are why a complete-design PASS cannot follow from this dossier alone
 - `tools/oracles/ec2_beam_oracle.py` is a pure-Python recomputation from this dossier. It writes `jrc-axis2-beam.reconciliation.json` and fails on any disagreement. Five deliberate misreadings (αcc, the k cap, ν, the V_Rd,max strut term, the V_Rd,c exponent) all fail it.
 - The UK NA variant values in the reconciliation file are **oracle-only**; no independent UK example is held. A UK-specific published example is still needed before profile acceptance (R-CONCRETE-EXAMPLES).
 
-## Open questions (resolve before enabling)
+## Open questions (resolve before a current-UK claim)
 
 1. **A1:2014 / NA+A2:2014.** Which of the rows above changed? The texts are not held.
-2. **UK V_Rd,max cap.** Table NA.1 for 6.2.3(3) says ν1 and αcw should not give V_Rd,max above 200·bw² at sections more than d from a support. It states no units, so this must not be implemented until the units are confirmed from the NA text or its amendment.
+2. ~~**UK V_Rd,max cap.**~~ Resolved by ADR 0026. It is applied as 200·b_w² N with b_w in mm at every section, and the interpretation is recorded in each shear check. Confirm it against NA+A2:2014 when that text is held.
 3. ~~**αcc for shear under the UK NA.**~~ Resolved by ADR 0015: the profile uses the permitted 0.85 for all phenomena (one parameter, `alpha_cc_shear`).
 4. **UK Cmax shear note.** Limiting shear strength of classes above C50/60 to C50/60 needs a decision on how fck enters (6.2.a), (6.2.b) and ν.
 
 ## Unsupported in the first profile
 
-Axial force (σcp ≠ 0), prestress, inclined links and bent-up bars, the 6.2.2(6)/6.2.3(8) β reduction, flanged sections beyond the "block in flange" rectangle, web-flange shear (6.2.4), torsion (6.3), steel option 3.2.7(2)(a), redistribution (5.5), members below As,min (Section 12), fck > 50 MPa until an example is reconciled, and all of Sections 7 and 8.
+Axial force (σcp ≠ 0), prestress, inclined links and bent-up bars, the 6.2.2(6)/6.2.3(8) β reduction, flanged sections beyond the "block in flange" rectangle, web-flange shear (6.2.4), torsion (6.3), steel option 3.2.7(2)(a), redistribution (5.5), members below As,min (Section 12), fck > 50 MPa until an example is reconciled, stress limits (7.2), direct crack-width and deflection calculation (7.3.4, 7.4.3), laps (8.7), curtailment (9.2.1.3) and bent bars.

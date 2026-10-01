@@ -212,7 +212,7 @@
     {
       "id": "M08",
       "name": "Design and schedule a concrete beam",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M06"
       ],
@@ -233,7 +233,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Product UI must reuse M07-F shell regions/patterns (inspector + drawer); schedule M08-SHELL for reinforcement-centric screens after engineering acceptance. Mockup Eurocode labels are not the code pin.",
+      "acceptanceDefinition": "Accepted (evidence/M08/full) as an edition-labelled demonstration (ADR 0026): ec2-uk-na for rectangular RC beams (EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 not reconciled; not a certified design) at the governing model key stations: flexure, shear, reinforcement limits, cover, spacing, anchorage, crack control and span/depth deflection; discrete least-steel reinforcement proposal; indicative schedule. Product UI must reuse M07-F shell regions/patterns; M08-SHELL follows.",
       "experienceFollowOns": [
         "M08-SHELL"
       ]
