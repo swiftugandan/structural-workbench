@@ -70,6 +70,10 @@ function readCodeInputs() {
   }
   if (document.getElementById("code-qp"))
     out.quasiPermanentCombinationId = value("code-qp");
+  if (document.getElementById("code-blinding")) {
+    out.castOnBlinding = yesNo("code-blinding");
+    out.bearingCombinationId = value("code-bearing");
+  }
   if (document.getElementById("code-braced")) {
     out.braced = yesNo("code-braced");
     out.restraintY = pair("code-ky");
@@ -259,7 +263,12 @@ export function concreteWorkspace({
           ]
         : []),
       ["schedule", "Schedule"],
-      ...(d.kind === "padFooting" ? [["soil", "Soil / contact"]] : []),
+      ...(d.kind === "padFooting"
+        ? [
+            ["soil", "Soil / contact"],
+            ["ec2", "EC2 checks"],
+          ]
+        : []),
     ];
     host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
@@ -426,7 +435,7 @@ export function concreteWorkspace({
             ? "Bind a target, save, then analyse a single current case/combination."
             : $("#preview-source").value === "plate"
               ? "Plate analysis available · code checks remain UNSUPPORTED"
-              : ["rcBeam", "rcColumn"].includes(d.kind)
+              : ["rcBeam", "rcColumn", "padFooting"].includes(d.kind)
                 ? $("#preview-source").value === "model"
                   ? "Workflow available · EC2 checks run on the model actions (demonstration)"
                   : "Synthetic actions · EC2 checks need model actions"

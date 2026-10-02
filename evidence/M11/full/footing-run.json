@@ -1,0 +1,737 @@
+{
+  "checks": [
+    {
+      "checkIds": [
+        "ec2.footing.contact",
+        "ec2.footing.bearing"
+      ],
+      "name": "Contact and bearing",
+      "reason": "EN 1997-1 6.5.2 (allowable pressure input); 9.8.2, 6.4.4(2)",
+      "status": "pass",
+      "utilisation": 0.22955952380952382
+    },
+    {
+      "checkIds": [
+        "ec2.footing.flexure.x",
+        "ec2.footing.flexure.y"
+      ],
+      "name": "Bending and tie force",
+      "reason": "6.1, 9.8.2.2, 9.3.1.1, 9.2.1.1; 6.1, 9.8.2.2, 9.3.1.1, 9.2.1.1",
+      "status": "pass",
+      "utilisation": 0.996728136650789
+    },
+    {
+      "checkIds": [
+        "ec2.footing.anchorage.x",
+        "ec2.footing.anchorage.y"
+      ],
+      "name": "Anchorage",
+      "reason": "9.8.2.2(5), 8.4; 9.8.2.2(5), 8.4",
+      "status": "pass",
+      "utilisation": 0.24115267800239668
+    },
+    {
+      "checkIds": [
+        "ec2.footing.shear.x",
+        "ec2.footing.shear.y",
+        "ec2.footing.punching",
+        "ec2.footing.punching-face"
+      ],
+      "name": "Shear and punching",
+      "reason": "6.2.2(1); 6.2.2(1); 6.4.4(2), (6.48)-(6.51); 6.4.5(3); UK NA v_Rd,max = 0.5 ν f_cd",
+      "status": "pass",
+      "utilisation": 0.0701632180138431
+    },
+    {
+      "checkIds": [
+        "ec2.cover",
+        "ec2.footing.cast-cover",
+        "ec2.footing.bar-diameter"
+      ],
+      "name": "Cover and bar size",
+      "reason": "4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P; 4.4.1.3(4); UK NA k1 = 40 mm, k2 = 75 mm; 9.8.2.1(1); UK NA φ_min = 8 mm",
+      "status": "pass",
+      "utilisation": 0.8
+    }
+  ],
+  "codeProfile": {
+    "certification": "Demonstration, not a certified design",
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "id": "ec2-uk-na",
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "codeProfilePreview": {
+    "actions": {
+      "convention": "Global axes; N downward on the base; moments and horizontal forces at the top of the base",
+      "hx": 0,
+      "hy": 0,
+      "mx": 0,
+      "my": 30000,
+      "n": 30000
+    },
+    "barsX": {
+      "area": 0.0015707963267948969,
+      "count": 20,
+      "diameter": 0.01,
+      "effectiveDepth": 0.495,
+      "spacing": 0.10473684210526316
+    },
+    "barsY": {
+      "area": 0.0018064157758141313,
+      "count": 23,
+      "diameter": 0.01,
+      "effectiveDepth": 0.485,
+      "spacing": 0.1040909090909091
+    },
+    "basis": "codeProfile",
+    "bearingCombinationId": "LC1",
+    "certification": "Demonstration, not a certified design",
+    "checks": [
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.bearing",
+        "clause": "EN 1997-1 6.5.2 (allowable pressure input)",
+        "demand": 45911.90476190476,
+        "intermediates": {
+          "combinationId": "LC1",
+          "contact": {
+            "contactArea": 5.04,
+            "contactFraction": 1,
+            "contactPolygon": [
+              [
+                -1.2,
+                -1.05
+              ],
+              [
+                1.2,
+                -1.05
+              ],
+              [
+                1.2,
+                1.05
+              ],
+              [
+                -1.2,
+                1.05
+              ]
+            ],
+            "corners": [
+              16150.000000000002,
+              45911.90476190476,
+              45911.90476190476,
+              16150.000000000002
+            ],
+            "iterations": 0,
+            "plane": {
+              "p0": 31030.95238095238,
+              "px": 12400.79365079365,
+              "py": 0
+            },
+            "qMax": 45911.90476190476,
+            "qMin": 16150.000000000002,
+            "residual": 3.697288668884982e-18,
+            "state": "full"
+          },
+          "ex": 0.1918207626793524,
+          "ey": 0,
+          "n": 156396,
+          "overburden": 57095.99999999999,
+          "selfWeight": 69300
+        },
+        "message": "q_max under LC1 (full contact) vs the allowable bearing input",
+        "resistance": 200000,
+        "status": "pass",
+        "units": "Pa",
+        "utilisation": 0.22955952380952382
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.contact",
+        "clause": "9.8.2, 6.4.4(2)",
+        "demand": 0.2500000000000002,
+        "intermediates": {
+          "combinationId": "LC1",
+          "contact": {
+            "contactArea": 1.2600000000000011,
+            "contactFraction": 0.2500000000000002,
+            "contactPolygon": [
+              [
+                0.5999999999999994,
+                -1.05
+              ],
+              [
+                1.2,
+                -1.05
+              ],
+              [
+                1.2,
+                1.05
+              ],
+              [
+                0.5999999999999993,
+                1.05
+              ]
+            ],
+            "corners": [
+              0,
+              47619.04761904758,
+              47619.04761904758,
+              0
+            ],
+            "iterations": 9,
+            "plane": {
+              "p0": -47619.04761904748,
+              "px": 79365.07936507922,
+              "py": -1.8553096826986717e-12
+            },
+            "qMax": 47619.04761904758,
+            "qMin": 0,
+            "residual": 7.848691713710486e-16,
+            "state": "partial"
+          },
+          "ex": 1,
+          "ey": 0
+        },
+        "message": "partial contact over 25.0 % of the base under LC1",
+        "resistance": 1,
+        "status": "pass",
+        "units": "-",
+        "utilisation": null
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.flexure.x",
+        "clause": "6.1, 9.8.2.2, 9.3.1.1, 9.2.1.1",
+        "demand": 0.0015656568958641814,
+        "intermediates": {
+          "anchorage": {
+            "cover": 0.05,
+            "fsAtXmin": 44543.03840877916,
+            "lbNeeded": 0.01631698645065908,
+            "lbd": 0.25017975088195327,
+            "xMin": 0.275
+          },
+          "asFlexure": 0.00011166855334252942,
+          "asMin": 0.0015656568958641814,
+          "asRequired": 0.0015656568958641814,
+          "asTie": 0.0001331986531986533,
+          "clearSpacing": 0.09473684210526316,
+          "direction": "x",
+          "faceMoment": 24000.000000000022,
+          "sMax": 0.4,
+          "sMin": 0.025,
+          "tieForceMax": 57912.457912457954,
+          "tieMaxAt": 0.6216636810350924,
+          "zi": 0.4455
+        },
+        "message": "20 Ø10 at 105 mm: max of face bending, the 9.8.2.2 tie force and A_s,min",
+        "resistance": 0.0015707963267948969,
+        "status": "pass",
+        "units": "m2",
+        "utilisation": 0.996728136650789
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.anchorage.x",
+        "clause": "9.8.2.2(5), 8.4",
+        "demand": 0.06631698645065909,
+        "intermediates": {
+          "cover": 0.05,
+          "fsAtXmin": 44543.03840877916,
+          "lbNeeded": 0.01631698645065908,
+          "lbd": 0.25017975088195327,
+          "xMin": 0.275
+        },
+        "message": "Straight bars anchor F_s(x_min) within x_min = h/2",
+        "resistance": 0.275,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.24115267800239668
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.flexure.y",
+        "clause": "6.1, 9.8.2.2, 9.3.1.1, 9.2.1.1",
+        "demand": 0.0017531742441422864,
+        "intermediates": {
+          "anchorage": {
+            "cover": 0.05,
+            "fsAtXmin": 6952.6264113892985,
+            "lbNeeded": 0.0022146809410050045,
+            "lbd": 0.25017975088195327,
+            "xMin": 0.275
+          },
+          "asFlexure": 0.000024480074061738116,
+          "asMin": 0.0017531742441422864,
+          "asRequired": 0.0017531742441422864,
+          "asTie": 0.00003116723940435282,
+          "clearSpacing": 0.0940909090909091,
+          "direction": "y",
+          "faceMoment": 5160.714285714285,
+          "sMax": 0.4,
+          "sMin": 0.025,
+          "tieForceMax": 13550.973654066445,
+          "tieMaxAt": 0.9099999887850865,
+          "zi": 0.4365
+        },
+        "message": "23 Ø10 at 104 mm: max of face bending, the 9.8.2.2 tie force and A_s,min",
+        "resistance": 0.0018064157758141313,
+        "status": "pass",
+        "units": "m2",
+        "utilisation": 0.9705264245448424
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.anchorage.y",
+        "clause": "9.8.2.2(5), 8.4",
+        "demand": 0.05221468094100501,
+        "intermediates": {
+          "cover": 0.05,
+          "fsAtXmin": 6952.6264113892985,
+          "lbNeeded": 0.0022146809410050045,
+          "lbd": 0.25017975088195327,
+          "xMin": 0.275
+        },
+        "message": "Straight bars anchor F_s(x_min) within x_min = h/2",
+        "resistance": 0.275,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.18987156705820002
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.shear.x",
+        "clause": "6.2.2(1)",
+        "demand": 29247.91666666667,
+        "intermediates": {
+          "d": 0.495,
+          "k": 1.6356417261637284,
+          "rhoL": 0.0015111075774842681,
+          "section": 0.6950000000000001,
+          "vmin": 0.40101530069937796
+        },
+        "message": "Ground force beyond d from the column face against V_Rd,c",
+        "resistance": 416855.4050770034,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.0701632180138431
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.shear.y",
+        "clause": "6.2.2(1)",
+        "demand": 5214.285714285719,
+        "intermediates": {
+          "d": 0.485,
+          "k": 1.6421612990679355,
+          "rhoL": 0.001551903587469185,
+          "section": 0.685,
+          "vmin": 0.40341532386326434
+        },
+        "message": "Ground force beyond d from the column face against V_Rd,c",
+        "resistance": 469575.4369768397,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.011104255682230026
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.punching",
+        "clause": "6.4.4(2), (6.48)-(6.51)",
+        "demand": 0.03701805992029475,
+        "intermediates": {
+          "critical": {
+            "a": 0.4165,
+            "areaInside": 1.371379146201692,
+            "beta": 2.413390672697025,
+            "groundInside": 5.659089565450472,
+            "u": 4.216946680440298,
+            "vEd": 0.035032631704491245,
+            "vEdRed": 29994.34091043455,
+            "vRd": 0.9463659570469545
+          },
+          "d": 0.49,
+          "k": 1.63887656499994,
+          "rhoL": 0.0015313697367225541,
+          "samples": 80,
+          "vmin": 0.40220553174495566
+        },
+        "message": "Demand is the largest v_Ed/v_Rd over control perimeters a ≤ 2d",
+        "resistance": 1,
+        "status": "pass",
+        "units": "-",
+        "utilisation": 0.03701805992029475
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.punching-face",
+        "clause": "6.4.5(3); UK NA v_Rd,max = 0.5 ν f_cd",
+        "demand": 191326.53061224485,
+        "intermediates": {
+          "beta": 4.999999999999999,
+          "nu": 0.528,
+          "u0": 1.6
+        },
+        "message": "Shear stress at the column face",
+        "resistance": 4488000,
+        "status": "pass",
+        "units": "Pa",
+        "utilisation": 0.04263068863909199
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.cover",
+        "clause": "4.4.1.2, 4.4.1.3; UK NA 4.4.1.2(5), 4.4.1.3(1)P",
+        "demand": 0.7000000000000001,
+        "intermediates": {
+          "aggregateSize": 0.02,
+          "cMinDur": 0.025,
+          "deltaCDev": 0.01,
+          "links": {
+            "cNomRequired": 0.035,
+            "diameter": 0,
+            "provided": 0.05
+          },
+          "mainBars": {
+            "cNomRequired": 0.035,
+            "diameter": 0.01,
+            "provided": 0.05
+          }
+        },
+        "message": "Demand is the larger of c_nom,required/c_provided for the links and the main bars",
+        "resistance": 1,
+        "status": "pass",
+        "units": "-",
+        "utilisation": 0.7000000000000001
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.cast-cover",
+        "clause": "4.4.1.3(4); UK NA k1 = 40 mm, k2 = 75 mm",
+        "demand": 0.04,
+        "intermediates": {
+          "castOnBlinding": true
+        },
+        "message": "Demand is the minimum nominal cover for the casting surface",
+        "resistance": 0.05,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.7999999999999999
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.bar-diameter",
+        "clause": "9.8.2.1(1); UK NA φ_min = 8 mm",
+        "demand": 0.008,
+        "intermediates": {},
+        "message": "Demand is φ_min, resistance the smaller bar",
+        "resistance": 0.01,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.8
+      }
+    ],
+    "codeInputs": {
+      "aggregateSize": 0.02,
+      "bearingCombinationId": "LC1",
+      "castOnBlinding": true,
+      "exposureClass": "XC2",
+      "minimumCoverDurability": 0.025
+    },
+    "combinationId": "LC1",
+    "design": {
+      "bearing": {
+        "combinationId": "LC1",
+        "contact": {
+          "contactArea": 5.04,
+          "contactFraction": 1,
+          "contactPolygon": [
+            [
+              -1.2,
+              -1.05
+            ],
+            [
+              1.2,
+              -1.05
+            ],
+            [
+              1.2,
+              1.05
+            ],
+            [
+              -1.2,
+              1.05
+            ]
+          ],
+          "corners": [
+            16150.000000000002,
+            45911.90476190476,
+            45911.90476190476,
+            16150.000000000002
+          ],
+          "iterations": 0,
+          "plane": {
+            "p0": 31030.95238095238,
+            "px": 12400.79365079365,
+            "py": 0
+          },
+          "qMax": 45911.90476190476,
+          "qMin": 16150.000000000002,
+          "residual": 3.697288668884982e-18,
+          "state": "full"
+        },
+        "n": 156396
+      },
+      "directions": [
+        {
+          "anchorage": {
+            "cover": 0.05,
+            "fsAtXmin": 44543.03840877916,
+            "lbNeeded": 0.01631698645065908,
+            "lbd": 0.25017975088195327,
+            "xMin": 0.275
+          },
+          "asFlexure": 0.00011166855334252942,
+          "asMin": 0.0015656568958641814,
+          "asRequired": 0.0015656568958641814,
+          "asTie": 0.0001331986531986533,
+          "clearSpacing": 0.09473684210526316,
+          "direction": "x",
+          "faceMoment": 24000.000000000022,
+          "sMax": 0.4,
+          "sMin": 0.025,
+          "tieForceMax": 57912.457912457954,
+          "tieMaxAt": 0.6216636810350924,
+          "zi": 0.4455
+        },
+        {
+          "anchorage": {
+            "cover": 0.05,
+            "fsAtXmin": 6952.6264113892985,
+            "lbNeeded": 0.0022146809410050045,
+            "lbd": 0.25017975088195327,
+            "xMin": 0.275
+          },
+          "asFlexure": 0.000024480074061738116,
+          "asMin": 0.0017531742441422864,
+          "asRequired": 0.0017531742441422864,
+          "asTie": 0.00003116723940435282,
+          "clearSpacing": 0.0940909090909091,
+          "direction": "y",
+          "faceMoment": 5160.714285714285,
+          "sMax": 0.4,
+          "sMin": 0.025,
+          "tieForceMax": 13550.973654066445,
+          "tieMaxAt": 0.9099999887850865,
+          "zi": 0.4365
+        }
+      ],
+      "fcd": 17000000,
+      "fyd": 434782608.6956522,
+      "uls": {
+        "combinationId": "LC1",
+        "contact": {
+          "contactArea": 1.2600000000000011,
+          "contactFraction": 0.2500000000000002,
+          "contactPolygon": [
+            [
+              0.5999999999999994,
+              -1.05
+            ],
+            [
+              1.2,
+              -1.05
+            ],
+            [
+              1.2,
+              1.05
+            ],
+            [
+              0.5999999999999993,
+              1.05
+            ]
+          ],
+          "corners": [
+            0,
+            47619.04761904758,
+            47619.04761904758,
+            0
+          ],
+          "iterations": 9,
+          "plane": {
+            "p0": -47619.04761904748,
+            "px": 79365.07936507922,
+            "py": -1.8553096826986717e-12
+          },
+          "qMax": 47619.04761904758,
+          "qMin": 0,
+          "residual": 7.848691713710486e-16,
+          "state": "partial"
+        },
+        "ex": 1,
+        "ey": 0,
+        "n": 30000
+      }
+    },
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "family": "padFooting",
+    "interpretation": {
+      "concreteStrength": "fck (characteristic cylinder strength)",
+      "rebarStrength": "fyk for longitudinal bars and links"
+    },
+    "limitations": [
+      "A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them",
+      "Rectangular sections, fck <= 50 MPa, vertical links, one layer of equal bars per face",
+      "Beams: pure bending about local y with shear Vz; N, T, Vy and Mz must be zero",
+      "Columns: rectangular, constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and φ_ef; the node-to-node length is the clear height",
+      "Pad footings: concentric rectangular column on a rigid base over tensionless ground; the allowable bearing pressure is the engineer's input",
+      "Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation",
+      "Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer's confirmation",
+      "UK NA VRd,max <= 200 bw² applied as N with bw in mm at every section (the NA states no units)"
+    ],
+    "ndp": "UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)",
+    "profileEnabled": true,
+    "profileId": "ec2-uk-na",
+    "resourceGate": "R-EC2-EN-1992-1-1-2004+R-EC2-UK-NA-2009+R-EC2-JRC-EXAMPLES",
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "status": "evaluated",
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "columnMechanics": null,
+  "contactState": "partial",
+  "contractVersion": 1,
+  "draftId": "dp91685af31af322b3",
+  "flexuralDemand": null,
+  "inputHash": "8216819b414ab0cb15a0d7d5d817d93098bda1454d48c5d505fc467704f26d5c",
+  "inputs": {
+    "codeInputs": {
+      "aggregateSize": 0.02,
+      "bearingCombinationId": "LC1",
+      "castOnBlinding": true,
+      "exposureClass": "XC2",
+      "minimumCoverDurability": 0.025
+    },
+    "id": "dp91685af31af322b3",
+    "inputSource": "syntheticFixture",
+    "inputSources": {
+      "bearingPressure": "syntheticFixture",
+      "columnDepth": "syntheticFixture",
+      "columnWidth": "syntheticFixture",
+      "concreteStrength": "syntheticFixture",
+      "cover": "syntheticFixture",
+      "embedment": "syntheticFixture",
+      "length": "syntheticFixture",
+      "rebarStrength": "syntheticFixture",
+      "soilUnitWeight": "syntheticFixture",
+      "thickness": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "bearingPressure": 200000,
+      "columnDepth": 0.4,
+      "columnWidth": 0.4,
+      "concreteStrength": 30000000,
+      "cover": 0.05,
+      "embedment": 1.2,
+      "length": 2.4,
+      "rebarStrength": 500000000,
+      "soilUnitWeight": 18000,
+      "thickness": 0.55,
+      "width": 2.1
+    },
+    "kind": "padFooting",
+    "soilReference": "User-entered demonstration bearing input; not a site report",
+    "targetId": "s1"
+  },
+  "kind": "padFooting",
+  "limitations": [
+    "DEMONSTRATION — EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009); EN 1992-1-1:2004/A1:2014, UK NA + A2:2014 not reconciled; Demonstration, not a certified design",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Schedule and illustrations are indicative; curtailment and laps are the engineer's detailing"
+  ],
+  "mock": true,
+  "modelHash": "04760a9733cd3a4a70a495494f8b51da4a9e3e30d861002c4ea6bb1fd3f042ff",
+  "overall": "pass",
+  "plateAnalysis": null,
+  "previewRunId": "4bf71a972558ae15fff5ab71961b5a432488f0e2b31ca68a980a6eec77751ba3",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "reinforcementProposal": null,
+  "schedule": [
+    {
+      "basis": "Straight bars over the base less the nominal cover at each end; spacing as designed",
+      "cutLength": 2.3,
+      "diameter": 0.01,
+      "mark": "X1",
+      "massKg": 28.360727680281858,
+      "quantity": 20,
+      "region": "Bottom X",
+      "shape": "straight",
+      "source": "designed",
+      "spacing": 0.10473684210526316,
+      "status": "indicative"
+    },
+    {
+      "basis": "Straight bars over the base less the nominal cover at each end; spacing as designed",
+      "cutLength": 2,
+      "diameter": 0.01,
+      "mark": "Y1",
+      "massKg": 28.36072768028186,
+      "quantity": 23,
+      "region": "Bottom Y",
+      "shape": "straight",
+      "source": "designed",
+      "spacing": 0.1040909090909091,
+      "status": "indicative"
+    }
+  ],
+  "sectionMechanics": null,
+  "soilProvenance": {
+    "bearingPressure": 200000,
+    "computedByWorkbench": false,
+    "reference": "User-entered demonstration bearing input; not a site report",
+    "source": "syntheticFixture"
+  },
+  "sourceProvenance": {
+    "axes": "Global [Fx,Fy,Fz,Mx,My,Mz], SI; foundation actions oppose support-on-structure reactions",
+    "combinationId": "LC1",
+    "foundationActions": [
+      0,
+      0,
+      -30000,
+      0,
+      30000,
+      0
+    ],
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "04760a9733cd3a4a70a495494f8b51da4a9e3e30d861002c4ea6bb1fd3f042ff",
+    "note": "Exact simultaneous support reaction; the base is rigid on tensionless ground (no frame-foundation coupling)",
+    "resultId": "04760a9733cd3a4a-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+    "sourceRevision": 3,
+    "supportReaction": [
+      0,
+      0,
+      30000,
+      0,
+      -30000,
+      0
+    ],
+    "targetId": "s1"
+  },
+  "sourceRevision": 3,
+  "currentState": "PASS"
+}

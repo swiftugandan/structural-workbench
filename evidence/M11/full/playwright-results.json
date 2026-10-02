@@ -1,0 +1,639 @@
+{
+  "config": {
+    "argv": [
+      "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
+      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "test",
+      "tests/e2e/pad-footing.spec.js",
+      "tests/e2e/design-previews.spec.js",
+      "tests/e2e/design-fidelity.spec.js",
+      "tests/e2e/capability-ledger.spec.js"
+    ],
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testIgnore": [
+          "**/live-visual.spec.js"
+        ],
+        "testMatch": [
+          "**/*.spec.js"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/M11/full/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run preview",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e/capability-ledger.spec.js",
+      "file": "e2e/capability-ledger.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22778,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-01T23:57:59.957Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-capability-ledger-M06--d2c92-KNOWN-parity-and-exclusions/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6495f811da1e1b026d63-e03b805e2a6853e6bdb6",
+          "file": "e2e/capability-ledger.spec.js",
+          "line": 14,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/design-fidelity.spec.js",
+      "file": "e2e/design-fidelity.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Mockup layout rcBeam: 3D focus, drawings, details, source and preserved model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 122421,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-01T23:58:23.757Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Mockup-d2c7c--source-and-preserved-model/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-46d21348be2754f2f922",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 18,
+          "column": 3
+        },
+        {
+          "title": "Mockup layout slab: 3D focus, drawings, details, source and preserved model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35402,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:00:26.390Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Mockup-37491--source-and-preserved-model/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-5438b70cb55aef0e2bfc",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 18,
+          "column": 3
+        },
+        {
+          "title": "Mockup layout padFooting: 3D focus, drawings, details, source and preserved model",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11626,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:01:02.021Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Mockup-f5702--source-and-preserved-model/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-6ad60ee221585066acdb",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 18,
+          "column": 3
+        },
+        {
+          "title": "Steel mockup: section card, catalogue, readiness, calculation tree and provenance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11537,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:01:13.888Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Steel--569ad-ulation-tree-and-provenance/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "717abd2dbfc1bb958775-53fd93fb63f5472c254b",
+          "file": "e2e/design-fidelity.spec.js",
+          "line": 94,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/design-previews.spec.js",
+      "file": "e2e/design-previews.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Concrete preview rcBeam: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17104,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:01:25.723Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-7a78f-undo-persistence-and-export/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-09f43fa081fcc1a6ac9b",
+          "file": "e2e/design-previews.spec.js",
+          "line": 18,
+          "column": 3
+        },
+        {
+          "title": "Concrete preview slab: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10743,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:01:43.138Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-8cf41-undo-persistence-and-export/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-f1cdb8647810d372f1c3",
+          "file": "e2e/design-previews.spec.js",
+          "line": 18,
+          "column": 3
+        },
+        {
+          "title": "Concrete preview padFooting: source, stale, undo, persistence and export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10532,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:01:54.117Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-c7057-undo-persistence-and-export/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-4cb4173f09d60386c561",
+          "file": "e2e/design-previews.spec.js",
+          "line": 18,
+          "column": 3
+        },
+        {
+          "title": "RC beam section mechanics: per-face oracle values, law switch, provenance, fit failure and reopen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17540,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:02:04.902Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-0ef1b-ance-fit-failure-and-reopen/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-d24412791d7b53d60a49",
+          "file": "e2e/design-previews.spec.js",
+          "line": 169,
+          "column": 1
+        },
+        {
+          "title": "RC beam model design moments beside mechanics capacities (top face points up)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11426,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:02:22.780Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-71e88-acities-top-face-points-up-/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-c2a4272bca0cdeaed5e1",
+          "file": "e2e/design-previews.spec.js",
+          "line": 300,
+          "column": 3
+        },
+        {
+          "title": "RC beam model design moments beside mechanics capacities (top face points DOWN)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10832,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:02:34.457Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-a6c60-ities-top-face-points-DOWN-/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-aacaa10f7eca9b598316",
+          "file": "e2e/design-previews.spec.js",
+          "line": 300,
+          "column": 3
+        },
+        {
+          "title": "RC beam EC2 checks: demonstration profile at governing stations, code inputs, explicit anchorage, report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15439,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:02:45.575Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-24111-s-explicit-anchorage-report/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e4a453773548216eeeb-ede8f26cd82a55bb372c",
+          "file": "e2e/design-previews.spec.js",
+          "line": 463,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "e2e/pad-footing.spec.js",
+      "file": "e2e/pad-footing.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Pad footing: contact, bearing, EC2 design, schedule, report and persistence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9579,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-02T00:03:01.351Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-pad-footing-Pad-footin-5263e-dule-report-and-persistence/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ada1d3f8c4f2ac103e44-b1e8e216b03bd388fdae",
+          "file": "e2e/pad-footing.spec.js",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-01T23:57:57.561Z",
+    "duration": 313767.783,
+    "expected": 13,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

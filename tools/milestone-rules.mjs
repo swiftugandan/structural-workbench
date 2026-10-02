@@ -91,6 +91,14 @@ export const m08 = [
   "m08-browser",
   "m08-acceptance",
 ];
+export const m11 = [
+  "build",
+  "footing-native",
+  "footing-model",
+  "footing-protocol",
+  "m11-browser",
+  "m11-acceptance",
+];
 export const m12 = [
   "build",
   "column-native",
@@ -243,6 +251,24 @@ export const requiredIds = {
     "RC beam model design moments beside mechanics capacities (top face points up)",
     "RC beam model design moments beside mechanics capacities (top face points DOWN)",
     "RC beam EC2 checks: demonstration profile at governing stations, code inputs, explicit anchorage, report",
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+  ],
+  "m11-acceptance": [
+    "M11-CONTACT-ANALYTICAL",
+    "M11-UPLIFT-DOMAIN",
+    "M11-REACTION-PROVENANCE",
+    "M11-STRUCTURAL-EXAMPLES",
+    "M11-BEARING",
+    "M11-DETAIL-SCHEDULE",
+    "M11-USER-JOURNEY",
+    "M11-PERSISTENCE",
+    "M11-LEDGER",
+    "M11-ORACLE-PROVENANCE",
+  ],
+  "m11-browser": [
+    "Pad footing: contact, bearing, EC2 design, schedule, report and persistence",
+    "Concrete preview padFooting: source, stale, undo, persistence and export",
+    "Mockup layout padFooting: 3D focus, drawings, details, source and preserved model",
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
   ],
   "m12-acceptance": [
@@ -449,6 +475,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
                 "M07",
                 "M08",
                 "M09",
+                "M11",
                 "M12",
                 "M14",
                 "M21",
@@ -507,6 +534,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 8)
   )
     errors.push(`${name}: failed, skipped or incomplete M08 browser journeys`);
+  if (
+    name === "m11-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 4)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M11 browser journeys`);
   if (
     name === "m12-browser" &&
     (e.stats?.unexpected !== 0 ||

@@ -180,6 +180,13 @@ See ADR 0009 for input identity, axis mapping and bounded applicability.
   The run's `checks` become five rows (Axial and biaxial bending, Shear, Longitudinal reinforcement, Links and bar restraint, Cover and spacing), and `overall` and `codeProfile` are set as for beams.
 
   `propose: true` adds `reinforcementProposal {status, inputs {barDiameter, barsAlongWidth, barsAlongDepth, linkDiameter, linkSpacing}, steelArea, overall, checks, candidatesEvaluated, basis}`, the least steel area with no failing check. It returns `{status: none, reason}` until the bending inputs are entered.
+- Pad footings (ADR 0028):
+  - **Code inputs.** padFooting `codeInputs` add `castOnBlinding` (boolean) and `bearingCombinationId`, which must name a case or combination (`DANGLING_REFERENCE` otherwise).
+  - **codeProfilePreview.** In model mode a footing bound to a support adds `codeProfilePreview` with `family: padFooting`, `actions {n, mx, my, hx, hy}`, `barsX` and `barsY` (`{diameter, count, spacing, area, effectiveDepth}`), and `design {bearing, uls {n, ex, ey, contact}, directions[], fcd, fyd}`. The actions are the reaction reversed, in global axes, with N downward.
+  - **contact.** `{plane {p0, px, py}, state: full|partial, contactArea, contactFraction, qMax, qMin, corners, iterations, residual, contactPolygon}`: a rigid base on tensionless ground (`docs/formulations/footing.md`).
+  - **checks.** The checks are `ec2.footing.contact`, `ec2.footing.bearing`, `ec2.footing.flexure.x|y`, `ec2.footing.anchorage.x|y`, `ec2.footing.shear.x|y`, `ec2.footing.punching`, `ec2.footing.punching-face`, `ec2.cover`, `ec2.footing.cast-cover` and `ec2.footing.bar-diameter`.
+  - **Run.** `checks` become five rows (Contact and bearing; Bending and tie force; Anchorage; Shear and punching; Cover and bar size), `contactState` is `full`, `partial` or `noEquilibrium`, and `schedule` lists X1/Y1 straight bottom bars (length less cover at each end).
+  - **Report.** The calculation record includes a footing section for each current model-sourced footing run.
 - `SetDesignPreview` provenance compares numeric inputs by value: an untouched integer (`3`) equals its stored `3.0` and keeps its source.
 - Preview reinforcement pictures/RC CSV rows are illustrative preferences, with unverified fit/quantities/anchorage and null cut lengths. Export adds current/stale presentation state; it never upgrades the recorded design status. See `docs/design/concrete-workflow-previews.md`.
 

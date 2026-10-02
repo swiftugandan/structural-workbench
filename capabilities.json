@@ -407,7 +407,7 @@
     },
     {
       "capabilityId": "concrete-code",
-      "scopeKey": "M08 / M12 / ec2-uk-na / rectangular RC beams and columns: EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009), demonstration",
+      "scopeKey": "M08 / M11 / M12 / ec2-uk-na / rectangular RC beams, columns and pad footings: EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009), demonstration",
       "implementationStatus": "partial",
       "verificationStatus": "parent-gate-pass",
       "comparisonStatus": "UNKNOWN",
@@ -429,6 +429,29 @@
         "resources.lock.json",
         "evidence/M08/full/gate-M08.json",
         "evidence/M08/full/ACCEPTANCE.md"
+      ]
+    },
+    {
+      "capabilityId": "pad-footing",
+      "scopeKey": "M11 / rigid pad on tensionless ground + ec2-uk-na pad footing design (demonstration)",
+      "implementationStatus": "partial",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "EC2 footing design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 not reconciled; not a certified design (ADR 0028)",
+        "Rectangular pad with a concentric rectangular column; rigid base on linear tensionless ground; no downward force or a resultant off the base is refused",
+        "Allowable bearing pressure is the engineer's input; no ground resistance or settlement is computed (EN 1997 not held)",
+        "Bottom bars sized for face bending, the 9.8.2.2 tie force and A_s,min with straight anchorage; one-way shear, punching (6.4.4(2)) and the face check",
+        "Eccentric columns, stepped or sloped bases, uplift top steel, punching reinforcement, pile caps and combined footings are unsupported",
+        "Not a claim of commercial PROKON parity or professional code certification"
+      ],
+      "evidenceReferences": [
+        "docs/adr/0028-pad-footing-contact-and-ec2-design.md",
+        "docs/formulations/footing.md",
+        "docs/code-profiles/ec2-uk-na/dossier-footing.md",
+        "fixtures/design/ec2-uk-na/footing.reconciliation.json",
+        "evidence/M11/full/gate-M11.json"
       ]
     },
     {

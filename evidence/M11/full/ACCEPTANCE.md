@@ -1,0 +1,21 @@
+# M11 acceptance record
+
+Source hash: `a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb`
+Build hash: `e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3`
+Observed: 2026-10-02T00:03:11.438Z
+Status: **PASS**
+
+| ID | Title | Evidence | Status | Observation |
+| --- | --- | --- | --- | --- |
+| M11-CONTACT-ANALYTICAL | Centred and eccentric analytical pressure checks | kernel_validation | PASS | Centred, in-kern, kern-edge and uniaxial partial contact reproduce the closed forms to 1e-12 (the triangle q_max = 2N/(3Bc) over 3c); biaxial in-kern and partial contact match the oracle's independent strip-integration search; every solved plane is in equilibrium to 1e-12. |
+| M11-UPLIFT-DOMAIN | Uplift and out-of-domain handling; tension never treated as contact | failure_path | PASS | No downward force and a resultant on or off the base edge are refused with their reason and fail the design; a resultant outside the kern gives partial contact on a tensionless plane, never negative pressure; B04's lateral reaction (no vertical force) reports noEquilibrium and FAIL in the browser. |
+| M11-REACTION-PROVENANCE | Exact reaction provenance | kernel_validation | PASS | The foundation actions are the exact simultaneous support reaction reversed (bit-for-bit), bound to the current result; forged or stale results are refused; on B08 the footing carries N = 30 kN and |M| = 30 kN m (q L/2, q L²/12). |
+| M11-STRUCTURAL-EXAMPLES | Independent structural design examples | kernel_validation | PASS | JRC footing B-2 (9.8.2.2): F_s,max 1457.9 kN, A_s 3353 mm², F_s(h/2) 1071.0 kN and l_b 360 mm reproduce from the report's own σ'_Ed and z_i, with its self-weight deduction and rounded anchorage comparison documented; a concentric pad matches hand values for face moment, tie force, shear at d, punching v_Ed at the critical perimeter and bearing; a thin base fails. |
+| M11-BEARING | Bearing against the engineer's allowable pressure | kernel_validation | PASS | q_max under the engineer's bearing case or combination, including the base self-weight (25 kN/m³) and overburden, is compared with the allowable input; without a bearing combination the check is INDETERMINATE. |
+| M11-DETAIL-SCHEDULE | Reinforcement details and schedule | exported_outcome | PASS | Bottom bars sized in both directions (lower x layer, y on top) for bending, the 9.8.2.2 tie force and A_s,min within the spacing limits and anchoring straight; the schedule lists X1/Y1 straight bars of the base less cover with counts and masses; the CSV and calculation record carry them. |
+| M11-USER-JOURNEY | Transfer a reaction, assess contact, design and export | ui_journey | PASS | Bind a support, run on model actions (contact solved and drawn before code inputs), enter the code inputs, rerun to PASS, inspect the EC2 checks and the contact plan, download the run, the schedule CSV and the calculation record. |
+| M11-PERSISTENCE | Footing code inputs save and reopen | save_and_reopen | PASS | castOnBlinding and bearingCombinationId are kept for footings, refused on other kinds and the combination must exist; the downloaded project keeps them. |
+| M11-LEDGER | Capability ledger | capability_ledger | PASS | The capability ledger lists pad-footing with its demonstration label, limitations and UNKNOWN comparison. |
+| M11-ORACLE-PROVENANCE | Independent footing oracle is the recorded script | regression_results | PASS | tools/oracles/footing_oracle.py sha256 34736729e9a31327e69ab01edf12589d1c59f062e4792784706e33f50fb89b69 (recorded 34736729e9a31327e69ab01edf12589d1c59f062e4792784706e33f50fb89b69); 6 contact cases; 0 failures. |
+
+Limitations: ec2-uk-na pad footing design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular pads with a concentric column on a rigid base over linear tensionless ground; the allowable bearing pressure is the engineer's input and no ground resistance or settlement is computed (EN 1997 not held). Eccentric columns, stepped bases, uplift top steel, punching reinforcement, pile caps and combined footings are unsupported. Commercial PROKON parity remains UNKNOWN.

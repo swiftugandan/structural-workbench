@@ -1,0 +1,68 @@
+{
+  "taskId": "M11-parent",
+  "milestone": "M11",
+  "sourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+  "buildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "playwright-results.json": "eb7aee9f007bf3cb90d1b01c81dae5ae67624afe3d342f34b662ebcf1d4859ec",
+    "footing-ec2.png": "9fbabff7f6cce355f6ea827c398f105c0d32d2187c780ab255322ca5de690f56",
+    "footing-contact.png": "4e4245c9099afb690519b1709e0bf49d8d646438ecbefe4eb3b68a78adbdcde6",
+    "footing-run.json": "4fdc548afc621881a53f89760fc55fb76c34074d05f4db92879eb982ebc730cb",
+    "calculation-record.html": "fd51eeb2075f58cf652c8598714b89e5c3dc7fb1528c6e8219359713b499a4a1"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-02T00:03:11.368Z",
+  "status": "PASS",
+  "testCount": 13,
+  "testIds": [
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+    "Mockup layout rcBeam: 3D focus, drawings, details, source and preserved model",
+    "Mockup layout slab: 3D focus, drawings, details, source and preserved model",
+    "Mockup layout padFooting: 3D focus, drawings, details, source and preserved model",
+    "Steel mockup: section card, catalogue, readiness, calculation tree and provenance",
+    "Concrete preview rcBeam: source, stale, undo, persistence and export",
+    "Concrete preview slab: source, stale, undo, persistence and export",
+    "Concrete preview padFooting: source, stale, undo, persistence and export",
+    "RC beam section mechanics: per-face oracle values, law switch, provenance, fit failure and reopen",
+    "RC beam model design moments beside mechanics capacities (top face points up)",
+    "RC beam model design moments beside mechanics capacities (top face points DOWN)",
+    "RC beam EC2 checks: demonstration profile at governing stations, code inputs, explicit anchorage, report",
+    "Pad footing: contact, bearing, EC2 design, schedule, report and persistence"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/pad-footing.spec.js",
+    "tests/e2e/design-previews.spec.js",
+    "tests/e2e/design-fidelity.spec.js",
+    "tests/e2e/capability-ledger.spec.js"
+  ],
+  "stats": {
+    "startTime": "2026-10-01T23:57:57.561Z",
+    "duration": 313767.783,
+    "expected": 13,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifacts": [
+    "playwright-results.json",
+    "footing-ec2.png",
+    "footing-contact.png",
+    "footing-run.json",
+    "calculation-record.html"
+  ]
+}

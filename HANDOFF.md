@@ -1,3 +1,18 @@
+## Latest: M11 pad footing accepted (EC2 UK demonstration)
+
+- **Contact.** `workbench-design::footing` (ADR 0028, `docs/formulations/footing.md`) models a rigid base on tensionless ground.
+  - The closed form for full contact, and Newton's method with exact polygon integrals for partial contact.
+  - No downward force, or a resultant off the base, is refused, never reported as a pressure.
+- **EC2 design.** `ec2uk/footing.rs` (`dossier-footing.md`):
+  - bearing under the engineer's bearing combination, with self-weight and overburden, against the allowable input;
+  - bottom bars sized per direction for face bending, the 9.8.2.2 tie force and A_s,min, with straight anchorage at h/2;
+  - one-way shear, punching at perimeters within 2d (ground force removed) and the face check, and cover including the 4.4.1.3(4) casting minimum.
+- **In the app.** Contact plan drawing, EC2 tab, an X/Y schedule and a report section. New code inputs `castOnBlinding` and `bearingCombinationId` (schema 1.8.0).
+- **Verification.**
+  - `tools/oracles/footing_oracle.py` reproduces the contact independently.
+  - JRC footing B-2 is reconciled, with two discrepancies documented.
+  - Gate: `node tools/run-m11-parent.mjs` → evidence/M11/full, 10/10 PASS on a2bd5864.
+
 ## Latest: M12 RC column design accepted (EC2 UK demonstration)
 
 - **What it does.** `ec2uk/column.rs` (ADR 0027, `dossier-column.md`) checks a column bound to a member under one combination:

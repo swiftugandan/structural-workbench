@@ -2034,6 +2034,16 @@ $("#export-report").onclick = () => {
               run.sourceProvenance.kind === "modelAnalysis" &&
               run.sourceProvenance.resultId === result.resultId,
           ),
+        // Current model-sourced pad footing designs bound to this result.
+        footingRuns: concrete
+          .records()
+          .filter(
+            (run) =>
+              run.kind === "padFooting" &&
+              run.modelHash === modelHash &&
+              run.sourceProvenance.kind === "modelAnalysis" &&
+              run.sourceProvenance.resultId === result.resultId,
+          ),
         // Slab plate analyses of the current model's drafts (ADR 0021).
         plateRuns: concrete
           .records()

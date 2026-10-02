@@ -1,0 +1,57 @@
+{
+  "taskId": "M11-parent",
+  "milestone": "M11",
+  "sourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+  "buildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-01T23:57:54.905Z",
+  "status": "PASS",
+  "testCount": 22,
+  "testIds": [
+    "mechanics_rejected_for_non_beam_previews",
+    "preview_invalid_geometry_is_atomic_and_slab_refuses_frame_actions",
+    "rc_beam_anchorage_confirmation_is_explicit_and_rc_only",
+    "pad_footing_designs_on_a_support_reaction",
+    "preview_all_families_persist_and_never_claim_compliance",
+    "preview_model_sources_are_exact_and_stale_or_forged_results_rejected",
+    "rc_beam_ec2_preview_is_unavailable_without_model_actions",
+    "rc_beam_ec2_preview_picks_the_largest_shear_station",
+    "rc_beam_ec2_profile_runs_at_governing_stations",
+    "rc_beam_code_inputs_complete_the_ec2_run",
+    "rc_beam_mechanics_edits_are_validated_atomic_and_provenance_tracked",
+    "rc_beam_saved_without_mechanics_reopens_as_not_configured",
+    "rc_beam_schedule_is_indicative_and_hand_checked",
+    "rc_beam_section_mechanics_match_oracle_and_never_change_status",
+    "rc_beam_synthetic_run_has_no_model_demand",
+    "rc_beam_model_demand_matches_closed_form_and_reports_face_orientation",
+    "rc_beam_synthetic_run_has_no_service_stresses",
+    "rc_beam_service_stresses_under_model_moments_match_oracle",
+    "schema_1_1_rc_beam_drafts_migrate_to_equal_top_and_bottom_rows",
+    "rc_beam_unequal_faces_give_distinct_sagging_and_hogging_matching_oracle",
+    "schema_1_2_rc_beam_drafts_gain_two_synthetic_link_legs",
+    "rc_beam_proposal_passes_and_every_lighter_neighbour_fails"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "workbench-wasm-api",
+    "--test",
+    "preview_workspace"
+  ],
+  "artifacts": []
+}

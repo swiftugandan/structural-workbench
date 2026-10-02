@@ -1,0 +1,195 @@
+{
+  "taskId": "M11-parent",
+  "milestone": "M11",
+  "sourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+  "buildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-02T00:03:11.437Z",
+  "status": "PASS",
+  "testCount": 10,
+  "testIds": [
+    "M11-CONTACT-ANALYTICAL",
+    "M11-UPLIFT-DOMAIN",
+    "M11-REACTION-PROVENANCE",
+    "M11-STRUCTURAL-EXAMPLES",
+    "M11-BEARING",
+    "M11-DETAIL-SCHEDULE",
+    "M11-USER-JOURNEY",
+    "M11-PERSISTENCE",
+    "M11-LEDGER",
+    "M11-ORACLE-PROVENANCE"
+  ],
+  "command": [
+    "node",
+    "tools/record-m11-acceptance.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "M11-CONTACT-ANALYTICAL",
+      "title": "Centred and eccentric analytical pressure checks",
+      "evidence": "kernel_validation",
+      "tests": {
+        "footing-native": [
+          "profile::ec2uk::footing_tests::polygon_moments_are_exact_for_a_rectangle",
+          "profile::ec2uk::footing_tests::contact_matches_the_independent_oracle"
+        ]
+      },
+      "observation": "Centred, in-kern, kern-edge and uniaxial partial contact reproduce the closed forms to 1e-12 (the triangle q_max = 2N/(3Bc) over 3c); biaxial in-kern and partial contact match the oracle's independent strip-integration search; every solved plane is in equilibrium to 1e-12.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-UPLIFT-DOMAIN",
+      "title": "Uplift and out-of-domain handling; tension never treated as contact",
+      "evidence": "failure_path",
+      "tests": {
+        "footing-native": [
+          "profile::ec2uk::footing_tests::contact_refuses_uplift_and_a_resultant_off_the_base",
+          "profile::ec2uk::footing_tests::eccentric_pad_partial_contact_and_refusals"
+        ],
+        "footing-protocol": [
+          "preview_model_sources_are_exact_and_stale_or_forged_results_rejected"
+        ],
+        "m11-browser": [
+          "Concrete preview padFooting: source, stale, undo, persistence and export"
+        ]
+      },
+      "observation": "No downward force and a resultant on or off the base edge are refused with their reason and fail the design; a resultant outside the kern gives partial contact on a tensionless plane, never negative pressure; B04's lateral reaction (no vertical force) reports noEquilibrium and FAIL in the browser.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-REACTION-PROVENANCE",
+      "title": "Exact reaction provenance",
+      "evidence": "kernel_validation",
+      "tests": {
+        "footing-protocol": [
+          "preview_model_sources_are_exact_and_stale_or_forged_results_rejected",
+          "pad_footing_designs_on_a_support_reaction"
+        ],
+        "m11-browser": [
+          "Pad footing: contact, bearing, EC2 design, schedule, report and persistence"
+        ]
+      },
+      "observation": "The foundation actions are the exact simultaneous support reaction reversed (bit-for-bit), bound to the current result; forged or stale results are refused; on B08 the footing carries N = 30 kN and |M| = 30 kN m (q L/2, q L²/12).",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-STRUCTURAL-EXAMPLES",
+      "title": "Independent structural design examples",
+      "evidence": "kernel_validation",
+      "tests": {
+        "footing-native": [
+          "profile::ec2uk::footing_tests::jrc_footing_b2_tie_force_and_anchorage",
+          "profile::ec2uk::footing_tests::concentric_pad_by_hand",
+          "profile::ec2uk::footing_tests::a_thin_base_fails_punching_or_shear",
+          "profile::ec2uk::detailing_tests::anchorage_lengths_reproduce_jrc_tables_4_1_2_to_4_1_4"
+        ]
+      },
+      "observation": "JRC footing B-2 (9.8.2.2): F_s,max 1457.9 kN, A_s 3353 mm², F_s(h/2) 1071.0 kN and l_b 360 mm reproduce from the report's own σ'_Ed and z_i, with its self-weight deduction and rounded anchorage comparison documented; a concentric pad matches hand values for face moment, tie force, shear at d, punching v_Ed at the critical perimeter and bearing; a thin base fails.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-BEARING",
+      "title": "Bearing against the engineer's allowable pressure",
+      "evidence": "kernel_validation",
+      "tests": {
+        "footing-native": [
+          "profile::ec2uk::footing_tests::concentric_pad_by_hand",
+          "profile::ec2uk::footing_tests::eccentric_pad_partial_contact_and_refusals"
+        ],
+        "footing-protocol": [
+          "pad_footing_designs_on_a_support_reaction"
+        ]
+      },
+      "observation": "q_max under the engineer's bearing case or combination, including the base self-weight (25 kN/m³) and overburden, is compared with the allowable input; without a bearing combination the check is INDETERMINATE.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-DETAIL-SCHEDULE",
+      "title": "Reinforcement details and schedule",
+      "evidence": "exported_outcome",
+      "tests": {
+        "footing-protocol": [
+          "pad_footing_designs_on_a_support_reaction"
+        ],
+        "m11-browser": [
+          "Pad footing: contact, bearing, EC2 design, schedule, report and persistence"
+        ]
+      },
+      "observation": "Bottom bars sized in both directions (lower x layer, y on top) for bending, the 9.8.2.2 tie force and A_s,min within the spacing limits and anchoring straight; the schedule lists X1/Y1 straight bars of the base less cover with counts and masses; the CSV and calculation record carry them.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-USER-JOURNEY",
+      "title": "Transfer a reaction, assess contact, design and export",
+      "evidence": "ui_journey",
+      "tests": {
+        "m11-browser": [
+          "Pad footing: contact, bearing, EC2 design, schedule, report and persistence",
+          "Mockup layout padFooting: 3D focus, drawings, details, source and preserved model"
+        ]
+      },
+      "observation": "Bind a support, run on model actions (contact solved and drawn before code inputs), enter the code inputs, rerun to PASS, inspect the EC2 checks and the contact plan, download the run, the schedule CSV and the calculation record.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-PERSISTENCE",
+      "title": "Footing code inputs save and reopen",
+      "evidence": "save_and_reopen",
+      "tests": {
+        "footing-model": [
+          "footing_code_inputs_apply_only_to_footings_and_reference_a_combination",
+          "code_inputs_are_validated_for_the_draft_kind"
+        ],
+        "m11-browser": [
+          "Pad footing: contact, bearing, EC2 design, schedule, report and persistence"
+        ]
+      },
+      "observation": "castOnBlinding and bearingCombinationId are kept for footings, refused on other kinds and the combination must exist; the downloaded project keeps them.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-LEDGER",
+      "title": "Capability ledger",
+      "evidence": "capability_ledger",
+      "tests": {
+        "m11-browser": [
+          "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions"
+        ]
+      },
+      "observation": "The capability ledger lists pad-footing with its demonstration label, limitations and UNKNOWN comparison.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M11-ORACLE-PROVENANCE",
+      "title": "Independent footing oracle is the recorded script",
+      "evidence": "regression_results",
+      "observation": "tools/oracles/footing_oracle.py sha256 34736729e9a31327e69ab01edf12589d1c59f062e4792784706e33f50fb89b69 (recorded 34736729e9a31327e69ab01edf12589d1c59f062e4792784706e33f50fb89b69); 6 contact cases; 0 failures.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "ec2-uk-na pad footing design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular pads with a concentric column on a rigid base over linear tensionless ground; the allowable bearing pressure is the engineer's input and no ground resistance or settlement is computed (EN 1997 not held). Eccentric columns, stepped bases, uplift top steel, punching reinforcement, pile caps and combined footings are unsupported. Commercial PROKON parity remains UNKNOWN."
+}

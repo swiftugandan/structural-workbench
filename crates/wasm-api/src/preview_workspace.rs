@@ -5,7 +5,7 @@ use workbench_design::rc_section::{
     self, BarLayer, BarRow, ConcreteLaw, ElasticInputs, RcRectangle, SteelLaw,
 };
 use workbench_design::{
-    CodeProfile, ColumnActions, DesignDemand, DesignRun, Ec2UkNaProfile, MemberContext, ProfileApplicability,
+    CodeProfile, ColumnActions, FootingActions, PadFootingContext, PadFootingDetailing, footing_design, DesignDemand, DesignRun, Ec2UkNaProfile, MemberContext, ProfileApplicability,
     RcBarRow, RcBeamContext, RcColumnContext, RcColumnDetailing, RcFace, RcLinks,
 };
 use workbench_model::{
@@ -843,12 +843,12 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                     super::quantity(&mut x, "length")?;
                     out.insert(key.into(), x);
                 }
-                for key in ["exposureClass", "structuralSystem", "quasiPermanentCombinationId"] {
+                for key in ["exposureClass", "structuralSystem", "quasiPermanentCombinationId", "bearingCombinationId"] {
                     if let Some(t) = ci[key].as_str().filter(|t| !t.is_empty()) {
                         out.insert(key.into(), json!(t));
                     }
                 }
-                for key in ["partitionsSensitive", "braced"] {
+                for key in ["partitionsSensitive", "braced", "castOnBlinding"] {
                     if let Some(b) = ci[key].as_bool() {
                         out.insert(key.into(), json!(b));
                     }
@@ -1558,7 +1558,20 @@ fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
         ("Links and bar restraint", &["ec2.column.links", "ec2.column.restraint"]),
         ("Cover and spacing", &["ec2.cover", "ec2.bar-spacing"]),
     ];
-    let rows: &[(&str, &[&str])] = if code["governing"].is_array() { &beam } else { &column };
+    let footing: [(&str, &[&str]); 5] = [
+        ("Contact and bearing", &["ec2.footing.contact", "ec2.footing.bearing"]),
+        ("Bending and tie force", &["ec2.footing.flexure.x", "ec2.footing.flexure.y"]),
+        ("Anchorage", &["ec2.footing.anchorage.x", "ec2.footing.anchorage.y"]),
+        ("Shear and punching", &["ec2.footing.shear.x", "ec2.footing.shear.y", "ec2.footing.punching", "ec2.footing.punching-face"]),
+        ("Cover and bar size", &["ec2.cover", "ec2.footing.cast-cover", "ec2.footing.bar-diameter"]),
+    ];
+    let rows: &[(&str, &[&str])] = if code["governing"].is_array() {
+        &beam
+    } else if code["family"] == "padFooting" {
+        &footing
+    } else {
+        &column
+    };
     Some(rows_from(&checks, rows))
 }
 
@@ -1669,6 +1682,79 @@ fn column_code(p: &Project, d: &DesignPreview, stations: &[KeyStation], combinat
                 "convention":"N compression positive; end moments are the frame's internal My, Mz at stations 0 and 1"},
             "checks":checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()}),
     )
+}
+
+/// EC2 UK NA pad footing design (M11, ADR 0028) for a draft bound to a
+/// support: the column actions are the support reaction reversed (global
+/// axes), the base rigid on tensionless ground; the bearing check re-solves
+/// the engineer's bearing case or combination at the same support.
+fn footing_code(p: &Project, d: &DesignPreview, foundation: &[f64], combination: &str) -> Value {
+    let mut base = code_base(d);
+    base.as_object_mut().unwrap().remove("tensionAnchorageConfirmed");
+    base["family"] = json!("padFooting");
+    let profile = Ec2UkNaProfile::default();
+    let v = &d.inputs;
+    let ci = d.code_inputs.clone().unwrap_or_default();
+    let ctx = PadFootingContext {
+        length: v["length"],
+        width: v["width"],
+        thickness: v["thickness"],
+        cover: v["cover"],
+        column_x: v["columnWidth"],
+        column_y: v["columnDepth"],
+        fck: v["concreteStrength"],
+        fyk: v["rebarStrength"],
+        bearing_pressure: v["bearingPressure"],
+        embedment: v["embedment"],
+        soil_unit_weight: v["soilUnitWeight"],
+        detailing: PadFootingDetailing {
+            exposure_class: ci.exposure_class.clone(),
+            cover_durability: ci.minimum_cover_durability,
+            aggregate_size: ci.aggregate_size,
+            cast_on_blinding: ci.cast_on_blinding,
+        },
+    };
+    // Foundation actions [Fx, Fy, Fz, Mx, My, Mz] act on the base; N is downward.
+    let actions = |f: &[f64], id: &str| FootingActions { n: -f[2], mx: f[3], my: f[4], hx: f[0], hy: f[1], combination_id: id.into() };
+    let uls = actions(foundation, combination);
+    let target = d.target_id.clone().unwrap_or_default();
+    let bearing = match &ci.bearing_combination_id {
+        None => None,
+        Some(id) => match workbench_assembly::analyse(p, id) {
+            Ok(a) => match a.reaction_support_ids.iter().position(|s| s == &target) {
+                Some(i) => Some(actions(&a.reactions[i * 6..i * 6 + 6].iter().map(|x| -x).collect::<Vec<_>>(), id)),
+                None => None,
+            },
+            Err(e) => return merge(base, json!({"status":"unavailable","reason":format!("Bearing combination {id}: {}", e.message)})),
+        },
+    };
+    let out = footing_design(&profile.ndp, &ctx, &uls, bearing.as_ref());
+    merge(
+        base,
+        json!({"status":"evaluated","combinationId":combination,"bearingCombinationId":ci.bearing_combination_id,
+            "actions":{"n":uls.n,"mx":uls.mx,"my":uls.my,"hx":uls.hx,"hy":uls.hy,
+                "convention":"Global axes; N downward on the base; moments and horizontal forces at the top of the base"},
+            "barsX":out.bars_x,"barsY":out.bars_y,"design":out.detail,
+            "checks":out.checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()}),
+    )
+}
+
+/// The footing's bottom bars: straight, the base length less cover at each end.
+fn footing_schedule(d: &DesignPreview, code: &Value) -> Value {
+    let v = &d.inputs;
+    let mass = |phi: f64, len: f64, n: f64| std::f64::consts::PI * phi * phi / 4. * len * n * STEEL_DENSITY;
+    let rows: Vec<Value> = [("X1", "Bottom X", "barsX", "length"), ("Y1", "Bottom Y", "barsY", "width")]
+        .iter()
+        .filter_map(|(mark, region, key, along)| {
+            let b = &code[*key];
+            let (phi, n) = (b["diameter"].as_f64()?, b["count"].as_f64()?);
+            let cut = v[*along] - 2. * v["cover"];
+            Some(json!({"mark":mark,"region":region,"shape":"straight","diameter":phi,"quantity":n,"cutLength":cut,
+                "massKg":mass(phi, cut, n),"spacing":b["spacing"],"source":"designed","status":"indicative",
+                "basis":"Straight bars over the base less the nominal cover at each end; spacing as designed"}))
+        })
+        .collect();
+    json!(rows)
 }
 
 /// Column bar sizes the proposal enumerates (BS 8666 preferred, ≥ 12 mm UK NA 9.5.2(1)).
@@ -1915,8 +2001,10 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
                 "Global [Fx,Fy,Fz,Mx,My,Mz], SI; foundation actions oppose support-on-structure reactions"
             );
             source["note"] = json!(
-                "Exact simultaneous support reaction; no soil/contact solution or frame-foundation coupling"
+                "Exact simultaneous support reaction; the base is rigid on tensionless ground (no frame-foundation coupling)"
             );
+            let foundation: Vec<f64> = reaction.iter().map(|v| -v).collect();
+            code = footing_code(p, draft, &foundation, case);
         }
     } else if input["sourceMode"] != "synthetic" {
         return Err(err(
@@ -1962,12 +2050,14 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
     };
     let schedule = if draft.kind == "rcBeam" {
         beam_schedule(p, draft)
+    } else if draft.kind == "padFooting" && code["status"] == "evaluated" {
+        footing_schedule(draft, &code)
     } else {
         json!([])
     };
     // ADR 0026: an evaluated, enabled code profile replaces the unsupported
     // rows with its checks, labelled as a demonstration of the held edition.
-    let coded = if ["rcBeam", "rcColumn"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
+    let coded = if ["rcBeam", "rcColumn", "padFooting"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
     let mut run = json!({"contractVersion":1,"draftId":id,"kind":draft.kind,"overall":"unsupported","mock":true,"codeProfile":null,"modelHash":p.hash(),"sourceRevision":p.revision,
         "inputHash":digest(&serde_json::to_vec(draft).unwrap()),"inputs":draft,"sourceProvenance":source,"schedule":schedule,
         "checks":checks.iter().map(|name|json!({"name":name,"status":"unsupported","utilisation":null,"reason":if *name=="Flexure"&&draft.kind=="rcBeam"{"Code profile unavailable. Section mechanics are reported separately and are not a code resistance"}else{"Required numerical family or locked code/example resources are unavailable"}})).collect::<Vec<_>>(),
@@ -1976,7 +2066,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
-        "codeProfilePreview":if ["rcBeam","rcColumn"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
+        "codeProfilePreview":if ["rcBeam","rcColumn","padFooting"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
         "plateAnalysis":plate,
         "columnMechanics":if draft.kind=="rcColumn"{column_mechanics(draft,stations.as_deref())}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
@@ -1984,6 +2074,10 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         run["reinforcementProposal"] = proposal;
         run["checks"] = json!(rows);
         run["overall"] = json!(overall);
+        if draft.kind == "padFooting" {
+            // The ULS contact state from the rigid-base solution.
+            run["contactState"] = json!(code["design"]["uls"]["contact"]["state"].as_str().unwrap_or("noEquilibrium"));
+        }
         run["mock"] = json!(draft.input_source != "user");
         run["codeProfile"] = json!({"id":code["profileId"],"standard":code["standard"],"edition":code["edition"],
             "certification":code["certification"],"unreconciledAmendments":code["unreconciledAmendments"]});

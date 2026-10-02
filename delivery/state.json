@@ -17,7 +17,8 @@
     "M22",
     "M21",
     "M08",
-    "M12"
+    "M12",
+    "M11"
   ],
   "tasks": {
     "M00-A": {
@@ -4689,6 +4690,73 @@
       ],
       "verifiedSourceHash": "c1204f1e9307d5f5b2abed9268a2cdb18b7756a817c0c4ece92ca5dd8c6f28ef",
       "verifiedBuildHash": "9e0fa0da90546c4807e2b3fb4479c0ae8881735a7c12c1e878dacfa16e5b96b6"
+    },
+    "M11-parent": {
+      "id": "M11-parent",
+      "useCase": "Size a pad footing from column reactions (SPECIFICATION M11): rigid base on tensionless ground, bearing against the engineer's allowable value, EC2 UK footing design with sized bars and schedule",
+      "dependencies": [
+        "M08-parent"
+      ],
+      "status": "ACCEPTED",
+      "ownedPaths": [
+        "crates/design/src/footing.rs",
+        "crates/design/src/profile/ec2uk/footing.rs",
+        "crates/design/src/profile/ec2uk/footing_tests.rs",
+        "tools/oracles/footing_oracle.py",
+        "fixtures/design/ec2-uk-na/jrc-footing-b2.published.json",
+        "fixtures/design/ec2-uk-na/footing.reconciliation.json",
+        "crates/wasm-api/src/preview_workspace.rs",
+        "crates/wasm-api/tests/preview_workspace.rs",
+        "web/design-presentation.js",
+        "web/design-previews.js",
+        "web/reports/report.js",
+        "web/app.js",
+        "tests/e2e/pad-footing.spec.js",
+        "docs/adr/0028-pad-footing-contact-and-ec2-design.md",
+        "docs/formulations/footing.md",
+        "docs/code-profiles/ec2-uk-na/dossier-footing.md",
+        "tools/run-m11-parent.mjs",
+        "tools/record-m11-acceptance.mjs",
+        "evidence/M11/full"
+      ],
+      "acceptanceIds": [
+        "M11-CONTACT-ANALYTICAL",
+        "M11-UPLIFT-DOMAIN",
+        "M11-REACTION-PROVENANCE",
+        "M11-STRUCTURAL-EXAMPLES",
+        "M11-BEARING",
+        "M11-DETAIL-SCHEDULE",
+        "M11-USER-JOURNEY",
+        "M11-PERSISTENCE",
+        "M11-LEDGER",
+        "M11-ORACLE-PROVENANCE"
+      ],
+      "requiredCommands": [
+        "node tools/run-m11-parent.mjs"
+      ],
+      "outcomes": [
+        {
+          "check": "gate-M11",
+          "status": "PASS",
+          "evidencePath": "evidence/M11/full/gate-M11.json"
+        },
+        {
+          "check": "m11-acceptance",
+          "status": "PASS",
+          "evidencePath": "evidence/M11/full/m11-acceptance.json"
+        }
+      ],
+      "actualOutcomes": [
+        "Contact kernel: closed forms to 1e-12 (full contact, uniaxial triangle), biaxial partial contact matches an independent strip-integration search; no downward force or a resultant off the base is refused",
+        "JRC footing B-2 (9.8.2.2) reconciled from the report's own \u03c3'_Ed and z_i; found: its self-weight deduction is inconsistent, and its '400 \u2264 400 mm' straight anchorage is 400.3 mm unrounded",
+        "Concentric pad hand-checked (face moment, tie force, shear at d, punching at the critical perimeter, bearing with self-weight and overburden)",
+        "B04's lateral reaction carries no downward force: its footing now reports noEquilibrium and FAIL instead of an indeterminate placeholder"
+      ],
+      "evidencePaths": [
+        "evidence/M11/full"
+      ],
+      "verifiedSourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+      "verifiedBuildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3"
     }
   },
   "blockers": [
@@ -4739,9 +4807,9 @@
     }
   ],
   "lastVerifiedSourceRevision": "ccd4ada",
-  "lastVerifiedBuildHash": "6abfcc6d3cb244d39f9d9b0b8dd4473d016e2ad09c8f283b43d12e26dcc8b1d2",
-  "nextAction": "M11 pad footing (contact, bearing, EC2 bending/tie/anchorage/shear/punching, sized bars, schedule), then M10 slab design, M16 detailing, M18 prestress, M13 AISC connections; the demonstration pattern of ADR 0026.",
+  "lastVerifiedBuildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3",
+  "nextAction": "M10 slab design (reinforcement map from Wood\u2013Armer, shear, span/depth, punching), then M16 detailing, M18 prestress, M13 AISC connections; ADR 0026 demonstration pattern.",
   "handoffPath": "HANDOFF.md",
-  "lastVerifiedSourceHash": "ebc1dc77e91ca92977a416e8db52d6f5be2144394d815152eadd94f3542643e6",
-  "lastVerifiedScope": "M12 parent on source ebc1dc77: gate 12/12; cargo workspace 309/309, node contracts/security 16/16; column and beam browser journeys pass (full browser suite reruns before the next release)"
+  "lastVerifiedSourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+  "lastVerifiedScope": "M11 parent on source a2bd5864: gate 10/10; cargo workspace 318/318, node contracts 14/14; footing and concrete browser journeys pass"
 }

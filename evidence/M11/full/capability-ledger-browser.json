@@ -1,0 +1,26 @@
+{
+  "taskId": "M11-parent",
+  "milestone": "M11",
+  "sourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+  "buildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-01T23:58:13.391Z",
+  "status": "PASS",
+  "pageErrors": [],
+  "comparisonStatus": "UNKNOWN",
+  "excludedCount": 17,
+  "capabilityCount": 21
+}

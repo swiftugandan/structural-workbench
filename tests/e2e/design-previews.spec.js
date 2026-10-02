@@ -78,7 +78,10 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     const settled = await page
       .locator("[data-testid=preview-state]")
       .textContent();
+    // B04's support carries no downward force, so its footing has no
+    // ground contact: FAIL, never a pressure (ADR 0028).
     if (kind === "rcBeam") expect(settled).not.toBe("UNSUPPORTED");
+    else if (kind === "padFooting") expect(settled).toBe("FAIL");
     else expect(settled).toBe("UNSUPPORTED");
     const key = kind === "rcBeam" ? "depth" : "thickness";
     await page.locator(`#preview-${key}`).fill("650 mm");
@@ -106,8 +109,8 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     );
     expect(run.overall).toBe(settled.toLowerCase());
     expect(run.mock).toBe(true);
-    if (kind === "rcBeam") {
-      // ADR 0026: the EC2 profile's rows, labelled as a demonstration.
+    if (kind === "rcBeam" || kind === "padFooting") {
+      // ADR 0026/0028: the EC2 profile's rows, labelled as a demonstration.
       expect(run.codeProfile.id).toBe("ec2-uk-na");
       expect(run.codeProfile.certification).toBe(
         "Demonstration, not a certified design",
@@ -135,7 +138,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
       expect(run.schedule.map((r) => r.mark)).toEqual(["T1", "B1", "L1"]);
     }
     if (kind === "padFooting") {
-      expect(run.contactState).toBe("indeterminate");
+      expect(run.contactState).toBe("noEquilibrium");
       expect(run.soilProvenance.computedByWorkbench).toBe(false);
       // JSON canonicalises signed zero; compare exact numeric equality.
       run.sourceProvenance.foundationActions.forEach((v, i) =>

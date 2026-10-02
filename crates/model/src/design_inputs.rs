@@ -73,6 +73,14 @@ pub struct CodeInputs {
     /// rcColumn: effective creep ratio φ_ef (5.8.4).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub effective_creep_ratio: Option<f64>,
+    /// padFooting: cast on blinding (true) or directly against the ground,
+    /// for the 4.4.1.3(4) minimum cover.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cast_on_blinding: Option<bool>,
+    /// padFooting: the case or combination compared with the allowable
+    /// bearing pressure.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bearing_combination_id: Option<String>,
 }
 
 impl CodeInputs {
@@ -89,7 +97,8 @@ impl CodeInputs {
                 && (self.braced.is_some()
                     || self.restraint_y.is_some()
                     || self.restraint_z.is_some()
-                    || self.effective_creep_ratio.is_some()));
+                    || self.effective_creep_ratio.is_some()))
+            || (kind != "padFooting" && (self.cast_on_blinding.is_some() || self.bearing_combination_id.is_some()));
         if misplaced {
             return Err(err("INVALID_SCHEMA", format!("Code input not applicable to a {kind} draft")));
         }
@@ -113,8 +122,11 @@ impl CodeInputs {
         if self.aggregate_size.is_some_and(|c| !(c.is_finite() && c > 0. && c <= 0.063)) {
             return Err(err("INVALID_SCHEMA", "Aggregate size must lie in (0, 63] mm"));
         }
-        if self.quasi_permanent_combination_id.as_deref().is_some_and(|c| c.is_empty() || c.len() > 64) {
-            return Err(err("INVALID_SCHEMA", "Invalid quasi-permanent combination reference"));
+        if [&self.quasi_permanent_combination_id, &self.bearing_combination_id]
+            .iter()
+            .any(|r| r.as_deref().is_some_and(|c| c.is_empty() || c.len() > 64))
+        {
+            return Err(err("INVALID_SCHEMA", "Invalid case or combination reference"));
         }
         Ok(())
     }

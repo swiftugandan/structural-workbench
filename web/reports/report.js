@@ -330,16 +330,64 @@ function stabilityHtml(project, run, e) {
   return `${head}<table data-testid="report-stability-displacements"><tr><th>Node</th>${["ux", "uy", "uz"].map((c) => `<th>${c} 1st (m)</th><th>${c} 2nd (m)</th>`).join("")}</tr>${rows}</table><p>Converged in ${r.numericalChecks.iterations} iterations. Imperfection: ${r.numericalChecks.imperfection.settings.kind === "none" ? "none (stated)" : `sway ratio ${e(r.numericalChecks.imperfection.settings.ratio)} with ${forces.length} equivalent nodal forces`}.</p>`;
 }
 
+/** EC2 pad footings (ADR 0028): contact, bearing, designed bars and checks. */
+function footingRunsHtml(project, runs, e) {
+  if (!runs?.length) return "";
+  const units = {
+    N: [1e3, "kN"],
+    "N m": [1e3, "kN·m"],
+    m2: [1e-6, "mm²"],
+    m: [1e-3, "mm"],
+    Pa: [1e3, "kPa"],
+    "-": [1, ""],
+  };
+  const val = (v, u) => {
+    if (typeof v !== "number") return "—";
+    const [scale, unit] = units[u] || [1, u];
+    return `<span data-si="${v}">${(v / scale).toPrecision(6)}${unit ? ` ${unit}` : ""}</span>`;
+  };
+  const body = runs
+    .map((run) => {
+      const cp = run.codeProfilePreview,
+        src = run.sourceProvenance;
+      if (cp?.status !== "evaluated")
+        return `<section data-testid="report-footing-preview"><h3>Pad footing draft ${e(run.draftId)}</h3><p>${e(cp?.reason || "Not evaluated")}</p></section>`;
+      const k = cp.design?.uls?.contact;
+      const bars = (b, axis) =>
+        b
+          ? `<tr><th scope="row">${axis}</th><td>${b.count}</td><td>${b.diameter}</td><td>${b.spacing}</td><td>${b.area}</td><td>${b.effectiveDepth}</td></tr>`
+          : "";
+      return `<section data-testid="report-footing-preview" data-draft-id="${e(run.draftId)}"><h3>Pad footing draft ${e(run.draftId)} · support ${e(entityLabel(project, src.targetId))}</h3>
+<p class="banner" data-testid="report-ec2-banner">DEMONSTRATION. ${e(cp.edition)}. ${e((cp.unreconciledAmendments || []).join(", "))} not reconciled. ${e(cp.certification)}.</p>
+<p>Overall <strong data-testid="report-footing-overall">${e(String(run.overall).toUpperCase())}</strong> · contact <strong data-testid="report-footing-contact">${e(run.contactState)}</strong> · combination ${e(cp.combinationId)}${cp.bearingCombinationId ? ` · bearing ${e(cp.bearingCombinationId)}` : ""}</p>
+<p>Column actions (global, N downward): N ${val(cp.actions.n, "N")} · Mx ${val(cp.actions.mx, "N m")} · My ${val(cp.actions.my, "N m")} · Hx ${val(cp.actions.hx, "N")} · Hy ${val(cp.actions.hy, "N")}</p>
+${k ? `<p>Ground contact under the column actions: ${e(k.state)}, ${val(k.contactArea, "-")} m² · corner pressures ${k.corners.map((q) => val(q, "Pa")).join(" / ")}</p>` : ""}
+<h4>Bottom reinforcement (SI)</h4><table><thead><tr><th>Bars along</th><th>Count</th><th>Ø (m)</th><th>Spacing (m)</th><th>A<sub>s</sub> (m²)</th><th>d (m)</th></tr></thead><tbody>${bars(cp.barsX, "X")}${bars(cp.barsY, "Y")}</tbody></table>
+<table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody>${cp.checks.map((c) => `<tr data-testid="report-ec2-check" data-check-id="${e(c.checkId)}"><th scope="row">${e(c.checkId)}</th><td>${e(c.clause)}</td><td>${e(c.status.toUpperCase())}</td><td>${val(c.demand, c.units)}</td><td>${val(c.resistance, c.units)}</td><td>${c.utilisation == null ? "—" : c.utilisation.toPrecision(4)}</td><td>${e(c.message)}</td></tr>`).join("")}</tbody></table>
+<details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
+    })
+    .join("");
+  return `<section data-testid="report-footing-previews"><h2>Pad footing design (EC2 UK, demonstration)</h2><p class="banner">Rigid base on tensionless ground; the allowable bearing pressure is the engineer's input and never computed (ADR 0028).</p>${body}</section>`;
+}
+
 export function report(
   project,
   result,
-  { designRuns, previewRuns, columnRuns, plateRuns, stabilityRun } = {},
+  {
+    designRuns,
+    previewRuns,
+    columnRuns,
+    footingRuns,
+    plateRuns,
+    stabilityRun,
+  } = {},
 ) {
   const e = escape;
   const designSection =
     designRunsHtml(designRuns, e) +
     concretePreviewsHtml(project, previewRuns, e) +
     columnRunsHtml(project, columnRuns, e) +
+    footingRunsHtml(project, footingRuns, e) +
     plateRunsHtml(plateRuns, e) +
     stabilityHtml(project, stabilityRun, e);
   if (result.analysisType === "envelope") {

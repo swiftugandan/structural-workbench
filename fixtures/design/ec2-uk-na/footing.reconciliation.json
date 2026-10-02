@@ -1,0 +1,139 @@
+{
+  "fixtureVersion": 1,
+  "published": "fixtures/design/ec2-uk-na/jrc-footing-b2.published.json",
+  "publishedSha256": "66d6e51dce2c9b1c31dc64950a0adbc5b5ad05f8108dac98c51860f455ac58a0",
+  "oracle": "tools/oracles/footing_oracle.py",
+  "oracleSha256": "34736729e9a31327e69ab01edf12589d1c59f062e4792784706e33f50fb89b69",
+  "python": "3.14.6",
+  "contact": [
+    {
+      "input": {
+        "id": "CENTRED",
+        "L": 2.4,
+        "B": 2.1,
+        "N": 1200000.0,
+        "ex": 0.0,
+        "ey": 0.0
+      },
+      "state": "full",
+      "corners": [
+        238095.2380952381,
+        238095.2380952381,
+        238095.2380952381,
+        238095.2380952381
+      ],
+      "method": "closed form",
+      "tolerance": 1e-12
+    },
+    {
+      "input": {
+        "id": "UNIAXIAL-IN-KERN",
+        "L": 2.4,
+        "B": 2.1,
+        "N": 1200000.0,
+        "ex": 0.3,
+        "ey": 0.0
+      },
+      "state": "full",
+      "corners": [
+        59523.80952380953,
+        416666.6666666667,
+        416666.6666666667,
+        59523.80952380953
+      ],
+      "method": "closed form",
+      "tolerance": 1e-12
+    },
+    {
+      "input": {
+        "id": "UNIAXIAL-KERN-EDGE",
+        "L": 2.4,
+        "B": 2.1,
+        "N": 1200000.0,
+        "ex": 0.4,
+        "ey": 0.0
+      },
+      "state": "full",
+      "corners": [
+        0.0,
+        476190.4761904762,
+        476190.4761904762,
+        0.0
+      ],
+      "method": "closed form",
+      "tolerance": 1e-12
+    },
+    {
+      "input": {
+        "id": "UNIAXIAL-PARTIAL",
+        "L": 2.4,
+        "B": 2.1,
+        "N": 1200000.0,
+        "ex": 0.7,
+        "ey": 0.0
+      },
+      "state": "partial",
+      "corners": [
+        0.0,
+        761904.7619047618,
+        761904.7619047618,
+        0.0
+      ],
+      "contactLength": 1.5,
+      "method": "closed form triangle",
+      "tolerance": 1e-12
+    },
+    {
+      "input": {
+        "id": "BIAXIAL-IN-KERN",
+        "L": 2.4,
+        "B": 2.1,
+        "N": 1200000.0,
+        "ex": 0.15,
+        "ey": 0.12
+      },
+      "state": "full",
+      "corners": [
+        67176.87074829932,
+        245748.29931972793,
+        409013.6054421769,
+        230442.1768707483
+      ],
+      "method": "closed form",
+      "tolerance": 1e-12
+    },
+    {
+      "input": {
+        "id": "BIAXIAL-PARTIAL",
+        "L": 2.4,
+        "B": 2.1,
+        "N": 1200000.0,
+        "ex": 0.45,
+        "ey": 0.35
+      },
+      "state": "partial",
+      "corners": [
+        0.0,
+        237976.210974355,
+        842937.7713027571,
+        171312.13153418282
+      ],
+      "method": "strip integration search",
+      "gridCheck": {
+        "N": 1200000.0189525166,
+        "ex": 0.450000067476456,
+        "ey": 0.3499999897786455
+      },
+      "tolerance": 1e-05
+    }
+  ],
+  "jrc": {
+    "zi": 0.662,
+    "FsMax": 1457894.6374622355,
+    "xAtMax": 0.825,
+    "AsRequired": 0.0033531576661631414,
+    "FsAtXmin": 1070996.9788519638,
+    "lbRequiredPhi16": 0.36033572188215535
+  },
+  "failures": []
+}

@@ -90,7 +90,19 @@ fn preview_model_sources_are_exact_and_stale_or_forged_results_rejected() {
             {
                 assert_eq!(a.as_f64().unwrap(), -b.as_f64().unwrap());
             }
-            assert_eq!(r["payload"]["contactState"], "indeterminate");
+            // B04's reaction carries no downward force: no ground contact,
+            // reported as a failure, never as a pressure.
+            assert_eq!(r["payload"]["contactState"], "noEquilibrium");
+            let contact = r["payload"]["codeProfilePreview"]["checks"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|c| c["checkId"] == "ec2.footing.contact")
+                .unwrap()
+                .clone();
+            assert_eq!(contact["status"], "fail", "{contact}");
+            assert!(contact["message"].as_str().unwrap().contains("No downward force"), "{contact}");
+            assert_eq!(r["payload"]["overall"], "fail");
         } else {
             assert_eq!(
                 source["stations"],
@@ -1045,4 +1057,58 @@ fn rc_beam_proposal_passes_and_every_lighter_neighbour_fails() {
     for x in &lighter {
         assert!(fails(&run(&mut k, x)), "lighter neighbour passes: {x}");
     }
+}
+
+/// EC2 pad footing on model actions (ADR 0028): B08's fixed-fixed beam puts
+/// 30 kN down and a 30 kN m moment on support s1 (q L/2 and q L²/12 at
+/// 10 kN/m over 6 m), so the resultant sits 1.0 m off a 2.4 m base centre:
+/// partial contact. The base is designed and scheduled in both directions.
+#[test]
+fn pad_footing_designs_on_a_support_reaction() {
+    let mut k = Kernel::new();
+    let p: Value = serde_json::from_str(include_str!("../../../fixtures/models/B08.json")).unwrap();
+    assert_eq!(req(&mut k, "createProject", json!({"project":p}))["status"], "ok");
+    let c = create(&mut k, "padFooting");
+    let d = c["payload"]["project"]["designPreviews"][0].clone();
+    let set = |k: &mut Kernel, code: Value| {
+        cmd(k, "SetDesignPreview", json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"Site report SR-1","targetId":"s1","codeInputs":code}))
+    };
+    // Footing inputs on a beam field, and dangling bearing combinations, are refused.
+    assert_eq!(set(&mut k, json!({"bearingCombinationId":"nope"}))["status"], "error");
+    assert_eq!(set(&mut k, json!({"braced":true}))["status"], "error");
+    let ok = set(&mut k, json!({"exposureClass":"XC2","minimumCoverDurability":"25 mm","aggregateSize":"20 mm",
+        "castOnBlinding":true,"bearingCombinationId":"LC1"}));
+    assert_eq!(ok["status"], "ok", "{ok}");
+    let a = req(&mut k, "analyse", json!({"caseIds":["LC1"]}));
+    let r = req(&mut k, "evaluateDesignPreview",
+        json!({"draftId":d["id"],"modelHash":a["modelHash"],"caseId":"LC1","resultId":a["payload"]["resultId"],"sourceMode":"model"}));
+    assert_eq!(r["status"], "ok", "{r}");
+    let run = &r["payload"];
+    let code = &run["codeProfilePreview"];
+    assert_eq!(code["status"], "evaluated", "{code}");
+    assert_eq!(code["family"], "padFooting");
+    assert!((code["actions"]["n"].as_f64().unwrap() - 30e3).abs() < 1e-6, "{}", code["actions"]);
+    let m = code["actions"]["mx"].as_f64().unwrap().hypot(code["actions"]["my"].as_f64().unwrap());
+    assert!((m - 30e3).abs() < 1e-6);
+    assert_eq!(run["contactState"], "partial");
+    let rows: Vec<&str> = run["checks"].as_array().unwrap().iter().map(|c| c["name"].as_str().unwrap()).collect();
+    assert_eq!(rows, ["Contact and bearing", "Bending and tie force", "Anchorage", "Shear and punching", "Cover and bar size"]);
+    assert!(run["checks"].as_array().unwrap().iter().all(|c| c["status"] != "indeterminate"), "{}", run["checks"]);
+    assert_eq!(run["codeProfile"]["id"], "ec2-uk-na");
+    // The default 2.4 × 2.1 × 0.55 m base carries this support comfortably.
+    assert_eq!(run["overall"], "pass", "{}", run["checks"]);
+    // Schedule: straight bars in both directions, the base less cover.
+    let schedule = run["schedule"].as_array().unwrap();
+    assert_eq!(schedule.len(), 2);
+    let v = &d["inputs"];
+    let cut = v["length"].as_f64().unwrap() - 2. * v["cover"].as_f64().unwrap();
+    assert!((schedule[0]["cutLength"].as_f64().unwrap() - cut).abs() < 1e-12);
+    assert_eq!(schedule[0]["quantity"].as_f64(), code["barsX"]["count"].as_f64());
+    // Bearing includes the base and overburden at the same support.
+    let bearing = code["checks"].as_array().unwrap().iter().find(|c| c["checkId"] == "ec2.footing.bearing").unwrap();
+    let n_b = bearing["intermediates"]["n"].as_f64().unwrap();
+    let (l, b, h) = (v["length"].as_f64().unwrap(), v["width"].as_f64().unwrap(), v["thickness"].as_f64().unwrap());
+    let over = v["soilUnitWeight"].as_f64().unwrap() * (v["embedment"].as_f64().unwrap() - h).max(0.)
+        * (l * b - v["columnWidth"].as_f64().unwrap() * v["columnDepth"].as_f64().unwrap());
+    assert!((n_b - (30e3 + 25e3 * l * b * h + over)).abs() < 1e-6, "{bearing}");
 }

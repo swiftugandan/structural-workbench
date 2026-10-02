@@ -1,0 +1,459 @@
+{
+  "checks": [
+    {
+      "checkIds": [
+        "ec2.flexure",
+        "ec2.actions"
+      ],
+      "name": "Flexure",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.shear",
+        "ec2.links-min",
+        "ec2.links-spacing"
+      ],
+      "name": "Shear",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.as-min",
+        "ec2.as-max.top",
+        "ec2.as-max.bottom",
+        "ec2.crack-min"
+      ],
+      "name": "Minimum/maximum reinforcement",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.cover",
+        "ec2.bar-spacing"
+      ],
+      "name": "Cover and spacing",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.anchorage"
+      ],
+      "name": "Anchorage",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.crack-control",
+        "ec2.deflection"
+      ],
+      "name": "Serviceability",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    }
+  ],
+  "codeProfile": {
+    "certification": "Demonstration, not a certified design",
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "id": "ec2-uk-na",
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "codeProfilePreview": {
+    "basis": "codeProfile",
+    "certification": "Demonstration, not a certified design",
+    "codeInputs": {},
+    "combinationId": "LC1",
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "governing": [],
+    "interpretation": {
+      "concreteStrength": "fck (characteristic cylinder strength)",
+      "rebarStrength": "fyk for longitudinal bars and links"
+    },
+    "limitations": [
+      "A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them",
+      "Rectangular sections, fck <= 50 MPa, vertical links, one layer of equal bars per face",
+      "Beams: pure bending about local y with shear Vz; N, T, Vy and Mz must be zero",
+      "Columns: rectangular, constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and φ_ef; the node-to-node length is the clear height",
+      "Pad footings: concentric rectangular column on a rigid base over tensionless ground; the allowable bearing pressure is the engineer's input",
+      "Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation",
+      "Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer's confirmation",
+      "UK NA VRd,max <= 200 bw² applied as N with bw in mm at every section (the NA states no units)"
+    ],
+    "ndp": "UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)",
+    "profileEnabled": true,
+    "profileId": "ec2-uk-na",
+    "resourceGate": "R-EC2-EN-1992-1-1-2004+R-EC2-UK-NA-2009+R-EC2-JRC-EXAMPLES",
+    "span": 3,
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "status": "evaluated",
+    "tensionAnchorageConfirmed": false,
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "columnMechanics": null,
+  "contactState": "notApplicable",
+  "contractVersion": 1,
+  "draftId": "dpb7283861d5cca5dd",
+  "flexuralDemand": {
+    "actionOrder": [
+      "N",
+      "Vy",
+      "Vz",
+      "T",
+      "My",
+      "Mz"
+    ],
+    "basis": "modelKeyStations",
+    "combinationId": "LC1",
+    "component": "My",
+    "convention": "Draft width along local y, depth along local z; top face = local +z. My < 0 compresses the top face (sagging), My > 0 the bottom face (hogging)",
+    "hogging": null,
+    "limitations": [
+      "Governing key stations of the one bound case/combination; no envelope across combinations",
+      "Axial force, shear, torsion and Mz at these stations are not considered by the pure-flexure mechanics",
+      "No utilisation ratio or status: the capacity is mechanics, not a code resistance"
+    ],
+    "memberId": "m1",
+    "sagging": null,
+    "status": "evaluated",
+    "topFaceDirection": [
+      0,
+      0,
+      1
+    ],
+    "topFaceOrientation": "up",
+    "utilisation": null
+  },
+  "inputHash": "3226a5f8789b391018ecb6640dab7a2ea310323034b126008bfc870155f7ae18",
+  "inputs": {
+    "codeInputs": {},
+    "id": "dpb7283861d5cca5dd",
+    "inputSource": "syntheticFixture",
+    "inputSources": {
+      "bottomBarCount": "syntheticFixture",
+      "bottomBarDiameter": "syntheticFixture",
+      "concreteStrength": "syntheticFixture",
+      "cover": "syntheticFixture",
+      "depth": "syntheticFixture",
+      "linkDiameter": "syntheticFixture",
+      "linkLegs": "syntheticFixture",
+      "linkSpacing": "syntheticFixture",
+      "rebarStrength": "syntheticFixture",
+      "topBarCount": "syntheticFixture",
+      "topBarDiameter": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "bottomBarCount": 4,
+      "bottomBarDiameter": 0.02,
+      "concreteStrength": 30000000,
+      "cover": 0.035,
+      "depth": 0.6,
+      "linkDiameter": 0.01,
+      "linkLegs": 2,
+      "linkSpacing": 0.2,
+      "rebarStrength": 500000000,
+      "topBarCount": 4,
+      "topBarDiameter": 0.02,
+      "width": 0.3
+    },
+    "kind": "rcBeam",
+    "mechanics": {
+      "inputSources": {
+        "blockDepthRatio": "syntheticFixture",
+        "blockIntensity": "syntheticFixture",
+        "concreteModulus": "syntheticFixture",
+        "concreteTensileStrength": "syntheticFixture",
+        "minimumClearSpacing": "syntheticFixture",
+        "steelModulus": "syntheticFixture",
+        "steelYieldStrength": "syntheticFixture",
+        "ultimateStrain": "syntheticFixture"
+      },
+      "inputs": {
+        "blockDepthRatio": 0.75,
+        "blockIntensity": 20000000,
+        "concreteModulus": 30000000000,
+        "concreteTensileStrength": 2800000,
+        "minimumClearSpacing": 0.025,
+        "steelModulus": 200000000000,
+        "steelYieldStrength": 460000000,
+        "ultimateStrain": 0.003
+      },
+      "law": "rectangularBlock"
+    },
+    "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+    "targetId": "m1"
+  },
+  "kind": "rcBeam",
+  "limitations": [
+    "DEMONSTRATION — EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009); EN 1992-1-1:2004/A1:2014, UK NA + A2:2014 not reconciled; Demonstration, not a certified design",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Schedule and illustrations are indicative; curtailment and laps are the engineer's detailing"
+  ],
+  "mock": true,
+  "modelHash": "928e5b1194775adad6fa35469468f6ea6a77d21c42d71c68c4042cd0755a5a7c",
+  "overall": "pass",
+  "plateAnalysis": null,
+  "previewRunId": "f7d2d1bb776d3d1b268922c878350e916c65ae713e9a192177427e4f21dda36f",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "reinforcementProposal": null,
+  "schedule": [
+    {
+      "basis": "Straight bar over the member length less cover + link at each end",
+      "cutLength": 2.91,
+      "diameter": 0.02,
+      "mark": "T1",
+      "massKg": 28.70598871291138,
+      "quantity": 4,
+      "region": "Top",
+      "shape": "straight",
+      "source": "indicative",
+      "status": "indicative"
+    },
+    {
+      "basis": "Straight bar over the member length less cover + link at each end",
+      "cutLength": 2.91,
+      "diameter": 0.02,
+      "mark": "B1",
+      "massKg": 28.70598871291138,
+      "quantity": 4,
+      "region": "Bottom",
+      "shape": "straight",
+      "source": "indicative",
+      "status": "indicative"
+    },
+    {
+      "basis": "First link 50 mm from each end at the draft spacing; cut length 2(A + B) + 2 max(5φ, 50 mm), EN 1992-1-1 Fig. 8.5",
+      "cutLength": 1.62,
+      "diameter": 0.01,
+      "legs": 2,
+      "mark": "L1",
+      "massKg": 14.981862665888027,
+      "quantity": 15,
+      "region": "Links",
+      "shape": "closed link, 135° hooks",
+      "source": "indicative",
+      "status": "indicative"
+    }
+  ],
+  "sectionMechanics": {
+    "arrangement": "One row per face (top and bottom bar inputs); cover measured to the link; layer depths from the compression face",
+    "basis": "mechanics",
+    "codeProfile": null,
+    "hogging": {
+      "compressionFace": "bottom",
+      "elastic": {
+        "crackedInertia": 0.001699575836998241,
+        "crackedNeutralAxis": 0.1373316156671544,
+        "crackingMoment": 58378.779656809085,
+        "modularRatio": 6.666666666666667,
+        "uncrackedArea": 0.19424188669627374,
+        "uncrackedCentroid": 0.3,
+        "uncrackedInertia": 0.00625486924894383
+      },
+      "layers": [
+        {
+          "area": 0.0012566370614359175,
+          "depth": 0.05500000000000001
+        },
+        {
+          "area": 0.0012566370614359175,
+          "depth": 0.5449999999999999
+        }
+      ],
+      "serviceMoment": null,
+      "status": "evaluated",
+      "ultimate": {
+        "classification": "tensionYielded",
+        "concreteForce": 363116.87954093027,
+        "curvature": 0.0371781119541106,
+        "depthRatio": 0.1480598897210725,
+        "layers": [
+          {
+            "force": 214936.16871959192,
+            "steelStress": 191040768.5047833,
+            "strain": 0.0009552038425239165,
+            "yielded": false
+          },
+          {
+            "force": -578053.0482605221,
+            "steelStress": -460000000,
+            "strain": -0.017262071014990277,
+            "yielded": true
+          }
+        ],
+        "moment": 292229.5996717784,
+        "neutralAxisDepth": 0.0806926398979845,
+        "relativeResidual": 1.4680568075095804e-16
+      }
+    },
+    "inputSources": {
+      "blockDepthRatio": "syntheticFixture",
+      "blockIntensity": "syntheticFixture",
+      "concreteModulus": "syntheticFixture",
+      "concreteTensileStrength": "syntheticFixture",
+      "minimumClearSpacing": "syntheticFixture",
+      "steelModulus": "syntheticFixture",
+      "steelYieldStrength": "syntheticFixture",
+      "ultimateStrain": "syntheticFixture"
+    },
+    "inputs": {
+      "blockDepthRatio": 0.75,
+      "blockIntensity": 20000000,
+      "concreteModulus": 30000000000,
+      "concreteTensileStrength": 2800000,
+      "minimumClearSpacing": 0.025,
+      "steelModulus": 200000000000,
+      "steelYieldStrength": 460000000,
+      "ultimateStrain": 0.003
+    },
+    "law": "rectangularBlock",
+    "limitations": [
+      "Mechanics only — not a code resistance; no partial factors or code limits applied",
+      "Pure flexure (N = 0) about the width axis; concrete tension ignored at ultimate and in the cracked state",
+      "Material-law parameters are explicit inputs with recorded provenance",
+      "Service stresses use the cracked transformed section under the governing model moment of the one bound case/combination, which is not classified as a serviceability combination; no stress limits applied"
+    ],
+    "rowFits": {
+      "bottom": {
+        "area": 0.0012566370614359175,
+        "clearSpacing": 0.043333333333333314,
+        "depthFromFace": 0.05500000000000001,
+        "fits": true
+      },
+      "top": {
+        "area": 0.0012566370614359175,
+        "clearSpacing": 0.043333333333333314,
+        "depthFromFace": 0.05500000000000001,
+        "fits": true
+      }
+    },
+    "sagging": {
+      "compressionFace": "top",
+      "elastic": {
+        "crackedInertia": 0.001699575836998241,
+        "crackedNeutralAxis": 0.1373316156671544,
+        "crackingMoment": 58378.779656809085,
+        "modularRatio": 6.666666666666667,
+        "uncrackedArea": 0.19424188669627374,
+        "uncrackedCentroid": 0.3,
+        "uncrackedInertia": 0.00625486924894383
+      },
+      "layers": [
+        {
+          "area": 0.0012566370614359175,
+          "depth": 0.05500000000000001
+        },
+        {
+          "area": 0.0012566370614359175,
+          "depth": 0.5449999999999999
+        }
+      ],
+      "serviceMoment": null,
+      "status": "evaluated",
+      "ultimate": {
+        "classification": "tensionYielded",
+        "concreteForce": 363116.87954093027,
+        "curvature": 0.0371781119541106,
+        "depthRatio": 0.1480598897210725,
+        "layers": [
+          {
+            "force": 214936.16871959192,
+            "steelStress": 191040768.5047833,
+            "strain": 0.0009552038425239165,
+            "yielded": false
+          },
+          {
+            "force": -578053.0482605221,
+            "steelStress": -460000000,
+            "strain": -0.017262071014990277,
+            "yielded": true
+          }
+        ],
+        "moment": 292229.5996717784,
+        "neutralAxisDepth": 0.0806926398979845,
+        "relativeResidual": 1.4680568075095804e-16
+      }
+    },
+    "status": "evaluated"
+  },
+  "soilProvenance": null,
+  "sourceProvenance": {
+    "combinationId": "LC1",
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "928e5b1194775adad6fa35469468f6ea6a77d21c42d71c68c4042cd0755a5a7c",
+    "note": "Actual model actions; preview section is not applied to frame stiffness, and no concrete resistance is calculated",
+    "resultId": "928e5b1194775ada-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+    "sourceRevision": 2,
+    "stations": [
+      {
+        "actions": [
+          0,
+          -9999.999999999993,
+          0,
+          0,
+          0,
+          -29999.999999999985
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 0
+      },
+      {
+        "actions": [
+          0,
+          -9999.999999999993,
+          0,
+          0,
+          0,
+          -7.275957614183426e-12
+        ],
+        "components": [
+          "N",
+          "Vy",
+          "Vz",
+          "T",
+          "My",
+          "Mz"
+        ],
+        "kind": "end",
+        "station": 1
+      }
+    ],
+    "targetId": "m1"
+  },
+  "sourceRevision": 2,
+  "currentState": "PASS"
+}

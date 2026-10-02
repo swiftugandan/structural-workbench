@@ -70,3 +70,36 @@ fn code_inputs_are_validated_for_the_draft_kind() {
         assert_eq!(import_project(&column(Some(ci), true).to_string()).unwrap_err().code, "INVALID_SCHEMA", "{field}");
     }
 }
+
+#[test]
+fn footing_code_inputs_apply_only_to_footings_and_reference_a_combination() {
+    // On a column, footing fields are refused.
+    for (field, value) in [("castOnBlinding", json!(true)), ("bearingCombinationId", json!("LC1"))] {
+        let mut ci = json!({});
+        ci[field] = value;
+        assert_eq!(import_project(&column(Some(ci), true).to_string()).unwrap_err().code, "INVALID_SCHEMA", "{field}");
+    }
+    // On a pad footing bound to s1 they are kept, and the combination must exist.
+    let footing = |ci: Value| {
+        let mut v = column(None, true);
+        let d = &mut v["designPreviews"][0];
+        d["kind"] = json!("padFooting");
+        d["targetId"] = json!("s1");
+        d["inputs"] = json!({"length":2.4,"width":2.1,"thickness":0.55,"cover":0.05,"concreteStrength":30e6,"rebarStrength":500e6,
+            "columnWidth":0.4,"columnDepth":0.4,"bearingPressure":200e3,"embedment":1.2,"soilUnitWeight":18e3});
+        d["codeInputs"] = ci;
+        let (mut p, _) = import_project(include_str!("../../../fixtures/models/B08.json")).unwrap();
+        p.design_previews = vec![serde_json::from_value(v["designPreviews"][0].clone()).unwrap()];
+        let mut s = p.structure.clone();
+        s.sync_records(&p);
+        p.structure = s;
+        let mut out = serde_json::to_value(&p).unwrap();
+        out["designPreviews"][0]["codeInputs"] = v["designPreviews"][0]["codeInputs"].clone();
+        out
+    };
+    let ok = json!({"castOnBlinding": false, "bearingCombinationId": "LC1"});
+    let (p, _) = import_project(&footing(ok.clone()).to_string()).unwrap();
+    assert_eq!(serde_json::to_value(&p.design_previews[0].code_inputs).unwrap(), ok);
+    let err = import_project(&footing(json!({"bearingCombinationId": "nope"})).to_string()).unwrap_err();
+    assert_eq!(err.code, "DANGLING_REFERENCE");
+}

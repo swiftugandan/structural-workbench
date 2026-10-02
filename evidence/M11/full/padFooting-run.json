@@ -1,0 +1,240 @@
+{
+  "checks": [
+    {
+      "checkIds": [
+        "ec2.footing.contact",
+        "ec2.footing.bearing"
+      ],
+      "name": "Contact and bearing",
+      "reason": "No downward force on the base: no ground contact (tension is not resisted)",
+      "status": "fail",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.footing.flexure.x",
+        "ec2.footing.flexure.y"
+      ],
+      "name": "Bending and tie force",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.footing.anchorage.x",
+        "ec2.footing.anchorage.y"
+      ],
+      "name": "Anchorage",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.footing.shear.x",
+        "ec2.footing.shear.y",
+        "ec2.footing.punching",
+        "ec2.footing.punching-face"
+      ],
+      "name": "Shear and punching",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    },
+    {
+      "checkIds": [
+        "ec2.cover",
+        "ec2.footing.cast-cover",
+        "ec2.footing.bar-diameter"
+      ],
+      "name": "Cover and bar size",
+      "reason": "",
+      "status": "notApplicable",
+      "utilisation": null
+    }
+  ],
+  "codeProfile": {
+    "certification": "Demonstration, not a certified design",
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "id": "ec2-uk-na",
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "codeProfilePreview": {
+    "actions": {
+      "convention": "Global axes; N downward on the base; moments and horizontal forces at the top of the base",
+      "hx": 0,
+      "hy": -9999.999999999993,
+      "mx": 0,
+      "my": 0,
+      "n": 0
+    },
+    "barsX": null,
+    "barsY": null,
+    "basis": "codeProfile",
+    "bearingCombinationId": null,
+    "certification": "Demonstration, not a certified design",
+    "checks": [
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.bearing",
+        "clause": "EN 1997-1 6.5.2 (allowable pressure input)",
+        "demand": null,
+        "intermediates": {},
+        "message": "Choose the case or combination for the bearing check (the allowable pressure is compared with that combination)",
+        "resistance": null,
+        "status": "indeterminate",
+        "units": "",
+        "utilisation": null
+      },
+      {
+        "assumptions": [],
+        "checkId": "ec2.footing.contact",
+        "clause": "9.8.2, 6.4.4(2)",
+        "demand": 0,
+        "intermediates": {
+          "code": "UNSUPPORTED_FEATURE",
+          "ex": null,
+          "ey": null
+        },
+        "message": "No downward force on the base: no ground contact (tension is not resisted)",
+        "resistance": 0,
+        "status": "fail",
+        "units": "N",
+        "utilisation": null
+      }
+    ],
+    "codeInputs": {},
+    "combinationId": "LC1",
+    "design": {
+      "bearing": null
+    },
+    "edition": "EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009)",
+    "family": "padFooting",
+    "interpretation": {
+      "concreteStrength": "fck (characteristic cylinder strength)",
+      "rebarStrength": "fyk for longitudinal bars and links"
+    },
+    "limitations": [
+      "A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them",
+      "Rectangular sections, fck <= 50 MPa, vertical links, one layer of equal bars per face",
+      "Beams: pure bending about local y with shear Vz; N, T, Vy and Mz must be zero",
+      "Columns: rectangular, constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and φ_ef; the node-to-node length is the clear height",
+      "Pad footings: concentric rectangular column on a rigid base over tensionless ground; the allowable bearing pressure is the engineer's input",
+      "Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation",
+      "Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer's confirmation",
+      "UK NA VRd,max <= 200 bw² applied as N with bw in mm at every section (the NA states no units)"
+    ],
+    "ndp": "UK NA to BS EN 1992-1-1:2004 incl. NA Amd 1 (2009)",
+    "profileEnabled": true,
+    "profileId": "ec2-uk-na",
+    "resourceGate": "R-EC2-EN-1992-1-1-2004+R-EC2-UK-NA-2009+R-EC2-JRC-EXAMPLES",
+    "standard": "EN 1992-1-1 with UK National Annex",
+    "status": "evaluated",
+    "unreconciledAmendments": [
+      "EN 1992-1-1:2004/A1:2014",
+      "UK NA + A2:2014"
+    ]
+  },
+  "columnMechanics": null,
+  "contactState": "noEquilibrium",
+  "contractVersion": 1,
+  "draftId": "dp20c8fa11e10756d9",
+  "flexuralDemand": null,
+  "inputHash": "9ea77e8c00723c8973c1e5849bca236ccc6dd468489cdcb378781fe57e5b94eb",
+  "inputs": {
+    "codeInputs": {},
+    "id": "dp20c8fa11e10756d9",
+    "inputSource": "syntheticFixture",
+    "inputSources": {
+      "bearingPressure": "syntheticFixture",
+      "columnDepth": "syntheticFixture",
+      "columnWidth": "syntheticFixture",
+      "concreteStrength": "syntheticFixture",
+      "cover": "syntheticFixture",
+      "embedment": "syntheticFixture",
+      "length": "syntheticFixture",
+      "rebarStrength": "syntheticFixture",
+      "soilUnitWeight": "syntheticFixture",
+      "thickness": "syntheticFixture",
+      "width": "syntheticFixture"
+    },
+    "inputs": {
+      "bearingPressure": 200000,
+      "columnDepth": 0.4,
+      "columnWidth": 0.4,
+      "concreteStrength": 30000000,
+      "cover": 0.05,
+      "embedment": 1.2,
+      "length": 2.4,
+      "rebarStrength": 500000000,
+      "soilUnitWeight": 18000,
+      "thickness": 0.55,
+      "width": 2.1
+    },
+    "kind": "padFooting",
+    "soilReference": "User-entered demonstration bearing input; not a site report",
+    "targetId": "s1"
+  },
+  "kind": "padFooting",
+  "limitations": [
+    "DEMONSTRATION — EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009); EN 1992-1-1:2004/A1:2014, UK NA + A2:2014 not reconciled; Demonstration, not a certified design",
+    "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+    "Schedule and illustrations are indicative; curtailment and laps are the engineer's detailing"
+  ],
+  "mock": true,
+  "modelHash": "ecbaa5975021e19ceb9400f25788e8318271eba5709b4efa4a4530c492813f85",
+  "overall": "fail",
+  "plateAnalysis": null,
+  "previewRunId": "ff6c89238240287adf3906113f7626448044fa58d68cb2af7b77e5e940216430",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "reinforcementProposal": null,
+  "schedule": [],
+  "sectionMechanics": null,
+  "soilProvenance": {
+    "bearingPressure": 200000,
+    "computedByWorkbench": false,
+    "reference": "User-entered demonstration bearing input; not a site report",
+    "source": "syntheticFixture"
+  },
+  "sourceProvenance": {
+    "axes": "Global [Fx,Fy,Fz,Mx,My,Mz], SI; foundation actions oppose support-on-structure reactions",
+    "combinationId": "LC1",
+    "foundationActions": [
+      0,
+      -9999.999999999993,
+      0,
+      0,
+      0,
+      -29999.999999999985
+    ],
+    "kind": "modelAnalysis",
+    "mock": false,
+    "modelHash": "ecbaa5975021e19ceb9400f25788e8318271eba5709b4efa4a4530c492813f85",
+    "note": "Exact simultaneous support reaction; the base is rigid on tensionless ground (no frame-foundation coupling)",
+    "resultId": "ecbaa5975021e19c-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+    "sourceRevision": 2,
+    "supportReaction": [
+      0,
+      9999.999999999993,
+      0,
+      0,
+      0,
+      29999.999999999985
+    ],
+    "targetId": "s1"
+  },
+  "sourceRevision": 2,
+  "currentState": "FAIL"
+}

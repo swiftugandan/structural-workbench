@@ -1485,7 +1485,7 @@
         "codeInputs": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Schema 1.8.0 (ADR 0026, ADR 0027): code-profile inputs for RC drafts. exposureClass, minimumCoverDurability and aggregateSize apply to every RC kind; structuralSystem and partitionsSensitive to rcBeam and slab (flatSlab only for slab); quasiPermanentCombinationId to rcBeam; braced, restraintY, restraintZ and effectiveCreepRatio to rcColumn. Absent fields leave the checks that need them indeterminate.",
+          "description": "Schema 1.8.0 (ADR 0026, ADR 0027): code-profile inputs for RC drafts. exposureClass, minimumCoverDurability and aggregateSize apply to every RC kind; structuralSystem and partitionsSensitive to rcBeam and slab (flatSlab only for slab); quasiPermanentCombinationId to rcBeam; braced, restraintY, restraintZ and effectiveCreepRatio to rcColumn; castOnBlinding and bearingCombinationId to padFooting. Absent fields leave the checks that need them indeterminate.",
           "properties": {
             "exposureClass": {
               "enum": [
@@ -1557,6 +1557,13 @@
               "type": "number",
               "minimum": 0,
               "maximum": 10
+            },
+            "castOnBlinding": {
+              "type": "boolean"
+            },
+            "bearingCombinationId": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
             }
           }
         }

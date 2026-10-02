@@ -4,6 +4,7 @@
 //! advertised in capabilities and may return Pass/Fail only after its resource
 //! lock and clause corpus verify. Until then evaluateDesign returns UNSUPPORTED.
 
+pub mod footing;
 pub mod native;
 mod profile;
 pub mod rc_column;
@@ -14,6 +15,9 @@ pub use profile::aisc36022::{
     verify_vault_pdfs_if_present,
 };
 pub use profile::ec2uk::column::{ColumnActions, RcColumnContext, RcColumnDetailing, checks as column_checks};
+pub use profile::ec2uk::footing::{
+    Bars as FootingBars, FootingActions, FootingDesign, PadFootingContext, PadFootingDetailing, design as footing_design,
+};
 pub use profile::ec2uk::{Ec2Ndp, Ec2UkNaProfile};
 pub use profile::{
     CheckOutcome, CheckStatus, CodeProfile, DesignDemand, DesignRun, MemberContext,

@@ -495,9 +495,14 @@ impl Project {
             if !all.insert(&draft.id) {
                 return Err(err("DUPLICATE_ID", &draft.id));
             }
-            if let Some(id) = draft.code_inputs.as_ref().and_then(|c| c.quasi_permanent_combination_id.as_ref()) {
-                if !self.combinations.iter().any(|c| &c.id == id) && !self.load_cases.iter().any(|c| &c.id == id) {
-                    return Err(err("DANGLING_REFERENCE", format!("Quasi-permanent case or combination {id} does not exist")));
+            for (what, id) in draft.code_inputs.iter().flat_map(|c| {
+                [("Quasi-permanent", c.quasi_permanent_combination_id.as_ref()), ("Bearing", c.bearing_combination_id.as_ref())]
+            }) {
+                if let Some(id) = id
+                    && !self.combinations.iter().any(|c| &c.id == id)
+                    && !self.load_cases.iter().any(|c| &c.id == id)
+                {
+                    return Err(err("DANGLING_REFERENCE", format!("{what} case or combination {id} does not exist")));
                 }
             }
             if let Some(id) = &draft.target_id {

@@ -1,0 +1,64 @@
+{
+  "fixtureVersion": 1,
+  "source": "JRC89037 (2014) 'Eurocode 2: Background & Applications, Design of concrete buildings - worked examples', 4.2.1 Detailing of footing B-2, pp. 107-112 (R-EC2-JRC-EXAMPLES)",
+  "inputs": {
+    "a": 0.5,
+    "b": 2.0,
+    "h": 0.8,
+    "cNom": 0.04,
+    "d": 0.736,
+    "zi": 0.662,
+    "fck": 25000000.0,
+    "fyk": 500000000.0,
+    "gammaS": 1.15,
+    "NEd": 5780180.0,
+    "sigmaEd": 1445,
+    "sigmaEffective": 1418,
+    "lbdPhi16": 0.5,
+    "lbdPhi20": 0.686
+  },
+  "published": {
+    "FsMax": {
+      "value": 1457.9,
+      "unit": "kN",
+      "scale": 0.001,
+      "page": 110,
+      "rounding": 0.05
+    },
+    "AsRequired": {
+      "value": 3353,
+      "unit": "mm2",
+      "scale": 1000000,
+      "page": 110,
+      "rounding": 0.5
+    },
+    "FsAtXmin": {
+      "value": 1071.0,
+      "unit": "kN",
+      "scale": 0.001,
+      "page": 110,
+      "rounding": 0.05
+    },
+    "lbRequiredPhi16": {
+      "value": 360,
+      "unit": "mm",
+      "scale": 1000,
+      "page": 110,
+      "rounding": 0.5
+    },
+    "barsPhi16": {
+      "value": 17,
+      "page": 110
+    }
+  },
+  "discrepancies": [
+    {
+      "id": "JRC-B2-FOOTING-SELF-WEIGHT",
+      "note": "The report forms σ_Ed = N_Ed/(B L) = 1445 kN/m² from the column force alone and then deducts the base self-weight (1.35 × 25 × 0.8 kN/m²) to get σ'_Ed = 1418 kN/m². With N_Ed excluding the base's weight, the net pressure that bends the base is 1445 kN/m²; the deduction is only consistent if σ_Ed includes the self-weight. The workbench uses the column force alone (net pressure). The report's 9.8.2.2 arithmetic is reconciled from its own σ'_Ed."
+    },
+    {
+      "id": "JRC-B2-FOOTING-ANCHORAGE-ROUNDING",
+      "note": "The report concludes l_b + c_nom = 400 mm ≤ x_min = 400 mm for Ø16. Unrounded, l_b = 500 × 1071.0/1486.1 = 360.3 mm, so l_b + c_nom = 400.3 mm exceeds x_min by 0.3 mm. The workbench applies 9.8.2.2(5) unrounded, so this arrangement needs a bend or a deeper base."
+    }
+  ]
+}

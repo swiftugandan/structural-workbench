@@ -1,0 +1,16 @@
+{
+  "milestone": "M11",
+  "status": "PASS",
+  "sourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
+  "buildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3",
+  "required": [
+    "build",
+    "footing-native",
+    "footing-model",
+    "footing-protocol",
+    "m11-browser",
+    "m11-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-10-02T00:03:11.941Z"
+}

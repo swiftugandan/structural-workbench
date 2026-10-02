@@ -293,7 +293,7 @@
     {
       "id": "M11",
       "name": "Size a pad footing from column reactions",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M08"
       ],
@@ -312,7 +312,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Footing UI follows M11-SHELL (reaction \u2192 soil/contact \u2192 geometry \u2192 structural \u2192 detailing).",
+      "acceptanceDefinition": "Accepted (evidence/M11/full) as an edition-labelled EC2 UK demonstration (ADR 0026, 0028): rigid rectangular pad on tensionless ground (closed form and exact polygon Newton), bearing against the engineer's allowable value with self-weight and overburden, bottom bars sized for face bending, the 9.8.2.2 tie force and A_s,min with straight anchorage, one-way shear, punching (6.4.4(2)) and cover; schedule and calculation record. Soil resistance stays an input.",
       "experienceFollowOns": [
         "M11-SHELL"
       ]
