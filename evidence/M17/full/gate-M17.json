@@ -1,0 +1,16 @@
+{
+  "milestone": "M17",
+  "status": "PASS",
+  "sourceHash": "d3c1ea09b14c16675dd4cba9d706745d6ae98f5a8b0b48090101bd14616bbef0",
+  "buildHash": "037e01d2896dff212c5a1aefef80919b627561f52e269d0bac82935eb48cafe9",
+  "required": [
+    "build",
+    "composite-native",
+    "composite-model",
+    "composite-protocol",
+    "m17-browser",
+    "m17-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-10-06T02:46:56.298Z"
+}

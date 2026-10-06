@@ -184,7 +184,8 @@ export function renderExplorer(
             drafts("rcColumn", "RC columns") +
             drafts("slab", "Slabs") +
             drafts("padFooting", "Foundations") +
-            drafts("singlePlate", "Steel connections"),
+            drafts("singlePlate", "Steel connections") +
+            drafts("compositeBeam", "Composite beams"),
         ),
     ) +
     branch(

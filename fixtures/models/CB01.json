@@ -1,0 +1,335 @@
+{
+  "analysisMode": "spatial",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [
+    {
+      "id": "C-COMP",
+      "name": "Composite 1.2 (WET + SDL) + 1.6 LIVE",
+      "purpose": "strength",
+      "terms": [
+        {
+          "case": "LIVE",
+          "factor": 1.6
+        },
+        {
+          "case": "SDL",
+          "factor": 1.2
+        },
+        {
+          "case": "WET",
+          "factor": 1.2
+        }
+      ]
+    },
+    {
+      "id": "C-CON",
+      "name": "Construction 1.2 WET + 1.6 CONST",
+      "purpose": "strength",
+      "terms": [
+        {
+          "case": "CONST",
+          "factor": 1.6
+        },
+        {
+          "case": "WET",
+          "factor": 1.2
+        }
+      ]
+    }
+  ],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "CB01",
+  "loadCases": [
+    {
+      "category": "live",
+      "id": "CONST",
+      "name": "Construction live"
+    },
+    {
+      "category": "live",
+      "id": "LIVE",
+      "name": "Live (composite)"
+    },
+    {
+      "category": "dead",
+      "id": "SDL",
+      "name": "Superimposed dead (composite)"
+    },
+    {
+      "category": "dead",
+      "id": "WET",
+      "name": "Wet concrete and self weight"
+    }
+  ],
+  "loads": [
+    {
+      "axes": "global",
+      "case": "CONST",
+      "forcePerLength": [
+        0,
+        0,
+        -3648.475734301591
+      ],
+      "id": "w-CONST",
+      "member": "beam",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "LIVE",
+      "forcePerLength": [
+        0,
+        0,
+        -14593.902937206363
+      ],
+      "id": "w-LIVE",
+      "member": "beam",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "SDL",
+      "forcePerLength": [
+        0,
+        0,
+        -1459.3902937206365
+      ],
+      "id": "w-SDL",
+      "member": "beam",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "WET",
+      "forcePerLength": [
+        0,
+        0,
+        -11675.122349765092
+      ],
+      "id": "w-WET",
+      "member": "beam",
+      "type": "uniform"
+    }
+  ],
+  "materials": [
+    {
+      "E": 199947961501.88248,
+      "density": 7850,
+      "id": "dm81b0032cd70425a553c8",
+      "name": "ASTM A992",
+      "nu": 0.3
+    },
+    {
+      "E": 200000000000,
+      "density": 7850,
+      "id": "mat1",
+      "name": "steel",
+      "nu": 0.3
+    }
+  ],
+  "members": [
+    {
+      "end": "n2",
+      "id": "beam",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "dm81b0032cd70425a553c8",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "ds81b0032cd70425a553c8",
+      "start": "n1",
+      "steelDesign": {
+        "bracing": "notProvided",
+        "cb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "ky": {
+          "source": "notProvided",
+          "value": null
+        },
+        "kz": {
+          "source": "notProvided",
+          "value": null
+        },
+        "lb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "materialRef": "astm-a992-50-65-v1",
+        "profileId": "aisc-360-22-lrfd",
+        "sectionRef": "aisc-shapes-v16.0-subset-1:W21X50",
+        "stabilityBasis": "notProvided"
+      }
+    }
+  ],
+  "metadata": {
+    "createdBy": "Structural Workbench",
+    "description": "45 ft W21X50 simply supported at 10 ft centres with the stage loads of AISC Design Example I.1 (M17 fixture)",
+    "entityLabels": {
+      "C-COMP": "c2",
+      "C-CON": "c1",
+      "CONST": "lc2",
+      "LIVE": "lc4",
+      "SDL": "lc3",
+      "WET": "lc1",
+      "beam": "m1",
+      "dm81b0032cd70425a553c8": "mat2",
+      "ds81b0032cd70425a553c8": "sec2",
+      "mat1": "mat1",
+      "n1": "n1",
+      "n2": "n2",
+      "s": "sec1",
+      "s1": "s1",
+      "s2": "s2",
+      "w-CONST": "l2",
+      "w-LIVE": "l4",
+      "w-SDL": "l3",
+      "w-WET": "l1"
+    }
+  },
+  "name": "Composite floor beam · Design Example I.1",
+  "nodes": [
+    {
+      "id": "n1",
+      "position": [
+        0,
+        0,
+        3.5
+      ]
+    },
+    {
+      "id": "n2",
+      "position": [
+        13.716000000000001,
+        0,
+        3.5
+      ]
+    }
+  ],
+  "revision": 0,
+  "schemaVersion": "1.10.0",
+  "sections": [
+    {
+      "A": 0.009483852,
+      "Iy": 0.000010364162497439998,
+      "Iz": 0.0004095717227903999,
+      "J": 4.745038251839999e-7,
+      "cy": 0.26416,
+      "cz": 0.082931,
+      "id": "ds81b0032cd70425a553c8",
+      "name": "W21X50",
+      "provenance": "aisc-shapes-v16.0-subset-1; AISC x → local z, AISC y → local y"
+    }
+  ],
+  "structure": {
+    "designObjects": [],
+    "grids": [],
+    "groups": [],
+    "joints": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt0480a93d2e9b094b89e0",
+        "name": "Joint n2",
+        "nodeId": "n2",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt676b8bb84ce7267dd520",
+        "name": "Joint n1",
+        "nodeId": "n1",
+        "storeyId": null
+      }
+    ],
+    "layers": [],
+    "physicalMembers": [
+      {
+        "analyticalMemberIds": [
+          "beam"
+        ],
+        "id": "pmae4b867cf2eeb128ceab",
+        "name": "beam",
+        "role": "unassigned",
+        "storeyId": null
+      }
+    ],
+    "storeys": [],
+    "supportDetails": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdad328846aa18b32a3358",
+        "name": "Support s2",
+        "supportId": "s2"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sde8bc163c82eee1873328",
+        "name": "Support s1",
+        "supportId": "s1"
+      }
+    ]
+  },
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "id": "s1",
+      "node": "n1",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        false,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "id": "s2",
+      "node": "n2",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

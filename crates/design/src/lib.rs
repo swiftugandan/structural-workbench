@@ -10,6 +10,7 @@ mod profile;
 pub mod rc_column;
 pub mod rc_section;
 
+pub use profile::aisc36022::composite;
 pub use profile::aisc36022::connection;
 pub use profile::aisc36022::{
     Aisc36022LrfdProfile, Ltb, aisc_s2_resources_verified, evaluate_ltb,

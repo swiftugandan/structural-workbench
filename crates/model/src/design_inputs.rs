@@ -36,6 +36,100 @@ pub struct DesignPreview {
     /// support and hardware. Absent means the connection is not configured.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub connection: Option<SinglePlateInputs>,
+    /// compositeBeam only (schema 1.10.0, ADR 0031): deck, sides, stage
+    /// cases and the engineer's service inputs. Absent: not configured.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub composite: Option<CompositeInputs>,
+}
+
+pub const DECK_KINDS: &[&str] = &["solid", "perpendicular", "parallel"];
+pub const SIDE_KINDS: &[&str] = &["adjacent", "edge"];
+
+/// A composite beam's non-numeric inputs and optional engineer's values
+/// (ADR 0031). Stage cases name the model's cases or combinations.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Default)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct CompositeInputs {
+    pub deck: String,
+    pub lightweight: bool,
+    /// For each side of the beam: "adjacent" (sideLeft/sideRight is the
+    /// centre-to-centre distance to the next beam) or "edge" (to the slab edge).
+    pub sides: [String; 2],
+    pub studs_over_web: bool,
+    /// e_mid-ht for deck perpendicular to the beam (m), when known.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub emid_ht: Option<f64>,
+    /// Factored loads applied before the concrete hardens.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub construction_case_id: Option<String>,
+    /// Factored total loads on the composite section.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub composite_case_id: Option<String>,
+    /// Service wet concrete and self weight on the steel alone.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub wet_case_id: Option<String>,
+    /// Service live load on the composite section.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub live_case_id: Option<String>,
+    /// Service sustained load applied after hardening.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sustained_case_id: Option<String>,
+    /// Deflection limits as L/n.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pre_composite_limit: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub live_limit: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub long_term_limit: Option<f64>,
+    /// Restrained shrinkage strain ε_sh.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub shrinkage_strain: Option<f64>,
+    /// The engineer's creep judgement (Commentary I3.2(c)).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub creep_judgement: Option<bool>,
+    /// With point loads on the beam: the engineer confirms they are equal
+    /// and equally spaced (Commentary I3.2d.1).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub regular_loading_confirmed: Option<bool>,
+}
+
+impl CompositeInputs {
+    pub fn validate(&self) -> Result<()> {
+        if !DECK_KINDS.contains(&self.deck.as_str()) {
+            return Err(err("INVALID_SCHEMA", "Unknown deck kind"));
+        }
+        if self.sides.iter().any(|s| !SIDE_KINDS.contains(&s.as_str())) {
+            return Err(err("INVALID_SCHEMA", "Each side is adjacent or edge"));
+        }
+        for limit in [self.pre_composite_limit, self.live_limit, self.long_term_limit].into_iter().flatten() {
+            if !(limit.is_finite() && (50.0..=5000.0).contains(&limit)) {
+                return Err(err("INVALID_SCHEMA", "Deflection limits L/n need n in [50, 5000]"));
+            }
+        }
+        if self.shrinkage_strain.is_some_and(|e| !(e.is_finite() && (0.0..=0.002).contains(&e))) {
+            return Err(err("INVALID_SCHEMA", "Shrinkage strain must lie in [0, 0.002]"));
+        }
+        if self.emid_ht.is_some_and(|e| !(e.is_finite() && e > 0.0 && e <= 0.2)) {
+            return Err(err("INVALID_SCHEMA", "e_mid-ht must lie in (0, 200] mm"));
+        }
+        for id in self.case_ids().into_iter().flatten() {
+            if id.is_empty() || id.len() > 64 {
+                return Err(err("INVALID_SCHEMA", "Invalid case or combination reference"));
+            }
+        }
+        Ok(())
+    }
+
+    /// The stage case references (construction, composite, wet, live, sustained).
+    pub fn case_ids(&self) -> [Option<&String>; 5] {
+        [
+            self.construction_case_id.as_ref(),
+            self.composite_case_id.as_ref(),
+            self.wet_case_id.as_ref(),
+            self.live_case_id.as_ref(),
+            self.sustained_case_id.as_ref(),
+        ]
+    }
 }
 
 /// Bolt designations of AISC 360-22 Tables J3.3/J3.4 (US) and J3.3M/J3.4M
@@ -447,10 +541,16 @@ impl SectionMechanicsInputs {
 impl DesignPreview {
     /// Drafts bound to an analytical member (rather than a support).
     pub fn binds_member(&self) -> bool {
-        matches!(self.kind.as_str(), "rcBeam" | "rcColumn" | "singlePlate")
+        matches!(self.kind.as_str(), "rcBeam" | "rcColumn" | "singlePlate" | "compositeBeam")
     }
 
     pub fn validate(&self) -> Result<()> {
+        if let Some(c) = &self.composite {
+            if self.kind != "compositeBeam" {
+                return Err(err("INVALID_SCHEMA", "Composite inputs apply only to composite beam drafts"));
+            }
+            c.validate()?;
+        }
         if let Some(c) = &self.connection {
             if self.kind != "singlePlate" {
                 return Err(err(
@@ -555,10 +655,35 @@ impl DesignPreview {
                 "weldSize",
                 "fexx",
             ],
+            "compositeBeam" => &[
+                "slabThickness",
+                "ribHeight",
+                "ribWidth",
+                "ribPitch",
+                "concreteStrength",
+                "concreteDensity",
+                "studDiameter",
+                "studFu",
+                "studLength",
+                "studsPerRow",
+                "studRowSpacing",
+                "firstStudRow",
+                "studTransverseSpacing",
+                "sideLeft",
+                "sideRight",
+                "constructionLb",
+                "constructionCb",
+                "camber",
+            ],
             _ => return Err(err("INVALID_SCHEMA", "Unknown design preview kind")),
         };
-        // Inputs that may be zero (the beam length underrun).
-        let zero_ok: &[&str] = if self.kind == "singlePlate" { &["underrun"] } else { &[] };
+        // Inputs that may be zero (the beam length underrun; camber; a
+        // continuously braced construction stage).
+        let zero_ok: &[&str] = match self.kind.as_str() {
+            "singlePlate" => &["underrun"],
+            "compositeBeam" => &["camber", "constructionLb"],
+            _ => &[],
+        };
         if !["syntheticFixture", "user", "mixed"].contains(&self.input_source.as_str())
             || self.soil_reference.len() > 512
         {
@@ -623,6 +748,19 @@ impl DesignPreview {
                     "Cover, links and bars consume the column section",
                 ));
             }
+        }
+        if self.kind == "compositeBeam" {
+            let n = self.inputs["studsPerRow"];
+            if n.fract() != 0.0 || !(1.0..=3.0).contains(&n) {
+                return Err(err("INVALID_SCHEMA", "Studs per row must be 1, 2 or 3"));
+            }
+            if self.inputs["ribHeight"] >= self.inputs["slabThickness"] {
+                return Err(err("INVALID_SCHEMA", "The deck ribs must be shallower than the slab"));
+            }
+            if self.inputs["studLength"] >= self.inputs["slabThickness"] {
+                return Err(err("INVALID_SCHEMA", "The studs must lie within the slab"));
+            }
+            return Ok(());
         }
         if self.kind == "singlePlate" {
             let (rows, cols) = (self.inputs["rows"], self.inputs["columns"]);

@@ -447,7 +447,7 @@
     {
       "id": "M17",
       "name": "Model construction stage composite members",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M07",
         "M08",
@@ -468,7 +468,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "Accepted (evidence/M17/full) as an edition-labelled AISC 360-22 LRFD Chapter I demonstration (ADR 0026, 0031): unshored simply supported composite beams with headed studs under a solid slab or formed deck; stages from the engineer's cases (construction on the steel alone, composite plastic flexure at the maximum moment and concentrated loads), stud strength and detailing, slip-capacity conditions, stage deflections (I_s, I_LB, shrinkage) and the creep judgement; gate 12/12 on source d3c1ea09. Continuous beams, shoring, composite columns remain outside."
     },
     {
       "id": "M18",

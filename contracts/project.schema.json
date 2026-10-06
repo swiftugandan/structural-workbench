@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.9.0"
+      "const": "1.10.0"
     },
     "id": {
       "type": "string",
@@ -491,7 +491,8 @@
                   "rcColumn",
                   "slab",
                   "padFooting",
-                  "singlePlate"
+                  "singlePlate",
+                  "compositeBeam"
                 ]
               },
               "storeyId": {
@@ -1235,7 +1236,8 @@
             "rcColumn",
             "slab",
             "padFooting",
-            "singlePlate"
+            "singlePlate",
+            "compositeBeam"
           ]
         },
         "targetId": {
@@ -1259,6 +1261,16 @@
               "type": "number",
               "minimum": 0,
               "description": "singlePlate beam length underrun; may be zero"
+            },
+            "camber": {
+              "type": "number",
+              "minimum": 0,
+              "description": "compositeBeam camber; may be zero"
+            },
+            "constructionLb": {
+              "type": "number",
+              "minimum": 0,
+              "description": "compositeBeam construction-stage unbraced length; zero when continuously braced"
             }
           }
         },
@@ -1650,6 +1662,99 @@
               "type": "boolean"
             },
             "bracedAgainstRotation": {
+              "type": "boolean"
+            }
+          }
+        },
+        "composite": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Schema 1.10.0 (ADR 0031): a compositeBeam draft's deck, sides, stud placement, stage cases or combinations and the engineer's service inputs. Numeric geometry is in inputs (slabThickness, ribHeight, ribWidth, ribPitch, concreteStrength, concreteDensity, studDiameter, studFu, studLength, studsPerRow, studRowSpacing, firstStudRow, studTransverseSpacing, sideLeft, sideRight, constructionLb, constructionCb, camber).",
+          "required": [
+            "deck",
+            "lightweight",
+            "sides",
+            "studsOverWeb"
+          ],
+          "properties": {
+            "deck": {
+              "enum": [
+                "solid",
+                "perpendicular",
+                "parallel"
+              ]
+            },
+            "lightweight": {
+              "type": "boolean"
+            },
+            "sides": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "adjacent",
+                  "edge"
+                ]
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "studsOverWeb": {
+              "type": "boolean"
+            },
+            "emidHt": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.2
+            },
+            "constructionCaseId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "compositeCaseId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "wetCaseId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "liveCaseId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "sustainedCaseId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "preCompositeLimit": {
+              "type": "number",
+              "minimum": 50,
+              "maximum": 5000
+            },
+            "liveLimit": {
+              "type": "number",
+              "minimum": 50,
+              "maximum": 5000
+            },
+            "longTermLimit": {
+              "type": "number",
+              "minimum": 50,
+              "maximum": 5000
+            },
+            "shrinkageStrain": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.002
+            },
+            "creepJudgement": {
+              "type": "boolean"
+            },
+            "regularLoadingConfirmed": {
               "type": "boolean"
             }
           }

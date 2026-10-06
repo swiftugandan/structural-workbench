@@ -11,6 +11,7 @@ export function previewIdentity(project, draft) {
     slab: "Slab",
     padFooting: "Pad footing",
     singlePlate: "Steel connection",
+    compositeBeam: "Composite beam",
   }[draft.kind];
   const target = draft.targetId ? entityLabel(project, draft.targetId) : null;
   const name = binding?.name || `${kind} ${draft.id}`;

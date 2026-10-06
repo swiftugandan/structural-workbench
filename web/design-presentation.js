@@ -8,6 +8,7 @@ export const designNames = {
   slab: "Slab",
   padFooting: "Pad footing",
   singlePlate: "Steel connection",
+  compositeBeam: "Composite beam",
 };
 const sourceLabel = (s) =>
   ({

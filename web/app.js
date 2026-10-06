@@ -2044,6 +2044,16 @@ $("#export-report").onclick = () => {
               run.sourceProvenance.kind === "modelAnalysis" &&
               run.sourceProvenance.resultId === result.resultId,
           ),
+        // Current model-sourced composite beam designs (ADR 0031).
+        compositeRuns: concrete
+          .records()
+          .filter(
+            (run) =>
+              run.kind === "compositeBeam" &&
+              run.modelHash === modelHash &&
+              run.sourceProvenance.kind === "modelAnalysis" &&
+              run.sourceProvenance.resultId === result.resultId,
+          ),
         // Current model-sourced steel connection designs (ADR 0030).
         connectionRuns: concrete
           .records()

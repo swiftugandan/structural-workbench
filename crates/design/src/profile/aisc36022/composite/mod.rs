@@ -358,12 +358,12 @@ fn rows(span: f64, studs: &Studs) -> Vec<f64> {
     out
 }
 
-/// ΣQ_n available at x: the studs between x and the nearer support in each
-/// direction, the lesser of the two (the slab force at x is anchored both
-/// ways).
+/// ΣQ_n available at x: the studs strictly between x and each support, the
+/// lesser of the two (the slab force at x is anchored both ways). A stud at
+/// the section itself transfers no shear to either side.
 fn studs_at(rows: &[f64], per_row: usize, qn: f64, x: f64) -> f64 {
-    let left = rows.iter().filter(|&&r| r <= x + 1e-12).count();
-    let right = rows.iter().filter(|&&r| r >= x - 1e-12).count();
+    let left = rows.iter().filter(|&&r| r < x - 1e-9).count();
+    let right = rows.iter().filter(|&&r| r > x + 1e-9).count();
     left.min(right) as f64 * per_row as f64 * qn
 }
 
@@ -849,12 +849,14 @@ pub fn design(c: &CompositeBeam, st: &Stages) -> CompositeDesign {
             let (dw, at) = deflection(d, l, e * b.ix);
             deflections["wet"] =
                 json!({"delta": dw, "at": at, "net": dw.abs() - c.camber, "camber": c.camber});
+            // Net of the camber, as Design Example I.1 cambers the beam to
+            // meet the recommended pre-composite limit.
             checks.push(limit_check(
                 "composite.preCompositeDeflection",
                 "I3.1b; Commentary I3.1b",
-                dw,
+                dw.abs() - c.camber,
                 c.pre_composite_limit,
-                "Pre-composite (wet concrete)",
+                "Pre-composite (wet concrete, net of camber)",
                 json!({"delta": dw, "at": at, "I": b.ix, "camber": c.camber, "netAfterCamber": dw.abs() - c.camber}),
             ));
         }

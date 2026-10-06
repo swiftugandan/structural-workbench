@@ -415,6 +415,40 @@ ${connectionDrawing(cp)}
   return `<section data-testid="report-connections"><h2>Steel connections (AISC 360-22 LRFD, demonstration)</h2><p class="banner">Single-plate shear connections by the general method of the held Specification and Design Examples v16 (ADR 0030); the conventional configuration of Manual Table 10-9 is not held. Simple connections only: moment through the end is unsupported.</p>${body}</section>`;
 }
 
+/** Composite beams (M17, ADR 0031): stages, every check and the deflections. */
+function compositeRunsHtml(project, runs, e) {
+  if (!runs?.length) return "";
+  const units = {
+    N: [1e3, "kN"],
+    "N m": [1e3, "kN·m"],
+    m: [1e-3, "mm"],
+    Pa: [1e6, "MPa"],
+    "-": [1, ""],
+  };
+  const val = (v, u) => {
+    if (typeof v !== "number") return "—";
+    const [scale, unit] = units[u] || [1, u];
+    return `<span data-si="${v}">${(v / scale).toPrecision(6)}${unit ? ` ${unit}` : ""}</span>`;
+  };
+  const body = runs
+    .map((run) => {
+      const cp = run.codeProfilePreview,
+        src = run.sourceProvenance;
+      if (cp?.status !== "evaluated")
+        return `<section data-testid="report-composite"><h3>Composite beam draft ${e(run.draftId)}</h3><p>${e(cp?.reason || "Not evaluated")}</p></section>`;
+      const st = cp.stages,
+        dfl = cp.deflections;
+      return `<section data-testid="report-composite" data-draft-id="${e(run.draftId)}"><h3>Composite beam ${e(run.draftId)} · ${e(entityLabel(project, src.targetId))} · ${e(cp.beam.designation)} over ${cp.span.toPrecision(5)} m</h3>
+<p class="banner" data-testid="report-composite-banner">DEMONSTRATION. ${e(cp.standard)} ${e(cp.edition)} ${e(cp.designMethod)}, Chapter I. ${e(cp.certification)}.</p>
+<p>Overall <strong data-testid="report-composite-overall">${e(String(run.overall).toUpperCase())}</strong> · stages: construction ${e(st.constructionCaseId)}, composite ${e(st.compositeCaseId)}, wet ${e(st.wetCaseId || "—")}, live ${e(st.liveCaseId || "—")}, sustained ${e(st.sustainedCaseId || "—")}</p>
+<p>Stiffness (m⁴): I<sub>s</sub> ${val(dfl.Is, "-")} · I<sub>LB</sub> ${val(dfl.ILB, "-")} · I<sub>tr</sub> ${val(dfl.Itr, "-")} · ${cp.studs.total} studs, Q<sub>n</sub> ${val(cp.studs.Qn, "N")}</p>
+<table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody>${cp.checks.map((c) => `<tr data-testid="report-composite-check" data-check-id="${e(c.checkId)}"><th scope="row">${e(c.checkId)}</th><td>${e(c.clause)}</td><td>${e(c.status.toUpperCase())}</td><td>${val(c.demand, c.units)}</td><td>${val(c.resistance, c.units)}</td><td>${c.utilisation == null ? "—" : c.utilisation.toPrecision(4)}</td><td>${e(c.message)}</td></tr>`).join("")}</tbody></table>
+<details><summary>Complete composite run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
+    })
+    .join("");
+  return `<section data-testid="report-composites"><h2>Composite beams (AISC 360-22 LRFD Chapter I, demonstration)</h2><p class="banner">Unshored simply supported composite beams checked by stage: the steel section alone before the concrete hardens, the plastic composite section after; deflections per stage with the Commentary's lower-bound inertia and shrinkage model; creep is the engineer's recorded judgement (ADR 0031).</p>${body}</section>`;
+}
+
 export function report(
   project,
   result,
@@ -425,6 +459,7 @@ export function report(
     footingRuns,
     plateRuns,
     connectionRuns,
+    compositeRuns,
     stabilityRun,
   } = {},
 ) {
@@ -435,6 +470,7 @@ export function report(
     columnRunsHtml(project, columnRuns, e) +
     footingRunsHtml(project, footingRuns, e) +
     connectionRunsHtml(project, connectionRuns, e) +
+    compositeRunsHtml(project, compositeRuns, e) +
     plateRunsHtml(plateRuns, e) +
     stabilityHtml(project, stabilityRun, e);
   if (result.analysisType === "envelope") {

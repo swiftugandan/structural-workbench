@@ -92,7 +92,10 @@ fn a_1_8_file_migrates_and_cannot_carry_a_connection() {
     let (_, report) = import_project(&v.to_string()).unwrap();
     assert_eq!(
         report.steps,
-        ["set schemaVersion 1.9.0 (single-plate connection drafts)"]
+        [
+            "set schemaVersion 1.9.0 (single-plate connection drafts)",
+            "set schemaVersion 1.10.0 (composite beam drafts)"
+        ]
     );
     let mut v = connection(at("end", "c2"));
     v["schemaVersion"] = json!(SCHEMA_1_8);

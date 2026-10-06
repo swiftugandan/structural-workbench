@@ -108,6 +108,14 @@ export const m13 = [
   "m13-browser",
   "m13-acceptance",
 ];
+export const m17 = [
+  "build",
+  "composite-native",
+  "composite-model",
+  "composite-protocol",
+  "m17-browser",
+  "m17-acceptance",
+];
 export const m11 = [
   "build",
   "footing-native",
@@ -306,6 +314,25 @@ export const requiredIds = {
   "m13-browser": [
     "Steel connection: bind the beam end, check, draw, bill, report and persist",
     "Steel connection: moment transfer and missing inputs are never a pass",
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+  ],
+  "m17-acceptance": [
+    "M17-STAGE-HISTORY",
+    "M17-STAGE-SEPARATION",
+    "M17-MEMBER-CHECKS",
+    "M17-CONNECTORS",
+    "M17-WORKED-EXAMPLES",
+    "M17-SERVICE",
+    "M17-TIME-DEPENDENT",
+    "M17-USER-JOURNEY",
+    "M17-FAILURE-PATHS",
+    "M17-PERSISTENCE",
+    "M17-LEDGER",
+    "M17-ORACLE-PROVENANCE",
+  ],
+  "m17-browser": [
+    "Composite beam: stages, checks, section, deflections, report and persistence",
+    "Composite beam: missing stages and judgements are never a pass",
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
   ],
   "m11-acceptance": [
@@ -534,6 +561,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
                 "M11",
                 "M12",
                 "M13",
+                "M17",
                 "M14",
                 "M21",
               ].includes(milestone)
@@ -598,6 +626,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 5)
   )
     errors.push(`${name}: failed, skipped or incomplete M10 browser journeys`);
+  if (
+    name === "m17-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 3)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M17 browser journeys`);
   if (
     name === "m13-browser" &&
     (e.stats?.unexpected !== 0 ||

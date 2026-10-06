@@ -2,7 +2,9 @@ use crate::{Project, Result, digest, err};
 use serde_json::{Value, json};
 
 /// Current engineering project schema written by the application.
-pub const CURRENT_SCHEMA: &str = "1.9.0";
+pub const CURRENT_SCHEMA: &str = "1.10.0";
+/// No composite beam drafts (ADR 0031).
+pub const SCHEMA_1_9: &str = "1.9.0";
 /// No single-plate connection drafts (ADR 0030).
 pub const SCHEMA_1_8: &str = "1.8.0";
 /// rcBeam code inputs only; rcColumn drafts have no link spacing (ADR 0026, ADR 0027).
@@ -76,6 +78,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
     }
     let (mut steps, report_from) = match version.as_str() {
         CURRENT_SCHEMA => (Vec::new(), CURRENT_SCHEMA.to_string()),
+        SCHEMA_1_9 => (Vec::new(), SCHEMA_1_9.to_string()),
         SCHEMA_1_8 => (Vec::new(), SCHEMA_1_8.to_string()),
         SCHEMA_1_7 => (Vec::new(), SCHEMA_1_7.to_string()),
         SCHEMA_1_6 => (Vec::new(), SCHEMA_1_6.to_string()),
@@ -90,7 +93,7 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
             return Err(err(
                 "UNSUPPORTED_SCHEMA",
                 format!(
-                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {SCHEMA_1_2}, {SCHEMA_1_3}, {SCHEMA_1_4}, {SCHEMA_1_5}, {SCHEMA_1_6}, {SCHEMA_1_7}, {SCHEMA_1_8}, {CURRENT_SCHEMA}"
+                    "Project schema {version} is not supported. Supported import schemas: {LEGACY_SCHEMA_0_9}, 1.0.0, {SCHEMA_1_1}, {SCHEMA_1_2}, {SCHEMA_1_3}, {SCHEMA_1_4}, {SCHEMA_1_5}, {SCHEMA_1_6}, {SCHEMA_1_7}, {SCHEMA_1_8}, {SCHEMA_1_9}, {CURRENT_SCHEMA}"
                 ),
             ));
         }
@@ -112,29 +115,32 @@ pub fn import_project(original: &str) -> Result<(Project, MigrationReport)> {
         steps.push("set schemaVersion 1.1.0".into());
     }
     let newer = |versions: &[&str]| versions.contains(&version.as_str());
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3, SCHEMA_1_2]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3, SCHEMA_1_2]) {
         steps.extend(migrate_1_1_to_1_2(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4, SCHEMA_1_3]) {
         steps.extend(migrate_1_2_to_1_3(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5, SCHEMA_1_4]) {
         steps.extend(migrate_1_3_to_1_4(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6, SCHEMA_1_5]) {
         steps.extend(migrate_1_4_to_1_5(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9, SCHEMA_1_8, SCHEMA_1_7, SCHEMA_1_6]) {
         steps.extend(migrate_1_5_to_1_6(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_8, SCHEMA_1_7]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9, SCHEMA_1_8, SCHEMA_1_7]) {
         steps.extend(migrate_1_6_to_1_7(&mut raw)?);
     }
-    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_8]) {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9, SCHEMA_1_8]) {
         steps.extend(migrate_1_7_to_1_8(&mut raw)?);
     }
-    if version != CURRENT_SCHEMA {
+    if !newer(&[CURRENT_SCHEMA, SCHEMA_1_9]) {
         steps.extend(migrate_1_8_to_1_9(&mut raw)?);
+    }
+    if version != CURRENT_SCHEMA {
+        steps.extend(migrate_1_9_to_1_10(&mut raw)?);
     }
     let text = serde_json::to_string(&raw).map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let project = Project::parse_current(&text)?;
@@ -352,8 +358,20 @@ fn migrate_1_8_to_1_9(raw: &mut Value) -> Result<Vec<String>> {
     {
         return Err(err("INVALID_SCHEMA", "Schema 1.8.0 files cannot carry single-plate connection drafts"));
     }
-    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    raw["schemaVersion"] = json!(SCHEMA_1_9);
     Ok(vec!["set schemaVersion 1.9.0 (single-plate connection drafts)".into()])
+}
+
+/// 1.9.0 → 1.10.0: the version only. A 1.9.0 file cannot carry a composite
+/// beam draft (ADR 0031).
+fn migrate_1_9_to_1_10(raw: &mut Value) -> Result<Vec<String>> {
+    if let Some(drafts) = raw.get("designPreviews").and_then(|v| v.as_array())
+        && drafts.iter().any(|d| d["kind"] == "compositeBeam" || d.get("composite").is_some())
+    {
+        return Err(err("INVALID_SCHEMA", "Schema 1.9.0 files cannot carry composite beam drafts"));
+    }
+    raw["schemaVersion"] = json!(CURRENT_SCHEMA);
+    Ok(vec!["set schemaVersion 1.10.0 (composite beam drafts)".into()])
 }
 
 fn migrate_0_9_to_1_0(raw: &mut Value) -> Result<Vec<String>> {

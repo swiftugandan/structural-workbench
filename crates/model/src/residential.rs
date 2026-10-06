@@ -339,7 +339,7 @@ pub fn residential_reference() -> Result<Project> {
         });
     }
     for s in &p.supports {
-        p.design_previews.push(DesignPreview{id:format!("footing{}",s.id),kind:"padFooting".into(),target_id:Some(s.id.clone()),input_source:"syntheticFixture".into(),input_sources:Default::default(),inputs:[("length",2.4),("width",2.4),("thickness",0.6),("cover",0.075),("concreteStrength",30e6),("rebarStrength",500e6),("columnWidth",0.4),("columnDepth",0.4),("bearingPressure",200000.),("embedment",1.6),("soilUnitWeight",18000.)].into_iter().map(|(k,v)|(k.into(),v)).collect(),soil_reference:"Firm ground requested; 200 kPa is a SYNTHETIC assumption, not a ground investigation. Contact and settlement unverified.".into(),mechanics:None,tension_anchorage_confirmed:None,plate:None,code_inputs:None,connection:None});
+        p.design_previews.push(DesignPreview{id:format!("footing{}",s.id),kind:"padFooting".into(),target_id:Some(s.id.clone()),input_source:"syntheticFixture".into(),input_sources:Default::default(),inputs:[("length",2.4),("width",2.4),("thickness",0.6),("cover",0.075),("concreteStrength",30e6),("rebarStrength",500e6),("columnWidth",0.4),("columnDepth",0.4),("bearingPressure",200000.),("embedment",1.6),("soilUnitWeight",18000.)].into_iter().map(|(k,v)|(k.into(),v)).collect(),soil_reference:"Firm ground requested; 200 kPa is a SYNTHETIC assumption, not a ground investigation. Contact and settlement unverified.".into(),mechanics:None,tension_anchorage_confirmed:None,plate:None,code_inputs:None,connection:None,composite:None});
     }
     p.structure.sync_records(&p.clone());
     p.canonicalise();

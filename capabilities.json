@@ -483,15 +483,39 @@
       ]
     },
     {
+      "capabilityId": "composite-beam",
+      "scopeKey": "M17 / aisc-360-22-lrfd composite beam through construction and service stages (demonstration)",
+      "implementationStatus": "partial",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "AISC 360-22 LRFD Chapter I demonstration with the Commentary's deflection and shrinkage models; not a certified design (ADR 0031)",
+        "Unshored simply supported W beams with headed studs under a solid slab or formed deck (ribs perpendicular or parallel); positive flexure only",
+        "Stages from the engineer's cases or combinations: construction on the steel alone (Chapter F), composite on the plastic section at the maximum moment and at concentrated loads",
+        "Deflections by stage (wet on I_s net of camber, live on I_LB, long-term sustained plus shrinkage); creep is the engineer's recorded judgement, never assumed",
+        "Continuous beams, shored construction, slender webs, channel anchors, analytical slip capacity, vibration and composite columns are unsupported",
+        "Not a claim of commercial PROKON parity or professional code certification"
+      ],
+      "evidenceReferences": [
+        "docs/adr/0031-composite-beam-stages.md",
+        "docs/formulations/composite.md",
+        "docs/code-profiles/aisc-360-22-lrfd/dossier-composite.md",
+        "fixtures/design/aisc-360-22-lrfd/composite-beam.published.json",
+        "fixtures/design/aisc-360-22-lrfd/composite-oracle.json",
+        "evidence/M17/full/gate-M17.json"
+      ]
+    },
+    {
       "capabilityId": "advanced-suite",
-      "scopeKey": "M15–M21, M23",
+      "scopeKey": "M15–M16, M18–M21, M23",
       "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
       "comparisonStatus": "UNKNOWN",
       "resourceBlockers": [],
       "limitations": [
         "Outside analysis MVP; see PARITY_ROADMAP.md",
-        "The M10 slab, M11 footing, M12 column, M13 single-plate connection and M15 response-v1 capabilities are listed separately; everything else in these milestones remains outside"
+        "The M10 slab, M11 footing, M12 column, M13 connection, M15 response-v1 and M17 composite beam capabilities are listed separately; everything else in these milestones remains outside"
       ],
       "evidenceReferences": []
     }

@@ -1,7 +1,7 @@
 {
  "stateVersion": 1,
  "specVersion": "1.0",
- "activeMilestone": "M17",
+ "activeMilestone": "M16",
  "activeTask": null,
  "acceptedMilestones": [
   "M01",
@@ -20,7 +20,8 @@
   "M12",
   "M11",
   "M10",
-  "M13"
+  "M13",
+  "M17"
  ],
  "tasks": {
   "M00-A": {
@@ -4893,6 +4894,81 @@
    ],
    "verifiedSourceHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
    "verifiedBuildHash": "4b37f22d084c9e4cb80ebd43659d1216666f196e9b25154df150f097568f3ea3"
+  },
+  "M17-parent": {
+   "id": "M17-parent",
+   "useCase": "Model construction-stage composite members (SPECIFICATION M17): unshored simply supported composite beam under aisc-360-22-lrfd Chapter I (demonstration), stages from the engineer's cases, construction on the steel alone, composite plastic flexure, studs, stage deflections, shrinkage and creep judgement, design record",
+   "dependencies": [
+    "M07-parent",
+    "M08-parent",
+    "M09-parent"
+   ],
+   "status": "ACCEPTED",
+   "ownedPaths": [
+    "crates/design/src/profile/aisc36022/composite",
+    "tools/oracles/composite_oracle.py",
+    "fixtures/design/aisc-360-22-lrfd/composite-beam.published.json",
+    "fixtures/design/aisc-360-22-lrfd/composite-oracle.json",
+    "fixtures/models/CB01.json",
+    "tools/make-composite-fixture.mjs",
+    "crates/model/src/design_inputs.rs",
+    "crates/model/src/migrate.rs",
+    "crates/model/tests/composite_1_10.rs",
+    "crates/wasm-api/src/preview_workspace.rs",
+    "crates/wasm-api/tests/composite_beam.rs",
+    "contracts/project.schema.json",
+    "contracts/project-v1.9.schema.json",
+    "web/composite-beam.js",
+    "web/design-previews.js",
+    "web/reports/report.js",
+    "tests/e2e/composite-beam.spec.js",
+    "docs/adr/0031-composite-beam-stages.md",
+    "docs/formulations/composite.md",
+    "docs/code-profiles/aisc-360-22-lrfd/dossier-composite.md",
+    "tools/run-m17-parent.mjs",
+    "tools/record-m17-acceptance.mjs",
+    "evidence/M17/full"
+   ],
+   "acceptanceIds": [
+    "M17-STAGE-HISTORY",
+    "M17-STAGE-SEPARATION",
+    "M17-MEMBER-CHECKS",
+    "M17-CONNECTORS",
+    "M17-WORKED-EXAMPLES",
+    "M17-SERVICE",
+    "M17-TIME-DEPENDENT",
+    "M17-USER-JOURNEY",
+    "M17-FAILURE-PATHS",
+    "M17-PERSISTENCE",
+    "M17-LEDGER",
+    "M17-ORACLE-PROVENANCE"
+   ],
+   "requiredCommands": [
+    "PORT=4183 node tools/run-m17-parent.mjs"
+   ],
+   "outcomes": [
+    {
+     "check": "gate-M17",
+     "status": "PASS",
+     "evidencePath": "evidence/M17/full/gate-M17.json"
+    },
+    {
+     "check": "m17-acceptance",
+     "status": "PASS",
+     "evidencePath": "evidence/M17/full/m17-acceptance.json"
+    }
+   ],
+   "actualOutcomes": [
+    "Gate 12/12 PASS: composite kernel 7 tests (I.1, I.2 exact and with its rounded inputs, oracle to 1e-8), model 1.10.0, protocol 4/4, 2 browser journeys",
+    "Design Example I.2's stiffnesses and M_n reproduce exactly with its rounded inputs (d/2 = 12.0, E_c = 3,490); exact inputs differ by those roundings",
+    "Found and fixed during development: station-wise composite flexure was stricter than the Spec (I8.2d(a) redistribution) → checked at max moment and concentrated loads; a stud at the section was counted on both sides; pre-composite deflection is net of camber (Example I.1)",
+    "Full browser regression 140/142: orientation passed on rerun; the 10,000-member CAD import budget (3 s) failed at 4.4–6.4 s under machine load average ~9 from unrelated processes (edit p95 also doubled vs 2026-09-26 evidence) — environmental, not a regression of this change"
+   ],
+   "evidencePaths": [
+    "evidence/M17/full"
+   ],
+   "verifiedSourceHash": "d3c1ea09b14c16675dd4cba9d706745d6ae98f5a8b0b48090101bd14616bbef0",
+   "verifiedBuildHash": "037e01d2896dff212c5a1aefef80919b627561f52e269d0bac82935eb48cafe9"
   }
  },
  "blockers": [
@@ -4943,9 +5019,9 @@
   }
  ],
  "lastVerifiedSourceRevision": "ccd4ada",
- "lastVerifiedBuildHash": "4b37f22d084c9e4cb80ebd43659d1216666f196e9b25154df150f097568f3ea3",
- "nextAction": "M17 composite beam under AISC 360-22 Chapter I (held text + Design Examples I.1/I.2): construction stage on the bare steel, composite flexure by plastic stress distribution with partial composite action, steel headed stud anchors in deck (I8.2a), effective width, lower-bound moment of inertia deflections; then M16 detailing sub-slices, M18 prestress.",
+ "lastVerifiedBuildHash": "037e01d2896dff212c5a1aefef80919b627561f52e269d0bac82935eb48cafe9",
+ "nextAction": "M16 first sub-slice: EC2 Section 8 detailing of an RC beam with persistent bar sets (mandrel 8.3, anchorage 8.4, laps 8.7, curtailment 9.2.1.3) against JRC89037 4.2.2 detailing examples, schedule with shape geometry (not BS 8666, not held); then clashes at joints. Rerun tests/performance-cad.spec.js on an unloaded machine.",
  "handoffPath": "HANDOFF.md",
- "lastVerifiedSourceHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
- "lastVerifiedScope": "M13 parent on source 79a0dba2: gate 11/11; full browser regression green after repairs"
+ "lastVerifiedSourceHash": "d3c1ea09b14c16675dd4cba9d706745d6ae98f5a8b0b48090101bd14616bbef0",
+ "lastVerifiedScope": "M17 parent on source d3c1ea09: gate 12/12; full browser regression 140/142 (orientation flake passed on rerun; CAD capacity import budget exceeded under unrelated machine load)"
 }

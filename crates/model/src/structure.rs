@@ -197,6 +197,7 @@ impl Structure {
                         "rcColumn" => "RC column",
                         "slab" => "Slab",
                         "singlePlate" => "Steel connection",
+                        "compositeBeam" => "Composite beam",
                         _ => "Foundation",
                     }
                     .into(),

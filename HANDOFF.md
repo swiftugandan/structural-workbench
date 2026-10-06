@@ -1,3 +1,14 @@
+## Latest: M17 composite beam accepted (AISC 360-22 Chapter I demonstration)
+
+- **Kernel.** `aisc36022/composite/` (ADR 0031, `docs/formulations/composite.md`, `dossier-composite.md`): unshored simply supported W beam with headed studs under a solid slab or formed deck (ribs perpendicular or parallel).
+  - Construction stage on the steel alone (F2 with the engineer's L_b, C_b; F3), composite plastic flexure (Commentary C-I3-10) at the maximum moment and at concentrated loads with the studs between the section and the nearer support (I8.2c), shear on the steel, I8-1 studs with R_g/R_p, deck and stud detailing, slip-capacity conditions (Commentary I3.2d.1).
+  - Stage deflections by integrating each stage's moment diagram: wet concrete on I_s net of camber, live on I_LB (C-I3-1), long-term sustained plus the Commentary shrinkage model; creep is the engineer's recorded judgement — never assumed.
+- **Stages from the model.** The engineer assigns a case or combination to each stage (construction, composite, wet, live, sustained); `fixtures/models/CB01.json` is Design Example I.1 as a model (`tools/make-composite-fixture.mjs`).
+- **Verification.** I.1 and I.2 within their rounding chains, I.2 again with its own rounded inputs (reproduces I_LB 4,730, I_tr 6,790, I_equiv 5,480, M_n), independent oracle `tools/oracles/composite_oracle.py` to 1e-8.
+- **In the app.** `compositeBeam` drafts (schema 1.10.0): stages, AISC checks, section (PNA, stress block), deflections, bill of materials, report section.
+- **Gate:** `PORT=4183 node tools/run-m17-parent.mjs` → evidence/M17/full, 12/12 PASS on d3c1ea09.
+- **Regression:** 140/142. Orientation passed on rerun. `tests/performance-cad.spec.js` exceeded its 3 s import budget (4.4–6.4 s) while unrelated processes held the load average near 9 (edit p95 also doubled against the 26 Sep evidence); rerun it on an unloaded machine.
+
 ## Latest: M13 single-plate steel connection accepted (AISC 360-22 demonstration)
 
 - **Kernel.** `aisc36022/connection/` (ADR 0030, `docs/formulations/connection.md`, `dossier-connection.md`): a single plate welded to a column flange, column web or girder web, bolted to an uncoped W beam web (1–2 lines, standard holes).

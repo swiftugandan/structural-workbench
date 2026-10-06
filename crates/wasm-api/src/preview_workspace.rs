@@ -10,7 +10,7 @@ use workbench_design::{
     RcBarRow, RcBeamContext, RcColumnContext, RcColumnDetailing, RcFace, RcLinks,
 };
 use workbench_model::{
-    DesignPreview, Project, Result, SectionMechanicsInputs, SinglePlateInputs, SlabColumn, SlabPlateInputs, digest,
+    DesignPreview, Project, Result, SectionMechanicsInputs, SinglePlateInputs, CompositeInputs, SlabColumn, SlabPlateInputs, digest,
     err,
 };
 use workbench_results::KeyStation;
@@ -91,9 +91,32 @@ fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64
             ("weldSize", "Fillet weld (each side)", 0.00635, "mm", 1000.),
             ("fexx", "Electrode FEXX", 482.633e6, "MPa", 1e-6),
         ],
+        // Composite beam (ADR 0031): starter values of Design Example I.1 in
+        // SI (7.5 in. slab on 3 in. deck, 4 ksi normal-weight concrete, 3/4 in.
+        // studs, beams at 10 ft).
+        "compositeBeam" => vec![
+            ("slabThickness", "Total slab thickness", 0.1905, "mm", 1000.),
+            ("ribHeight", "Deck rib height", 0.0762, "mm", 1000.),
+            ("ribWidth", "Average rib width", 0.1524, "mm", 1000.),
+            ("ribPitch", "Rib pitch", 0.3048, "mm", 1000.),
+            ("concreteStrength", "Concrete f'c", 27.579e6, "MPa", 1e-6),
+            ("concreteDensity", "Concrete density", 2322.68, "kg/m³", 1.),
+            ("studDiameter", "Stud diameter", 0.01905, "mm", 1000.),
+            ("studFu", "Stud Fu", 448.159e6, "MPa", 1e-6),
+            ("studLength", "Installed stud length", 0.1143, "mm", 1000.),
+            ("studsPerRow", "Studs per rib / row", 1., "", 1.),
+            ("studRowSpacing", "Row spacing", 0.3048, "mm", 1000.),
+            ("firstStudRow", "First row from support", 0.1524, "mm", 1000.),
+            ("studTransverseSpacing", "Transverse stud spacing", 0.0762, "mm", 1000.),
+            ("sideLeft", "Side 1: next beam or slab edge", 3.048, "m", 1.),
+            ("sideRight", "Side 2: next beam or slab edge", 3.048, "m", 1.),
+            ("constructionLb", "Construction unbraced length", 0., "m", 1.),
+            ("constructionCb", "Construction C_b", 1., "", 1.),
+            ("camber", "Camber", 0., "mm", 1000.),
+        ],
         _ => vec![],
     };
-    if kind == "singlePlate" {
+    if ["singlePlate", "compositeBeam"].contains(&kind) {
         return f;
     }
     f.extend([
@@ -670,8 +693,14 @@ fn apply_slab_column_loads(v: &mut Value, a: &Value) -> Result<()> {
     Ok(())
 }
 pub fn templates() -> Value {
-    json!([("rcBeam","RC beam"),("rcColumn","RC column"),("slab","Slab"),("padFooting","Pad footing"),("singlePlate","Steel connection · single plate")].iter().map(|(kind,name)|{
+    json!([("rcBeam","RC beam"),("rcColumn","RC column"),("slab","Slab"),("padFooting","Pad footing"),("singlePlate","Steel connection · single plate"),("compositeBeam","Composite beam · AISC Chapter I")].iter().map(|(kind,name)|{
         let mut t = json!({"kind":kind,"name":name,"mock":true,"fields":fields(kind).into_iter().map(|(key,label,value,unit,scale)|json!({"key":key,"label":label,"defaultValue":value,"unit":unit,"displayScale":scale})).collect::<Vec<_>>()});
+        if *kind == "compositeBeam" {
+            t["composite"] = json!({
+                "decks": [["perpendicular", "Deck ribs perpendicular to the beam"], ["parallel", "Deck ribs parallel to the beam"], ["solid", "Solid slab"]],
+                "sides": [["adjacent", "Next beam (centre to centre)"], ["edge", "Slab edge"]],
+            });
+        }
         if *kind == "singlePlate" {
             t["connection"] = json!({
                 "bolts": workbench_model::STEEL_BOLT_DESIGNATIONS,
@@ -713,7 +742,7 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
     }
     if c["type"] == "CreateDesignPreview" {
         let kind = a["kind"].as_str().unwrap_or("");
-        if !["rcBeam", "rcColumn", "slab", "padFooting", "singlePlate"].contains(&kind) {
+        if !["rcBeam", "rcColumn", "slab", "padFooting", "singlePlate", "compositeBeam"].contains(&kind) {
             return Err(err("INVALID_SCHEMA", "Unknown preview kind"));
         }
         let id = format!(
@@ -757,6 +786,14 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                 deformation_considered: true,
                 braced_against_rotation: None,
             }),
+            // Starter deck and sides; stage cases and limits are the engineer's.
+            composite: (kind == "compositeBeam").then(|| CompositeInputs {
+                deck: "perpendicular".into(),
+                lightweight: false,
+                sides: ["adjacent".into(), "adjacent".into()],
+                studs_over_web: false,
+                ..Default::default()
+            }),
         };
         v["designPreviews"]
             .as_array_mut()
@@ -780,12 +817,12 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
             .to_string();
         let mut inputs = a["inputs"].clone();
         for (key, _, _, unit, _) in fields(&kind) {
-            if key == "soilUnitWeight" {
+            if unit == "N/m³" || unit == "kg/m³" {
                 let n = inputs[key]
                     .as_f64()
-                    .or_else(|| inputs[key].as_str().and_then(|s| s.parse().ok()))
+                    .or_else(|| inputs[key].as_str().and_then(|s| s.trim().parse().ok()))
                     .ok_or_else(|| {
-                        err("INVALID_SCHEMA", "Soil unit weight must be numeric in N/m³")
+                        err("INVALID_SCHEMA", format!("{key} must be numeric in {unit}"))
                     })?;
                 inputs[key] = json!(n);
             } else {
@@ -837,6 +874,15 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                 "INVALID_SCHEMA",
                 "Section mechanics apply only to RC beam and column drafts",
             ));
+        }
+        if !a["composite"].is_null() {
+            if kind != "compositeBeam" {
+                return Err(err("INVALID_SCHEMA", "Composite inputs apply only to composite beam drafts"));
+            }
+            let c: CompositeInputs = serde_json::from_value(a["composite"].clone())
+                .map_err(|e| err("INVALID_SCHEMA", format!("Invalid composite inputs: {e}")))?;
+            c.validate()?;
+            v["designPreviews"][index]["composite"] = serde_json::to_value(c).unwrap();
         }
         if !a["connection"].is_null() {
             if kind != "singlePlate" {
@@ -1645,8 +1691,19 @@ fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
         ("Beam web", &["connection.beam.*"]),
         ("Detailing and fit", &["connection.spacing", "connection.edgeDistance", "connection.fit"]),
     ];
+    let composite: [(&str, &[&str]); 7] = [
+        ("Construction stage", &["composite.construction.*"]),
+        ("Composite flexure", &["composite.flexure", "composite.negativeFlexure", "composite.web"]),
+        ("Shear", &["composite.shear"]),
+        ("Shear connection", &["composite.slipCapacity", "composite.studStrength", "composite.studDiameter", "composite.studLength", "composite.studSpacing"]),
+        ("Deck and materials", &["composite.deck", "composite.materials"]),
+        ("Deflections", &["composite.preCompositeDeflection", "composite.liveDeflection"]),
+        ("Time-dependent effects", &["composite.longTermDeflection", "composite.creep"]),
+    ];
     let rows: &[(&str, &[&str])] = if code["governing"].is_array() {
         &beam
+    } else if code["family"] == "compositeBeam" {
+        &composite
     } else if code["family"] == "singlePlate" {
         &connection
     } else if code["family"] == "slab" {
@@ -1767,6 +1824,160 @@ fn column_code(p: &Project, d: &DesignPreview, stations: &[KeyStation], combinat
                 "mzMax":actions.mz_max,"vyMax":actions.vy_max,"vzMax":actions.vz_max,
                 "convention":"N compression positive; end moments are the frame's internal My, Mz at stations 0 and 1"},
             "checks":checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()}),
+    )
+}
+
+/// AISC 360-22 LRFD composite beam (M17, ADR 0031) bound to a member: each
+/// stage's moment and shear diagram from the exact member actions of the
+/// case or combination the engineer assigned to that stage. Sagging is
+/// positive with the beam's local y toward the slab.
+fn composite_code(p: &Project, d: &DesignPreview) -> Value {
+    use workbench_design::composite as cb;
+    let profile = workbench_design::Aisc36022LrfdProfile::default();
+    let meta = profile.metadata();
+    let base = json!({"family":"compositeBeam","profileId":meta.id,"profileEnabled":meta.enabled,
+        "basis":if meta.enabled {"codeProfile"} else {"disabledProfilePreview"},
+        "standard":meta.standard,"edition":meta.edition,"designMethod":meta.design_method,"certification":meta.certification,
+        "unreconciledAmendments":meta.unreconciled_amendments,"resourceGate":meta.resource_gate,"limitations":meta.limitations});
+    let unavailable = |reason: &str| merge(base.clone(), json!({"status":"unavailable","reason":reason}));
+    let Some(ci) = &d.composite else {
+        return unavailable("Configure the deck, sides and stage cases");
+    };
+    let target = d.target_id.as_deref().unwrap_or("");
+    let Some(member) = p.members.iter().find(|m| m.id == target) else {
+        return unavailable("Bind the draft to a beam member");
+    };
+    let Some(sd) = member.steel_design.as_ref() else {
+        return unavailable("Assign a catalogue W section to the beam (Steel design) before designing it as composite");
+    };
+    let Ok((_, _, section)) = workbench_design::native::resolve(&sd.section_ref, &sd.material_ref) else {
+        return unavailable("Only catalogue W sections in ASTM A992 are supported");
+    };
+    let row = workbench_design::native::shape_row(&sd.section_ref).unwrap();
+    let material = workbench_design::native::catalogue()["material"].clone();
+    let pos = |id: &str| p.nodes.iter().find(|n| n.id == id).map(|n| n.position).unwrap();
+    let (span, r) = workbench_geometry::axes(pos(&member.start), pos(&member.end), member.local_y);
+    if r[1][2] <= 1e-9 {
+        return unavailable("The beam's local y must point up toward the slab (global +Z)");
+    }
+    let (Some(con_case), Some(comp_case)) = (&ci.construction_case_id, &ci.composite_case_id) else {
+        return unavailable("Choose the construction-stage and composite-stage cases or combinations");
+    };
+    // Point loads on the beam in the composite stage are I8.2c sections.
+    let factors: Vec<(String, f64)> = p
+        .combinations
+        .iter()
+        .find(|c| &c.id == comp_case)
+        .map(|c| c.terms.iter().map(|t| (t.case.clone(), t.factor)).collect())
+        .unwrap_or_else(|| vec![(comp_case.clone(), 1.0)]);
+    let point_stations: Vec<f64> = p
+        .loads
+        .iter()
+        .filter_map(|l| match l {
+            workbench_model::Load::Point { case, member: m, station, values, .. }
+                if m == target && factors.iter().any(|(c, f)| c == case && *f != 0.0) && values.iter().any(|v| *v != 0.0) =>
+            {
+                Some(*station)
+            }
+            _ => None,
+        })
+        .collect();
+    let mut stations: Vec<f64> = (0..=360).map(|k| k as f64 / 360.0).chain(point_stations.iter().cloned()).collect();
+    stations.sort_by(f64::total_cmp);
+    stations.dedup_by(|a, b| (*a - *b).abs() < 1e-12);
+    let diagram = |case: &str| -> Result<cb::Diagram> {
+        let actions = workbench_assembly::member_actions_at(p, case, target, &stations)?;
+        let mut out = cb::Diagram::default();
+        for (t, at) in stations.iter().zip(&actions) {
+            out.stations.push(t * span);
+            // [N, Vy, Vz, T, My, Mz]: Mz is sagging with local y toward the slab.
+            out.moment.push(at[0][5]);
+            out.shear.push(at.iter().map(|a| a[1]).fold(0.0_f64, |m, v| if v.abs() > m.abs() { v } else { m }));
+        }
+        Ok(out)
+    };
+    let stage = |id: Option<&String>| -> Result<Option<cb::Diagram>> { id.map(|c| diagram(c)).transpose() };
+    let stages = (|| -> Result<cb::Stages> {
+        Ok(cb::Stages {
+            construction: diagram(con_case)?,
+            composite: diagram(comp_case)?,
+            wet: stage(ci.wet_case_id.as_ref())?,
+            live: stage(ci.live_case_id.as_ref())?,
+            sustained: stage(ci.sustained_case_id.as_ref())?,
+            regular_loading: point_stations.is_empty() || ci.regular_loading_confirmed == Some(true),
+            load_points: point_stations.iter().map(|t| t * span).collect(),
+        })
+    })();
+    let stages = match stages {
+        Ok(s) => s,
+        Err(e) => return unavailable(&format!("A stage case could not be analysed: {}", e.message)),
+    };
+    let i = &d.inputs;
+    let side = |kind: &str, v: f64| if kind == "edge" { cb::Side::Edge(v) } else { cb::Side::Adjacent(v) };
+    let deck = match ci.deck.as_str() {
+        "parallel" => cb::Deck::Parallel,
+        "solid" => cb::Deck::Solid,
+        _ => cb::Deck::Perpendicular,
+    };
+    let beam = cb::SteelBeam {
+        designation: row["designation"].as_str().unwrap_or("").into(),
+        section,
+        ix: workbench_design::native::inches(&row["Ix"]) * 0.0254f64.powi(3),
+        fy: material["fy"].as_f64().unwrap(),
+    };
+    let input = cb::CompositeBeam {
+        span,
+        beam,
+        slab: cb::Slab {
+            thickness: i["slabThickness"],
+            deck,
+            rib_height: i["ribHeight"],
+            rib_width: i["ribWidth"],
+            rib_pitch: i["ribPitch"],
+            fc: i["concreteStrength"],
+            density: i["concreteDensity"],
+            lightweight: ci.lightweight,
+        },
+        studs: cb::Studs {
+            diameter: i["studDiameter"],
+            fu: i["studFu"],
+            length: i["studLength"],
+            per_row: i["studsPerRow"] as usize,
+            row_spacing: i["studRowSpacing"],
+            first_row: i["firstStudRow"],
+            transverse_spacing: i["studTransverseSpacing"],
+            over_web: ci.studs_over_web,
+            emid_ht: ci.emid_ht,
+        },
+        sides: [side(&ci.sides[0], i["sideLeft"]), side(&ci.sides[1], i["sideRight"])],
+        construction_lb: i["constructionLb"],
+        construction_cb: i["constructionCb"],
+        camber: i["camber"],
+        pre_composite_limit: ci.pre_composite_limit,
+        live_limit: ci.live_limit,
+        long_term_limit: ci.long_term_limit,
+        shrinkage_strain: ci.shrinkage_strain,
+        creep_judgement: ci.creep_judgement,
+    };
+    let out = cb::design(&input, &stages);
+    let total_studs = out.studs["total"].as_u64().unwrap_or(0);
+    let beam_mass = input.beam.section.ag * span * 7850.0;
+    let bill = json!([
+        {"item": "Beam", "description": format!("{} × {:.3} m, ASTM A992, camber {:.0} mm", input.beam.designation, span, input.camber * 1e3),
+         "quantity": 1, "massKg": beam_mass},
+        {"item": "Headed studs", "description": format!("Ø{:.1} × {:.1} mm installed, {} per row at {:.0} mm, first row {:.0} mm from each support",
+            input.studs.diameter * 1e3, input.studs.length * 1e3, input.studs.per_row, input.studs.row_spacing * 1e3, input.studs.first_row * 1e3),
+         "quantity": total_studs},
+    ]);
+    let summarise = |dg: &cb::Diagram| json!({"stations": dg.stations, "moment": dg.moment, "shear": dg.shear});
+    merge(
+        base,
+        json!({"status":"evaluated","span":span,"beam":{"designation":input.beam.designation,"d":input.beam.section.d,"bf":input.beam.section.bf,"tf":input.beam.section.tf,"tw":input.beam.section.tw,"fy":input.beam.fy},
+            "stages":{"constructionCaseId":con_case,"compositeCaseId":comp_case,"wetCaseId":ci.wet_case_id,"liveCaseId":ci.live_case_id,"sustainedCaseId":ci.sustained_case_id,
+                "loadPoints":stages.load_points,"regularLoading":stages.regular_loading,
+                "construction":summarise(&stages.construction),"composite":summarise(&stages.composite)},
+            "checks":out.checks.iter().map(|c| c.to_json()).collect::<Vec<_>>(),
+            "section":out.section,"studs":out.studs,"deflections":out.deflections,"bill":bill}),
     )
 }
 
@@ -2257,7 +2468,12 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
             ));
         }
         source = json!({"kind":"modelAnalysis","mock":false,"resultId":a.result_id,"modelHash":a.model_hash,"sourceRevision":a.source_revision,"solverBuildHash":a.solver_build_hash,"settingsHash":a.settings_hash,"combinationId":case,"targetId":target});
-        if draft.kind == "singlePlate" {
+        if draft.kind == "compositeBeam" {
+            code = composite_code(p, draft);
+            source["note"] = json!(
+                "Exact member actions of the bound beam for each stage case or combination chosen in the draft"
+            );
+        } else if draft.kind == "singlePlate" {
             let m = a
                 .members
                 .iter()
@@ -2349,6 +2565,15 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
             "Punching",
             "Deflection",
         ],
+        "compositeBeam" => vec![
+            "Construction stage",
+            "Composite flexure",
+            "Shear",
+            "Shear connection",
+            "Deck and materials",
+            "Deflections",
+            "Time-dependent effects",
+        ],
         "singlePlate" => vec![
             "Simple connection",
             "Bolt group",
@@ -2374,14 +2599,14 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         footing_schedule(draft, &code)
     } else if draft.kind == "slab" && code["status"] == "evaluated" {
         slab_schedule(draft, &code)
-    } else if draft.kind == "singlePlate" && code["status"] == "evaluated" {
+    } else if (draft.kind == "singlePlate" || draft.kind == "compositeBeam") && code["status"] == "evaluated" {
         code["bill"].clone()
     } else {
         json!([])
     };
     // ADR 0026: an evaluated, enabled code profile replaces the unsupported
     // rows with its checks, labelled as a demonstration of the held edition.
-    let coded = if ["rcBeam", "rcColumn", "padFooting", "slab", "singlePlate"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
+    let coded = if ["rcBeam", "rcColumn", "padFooting", "slab", "singlePlate", "compositeBeam"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
     let mut run = json!({"contractVersion":1,"draftId":id,"kind":draft.kind,"overall":"unsupported","mock":true,"codeProfile":null,"modelHash":p.hash(),"sourceRevision":p.revision,
         "inputHash":digest(&serde_json::to_vec(draft).unwrap()),"inputs":draft,"sourceProvenance":source,"schedule":schedule,
         "checks":checks.iter().map(|name|json!({"name":name,"status":"unsupported","utilisation":null,"reason":if *name=="Flexure"&&draft.kind=="rcBeam"{"Code profile unavailable. Section mechanics are reported separately and are not a code resistance"}else{"Required numerical family or locked code/example resources are unavailable"}})).collect::<Vec<_>>(),
@@ -2390,7 +2615,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
-        "codeProfilePreview":if ["rcBeam","rcColumn","padFooting","slab","singlePlate"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
+        "codeProfilePreview":if ["rcBeam","rcColumn","padFooting","slab","singlePlate","compositeBeam"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
         "plateAnalysis":plate,
         "columnMechanics":if draft.kind=="rcColumn"{column_mechanics(draft,stations.as_deref())}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
@@ -2411,7 +2636,11 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         } else {
             format!("DEMONSTRATION — {}; {amendments} not reconciled; {}", code["edition"].as_str().unwrap_or(""), code["certification"].as_str().unwrap_or(""))
         };
-        run["limitations"] = if draft.kind == "singlePlate" {
+        run["limitations"] = if draft.kind == "compositeBeam" {
+            json!([label,
+                "Unshored simply supported composite beam: the construction stage on the steel alone, the composite stage on the plastic section, deflections by stage",
+                "Creep has no method in the held texts and is the engineer's judgement; shrinkage follows the Commentary model with the engineer's strain"])
+        } else if draft.kind == "singlePlate" {
             json!([label,
                 "The connection is a simple (pinned) connection: the analysis must release the major-axis moment at this end",
                 "Drawing and bill of materials are derived from the inputs; bolt lengths and shop tolerances are the fabricator's"])

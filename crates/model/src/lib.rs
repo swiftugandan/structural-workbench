@@ -13,11 +13,11 @@ pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, EXPOSURE_CLASSES, MAX_BRACING_POINTS, MAX_SLAB_COLUMNS,
     CodeInputs, STRUCTURAL_SYSTEMS,
     MECHANICS_COMMON_KEYS, SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs,
-    SlabColumn, SlabPlateInputs, SteelDesign, SteelServiceability, SinglePlateInputs, STEEL_BOLT_DESIGNATIONS,
+    SlabColumn, SlabPlateInputs, SteelDesign, SteelServiceability, SinglePlateInputs, STEEL_BOLT_DESIGNATIONS, CompositeInputs,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
-    SCHEMA_1_4, SCHEMA_1_5, SCHEMA_1_6, SCHEMA_1_7, SCHEMA_1_8, import_project,
+    SCHEMA_1_4, SCHEMA_1_5, SCHEMA_1_6, SCHEMA_1_7, SCHEMA_1_8, SCHEMA_1_9, import_project,
 };
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;
@@ -507,12 +507,17 @@ impl Project {
             }
             if let Some(id) = &draft.target_id {
                 let exists = match draft.kind.as_str() {
-                    "rcBeam" | "rcColumn" | "singlePlate" => self.members.iter().any(|m| &m.id == id),
+                    "rcBeam" | "rcColumn" | "singlePlate" | "compositeBeam" => self.members.iter().any(|m| &m.id == id),
                     "padFooting" => self.supports.iter().any(|s| &s.id == id),
                     _ => false,
                 };
                 if !exists {
                     return Err(err("DANGLING_REFERENCE", "Preview target no longer exists"));
+                }
+            }
+            for id in draft.composite.iter().flat_map(|c| c.case_ids()).flatten() {
+                if !self.combinations.iter().any(|c| &c.id == id) && !self.load_cases.iter().any(|c| &c.id == id) {
+                    return Err(err("DANGLING_REFERENCE", format!("Stage case or combination {id} does not exist")));
                 }
             }
             // A connection's support must meet the beam at the connected end.

@@ -557,12 +557,23 @@
       "resolvedAt": "2026-10-06",
       "resolution": "Same held document as R-STEEL-EXAMPLES; Part II.A works single-plate connections and quotes the Manual equations and C values used (ADR 0030). The Steel Construction Manual itself (Table 10-9, Tables 7-6/7-7, Part 9) is not held.",
       "validationUse": "fixtures/design/aisc-360-22-lrfd/connection-single-plate.published.json"
+    },
+    {
+      "id": "R-COMPOSITE-CODE",
+      "edition": "ANSI/AISC 360-22, Chapter I and Commentary (composite members)",
+      "authoritativeOrigin": "https://www.aisc.org/aisc/publications/current-standards/aisc-360/",
+      "contentHashSha256": "6b1322440eedaa0b82d617811dc4b2a2657e7492cf9067cbb3debdf9e610abb7",
+      "rightsStatus": "Acquired for local implementation use from free AISC download; not redistributed in repository",
+      "localPath": "resources/private/aisc-360-22.pdf",
+      "retrievedAt": "2026-09-23T14:57:10.648Z",
+      "resolvedAt": "2026-10-06",
+      "resolution": "Same held document as R-CODE-STEEL; Chapter I and its Commentary cover composite beams with headed studs, deck, deflection and shrinkage (ADR 0031). Worked examples: R-STEEL-EXAMPLES Chapter I (I.1, I.2). EN 1994 is not held.",
+      "validationUse": "M17 composite beam dossier (docs/code-profiles/aisc-360-22-lrfd/dossier-composite.md)"
     }
   ],
   "unresolved": [
     "R-CODE-CONCRETE",
     "R-COLUMN-EXAMPLES",
-    "R-COMPOSITE-CODE",
     "R-CONCRETE-EXAMPLES",
     "R-DETAILING",
     "R-FOUNDATION-EXAMPLES",

@@ -134,7 +134,7 @@ fn a_1_4_project_migrates_by_version_only() {
             "set schemaVersion 1.6.0 (no response spectra)",
             "set schemaVersion 1.7.0 (no RC beam code inputs)",
             "set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)",
-            "set schemaVersion 1.9.0 (single-plate connection drafts)"
+            "set schemaVersion 1.9.0 (single-plate connection drafts)", "set schemaVersion 1.10.0 (composite beam drafts)"
         ]
     );
     assert!(migrated.design_previews[0].plate.is_none());

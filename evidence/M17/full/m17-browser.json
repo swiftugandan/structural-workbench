@@ -1,0 +1,60 @@
+{
+  "taskId": "M17-parent",
+  "milestone": "M17",
+  "sourceHash": "d3c1ea09b14c16675dd4cba9d706745d6ae98f5a8b0b48090101bd14616bbef0",
+  "buildHash": "037e01d2896dff212c5a1aefef80919b627561f52e269d0bac82935eb48cafe9",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "playwright-results.json": "c050fd65c37c754e2957708be68d14d7853d7a45e0efea545bdca126a94d51fd",
+    "composite-checks.png": "6bff88c79c1d54033b1c20bd9c755d2e4a36728e688e4ddbd9750dd954d20495",
+    "composite-section.png": "8f4eef17a5a9ed2b0a146993a080d61961327ce7366b7c838946535019bba4bc",
+    "composite-section.svg": "019f1fb138a359a705e2a168c4117b1c5e9d9a15176c4d71afbbcc457261184b",
+    "composite-run.json": "4ed2c75aa4303ff06089d39b72fbeec07b9fbf1aabcaf33aa852af69eef0c462",
+    "calculation-record.html": "742c908eec5a8cc9a5a8a1584ef4a7231ac0d361cb646d343c6d80bd2fe9551a",
+    "composite-indeterminate.png": "b34003ae1599b3468400b41dc1e8deda33c4d119f1c41709810945c308b3637f"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-06T02:46:55.731Z",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+    "Composite beam: stages, checks, section, deflections, report and persistence",
+    "Composite beam: missing stages and judgements are never a pass"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/composite-beam.spec.js",
+    "tests/e2e/capability-ledger.spec.js"
+  ],
+  "stats": {
+    "startTime": "2026-10-06T02:46:32.738Z",
+    "duration": 22964.611,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifacts": [
+    "playwright-results.json",
+    "composite-checks.png",
+    "composite-section.png",
+    "composite-section.svg",
+    "composite-run.json",
+    "calculation-record.html",
+    "composite-indeterminate.png"
+  ]
+}
