@@ -1,5 +1,6 @@
 import { entityLabel } from "../entity-labels.js";
 import { reportExcludedSection } from "../capabilities-ledger.js";
+import { connectionDrawing } from "../connection-drawing.js";
 export const escape = (s) =>
   String(s).replace(
     /[&<>"']/g,
@@ -380,6 +381,40 @@ ${k ? `<p>Ground contact under the column actions: ${e(k.state)}, ${val(k.contac
   return `<section data-testid="report-footing-previews"><h2>Pad footing design (EC2 UK, demonstration)</h2><p class="banner">Rigid base on tensionless ground; the allowable bearing pressure is the engineer's input and never computed (ADR 0028).</p>${body}</section>`;
 }
 
+/** Single-plate connection designs (M13, ADR 0030): every limit state, the
+ * dimensioned elevation and the bill of materials of each run. */
+function connectionRunsHtml(project, runs, e) {
+  if (!runs?.length) return "";
+  const units = {
+    N: [1e3, "kN"],
+    "N m": [1e3, "kN·m"],
+    m: [1e-3, "mm"],
+    "-": [1, ""],
+  };
+  const val = (v, u) => {
+    if (typeof v !== "number") return "—";
+    const [scale, unit] = units[u] || [1, u];
+    return `<span data-si="${v}">${(v / scale).toPrecision(6)}${unit ? ` ${unit}` : ""}</span>`;
+  };
+  const body = runs
+    .map((run) => {
+      const cp = run.codeProfilePreview,
+        src = run.sourceProvenance;
+      if (cp?.status !== "evaluated")
+        return `<section data-testid="report-connection"><h3>Steel connection draft ${e(run.draftId)}</h3><p>${e(cp?.reason || "Not evaluated")}</p></section>`;
+      return `<section data-testid="report-connection" data-draft-id="${e(run.draftId)}"><h3>Single-plate connection ${e(run.draftId)} · ${e(cp.end)} of beam ${e(entityLabel(project, src.targetId))} to ${e(entityLabel(project, cp.supportMemberId))}</h3>
+<p class="banner" data-testid="report-aisc-banner">DEMONSTRATION. ${e(cp.standard)} ${e(cp.edition)} ${e(cp.designMethod)}. ${e(cp.certification)}.</p>
+<p>Overall <strong data-testid="report-connection-overall">${e(String(run.overall).toUpperCase())}</strong> · case or combination ${e(cp.combinationId)} · beam ${e(cp.beam.designation)} · support ${e(cp.support.designation)} (${e(cp.support.kind)})</p>
+<p>Beam end actions: V ${val(cp.actions.V, "N")} · N ${val(cp.actions.N, "N")} · M ${val(cp.actions.M, "N m")}. ${e(cp.actions.convention)}</p>
+${connectionDrawing(cp)}
+<table><thead><tr><th>Limit state</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody>${cp.checks.map((c) => `<tr data-testid="report-connection-check" data-check-id="${e(c.checkId)}"><th scope="row">${e(c.checkId)}</th><td>${e(c.clause)}</td><td>${e(c.status.toUpperCase())}</td><td>${val(c.demand, c.units)}</td><td>${val(c.resistance, c.units)}</td><td>${c.utilisation == null ? "—" : c.utilisation.toPrecision(4)}</td><td>${e(c.message)}</td></tr>`).join("")}</tbody></table>
+<h4>Bill of materials</h4><table><thead><tr><th>Item</th><th>Description</th><th>Qty</th><th>Mass (kg)</th></tr></thead><tbody>${(run.schedule || []).map((r) => `<tr data-testid="report-connection-bill"><td>${e(r.item)}</td><td>${e(r.description)}</td><td>${r.quantity}</td><td>${r.massKg == null ? "—" : r.massKg.toPrecision(4)}</td></tr>`).join("")}</tbody></table>
+<details><summary>Complete connection run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
+    })
+    .join("");
+  return `<section data-testid="report-connections"><h2>Steel connections (AISC 360-22 LRFD, demonstration)</h2><p class="banner">Single-plate shear connections by the general method of the held Specification and Design Examples v16 (ADR 0030); the conventional configuration of Manual Table 10-9 is not held. Simple connections only: moment through the end is unsupported.</p>${body}</section>`;
+}
+
 export function report(
   project,
   result,
@@ -389,6 +424,7 @@ export function report(
     columnRuns,
     footingRuns,
     plateRuns,
+    connectionRuns,
     stabilityRun,
   } = {},
 ) {
@@ -398,6 +434,7 @@ export function report(
     concretePreviewsHtml(project, previewRuns, e) +
     columnRunsHtml(project, columnRuns, e) +
     footingRunsHtml(project, footingRuns, e) +
+    connectionRunsHtml(project, connectionRuns, e) +
     plateRunsHtml(plateRuns, e) +
     stabilityHtml(project, stabilityRun, e);
   if (result.analysisType === "envelope") {
@@ -457,5 +494,5 @@ export function report(
     "</svg>";
   const row = (id, v) =>
     `<tr><th>${e(entityLabel(project, id))}</th>${Array.from(v, (x) => `<td>${e(x.toPrecision(9))}</td>`).join("")}</tr>`;
-  return `<!doctype html><html lang="en"><meta charset="utf-8"><title>${e(project.name)} — calculation record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f8;padding:20px;font-size:12px}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}code{font-size:11px;overflow-wrap:anywhere}svg{width:100%;height:220px}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / CALCULATION RECORD</p><h1>${e(project.name)}</h1><p>Linear elastic frame analysis · ${e(result.caseId)} · SI units</p><small>Model SHA-256: ${e(result.modelHash)}<br>Solver source: ${e(result.solverBuildHash)}<br>Settings: ${e(result.settingsHash)}<br>Created ${e(new Date().toISOString())}</small></header><p class="banner">Mechanics preview. Prismatic Euler–Bernoulli members, small displacement, isotropic material, principal axes and Saint Venant torsion. No shear deformation, buckling, material nonlinearity, connection design or building-code compliance${stabilityRun?.result ? "; buckling and second-order results appear only in the labelled stability section" : ""}. Commercial numerical parity is UNKNOWN.</p>${reportExcludedSection(e)}<h2>Model</h2><p>${project.nodes.length} nodes · ${project.members.length} members · ${e(project.analysisMode)}. Global Z up; right-hand rotations. ${project.analysisMode === "planarXZ" ? "Generated constraints fix uy, rx and rz at every node." : ""}</p><h2>Global XZ elevation</h2><p>Grey: undeformed. Blue: deformation ×10. Projection may hide out-of-plane members.</p>${plot}<h2>Nodal displacements</h2><table><tr><th>Node</th>${["ux (m)", "uy (m)", "uz (m)", "rx (rad)", "ry (rad)", "rz (rad)"].map((x) => `<th>${x}</th>`).join("")}</tr>${result.nodeIds.map((id, i) => row(id, result.nodeDisplacements.slice(i * 6, i * 6 + 6))).join("")}</table><h2>Physical support reactions</h2><table><tr><th>Support</th>${["Fx (N)", "Fy (N)", "Fz (N)", "Mx (N m)", "My (N m)", "Mz (N m)"].map((x) => `<th>${x}</th>`).join("")}</tr>${result.reactionSupportIds.map((id, i) => row(id, result.reactions.slice(i * 6, i * 6 + 6))).join("")}</table><h2>Member end actions</h2><p>Actions applied by nodes to the element, in local axes. These differ from cut-face section actions.</p>${result.members.map((m) => `<h3>${e(entityLabel(project, m.id))} · ${m.length} m</h3><table><tr><th>End</th>${["Fx (N)", "Fy (N)", "Fz (N)", "Mx (N m)", "My (N m)", "Mz (N m)"].map((x) => `<th>${x}</th>`).join("")}</tr>${row("i", m.endActions.slice(0, 6))}${row("j", m.endActions.slice(6))}</table>`).join("")}${designSection}<h2>Equilibrium and diagnostics</h2><pre>${e(JSON.stringify({ checks: result.numericalChecks, diagnostics: result.diagnostics, generatedConstraints: result.generatedConstraintReactions }, null, 2))}</pre><h2>Reproducible project input</h2><pre>${e(JSON.stringify(project, null, 2))}</pre></html>`;
+  return `<!doctype html><html lang="en"><meta charset="utf-8"><title>${e(project.name)} — calculation record</title><style>body{font:15px system-ui;color:#182d43;max-width:1100px;margin:50px auto;padding:24px}h1{font-size:32px}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;border-bottom:1px solid #ddd;padding:10px}th:first-child{text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f8;padding:20px;font-size:12px}.banner{padding:20px;background:#fff3d6}small{overflow-wrap:anywhere}code{font-size:11px;overflow-wrap:anywhere}svg{width:100%;height:220px}@media print{body{margin:0;padding:0}tr{break-inside:avoid}}</style><header><p>STRUCTURAL WORKBENCH / CALCULATION RECORD</p><h1>${e(project.name)}</h1><p>Linear elastic frame analysis · ${e(result.caseId)} · SI units</p><small>Model SHA-256: ${e(result.modelHash)}<br>Solver source: ${e(result.solverBuildHash)}<br>Settings: ${e(result.settingsHash)}<br>Created ${e(new Date().toISOString())}</small></header><p class="banner">Mechanics preview. Prismatic Euler–Bernoulli members, small displacement, isotropic material, principal axes and Saint Venant torsion. No shear deformation, buckling, material nonlinearity, connection design (other than the labelled single-plate connection section) or building-code compliance${stabilityRun?.result ? "; buckling and second-order results appear only in the labelled stability section" : ""}. Commercial numerical parity is UNKNOWN.</p>${reportExcludedSection(e)}<h2>Model</h2><p>${project.nodes.length} nodes · ${project.members.length} members · ${e(project.analysisMode)}. Global Z up; right-hand rotations. ${project.analysisMode === "planarXZ" ? "Generated constraints fix uy, rx and rz at every node." : ""}</p><h2>Global XZ elevation</h2><p>Grey: undeformed. Blue: deformation ×10. Projection may hide out-of-plane members.</p>${plot}<h2>Nodal displacements</h2><table><tr><th>Node</th>${["ux (m)", "uy (m)", "uz (m)", "rx (rad)", "ry (rad)", "rz (rad)"].map((x) => `<th>${x}</th>`).join("")}</tr>${result.nodeIds.map((id, i) => row(id, result.nodeDisplacements.slice(i * 6, i * 6 + 6))).join("")}</table><h2>Physical support reactions</h2><table><tr><th>Support</th>${["Fx (N)", "Fy (N)", "Fz (N)", "Mx (N m)", "My (N m)", "Mz (N m)"].map((x) => `<th>${x}</th>`).join("")}</tr>${result.reactionSupportIds.map((id, i) => row(id, result.reactions.slice(i * 6, i * 6 + 6))).join("")}</table><h2>Member end actions</h2><p>Actions applied by nodes to the element, in local axes. These differ from cut-face section actions.</p>${result.members.map((m) => `<h3>${e(entityLabel(project, m.id))} · ${m.length} m</h3><table><tr><th>End</th>${["Fx (N)", "Fy (N)", "Fz (N)", "Mx (N m)", "My (N m)", "Mz (N m)"].map((x) => `<th>${x}</th>`).join("")}</tr>${row("i", m.endActions.slice(0, 6))}${row("j", m.endActions.slice(6))}</table>`).join("")}${designSection}<h2>Equilibrium and diagnostics</h2><pre>${e(JSON.stringify({ checks: result.numericalChecks, diagnostics: result.diagnostics, generatedConstraints: result.generatedConstraintReactions }, null, 2))}</pre><h2>Reproducible project input</h2><pre>${e(JSON.stringify(project, null, 2))}</pre></html>`;
 }

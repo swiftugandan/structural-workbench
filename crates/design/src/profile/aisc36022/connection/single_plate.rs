@@ -10,7 +10,7 @@
 //! group eccentricity measured from the support, plate flexure (F11, C_b =
 //! 1.84), the Manual Part 10/12 interactions and the 5/8 t_p weld. The
 //! conventional configuration of Manual Table 10-9 is not held and is not
-//! used. Clause reading: `docs/code-profiles/aisc-360-22/dossier-connection.md`.
+//! used. Clause reading: `docs/code-profiles/aisc-360-22-lrfd/dossier-connection.md`.
 
 use serde_json::{Value, json};
 

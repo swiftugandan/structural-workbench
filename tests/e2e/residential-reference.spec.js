@@ -45,8 +45,10 @@ test("UK residential reference: actual WASM analysis, hierarchy, model-sourced f
   await page.locator("#model-nav [data-preview]").first().click();
   await page.locator("#preview-source").selectOption("model");
   await page.locator("#preview-run").click();
+  // The footing's ground contact is solved on the SLS reaction and its EC2
+  // checks wait for the engineer's code inputs (ADR 0028).
   await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-    "UNSUPPORTED",
+    "INDETERMINATE",
   );
   const runDownload = page.waitForEvent("download");
   await page.locator("#preview-record").click();
@@ -55,8 +57,8 @@ test("UK residential reference: actual WASM analysis, hierarchy, model-sourced f
   );
   expect(run.sourceProvenance.mock).toBe(false);
   expect(run.sourceProvenance.combinationId).toBe("SLS");
-  expect(run.contactState).toBe("indeterminate");
-  expect(run.overall).toBe("unsupported");
+  expect(["full", "partial"]).toContain(run.contactState);
+  expect(run.overall).toBe("indeterminate");
   await writeFile(`${dir}/footing-review.json`, JSON.stringify(run, null, 2));
   await page.locator("#preview-thickness").fill("700 mm");
   await expect(page.locator("[data-testid=preview-state]")).toHaveText("STALE");

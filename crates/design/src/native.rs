@@ -23,6 +23,21 @@ pub fn catalogue() -> Value {
     v
 }
 
+/// The catalogue row (US customary, as published) of a versioned W reference.
+pub fn shape_row(section_ref: &str) -> Option<Value> {
+    catalogue()["shapes"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|s| section_ref == format!("{CATALOGUE_ID}:{}", s["designation"].as_str().unwrap()))
+        .cloned()
+}
+
+/// SI length of a catalogue row's US customary dimension (in.).
+pub fn inches(v: &Value) -> f64 {
+    v.as_f64().unwrap_or(0.0) * INCH
+}
+
 pub fn resolve(
     section_ref: &str,
     material_ref: &str,

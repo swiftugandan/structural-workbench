@@ -13,11 +13,22 @@ import {
   platePane,
 } from "./slab-plate.js";
 import { columnPane, columnSketch } from "./rc-column.js";
+import {
+  bindConnectionInspector,
+  connectionActions,
+  connectionBill,
+  connectionChecksPane,
+  connectionDrawing,
+  connectionInspector,
+  connectionSketch,
+  readConnection,
+} from "./steel-connection.js";
 const names = {
   rcBeam: "RC beam",
   rcColumn: "RC column",
   slab: "Slab",
   padFooting: "Pad footing",
+  singlePlate: "Steel connection",
 };
 const sourceName = (value) =>
   ({
@@ -97,6 +108,7 @@ export function previewState(run, ctx) {
 }
 function illustration(d, face) {
   const v = d.inputs;
+  if (d.kind === "singlePlate") return connectionSketch(d);
   if (d.kind === "rcColumn") return columnSketch(d);
   if (d.kind === "rcBeam") {
     const w = (180 * v.width) / Math.max(v.width, v.depth),
@@ -191,14 +203,16 @@ export function concreteWorkspace({
       viewport.pan = [0, 0];
     }
     document.body.classList.toggle("concrete-focus", focusObject);
+    // A connection has no draft solid: the model context shows its beam.
     viewport.designPreview =
-      focusObject || (["rcBeam", "rcColumn"].includes(d.kind) && d.targetId)
+      d.kind !== "singlePlate" &&
+      (focusObject || (["rcBeam", "rcColumn"].includes(d.kind) && d.targetId))
         ? { draft: d, mode: displayMode, face, context: !focusObject }
         : null;
     $("#design-geometry-labels").hidden = !viewport.designPreview;
     onSelection(d);
     const identity = previewIdentity(getContext().project, d);
-    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(identity.text)}</strong><span class="design-tag">${runs.get(active)?.codeProfile ? "EC2 UK · DEMONSTRATION" : "MOCK WORKFLOW"}</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
+    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(identity.text)}</strong><span class="design-tag">${runs.get(active)?.codeProfile ? (d.kind === "singlePlate" ? "AISC 360-22 · DEMONSTRATION" : "EC2 UK · DEMONSTRATION") : "MOCK WORKFLOW"}</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
       ["concrete", "Concrete"],
       ["reinforcement", "Reinforcement"],
       ["both", "Both"],
@@ -209,7 +223,7 @@ export function concreteWorkspace({
       )
       .join(
         "",
-      )}<button id="preview-focus" aria-pressed="${focusObject}">${focusObject ? "Show model context" : "Focus design object"}</button></div><small>${d.kind === "slab" ? esc(face) + " · illustrative grid, not FE mesh" : d.kind === "padFooting" ? "Contact INDETERMINATE · no pressure field" : "Illustrative reinforcement · fit and anchorage unverified"}</small>`;
+      )}<button id="preview-focus" aria-pressed="${focusObject}">${focusObject ? "Show model context" : "Focus design object"}</button></div><small>${d.kind === "slab" ? esc(face) + " · illustrative grid, not FE mesh" : d.kind === "padFooting" ? "Contact INDETERMINATE · no pressure field" : d.kind === "singlePlate" ? "Dimensioned elevation in the Drawing view" : "Illustrative reinforcement · fit and anchorage unverified"}</small>`;
     for (const b of host.querySelectorAll("[data-object-display]"))
       b.onclick = () => {
         displayMode = b.dataset.objectDisplay;
@@ -237,6 +251,13 @@ export function concreteWorkspace({
           plateRecovery,
         );
     if (d.kind === "rcColumn" && pane === "mechanics") return columnPane(run);
+    if (d.kind === "singlePlate") {
+      if (pane === "drawing")
+        return `<h4>Connection elevation · dimensions from the run</h4>${connectionDrawing(run?.codeProfilePreview)}`;
+      if (pane === "checks") return connectionChecksPane(run);
+      if (pane === "schedule") return connectionBill(run);
+      if (pane === "actions") return connectionActions(run);
+    }
     return previewPane({
       run,
       state,
@@ -255,32 +276,42 @@ export function concreteWorkspace({
         '<div class="empty-results"><strong>No concrete design object selected</strong><p>Create or select a draft in the Selection Inspector.</p></div>';
       return;
     }
-    const panes = [
-      ["summary", "Design summary"],
-      ["actions", d.kind === "slab" ? "Plate actions" : "Design actions"],
-      ["details", "Calculation details"],
-      ["reinforcement", "Reinforcement"],
-      ...(d.kind === "rcBeam"
+    const panes =
+      d.kind === "singlePlate"
         ? [
-            ["mechanics", "Section mechanics"],
-            ["ec2", "EC2 checks"],
+            ["summary", "Design summary"],
+            ["actions", "End actions"],
+            ["checks", "AISC checks"],
+            ["drawing", "Drawing"],
+            ["schedule", "Bill of materials"],
+            ["details", "Calculation details"],
           ]
-        : []),
-      ...(d.kind === "rcColumn"
-        ? [
-            ["mechanics", "Section mechanics"],
-            ["ec2", "EC2 checks"],
-          ]
-        : []),
-      ["schedule", "Schedule"],
-      ...(d.kind === "padFooting"
-        ? [
-            ["soil", "Soil / contact"],
-            ["ec2", "EC2 checks"],
-          ]
-        : []),
-      ...(d.kind === "slab" ? [["ec2", "EC2 checks"]] : []),
-    ];
+        : [
+            ["summary", "Design summary"],
+            ["actions", d.kind === "slab" ? "Plate actions" : "Design actions"],
+            ["details", "Calculation details"],
+            ["reinforcement", "Reinforcement"],
+            ...(d.kind === "rcBeam"
+              ? [
+                  ["mechanics", "Section mechanics"],
+                  ["ec2", "EC2 checks"],
+                ]
+              : []),
+            ...(d.kind === "rcColumn"
+              ? [
+                  ["mechanics", "Section mechanics"],
+                  ["ec2", "EC2 checks"],
+                ]
+              : []),
+            ["schedule", "Schedule"],
+            ...(d.kind === "padFooting"
+              ? [
+                  ["soil", "Soil / contact"],
+                  ["ec2", "EC2 checks"],
+                ]
+              : []),
+            ...(d.kind === "slab" ? [["ec2", "EC2 checks"]] : []),
+          ];
     host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
       b.onclick = () => {
@@ -346,7 +377,26 @@ export function concreteWorkspace({
           JSON.stringify({ ...run, currentState: state }, null, 2),
           "application/json",
         );
-      if ($("#preview-schedule"))
+      if ($("#preview-schedule") && d.kind === "singlePlate")
+        $("#preview-schedule").onclick = () =>
+          download(
+            "connection-bill-of-materials.csv",
+            "previewRunId,currentState,item,description,quantity,mass_kg\n" +
+              run.schedule
+                .map((r) =>
+                  [
+                    run.previewRunId,
+                    state,
+                    r.item,
+                    `"${String(r.description).replaceAll('"', '""')}"`,
+                    r.quantity,
+                    r.massKg ?? "",
+                  ].join(","),
+                )
+                .join("\n"),
+            "text/csv",
+          );
+      else if ($("#preview-schedule"))
         $("#preview-schedule").onclick = () =>
           download(
             "indicative-schedule.csv",
@@ -391,17 +441,22 @@ export function concreteWorkspace({
         t = templates.find((t) => t.kind === d?.kind);
       if (!getContext().dirty)
         mechanicsLaw = d?.mechanics?.law || t?.mechanics?.defaultLaw;
-      host.innerHTML = previewInspector({
-        mechanicsLaw,
-        d,
-        templates,
-        ds,
-        active,
-        ctx,
-        face,
-        sketch: d ? illustration(d, face) : "",
-        plateHtml: d ? plateSection(d, t) : "",
-      });
+      host.innerHTML =
+        d?.kind === "singlePlate"
+          ? connectionInspector({ d, templates, ds, active, ctx })
+          : previewInspector({
+              mechanicsLaw,
+              d,
+              templates,
+              ds,
+              active,
+              ctx,
+              face,
+              sketch: d ? illustration(d, face) : "",
+              plateHtml: d ? plateSection(d, t) : "",
+            });
+      if (d?.kind === "singlePlate")
+        bindConnectionInspector(host, ctx.project, d);
       if (runError && runError.draft === active)
         $("#preview-error").textContent = runError.message;
       const fail = (e) => {
@@ -451,11 +506,15 @@ export function concreteWorkspace({
             ? "Bind a target, save, then analyse a single current case/combination."
             : $("#preview-source").value === "plate"
               ? "Plate analysis available · code checks remain UNSUPPORTED"
-              : ["rcBeam", "rcColumn", "padFooting"].includes(d.kind)
+              : d.kind === "singlePlate"
                 ? $("#preview-source").value === "model"
-                  ? "Workflow available · EC2 checks run on the model actions (demonstration)"
-                  : "Synthetic actions · EC2 checks need model actions"
-                : "Workflow available · every design check remains UNSUPPORTED";
+                  ? "AISC 360-22 checks run on the beam's end actions (demonstration)"
+                  : "Synthetic actions · connection checks need model actions"
+                : ["rcBeam", "rcColumn", "padFooting"].includes(d.kind)
+                  ? $("#preview-source").value === "model"
+                    ? "Workflow available · EC2 checks run on the model actions (demonstration)"
+                    : "Synthetic actions · EC2 checks need model actions"
+                  : "Workflow available · every design check remains UNSUPPORTED";
         };
         $("#preview-source").onchange = () => {
           sourceMode = $("#preview-source").value;
@@ -490,6 +549,9 @@ export function concreteWorkspace({
                 tensionAnchorageConfirmed: $("#preview-anchorage").checked,
               }),
               ...($("#code-exposure") && { codeInputs: readCodeInputs() }),
+              ...(d.kind === "singlePlate" && {
+                connection: readConnection(host),
+              }),
               ...(plate && { plate }),
               ...(t.mechanics && {
                 mechanics: {

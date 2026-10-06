@@ -1,0 +1,889 @@
+{
+  "checks": [
+    {
+      "checkIds": [
+        "connection.momentTransfer",
+        "connection.outOfPlane",
+        "connection.compression"
+      ],
+      "name": "Simple connection",
+      "reason": "B3.4(a)",
+      "status": "pass",
+      "utilisation": 0
+    },
+    {
+      "checkIds": [
+        "connection.boltGroup"
+      ],
+      "name": "Bolt group",
+      "reason": "J3.7, J3.11a; instantaneous centre (User Note to J3.7)",
+      "status": "pass",
+      "utilisation": 0.6534907778559421
+    },
+    {
+      "checkIds": [
+        "connection.plate.*"
+      ],
+      "name": "Plate",
+      "reason": "J4.2(a) (J4-3); J4.2(b) (J4-4), B4.3b; J4.3 (J4-5); F11.1 (F11-1), F11.2; C_b = 1.84 (Manual Part 10); J4.5; Manual Eq. 9-8 (Design Example II.A-17B); Manual Eqs. 10-8, 12-2, 12-3 (Design Examples II.A-17B, II.A-19A); Manual Eqs. 10-6, 10-7 (Design Example II.A-19A)",
+      "status": "pass",
+      "utilisation": 0.9234105541173674
+    },
+    {
+      "checkIds": [
+        "connection.weld.*"
+      ],
+      "name": "Weld",
+      "reason": "J2.2b Table J2.4; 5/8 t_p (Manual Part 10, Design Examples II.A-17B, II.A-19A); J2.4 (J2-4), Table J2.5; k_ds = 1.0",
+      "status": "pass",
+      "utilisation": 0.49609375
+    },
+    {
+      "checkIds": [
+        "connection.support.*"
+      ],
+      "name": "Support",
+      "reason": "J4.2(b) (J4-4); Manual Eq. 9-6 (Design Examples II.A-17A, II.A-18, II.A-19A)",
+      "status": "pass",
+      "utilisation": 0.3374139446003703
+    },
+    {
+      "checkIds": [
+        "connection.beam.*"
+      ],
+      "name": "Beam web",
+      "reason": "J4.2(a) (J4-3)",
+      "status": "pass",
+      "utilisation": 0.15831615711247218
+    },
+    {
+      "checkIds": [
+        "connection.spacing",
+        "connection.edgeDistance",
+        "connection.fit"
+      ],
+      "name": "Detailing and fit",
+      "reason": "J3.4, J3.6(a); J3.5 Table J3.4 (footnote a), J3.6; Detailing",
+      "status": "pass",
+      "utilisation": 0.716243148978575
+    }
+  ],
+  "codeProfile": {
+    "certification": "Demonstration, not a certified design",
+    "edition": "2022",
+    "id": "aisc-360-22-lrfd",
+    "standard": "ANSI/AISC 360",
+    "unreconciledAmendments": []
+  },
+  "codeProfilePreview": {
+    "actions": {
+      "M": 0,
+      "Mminor": 0,
+      "N": 0,
+      "T": 0,
+      "V": 135000,
+      "Vminor": 0,
+      "convention": "V along the beam's local y (positive: the beam bears on the support toward −y); N positive in tension; M about local z"
+    },
+    "basis": "codeProfile",
+    "beam": {
+      "d": 0.4572,
+      "designation": "W18X50",
+      "fu": 448159224.0559435,
+      "fy": 344737864.65841806,
+      "kdes": 0.024688799999999997,
+      "tf": 0.014477999999999998,
+      "tw": 0.009016999999999999
+    },
+    "bill": [
+      {
+        "description": "PL 6.3 mm × 114.3 mm × 292.1 mm",
+        "item": "Plate",
+        "length": 0.2921,
+        "massKg": 1.5975628048020498,
+        "material": "Fy 345 MPa, Fu 448 MPa",
+        "quantity": 1,
+        "thickness": 0.00635,
+        "width": 0.11430000000000001
+      },
+      {
+        "description": "3/4 Group 120 threads included (N), standard holes, snug-tight",
+        "diameter": 0.019049999999999997,
+        "hole": 0.0206375,
+        "item": "Bolts",
+        "note": "Length by grip: plate + beam web + washer, from the bolt supplier's tables",
+        "quantity": 4
+      },
+      {
+        "description": "8.0 mm fillet both sides, E70",
+        "item": "Fillet weld",
+        "length": 0.2921,
+        "quantity": 2,
+        "size": 0.008,
+        "totalLength": 0.5842
+      }
+    ],
+    "bolt": {
+      "Fnv": 372316893.8310915,
+      "designation": "3/4",
+      "group": "group120",
+      "hole": 0.0206375,
+      "threadsExcluded": false
+    },
+    "boltGroup": {
+      "C": 2.813926811639901,
+      "Cprime": 0.2859103241518317,
+      "centre": [
+        0.08002564299371702,
+        6.293883955382097e-18
+      ],
+      "eccentricity": 0.0762,
+      "forces": [
+        [
+          -0.8040282007971848,
+          -0.5629297791240256
+        ],
+        [
+          -0.4018422092483467,
+          -0.8440336266959246
+        ],
+        [
+          0.4018422092483468,
+          -0.8440336266959245
+        ],
+        [
+          0.8040282007971848,
+          -0.5629297791240256
+        ]
+      ],
+      "iterations": 5,
+      "positions": [
+        [
+          0,
+          0.11430000000000001
+        ],
+        [
+          0,
+          0.0381
+        ],
+        [
+          0,
+          -0.0381
+        ],
+        [
+          0,
+          -0.11430000000000001
+        ]
+      ],
+      "residual": [
+        -1.5781832278404433e-16,
+        -3.9454580696011083e-17,
+        0
+      ]
+    },
+    "certification": "Demonstration, not a certified design",
+    "checks": [
+      {
+        "assumptions": [],
+        "checkId": "connection.momentTransfer",
+        "clause": "B3.4(a)",
+        "demand": 0,
+        "intermediates": {
+          "M": 0
+        },
+        "message": "The analysis carries no moment through this end: a simple connection",
+        "resistance": 0.039433499999999996,
+        "status": "pass",
+        "units": "N m",
+        "utilisation": 0
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.spacing",
+        "clause": "J3.4, J3.6(a)",
+        "demand": 0.05079999999999999,
+        "intermediates": {
+          "gauge": null,
+          "maximumPitch": 0.15239999999999998,
+          "minimum": 0.05079999999999999,
+          "pitch": 0.0762,
+          "rule": "centres ≥ 2⅔d with clear distance ≥ d (J3.4); pitch ≤ min(24t, 12 in.) (J3.6(a))"
+        },
+        "message": "Pitch 76.2 mm (gauge —), minimum 50.8 mm",
+        "resistance": 0.0762,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.6666666666666665
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.edgeDistance",
+        "clause": "J3.5 Table J3.4 (footnote a), J3.6",
+        "demand": 0.019049999999999997,
+        "intermediates": {
+          "aboveMaximum": [],
+          "belowTable": [],
+          "edges": [
+            {
+              "edge": "plate vertical",
+              "maximum": 0.07619999999999999,
+              "value": 0.03175
+            },
+            {
+              "edge": "plate horizontal",
+              "maximum": 0.07619999999999999,
+              "value": 0.0381
+            },
+            {
+              "edge": "beam web horizontal",
+              "maximum": 0.108204,
+              "value": 0.03175
+            }
+          ],
+          "note": "Edges below Table J3.4 are permitted by footnote a down to d because J3.11 and J4 are checked with the actual distances",
+          "tableJ34": 0.0254
+        },
+        "message": "Smallest edge 31.8 mm (Table J3.4 25.4 mm, never below d = 19.0 mm)",
+        "resistance": 0.03175,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.5999999999999999
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.fit",
+        "clause": "Detailing",
+        "demand": 0.2921,
+        "intermediates": {
+          "T": 0.40782240000000003,
+          "beamEndFromSupport": 0.0381,
+          "clearBottom": 0.06421119999999997,
+          "clearTop": 0.05151120000000001,
+          "flangeTipClearance": 0,
+          "note": "The plate sits within the beam's flat web (k_des from each flange); the beam end clears the support (a column web's flange tips). A plate length of at least T/2 is recommended for erection stability (Design Example II.A-17A)",
+          "plateLength": 0.2921,
+          "recommendedMinimumLength": 0.20391120000000001
+        },
+        "message": "Plate 292.1 mm within the flat web; beam end 38.1 mm from the support",
+        "resistance": 0.40782240000000003,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.716243148978575
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.boltGroup",
+        "clause": "J3.7, J3.11a; instantaneous centre (User Note to J3.7)",
+        "demand": 135000,
+        "intermediates": {
+          "Ab": 0.0002850229569923424,
+          "C": 2.813926811639901,
+          "Fnv": 372316893.8310915,
+          "bearingCoefficients": [
+            2.4,
+            1.2
+          ],
+          "bolts": 4,
+          "centre": [
+            0.08002564299371702,
+            6.293883955382097e-18
+          ],
+          "eccentricity": 0.0762,
+          "hole": 0.0206375,
+          "icrResidual": [
+            -1.5781832278404433e-16,
+            -3.9454580696011083e-17,
+            0
+          ],
+          "loadAngleFromVertical": 0,
+          "perBolt": [
+            {
+              "governs": "bolt shear",
+              "lcPlate": 0.0555625,
+              "lcWeb": null,
+              "line": 1,
+              "phiRn": 79589.1465134563,
+              "phiRnPlateBearing": 97582.81289849998,
+              "phiRnPlateTearout": 142308.26881031247,
+              "phiRnShear": 79589.1465134563,
+              "phiRnWebBearing": 138567.66359238361,
+              "phiRnWebTearout": null,
+              "row": 1
+            },
+            {
+              "governs": "bolt shear",
+              "lcPlate": 0.0555625,
+              "lcWeb": 0.0555625,
+              "line": 1,
+              "phiRn": 79589.1465134563,
+              "phiRnPlateBearing": 97582.81289849998,
+              "phiRnPlateTearout": 142308.26881031247,
+              "phiRnShear": 79589.1465134563,
+              "phiRnWebBearing": 138567.66359238361,
+              "phiRnWebTearout": 202077.8427388928,
+              "row": 2
+            },
+            {
+              "governs": "bolt shear",
+              "lcPlate": 0.0555625,
+              "lcWeb": 0.0555625,
+              "line": 1,
+              "phiRn": 79589.1465134563,
+              "phiRnPlateBearing": 97582.81289849998,
+              "phiRnPlateTearout": 142308.26881031247,
+              "phiRnShear": 79589.1465134563,
+              "phiRnWebBearing": 138567.66359238361,
+              "phiRnWebTearout": 202077.8427388928,
+              "row": 3
+            },
+            {
+              "governs": "plate tearout",
+              "lcPlate": 0.02143125,
+              "lcWeb": 0.0555625,
+              "line": 1,
+              "phiRn": 54890.33225540624,
+              "phiRnPlateBearing": 97582.81289849998,
+              "phiRnPlateTearout": 54890.33225540624,
+              "phiRnShear": 79589.1465134563,
+              "phiRnWebBearing": 138567.66359238361,
+              "phiRnWebTearout": 202077.8427388928,
+              "row": 4
+            }
+          ],
+          "rule": "φR_n = (C/n) Σ φr_n,i, with φr_n,i the least of bolt shear and the bearing and tearout of the plate and beam web at that bolt",
+          "sumPhiRn": 293657.77179577516
+        },
+        "message": "C = 2.814 for 4 bolts at e = 76.2 mm: φR_n = 206.6 kN for R_u = 135.0 kN",
+        "resistance": 206582.86937564082,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.6534907778559421
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.plate.shearYield",
+        "clause": "J4.2(a) (J4-3)",
+        "demand": 135000,
+        "intermediates": {
+          "Agv": 0.001854835
+        },
+        "message": "Shear yielding of the plate",
+        "resistance": 383659.264938,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.35187472931695324
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.plate.shearRupture",
+        "clause": "J4.2(b) (J4-4), B4.3b",
+        "demand": 135000,
+        "intermediates": {
+          "Anv": 0.0012903200000000002
+        },
+        "message": "Shear rupture of the plate on the net section through a bolt line",
+        "resistance": 260220.834396,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.5187901280593049
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.plate.blockShear",
+        "clause": "J4.3 (J4-5)",
+        "demand": 135000,
+        "intermediates": {
+          "Agv": 0.0016532225000000002,
+          "Ant": 0.00017137062500000003,
+          "Anv": 0.001159271875,
+          "Rn": 388524.16246625007,
+          "Ubs": 1,
+          "rupturePath": 388524.16246625007,
+          "yieldPath": 418758.45885237504
+        },
+        "message": "L-shaped block, uniform tension (U_bs = 1)",
+        "resistance": 291393.12184968754,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.46329164924365823
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.plate.flexure",
+        "clause": "F11.1 (F11-1), F11.2; C_b = 1.84 (Manual Part 10)",
+        "demand": 10287,
+        "intermediates": {
+          "Cb": 1.84,
+          "Lb": 0.0762,
+          "LbDOverT2": 552.0000000000001,
+          "MnLtb": 46694.529703495755,
+          "MnYield": 46694.529703495755,
+          "Mp": 46694.529703495755,
+          "Mu": 10287,
+          "S": 0.00009029955058333334,
+          "Z": 0.00013544932587500002,
+          "lever": 0.0762,
+          "ltbCase": "F11.2(b) (F11-3)"
+        },
+        "message": "Plate flexure at the bolt line from the shear at the support distance a",
+        "resistance": 42025.07673314618,
+        "status": "pass",
+        "units": "N m",
+        "utilisation": 0.2447824203944022
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.plate.flexuralRupture",
+        "clause": "J4.5; Manual Eq. 9-8 (Design Example II.A-17B)",
+        "demand": 10287,
+        "intermediates": {
+          "Znet": 0.00009243328287500001
+        },
+        "message": "Flexural rupture on the net section through a bolt line",
+        "resistance": 31068.60571498285,
+        "status": "pass",
+        "units": "N m",
+        "utilisation": 0.33110594322676956
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.plate.interactionYield",
+        "clause": "Manual Eqs. 10-8, 12-2, 12-3 (Design Examples II.A-17B, II.A-19A)",
+        "demand": 0.18373425846602096,
+        "intermediates": {
+          "Mc": 42025.07673314618,
+          "Mr/Mc": 0.2447824203944022,
+          "Pc": 575488.8974070001,
+          "Pr/Pc": 0,
+          "Vc": 383659.264938,
+          "Vr/Vc": 0.35187472931695324,
+          "equation": "Manual Eq. 12-2"
+        },
+        "message": "Interaction of axial, flexural and shear yielding in the plate",
+        "resistance": 1,
+        "status": "pass",
+        "units": "-",
+        "utilisation": 0.18373425846602096
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.plate.ductility",
+        "clause": "Manual Eqs. 10-6, 10-7 (Design Example II.A-19A)",
+        "demand": 0.00635,
+        "intermediates": {
+          "Cprime": 0.2859103241518317,
+          "Mmax": 33711.64248685913,
+          "tmax": 0.006876681202836785
+        },
+        "message": "The plate yields in flexure before the bolts fracture",
+        "resistance": 0.006876681202836785,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.9234105541173674
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.weld.size",
+        "clause": "J2.2b Table J2.4; 5/8 t_p (Manual Part 10, Design Examples II.A-17B, II.A-19A)",
+        "demand": 0.00396875,
+        "intermediates": {
+          "developPlate": 0.00396875,
+          "minimumLength": 0.032,
+          "note": "Two fillets of 5/8 t_p develop the plate, so the weld is not the weak link under the indeterminate moment at the support",
+          "tableJ24Minimum": 0.003175,
+          "thinnerPart": 0.00635
+        },
+        "message": "Fillet 8.0 mm each side; 5/8 t_p = 4.0 mm, Table J2.4 minimum 3.2 mm",
+        "resistance": 0.008,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.49609375
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.weld.strength",
+        "clause": "J2.4 (J2-4), Table J2.5; k_ds = 1.0",
+        "demand": 135000,
+        "intermediates": {
+          "Awe": 0.003304734252553449,
+          "Fnw": 289579800,
+          "kds": 1,
+          "note": "k_ds = 1.0: the weld group is not loaded through its centroid, so the J2-5 increase is not taken"
+        },
+        "message": "Two fillet welds along the plate under the resultant",
+        "resistance": 717738.2129306828,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.18809086316968598
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.support.shearRupture",
+        "clause": "J4.2(b) (J4-4)",
+        "demand": 135000,
+        "intermediates": {
+          "Anv": 0.0105354628,
+          "planes": 2
+        },
+        "message": "Shear rupture of the column flange along both weld lines",
+        "resistance": 2124704.175083216,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.06353825703510589
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.support.thickness",
+        "clause": "Manual Eq. 9-6 (Design Examples II.A-17A, II.A-18, II.A-19A)",
+        "demand": 0.006084923076923077,
+        "intermediates": {
+          "D": 5.039370078740157,
+          "note": "Plate on one side of the support",
+          "tmin": 0.006084923076923077
+        },
+        "message": "The column flange matches the weld's shear rupture strength",
+        "resistance": 0.018033999999999998,
+        "status": "pass",
+        "units": "m",
+        "utilisation": 0.3374139446003703
+      },
+      {
+        "assumptions": [],
+        "checkId": "connection.beam.shearYield",
+        "clause": "J4.2(a) (J4-3)",
+        "demand": 135000,
+        "intermediates": {
+          "Agv": 0.0041225724
+        },
+        "message": "Shear yielding of the beam web (uncoped: shear rupture and block shear do not apply)",
+        "resistance": 852724.0836454377,
+        "status": "pass",
+        "units": "N",
+        "utilisation": 0.15831615711247218
+      }
+    ],
+    "combinationId": "LC1",
+    "designMethod": "LRFD",
+    "edition": "2022",
+    "end": "end",
+    "family": "singlePlate",
+    "freeBody": {
+      "boltGroupCentroid": {
+        "M": 0,
+        "N": 0,
+        "V": 135000
+      },
+      "boltLineNearSupport": {
+        "M": 0,
+        "N": 0,
+        "V": 135000
+      },
+      "note": "The connection is in equilibrium with the beam end actions: the support face carries V, N and V·e with e = a + (gauge/2 for two lines); the plate's critical flexural section is the bolt line nearest the support (V·a)",
+      "supportFace": {
+        "M": 10287,
+        "N": 0,
+        "V": 135000
+      },
+      "supportReaction": {
+        "M": -10287,
+        "N": 0,
+        "V": -135000
+      }
+    },
+    "geometry": {
+      "beam": {
+        "depth": 0.4572,
+        "designation": "W18X50",
+        "end": 0.0381,
+        "flange": 0.014477999999999998,
+        "kdes": 0.024688799999999997,
+        "web": 0.009016999999999999
+      },
+      "bolts": {
+        "designation": "3/4",
+        "diameter": 0.019049999999999997,
+        "hole": 0.0206375,
+        "x": [
+          0.0762
+        ],
+        "y": [
+          0.10795,
+          0.18415,
+          0.26035,
+          0.33655
+        ]
+      },
+      "dimensions": [
+        {
+          "axis": "x",
+          "from": [
+            0,
+            0.0762
+          ],
+          "label": "a",
+          "to": [
+            0.0762,
+            0.0762
+          ],
+          "value": 0.0762
+        },
+        {
+          "axis": "x",
+          "from": [
+            0.0762,
+            0.0762
+          ],
+          "label": "leh (plate)",
+          "to": [
+            0.11430000000000001,
+            0.0762
+          ],
+          "value": 0.0381
+        },
+        {
+          "axis": "x",
+          "from": [
+            0.0381,
+            0.33655
+          ],
+          "label": "leh (beam)",
+          "to": [
+            0.0762,
+            0.33655
+          ],
+          "value": 0.0381
+        },
+        {
+          "axis": "y",
+          "from": [
+            0.11430000000000001,
+            0.0762
+          ],
+          "label": "lev",
+          "to": [
+            0.11430000000000001,
+            0.10795
+          ],
+          "value": 0.03175
+        },
+        {
+          "axis": "y",
+          "count": 3,
+          "from": [
+            0.11430000000000001,
+            0.10795
+          ],
+          "label": "s",
+          "to": [
+            0.11430000000000001,
+            0.33655
+          ],
+          "value": 0.0762
+        },
+        {
+          "axis": "y",
+          "from": [
+            0,
+            0.0762
+          ],
+          "label": "l",
+          "to": [
+            0,
+            0.3683
+          ],
+          "value": 0.2921
+        },
+        {
+          "axis": "x",
+          "from": [
+            0.0762,
+            0.0762
+          ],
+          "label": "gauge",
+          "present": false,
+          "to": [
+            0.0762,
+            0.0762
+          ],
+          "value": 0
+        }
+      ],
+      "origin": "support face at x = 0, beam top at y = 0, y downward",
+      "plate": {
+        "length": 0.2921,
+        "thickness": 0.00635,
+        "width": 0.11430000000000001,
+        "x0": 0,
+        "x1": 0.11430000000000001,
+        "y0": 0.0762,
+        "y1": 0.3683
+      },
+      "support": {
+        "designation": "W14X90",
+        "kind": "columnFlange",
+        "thickness": 0.018033999999999998
+      },
+      "units": "m",
+      "weld": {
+        "length": 0.2921,
+        "sides": 2,
+        "size": 0.008
+      }
+    },
+    "limitations": [
+      "M07 S2: prismatic doubly-symmetric W-shapes only",
+      "User-specified Ky/Kz, Lb, Cb required",
+      "Torsion, non-prismatic and non-W shapes return unsupported",
+      "Continuous-brace flexure path only when Lb ≈ 0; LTB deferred",
+      "H1 uses φcPn/φbMn from prior checks or explicit context fields",
+      "S2 seeds: D.1, E.1C, F.1-1B (Lb=0), G.1B, H.1B; LTB flexure deferred",
+      "Connections (M13): single-plate shear connections of uncoped W beams, one or two bolt lines in standard holes, by the general (extended-configuration) method; the conventional configuration of Manual Table 10-9 is not held"
+    ],
+    "profileEnabled": true,
+    "profileId": "aisc-360-22-lrfd",
+    "resourceGate": "R-CODE-STEEL+R-STEEL-EXAMPLES",
+    "standard": "ANSI/AISC 360",
+    "status": "evaluated",
+    "support": {
+      "designation": "W14X90",
+      "fu": 448159224.0559435,
+      "kind": "columnFlange",
+      "thickness": 0.018033999999999998
+    },
+    "supportMemberId": "c2",
+    "unreconciledAmendments": []
+  },
+  "columnMechanics": null,
+  "contactState": "notApplicable",
+  "contractVersion": 1,
+  "draftId": "dp632305d83708e696",
+  "flexuralDemand": null,
+  "inputHash": "6d7c8152826c79858c86fbffdc49e82d14d9e25763f9bfee0d1821768da7c39d",
+  "inputs": {
+    "connection": {
+      "bolt": "3/4",
+      "boltGroup": "group120",
+      "bracedAgainstRotation": true,
+      "deformationConsidered": true,
+      "end": "end",
+      "supportKind": "columnFlange",
+      "supportMemberId": "c2",
+      "threadsExcluded": false
+    },
+    "id": "dp632305d83708e696",
+    "inputSource": "mixed",
+    "inputSources": {
+      "a": "syntheticFixture",
+      "columns": "syntheticFixture",
+      "fexx": "syntheticFixture",
+      "gauge": "syntheticFixture",
+      "lehBeam": "syntheticFixture",
+      "lehPlate": "syntheticFixture",
+      "lev": "syntheticFixture",
+      "pitch": "syntheticFixture",
+      "plateFu": "syntheticFixture",
+      "plateFy": "syntheticFixture",
+      "plateThickness": "syntheticFixture",
+      "rows": "syntheticFixture",
+      "topOffset": "syntheticFixture",
+      "underrun": "syntheticFixture",
+      "weldSize": "user"
+    },
+    "inputs": {
+      "a": 0.0762,
+      "columns": 1,
+      "fexx": 482633000,
+      "gauge": 0.0762,
+      "lehBeam": 0.0381,
+      "lehPlate": 0.0381,
+      "lev": 0.03175,
+      "pitch": 0.0762,
+      "plateFu": 448159000,
+      "plateFy": 344738000,
+      "plateThickness": 0.00635,
+      "rows": 4,
+      "topOffset": 0.0762,
+      "underrun": 0.00635,
+      "weldSize": 0.008
+    },
+    "kind": "singlePlate",
+    "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+    "targetId": "beam"
+  },
+  "kind": "singlePlate",
+  "limitations": [
+    "DEMONSTRATION — 2022; Demonstration, not a certified design",
+    "The connection is a simple (pinned) connection: the analysis must release the major-axis moment at this end",
+    "Drawing and bill of materials are derived from the inputs; bolt lengths and shop tolerances are the fabricator's"
+  ],
+  "mock": true,
+  "modelHash": "71ce11a1e3447843af53f8bb80a996e253c5d24ecad9b671a0540a61edb78dab",
+  "overall": "pass",
+  "plateAnalysis": null,
+  "previewRunId": "d790cb24e18e4ea7d0d34b89e679c5d40dfdd559322a670ba9c7b315432be9cd",
+  "reinforcementFields": [
+    "Top X",
+    "Top Y",
+    "Bottom X",
+    "Bottom Y"
+  ],
+  "reinforcementProposal": null,
+  "schedule": [
+    {
+      "description": "PL 6.3 mm × 114.3 mm × 292.1 mm",
+      "item": "Plate",
+      "length": 0.2921,
+      "massKg": 1.5975628048020498,
+      "material": "Fy 345 MPa, Fu 448 MPa",
+      "quantity": 1,
+      "thickness": 0.00635,
+      "width": 0.11430000000000001
+    },
+    {
+      "description": "3/4 Group 120 threads included (N), standard holes, snug-tight",
+      "diameter": 0.019049999999999997,
+      "hole": 0.0206375,
+      "item": "Bolts",
+      "note": "Length by grip: plate + beam web + washer, from the bolt supplier's tables",
+      "quantity": 4
+    },
+    {
+      "description": "8.0 mm fillet both sides, E70",
+      "item": "Fillet weld",
+      "length": 0.2921,
+      "quantity": 2,
+      "size": 0.008,
+      "totalLength": 0.5842
+    }
+  ],
+  "sectionMechanics": null,
+  "soilProvenance": null,
+  "sourceProvenance": {
+    "combinationId": "LC1",
+    "kind": "modelAnalysis",
+    "memberEndActions": [
+      0,
+      135000,
+      0,
+      0,
+      0,
+      0,
+      0,
+      135000,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mock": false,
+    "modelHash": "71ce11a1e3447843af53f8bb80a996e253c5d24ecad9b671a0540a61edb78dab",
+    "note": "Exact member end actions of the bound beam (node on element, local axes) for the chosen case or combination",
+    "resultId": "71ce11a1e3447843-LC1",
+    "settingsHash": "71790aa26c6d8ed788862cac0e018ece4494308fa379a455153475c476fb52da",
+    "solverBuildHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
+    "sourceRevision": 2,
+    "targetId": "beam"
+  },
+  "sourceRevision": 2,
+  "currentState": "PASS"
+}

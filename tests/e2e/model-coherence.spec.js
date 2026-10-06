@@ -23,9 +23,16 @@ test("One selection identity follows a bound footing, its support and physical m
   await expect(page.locator("#preview-source")).toHaveValue("model");
   await expect(page.locator("#preview-run")).toBeDisabled();
   const target = await page.locator("#preview-target").inputValue();
-  const title = (await page.locator("#concrete-inspector h2").innerText())
-    .replace(/Mock workflow/i, "")
-    .trim();
+  // The heading's own text, without its profile tag.
+  const title = await page
+    .locator("#concrete-inspector h2")
+    .evaluate((h) =>
+      [...h.childNodes]
+        .filter((n) => n.nodeType === Node.TEXT_NODE)
+        .map((n) => n.textContent)
+        .join("")
+        .trim(),
+    );
   await expect(page.locator("#selected-status")).toContainText(title);
   await expect(page.locator("#selection-tag")).toHaveText(title);
   await expect(draft).toHaveAttribute("aria-current", "true");

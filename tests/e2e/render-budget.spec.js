@@ -70,8 +70,10 @@ test("UKR01 preview run and undo: one viewport frame per task, no redundant expl
     await settle();
     await reset();
     await page.locator("#preview-run").click();
+    // The UKR01 footing is designed on model actions and waits for the
+    // engineer's code inputs (ADR 0028).
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-      "UNSUPPORTED",
+      "INDETERMINATE",
     );
     await settle();
     runs.push(await read());

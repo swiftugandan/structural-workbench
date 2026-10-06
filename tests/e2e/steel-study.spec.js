@@ -25,7 +25,7 @@ test("M07-G catalogue study reanalyses self weight, applies explicitly and undoe
   await expect(page.locator("#design-assign")).toBeVisible();
   await page.locator("[data-tab=steel-overview]").click();
   await page.locator("[data-steel-screen=catalogue]").click();
-  await page.locator("#catalogue-search").fill("W18");
+  await page.locator("#catalogue-search").fill("W18X50");
   await page.locator("#catalogue-search").press("Tab");
   await expect(page.locator("[data-catalogue-row]")).toHaveCount(1);
   await page.locator("[data-assign-ref]").click();
@@ -42,7 +42,8 @@ test("M07-G catalogue study reanalyses self weight, applies explicitly and undoe
   await expect(page.locator("#candidate-run")).toBeDisabled();
   await page.locator("#catalogue-search").fill("");
   await page.locator("#catalogue-search").press("Tab");
-  await expect(page.locator("[data-candidate-ref]")).toHaveCount(5);
+  // The whole verified subset is listed (tools/extract-aisc-shapes.py).
+  await expect(page.locator("[data-candidate-ref]")).toHaveCount(12);
   // Select exactly the two published sections regardless of catalogue ordering.
   for (const el of await page.locator("[data-candidate-ref]").all()) {
     const ref = await el.getAttribute("data-candidate-ref");

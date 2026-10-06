@@ -533,6 +533,30 @@
       "formulation": "docs/formulations/exchange.md",
       "rightsStatus": "Corpus project-authored, redistributable with the repository. buildingSMART schema and PSD files are used for software development with attribution under the buildingSMART copyright notice and are not redistributed (resources/private). IfcOpenShell (LGPL-3.0) and ezdxf (MIT) are oracle tools only, not shipped.",
       "validationUse": "M21 exchange kernel, protocol, CLI and browser acceptance"
+    },
+    {
+      "id": "R-CONNECTION-CODE",
+      "edition": "ANSI/AISC 360-22, Chapter J (and F11 for plate flexure)",
+      "authoritativeOrigin": "https://www.aisc.org/aisc/publications/current-standards/aisc-360/",
+      "contentHashSha256": "6b1322440eedaa0b82d617811dc4b2a2657e7492cf9067cbb3debdf9e610abb7",
+      "rightsStatus": "Acquired for local implementation use from free AISC download; not redistributed in repository",
+      "localPath": "resources/private/aisc-360-22.pdf",
+      "retrievedAt": "2026-09-23T14:57:10.648Z",
+      "resolvedAt": "2026-10-06",
+      "resolution": "Same held document as R-CODE-STEEL; Chapter J covers the bolts, welds and affected elements of the single-plate connection (ADR 0030)",
+      "validationUse": "M13 single-plate connection dossier (docs/code-profiles/aisc-360-22-lrfd/dossier-connection.md)"
+    },
+    {
+      "id": "R-CONNECTION-EXAMPLES",
+      "edition": "AISC Companion to the Manual v16.0, Vol. 1: Design Examples, Part II.A (single-plate connections II.A-17A/17B/18/19A)",
+      "authoritativeOrigin": "https://www.aisc.org/aisc/publications/steel-construction-manual/manual-companion-for-16th-edition/",
+      "contentHashSha256": "ec25b52e1d7b6b9ec9e5eaccc27452153208784d7d715908daa2595dd8f92423",
+      "rightsStatus": "Acquired for local implementation use from free AISC download; not redistributed in repository",
+      "localPath": "resources/private/aisc-design-examples-v16.pdf",
+      "retrievedAt": "2026-09-23T14:57:10.648Z",
+      "resolvedAt": "2026-10-06",
+      "resolution": "Same held document as R-STEEL-EXAMPLES; Part II.A works single-plate connections and quotes the Manual equations and C values used (ADR 0030). The Steel Construction Manual itself (Table 10-9, Tables 7-6/7-7, Part 9) is not held.",
+      "validationUse": "fixtures/design/aisc-360-22-lrfd/connection-single-plate.published.json"
     }
   ],
   "unresolved": [
@@ -540,8 +564,6 @@
     "R-COLUMN-EXAMPLES",
     "R-COMPOSITE-CODE",
     "R-CONCRETE-EXAMPLES",
-    "R-CONNECTION-CODE",
-    "R-CONNECTION-EXAMPLES",
     "R-DETAILING",
     "R-FOUNDATION-EXAMPLES",
     "R-FULL-INVENTORY",

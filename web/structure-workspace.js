@@ -65,7 +65,7 @@ export function renderStructureEditor({
         .filter((m) => m.start === entity.nodeId || m.end === entity.nodeId)
         .map((m) => esc(m.id))
         .join(", ") || "None"
-    }</p><p class="form-help">Connectivity and end releases come from the analytical model. Connection hardware is not designed.</p>`;
+    }</p><p class="form-help">Connectivity and end releases come from the analytical model. Connection hardware is designed only for single-plate shear connections drafted in the design workspace (M13).</p>`;
   if (entity.supportId) fields += `<p>Support: ${esc(entity.supportId)}</p>`;
   if (collection === "supportDetails")
     fields +=

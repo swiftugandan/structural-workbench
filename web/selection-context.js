@@ -10,13 +10,14 @@ export function previewIdentity(project, draft) {
     rcColumn: "RC column",
     slab: "Slab",
     padFooting: "Pad footing",
+    singlePlate: "Steel connection",
   }[draft.kind];
   const target = draft.targetId ? entityLabel(project, draft.targetId) : null;
   const name = binding?.name || `${kind} ${draft.id}`;
   return {
     name,
     target,
-    text: `${name}${target ? ` · ${draft.kind === "padFooting" ? "support" : "member"} ${target}` : " · unbound draft"}`,
+    text: `${name}${target ? ` · ${draft.kind === "padFooting" ? "support" : draft.kind === "singlePlate" ? `beam ${draft.connection?.end === "start" ? "start" : "end"} of` : "member"} ${target}` : " · unbound draft"}`,
   };
 }
 

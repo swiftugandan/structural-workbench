@@ -111,21 +111,13 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     );
     expect(run.overall).toBe(settled.toLowerCase());
     expect(run.mock).toBe(true);
-    if (kind === "rcBeam" || kind === "padFooting") {
-      // ADR 0026/0028: the EC2 profile's rows, labelled as a demonstration.
-      expect(run.codeProfile.id).toBe("ec2-uk-na");
-      expect(run.codeProfile.certification).toBe(
-        "Demonstration, not a certified design",
-      );
-      expect(run.checks.every((c) => c.status !== "unsupported")).toBe(true);
-    } else {
-      expect(run.codeProfile).toBeNull();
-      expect(
-        run.checks.every(
-          (c) => c.status === "unsupported" && c.utilisation === null,
-        ),
-      ).toBe(true);
-    }
+    // ADR 0026/0028/0029: every family's run carries the EC2 profile's rows,
+    // labelled as a demonstration.
+    expect(run.codeProfile.id).toBe("ec2-uk-na");
+    expect(run.codeProfile.certification).toBe(
+      "Demonstration, not a certified design",
+    );
+    expect(run.checks.every((c) => c.status !== "unsupported")).toBe(true);
     expect(run.sourceProvenance.mock).toBe(false);
     if (kind === "rcBeam") {
       const d = page.waitForEvent("download");

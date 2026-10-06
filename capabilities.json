@@ -33,7 +33,7 @@
     "soil contact",
     "code-generated wind/seismic loads",
     "code-certified member sizing",
-    "connections",
+    "connections other than single-plate shear connections (M13)",
     "reinforcement detailing",
     "DWG/native PROKON formats",
     "Revit plugins",
@@ -459,15 +459,39 @@
       ]
     },
     {
+      "capabilityId": "steel-connection-single-plate",
+      "scopeKey": "M13 / aisc-360-22-lrfd single-plate shear connection (demonstration)",
+      "implementationStatus": "partial",
+      "verificationStatus": "parent-gate-pass",
+      "comparisonStatus": "UNKNOWN",
+      "resourceBlockers": [],
+      "limitations": [
+        "AISC 360-22 LRFD demonstration from the held Specification and the Manual equations reproduced in Design Examples v16 (II.A-17A, II.A-17B, II.A-19A); not a certified design (ADR 0030)",
+        "Single-plate (shear tab) connections of uncoped W beams to a column flange, column web or girder web; one or two vertical bolt lines in standard holes, bearing-type, snug-tight",
+        "General (extended-configuration) method for every geometry: the conventional configuration of Manual Table 10-9 is not held, so some connections the Manual's conventional rules accept fail here (bolt-group eccentricity e = a, plate ductility t ≤ t_max)",
+        "Simple connections only: a moment carried through the end, axial compression, minor-axis actions and torsion are unsupported; coped beams, slotted or oversized holes, slip-critical bolts and other connection families are not implemented",
+        "Bolt group by the instantaneous centre (Crawford–Kulak), verified against the C values quoted in the held examples; bolt lengths are the fabricator's",
+        "Not a claim of commercial PROKON parity or professional code certification"
+      ],
+      "evidenceReferences": [
+        "docs/adr/0030-single-plate-shear-connection.md",
+        "docs/formulations/connection.md",
+        "docs/code-profiles/aisc-360-22-lrfd/dossier-connection.md",
+        "fixtures/design/aisc-360-22-lrfd/connection-single-plate.published.json",
+        "fixtures/design/aisc-360-22-lrfd/connection-oracle.json",
+        "evidence/M13/full/gate-M13.json"
+      ]
+    },
+    {
       "capabilityId": "advanced-suite",
-      "scopeKey": "M10–M13, M15–M21, M23",
+      "scopeKey": "M15–M21, M23",
       "implementationStatus": "excluded",
       "verificationStatus": "not-verified",
       "comparisonStatus": "UNKNOWN",
       "resourceBlockers": [],
       "limitations": [
         "Outside analysis MVP; see PARITY_ROADMAP.md",
-        "The M10 plate-v1, M12 rc-column and M15 response-v1 numerical families are listed separately; their code checks remain outside"
+        "The M10 slab, M11 footing, M12 column, M13 single-plate connection and M15 response-v1 capabilities are listed separately; everything else in these milestones remains outside"
       ],
       "evidenceReferences": []
     }

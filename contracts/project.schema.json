@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.8.0"
+      "const": "1.9.0"
     },
     "id": {
       "type": "string",
@@ -490,7 +490,8 @@
                   "rcBeam",
                   "rcColumn",
                   "slab",
-                  "padFooting"
+                  "padFooting",
+                  "singlePlate"
                 ]
               },
               "storeyId": {
@@ -1233,7 +1234,8 @@
             "rcBeam",
             "rcColumn",
             "slab",
-            "padFooting"
+            "padFooting",
+            "singlePlate"
           ]
         },
         "targetId": {
@@ -1251,6 +1253,13 @@
           "additionalProperties": {
             "type": "number",
             "exclusiveMinimum": 0
+          },
+          "properties": {
+            "underrun": {
+              "type": "number",
+              "minimum": 0,
+              "description": "singlePlate beam length underrun; may be zero"
+            }
           }
         },
         "soilReference": {
@@ -1575,6 +1584,73 @@
                 "maximum": 3
               },
               "description": "slab: column c_x × c_y (m) for punching"
+            }
+          }
+        },
+        "connection": {
+          "type": "object",
+          "description": "Schema 1.9.0 (ADR 0030): a singlePlate draft's connection at one end of its bound beam: the end, the supporting member meeting the beam there, the support element, the bolts and the engineer's confirmations. Numeric geometry is in inputs (rows, columns, pitch, gauge, plateThickness, plateFy, plateFu, lev, lehPlate, a, lehBeam, underrun, topOffset, weldSize, fexx).",
+          "additionalProperties": false,
+          "required": [
+            "end",
+            "supportKind",
+            "bolt",
+            "boltGroup",
+            "threadsExcluded",
+            "deformationConsidered"
+          ],
+          "properties": {
+            "end": {
+              "enum": [
+                "start",
+                "end"
+              ]
+            },
+            "supportMemberId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "supportKind": {
+              "enum": [
+                "columnFlange",
+                "columnWeb",
+                "girderWeb"
+              ]
+            },
+            "bolt": {
+              "enum": [
+                "1/2",
+                "5/8",
+                "3/4",
+                "7/8",
+                "1",
+                "1-1/8",
+                "1-1/4",
+                "M12",
+                "M16",
+                "M20",
+                "M22",
+                "M24",
+                "M27",
+                "M30",
+                "M36"
+              ]
+            },
+            "boltGroup": {
+              "enum": [
+                "group120",
+                "group150"
+              ]
+            },
+            "threadsExcluded": {
+              "type": "boolean"
+            },
+            "deformationConsidered": {
+              "type": "boolean"
+            },
+            "bracedAgainstRotation": {
+              "type": "boolean"
             }
           }
         }

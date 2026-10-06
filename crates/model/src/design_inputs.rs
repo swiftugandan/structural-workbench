@@ -32,6 +32,60 @@ pub struct DesignPreview {
     /// fields leave the checks that need them indeterminate.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub code_inputs: Option<CodeInputs>,
+    /// singlePlate only (schema 1.9.0, ADR 0030): the connection's end,
+    /// support and hardware. Absent means the connection is not configured.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub connection: Option<SinglePlateInputs>,
+}
+
+/// Bolt designations of AISC 360-22 Tables J3.3/J3.4 (US) and J3.3M/J3.4M
+/// (metric); the design crate's bolt table must list the same.
+pub const STEEL_BOLT_DESIGNATIONS: &[&str] = &[
+    "1/2", "5/8", "3/4", "7/8", "1", "1-1/8", "1-1/4", "M12", "M16", "M20", "M22", "M24", "M27", "M30", "M36",
+];
+pub const SUPPORT_KINDS: &[&str] = &["columnFlange", "columnWeb", "girderWeb"];
+pub const BOLT_GROUPS: &[&str] = &["group120", "group150"];
+
+/// The single-plate connection at one end of the bound beam (ADR 0030).
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct SinglePlateInputs {
+    /// "start" or "end" of the bound member.
+    pub end: String,
+    /// The supporting member at that end's node (column or girder).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub support_member_id: Option<String>,
+    pub support_kind: String,
+    pub bolt: String,
+    pub bolt_group: String,
+    pub threads_excluded: bool,
+    /// Deformation at the bolt hole at service load is a design consideration.
+    pub deformation_considered: bool,
+    /// The beam is braced against rotation about its longitudinal axis.
+    /// Absent: not confirmed (the plate interactions are indeterminate).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub braced_against_rotation: Option<bool>,
+}
+
+impl SinglePlateInputs {
+    pub fn validate(&self) -> Result<()> {
+        if !["start", "end"].contains(&self.end.as_str()) {
+            return Err(err("INVALID_SCHEMA", "Connection end must be start or end"));
+        }
+        if !SUPPORT_KINDS.contains(&self.support_kind.as_str()) {
+            return Err(err("INVALID_SCHEMA", "Unknown connection support kind"));
+        }
+        if !STEEL_BOLT_DESIGNATIONS.contains(&self.bolt.as_str()) {
+            return Err(err("INVALID_SCHEMA", "Unknown bolt size"));
+        }
+        if !BOLT_GROUPS.contains(&self.bolt_group.as_str()) {
+            return Err(err("INVALID_SCHEMA", "Unknown bolt group"));
+        }
+        if self.support_member_id.as_deref().is_some_and(|m| m.is_empty() || m.len() > 64) {
+            return Err(err("INVALID_SCHEMA", "Invalid support member reference"));
+        }
+        Ok(())
+    }
 }
 
 /// Exposure classes of EN 206 / EN 1992-1-1 Table 4.1.
@@ -393,12 +447,21 @@ impl SectionMechanicsInputs {
 impl DesignPreview {
     /// Drafts bound to an analytical member (rather than a support).
     pub fn binds_member(&self) -> bool {
-        matches!(self.kind.as_str(), "rcBeam" | "rcColumn")
+        matches!(self.kind.as_str(), "rcBeam" | "rcColumn" | "singlePlate")
     }
 
     pub fn validate(&self) -> Result<()> {
+        if let Some(c) = &self.connection {
+            if self.kind != "singlePlate" {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Connection inputs apply only to single-plate connection drafts",
+                ));
+            }
+            c.validate()?;
+        }
         if let Some(m) = &self.mechanics {
-            if !self.binds_member() {
+            if !matches!(self.kind.as_str(), "rcBeam" | "rcColumn") {
                 return Err(err(
                     "INVALID_SCHEMA",
                     "Section mechanics apply only to RC beam and column drafts",
@@ -475,8 +538,27 @@ impl DesignPreview {
                 "embedment",
                 "soilUnitWeight",
             ],
+            "singlePlate" => &[
+                "rows",
+                "columns",
+                "pitch",
+                "gauge",
+                "plateThickness",
+                "plateFy",
+                "plateFu",
+                "lev",
+                "lehPlate",
+                "a",
+                "lehBeam",
+                "underrun",
+                "topOffset",
+                "weldSize",
+                "fexx",
+            ],
             _ => return Err(err("INVALID_SCHEMA", "Unknown design preview kind")),
         };
+        // Inputs that may be zero (the beam length underrun).
+        let zero_ok: &[&str] = if self.kind == "singlePlate" { &["underrun"] } else { &[] };
         if !["syntheticFixture", "user", "mixed"].contains(&self.input_source.as_str())
             || self.soil_reference.len() > 512
         {
@@ -494,9 +576,9 @@ impl DesignPreview {
         }
         if self.inputs.len() != keys.len()
             || keys.iter().any(|k| {
-                self.inputs
-                    .get(*k)
-                    .is_none_or(|v| !v.is_finite() || *v <= 0.0)
+                self.inputs.get(*k).is_none_or(|v| {
+                    !v.is_finite() || *v < 0.0 || (*v == 0.0 && !zero_ok.contains(k))
+                })
             })
         {
             return Err(err(
@@ -541,6 +623,19 @@ impl DesignPreview {
                     "Cover, links and bars consume the column section",
                 ));
             }
+        }
+        if self.kind == "singlePlate" {
+            let (rows, cols) = (self.inputs["rows"], self.inputs["columns"]);
+            if rows.fract() != 0.0 || !(2.0..=12.0).contains(&rows) {
+                return Err(err("INVALID_SCHEMA", "Bolt rows must be an integer from 2 to 12"));
+            }
+            if cols.fract() != 0.0 || !(1.0..=2.0).contains(&cols) {
+                return Err(err("INVALID_SCHEMA", "Bolt lines must be 1 or 2"));
+            }
+            if self.inputs["plateFu"] < self.inputs["plateFy"] {
+                return Err(err("INVALID_SCHEMA", "Plate Fu must not be below Fy"));
+            }
+            return Ok(());
         }
         let depth = if self.binds_member() {
             self.inputs["depth"]

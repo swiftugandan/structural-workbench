@@ -825,7 +825,7 @@ fn excluded_domains() -> Value {
         "soil contact",
         "code-generated wind/seismic loads",
         "code-certified member sizing",
-        "connections",
+        "connections other than single-plate shear connections (M13)",
         "reinforcement detailing",
         "DWG/native PROKON formats",
         "Revit plugins",
@@ -846,7 +846,7 @@ fn domain_disclosure() -> Value {
 fn capabilities_payload() -> Value {
     json!({
         "protocolVersion": 1,
-        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0", "1.8.0"],
+        "schemaVersions": ["0.9.0", "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0", "1.8.0", "1.9.0"],
         "analysisTypes": ["linearStatic", "elasticBuckling", "secondOrder", "modal", "harmonic", "responseSpectrum"],
         // exchange-v1 (ADR 0025): browser-only file exchange, not a native
         // authoring-tool adapter.

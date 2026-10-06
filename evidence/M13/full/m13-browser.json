@@ -1,0 +1,60 @@
+{
+  "taskId": "M13-parent",
+  "milestone": "M13",
+  "sourceHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
+  "buildHash": "4b37f22d084c9e4cb80ebd43659d1216666f196e9b25154df150f097568f3ea3",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "playwright-results.json": "3a9c6c44248f9cb293d14cb76527c0325e8e6e00ceb003141608e9bef708d743",
+    "connection-checks.png": "de431f994b346f3011663f15d4a52066c606dba862924f68f121aafd4e2c615c",
+    "connection-drawing.png": "7e95085745c6be934c3e4119ee665c7a8401c2c1cdab9bf7ca6c64b1105fa289",
+    "connection-drawing.svg": "be7f3325147594db5c976c6b58f5cdc87d91178880ae359db127c77d750d161e",
+    "connection-run.json": "0917f37e84003338e8609b2239ae9dd0600f17706a469b5cae806332ee2d02ee",
+    "calculation-record.html": "fbfc6eed03bb4d6c14dce03b7c1006392dfac1fa3b8e29ed1fb79410f0a3219e",
+    "moment-transfer.png": "39e4d96f1c1ab74b38dd69f6db3e844ec0553eac0298def099bff5b2d349f36e"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-06T02:05:00.053Z",
+  "status": "PASS",
+  "testCount": 3,
+  "testIds": [
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+    "Steel connection: bind the beam end, check, draw, bill, report and persist",
+    "Steel connection: moment transfer and missing inputs are never a pass"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/steel-connection.spec.js",
+    "tests/e2e/capability-ledger.spec.js"
+  ],
+  "stats": {
+    "startTime": "2026-10-06T02:04:33.201Z",
+    "duration": 26824.199999999997,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifacts": [
+    "playwright-results.json",
+    "connection-checks.png",
+    "connection-drawing.png",
+    "connection-drawing.svg",
+    "connection-run.json",
+    "calculation-record.html",
+    "moment-transfer.png"
+  ]
+}

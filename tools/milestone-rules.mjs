@@ -100,6 +100,14 @@ export const m10 = [
   "m10-browser",
   "m10-acceptance",
 ];
+export const m13 = [
+  "build",
+  "connection-native",
+  "connection-model",
+  "connection-protocol",
+  "m13-browser",
+  "m13-acceptance",
+];
 export const m11 = [
   "build",
   "footing-native",
@@ -280,6 +288,24 @@ export const requiredIds = {
     "Slab plate refusals keep the project and explain the reason",
     "Slab on model columns: derive the columns, solve and apply the column loads to the frame",
     "Slab EC2 design: reinforcement map, span/depth, report and persistence",
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+  ],
+  "m13-acceptance": [
+    "M13-EQUILIBRIUM",
+    "M13-FAILURE-MODES",
+    "M13-UNSUPPORTED",
+    "M13-WORKED-EXAMPLES",
+    "M13-MODEL-LINK",
+    "M13-DRAWING-BOM",
+    "M13-USER-JOURNEY",
+    "M13-FAILURE-PATHS",
+    "M13-PERSISTENCE",
+    "M13-LEDGER",
+    "M13-ORACLE-PROVENANCE",
+  ],
+  "m13-browser": [
+    "Steel connection: bind the beam end, check, draw, bill, report and persist",
+    "Steel connection: moment transfer and missing inputs are never a pass",
     "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
   ],
   "m11-acceptance": [
@@ -507,6 +533,7 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
                 "M10",
                 "M11",
                 "M12",
+                "M13",
                 "M14",
                 "M21",
               ].includes(milestone)
@@ -571,6 +598,13 @@ export function recordIssues(name, e, build, { milestone = "M01" } = {}) {
       e.stats?.expected < 5)
   )
     errors.push(`${name}: failed, skipped or incomplete M10 browser journeys`);
+  if (
+    name === "m13-browser" &&
+    (e.stats?.unexpected !== 0 ||
+      e.stats?.skipped !== 0 ||
+      e.stats?.expected < 3)
+  )
+    errors.push(`${name}: failed, skipped or incomplete M13 browser journeys`);
   if (
     name === "m11-browser" &&
     (e.stats?.unexpected !== 0 ||

@@ -1,7 +1,7 @@
 {
  "stateVersion": 1,
  "specVersion": "1.0",
- "activeMilestone": "M13",
+ "activeMilestone": "M17",
  "activeTask": null,
  "acceptedMilestones": [
   "M01",
@@ -19,7 +19,8 @@
   "M08",
   "M12",
   "M11",
-  "M10"
+  "M10",
+  "M13"
  ],
  "tasks": {
   "M00-A": {
@@ -4815,6 +4816,83 @@
    ],
    "verifiedSourceHash": "a2bd5864ba40d746a40812d55e8497e5e308c27e155c207ab5f318452166e0bb",
    "verifiedBuildHash": "e4eb6d7849ff4b405e2e3638c05e2d90585805795818a7b49b401c4da5354be3"
+  },
+  "M13-parent": {
+   "id": "M13-parent",
+   "useCase": "Detail a steel connection (SPECIFICATION M13): single-plate shear connection at a beam end under aisc-360-22-lrfd (demonstration), from the beam's exact end actions, with every limit state, a dimensioned drawing, bill of materials and calculation record",
+   "dependencies": [
+    "M07-parent"
+   ],
+   "status": "ACCEPTED",
+   "ownedPaths": [
+    "crates/design/src/profile/aisc36022/connection",
+    "crates/design/data/aisc-v16-subset.json",
+    "tools/extract-aisc-shapes.py",
+    "tools/oracles/connection_oracle.py",
+    "fixtures/design/aisc-360-22-lrfd/connection-single-plate.published.json",
+    "fixtures/design/aisc-360-22-lrfd/connection-oracle.json",
+    "fixtures/models/C01.json",
+    "tools/make-connection-fixture.mjs",
+    "crates/model/src/design_inputs.rs",
+    "crates/model/src/migrate.rs",
+    "crates/model/tests/single_plate_1_9.rs",
+    "crates/wasm-api/src/preview_workspace.rs",
+    "crates/wasm-api/tests/single_plate.rs",
+    "contracts/project.schema.json",
+    "contracts/project-v1.8.schema.json",
+    "web/steel-connection.js",
+    "web/connection-drawing.js",
+    "web/design-previews.js",
+    "web/reports/report.js",
+    "tests/e2e/steel-connection.spec.js",
+    "docs/adr/0030-single-plate-shear-connection.md",
+    "docs/formulations/connection.md",
+    "docs/code-profiles/aisc-360-22-lrfd/dossier-connection.md",
+    "tools/run-m13-parent.mjs",
+    "tools/record-m13-acceptance.mjs",
+    "evidence/M13/full"
+   ],
+   "acceptanceIds": [
+    "M13-EQUILIBRIUM",
+    "M13-FAILURE-MODES",
+    "M13-UNSUPPORTED",
+    "M13-WORKED-EXAMPLES",
+    "M13-MODEL-LINK",
+    "M13-DRAWING-BOM",
+    "M13-USER-JOURNEY",
+    "M13-FAILURE-PATHS",
+    "M13-PERSISTENCE",
+    "M13-LEDGER",
+    "M13-ORACLE-PROVENANCE"
+   ],
+   "requiredCommands": [
+    "PORT=4183 node tools/run-m13-parent.mjs"
+   ],
+   "outcomes": [
+    {
+     "check": "gate-M13",
+     "status": "PASS",
+     "evidencePath": "evidence/M13/full/gate-M13.json"
+    },
+    {
+     "check": "m13-acceptance",
+     "status": "PASS",
+     "evidencePath": "evidence/M13/full/m13-acceptance.json"
+    }
+   ],
+   "actualOutcomes": [
+    "Gate 11/11 PASS: connection kernel (design 88 tests incl. 11 connection), model 1.9.0, protocol 5/5, 3 browser journeys",
+    "ICR (Crawford–Kulak) reproduces six published C values and C′ on the table grid; found and fixed a spurious far-field root (translation asymptote) and an unsigned residual admitting antiparallel solutions",
+    "II.A-17A/17B/19A reconcile within documented rounding chains; general method discrepancies documented (17A bolt group at e = a fails, 17B ductility fails, C(38.7°) 0.05 % below C(30°))",
+    "Independent oracle (grid/Nelder–Mead ICR, recoded limit states) agrees to 1e-8 on six cases incl. metric, uplift, two lines and tension",
+    "W catalogue subset regenerated reproducibly from the held Shapes Database with kdes/T and 7 more shapes (existing values unchanged); study defaults to five candidates",
+    "Full browser regression run: 6 stale specs repaired (slab/footing expectations since M10/M11, heading tag since M08, catalogue size), all pass"
+   ],
+   "evidencePaths": [
+    "evidence/M13/full"
+   ],
+   "verifiedSourceHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
+   "verifiedBuildHash": "4b37f22d084c9e4cb80ebd43659d1216666f196e9b25154df150f097568f3ea3"
   }
  },
  "blockers": [
@@ -4865,9 +4943,9 @@
   }
  ],
  "lastVerifiedSourceRevision": "ccd4ada",
- "lastVerifiedBuildHash": "c881053200de3a1c8fdb1f96de0829627b8775c25abeabfbecb2810aaa01afe8",
- "nextAction": "M13 single-plate (fin plate) shear connection to AISC 360-22 LRFD (held text + Design Examples II.A-17A/B, II.A-18; ICR bolt group validated on example C values), then M16 detailing, M18 prestress; ADR 0026 demonstration pattern.",
+ "lastVerifiedBuildHash": "4b37f22d084c9e4cb80ebd43659d1216666f196e9b25154df150f097568f3ea3",
+ "nextAction": "M17 composite beam under AISC 360-22 Chapter I (held text + Design Examples I.1/I.2): construction stage on the bare steel, composite flexure by plastic stress distribution with partial composite action, steel headed stud anchors in deck (I8.2a), effective width, lower-bound moment of inertia deflections; then M16 detailing sub-slices, M18 prestress.",
  "handoffPath": "HANDOFF.md",
- "lastVerifiedSourceHash": "b53cf45b187bb6d0cd21a32600d11636e0103201c323a084eed3921c20e211d7",
- "lastVerifiedScope": "M10 parent on source b53cf45b: gate 11/11; slab browser journeys pass"
+ "lastVerifiedSourceHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
+ "lastVerifiedScope": "M13 parent on source 79a0dba2: gate 11/11; full browser regression green after repairs"
 }

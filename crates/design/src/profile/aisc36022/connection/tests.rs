@@ -684,3 +684,8 @@ fn matches_the_independent_oracle() {
         }
     }
 }
+
+#[test]
+fn model_bolt_list_matches_the_tables() {
+    assert_eq!(workbench_model::STEEL_BOLT_DESIGNATIONS, Bolt::designations().as_slice());
+}

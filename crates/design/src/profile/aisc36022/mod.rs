@@ -53,6 +53,7 @@ impl CodeProfile for Aisc36022LrfdProfile {
                 "flexure".into(),
                 "shear".into(),
                 "interaction-H1".into(),
+                "connection-single-plate".into(),
             ],
             limitations: vec![
                 "M07 S2: prismatic doubly-symmetric W-shapes only".into(),
@@ -61,6 +62,7 @@ impl CodeProfile for Aisc36022LrfdProfile {
                 "Continuous-brace flexure path only when Lb ≈ 0; LTB deferred".into(),
                 "H1 uses φcPn/φbMn from prior checks or explicit context fields".into(),
                 "S2 seeds: D.1, E.1C, F.1-1B (Lb=0), G.1B, H.1B; LTB flexure deferred".into(),
+                "Connections (M13): single-plate shear connections of uncoped W beams, one or two bolt lines in standard holes, by the general (extended-configuration) method; the conventional configuration of Manual Table 10-9 is not held".into(),
             ],
             certification: super::DEMONSTRATION.into(),
             unreconciled_amendments: vec![],

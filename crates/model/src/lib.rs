@@ -13,11 +13,11 @@ pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, EXPOSURE_CLASSES, MAX_BRACING_POINTS, MAX_SLAB_COLUMNS,
     CodeInputs, STRUCTURAL_SYSTEMS,
     MECHANICS_COMMON_KEYS, SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs,
-    SlabColumn, SlabPlateInputs, SteelDesign, SteelServiceability,
+    SlabColumn, SlabPlateInputs, SteelDesign, SteelServiceability, SinglePlateInputs, STEEL_BOLT_DESIGNATIONS,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,
-    SCHEMA_1_4, SCHEMA_1_5, SCHEMA_1_6, SCHEMA_1_7, import_project,
+    SCHEMA_1_4, SCHEMA_1_5, SCHEMA_1_6, SCHEMA_1_7, SCHEMA_1_8, import_project,
 };
 pub use section_props::{RectangularSection, solid_rectangle, solid_rectangle_j};
 pub use structure::Structure;
@@ -507,12 +507,29 @@ impl Project {
             }
             if let Some(id) = &draft.target_id {
                 let exists = match draft.kind.as_str() {
-                    "rcBeam" | "rcColumn" => self.members.iter().any(|m| &m.id == id),
+                    "rcBeam" | "rcColumn" | "singlePlate" => self.members.iter().any(|m| &m.id == id),
                     "padFooting" => self.supports.iter().any(|s| &s.id == id),
                     _ => false,
                 };
                 if !exists {
                     return Err(err("DANGLING_REFERENCE", "Preview target no longer exists"));
+                }
+            }
+            // A connection's support must meet the beam at the connected end.
+            if let (Some(c), Some(target)) = (&draft.connection, &draft.target_id)
+                && let Some(support) = &c.support_member_id
+            {
+                let beam = self.members.iter().find(|m| &m.id == target).unwrap();
+                let node = if c.end == "start" { &beam.start } else { &beam.end };
+                let meets = self
+                    .members
+                    .iter()
+                    .any(|m| &m.id == support && m.id != beam.id && (&m.start == node || &m.end == node));
+                if !meets {
+                    return Err(err(
+                        "DANGLING_REFERENCE",
+                        "The connection's supporting member must meet the beam at the connected end",
+                    ));
                 }
             }
         }

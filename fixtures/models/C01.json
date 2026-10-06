@@ -1,0 +1,419 @@
+{
+  "analysisMode": "spatial",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "C01",
+  "loadCases": [
+    {
+      "category": "other",
+      "id": "LC1",
+      "name": "Floor"
+    }
+  ],
+  "loads": [
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -30000
+      ],
+      "id": "w",
+      "member": "beam",
+      "type": "uniform"
+    }
+  ],
+  "materials": [
+    {
+      "E": 199947961501.88248,
+      "density": 7850,
+      "id": "dm026da40948d982ea58a9",
+      "name": "ASTM A992",
+      "nu": 0.3
+    },
+    {
+      "E": 199947961501.88248,
+      "density": 7850,
+      "id": "dm20717d743ea9d2686a4b",
+      "name": "ASTM A992",
+      "nu": 0.3
+    },
+    {
+      "E": 199947961501.88248,
+      "density": 7850,
+      "id": "dmb303d06c707da9c46b0f",
+      "name": "ASTM A992",
+      "nu": 0.3
+    },
+    {
+      "E": 200000000000,
+      "density": 7850,
+      "id": "mat1",
+      "name": "steel",
+      "nu": 0.3
+    }
+  ],
+  "members": [
+    {
+      "end": "t2",
+      "id": "beam",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "dm026da40948d982ea58a9",
+      "releaseEnd": {
+        "my": false,
+        "mz": true
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": true
+      },
+      "section": "ds026da40948d982ea58a9",
+      "start": "t1",
+      "steelDesign": {
+        "bracing": "notProvided",
+        "cb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "ky": {
+          "source": "notProvided",
+          "value": null
+        },
+        "kz": {
+          "source": "notProvided",
+          "value": null
+        },
+        "lb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "materialRef": "astm-a992-50-65-v1",
+        "profileId": "aisc-360-22-lrfd",
+        "sectionRef": "aisc-shapes-v16.0-subset-1:W18X50",
+        "stabilityBasis": "notProvided"
+      }
+    },
+    {
+      "end": "t1",
+      "id": "c1",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "dmb303d06c707da9c46b0f",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "dsb303d06c707da9c46b0f",
+      "start": "b1",
+      "steelDesign": {
+        "bracing": "notProvided",
+        "cb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "ky": {
+          "source": "notProvided",
+          "value": null
+        },
+        "kz": {
+          "source": "notProvided",
+          "value": null
+        },
+        "lb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "materialRef": "astm-a992-50-65-v1",
+        "profileId": "aisc-360-22-lrfd",
+        "sectionRef": "aisc-shapes-v16.0-subset-1:W14X90",
+        "stabilityBasis": "notProvided"
+      }
+    },
+    {
+      "end": "t2",
+      "id": "c2",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "dm20717d743ea9d2686a4b",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "ds20717d743ea9d2686a4b",
+      "start": "b2",
+      "steelDesign": {
+        "bracing": "notProvided",
+        "cb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "ky": {
+          "source": "notProvided",
+          "value": null
+        },
+        "kz": {
+          "source": "notProvided",
+          "value": null
+        },
+        "lb": {
+          "source": "notProvided",
+          "value": null
+        },
+        "materialRef": "astm-a992-50-65-v1",
+        "profileId": "aisc-360-22-lrfd",
+        "sectionRef": "aisc-shapes-v16.0-subset-1:W14X90",
+        "stabilityBasis": "notProvided"
+      }
+    }
+  ],
+  "metadata": {
+    "createdBy": "Structural Workbench",
+    "description": "W18X50 beam pinned between two W14X90 columns, 30 kN/m (M13 connection fixture)",
+    "entityLabels": {
+      "LC1": "lc1",
+      "b1": "n1",
+      "b2": "n3",
+      "beam": "m3",
+      "c1": "m1",
+      "c2": "m2",
+      "dm026da40948d982ea58a9": "mat4",
+      "dm20717d743ea9d2686a4b": "mat3",
+      "dmb303d06c707da9c46b0f": "mat2",
+      "ds026da40948d982ea58a9": "sec4",
+      "ds20717d743ea9d2686a4b": "sec3",
+      "dsb303d06c707da9c46b0f": "sec2",
+      "mat1": "mat1",
+      "s": "sec1",
+      "s1": "s1",
+      "s2": "s2",
+      "t1": "n2",
+      "t2": "n4",
+      "w": "l1"
+    }
+  },
+  "name": "Single-plate connection frame",
+  "nodes": [
+    {
+      "id": "b1",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "b2",
+      "position": [
+        9,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "t1",
+      "position": [
+        0,
+        0,
+        4
+      ]
+    },
+    {
+      "id": "t2",
+      "position": [
+        9,
+        0,
+        4
+      ]
+    }
+  ],
+  "revision": 0,
+  "schemaVersion": "1.9.0",
+  "sections": [
+    {
+      "A": 0.009483852,
+      "Iy": 0.000016690880166559998,
+      "Iz": 0.0003329851404799999,
+      "J": 5.161269677439999e-7,
+      "cy": 0.2286,
+      "cz": 0.09525,
+      "id": "ds026da40948d982ea58a9",
+      "name": "W18X50",
+      "provenance": "aisc-shapes-v16.0-subset-1; AISC x → local z, AISC y → local y"
+    },
+    {
+      "A": 0.01709674,
+      "Iy": 0.00015067577606719997,
+      "Iz": 0.0004158151941743999,
+      "J": 0.0000016898995879359996,
+      "cy": 0.17779999999999999,
+      "cz": 0.18414999999999998,
+      "id": "ds20717d743ea9d2686a4b",
+      "name": "W14X90",
+      "provenance": "aisc-shapes-v16.0-subset-1; AISC x → local z, AISC y → local y"
+    },
+    {
+      "A": 0.01709674,
+      "Iy": 0.00015067577606719997,
+      "Iz": 0.0004158151941743999,
+      "J": 0.0000016898995879359996,
+      "cy": 0.17779999999999999,
+      "cz": 0.18414999999999998,
+      "id": "dsb303d06c707da9c46b0f",
+      "name": "W14X90",
+      "provenance": "aisc-shapes-v16.0-subset-1; AISC x → local z, AISC y → local y"
+    }
+  ],
+  "structure": {
+    "designObjects": [],
+    "grids": [],
+    "groups": [],
+    "joints": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt4814d92093ac8a0f4a21",
+        "name": "Joint b2",
+        "nodeId": "b2",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt628b49d96dcde97a430d",
+        "name": "Joint t1",
+        "nodeId": "t1",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt7dc96f776c8423e57a27",
+        "name": "Joint b1",
+        "nodeId": "b1",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtc44474038d459e40e471",
+        "name": "Joint t2",
+        "nodeId": "t2",
+        "storeyId": null
+      }
+    ],
+    "layers": [],
+    "physicalMembers": [
+      {
+        "analyticalMemberIds": [
+          "c2"
+        ],
+        "id": "pm9c0abe51c6e6655d81de",
+        "name": "c2",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "beam"
+        ],
+        "id": "pmae4b867cf2eeb128ceab",
+        "name": "beam",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "c1"
+        ],
+        "id": "pmd0f631ca1ddba8db3bcf",
+        "name": "c1",
+        "role": "unassigned",
+        "storeyId": null
+      }
+    ],
+    "storeys": [],
+    "supportDetails": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdad328846aa18b32a3358",
+        "name": "Support s2",
+        "supportId": "s2"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sde8bc163c82eee1873328",
+        "name": "Support s1",
+        "supportId": "s1"
+      }
+    ]
+  },
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "s1",
+      "node": "b1",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "s2",
+      "node": "b2",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

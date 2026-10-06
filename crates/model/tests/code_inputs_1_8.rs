@@ -37,7 +37,8 @@ fn a_1_7_column_gains_a_synthetic_link_spacing() {
         report.steps,
         [
             "record 200 mm link spacing (synthetic) on 1 RC column draft(s)",
-            "set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)"
+            "set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)",
+            "set schemaVersion 1.9.0 (single-plate connection drafts)"
         ]
     );
     assert_eq!(p.design_previews[0].inputs["linkSpacing"], 0.2);

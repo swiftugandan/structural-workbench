@@ -1,0 +1,1710 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "1.8.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "displayUnits": {
+      "enum": [
+        "SI",
+        "engineeringMetric"
+      ]
+    },
+    "analysisMode": {
+      "enum": [
+        "spatial",
+        "planarXZ"
+      ]
+    },
+    "gravity": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/material"
+      },
+      "minItems": 1,
+      "maxItems": 1000
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/section"
+      },
+      "minItems": 1,
+      "maxItems": 10000
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      },
+      "minItems": 1,
+      "maxItems": 5000
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/member"
+      },
+      "minItems": 1,
+      "maxItems": 10000
+    },
+    "supports": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/support"
+      },
+      "minItems": 0,
+      "maxItems": 5000
+    },
+    "loadCases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/loadCase"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "loads": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/load"
+      },
+      "minItems": 0,
+      "maxItems": 100000
+    },
+    "combinations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/combination"
+      },
+      "minItems": 0,
+      "maxItems": 500
+    },
+    "analysisSettings": {
+      "$ref": "#/$defs/analysisSettings"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "entityLabels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^(n|m|s|l|mat|sec|lc|c|ms|rs)[1-9][0-9]*$"
+          }
+        }
+      },
+      "required": [
+        "description",
+        "createdBy"
+      ],
+      "additionalProperties": false
+    },
+    "designPreviews": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/designPreview"
+      }
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storeys",
+        "physicalMembers",
+        "grids",
+        "layers",
+        "groups",
+        "joints",
+        "supportDetails",
+        "designObjects"
+      ],
+      "properties": {
+        "storeys": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "elevation"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "elevation": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "physicalMembers": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "role",
+              "storeyId",
+              "analyticalMemberIds"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "role": {
+                "enum": [
+                  "unassigned",
+                  "beam",
+                  "column",
+                  "brace",
+                  "slab",
+                  "stair",
+                  "landing"
+                ]
+              },
+              "storeyId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "analyticalMemberIds": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                }
+              },
+              "stairRisers": {
+                "type": "integer",
+                "minimum": 2,
+                "maximum": 30
+              }
+            }
+          }
+        },
+        "grids": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "start",
+              "end"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "start": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "end": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              }
+            }
+          }
+        },
+        "layers": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "members"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "members": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "id"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "physicalMember",
+                        "designObject",
+                        "joint",
+                        "support",
+                        "grid"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                    }
+                  }
+                },
+                "uniqueItems": true,
+                "maxItems": 25000
+              }
+            }
+          }
+        },
+        "groups": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "members"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "members": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "id"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "physicalMember",
+                        "designObject",
+                        "joint",
+                        "support",
+                        "grid"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                    }
+                  }
+                },
+                "uniqueItems": true,
+                "maxItems": 25000
+              }
+            }
+          }
+        },
+        "joints": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "nodeId",
+              "storeyId",
+              "detailStatus"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "nodeId": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "storeyId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "detailStatus": {
+                "const": "notDesigned"
+              }
+            }
+          }
+        },
+        "supportDetails": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "supportId",
+              "detailStatus"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "supportId": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "detailStatus": {
+                "const": "notDesigned"
+              }
+            }
+          }
+        },
+        "designObjects": {
+          "type": "array",
+          "maxItems": 25000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "kind",
+              "storeyId",
+              "previewId",
+              "physicalMemberId",
+              "supportId",
+              "analysisStatus"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "kind": {
+                "enum": [
+                  "rcBeam",
+                  "rcColumn",
+                  "slab",
+                  "padFooting"
+                ]
+              },
+              "storeyId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "previewId": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "physicalMemberId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "supportId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "analysisStatus": {
+                "const": "unverified"
+              }
+            }
+          }
+        }
+      }
+    },
+    "massSources": {
+      "description": "Declared mass for modal analysis (ADR 0018, docs/formulations/modal.md). Absent means none; mass is never implied.",
+      "type": "array",
+      "maxItems": 5000,
+      "items": {
+        "$ref": "#/$defs/massSource"
+      }
+    },
+    "responseSpectra": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/responseSpectrum"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "revision",
+    "displayUnits",
+    "analysisMode",
+    "gravity",
+    "materials",
+    "sections",
+    "nodes",
+    "members",
+    "supports",
+    "loadCases",
+    "loads",
+    "combinations",
+    "analysisSettings",
+    "metadata",
+    "structure"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://structural-workbench.invalid/contracts/project.schema.json",
+  "title": "Analysis MVP project format",
+  "description": "All engineering numbers use SI. Cross-reference and physical semantics require the checks in SPECIFICATION section 6.",
+  "$defs": {
+    "material": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "E": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "nu": {
+          "type": "number",
+          "exclusiveMinimum": -1,
+          "exclusiveMaximum": 0.5
+        },
+        "density": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "E",
+        "nu",
+        "density"
+      ],
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "A": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "Iy": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "Iz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "J": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "cy": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "cz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "provenance": {
+          "type": "string",
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "A",
+        "Iy",
+        "Iz",
+        "J",
+        "cy",
+        "cz",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "id",
+        "position"
+      ],
+      "additionalProperties": false
+    },
+    "member": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "start": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "end": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "material": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "section": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "localY": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "releaseStart": {
+          "type": "object",
+          "properties": {
+            "my": {
+              "type": "boolean"
+            },
+            "mz": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "my",
+            "mz"
+          ],
+          "additionalProperties": false
+        },
+        "releaseEnd": {
+          "type": "object",
+          "properties": {
+            "my": {
+              "type": "boolean"
+            },
+            "mz": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "my",
+            "mz"
+          ],
+          "additionalProperties": false
+        },
+        "parentMemberId": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "stationRange": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "steelDesign": {
+          "$ref": "#/$defs/steelDesign"
+        }
+      },
+      "required": [
+        "id",
+        "start",
+        "end",
+        "material",
+        "section",
+        "localY",
+        "releaseStart",
+        "releaseEnd"
+      ],
+      "additionalProperties": false
+    },
+    "support": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "node": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "fixed": {
+          "type": "array",
+          "items": {
+            "type": "boolean"
+          },
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "prescribed": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 6,
+          "maxItems": 6
+        }
+      },
+      "required": [
+        "id",
+        "node",
+        "fixed",
+        "prescribed"
+      ],
+      "additionalProperties": false
+    },
+    "loadCase": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "category": {
+          "enum": [
+            "dead",
+            "live",
+            "wind",
+            "other"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "category"
+      ],
+      "additionalProperties": false
+    },
+    "load": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "case": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": {
+              "const": "nodal"
+            },
+            "node": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 6,
+              "maxItems": 6
+            }
+          },
+          "required": [
+            "id",
+            "case",
+            "type",
+            "node",
+            "values"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "case": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": {
+              "const": "uniform"
+            },
+            "member": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "axes": {
+              "enum": [
+                "global",
+                "local"
+              ]
+            },
+            "forcePerLength": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "required": [
+            "id",
+            "case",
+            "type",
+            "member",
+            "axes",
+            "forcePerLength"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "case": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": {
+              "const": "point"
+            },
+            "member": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "axes": {
+              "enum": [
+                "global",
+                "local"
+              ]
+            },
+            "station": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 6,
+              "maxItems": 6
+            }
+          },
+          "required": [
+            "id",
+            "case",
+            "type",
+            "member",
+            "axes",
+            "station",
+            "values"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "case": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "type": {
+              "const": "selfWeight"
+            },
+            "members": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "minItems": 1,
+              "maxItems": 10000
+            },
+            "factor": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "id",
+            "case",
+            "type",
+            "members",
+            "factor"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "combination": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "purpose": {
+          "enum": [
+            "analysis",
+            "service",
+            "strength"
+          ]
+        },
+        "terms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "case": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "factor": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "case",
+              "factor"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "purpose",
+        "terms"
+      ],
+      "additionalProperties": false
+    },
+    "analysisSettings": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "linearStatic"
+        },
+        "formulation": {
+          "const": "eulerBernoulli3D"
+        },
+        "mergeTolerance": {
+          "const": 1e-06
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 30000
+        },
+        "memoryLimitMiB": {
+          "type": "integer",
+          "minimum": 64,
+          "maximum": 512
+        }
+      },
+      "required": [
+        "type",
+        "formulation",
+        "mergeTolerance",
+        "timeoutMs",
+        "memoryLimitMiB"
+      ],
+      "additionalProperties": false
+    },
+    "designValue": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "source": {
+          "enum": [
+            "catalogue",
+            "projectDefault",
+            "groupDefault",
+            "derived",
+            "user",
+            "imported",
+            "notProvided"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "steelDesign": {
+      "type": "object",
+      "properties": {
+        "sectionRef": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "materialRef": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "profileId": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "stabilityBasis": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "bracing": {
+          "enum": [
+            "notProvided",
+            "continuous",
+            "unbraced",
+            "points"
+          ]
+        },
+        "ky": {
+          "$ref": "#/$defs/designValue"
+        },
+        "kz": {
+          "$ref": "#/$defs/designValue"
+        },
+        "lb": {
+          "$ref": "#/$defs/designValue"
+        },
+        "cb": {
+          "$ref": "#/$defs/designValue"
+        },
+        "serviceability": {
+          "description": "User deflection criterion L/n under one service case or combination (ADR 0020); absent means not checked.",
+          "type": "object",
+          "properties": {
+            "combinationId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "limitRatio": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100000
+            },
+            "basis": {
+              "enum": [
+                "chord",
+                "absolute"
+              ]
+            }
+          },
+          "required": [
+            "combinationId",
+            "limitRatio",
+            "basis"
+          ],
+          "additionalProperties": false
+        },
+        "bracingPoints": {
+          "description": "Lateral-torsional bracing stations (0, 1), increasing, for bracing \"points\" (schema 1.6.0).",
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "exclusiveMaximum": 1
+          }
+        }
+      },
+      "required": [
+        "sectionRef",
+        "materialRef",
+        "profileId",
+        "stabilityBasis",
+        "bracing",
+        "ky",
+        "kz",
+        "lb",
+        "cb"
+      ],
+      "additionalProperties": false
+    },
+    "designPreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "inputSource",
+        "inputs",
+        "soilReference"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "kind": {
+          "enum": [
+            "rcBeam",
+            "rcColumn",
+            "slab",
+            "padFooting"
+          ]
+        },
+        "targetId": {
+          "type": "string"
+        },
+        "inputSource": {
+          "enum": [
+            "syntheticFixture",
+            "user",
+            "mixed"
+          ]
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "soilReference": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "inputSources": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "syntheticFixture",
+              "user"
+            ]
+          }
+        },
+        "mechanics": {
+          "description": "rcBeam and rcColumn. Explicit, code-agnostic section-mechanics material law (ADR 0012, ADR 0022); keys depend on law, and rcColumn adds fullCompressionStrain.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "law",
+            "inputs",
+            "inputSources"
+          ],
+          "properties": {
+            "law": {
+              "enum": [
+                "rectangularBlock",
+                "parabolaRectangle"
+              ]
+            },
+            "inputs": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "inputSources": {
+              "type": "object",
+              "additionalProperties": {
+                "enum": [
+                  "syntheticFixture",
+                  "user"
+                ]
+              }
+            }
+          }
+        },
+        "tensionAnchorageConfirmed": {
+          "description": "rcBeam only. User confirmation that longitudinal tension steel extends at least l_bd + d beyond the checked sections (EN 1992-1-1 Fig. 6.3). Absent means not confirmed (ADR 0016).",
+          "type": "boolean"
+        },
+        "plate": {
+          "description": "slab only. plate-v1 panel analysis inputs (schema 1.5.0, ADR 0021): edges at x = 0, x = Lx, y = 0, y = Ly; SI inputs (pressure Pa downward, elasticModulus Pa, poissonRatio, openingX/openingY m to the opening corner nearest the origin). Absent means not configured.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "edges",
+            "includeOpening",
+            "inputs",
+            "inputSources"
+          ],
+          "properties": {
+            "edges": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "enum": [
+                  "free",
+                  "simple",
+                  "clamped"
+                ]
+              }
+            },
+            "includeOpening": {
+              "type": "boolean"
+            },
+            "inputs": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "pressure",
+                "elasticModulus",
+                "poissonRatio",
+                "openingX",
+                "openingY"
+              ],
+              "properties": {
+                "pressure": {
+                  "type": "number"
+                },
+                "elasticModulus": {
+                  "type": "number"
+                },
+                "poissonRatio": {
+                  "type": "number"
+                },
+                "openingX": {
+                  "type": "number"
+                },
+                "openingY": {
+                  "type": "number"
+                }
+              }
+            },
+            "inputSources": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "pressure",
+                "elasticModulus",
+                "poissonRatio",
+                "openingX",
+                "openingY",
+                "edges",
+                "includeOpening"
+              ],
+              "properties": {
+                "pressure": {
+                  "enum": [
+                    "syntheticFixture",
+                    "user"
+                  ]
+                },
+                "elasticModulus": {
+                  "enum": [
+                    "syntheticFixture",
+                    "user"
+                  ]
+                },
+                "poissonRatio": {
+                  "enum": [
+                    "syntheticFixture",
+                    "user"
+                  ]
+                },
+                "openingX": {
+                  "enum": [
+                    "syntheticFixture",
+                    "user"
+                  ]
+                },
+                "openingY": {
+                  "enum": [
+                    "syntheticFixture",
+                    "user"
+                  ]
+                },
+                "edges": {
+                  "enum": [
+                    "syntheticFixture",
+                    "user"
+                  ]
+                },
+                "includeOpening": {
+                  "enum": [
+                    "syntheticFixture",
+                    "user"
+                  ]
+                }
+              }
+            },
+            "placement": {
+              "description": "Model position of the panel corner (x = 0, y = 0) at the slab level; panel axes along global X and Y.",
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              }
+            },
+            "columns": {
+              "type": "array",
+              "maxItems": 200,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "x",
+                  "y",
+                  "kind",
+                  "source"
+                ],
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "kind": {
+                    "enum": [
+                      "pinned",
+                      "fixed",
+                      "spring"
+                    ]
+                  },
+                  "kz": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "krx": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "kry": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "source": {
+                    "enum": [
+                      "user",
+                      "model"
+                    ]
+                  },
+                  "nodeId": {
+                    "type": "string"
+                  },
+                  "memberIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "codeInputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Schema 1.8.0 (ADR 0026, ADR 0027): code-profile inputs for RC drafts. exposureClass, minimumCoverDurability and aggregateSize apply to every RC kind; structuralSystem and partitionsSensitive to rcBeam and slab (flatSlab only for slab); quasiPermanentCombinationId to rcBeam; braced, restraintY, restraintZ and effectiveCreepRatio to rcColumn; castOnBlinding and bearingCombinationId to padFooting; columnSize to slab. Absent fields leave the checks that need them indeterminate.",
+          "properties": {
+            "exposureClass": {
+              "enum": [
+                "X0",
+                "XC1",
+                "XC2",
+                "XC3",
+                "XC4",
+                "XD1",
+                "XD2",
+                "XD3",
+                "XS1",
+                "XS2",
+                "XS3"
+              ]
+            },
+            "minimumCoverDurability": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.1
+            },
+            "aggregateSize": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.063
+            },
+            "structuralSystem": {
+              "enum": [
+                "simplySupported",
+                "endSpan",
+                "interiorSpan",
+                "cantilever",
+                "flatSlab"
+              ]
+            },
+            "partitionsSensitive": {
+              "type": "boolean"
+            },
+            "quasiPermanentCombinationId": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "braced": {
+              "type": "boolean"
+            },
+            "restraintY": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000
+              },
+              "description": "Relative end-restraint flexibilities k1, k2 (5.8.3.2(3)); 0 rigid, 1000 a pin"
+            },
+            "restraintZ": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000
+              },
+              "description": "Relative end-restraint flexibilities k1, k2 (5.8.3.2(3)); 0 rigid, 1000 a pin"
+            },
+            "effectiveCreepRatio": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "castOnBlinding": {
+              "type": "boolean"
+            },
+            "bearingCombinationId": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "columnSize": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 3
+              },
+              "description": "slab: column c_x × c_y (m) for punching"
+            }
+          }
+        }
+      }
+    },
+    "massSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "kind": {
+              "const": "selfMass"
+            },
+            "factor": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "factor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "kind": {
+              "const": "loadCase"
+            },
+            "case": {
+              "type": "string"
+            },
+            "factor": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "case",
+            "factor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            "kind": {
+              "const": "nodalMass"
+            },
+            "node": {
+              "type": "string"
+            },
+            "mass": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "kg, translational, acting in X, Y and Z"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "node",
+            "mass"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "responseSpectrum": {
+      "description": "A user response spectrum (schema 1.6.0, ADR 0023): pseudo-acceleration Sa (m/s^2) against period T (s), linear between points, T strictly increasing from 0. Never a code value.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "points",
+        "dampingRatio",
+        "reference"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "points": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 200,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "dampingRatio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 512
+        }
+      }
+    }
+  },
+  "$comment": "The invalid domain is an identifier, not a downloadable endpoint."
+}

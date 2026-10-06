@@ -12,7 +12,7 @@ export const EXCLUDED_DOMAINS = [
   "soil contact",
   "code-generated wind/seismic loads",
   "code-certified member sizing",
-  "connections",
+  "connections other than single-plate shear connections (M13)",
   "reinforcement detailing",
   "DWG/native PROKON formats",
   "Revit plugins",

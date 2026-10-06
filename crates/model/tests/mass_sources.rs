@@ -126,7 +126,8 @@ fn a_1_3_project_migrates_by_version_only() {
             "set schemaVersion 1.5.0 (slab plate analysis not configured)",
             "set schemaVersion 1.6.0 (no response spectra)",
             "set schemaVersion 1.7.0 (no RC beam code inputs)",
-            "set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)"
+            "set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)",
+            "set schemaVersion 1.9.0 (single-plate connection drafts)"
         ]
     );
     assert!(migrated.mass_sources.is_empty());

@@ -10,7 +10,7 @@ use workbench_design::{
     RcBarRow, RcBeamContext, RcColumnContext, RcColumnDetailing, RcFace, RcLinks,
 };
 use workbench_model::{
-    DesignPreview, Project, Result, SectionMechanicsInputs, SlabColumn, SlabPlateInputs, digest,
+    DesignPreview, Project, Result, SectionMechanicsInputs, SinglePlateInputs, SlabColumn, SlabPlateInputs, digest,
     err,
 };
 use workbench_results::KeyStation;
@@ -72,8 +72,30 @@ fn fields(kind: &str) -> Vec<(&'static str, &'static str, f64, &'static str, f64
             ("embedment", "Foundation depth", 1.2, "m", 1.),
             ("soilUnitWeight", "Soil unit weight", 18000., "N/m³", 1.),
         ],
+        // Single-plate connection (ADR 0030): AISC 3/4 in. starter values in
+        // SI; the plate is ASTM A572 Gr. 50 and the electrode E70.
+        "singlePlate" => vec![
+            ("rows", "Bolt rows", 4., "", 1.),
+            ("columns", "Bolt lines (1 or 2)", 1., "", 1.),
+            ("pitch", "Pitch s", 0.0762, "mm", 1000.),
+            ("gauge", "Gauge between lines", 0.0762, "mm", 1000.),
+            ("plateThickness", "Plate thickness", 0.00635, "mm", 1000.),
+            ("plateFy", "Plate Fy", 344.738e6, "MPa", 1e-6),
+            ("plateFu", "Plate Fu", 448.159e6, "MPa", 1e-6),
+            ("lev", "Plate vertical edge lev", 0.03175, "mm", 1000.),
+            ("lehPlate", "Plate horizontal edge leh", 0.0381, "mm", 1000.),
+            ("a", "Support to bolt line a", 0.0762, "mm", 1000.),
+            ("lehBeam", "Beam end to bolt line", 0.0381, "mm", 1000.),
+            ("underrun", "Beam length underrun", 0.00635, "mm", 1000.),
+            ("topOffset", "Beam top to plate top", 0.0762, "mm", 1000.),
+            ("weldSize", "Fillet weld (each side)", 0.00635, "mm", 1000.),
+            ("fexx", "Electrode FEXX", 482.633e6, "MPa", 1e-6),
+        ],
         _ => vec![],
     };
+    if kind == "singlePlate" {
+        return f;
+    }
     f.extend([
         (
             "concreteStrength",
@@ -648,8 +670,15 @@ fn apply_slab_column_loads(v: &mut Value, a: &Value) -> Result<()> {
     Ok(())
 }
 pub fn templates() -> Value {
-    json!([("rcBeam","RC beam"),("rcColumn","RC column"),("slab","Slab"),("padFooting","Pad footing")].iter().map(|(kind,name)|{
+    json!([("rcBeam","RC beam"),("rcColumn","RC column"),("slab","Slab"),("padFooting","Pad footing"),("singlePlate","Steel connection · single plate")].iter().map(|(kind,name)|{
         let mut t = json!({"kind":kind,"name":name,"mock":true,"fields":fields(kind).into_iter().map(|(key,label,value,unit,scale)|json!({"key":key,"label":label,"defaultValue":value,"unit":unit,"displayScale":scale})).collect::<Vec<_>>()});
+        if *kind == "singlePlate" {
+            t["connection"] = json!({
+                "bolts": workbench_model::STEEL_BOLT_DESIGNATIONS,
+                "boltGroups": [["group120", "Group 120 (e.g. A325)"], ["group150", "Group 150 (e.g. A490)"]],
+                "supportKinds": [["columnFlange", "Column flange"], ["columnWeb", "Column web"], ["girderWeb", "Girder web"]],
+            });
+        }
         if *kind == "slab" {
             t["plate"] = json!({
                 "fields": PLATE_FIELDS.iter().map(|(key,label,value,unit,scale)|json!({"key":key,"label":label,"defaultValue":value,"unit":unit,"displayScale":scale})).collect::<Vec<_>>(),
@@ -684,7 +713,7 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
     }
     if c["type"] == "CreateDesignPreview" {
         let kind = a["kind"].as_str().unwrap_or("");
-        if !["rcBeam", "rcColumn", "slab", "padFooting"].contains(&kind) {
+        if !["rcBeam", "rcColumn", "slab", "padFooting", "singlePlate"].contains(&kind) {
             return Err(err("INVALID_SCHEMA", "Unknown preview kind"));
         }
         let id = format!(
@@ -717,6 +746,17 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
             plate: (kind == "slab").then(default_plate),
             // Never defaulted: the engineer enters them (ADR 0026).
             code_inputs: None,
+            // Starter hardware; the end and support are the engineer's.
+            connection: (kind == "singlePlate").then(|| SinglePlateInputs {
+                end: "end".into(),
+                support_member_id: None,
+                support_kind: "columnFlange".into(),
+                bolt: "3/4".into(),
+                bolt_group: "group120".into(),
+                threads_excluded: false,
+                deformation_considered: true,
+                braced_against_rotation: None,
+            }),
         };
         v["designPreviews"]
             .as_array_mut()
@@ -797,6 +837,18 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                 "INVALID_SCHEMA",
                 "Section mechanics apply only to RC beam and column drafts",
             ));
+        }
+        if !a["connection"].is_null() {
+            if kind != "singlePlate" {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "Connection inputs apply only to single-plate connection drafts",
+                ));
+            }
+            let c: SinglePlateInputs = serde_json::from_value(a["connection"].clone())
+                .map_err(|e| err("INVALID_SCHEMA", format!("Invalid connection inputs: {e}")))?;
+            c.validate()?;
+            v["designPreviews"][index]["connection"] = serde_json::to_value(c).unwrap();
         }
         if kind == "slab" && !a["plate"].is_null() {
             let old: Option<SlabPlateInputs> =
@@ -1584,8 +1636,19 @@ fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
         ("Deflection", &["ec2.slab.deflection"]),
         ("Cover", &["ec2.cover"]),
     ];
+    let connection: [(&str, &[&str]); 7] = [
+        ("Simple connection", &["connection.momentTransfer", "connection.outOfPlane", "connection.compression"]),
+        ("Bolt group", &["connection.boltGroup"]),
+        ("Plate", &["connection.plate.*"]),
+        ("Weld", &["connection.weld.*"]),
+        ("Support", &["connection.support.*"]),
+        ("Beam web", &["connection.beam.*"]),
+        ("Detailing and fit", &["connection.spacing", "connection.edgeDistance", "connection.fit"]),
+    ];
     let rows: &[(&str, &[&str])] = if code["governing"].is_array() {
         &beam
+    } else if code["family"] == "singlePlate" {
+        &connection
     } else if code["family"] == "slab" {
         &slab
     } else if code["family"] == "padFooting" {
@@ -1704,6 +1767,113 @@ fn column_code(p: &Project, d: &DesignPreview, stations: &[KeyStation], combinat
                 "mzMax":actions.mz_max,"vyMax":actions.vy_max,"vzMax":actions.vz_max,
                 "convention":"N compression positive; end moments are the frame's internal My, Mz at stations 0 and 1"},
             "checks":checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()}),
+    )
+}
+
+/// AISC 360-22 LRFD single-plate connection (M13, ADR 0030) at one end of
+/// the bound beam, from the member's exact end actions (node on element,
+/// local axes): V along local y (the web), N along local x (tension pulling
+/// the beam away from the support), M about local z (the strong axis).
+fn connection_code(p: &Project, d: &DesignPreview, end: &[f64], case: &str) -> Value {
+    use workbench_design::connection as conn;
+    let profile = workbench_design::Aisc36022LrfdProfile::default();
+    let meta = profile.metadata();
+    let base = json!({"family":"singlePlate","profileId":meta.id,"profileEnabled":meta.enabled,
+        "basis":if meta.enabled {"codeProfile"} else {"disabledProfilePreview"},
+        "standard":meta.standard,"edition":meta.edition,"designMethod":meta.design_method,"certification":meta.certification,
+        "unreconciledAmendments":meta.unreconciled_amendments,"resourceGate":meta.resource_gate,"combinationId":case,
+        "limitations":meta.limitations});
+    let unavailable = |reason: &str| merge(base.clone(), json!({"status":"unavailable","reason":reason}));
+    let Some(c) = &d.connection else {
+        return unavailable("Configure the connection's end, support and bolts");
+    };
+    let target = d.target_id.as_deref().unwrap_or("");
+    let section = |id: &str| -> Option<(Value, String)> {
+        let m = p.members.iter().find(|m| m.id == id)?;
+        let sd = m.steel_design.as_ref()?;
+        Some((workbench_design::native::shape_row(&sd.section_ref)?, sd.material_ref.clone()))
+    };
+    let Some((beam_row, beam_material)) = section(target) else {
+        return unavailable("Assign a catalogue W section to the beam (Steel design) before designing its connection");
+    };
+    let Some(support_id) = c.support_member_id.as_deref() else {
+        return unavailable("Choose the supporting member at the connected end");
+    };
+    let Some((support_row, support_material)) = section(support_id) else {
+        return unavailable("Assign a catalogue W section to the supporting member");
+    };
+    let material = workbench_design::native::catalogue()["material"].clone();
+    if [&beam_material, &support_material].iter().any(|m| m.as_str() != material["id"].as_str().unwrap_or("")) {
+        return unavailable("Only the catalogue's ASTM A992 material is supported for the beam and support");
+    }
+    let (fy, fu) = (material["fy"].as_f64().unwrap(), material["fu"].as_f64().unwrap());
+    let inch = workbench_design::native::inches;
+    let beam = conn::Beam {
+        designation: beam_row["designation"].as_str().unwrap_or("").into(),
+        d: inch(&beam_row["d"]),
+        tw: inch(&beam_row["tw"]),
+        tf: inch(&beam_row["tf"]),
+        ag: inch(&beam_row["A"]) * 0.0254,
+        kdes: inch(&beam_row["kdes"]),
+        fy,
+        fu,
+    };
+    let kind: conn::SupportKind = serde_json::from_value(json!(c.support_kind)).unwrap();
+    let support = conn::Support {
+        designation: support_row["designation"].as_str().unwrap_or("").into(),
+        kind,
+        thickness: inch(if kind == conn::SupportKind::ColumnFlange { &support_row["tf"] } else { &support_row["tw"] }),
+        fu,
+        flange_width: inch(&support_row["bf"]),
+        web_thickness: inch(&support_row["tw"]),
+    };
+    let group = if c.bolt_group == "group150" { conn::BoltGroup::Group150 } else { conn::BoltGroup::Group120 };
+    let Some(bolt) = conn::Bolt::new(&c.bolt, group, c.threads_excluded) else {
+        return unavailable("Unknown bolt size");
+    };
+    let i = &d.inputs;
+    let plate = conn::SinglePlate {
+        bolt,
+        rows: i["rows"] as usize,
+        columns: i["columns"] as usize,
+        pitch: i["pitch"],
+        gauge: i["gauge"],
+        thickness: i["plateThickness"],
+        fy: i["plateFy"],
+        fu: i["plateFu"],
+        elastic_modulus: material["E"].as_f64().unwrap(),
+        lev: i["lev"],
+        leh_plate: i["lehPlate"],
+        a: i["a"],
+        leh_beam: i["lehBeam"],
+        underrun: i["underrun"],
+        top_offset: i["topOffset"],
+        weld: i["weldSize"],
+        fexx: i["fexx"],
+        deformation_considered: c.deformation_considered,
+        braced_against_rotation: c.braced_against_rotation,
+    };
+    // Node-on-element end actions [N, Vy, Vz, T, My, Mz] at i (0..6) or j (6..12).
+    let (k, sign) = if c.end == "start" { (0, -1.0) } else { (6, 1.0) };
+    let actions = conn::ConnectionActions {
+        v: end[k + 1],
+        n: sign * end[k],
+        m: end[k + 5],
+        v_minor: end[k + 2],
+        m_minor: end[k + 4],
+        torsion: end[k + 3],
+    };
+    let out = conn::design(&plate, &beam, &support, &actions);
+    merge(
+        base,
+        json!({"status":"evaluated","end":c.end,"supportMemberId":support_id,
+            "actions":{"V":actions.v,"N":actions.n,"M":actions.m,"Vminor":actions.v_minor,"Mminor":actions.m_minor,"T":actions.torsion,
+                "convention":"V along the beam's local y (positive: the beam bears on the support toward −y); N positive in tension; M about local z"},
+            "beam":{"designation":beam.designation,"d":beam.d,"tw":beam.tw,"tf":beam.tf,"kdes":beam.kdes,"fy":fy,"fu":fu},
+            "support":{"designation":support.designation,"kind":c.support_kind,"thickness":support.thickness,"fu":fu},
+            "bolt":{"designation":c.bolt,"group":c.bolt_group,"threadsExcluded":c.threads_excluded,"hole":plate.bolt.hole(),"Fnv":plate.bolt.fnv()},
+            "checks":out.checks.iter().map(|c| c.to_json()).collect::<Vec<_>>(),
+            "geometry":out.geometry,"bill":out.bill,"freeBody":out.free_body,"boltGroup":out.bolt_group}),
     )
 }
 
@@ -2087,7 +2257,18 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
             ));
         }
         source = json!({"kind":"modelAnalysis","mock":false,"resultId":a.result_id,"modelHash":a.model_hash,"sourceRevision":a.source_revision,"solverBuildHash":a.solver_build_hash,"settingsHash":a.settings_hash,"combinationId":case,"targetId":target});
-        if draft.kind == "rcColumn" {
+        if draft.kind == "singlePlate" {
+            let m = a
+                .members
+                .iter()
+                .find(|m| &m.id == target)
+                .ok_or_else(|| err("DANGLING_REFERENCE", "Member result unavailable"))?;
+            code = connection_code(p, draft, &m.end_actions, case);
+            source["memberEndActions"] = json!(m.end_actions);
+            source["note"] = json!(
+                "Exact member end actions of the bound beam (node on element, local axes) for the chosen case or combination"
+            );
+        } else if draft.kind == "rcColumn" {
             let m = a
                 .members
                 .iter()
@@ -2168,6 +2349,15 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
             "Punching",
             "Deflection",
         ],
+        "singlePlate" => vec![
+            "Simple connection",
+            "Bolt group",
+            "Plate",
+            "Weld",
+            "Support",
+            "Beam web",
+            "Detailing and fit",
+        ],
         _ => vec![
             "Compression-only contact",
             "Bearing",
@@ -2184,12 +2374,14 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         footing_schedule(draft, &code)
     } else if draft.kind == "slab" && code["status"] == "evaluated" {
         slab_schedule(draft, &code)
+    } else if draft.kind == "singlePlate" && code["status"] == "evaluated" {
+        code["bill"].clone()
     } else {
         json!([])
     };
     // ADR 0026: an evaluated, enabled code profile replaces the unsupported
     // rows with its checks, labelled as a demonstration of the held edition.
-    let coded = if ["rcBeam", "rcColumn", "padFooting", "slab"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
+    let coded = if ["rcBeam", "rcColumn", "padFooting", "slab", "singlePlate"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
     let mut run = json!({"contractVersion":1,"draftId":id,"kind":draft.kind,"overall":"unsupported","mock":true,"codeProfile":null,"modelHash":p.hash(),"sourceRevision":p.revision,
         "inputHash":digest(&serde_json::to_vec(draft).unwrap()),"inputs":draft,"sourceProvenance":source,"schedule":schedule,
         "checks":checks.iter().map(|name|json!({"name":name,"status":"unsupported","utilisation":null,"reason":if *name=="Flexure"&&draft.kind=="rcBeam"{"Code profile unavailable. Section mechanics are reported separately and are not a code resistance"}else{"Required numerical family or locked code/example resources are unavailable"}})).collect::<Vec<_>>(),
@@ -2198,7 +2390,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
-        "codeProfilePreview":if ["rcBeam","rcColumn","padFooting","slab"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
+        "codeProfilePreview":if ["rcBeam","rcColumn","padFooting","slab","singlePlate"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
         "plateAnalysis":plate,
         "columnMechanics":if draft.kind=="rcColumn"{column_mechanics(draft,stations.as_deref())}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});
@@ -2213,12 +2405,21 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         run["mock"] = json!(draft.input_source != "user");
         run["codeProfile"] = json!({"id":code["profileId"],"standard":code["standard"],"edition":code["edition"],
             "certification":code["certification"],"unreconciledAmendments":code["unreconciledAmendments"]});
-        run["limitations"] = json!([
-            format!("DEMONSTRATION — {}; {} not reconciled; {}", code["edition"].as_str().unwrap_or(""),
-                code["unreconciledAmendments"].as_array().map(|a| a.iter().filter_map(|x| x.as_str()).collect::<Vec<_>>().join(", ")).unwrap_or_default(),
-                code["certification"].as_str().unwrap_or("")),
-            "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
-            "Schedule and illustrations are indicative; curtailment and laps are the engineer's detailing"]);
+        let amendments = code["unreconciledAmendments"].as_array().map(|a| a.iter().filter_map(|x| x.as_str()).collect::<Vec<_>>().join(", ")).unwrap_or_default();
+        let label = if amendments.is_empty() {
+            format!("DEMONSTRATION — {}; {}", code["edition"].as_str().unwrap_or(""), code["certification"].as_str().unwrap_or(""))
+        } else {
+            format!("DEMONSTRATION — {}; {amendments} not reconciled; {}", code["edition"].as_str().unwrap_or(""), code["certification"].as_str().unwrap_or(""))
+        };
+        run["limitations"] = if draft.kind == "singlePlate" {
+            json!([label,
+                "The connection is a simple (pinned) connection: the analysis must release the major-axis moment at this end",
+                "Drawing and bill of materials are derived from the inputs; bolt lengths and shop tolerances are the fabricator's"])
+        } else {
+            json!([label,
+                "Dimensions are draft inputs; frame geometry/stiffness is unchanged",
+                "Schedule and illustrations are indicative; curtailment and laps are the engineer's detailing"])
+        };
     }
     run["previewRunId"] = json!(digest(&serde_json::to_vec(&run).unwrap()));
     Ok(run)

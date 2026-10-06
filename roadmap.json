@@ -260,12 +260,12 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "stability-v1 accepted (evidence/M09/full): flexural elastic buckling and linearised P-\u0394-\u03b4 second-order analysis of one case or combination, with the independent oracle fixtures/stability/stability-oracle.json. Torsional/lateral-torsional instability, large displacement and member end releases remain excluded; a critical factor is never a code verdict."
+      "acceptanceDefinition": "stability-v1 accepted (evidence/M09/full): flexural elastic buckling and linearised P-Δ-δ second-order analysis of one case or combination, with the independent oracle fixtures/stability/stability-oracle.json. Torsional/lateral-torsional instability, large displacement and member end releases remain excluded; a critical factor is never a code verdict."
     },
     {
       "id": "M10",
       "name": "Analyse and design a slab panel",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M06",
         "M08"
@@ -285,7 +285,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Surface-design UI follows M10-SHELL in the approved shell; distinguish display-smoothed contours from design actions. Numerical family plate-v1 gated on its own (evidence/M10/plate, ADR 0021, R-SHELL-BENCHMARKS acquired as a project oracle); the parent stays planned until the M08 slab code profile enables reinforcement, punching and deflection checks.",
+      "acceptanceDefinition": "Accepted (evidence/M10/full) as an edition-labelled EC2 UK demonstration (ADR 0021, 0026, 0029): plate-v1 slab panel (MITC4 flat shell, one opening, free/simple/clamped edges, column supports) with element-centre Wood–Armer design actions and a display-only smoothed option; per-element A_s,req map, uniform meshes, one-way shear, span/depth, punching at internal columns; gate 11/11 on source b53cf45b. Edge/corner/near-opening punching, curtailment and coupled frame–shell analysis remain outside.",
       "experienceFollowOns": [
         "M10-SHELL"
       ]
@@ -345,7 +345,7 @@
     {
       "id": "M13",
       "name": "Detail a steel connection",
-      "state": "planned",
+      "state": "accepted",
       "dependsOn": [
         "M07"
       ],
@@ -365,7 +365,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "Accepted (evidence/M13/full) as an edition-labelled AISC 360-22 LRFD demonstration (ADR 0026, 0030): single-plate shear connections of uncoped W beams to a column flange, column web or girder web, one or two bolt lines; ICR bolt group; every Spec/Manual-as-reproduced limit state; dimensioned drawing, bill of materials and report; gate 11/11 on source 79a0dba2. Other connection families, coped beams and moment connections remain outside."
     },
     {
       "id": "M14",
@@ -670,7 +670,7 @@
     },
     "approvedSteelScreens": "docs/design/M07-WORKFLOW/screens/approved",
     "paritySection": "PARITY_ROADMAP.md#31-integrated-design-workspace-post-m07-experience-target",
-    "shellInvariant": "top menu/status; left Model Explorer; central WebGPU viewport; right Selection inspector; bottom Results drawer; footer \u2014 no parallel design chrome",
+    "shellInvariant": "top menu/status; left Model Explorer; central WebGPU viewport; right Selection inspector; bottom Results drawer; footer — no parallel design chrome",
     "mockupsAreLayoutOnly": true,
     "codePinsRemainSpec": true,
     "targetLoop": [

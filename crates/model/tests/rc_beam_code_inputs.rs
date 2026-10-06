@@ -35,7 +35,7 @@ fn a_1_6_project_migrates_by_version_only_and_cannot_carry_code_inputs() {
     assert_eq!((report.from.as_str(), report.to.as_str()), (SCHEMA_1_6, CURRENT_SCHEMA));
     assert_eq!(
         report.steps,
-        ["set schemaVersion 1.7.0 (no RC beam code inputs)", "set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)"]
+        ["set schemaVersion 1.7.0 (no RC beam code inputs)", "set schemaVersion 1.8.0 (code inputs for columns, slabs and footings)", "set schemaVersion 1.9.0 (single-plate connection drafts)"]
     );
     assert!(migrated.design_previews[0].code_inputs.is_none());
     // A 1.6.0 file cannot already carry 1.7.0 content.

@@ -1,0 +1,216 @@
+{
+  "taskId": "M13-parent",
+  "milestone": "M13",
+  "sourceHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
+  "buildHash": "4b37f22d084c9e4cb80ebd43659d1216666f196e9b25154df150f097568f3ea3",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-06T02:05:00.115Z",
+  "status": "PASS",
+  "testCount": 11,
+  "testIds": [
+    "M13-EQUILIBRIUM",
+    "M13-FAILURE-MODES",
+    "M13-UNSUPPORTED",
+    "M13-WORKED-EXAMPLES",
+    "M13-MODEL-LINK",
+    "M13-DRAWING-BOM",
+    "M13-USER-JOURNEY",
+    "M13-FAILURE-PATHS",
+    "M13-PERSISTENCE",
+    "M13-LEDGER",
+    "M13-ORACLE-PROVENANCE"
+  ],
+  "command": [
+    "node",
+    "tools/record-m13-acceptance.mjs"
+  ],
+  "issues": [],
+  "criteria": [
+    {
+      "id": "M13-EQUILIBRIUM",
+      "title": "Force equilibrium of the connection",
+      "evidence": "kernel_validation",
+      "tests": {
+        "connection-native": [
+          "profile::aisc36022::connection::tests::icr_is_in_equilibrium"
+        ],
+        "connection-protocol": [
+          "a_pinned_beam_end_is_designed_from_its_exact_reaction"
+        ]
+      },
+      "observation": "Every instantaneous-centre solution balances the load along and across it and in moment to 1e-9 of C (single and double lines, 0–89°); the free body carries the beam's exact end reaction to the support face as V, N and V·e, with the support reaction opposite.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-FAILURE-MODES",
+      "title": "Every applicable failure mode of the single plate",
+      "evidence": "kernel_validation",
+      "tests": {
+        "connection-native": [
+          "profile::aisc36022::connection::tests::ii_a_17b_limit_states",
+          "profile::aisc36022::connection::tests::ii_a_19a_limit_states",
+          "profile::aisc36022::connection::tests::matches_the_independent_oracle",
+          "profile::aisc36022::connection::tests::uplift_reverses_the_tearout_edges",
+          "profile::aisc36022::connection::tests::net_plastic_modulus_from_geometry",
+          "profile::aisc36022::connection::tests::bolt_tables"
+        ]
+      },
+      "observation": "Bolt shear, bearing and tearout per bolt with the eccentric bolt group; plate shear yield and rupture, block shear, flexure with LTB, flexural rupture, interactions and ductility; tension yield, rupture and block shear of plate and beam; weld size and strength; support rupture and thickness; beam shear; spacing, edges and fit.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-UNSUPPORTED",
+      "title": "Unsupported moment transfer and other conditions are stated",
+      "evidence": "failure_path",
+      "tests": {
+        "connection-native": [
+          "profile::aisc36022::connection::tests::unsupported_conditions_are_never_passed"
+        ],
+        "connection-protocol": [
+          "moment_transfer_is_unsupported_never_passed"
+        ],
+        "m13-browser": [
+          "Steel connection: moment transfer and missing inputs are never a pass"
+        ]
+      },
+      "observation": "A moment through the end, compression, minor-axis actions and torsion are UNSUPPORTED and the run is never a pass; an unconfirmed rotation restraint is INDETERMINATE; a beam that does not clear the column flange tips fails the fit.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-WORKED-EXAMPLES",
+      "title": "Independent worked examples",
+      "evidence": "kernel_validation",
+      "tests": {
+        "connection-native": [
+          "profile::aisc36022::connection::tests::icr_reproduces_the_published_c_values",
+          "profile::aisc36022::connection::tests::ii_a_17a_limit_states",
+          "profile::aisc36022::connection::tests::ii_a_17b_limit_states",
+          "profile::aisc36022::connection::tests::ii_a_19a_limit_states"
+        ]
+      },
+      "observation": "Six published C values and C′ reproduced on the table grid; Design Examples II.A-17A, II.A-17B and II.A-19A reconcile limit state by limit state within each rounding chain, with the general-method differences documented (17A bolt group at e = a, 17B ductility).",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-MODEL-LINK",
+      "title": "Member forces, connection geometry and material stay linked",
+      "evidence": "kernel_validation",
+      "tests": {
+        "connection-protocol": [
+          "a_pinned_beam_end_is_designed_from_its_exact_reaction",
+          "an_unconfigured_connection_says_what_is_missing"
+        ],
+        "connection-model": [
+          "the_support_must_meet_the_connected_end",
+          "a_connection_at_the_beam_end_round_trips"
+        ],
+        "connection-native": [
+          "profile::aisc36022::connection::tests::model_bolt_list_matches_the_tables"
+        ]
+      },
+      "observation": "The demand is the bound beam's exact end action for the case (wL/2 = 135 kN at both ends of C01); sections and material come from the members' catalogue assignments; the support must meet the beam at the connected end; a missing support or section is named, never assumed.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-DRAWING-BOM",
+      "title": "Exact drawing and report dimensions, bill of materials",
+      "evidence": "ui_journey",
+      "tests": {
+        "m13-browser": [
+          "Steel connection: bind the beam end, check, draw, bill, report and persist"
+        ]
+      },
+      "observation": "The dimensioned elevation draws the run's Rust geometry (the plate length on the drawing equals the record's), the bill lists the plate, four bolts and the welds, and the calculation record carries the drawing, every limit state and the bill.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-USER-JOURNEY",
+      "title": "Transfer actions, check, revise and export in the browser",
+      "evidence": "ui_journey",
+      "tests": {
+        "m13-browser": [
+          "Steel connection: bind the beam end, check, draw, bill, report and persist"
+        ]
+      },
+      "observation": "A connection draft is bound to the beam end and its support, saved with a user weld size, run on the analysed case to PASS, inspected (actions, checks, drawing, bill), exported as record, CSV and report, and saved.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-FAILURE-PATHS",
+      "title": "Refusals keep the project",
+      "evidence": "failure_path",
+      "tests": {
+        "connection-protocol": [
+          "invalid_connection_inputs_are_refused_atomically"
+        ],
+        "connection-model": [
+          "connection_inputs_are_validated"
+        ]
+      },
+      "observation": "Unknown bolts, out-of-range rows or lines, a support away from the connected end, connection inputs on another kind and unknown fields are refused, and the model hash is unchanged.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-PERSISTENCE",
+      "title": "Schema 1.9.0 save, reopen and migrate",
+      "evidence": "save_and_reopen",
+      "tests": {
+        "connection-protocol": [
+          "connection_inputs_persist_through_save_and_reopen"
+        ],
+        "connection-model": [
+          "a_1_8_file_migrates_and_cannot_carry_a_connection"
+        ],
+        "m13-browser": [
+          "Steel connection: bind the beam end, check, draw, bill, report and persist"
+        ]
+      },
+      "observation": "Connection inputs and their provenance persist in the downloaded project and reopen; 1.8.0 files migrate by version and cannot carry a connection draft.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-LEDGER",
+      "title": "Capability ledger",
+      "evidence": "capability_ledger",
+      "tests": {
+        "m13-browser": [
+          "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions"
+        ]
+      },
+      "observation": "The ledger lists steel-connection-single-plate with its demonstration label, limitations and UNKNOWN comparison; other connection families stay excluded.",
+      "status": "PASS",
+      "missing": []
+    },
+    {
+      "id": "M13-ORACLE-PROVENANCE",
+      "title": "Oracle is the recorded script; catalogue from the locked database",
+      "evidence": "regression_results",
+      "observation": "tools/oracles/connection_oracle.py sha256 9c3b41f8a12fdec2a45f51b6aadfb43c63e7c250b07d574bfe259d36dde78794 (recorded 9c3b41f8a12fdec2a45f51b6aadfb43c63e7c250b07d574bfe259d36dde78794); W subset source 82d0ceb96a0d938ae1a6bd9637cb10a1e269225b5d668dce5b0bdc8d86013496 (lock R-STEEL-SHAPES-V16 82d0ceb96a0d938ae1a6bd9637cb10a1e269225b5d668dce5b0bdc8d86013496); published fixture sha256 0b98e85d26b78020cff503e03e490f2b4ce3eec01cee319a1df9bb3d49963db0.",
+      "status": "PASS",
+      "missing": []
+    }
+  ],
+  "limitations": "aisc-360-22-lrfd single-plate connections are a demonstration of ANSI/AISC 360-22 with the Manual equations reproduced in the held Design Examples v16; not a certified design. Uncoped W beams to a column flange, column web or girder web; one or two bolt lines in standard holes, bearing-type, snug-tight; LRFD. The general (extended-configuration) method is applied to every geometry because Manual Table 10-9 is not held, so some conventional connections fail here. Moment through the end, compression, minor-axis actions, torsion, coped beams, slotted holes, slip-critical bolts and other connection families are unsupported. Commercial PROKON parity remains UNKNOWN."
+}

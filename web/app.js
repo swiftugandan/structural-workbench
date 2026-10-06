@@ -2044,6 +2044,16 @@ $("#export-report").onclick = () => {
               run.sourceProvenance.kind === "modelAnalysis" &&
               run.sourceProvenance.resultId === result.resultId,
           ),
+        // Current model-sourced steel connection designs (ADR 0030).
+        connectionRuns: concrete
+          .records()
+          .filter(
+            (run) =>
+              run.kind === "singlePlate" &&
+              run.modelHash === modelHash &&
+              run.sourceProvenance.kind === "modelAnalysis" &&
+              run.sourceProvenance.resultId === result.resultId,
+          ),
         // Slab plate analyses of the current model's drafts (ADR 0021).
         plateRuns: concrete
           .records()

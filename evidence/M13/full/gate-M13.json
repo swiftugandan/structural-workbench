@@ -1,0 +1,16 @@
+{
+  "milestone": "M13",
+  "status": "PASS",
+  "sourceHash": "79a0dba226216e7413a93c8b6471c03053a84ecde9a4d560ca12ca225fcca829",
+  "buildHash": "4b37f22d084c9e4cb80ebd43659d1216666f196e9b25154df150f097568f3ea3",
+  "required": [
+    "build",
+    "connection-native",
+    "connection-model",
+    "connection-protocol",
+    "m13-browser",
+    "m13-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-10-06T02:05:00.539Z"
+}
