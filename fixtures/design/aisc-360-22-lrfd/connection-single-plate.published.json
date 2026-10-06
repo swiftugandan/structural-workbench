@@ -1,0 +1,519 @@
+{
+  "fixtureVersion": 1,
+  "source": "AISC Companion to the Manual v16.0, Vol. 1: Design Examples (R-STEEL-EXAMPLES), Part II.A single-plate connections; LRFD columns. Values as published (US customary); 'rounding' is half a unit of the last published digit unless stated.",
+  "units": {
+    "length": "in",
+    "force": "kips",
+    "moment": "kip-in",
+    "stress": "ksi"
+  },
+  "icr": {
+    "source": "C (and C') quoted from AISC Manual Tables 7-6/7-7 in the examples; the tables are not held. Each published value is a linear interpolation between tabulated e values, so the check interpolates the solver's values at the table's grid points (rounded to two decimals as tabulated) and compares within 0.01.",
+    "cases": [
+      {
+        "example": "II.A-17A",
+        "page": "IIA-178",
+        "rows": 4,
+        "columns": 1,
+        "pitch": 3,
+        "gauge": 0,
+        "e": 1.5,
+        "angle": 0,
+        "grid": [
+          1,
+          2
+        ],
+        "C": 3.54
+      },
+      {
+        "example": "K.1 (bolted tee)",
+        "page": "K-4",
+        "rows": 4,
+        "columns": 1,
+        "pitch": 3,
+        "gauge": 0,
+        "e": 3.0,
+        "angle": 0,
+        "grid": [
+          3,
+          3
+        ],
+        "C": 2.81
+      },
+      {
+        "example": "II.A-20",
+        "page": "IIA-232",
+        "note": "pitch from the figure (3 in.)",
+        "rows": 4,
+        "columns": 1,
+        "pitch": 3,
+        "gauge": 0,
+        "e": 2.5,
+        "angle": 0,
+        "grid": [
+          2,
+          3
+        ],
+        "C": 3.07
+      },
+      {
+        "example": "II.A-30",
+        "page": "IIA-295",
+        "rows": 4,
+        "columns": 1,
+        "pitch": 3,
+        "gauge": 0,
+        "e": 3.8,
+        "angle": 0,
+        "grid": [
+          3,
+          4
+        ],
+        "C": 2.45
+      },
+      {
+        "example": "II.A-17B",
+        "page": "IIA-181",
+        "rows": 5,
+        "columns": 1,
+        "pitch": 3,
+        "gauge": 0,
+        "e": 2.5,
+        "angle": 30,
+        "grid": [
+          2,
+          3
+        ],
+        "C": 4.07
+      },
+      {
+        "example": "II.A-19A",
+        "page": "IIA-207",
+        "rows": 4,
+        "columns": 2,
+        "pitch": 3,
+        "gauge": 3,
+        "e": 10.5,
+        "angle": 0,
+        "grid": [
+          10,
+          12
+        ],
+        "C": 2.33
+      }
+    ],
+    "momentOnly": [
+      {
+        "example": "II.A-19A",
+        "page": "IIA-207",
+        "rows": 4,
+        "columns": 2,
+        "pitch": 3,
+        "gauge": 3,
+        "Cprime": 26.0,
+        "rounding": 0.05
+      }
+    ]
+  },
+  "examples": {
+    "II.A-17A": {
+      "pages": "IIA-171 to IIA-179 (Part B)",
+      "inputs": {
+        "beam": {
+          "designation": "W16X50",
+          "d": 16.3,
+          "tw": 0.38,
+          "tf": 0.63,
+          "A": 14.7,
+          "kdes": 1.03,
+          "Fy": 50,
+          "Fu": 65
+        },
+        "support": {
+          "designation": "W14X90",
+          "kind": "columnFlange",
+          "t": 0.71,
+          "Fu": 65
+        },
+        "bolt": "3/4",
+        "group": "group120",
+        "threadsExcluded": false,
+        "rows": 4,
+        "columns": 1,
+        "pitch": 3,
+        "lev": 1.25,
+        "lehPlate": 1.5,
+        "a": 3.0,
+        "lehBeam": 1.5,
+        "underrun": 0,
+        "topOffset": 2.4,
+        "tp": 0.25,
+        "plateFy": 50,
+        "plateFu": 65,
+        "weld": 0.1875,
+        "FEXX": 70,
+        "deformationConsidered": true,
+        "Vu": 49.6,
+        "Nu": 0
+      },
+      "published": {
+        "boltShear": {
+          "value": 17.9,
+          "rounding": 0.05
+        },
+        "plateEdgeTearout": {
+          "value": 12.4,
+          "rounding": 0.07,
+          "basis": "from the rounded Manual Table 7-5 value 49.4 kips/in. × 1/4 in. = 12.35; unrounded 12.34"
+        },
+        "plateBearing": {
+          "value": 22.0,
+          "rounding": 0.07,
+          "basis": "rounded Manual Table 7-4 value 87.8 kips/in. × 1/4 in.; unrounded 21.94"
+        },
+        "webBearing": {
+          "value": 33.4,
+          "rounding": 0.07,
+          "basis": "rounded Manual Table 7-4 value 87.8 kips/in. × 0.380 in.; unrounded 33.35"
+        },
+        "plateShearYield": {
+          "value": 86.4,
+          "rounding": 0.2,
+          "basis": "A_gv rounded to 2.88 in.² (exact 2.875); unrounded 86.25"
+        },
+        "plateShearRupture": {
+          "value": 58.5,
+          "rounding": 0.05
+        },
+        "plateBlockShear": {
+          "value": 65.3,
+          "rounding": 0.25,
+          "basis": "from the truncated A_nv = 1.79 in.²; with the exact 1.797 in.² the strength is 65.5 kips"
+        },
+        "blockAgv": {
+          "value": 2.56,
+          "rounding": 0.005
+        },
+        "blockAnv": {
+          "value": 1.79,
+          "rounding": 0.007,
+          "basis": "the example truncates 1.797 in.² to 1.79"
+        },
+        "blockAnt": {
+          "value": 0.266,
+          "rounding": 0.0005
+        },
+        "supportTmin": {
+          "value": 0.143,
+          "rounding": 0.0005
+        }
+      },
+      "discrepancies": [
+        "The example verifies the conventional configuration of Manual Table 10-9 with e = a/2 = 1.5 in. (C = 3.54, φR_n = 58.5 kips). Table 10-9 is not held, so the workbench uses the general method with e = a = 3 in. (C = 2.81): φR_n = 46.4 kips < 49.6 kips, a FAIL that the conventional method would pass. The per-bolt strengths and C at e = 1.5 in. reproduce the example.",
+        "The example truncates the block shear A_nv (1.797 → 1.79 in.²), so its φR_n = 65.3 kips is low; the exact value is 65.5 kips."
+      ]
+    },
+    "II.A-17B": {
+      "pages": "IIA-180 to IIA-193",
+      "inputs": {
+        "beam": {
+          "designation": "W18X50",
+          "d": 18.0,
+          "tw": 0.355,
+          "tf": 0.57,
+          "A": 14.7,
+          "kdes": 0.972,
+          "Fy": 50,
+          "Fu": 65
+        },
+        "support": {
+          "designation": "W14X90",
+          "kind": "columnFlange",
+          "t": 0.71,
+          "Fu": 65
+        },
+        "bolt": "7/8",
+        "group": "group120",
+        "threadsExcluded": false,
+        "rows": 5,
+        "columns": 1,
+        "pitch": 3,
+        "lev": 1.25,
+        "lehPlate": 2.5,
+        "a": 2.5,
+        "lehBeam": 1.75,
+        "underrun": 0.25,
+        "topOffset": 1.5,
+        "tp": 0.5,
+        "plateFy": 50,
+        "plateFu": 65,
+        "weld": 0.3125,
+        "FEXX": 70,
+        "deformationConsidered": false,
+        "Vu": 75,
+        "Nu": 60
+      },
+      "published": {
+        "resultant": {
+          "value": 96.0,
+          "rounding": 0.05
+        },
+        "boltShear": {
+          "value": 24.3,
+          "rounding": 0.06,
+          "basis": "Manual Table 7-1 with A_b = 0.601 in.² (rounded); unrounded 24.35"
+        },
+        "webTearout": {
+          "value": 26.8,
+          "rounding": 0.05
+        },
+        "webBearing": {
+          "value": 45.5,
+          "rounding": 0.08,
+          "basis": "r_n rounded to 60.6 kips, φr_n = 45.45 printed 45.5; unrounded 45.43"
+        },
+        "supportShearRupture": {
+          "value": 602,
+          "rounding": 0.5
+        },
+        "plateShearYield": {
+          "value": 218,
+          "rounding": 0.5
+        },
+        "plateTensionYield": {
+          "value": 327,
+          "rounding": 0.8,
+          "basis": "R_n rounded to 363 kips before φ; unrounded 326.25"
+        },
+        "Mu": {
+          "value": 188,
+          "rounding": 0.5
+        },
+        "Z": {
+          "value": 26.3,
+          "rounding": 0.05
+        },
+        "S": {
+          "value": 17.5,
+          "rounding": 0.05
+        },
+        "MnYield": {
+          "value": 1310,
+          "rounding": 5
+        },
+        "LbDOverT2": {
+          "value": 145,
+          "rounding": 0.5
+        },
+        "phiMn": {
+          "value": 1180,
+          "rounding": 5
+        },
+        "interactionYield": {
+          "value": 0.181,
+          "rounding": 0.001,
+          "basis": "computed from strengths rounded to three figures; unrounded 0.1817"
+        },
+        "plateShearRupture": {
+          "value": 139,
+          "rounding": 0.5
+        },
+        "plateTensionRupture": {
+          "value": 232,
+          "rounding": 0.5
+        },
+        "Znet": {
+          "value": 17.2,
+          "rounding": 0.05
+        },
+        "phiMnRupture": {
+          "value": 840,
+          "rounding": 5
+        },
+        "interactionRupture": {
+          "value": 0.5,
+          "rounding": 0.002,
+          "basis": "computed from strengths rounded to three figures; unrounded 0.5015"
+        },
+        "blockShearShear": {
+          "value": 177,
+          "rounding": 0.5
+        },
+        "blockShearAxial": {
+          "value": 242,
+          "rounding": 0.6,
+          "basis": "R_n rounded to 322 kips before φ (0.75 × 322 = 241.5 printed 242); unrounded 241.4"
+        },
+        "blockShearInteraction": {
+          "value": 0.241,
+          "rounding": 0.001,
+          "basis": "computed from rounded strengths; unrounded 0.2419"
+        },
+        "beamShearYield": {
+          "value": 192,
+          "rounding": 0.5
+        },
+        "beamTensionYield": {
+          "value": 662,
+          "rounding": 0.5
+        },
+        "beamU": {
+          "value": 0.407,
+          "rounding": 0.0005
+        },
+        "beamTensionRupture": {
+          "value": 256,
+          "rounding": 0.6,
+          "basis": "A_n, U and A_e rounded before R_n; unrounded 256.6"
+        },
+        "beamBlockShear": {
+          "value": 159,
+          "rounding": 0.5
+        }
+      },
+      "discrepancies": [
+        "The example takes C from Table 7-6 at 30° (4.07) as conservative for the actual 38.7°. Solved directly, C(38.7°) = 4.0596 is 0.05 % below C(30°) = 4.0618 (C has a shallow minimum near 40° for this group); φR_n = 98.9 kips either way.",
+        "The example states the plate rupture interaction as 0.500 from rounded strengths; the unrounded value is within 0.0006.",
+        "The example does not evaluate the plate ductility limit (Manual Eqs. 10-6/10-7); its geometry falls under the conventional configuration of Table 10-9, which is not held. The workbench applies Eq. 10-6 to every connection: t_max = 0.37 in. < t_p = 1/2 in., a FAIL the conventional rules would not give."
+      ]
+    },
+    "II.A-19A": {
+      "pages": "IIA-205 to IIA-212",
+      "inputs": {
+        "beam": {
+          "designation": "W16X36",
+          "d": 15.9,
+          "tw": 0.295,
+          "tf": 0.43,
+          "A": 10.6,
+          "kdes": 0.832,
+          "Fy": 50,
+          "Fu": 65
+        },
+        "support": {
+          "designation": "W14X90",
+          "kind": "columnWeb",
+          "t": 0.44,
+          "Fu": 65,
+          "bf": 14.5,
+          "tw": 0.44
+        },
+        "bolt": "3/4",
+        "group": "group120",
+        "threadsExcluded": false,
+        "rows": 4,
+        "columns": 2,
+        "pitch": 3,
+        "gauge": 3,
+        "lev": 1.5,
+        "lehPlate": 1.25,
+        "a": 9.0,
+        "lehBeam": 1.5,
+        "underrun": 0,
+        "topOffset": 1.5,
+        "tp": 0.5,
+        "plateFy": 50,
+        "plateFu": 65,
+        "weld": 0.3125,
+        "FEXX": 70,
+        "deformationConsidered": true,
+        "Vu": 36.0,
+        "Nu": 0
+      },
+      "published": {
+        "boltShear": {
+          "value": 17.9,
+          "rounding": 0.05
+        },
+        "webBearing": {
+          "value": 25.9,
+          "rounding": 0.05
+        },
+        "plateBearing": {
+          "value": 43.9,
+          "rounding": 0.05
+        },
+        "plateEdgeTearout": {
+          "value": 31.9,
+          "rounding": 0.1,
+          "basis": "the example rounds l_c to 1.09 in. (exact 1.094 in.); unrounded 32.0"
+        },
+        "Mmax": {
+          "value": 690,
+          "rounding": 1.5
+        },
+        "tmax": {
+          "value": 0.575,
+          "rounding": 0.0015
+        },
+        "plateShearYield": {
+          "value": 180,
+          "rounding": 0.5
+        },
+        "plateShearRupture": {
+          "value": 125,
+          "rounding": 0.8,
+          "basis": "R_n rounded to 166 kips before φ; unrounded 124.3"
+        },
+        "blockAgv": {
+          "value": 5.25,
+          "rounding": 0.005
+        },
+        "blockAnv": {
+          "value": 3.72,
+          "rounding": 0.005
+        },
+        "blockAnt": {
+          "value": 1.47,
+          "rounding": 0.005
+        },
+        "plateBlockShear": {
+          "value": 145,
+          "rounding": 0.5
+        },
+        "Mu": {
+          "value": 324,
+          "rounding": 0.5
+        },
+        "Z": {
+          "value": 18.0,
+          "rounding": 0.05
+        },
+        "S": {
+          "value": 12.0,
+          "rounding": 0.05
+        },
+        "phiMn": {
+          "value": 810,
+          "rounding": 0.5
+        },
+        "LbDOverT2": {
+          "value": 432,
+          "rounding": 0.5
+        },
+        "interactionYield": {
+          "value": 0.2,
+          "rounding": 0.0005
+        },
+        "Znet": {
+          "value": 12.8,
+          "rounding": 0.05
+        },
+        "phiMnRupture": {
+          "value": 624,
+          "rounding": 3.0,
+          "basis": "Z_net = 12.8 in.³ from Manual Table 15-2; the geometry gives 12.75 in.³ (621.6 kip-in.)"
+        },
+        "supportTmin": {
+          "value": 0.238,
+          "rounding": 0.0005
+        }
+      },
+      "discrepancies": [
+        "Mmax and tmax use C′ = 26.0 in. from the table; the solver's C′ = 26.03 in. moves them by less than their rounding allowance.",
+        "Znet is read from Manual Table 15-2 (12.8 in.³); the workbench computes 12.75 in.³ from the hole geometry, and φM_n follows."
+      ]
+    }
+  },
+  "note": "Where a published value was computed from intermediates the example rounded first, its tolerance covers that rounding chain and 'basis' records the unrounded value."
+}

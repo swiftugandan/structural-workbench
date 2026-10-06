@@ -1,0 +1,656 @@
+{
+ "oracle": "tools/oracles/connection_oracle.py",
+ "oracleSha256": "9c3b41f8a12fdec2a45f51b6aadfb43c63e7c250b07d574bfe259d36dde78794",
+ "method": "Grid scan + Nelder-Mead instantaneous centre; limit states written out independently from AISC 360-22 F11, J2, J3, J4 and the Manual equations reproduced in Design Examples II.A-17B and II.A-19A",
+ "tolerance": 1e-08,
+ "cases": [
+  {
+   "inputs": {
+    "id": "ii-a-17a",
+    "bolt": "3/4",
+    "group": "group120",
+    "threadsExcluded": false,
+    "rows": 4,
+    "columns": 1,
+    "pitch": 0.07619999999999999,
+    "gauge": 0.0,
+    "lev": 0.03175,
+    "lehPlate": 0.038099999999999995,
+    "a": 0.07619999999999999,
+    "lehBeam": 0.038099999999999995,
+    "underrun": 0.0,
+    "topOffset": 0.07619999999999999,
+    "tp": 0.00635,
+    "plateFy": 344737864.65841806,
+    "plateFu": 448159224.0559435,
+    "E": 199947961501.88248,
+    "weld": 0.004762499999999999,
+    "FEXX": 482633010.5217853,
+    "deformationConsidered": true,
+    "beam": {
+     "d": 0.41402,
+     "tw": 0.009651999999999999,
+     "tf": 0.016002,
+     "A": 0.009483852,
+     "kdes": 0.026162,
+     "Fy": 344737864.65841806,
+     "Fu": 448159224.0559435
+    },
+    "support": {
+     "kind": "columnFlange",
+     "t": 0.018033999999999998,
+     "Fu": 448159224.0559435,
+     "bf": 0.0,
+     "tw": 0.0
+    },
+    "V": 220631.79211692078,
+    "N": 0.0
+   },
+   "C": 2.813926811639901,
+   "checks": {
+    "connection.boltGroup": {
+     "demand": 220631.79211692078,
+     "resistance": 206582.8886807833
+    },
+    "connection.plate.shearYield": {
+     "demand": 220631.79211692078,
+     "resistance": 383659.11431621807
+    },
+    "connection.plate.shearRupture": {
+     "demand": 220631.79211692078,
+     "resistance": 260220.9644927392
+    },
+    "connection.plate.blockShear": {
+     "demand": 220631.79211692078,
+     "resistance": 291393.2675309319
+    },
+    "connection.plate.flexure": {
+     "demand": 16812.142559309363,
+     "resistance": 42025.06023441273
+    },
+    "connection.plate.flexuralRupture": {
+     "demand": 16812.142559309363,
+     "resistance": 31068.62124765264
+    },
+    "connection.plate.interactionYield": {
+     "demand": 0.4907486687877124,
+     "resistance": 1.0
+    },
+    "connection.plate.ductility": {
+     "demand": 0.00635,
+     "resistance": 0.006876683902571884
+    },
+    "connection.weld.strength": {
+     "demand": 220631.79211692078,
+     "resistance": 427278.53920031054
+    },
+    "connection.support.shearRupture": {
+     "demand": 220631.79211692078,
+     "resistance": 2124704.1750832153
+    },
+    "connection.support.thickness": {
+     "demand": 0.0036224307692307683,
+     "resistance": 0.018033999999999998
+    },
+    "connection.beam.shearYield": {
+     "demand": 220631.79211692078,
+     "resistance": 826568.540547706
+    }
+   }
+  },
+  {
+   "inputs": {
+    "id": "ii-a-17b",
+    "bolt": "7/8",
+    "group": "group120",
+    "threadsExcluded": false,
+    "rows": 5,
+    "columns": 1,
+    "pitch": 0.07619999999999999,
+    "gauge": 0.0,
+    "lev": 0.03175,
+    "lehPlate": 0.0635,
+    "a": 0.0635,
+    "lehBeam": 0.044449999999999996,
+    "underrun": 0.00635,
+    "topOffset": 0.07619999999999999,
+    "tp": 0.0127,
+    "plateFy": 344737864.65841806,
+    "plateFu": 448159224.0559435,
+    "E": 199947961501.88248,
+    "weld": 0.0079375,
+    "FEXX": 482633010.5217853,
+    "deformationConsidered": false,
+    "beam": {
+     "d": 0.4572,
+     "tw": 0.009016999999999999,
+     "tf": 0.014477999999999998,
+     "A": 0.009483852,
+     "kdes": 0.024688799999999997,
+     "Fy": 344737864.65841806,
+     "Fu": 448159224.0559435
+    },
+    "support": {
+     "kind": "columnFlange",
+     "t": 0.018033999999999998,
+     "Fu": 448159224.0559435,
+     "bf": 0.0,
+     "tw": 0.0
+    },
+    "V": 333616.62114453746,
+    "N": 266893.29691563
+   },
+   "C": 4.059550025029189,
+   "checks": {
+    "connection.boltGroup": {
+     "demand": 427237.734572208,
+     "resistance": 439769.72123102547
+    },
+    "connection.plate.shearYield": {
+     "demand": 333616.62114453746,
+     "resistance": 967488.2013191587
+    },
+    "connection.plate.shearRupture": {
+     "demand": 333616.62114453746,
+     "resistance": 618024.7906702555
+    },
+    "connection.plate.blockShear": {
+     "demand": 333616.62114453746,
+     "resistance": 786084.1635718162
+    },
+    "connection.plate.flexure": {
+     "demand": 21184.65544267813,
+     "resistance": 133622.21420469228
+    },
+    "connection.plate.flexuralRupture": {
+     "demand": 21184.65544267813,
+     "resistance": 94496.8036839961
+    },
+    "connection.plate.interactionYield": {
+     "demand": 0.18165403063908753,
+     "resistance": 1.0
+    },
+    "connection.plate.ductility": {
+     "demand": 0.0127,
+     "resistance": 0.008969091205441567
+    },
+    "connection.plate.tensionYield": {
+     "demand": 266893.29691563,
+     "resistance": 1451232.301978738
+    },
+    "connection.plate.tensionRupture": {
+     "demand": 266893.29691563,
+     "resistance": 1030041.3177837593
+    },
+    "connection.plate.blockShearInteraction": {
+     "demand": 0.24189202726178466,
+     "resistance": 1.0
+    },
+    "connection.plate.interactionRupture": {
+     "demand": 0.5015117208439646,
+     "resistance": 1.0
+    },
+    "connection.weld.strength": {
+     "demand": 427237.734572208,
+     "resistance": 897904.176580363
+    },
+    "connection.support.shearRupture": {
+     "demand": 333616.62114453746,
+     "resistance": 2678974.8294527493
+    },
+    "connection.support.thickness": {
+     "demand": 0.006037384615384615,
+     "resistance": 0.018033999999999998
+    },
+    "connection.beam.shearYield": {
+     "demand": 333616.62114453746,
+     "resistance": 852724.0836454377
+    },
+    "connection.beam.tensionYield": {
+     "demand": 266893.29691563,
+     "resistance": 2942498.5984948208
+    },
+    "connection.beam.tensionRupture": {
+     "demand": 266893.29691563,
+     "resistance": 1141195.8312761178
+    },
+    "connection.beam.blockShear": {
+     "demand": 266893.29691563,
+     "resistance": 708234.7250277384
+    }
+   }
+  },
+  {
+   "inputs": {
+    "id": "ii-a-19a",
+    "bolt": "3/4",
+    "group": "group120",
+    "threadsExcluded": false,
+    "rows": 4,
+    "columns": 2,
+    "pitch": 0.07619999999999999,
+    "gauge": 0.07619999999999999,
+    "lev": 0.038099999999999995,
+    "lehPlate": 0.03175,
+    "a": 0.2286,
+    "lehBeam": 0.038099999999999995,
+    "underrun": 0.0,
+    "topOffset": 0.07619999999999999,
+    "tp": 0.0127,
+    "plateFy": 344737864.65841806,
+    "plateFu": 448159224.0559435,
+    "E": 199947961501.88248,
+    "weld": 0.0079375,
+    "FEXX": 482633010.5217853,
+    "deformationConsidered": true,
+    "beam": {
+     "d": 0.40386,
+     "tw": 0.007493,
+     "tf": 0.010922,
+     "A": 0.006838695999999999,
+     "kdes": 0.021132799999999997,
+     "Fy": 344737864.65841806,
+     "Fu": 448159224.0559435
+    },
+    "support": {
+     "kind": "columnWeb",
+     "t": 0.011176,
+     "Fu": 448159224.0559435,
+     "bf": 0.36829999999999996,
+     "tw": 0.011176
+    },
+    "V": 160135.97814937797,
+    "N": 0.0
+   },
+   "C": 2.3175772705111672,
+   "checks": {
+    "connection.boltGroup": {
+     "demand": 160135.97814937797,
+     "resistance": 184453.99693896942
+    },
+    "connection.plate.shearYield": {
+     "demand": 160135.97814937797,
+     "resistance": 800679.8907468899
+    },
+    "connection.plate.shearRupture": {
+     "demand": 160135.97814937797,
+     "resistance": 552969.5495470708
+    },
+    "connection.plate.blockShear": {
+     "demand": 160135.97814937797,
+     "resistance": 643098.1648531498
+    },
+    "connection.plate.flexure": {
+     "demand": 36607.084604947806,
+     "resistance": 91517.7115123695
+    },
+    "connection.plate.flexuralRupture": {
+     "demand": 36607.084604947806,
+     "resistance": 70227.13279247799
+    },
+    "connection.plate.interactionYield": {
+     "demand": 0.20000000000000007,
+     "resistance": 1.0
+    },
+    "connection.plate.ductility": {
+     "demand": 0.0127,
+     "resistance": 0.01460548283644284
+    },
+    "connection.weld.strength": {
+     "demand": 160135.97814937797,
+     "resistance": 743093.1116527141
+    },
+    "connection.support.shearRupture": {
+     "demand": 160135.97814937797,
+     "resistance": 1373966.692521663
+    },
+    "connection.support.thickness": {
+     "demand": 0.006037384615384615,
+     "resistance": 0.011176
+    },
+    "connection.beam.shearYield": {
+     "demand": 160135.97814937797,
+     "resistance": 625931.5045913812
+    }
+   }
+  },
+  {
+   "inputs": {
+    "id": "uplift-tension",
+    "bolt": "3/4",
+    "group": "group120",
+    "threadsExcluded": false,
+    "rows": 4,
+    "columns": 1,
+    "pitch": 0.07619999999999999,
+    "gauge": 0.0,
+    "lev": 0.03175,
+    "lehPlate": 0.038099999999999995,
+    "a": 0.07619999999999999,
+    "lehBeam": 0.038099999999999995,
+    "underrun": 0.00635,
+    "topOffset": 0.07619999999999999,
+    "tp": 0.009524999999999999,
+    "plateFy": 344737864.65841806,
+    "plateFu": 448159224.0559435,
+    "E": 199947961501.88248,
+    "weld": 0.00635,
+    "FEXX": 482633010.5217853,
+    "deformationConsidered": true,
+    "beam": {
+     "d": 0.41402,
+     "tw": 0.009651999999999999,
+     "tf": 0.016002,
+     "A": 0.009483852,
+     "kdes": 0.026162,
+     "Fy": 344737864.65841806,
+     "Fu": 448159224.0559435
+    },
+    "support": {
+     "kind": "columnFlange",
+     "t": 0.018033999999999998,
+     "Fu": 448159224.0559435,
+     "bf": 0.0,
+     "tw": 0.0
+    },
+    "V": -133446.648457815,
+    "N": 111205.54038151249
+   },
+   "C": 2.8349336097849833,
+   "checks": {
+    "connection.boltGroup": {
+     "demand": 173708.60714474646,
+     "resistance": 225629.94642509855
+    },
+    "connection.plate.shearYield": {
+     "demand": 133446.648457815,
+     "resistance": 575488.6714743271
+    },
+    "connection.plate.shearRupture": {
+     "demand": 133446.648457815,
+     "resistance": 390331.44673910877
+    },
+    "connection.plate.blockShear": {
+     "demand": 133446.648457815,
+     "resistance": 437089.9012963978
+    },
+    "connection.plate.flexure": {
+     "demand": 10168.6346124855,
+     "resistance": 63037.590351619096
+    },
+    "connection.plate.flexuralRupture": {
+     "demand": 10168.6346124855,
+     "resistance": 46602.93187147895
+    },
+    "connection.plate.interactionYield": {
+     "demand": 0.1047210382140919,
+     "resistance": 1.0
+    },
+    "connection.plate.ductility": {
+     "demand": 0.009524999999999999,
+     "resistance": 0.006876683902571884
+    },
+    "connection.plate.tensionYield": {
+     "demand": 111205.54038151249,
+     "resistance": 863233.0072114907
+    },
+    "connection.plate.tensionRupture": {
+     "demand": 111205.54038151249,
+     "resistance": 650552.411231848
+    },
+    "connection.plate.blockShearInteraction": {
+     "demand": 0.12516790479025636,
+     "resistance": 1.0
+    },
+    "connection.plate.interactionRupture": {
+     "demand": 0.20909605836371492,
+     "resistance": 1.0
+    },
+    "connection.weld.strength": {
+     "demand": 173708.60714474646,
+     "resistance": 569704.7189337475
+    },
+    "connection.support.shearRupture": {
+     "demand": 133446.648457815,
+     "resistance": 2124704.1750832153
+    },
+    "connection.support.thickness": {
+     "demand": 0.004829907692307692,
+     "resistance": 0.018033999999999998
+    },
+    "connection.beam.shearYield": {
+     "demand": 133446.648457815,
+     "resistance": 826568.540547706
+    },
+    "connection.beam.tensionYield": {
+     "demand": 111205.54038151249,
+     "resistance": 2942498.5984948208
+    },
+    "connection.beam.tensionRupture": {
+     "demand": 111205.54038151249,
+     "resistance": 1127214.434711748
+    },
+    "connection.beam.blockShear": {
+     "demand": 111205.54038151249,
+     "resistance": 605664.2948568505
+    }
+   }
+  },
+  {
+   "inputs": {
+    "id": "two-lines-tension",
+    "bolt": "7/8",
+    "group": "group150",
+    "threadsExcluded": true,
+    "rows": 6,
+    "columns": 2,
+    "pitch": 0.07619999999999999,
+    "gauge": 0.07619999999999999,
+    "lev": 0.038099999999999995,
+    "lehPlate": 0.038099999999999995,
+    "a": 0.15239999999999998,
+    "lehBeam": 0.044449999999999996,
+    "underrun": 0.00635,
+    "topOffset": 0.07619999999999999,
+    "tp": 0.0127,
+    "plateFy": 344737864.65841806,
+    "plateFu": 448159224.0559435,
+    "E": 199947961501.88248,
+    "weld": 0.0079375,
+    "FEXX": 482633010.5217853,
+    "deformationConsidered": false,
+    "beam": {
+     "d": 0.5334,
+     "tw": 0.01016,
+     "tf": 0.015621,
+     "A": 0.011806427999999999,
+     "kdes": 0.028448,
+     "Fy": 344737864.65841806,
+     "Fu": 448159224.0559435
+    },
+    "support": {
+     "kind": "girderWeb",
+     "t": 0.01016,
+     "Fu": 448159224.0559435,
+     "bf": 0.0,
+     "tw": 0.0
+    },
+    "V": 355857.72922084,
+    "N": 133446.648457815
+   },
+   "C": 6.218572238017662,
+   "checks": {
+    "connection.boltGroup": {
+     "demand": 380056.22140788106,
+     "resistance": 938684.0841148128
+    },
+    "connection.plate.shearYield": {
+     "demand": 355857.72922084,
+     "resistance": 1201019.8361203347
+    },
+    "connection.plate.shearRupture": {
+     "demand": 355857.72922084,
+     "resistance": 780662.8934782175
+    },
+    "connection.plate.blockShear": {
+     "demand": 355857.72922084,
+     "resistance": 878245.7551629947
+    },
+    "connection.plate.flexure": {
+     "demand": 54232.717933256004,
+     "resistance": 205914.85090283136
+    },
+    "connection.plate.flexuralRupture": {
+     "demand": 54232.717933256004,
+     "resistance": 148716.28120760043
+    },
+    "connection.plate.interactionYield": {
+     "demand": 0.17803857813002766,
+     "resistance": 1.0
+    },
+    "connection.plate.ductility": {
+     "demand": 0.0127,
+     "resistance": 0.028598639141921553
+    },
+    "connection.plate.tensionYield": {
+     "demand": 133446.648457815,
+     "resistance": 1801529.7541805024
+    },
+    "connection.plate.tensionRupture": {
+     "demand": 133446.648457815,
+     "resistance": 1301104.822463696
+    },
+    "connection.plate.blockShearInteraction": {
+     "demand": 0.17342572701379996,
+     "resistance": 1.0
+    },
+    "connection.plate.interactionRupture": {
+     "demand": 0.38080859733281397,
+     "resistance": 1.0
+    },
+    "connection.weld.strength": {
+     "demand": 380056.22140788106,
+     "resistance": 1114639.6674790713
+    },
+    "connection.support.shearRupture": {
+     "demand": 355857.72922084,
+     "resistance": 1873590.9443477222
+    },
+    "connection.support.thickness": {
+     "demand": 0.006037384615384615,
+     "resistance": 0.01016
+    },
+    "connection.beam.shearYield": {
+     "demand": 355857.72922084,
+     "resistance": 1120951.847045646
+    },
+    "connection.beam.tensionYield": {
+     "demand": 133446.648457815,
+     "resistance": 3663110.500167022
+    },
+    "connection.beam.tensionRupture": {
+     "demand": 133446.648457815,
+     "resistance": 1489956.9880062137
+    },
+    "connection.beam.blockShear": {
+     "demand": 133446.648457815,
+     "resistance": 1179668.3723670845
+    }
+   }
+  },
+  {
+   "inputs": {
+    "id": "metric-m20",
+    "bolt": "M20",
+    "group": "group150",
+    "threadsExcluded": true,
+    "rows": 3,
+    "columns": 1,
+    "pitch": 0.07,
+    "gauge": 0.0,
+    "lev": 0.04,
+    "lehPlate": 0.04,
+    "a": 0.06,
+    "lehBeam": 0.04,
+    "underrun": 0.0,
+    "topOffset": 0.04,
+    "tp": 0.01,
+    "plateFy": 355000000.0,
+    "plateFu": 470000000.0,
+    "E": 200000000000.0,
+    "weld": 0.008,
+    "FEXX": 480000000.0,
+    "deformationConsidered": false,
+    "beam": {
+     "d": 0.3099,
+     "tw": 0.005842,
+     "tf": 0.009652,
+     "A": 0.004935,
+     "kdes": 0.017272,
+     "Fy": 345000000.0,
+     "Fu": 450000000.0
+    },
+    "support": {
+     "kind": "girderWeb",
+     "t": 0.01016,
+     "Fu": 450000000.0,
+     "bf": 0.0,
+     "tw": 0.0
+    },
+    "V": 80000.0,
+    "N": 0.0
+   },
+   "C": 1.9435720699498247,
+   "checks": {
+    "connection.boltGroup": {
+     "demand": 80000.0,
+     "resistance": 229925.54766109923
+    },
+    "connection.plate.shearYield": {
+     "demand": 80000.0,
+     "resistance": 468600.00000000006
+    },
+    "connection.plate.shearRupture": {
+     "demand": 80000.0,
+     "resistance": 313020.0
+    },
+    "connection.plate.blockShear": {
+     "demand": 80000.0,
+     "resistance": 352500.0000000001
+    },
+    "connection.plate.flexure": {
+     "demand": 4800.0,
+     "resistance": 38659.50000000001
+    },
+    "connection.plate.flexuralRupture": {
+     "demand": 4800.0,
+     "resistance": 30300.90000000001
+    },
+    "connection.plate.interactionYield": {
+     "demand": 0.044561701335286405,
+     "resistance": 1.0
+    },
+    "connection.plate.ductility": {
+     "demand": 0.01,
+     "resistance": 0.009714786674630129
+    },
+    "connection.weld.strength": {
+     "demand": 80000.0,
+     "resistance": 537627.4278717558
+    },
+    "connection.support.shearRupture": {
+     "demand": 80000.0,
+     "resistance": 905256.0
+    },
+    "connection.support.thickness": {
+     "demand": 0.006060032010208778,
+     "resistance": 0.01016
+    },
+    "connection.beam.shearYield": {
+     "demand": 80000.0,
+     "resistance": 374760.2106
+    }
+   }
+  }
+ ]
+}
