@@ -13,6 +13,7 @@ import {
   platePane,
 } from "./slab-plate.js";
 import { columnPane, columnSketch } from "./rc-column.js";
+import { jointsPane } from "./rc-joints.js";
 import {
   bindConnectionInspector,
   connectionActions,
@@ -164,6 +165,7 @@ export function concreteWorkspace({
     face = "Top X",
     plateField = "mx",
     plateRecovery = "elementCentre",
+    jointReport = null,
     // A refused run's reason, kept across the re-render that follows it.
     runError = null,
     sourceMode = "synthetic",
@@ -264,6 +266,8 @@ export function concreteWorkspace({
           plateRecovery,
         );
     if (d.kind === "rcColumn" && pane === "mechanics") return columnPane(run);
+    if (pane === "joints")
+      return jointsPane(jointReport, d, getContext().project);
     if (d.kind === "compositeBeam") {
       if (pane === "section")
         return `<h4>Composite section at the governing station</h4>${compositeSection(run?.codeProfilePreview)}`;
@@ -338,6 +342,9 @@ export function concreteWorkspace({
                     ["ec2", "EC2 checks"],
                   ]
                 : []),
+              ...(["rcBeam", "rcColumn"].includes(d.kind)
+                ? [["joints", "Joints"]]
+                : []),
               ["schedule", "Schedule"],
               ...(d.kind === "padFooting"
                 ? [
@@ -349,8 +356,18 @@ export function concreteWorkspace({
             ];
     host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
-      b.onclick = () => {
+      b.onclick = async () => {
         pane = b.dataset.previewPane;
+        if (pane === "joints") {
+          // The joint report belongs to the current model: refetch it.
+          jointReport = null;
+          results(host);
+          try {
+            jointReport = await gateway.send("detailJoints", {});
+          } catch (e) {
+            onError(e.message);
+          }
+        }
         results(host);
       };
     const apply = host.querySelector("#slab-apply-loads");

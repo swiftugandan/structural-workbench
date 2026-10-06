@@ -1,7 +1,7 @@
 # M16-RULES
 
-Source hash: `745508522936475b1c06626b5c6858c9fd58007f93962a9f408ac6ae299c25a6`
-Build hash: `c0324ec67576ead64e233b8edf553e175d70ea1cb78cc290c36cc343574dcc13`
+Source hash: `8ee52723ff988eae6587fbf4e638d72ed32a83eda2516b69ce480003a04ed9b2`
+Build hash: `48556717daa8146cd689491adaa48f0fde9542c91a7fde636a1fd232432163dc`
 Status: **PASS**
 
 - JRC89037 Table 4.1.1 mandrels (8), Table 4.1.5 link extensions (8), Tables 4.1.2–4.1.4 anchorage (84) and Tables 4.1.6–4.1.9 laps (224) reproduced within 1 mm.

@@ -5,6 +5,7 @@
 //! lock and clause corpus verify. Until then evaluateDesign returns UNSUPPORTED.
 
 pub mod footing;
+pub mod joints;
 pub mod native;
 mod profile;
 pub mod rc_column;

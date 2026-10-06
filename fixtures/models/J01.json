@@ -1,0 +1,558 @@
+{
+  "analysisMode": "spatial",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [],
+  "designPreviews": [
+    {
+      "id": "dp69bb8d4f650d2d80",
+      "inputSource": "syntheticFixture",
+      "inputSources": {
+        "bottomBarCount": "syntheticFixture",
+        "bottomBarDiameter": "syntheticFixture",
+        "concreteStrength": "syntheticFixture",
+        "cover": "syntheticFixture",
+        "depth": "syntheticFixture",
+        "linkDiameter": "syntheticFixture",
+        "linkLegs": "syntheticFixture",
+        "linkSpacing": "syntheticFixture",
+        "rebarStrength": "syntheticFixture",
+        "topBarCount": "syntheticFixture",
+        "topBarDiameter": "syntheticFixture",
+        "width": "syntheticFixture"
+      },
+      "inputs": {
+        "bottomBarCount": 4,
+        "bottomBarDiameter": 0.02,
+        "concreteStrength": 30000000,
+        "cover": 0.035,
+        "depth": 0.6,
+        "linkDiameter": 0.01,
+        "linkLegs": 2,
+        "linkSpacing": 0.2,
+        "rebarStrength": 500000000,
+        "topBarCount": 4,
+        "topBarDiameter": 0.02,
+        "width": 0.3
+      },
+      "kind": "rcBeam",
+      "mechanics": {
+        "inputSources": {
+          "blockDepthRatio": "syntheticFixture",
+          "blockIntensity": "syntheticFixture",
+          "concreteModulus": "syntheticFixture",
+          "concreteTensileStrength": "syntheticFixture",
+          "minimumClearSpacing": "syntheticFixture",
+          "steelModulus": "syntheticFixture",
+          "steelYieldStrength": "syntheticFixture",
+          "ultimateStrain": "syntheticFixture"
+        },
+        "inputs": {
+          "blockDepthRatio": 0.75,
+          "blockIntensity": 20000000,
+          "concreteModulus": 30000000000,
+          "concreteTensileStrength": 2800000,
+          "minimumClearSpacing": 0.025,
+          "steelModulus": 200000000000,
+          "steelYieldStrength": 460000000,
+          "ultimateStrain": 0.003
+        },
+        "law": "rectangularBlock"
+      },
+      "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+      "targetId": "beamY"
+    },
+    {
+      "id": "dp7e634675bc36f597",
+      "inputSource": "syntheticFixture",
+      "inputSources": {
+        "barDiameter": "syntheticFixture",
+        "barsAlongDepth": "syntheticFixture",
+        "barsAlongWidth": "syntheticFixture",
+        "concreteStrength": "syntheticFixture",
+        "cover": "syntheticFixture",
+        "depth": "syntheticFixture",
+        "linkDiameter": "syntheticFixture",
+        "linkSpacing": "syntheticFixture",
+        "rebarStrength": "syntheticFixture",
+        "width": "syntheticFixture"
+      },
+      "inputs": {
+        "barDiameter": 0.025,
+        "barsAlongDepth": 3,
+        "barsAlongWidth": 3,
+        "concreteStrength": 30000000,
+        "cover": 0.035,
+        "depth": 0.4,
+        "linkDiameter": 0.01,
+        "linkSpacing": 0.2,
+        "rebarStrength": 500000000,
+        "width": 0.4
+      },
+      "kind": "rcColumn",
+      "mechanics": {
+        "inputSources": {
+          "blockDepthRatio": "syntheticFixture",
+          "blockIntensity": "syntheticFixture",
+          "concreteModulus": "syntheticFixture",
+          "concreteTensileStrength": "syntheticFixture",
+          "fullCompressionStrain": "syntheticFixture",
+          "minimumClearSpacing": "syntheticFixture",
+          "steelModulus": "syntheticFixture",
+          "steelYieldStrength": "syntheticFixture",
+          "ultimateStrain": "syntheticFixture"
+        },
+        "inputs": {
+          "blockDepthRatio": 0.75,
+          "blockIntensity": 20000000,
+          "concreteModulus": 30000000000,
+          "concreteTensileStrength": 2800000,
+          "fullCompressionStrain": 0.002,
+          "minimumClearSpacing": 0.025,
+          "steelModulus": 200000000000,
+          "steelYieldStrength": 460000000,
+          "ultimateStrain": 0.003
+        },
+        "law": "rectangularBlock"
+      },
+      "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+      "targetId": "column"
+    },
+    {
+      "id": "dpb1ceb388974863c7",
+      "inputSource": "syntheticFixture",
+      "inputSources": {
+        "bottomBarCount": "syntheticFixture",
+        "bottomBarDiameter": "syntheticFixture",
+        "concreteStrength": "syntheticFixture",
+        "cover": "syntheticFixture",
+        "depth": "syntheticFixture",
+        "linkDiameter": "syntheticFixture",
+        "linkLegs": "syntheticFixture",
+        "linkSpacing": "syntheticFixture",
+        "rebarStrength": "syntheticFixture",
+        "topBarCount": "syntheticFixture",
+        "topBarDiameter": "syntheticFixture",
+        "width": "syntheticFixture"
+      },
+      "inputs": {
+        "bottomBarCount": 4,
+        "bottomBarDiameter": 0.02,
+        "concreteStrength": 30000000,
+        "cover": 0.035,
+        "depth": 0.6,
+        "linkDiameter": 0.01,
+        "linkLegs": 2,
+        "linkSpacing": 0.2,
+        "rebarStrength": 500000000,
+        "topBarCount": 4,
+        "topBarDiameter": 0.02,
+        "width": 0.3
+      },
+      "kind": "rcBeam",
+      "mechanics": {
+        "inputSources": {
+          "blockDepthRatio": "syntheticFixture",
+          "blockIntensity": "syntheticFixture",
+          "concreteModulus": "syntheticFixture",
+          "concreteTensileStrength": "syntheticFixture",
+          "minimumClearSpacing": "syntheticFixture",
+          "steelModulus": "syntheticFixture",
+          "steelYieldStrength": "syntheticFixture",
+          "ultimateStrain": "syntheticFixture"
+        },
+        "inputs": {
+          "blockDepthRatio": 0.75,
+          "blockIntensity": 20000000,
+          "concreteModulus": 30000000000,
+          "concreteTensileStrength": 2800000,
+          "minimumClearSpacing": 0.025,
+          "steelModulus": 200000000000,
+          "steelYieldStrength": 460000000,
+          "ultimateStrain": 0.003
+        },
+        "law": "rectangularBlock"
+      },
+      "soilReference": "Synthetic starter input; replace with a referenced geotechnical report",
+      "targetId": "beamX"
+    }
+  ],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "J01",
+  "loadCases": [
+    {
+      "category": "dead",
+      "id": "LC1",
+      "name": "Dead"
+    }
+  ],
+  "loads": [
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -20000
+      ],
+      "id": "wx",
+      "member": "beamX",
+      "type": "uniform"
+    },
+    {
+      "axes": "global",
+      "case": "LC1",
+      "forcePerLength": [
+        0,
+        0,
+        -20000
+      ],
+      "id": "wy",
+      "member": "beamY",
+      "type": "uniform"
+    }
+  ],
+  "materials": [
+    {
+      "E": 33000000000,
+      "density": 2500,
+      "id": "conc",
+      "name": "C30/37",
+      "nu": 0.2
+    }
+  ],
+  "members": [
+    {
+      "end": "ex",
+      "id": "beamX",
+      "localY": [
+        0,
+        1,
+        0
+      ],
+      "material": "conc",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "bm",
+      "start": "top"
+    },
+    {
+      "end": "ey",
+      "id": "beamY",
+      "localY": [
+        -1,
+        0,
+        0
+      ],
+      "material": "conc",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "bm",
+      "start": "top"
+    },
+    {
+      "end": "top",
+      "id": "column",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "conc",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "base"
+    }
+  ],
+  "metadata": {
+    "createdBy": "Structural Workbench",
+    "description": "Column with two orthogonal beams at its top, each with an RC draft (M16 joint clash fixture)",
+    "entityLabels": {
+      "LC1": "lc1",
+      "base": "n1",
+      "beamX": "m2",
+      "beamY": "m3",
+      "bm": "sec2",
+      "col": "sec1",
+      "column": "m1",
+      "conc": "mat1",
+      "ex": "n3",
+      "ey": "n4",
+      "s0": "s1",
+      "sx": "s2",
+      "sy": "s3",
+      "top": "n2",
+      "wx": "l1",
+      "wy": "l2"
+    }
+  },
+  "name": "RC joint · two beams into a column",
+  "nodes": [
+    {
+      "id": "base",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "ex",
+      "position": [
+        5,
+        0,
+        3.5
+      ]
+    },
+    {
+      "id": "ey",
+      "position": [
+        0,
+        5,
+        3.5
+      ]
+    },
+    {
+      "id": "top",
+      "position": [
+        0,
+        0,
+        3.5
+      ]
+    }
+  ],
+  "revision": 0,
+  "schemaVersion": "1.10.0",
+  "sections": [
+    {
+      "A": 0.18,
+      "Iy": 0.0054,
+      "Iz": 0.00135,
+      "J": 0.0037,
+      "cy": 0.15,
+      "cz": 0.3,
+      "id": "bm",
+      "name": "300 × 600",
+      "provenance": "Rectangle"
+    },
+    {
+      "A": 0.16,
+      "Iy": 0.002133,
+      "Iz": 0.002133,
+      "J": 0.0036,
+      "cy": 0.2,
+      "cz": 0.2,
+      "id": "col",
+      "name": "400 × 400",
+      "provenance": "Rectangle"
+    }
+  ],
+  "structure": {
+    "designObjects": [
+      {
+        "analysisStatus": "unverified",
+        "id": "do6ec87f5ef479db319049",
+        "kind": "rcBeam",
+        "name": "RC beam",
+        "physicalMemberId": "pm1712eefca52fa714add4",
+        "previewId": "dpb1ceb388974863c7",
+        "storeyId": null,
+        "supportId": null
+      },
+      {
+        "analysisStatus": "unverified",
+        "id": "doc0f50bc5ee77039a7b7d",
+        "kind": "rcColumn",
+        "name": "RC column",
+        "physicalMemberId": "pm881d5fb60090f59aabba",
+        "previewId": "dp7e634675bc36f597",
+        "storeyId": null,
+        "supportId": null
+      },
+      {
+        "analysisStatus": "unverified",
+        "id": "doc8295d4ee0424e21a396",
+        "kind": "rcBeam",
+        "name": "RC beam",
+        "physicalMemberId": "pmfbaf290fdcc14dfd5228",
+        "previewId": "dp69bb8d4f650d2d80",
+        "storeyId": null,
+        "supportId": null
+      }
+    ],
+    "grids": [],
+    "groups": [],
+    "joints": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt28720365c5e7476a011e",
+        "name": "Joint top",
+        "nodeId": "top",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt2bdd94c004581aa9f0d4",
+        "name": "Joint ey",
+        "nodeId": "ey",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt5312fb609f60384731fc",
+        "name": "Joint ex",
+        "nodeId": "ex",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtcae662172fd450bb0cd7",
+        "name": "Joint base",
+        "nodeId": "base",
+        "storeyId": null
+      }
+    ],
+    "layers": [],
+    "physicalMembers": [
+      {
+        "analyticalMemberIds": [
+          "beamX"
+        ],
+        "id": "pm1712eefca52fa714add4",
+        "name": "beamX",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "column"
+        ],
+        "id": "pm881d5fb60090f59aabba",
+        "name": "column",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "beamY"
+        ],
+        "id": "pmfbaf290fdcc14dfd5228",
+        "name": "beamY",
+        "role": "unassigned",
+        "storeyId": null
+      }
+    ],
+    "storeys": [],
+    "supportDetails": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd8ff5d4f4e62aec1b3c0c",
+        "name": "Support sy",
+        "supportId": "sy"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd9740c9dcdb4487d8cd63",
+        "name": "Support sx",
+        "supportId": "sx"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdec18eac8d758b1eba52d",
+        "name": "Support s0",
+        "supportId": "s0"
+      }
+    ]
+  },
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "s0",
+      "node": "base",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "id": "sx",
+      "node": "ex",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "id": "sy",
+      "node": "ey",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

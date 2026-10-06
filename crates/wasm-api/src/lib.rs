@@ -133,6 +133,7 @@ impl Kernel {
             "evaluateDesignPreview" => {
                 preview_workspace::evaluate(self.project.as_ref().unwrap(), payload)
             }
+            "detailJoints" => preview_workspace::joints(self.project.as_ref().unwrap()),
             "steelReadiness" => workbench_design::native::readiness(
                 self.project.as_ref().unwrap(),
                 payload["memberId"].as_str().unwrap_or(""),

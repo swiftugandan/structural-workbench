@@ -264,6 +264,10 @@ Review contract v1 includes `reviewId`, `modelHash`, `sourceRevision`, `resultId
 
 Extends exact model-native input `{memberId,modelHash,resultId,caseId}` with one to five unique `sectionRefs` from the verified subset. Rust rejects missing readiness/stale/envelope inputs, clones each candidate through normal catalogue assignment and project validation, reanalyses the full model and returns exact DesignRuns, masses in kg, candidate model/result IDs and baseline record. `complete:true` means the requested finite set completed, never global optimality. Any analysis failure rejects the study without a partial optimum. Explicit Apply is a separate ordinary `AssignSteelCatalogue` command; candidate results never replace live analysis.
 
+### `detailJoints`
+
+Takes `{}`. Rust collects the bound rcBeam and rcColumn drafts by the nodes of their members and checks every node where a beam draft meets another (ADR 0032). Returns `{contractVersion: 1, modelHash, status, joints, assumptions}`; each joint has `node`, nullable `column` and `beams` (draft ids), `status` (`clash`, `indeterminate` when an aggregate size is missing and nothing clashes, or `clear`), `pairsChecked`, `clashes` and `notes`. A clash is `beamColumn` (8.2(2) clear distance between a beam bar and a column bar) or `beamBeam` (crossing bars at one face intersecting), with `distance`, `required` and `shortfall` in metres and a message. It reads the current revision only; nothing is stored.
+
 ## Stability analyses (stability-v1, M09)
 
 Formulation: `docs/formulations/stability.md`; decisions: ADR 0017. Both types

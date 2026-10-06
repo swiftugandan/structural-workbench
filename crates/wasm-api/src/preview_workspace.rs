@@ -1017,6 +1017,70 @@ fn mechanics_laws(m: &SectionMechanicsInputs) -> (ConcreteLaw, SteelLaw) {
     (law, steel)
 }
 
+/// Bar clashes at every node where bound RC drafts meet (M16, ADR 0032):
+/// rcBeam drafts' top and bottom rows and rcColumn drafts' perimeter bars,
+/// on the analytical centrelines.
+pub fn joints(p: &Project) -> Result<Value> {
+    use workbench_design::joints::{Joint, JointBeam, JointColumn, check};
+    let pos = |id: &str| p.nodes.iter().find(|n| n.id == id).map(|n| n.position).unwrap();
+    let mut by_node: std::collections::BTreeMap<String, Joint> = std::collections::BTreeMap::new();
+    for d in &p.design_previews {
+        let Some(target) = d.target_id.as_ref() else { continue };
+        if !["rcBeam", "rcColumn"].contains(&d.kind.as_str()) {
+            continue;
+        }
+        let Some(m) = p.members.iter().find(|m| &m.id == target) else { continue };
+        let (_, r) = workbench_geometry::axes(pos(&m.start), pos(&m.end), m.local_y);
+        let dg = d.code_inputs.as_ref().and_then(|c| c.aggregate_size);
+        for (node, sign) in [(&m.start, 1.0), (&m.end, -1.0)] {
+            let joint = by_node.entry(node.clone()).or_insert_with(|| Joint { node: node.clone(), position: pos(node), column: None, beams: vec![] });
+            let v = &d.inputs;
+            if d.kind == "rcColumn" {
+                let bars: Vec<[f64; 2]> = column_bars(v).iter().map(|b| [b.y, b.z]).collect();
+                joint.column = Some(JointColumn {
+                    id: d.id.clone(),
+                    axis: r[0],
+                    y: r[1],
+                    z: r[2],
+                    bars,
+                    diameter: v["barDiameter"],
+                    aggregate: dg,
+                });
+            } else {
+                joint.beams.push(JointBeam {
+                    id: d.id.clone(),
+                    axis: r[0].map(|x| x * sign),
+                    lateral: r[1],
+                    up: r[2],
+                    width: v["width"],
+                    depth: v["depth"],
+                    cover: v["cover"],
+                    link: v["linkDiameter"],
+                    top: (v["topBarDiameter"], v["topBarCount"] as usize),
+                    bottom: (v["bottomBarDiameter"], v["bottomBarCount"] as usize),
+                    aggregate: dg,
+                });
+            }
+        }
+    }
+    let results: Vec<Value> = by_node
+        .values()
+        .filter(|j| j.beams.len() + usize::from(j.column.is_some()) >= 2 && !j.beams.is_empty())
+        .map(check)
+        .collect();
+    let status = if results.iter().any(|r| r["status"] == "clash") {
+        "clash"
+    } else if results.iter().any(|r| r["status"] == "indeterminate") {
+        "indeterminate"
+    } else {
+        "clear"
+    };
+    Ok(json!({"contractVersion": 1, "modelHash": p.hash(), "status": status, "joints": results,
+        "assumptions": ["Draft sections are centred on the analytical member axes (centreline model)",
+            "Longitudinal bars are straight lines through the joint; where they stop, laps and anchorage are the engineer's",
+            "EN 1992-1-1 8.2(2) clear distance between beam and column bars, k1 = 1, k2 = 5 mm (UK NA); crossing beam bars may touch but not intersect"]}))
+}
+
 /// Perimeter bars of an rcColumn draft: `barsAlongWidth` on each ±z face,
 /// `barsAlongDepth` on each ±y face (corners shared), centres inset by
 /// cover + link + half a bar. Origin at the section centre.

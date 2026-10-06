@@ -1,3 +1,9 @@
+## Latest: M16-JOINTS — bar clashes at RC joints (sub-slice, ADR 0032)
+
+- `workbench_design::joints`: bound rcBeam/rcColumn drafts are placed on their member centrelines; beam vs column bars need the 8.2(2) clear distance (k1 = 1, k2 = 5 mm), crossing beam rows may touch but not intersect. Missing aggregate size → indeterminate, never clear.
+- Protocol `detailJoints` (contracts/PROTOCOL.md) and a Joints pane on RC drafts. Fixture J01 (tools/make-joint-fixture.mjs): two equal beams into a column top clash; a 40 mm deeper beam clears the crossing.
+- Gate: `node tools/run-m16-joints.mjs` → evidence/M16/joints PASS (5 criteria). Hand-geometry verification only; no published joint example is held.
+
 ## Latest: M16-RULES — EC2 Section 8 detailing rules verified (sub-slice)
 
 - `ec2uk/detailing.rs`: `mandrel_min` (Table 8.1N), `link_extension` (Figure 8.5), `alpha6` (Table 8.3, interpolated) and `lap_length` (8.7.3). The beam anchorage check now records the mandrel, the link extensions and the lap lengths at 25/50/100 % lapped.
