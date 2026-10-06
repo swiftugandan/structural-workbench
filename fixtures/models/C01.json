@@ -57,13 +57,6 @@
       "id": "dmb303d06c707da9c46b0f",
       "name": "ASTM A992",
       "nu": 0.3
-    },
-    {
-      "E": 200000000000,
-      "density": 7850,
-      "id": "mat1",
-      "name": "steel",
-      "nu": 0.3
     }
   ],
   "members": [
@@ -213,8 +206,6 @@
       "ds026da40948d982ea58a9": "sec4",
       "ds20717d743ea9d2686a4b": "sec3",
       "dsb303d06c707da9c46b0f": "sec2",
-      "mat1": "mat1",
-      "s": "sec1",
       "s1": "s1",
       "s2": "s2",
       "t1": "n2",

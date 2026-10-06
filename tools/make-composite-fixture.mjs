@@ -164,10 +164,19 @@ request("applyCommand", {
   },
 });
 const { project } = request("getSnapshot", {});
+// The placeholder section and material are no longer used by any member.
 project.sections = project.sections.filter((s) => s.id !== "s");
+const removed = project.materials
+  .filter((m) => !project.members.some((x) => x.material === m.id))
+  .map((m) => m.id)
+  .concat(["s"]);
+project.materials = project.materials.filter((m) => !removed.includes(m.id));
+for (const id of removed) delete project.metadata.entityLabels?.[id];
 project.revision = 0;
 await writeFile(
   "fixtures/models/CB01.json",
   JSON.stringify(project, null, 2) + "\n",
 );
-console.log(`wrote fixtures/models/CB01.json (schema ${project.schemaVersion})`);
+console.log(
+  `wrote fixtures/models/CB01.json (schema ${project.schemaVersion})`,
+);
