@@ -442,7 +442,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md; no code or numerical acceptance has run yet"
+      "acceptanceDefinition": "SPECIFICATION.md milestone text plus VALIDATION.md. Accepted sub-slices only: M16-RULES (EC2 Section 8 mandrels, links, anchorage, laps vs JRC89037) and M16-JOINTS (joint bar clashes, ADR 0032). The parent is blocked by R-DETAILING (a named schedule standard with shape codes and schedule examples) and R-CONCRETE-EXAMPLES."
     },
     {
       "id": "M17",
