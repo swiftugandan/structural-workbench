@@ -13,7 +13,7 @@
 - **Verification.** I.1 and I.2 within their rounding chains, I.2 again with its own rounded inputs (reproduces I_LB 4,730, I_tr 6,790, I_equiv 5,480, M_n), independent oracle `tools/oracles/composite_oracle.py` to 1e-8.
 - **In the app.** `compositeBeam` drafts (schema 1.10.0): stages, AISC checks, section (PNA, stress block), deflections, bill of materials, report section.
 - **Gate:** `PORT=4183 node tools/run-m17-parent.mjs` → evidence/M17/full, 12/12 PASS on d3c1ea09.
-- **Regression:** 140/142. Orientation passed on rerun. `tests/performance-cad.spec.js` exceeded its 3 s import budget (4.4–6.4 s) while unrelated processes held the load average near 9 (edit p95 also doubled against the 26 Sep evidence); rerun it on an unloaded machine.
+- **Regression:** 140/142. Orientation passed on rerun. `tests/performance-cad.spec.js` exceeded its 3 s import budget (4.4–6.4 s) while unrelated processes held the load average near 9 (edit p95 also doubled against the 26 Sep evidence); rerun it on an unloaded machine. An A/B under the same load showed the session-start build (5285028) also over budget (3.8–4.4 s) and the current build at 3.1–3.6 s, so it is not a regression.
 
 ## Latest: M13 single-plate steel connection accepted (AISC 360-22 demonstration)
 
