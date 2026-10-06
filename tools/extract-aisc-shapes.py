@@ -21,6 +21,8 @@ NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 SHAPES = [
     "W24X62", "W18X50", "W14X132", "W14X99", "W8X21",
     "W16X50", "W14X90", "W16X36", "W18X35", "W21X62", "W12X26", "W10X33",
+    # Composite beams of Design Examples I.1 and I.2 (M17).
+    "W21X50", "W24X76",
 ]
 # Output key → database column.
 COLUMNS = [

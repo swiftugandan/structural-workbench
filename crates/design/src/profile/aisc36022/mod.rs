@@ -1,6 +1,7 @@
 //! ANSI/AISC 360-22 LRFD — M07 first pin (S2 clause families).
 
 mod classification;
+pub mod composite;
 pub mod connection;
 mod compression;
 mod flexure;

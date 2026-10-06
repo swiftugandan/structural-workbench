@@ -1,0 +1,266 @@
+{
+  "fixtureVersion": 1,
+  "source": "AISC Companion to the Manual v16.0, Vol. 1: Design Examples (R-STEEL-EXAMPLES), Chapter I: Examples I.1 (composite beam, Manual tables) and I.2 (composite girder, direct calculation); LRFD. US customary as published; 'rounding' is half a unit of the last published digit unless a basis is given.",
+  "units": {
+    "length": "in",
+    "span": "ft",
+    "force": "kips",
+    "moment": "kip-ft",
+    "stress": "ksi",
+    "inertia": "in.^4",
+    "density": "lb/ft^3"
+  },
+  "examples": {
+    "I.1": {
+      "pages": "I-4 to I-16",
+      "inputs": {
+        "beam": "W21X50",
+        "span": 45,
+        "spacing": [
+          10,
+          10
+        ],
+        "slab": 7.5,
+        "deck": "perpendicular",
+        "hr": 3,
+        "wr": 6,
+        "pitch": 12,
+        "fc": 4,
+        "wc": 145,
+        "stud": 0.75,
+        "studFu": 65,
+        "Fy": 50,
+        "wetUniform": 0.8,
+        "liveUniform": 1.0,
+        "constructionUniform": 1.36,
+        "compositeUniform": 2.68
+      },
+      "published": {
+        "beff": {
+          "value": 120,
+          "rounding": 0.5,
+          "basis": "10.0 ft"
+        },
+        "Ac": {
+          "value": 540,
+          "rounding": 0.5
+        },
+        "Cf": {
+          "value": 735,
+          "rounding": 0.5
+        },
+        "Qn1": {
+          "value": 17.2,
+          "rounding": 0.05,
+          "basis": "Manual Table 3-20, one stud per rib, weak position"
+        },
+        "Qn2": {
+          "value": 14.6,
+          "rounding": 0.05,
+          "basis": "two studs per rib"
+        },
+        "phiMn386": {
+          "value": 769,
+          "rounding": 1.0,
+          "basis": "Manual Table 3-18, PNA location 5 (bottom of flange), ΣQn = 386 kips; table values to three figures"
+        },
+        "a386": {
+          "value": 0.946,
+          "rounding": 0.0005
+        },
+        "ILB": {
+          "value": 2520,
+          "rounding": 10,
+          "basis": "Manual Table 3-19 for Y2 = 7.00 in. (rounded) and PNA location 5; the direct C-I3-1 value with the exact d1 differs by its rounding"
+        },
+        "deltaWet": {
+          "value": 2.59,
+          "rounding": 0.005
+        },
+        "deltaLive": {
+          "value": 1.26,
+          "rounding": 0.005
+        },
+        "composite390": {
+          "value": 53.1,
+          "rounding": 0.05,
+          "basis": "percent, ΣQn = 390 kips"
+        },
+        "phiVn": {
+          "value": 237,
+          "rounding": 0.5
+        },
+        "phiMnSteel": {
+          "value": 412.5,
+          "rounding": 0.5,
+          "basis": "0.90 Fy Zx, continuously braced during construction"
+        },
+        "MuConstruction": {
+          "value": 344,
+          "rounding": 0.5
+        },
+        "MuComposite": {
+          "value": 678,
+          "rounding": 0.5
+        }
+      },
+      "discrepancies": [
+        "The example selects the section from Manual Tables 3-18/3-19 (not held); the workbench computes φM_n and I_LB directly from Commentary C-I3-10 and C-I3-1, which reproduce the tabulated values within their rounding."
+      ]
+    },
+    "I.2": {
+      "pages": "I-17 to I-35",
+      "inputs": {
+        "beam": "W24X76",
+        "span": 30,
+        "spacing": [
+          45,
+          45
+        ],
+        "slab": 7.5,
+        "deck": "parallel",
+        "hr": 3,
+        "wr": 6,
+        "pitch": 12,
+        "fc": 4,
+        "wc": 145,
+        "stud": 0.75,
+        "studFu": 65,
+        "Fy": 50,
+        "constructionLb": 10,
+        "constructionCb": 1.0,
+        "wetPoint": 36.0,
+        "wetUniform": 0.076,
+        "livePoint": 45.0,
+        "constructionPoint": 61.3,
+        "constructionUniform": 0.096,
+        "compositePoint": 121,
+        "compositeUniform": 0.0912
+      },
+      "published": {
+        "beff": {
+          "value": 90.0,
+          "rounding": 0.05
+        },
+        "Ac": {
+          "value": 540,
+          "rounding": 0.5
+        },
+        "Cconcrete": {
+          "value": 1840,
+          "rounding": 5
+        },
+        "Csteel": {
+          "value": 1120,
+          "rounding": 0.5
+        },
+        "x560": {
+          "value": 0.623,
+          "rounding": 0.0005,
+          "basis": "PNA depth in the top flange for C = 560 kips"
+        },
+        "a560": {
+          "value": 1.83,
+          "rounding": 0.005
+        },
+        "d1_560": {
+          "value": 6.59,
+          "rounding": 0.006,
+          "basis": "7.50 − 1.83/2 = 6.585, printed 6.59"
+        },
+        "Mn560": {
+          "value": 1420,
+          "rounding": 15,
+          "basis": "the example takes d3 = 12.0 in. for d/2 = 11.95 in. and prints 17,000 kip-in. to three figures; with the exact inputs M_n = 1,408 kip-ft (16,897 kip-in.)"
+        },
+        "Qn": {
+          "value": 21.5,
+          "rounding": 0.05
+        },
+        "QnConcrete": {
+          "value": 26.1,
+          "rounding": 0.05
+        },
+        "Ec": {
+          "value": 3490,
+          "rounding": 5
+        },
+        "a581": {
+          "value": 1.9,
+          "rounding": 0.005
+        },
+        "d1_581": {
+          "value": 6.55,
+          "rounding": 0.005
+        },
+        "x581": {
+          "value": 0.6,
+          "rounding": 0.0005
+        },
+        "YENA": {
+          "value": 18.3,
+          "rounding": 0.05
+        },
+        "ILB": {
+          "value": 4730,
+          "rounding": 15,
+          "basis": "from d3 = 12.0 in. (d/2 = 11.95 in.); exact 4,719 in.^4, and 4,733 in.^4 with the example's rounded inputs"
+        },
+        "n": {
+          "value": 8.31,
+          "rounding": 0.006,
+          "basis": "E_c = 3,492 ksi exactly; the example rounds it to 3,490 ksi (n = 8.309)"
+        },
+        "Itr": {
+          "value": 6790,
+          "rounding": 20,
+          "basis": "from n = 8.31 and d/2 = 12.0 in.; exact 6,772 in.^4, 6,798 in.^4 with the rounded inputs"
+        },
+        "enaInDeck": {
+          "value": 2.88,
+          "rounding": 0.03,
+          "basis": "from n = 8.31 and d/2 = 12.0 in.; exact 2.854 in."
+        },
+        "Iequiv": {
+          "value": 5480,
+          "rounding": 15,
+          "basis": "from the rounded I_tr; exact 5,465 in.^4"
+        },
+        "deltaWet": {
+          "value": 1.0,
+          "rounding": 0.005
+        },
+        "deltaLive": {
+          "value": 0.543,
+          "rounding": 0.002,
+          "basis": "with the example's I_LB = 4,730 in.^4; with the exact 4,719 in.^4 it is 0.5446 in."
+        },
+        "phiMnConstruction": {
+          "value": 677,
+          "rounding": 1.0,
+          "basis": "Manual Eq. 3-4a with tabulated φbBF = 22.6 kips and φbMpx = 750 kip-ft"
+        },
+        "MuConstruction": {
+          "value": 624,
+          "rounding": 0.5
+        },
+        "MuComposite": {
+          "value": 1220,
+          "rounding": 5
+        },
+        "phiVn": {
+          "value": 315,
+          "rounding": 0.5
+        },
+        "Vu": {
+          "value": 122,
+          "rounding": 0.5
+        }
+      },
+      "discrepancies": [
+        "The example places pairs of studs at the ends and single studs in the middle third; the workbench models a uniform layout, so the stud-force comparison uses the example's ΣQn values (560 and 581 kips) directly.",
+        "The example rounds d/2 = 11.95 in. to 12.0 in. and E_c to 3,490 ksi; with those inputs the workbench reproduces its I_LB, Y_ENA, I_tr, I_equiv and M_n (test example_i_2_with_its_rounded_inputs). With the exact inputs the values differ by those roundings only."
+      ]
+    }
+  }
+}

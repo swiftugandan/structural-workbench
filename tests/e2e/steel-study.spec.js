@@ -43,7 +43,7 @@ test("M07-G catalogue study reanalyses self weight, applies explicitly and undoe
   await page.locator("#catalogue-search").fill("");
   await page.locator("#catalogue-search").press("Tab");
   // The whole verified subset is listed (tools/extract-aisc-shapes.py).
-  await expect(page.locator("[data-candidate-ref]")).toHaveCount(12);
+  await expect(page.locator("[data-candidate-ref]")).toHaveCount(14);
   // Select exactly the two published sections regardless of catalogue ordering.
   for (const el of await page.locator("[data-candidate-ref]").all()) {
     const ref = await el.getAttribute("data-candidate-ref");
