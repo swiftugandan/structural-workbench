@@ -4969,6 +4969,39 @@
    ],
    "verifiedSourceHash": "d3c1ea09b14c16675dd4cba9d706745d6ae98f5a8b0b48090101bd14616bbef0",
    "verifiedBuildHash": "037e01d2896dff212c5a1aefef80919b627561f52e269d0bac82935eb48cafe9"
+  },
+  "M16-RULES": {
+   "id": "M16-RULES",
+   "useCase": "EN 1992-1-1 Section 8 detailing rules for the ec2-uk-na demonstration: mandrel (Table 8.1N), link extensions (Figure 8.5), lap lengths (8.7.3, Table 8.3); recorded in the beam anchorage check",
+   "dependencies": [
+    "M08-parent"
+   ],
+   "status": "ACCEPTED",
+   "scope": "Numerical sub-slice of M16; the M16 parent (persistent bars, clashes, revision propagation, drawings) remains open",
+   "acceptanceIds": [
+    "M16-RULES-MANDREL",
+    "M16-RULES-LINKS",
+    "M16-RULES-ANCHORAGE",
+    "M16-RULES-LAPS"
+   ],
+   "requiredCommands": [
+    "node tools/run-m16-rules.mjs"
+   ],
+   "outcomes": [
+    {
+     "check": "m16-rules-acceptance",
+     "status": "PASS",
+     "evidencePath": "evidence/M16/rules/m16-rules-acceptance.json"
+    }
+   ],
+   "actualOutcomes": [
+    "JRC89037 Tables 4.1.1 (8), 4.1.5 (8), 4.1.2–4.1.4 (84) and 4.1.6–4.1.9 (224) reproduced within 1 mm",
+    "α6 by Table 8.3 with interpolation, as the JRC tables use (1.4 at 50 %, not √2)"
+   ],
+   "evidencePaths": [
+    "evidence/M16/rules"
+   ],
+   "nextAction": "M16 parent: persistent bar sets on rcBeam/rcColumn drafts with shapes from these rules, laps and curtailment (9.2.1.3), clash detection at beam–column joints, revision propagation and drawings"
   }
  },
  "blockers": [
@@ -5020,7 +5053,7 @@
  ],
  "lastVerifiedSourceRevision": "ccd4ada",
  "lastVerifiedBuildHash": "037e01d2896dff212c5a1aefef80919b627561f52e269d0bac82935eb48cafe9",
- "nextAction": "M16 first sub-slice: EC2 Section 8 detailing of an RC beam with persistent bar sets (mandrel 8.3, anchorage 8.4, laps 8.7, curtailment 9.2.1.3) against JRC89037 4.2.2 detailing examples, schedule with shape geometry (not BS 8666, not held); then clashes at joints. Rerun tests/performance-cad.spec.js on an unloaded machine.",
+ "nextAction": "M16 parent (persistent bars with EC2 Section 8 shapes, curtailment 9.2.1.3, clashes at joints, revision propagation, drawings) building on M16-RULES; M18 prestress (EC2 5.10) needs an independent worked example (none held in JRC89037); rerun tests/performance-cad.spec.js unloaded.",
  "handoffPath": "HANDOFF.md",
  "lastVerifiedSourceHash": "d3c1ea09b14c16675dd4cba9d706745d6ae98f5a8b0b48090101bd14616bbef0",
  "lastVerifiedScope": "M17 parent on source d3c1ea09: gate 12/12; full browser regression 140/142 (orientation flake passed on rerun; CAD capacity import budget exceeded under unrelated machine load)"

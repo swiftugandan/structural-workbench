@@ -1,3 +1,9 @@
+## Latest: M16-RULES — EC2 Section 8 detailing rules verified (sub-slice)
+
+- `ec2uk/detailing.rs`: `mandrel_min` (Table 8.1N), `link_extension` (Figure 8.5), `alpha6` (Table 8.3, interpolated) and `lap_length` (8.7.3). The beam anchorage check now records the mandrel, the link extensions and the lap lengths at 25/50/100 % lapped.
+- JRC89037 Tables 4.1.1, 4.1.5, 4.1.2–4.1.4 and 4.1.6–4.1.9 (324 values) reproduce within 1 mm.
+- Gate: `node tools/run-m16-rules.mjs` → evidence/M16/rules PASS. The M16 parent (persistent bars, clashes, revisions, drawings) is still open.
+
 ## Latest: M17 composite beam accepted (AISC 360-22 Chapter I demonstration)
 
 - **Kernel.** `aisc36022/composite/` (ADR 0031, `docs/formulations/composite.md`, `dossier-composite.md`): unshored simply supported W beam with headed studs under a solid slab or formed deck (ribs perpendicular or parallel).

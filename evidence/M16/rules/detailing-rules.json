@@ -1,0 +1,45 @@
+{
+  "taskId": "M16-RULES",
+  "milestone": "M16",
+  "sourceHash": "745508522936475b1c06626b5c6858c9fd58007f93962a9f408ac6ae299c25a6",
+  "buildHash": "c0324ec67576ead64e233b8edf553e175d70ea1cb78cc290c36cc343574dcc13",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {},
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-06T03:25:46.442Z",
+  "status": "PASS",
+  "testCount": 11,
+  "testIds": [
+    "profile::ec2uk::detailing_tests::cover_and_spacing_follow_4_4_1_and_8_2",
+    "profile::ec2uk::detailing_tests::anchorage_lengths_reproduce_jrc_tables_4_1_2_to_4_1_4",
+    "profile::ec2uk::detailing_tests::crack_tables_are_the_code_tables_with_the_conservative_row",
+    "profile::ec2uk::detailing_tests::cracked_stress_matches_the_closed_form",
+    "profile::ec2uk::detailing_tests::flexure_crosses_the_balanced_boundary_by_the_closed_form",
+    "profile::ec2uk::detailing_tests::lap_lengths_reproduce_jrc_tables_4_1_6_to_4_1_9",
+    "profile::ec2uk::detailing_tests::mandrels_and_link_extensions_reproduce_jrc_tables_4_1_1_and_4_1_5",
+    "profile::ec2uk::detailing_tests::required_steel_matches_the_rectangular_block_closed_form",
+    "profile::ec2uk::detailing_tests::uk_v_rd_max_cap_is_200_bw_squared_and_absent_from_the_eu_set",
+    "profile::ec2uk::detailing_tests::span_depth_reproduces_jrc_worked_values",
+    "profile::ec2uk::detailing_tests::a_fully_detailed_beam_passes_every_check"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "workbench-design",
+    "detailing_tests"
+  ],
+  "artifacts": []
+}

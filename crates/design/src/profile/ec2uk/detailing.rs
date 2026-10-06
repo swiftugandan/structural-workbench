@@ -156,6 +156,56 @@ pub fn anchorage_length(ndp: &Ec2Ndp, fck: f64, fyk: f64, phi: f64, good: bool, 
     Anchorage { fbd, lb_rqd, alpha2, lbd_tension: (alpha2 * lb_rqd).max(lb_min_t), lbd_compression: lb_rqd.max(lb_min_c) }
 }
 
+/// Table 8.1N(a): minimum mandrel diameter for bends, hooks and loops of
+/// bars: 4φ up to 16 mm, 7φ above. (8.1) for concrete failure is not needed
+/// when 8.3(3) holds; otherwise it is the engineer's.
+pub fn mandrel_min(phi: f64) -> f64 {
+    if phi <= 0.016 + 1e-12 { 4.0 * phi } else { 7.0 * phi }
+}
+
+/// Figure 8.5: the straight extension after the curve of a link or shear
+/// bar: (hook, at least 5φ and 50 mm; bend, at least 10φ and 70 mm).
+pub fn link_extension(phi: f64) -> (f64, f64) {
+    ((5.0 * phi).max(0.050), (10.0 * phi).max(0.070))
+}
+
+/// Table 8.3: α6 for the percentage ρ1 of bars lapped within 0.65 l0 of the
+/// lap centre, interpolated between the tabulated points (1 up to 25 %,
+/// 1.15 at 33 %, 1.4 at 50 %, 1.5 above 50 %).
+pub fn alpha6(rho1_percent: f64) -> f64 {
+    let points = [(25.0, 1.0), (100.0 / 3.0, 1.15), (50.0, 1.4)];
+    if rho1_percent <= points[0].0 {
+        1.0
+    } else if rho1_percent > 50.0 {
+        1.5
+    } else {
+        let k = if rho1_percent <= points[1].0 { 0 } else { 1 };
+        let ((x0, y0), (x1, y1)) = (points[k], points[k + 1]);
+        y0 + (y1 - y0) * (rho1_percent - x0) / (x1 - x0)
+    }
+}
+
+/// 8.7.3 lap length of a straight ribbed bar.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Lap {
+    pub l0: f64,
+    pub l0_min: f64,
+    pub alpha6: f64,
+    pub alpha2: f64,
+    pub lb_rqd: f64,
+}
+
+/// l0 = α1 α2 α3 α5 α6 l_b,rqd ≥ l0,min = max(0.3 α6 l_b,rqd, 15φ, 200 mm)
+/// (8.10, 8.11), with α1 = α3 = α5 = 1 and α2 from c_d in tension (1.0 in
+/// compression, Table 8.2); σsd = fyd.
+pub fn lap_length(ndp: &Ec2Ndp, fck: f64, fyk: f64, phi: f64, good: bool, cd: f64, rho1_percent: f64, tension: bool) -> Lap {
+    let a = anchorage_length(ndp, fck, fyk, phi, good, cd);
+    let alpha2 = if tension { a.alpha2 } else { 1.0 };
+    let a6 = alpha6(rho1_percent);
+    let l0_min = (0.3 * a6 * a.lb_rqd).max(15.0 * phi).max(0.200);
+    Lap { l0: (alpha2 * a6 * a.lb_rqd).max(l0_min), l0_min, alpha6: a6, alpha2, lb_rqd: a.lb_rqd }
+}
+
 /// 8.4: design anchorage lengths of the tension bars at this station. The
 /// check passes once the engineer confirms the bars extend at least l_bd (+ d
 /// for shear, Fig. 6.3) beyond the section.
@@ -174,10 +224,26 @@ pub fn anchorage(ndp: &Ec2Ndp, rc: &RcBeamContext, compression: RcFace) -> Check
         None => cover,
     };
     let a = anchorage_length(ndp, rc.fck, rc.fyk, b.diameter, good, cd);
+    let laps: Vec<serde_json::Value> = [25.0, 50.0, 100.0]
+        .iter()
+        .map(|&rho| {
+            let l = lap_length(ndp, rc.fck, rc.fyk, b.diameter, good, cd, rho, true);
+            json!({"rho1Percent": rho, "alpha6": l.alpha6, "l0": l.l0, "l0Min": l.l0_min})
+        })
+        .collect();
+    let link_ext = rc.links.as_ref().map(|l| {
+        let (hook, bend) = link_extension(l.diameter);
+        json!({"hook": hook, "bend": bend, "mandrelMin": mandrel_min(l.diameter)})
+    });
     let detail = json!({"face": face_name(face), "diameter": b.diameter, "bondCondition": if good {"good"} else {"poor"},
         "fbd": a.fbd, "lbRqd": a.lb_rqd, "cd": cd, "alpha2": a.alpha2, "lbdTension": a.lbd_tension,
         "lbdCompression": a.lbd_compression, "sigmaSd": rc.fyk / ndp.gamma_s,
-        "assumptions": ["Straight bars (α1 = 1)", "α3 = α4 = α5 = 1: confinement and transverse pressure ignored", "σsd = fyd"]});
+        // Detailing rules for these bars and the links (8.3, 8.5, 8.7.3).
+        "mandrelMin": mandrel_min(b.diameter),
+        "laps": laps,
+        "linkExtension": link_ext,
+        "assumptions": ["Straight bars (α1 = 1)", "α3 = α4 = α5 = 1: confinement and transverse pressure ignored", "σsd = fyd",
+            "Lap lengths are given for 25, 50 and 100 % of bars lapped in one section (Table 8.3); where to lap is the engineer's"]});
     match rc.tension_steel_anchored {
         Some(true) => {
             // The engineer's confirmation, not a measured length: l_bd is the

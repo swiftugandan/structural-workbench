@@ -257,3 +257,53 @@ fn uk_v_rd_max_cap_is_200_bw_squared_and_absent_from_the_eu_set() {
     assert!(eu.intermediates["ukVRdMaxCap"].is_null());
     assert!(eu.intermediates["VRdmax"].as_f64().unwrap() > 2e6);
 }
+
+#[test]
+fn lap_lengths_reproduce_jrc_tables_4_1_6_to_4_1_9() {
+    let ndp = Ec2Ndp::eu_recommended();
+    let f = fixture();
+    let rhos: Vec<f64> = f["laps"]["rho1Percent"].as_array().unwrap().iter().map(|v| v.as_f64().unwrap()).collect();
+    let mut n = 0;
+    for t in f["laps"]["tables"].as_array().unwrap() {
+        let (fck, fyk, cnom) = (t["fck"].as_f64().unwrap(), t["fyk"].as_f64().unwrap(), t["cNom"].as_f64().unwrap());
+        let tension = t["tension"].as_bool().unwrap();
+        for (phi, want) in t["l0Mm"].as_object().unwrap() {
+            let phi = phi.parse::<f64>().unwrap() / 1e3;
+            let w: Vec<f64> = want.as_array().unwrap().iter().map(|v| v.as_f64().unwrap()).collect();
+            for (k, good) in [(0usize, true), (4, false)] {
+                for (j, rho) in rhos.iter().enumerate() {
+                    let lap = lap_length(&ndp, fck, fyk, phi, good, cnom, *rho, tension);
+                    let want = w[k + j];
+                    assert!(
+                        (lap.l0 * 1e3 - want).abs() <= 1.0,
+                        "Table {} φ{} {} ρ1 {rho:.0}: {:.1} vs {want}",
+                        t["table"],
+                        phi * 1e3,
+                        if good { "good" } else { "poor" },
+                        lap.l0 * 1e3
+                    );
+                    n += 1;
+                }
+            }
+        }
+    }
+    assert_eq!(n, 224);
+}
+
+#[test]
+fn mandrels_and_link_extensions_reproduce_jrc_tables_4_1_1_and_4_1_5() {
+    let f = fixture();
+    for (phi, want) in f["mandrel"]["mandrelMm"].as_object().unwrap() {
+        let phi = phi.parse::<f64>().unwrap() / 1e3;
+        assert!((mandrel_min(phi) * 1e3 - want.as_f64().unwrap()).abs() < 1e-9, "mandrel φ{}", phi * 1e3);
+    }
+    for (phi, want) in f["links"]["extensionMm"].as_object().unwrap() {
+        let phi = phi.parse::<f64>().unwrap() / 1e3;
+        let (hook, bend) = link_extension(phi);
+        assert!((bend * 1e3 - want[0].as_f64().unwrap()).abs() < 1e-9 && (hook * 1e3 - want[1].as_f64().unwrap()).abs() < 1e-9, "link φ{}", phi * 1e3);
+    }
+    // Table 8.3 interpolation and its limits.
+    assert_eq!(alpha6(10.0), 1.0);
+    assert!((alpha6(100.0 / 3.0) - 1.15).abs() < 1e-12 && (alpha6(50.0) - 1.4).abs() < 1e-12 && alpha6(60.0) == 1.5);
+    assert!((alpha6(41.666_666_666_666_664) - 1.275).abs() < 1e-12);
+}

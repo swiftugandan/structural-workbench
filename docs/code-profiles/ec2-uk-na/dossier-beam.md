@@ -131,3 +131,13 @@ The UK NA 6.2.3(3) note caps V_Rd,max at 200 b_w² beyond d from a support. The 
 ## Unsupported in the first profile
 
 Axial force (σcp ≠ 0), prestress, inclined links and bent-up bars, the 6.2.2(6)/6.2.3(8) β reduction, flanged sections beyond the "block in flange" rectangle, web-flange shear (6.2.4), torsion (6.3), steel option 3.2.7(2)(a), redistribution (5.5), members below As,min (Section 12), fck > 50 MPa until an example is reconciled, stress limits (7.2), direct crack-width and deflection calculation (7.3.4, 7.4.3), laps (8.7), curtailment (9.2.1.3) and bent bars.
+
+## Detailing rules (M16-RULES)
+
+| Item | Clause | Rule | Verification |
+| --- | --- | --- | --- |
+| Mandrel diameter | 8.3, Table 8.1N(a) | 4φ for φ ≤ 16 mm, 7φ above; (8.1) is the engineer's when 8.3(3) does not hold | JRC Table 4.1.1 (8 values) |
+| Link extension | 8.5, Figure 8.5 | hook: 5φ ≥ 50 mm; bend: 10φ ≥ 70 mm | JRC Table 4.1.5 (8 values) |
+| Lap length | 8.7.3 (8.10), (8.11), Table 8.3 | l0 = α2 α6 l_b,rqd ≥ max(0.3 α6 l_b,rqd, 15φ, 200 mm); α1 = α3 = α5 = 1; α2 from c_d in tension, 1 in compression; α6 1 / 1.15 / 1.4 / 1.5 at ≤ 25 / 33 / 50 / > 50 % lapped, interpolated | JRC Tables 4.1.6–4.1.9 (224 values within 1 mm) |
+
+The beam's anchorage check records the mandrel for its bars, the link extensions and the lap lengths at 25, 50 and 100 % lapped. Where to lap and curtail stays the engineer's.
