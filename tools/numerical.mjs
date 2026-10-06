@@ -9,7 +9,7 @@ let browser, page;
 if (useWasm) {
   browser = await chromium.launch({ headless: true });
   page = await browser.newPage();
-  await page.goto("http://127.0.0.1:4173");
+  await page.goto(`http://127.0.0.1:${process.env.PORT || 4173}`);
 }
 let count = 0;
 const results = [];

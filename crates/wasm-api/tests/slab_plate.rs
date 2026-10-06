@@ -118,10 +118,25 @@ fn plate_source_reproduces_the_opening_oracle() {
     assert_eq!(pa["basis"], "mechanics");
     assert_eq!(run["sourceProvenance"]["kind"], "plateAnalysis");
     assert_eq!(run["sourceProvenance"]["mock"], false);
-    assert_eq!(run["overall"], "unsupported");
-    for check in run["checks"].as_array().unwrap() {
-        assert_eq!(check["status"], "unsupported");
-    }
+    // The EC2 slab design (ADR 0029) runs on the plate result; span/depth
+    // waits for the engineer's structural system, and there are no columns.
+    assert_eq!(run["overall"], "indeterminate");
+    assert_eq!(run["codeProfile"]["id"], "ec2-uk-na");
+    let rows: Vec<(&str, &str)> = run["checks"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|c| (c["name"].as_str().unwrap(), c["status"].as_str().unwrap()))
+        .collect();
+    assert_eq!(rows[3], ("Punching", "notApplicable"));
+    assert_eq!(rows[4], ("Deflection", "indeterminate"));
+    assert_eq!(rows[0].1, "pass");
+    // The reinforcement map is per element, the design values themselves.
+    let map = &run["codeProfilePreview"]["reinforcementMap"];
+    assert_eq!(
+        map["bottomX"].as_array().unwrap().len(),
+        c["elements"].as_u64().unwrap() as usize
+    );
     assert_eq!(pa["mesh"]["elements"], c["elements"]);
     assert_eq!(pa["mesh"]["nodes"], c["nodes"]);
     assert!(pa["equilibrium"]["relativeImbalance"].as_f64().unwrap() <= 1e-9);
@@ -167,6 +182,34 @@ fn plate_source_reproduces_the_opening_oracle() {
             .map(|v| v.as_f64().unwrap())
             .fold(0., f64::max);
         assert_eq!(pa["designMoments"][face]["value"].as_f64().unwrap(), max);
+    }
+    // Smoothed moments are display only: per node, the mean of the adjacent
+    // element-centre values, labelled so; the design fields stay unsmoothed.
+    let sm = &pa["smoothed"];
+    assert_eq!(sm["recovery"], "nodalAverage");
+    assert_eq!(sm["displayOnly"], true);
+    let nodes = f["nodes"].as_array().unwrap();
+    let cells = f["cells"].as_array().unwrap();
+    for m in ["mx", "my", "mxy"] {
+        assert_eq!(sm[m].as_array().unwrap().len(), nodes.len());
+        for (n, g) in nodes.iter().enumerate().step_by(17) {
+            let (gi, gj) = (g[0].as_u64().unwrap(), g[1].as_u64().unwrap());
+            let adjacent: Vec<f64> = cells
+                .iter()
+                .enumerate()
+                .filter(|(_, c)| {
+                    let (i, j) = (c[0].as_u64().unwrap(), c[1].as_u64().unwrap());
+                    (gi == i || gi == i + 1) && (gj == j || gj == j + 1)
+                })
+                .map(|(e, _)| f[m][e].as_f64().unwrap())
+                .collect();
+            let mean = adjacent.iter().sum::<f64>() / adjacent.len() as f64;
+            let got = sm[m][n].as_f64().unwrap();
+            assert!(
+                (got - mean).abs() <= 1e-12 * mean.abs().max(1.),
+                "{m} node {n}: {got} vs {mean}"
+            );
+        }
     }
     // Re-entrant opening corners: the indicator reports, never hides.
     assert!(pa["convergence"]["change"].as_f64().unwrap() > 0.);
@@ -513,4 +556,92 @@ fn slab_column_commands_refuse_what_they_cannot_do() {
         json!({"id": d["id"], "origin": [0, 0, 3]}),
     );
     assert_eq!(code(&r), "UNSUPPORTED_FEATURE", "{r}");
+}
+
+/// EC2 flat slab design (ADR 0029): the default 6 × 5 m panel with free edges
+/// on four internal pinned columns, the engineer's inputs entered. Every
+/// layer, shear, span/depth and the four punching checks are evaluated from
+/// the plate result, and the column reactions are the punching forces.
+#[test]
+fn flat_slab_on_columns_is_designed_from_the_plate_result() {
+    let mut k = open();
+    let d = slab(&mut k);
+    let mut plate = plate_args(&d);
+    plate["columns"] = json!([
+        {"x": 1.5, "y": 1.25, "kind": "pinned"}, {"x": 4.5, "y": 1.25, "kind": "pinned"},
+        {"x": 1.5, "y": 3.75, "kind": "pinned"}, {"x": 4.5, "y": 3.75, "kind": "pinned"}
+    ]);
+    plate["edges"] = json!(["free", "free", "free", "free"]);
+    plate["includeOpening"] = json!(false);
+    let r = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","plate":plate,
+        "codeInputs":{"exposureClass":"XC1","minimumCoverDurability":"15 mm","aggregateSize":"20 mm",
+            "structuralSystem":"flatSlab","partitionsSensitive":false,"columnSize":["400 mm","400 mm"]}}),
+    );
+    assert_eq!(r["status"], "ok", "{r}");
+    let saved = r["payload"]["project"]["designPreviews"][0].clone();
+    assert_eq!(saved["codeInputs"]["columnSize"], json!([0.4, 0.4]));
+    let run = evaluate(&mut k, &saved, "plate");
+    assert_eq!(run["status"], "ok", "{run}");
+    let run = &run["payload"];
+    let code = &run["codeProfilePreview"];
+    assert_eq!(code["family"], "slab");
+    let checks = code["checks"].as_array().unwrap();
+    assert!(
+        checks.iter().all(|c| c["status"] != "indeterminate"),
+        "{checks:?}"
+    );
+    // Four internal punching checks, each on its column's plate reaction.
+    let reactions: Vec<f64> = run["plateAnalysis"]["columns"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|c| c["reaction"][0].as_f64().unwrap())
+        .collect();
+    for (i, r) in reactions.iter().enumerate() {
+        let p = checks
+            .iter()
+            .find(|c| c["checkId"] == format!("ec2.slab.punching.{}", i + 1))
+            .unwrap();
+        assert_eq!(p["intermediates"]["position"], "internal");
+        assert!(
+            (p["intermediates"]["vEd"].as_f64().unwrap() - r.abs()).abs() < 1e-9,
+            "{p}"
+        );
+    }
+    // Flat slab: the longer span with K = 1.2.
+    let dfl = checks
+        .iter()
+        .find(|c| c["checkId"] == "ec2.slab.deflection")
+        .unwrap();
+    assert_eq!(dfl["intermediates"]["K"], 1.2);
+    assert_eq!(dfl["intermediates"]["direction"], "x");
+    // Hogging over the columns needs top steel; the schedule lists every layer.
+    assert!(!code["layers"]["topX"].is_null());
+    let marks: Vec<&str> = run["schedule"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|r| r["mark"].as_str().unwrap())
+        .collect();
+    assert_eq!(marks, ["B1", "B2", "T1", "T2"]);
+    // The map's utilisation never exceeds 1 where a layer is provided.
+    for name in ["bottomX", "bottomY", "topX", "topY"] {
+        for u in code["reinforcementMap"][format!("{name}Utilisation")]
+            .as_array()
+            .unwrap()
+        {
+            assert!(u.as_f64().is_none_or(|u| u <= 1. + 1e-12), "{name} {u}");
+        }
+    }
+    // Column dimensions belong to slabs only.
+    let bad = cmd(
+        &mut k,
+        "SetDesignPreview",
+        json!({"id":d["id"],"inputs":d["inputs"],"soilReference":"","plate":plate,
+        "codeInputs":{"columnSize":[0.0, 0.4]}}),
+    );
+    assert_eq!(bad["status"], "error");
 }

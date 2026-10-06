@@ -1,5 +1,7 @@
 import { defineConfig } from "@playwright/test";
 const realGpu = process.env.WORKBENCH_REAL_GPU === "1";
+// tools/serve.mjs listens on PORT; set it when 4173 is taken by another app.
+const origin = `http://127.0.0.1:${process.env.PORT || 4173}`;
 export default defineConfig({
   testDir: "./tests",
   testMatch: "**/*.spec.js",
@@ -12,7 +14,7 @@ export default defineConfig({
   workers: 1,
   fullyParallel: false,
   use: {
-    baseURL: "http://127.0.0.1:4173",
+    baseURL: origin,
     viewport: { width: 1440, height: 900 },
     trace: "on",
     screenshot: "only-on-failure",
@@ -26,7 +28,7 @@ export default defineConfig({
   },
   webServer: {
     command: "npm run preview",
-    url: "http://127.0.0.1:4173",
+    url: origin,
     reuseExistingServer: true,
   },
   reporter: [

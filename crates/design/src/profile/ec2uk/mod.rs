@@ -9,12 +9,15 @@
 pub mod column;
 pub mod detailing;
 pub mod footing;
+pub mod slab;
 #[cfg(test)]
 mod detailing_tests;
 #[cfg(test)]
 mod column_tests;
 #[cfg(test)]
 mod footing_tests;
+#[cfg(test)]
+mod slab_tests;
 #[cfg(test)]
 mod fixture_tests;
 mod verify;
@@ -133,12 +136,17 @@ impl CodeProfile for Ec2UkNaProfile {
                 "footing.shear".into(),
                 "footing.punching".into(),
                 "footing.cast-cover".into(),
+                "slab.flexure".into(),
+                "slab.shear".into(),
+                "slab.deflection".into(),
+                "slab.punching".into(),
             ],
             limitations: vec![
                 "A1:2014 and NA+A2:2014 are not held: no clause is reconciled with them".into(),
                 "Rectangular sections, fck <= 50 MPa, vertical links, one layer of equal bars per face".into(),
                 "Beams: pure bending about local y with shear Vz; N, T, Vy and Mz must be zero".into(),
                 "Columns: rectangular, constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and φ_ef; the node-to-node length is the clear height".into(),
+                "Slabs: plate-v1 element-centre Wood–Armer actions; uniform meshes; punching at internal columns only".into(),
                 "Pad footings: concentric rectangular column on a rigid base over tensionless ground; the allowable bearing pressure is the engineer's input".into(),
                 "Crack control by Tables 7.2N/7.3N and deflection by span/depth (7.4.2); no direct crack-width or deflection calculation".into(),
                 "Anchorage lengths for straight bars with α1 = 1 and α3 = α4 = α5 = 1; curtailment is the engineer's confirmation".into(),

@@ -1,0 +1,96 @@
+{
+  "fixtureVersion": 1,
+  "source": "JRC89037 (2014) 'Eurocode 2: Background & Applications, Design of concrete buildings - worked examples', 3.2.2.3 Punching shear - column B2, pp. 70-75 (R-EC2-JRC-EXAMPLES)",
+  "inputs": {
+    "VEd": 705000,
+    "beta": 1.15,
+    "c": 0.5,
+    "dy": 0.172,
+    "dz": 0.156,
+    "rhoL": 0.0083,
+    "fck": 25000000.0,
+    "fyk": 500000000.0,
+    "gammaC": 1.5,
+    "gammaS": 1.15,
+    "vEd1Rounded": 1220000.0,
+    "vRdcRounded": 660000.0
+  },
+  "published": {
+    "d": {
+      "value": 164,
+      "scale": 1000,
+      "rounding": 0.5,
+      "page": 71
+    },
+    "u1": {
+      "value": 4061,
+      "scale": 1000,
+      "rounding": 0.5,
+      "page": 72
+    },
+    "vEd1": {
+      "value": 1.22,
+      "scale": 1e-06,
+      "rounding": 0.005,
+      "page": 72
+    },
+    "vRdc": {
+      "value": 0.66,
+      "scale": 1e-06,
+      "rounding": 0.005,
+      "page": 73
+    },
+    "vmin": {
+      "value": 0.49,
+      "scale": 1e-06,
+      "rounding": 0.005,
+      "page": 73
+    },
+    "vEd0": {
+      "value": 2.47,
+      "scale": 1e-06,
+      "rounding": 0.005,
+      "page": 72
+    },
+    "fywdEf": {
+      "value": 291,
+      "scale": 1e-06,
+      "rounding": 0.5,
+      "page": 73
+    },
+    "sr": {
+      "value": 123,
+      "scale": 1000,
+      "rounding": 0.5,
+      "page": 74
+    },
+    "AswPerPerimeter": {
+      "value": 830,
+      "scale": 1000000.0,
+      "rounding": 1.0,
+      "page": 74
+    },
+    "uOut": {
+      "value": 7490,
+      "scale": 1000,
+      "rounding": 1.0,
+      "page": 74
+    },
+    "aOut": {
+      "value": 874,
+      "scale": 1000,
+      "rounding": 1.0,
+      "page": 74
+    }
+  },
+  "discrepancies": [
+    {
+      "id": "JRC-B2-PUNCHING-VRDMAX",
+      "note": "The report limits the face stress to v_Rd,max = 0.4 ν f_cd = 3.6 MPa. The UK NA (Amd 1, 2009) 6.4.5(3) gives v_Rd,max = 0.5 ν f_cd = 4.5 MPa, which the workbench uses. The face stress of 2.47 MPa passes under both."
+    },
+    {
+      "id": "JRC-B2-PUNCHING-ROUNDED-STRESSES",
+      "note": "The report computes A_sw = 830 mm² and u_out = 7490 mm from its rounded v_Ed = 1.22 MPa and v_Rd,c = 0.66 MPa. Unrounded (1.2174 and 0.6596 MPa) they are 827 mm² and 7495 mm. The reconciliation uses the report's rounded stresses for these two figures; the workbench computes unrounded."
+    }
+  ]
+}

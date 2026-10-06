@@ -5,7 +5,8 @@ use workbench_design::rc_section::{
     self, BarLayer, BarRow, ConcreteLaw, ElasticInputs, RcRectangle, SteelLaw,
 };
 use workbench_design::{
-    CodeProfile, ColumnActions, FootingActions, PadFootingContext, PadFootingDetailing, footing_design, DesignDemand, DesignRun, Ec2UkNaProfile, MemberContext, ProfileApplicability,
+    CodeProfile, ColumnActions, FootingActions, PadFootingContext, PadFootingDetailing, SlabColumnSupport, SlabContext,
+    SlabDetailing, SlabElement, footing_design, slab_design, DesignDemand, DesignRun, Ec2UkNaProfile, MemberContext, ProfileApplicability,
     RcBarRow, RcBeamContext, RcColumnContext, RcColumnDetailing, RcFace, RcLinks,
 };
 use workbench_model::{
@@ -858,6 +859,16 @@ pub fn apply(v: &mut Value, c: &Value) -> Result<()> {
                         out.insert(key.into(), ci[key].clone());
                     }
                 }
+                // Column dimensions accept units, like the other lengths.
+                if let Some(pair) = ci["columnSize"].as_array() {
+                    let mut dims = vec![];
+                    for x in pair {
+                        let mut x = x.clone();
+                        super::quantity(&mut x, "length")?;
+                        dims.push(x);
+                    }
+                    out.insert("columnSize".into(), json!(dims));
+                }
                 if !ci["effectiveCreepRatio"].is_null() && ci["effectiveCreepRatio"] != json!("") {
                     let mut x = ci["effectiveCreepRatio"].clone();
                     if let Some(t) = x.as_str() {
@@ -1565,8 +1576,18 @@ fn code_rows(code: &Value) -> Option<(Vec<Value>, &'static str)> {
         ("Shear and punching", &["ec2.footing.shear.x", "ec2.footing.shear.y", "ec2.footing.punching", "ec2.footing.punching-face"]),
         ("Cover and bar size", &["ec2.cover", "ec2.footing.cast-cover", "ec2.footing.bar-diameter"]),
     ];
+    let slab: [(&str, &[&str]); 6] = [
+        ("Bottom X/Y reinforcement", &["ec2.slab.flexure.bottomX", "ec2.slab.flexure.bottomY"]),
+        ("Top X/Y reinforcement", &["ec2.slab.flexure.topX", "ec2.slab.flexure.topY"]),
+        ("Shear", &["ec2.slab.shear"]),
+        ("Punching", &["ec2.slab.punching*"]),
+        ("Deflection", &["ec2.slab.deflection"]),
+        ("Cover", &["ec2.cover"]),
+    ];
     let rows: &[(&str, &[&str])] = if code["governing"].is_array() {
         &beam
+    } else if code["family"] == "slab" {
+        &slab
     } else if code["family"] == "padFooting" {
         &footing
     } else {
@@ -1588,7 +1609,9 @@ fn rows_from(checks: &[&Value], rows: &[(&str, &[&str])]) -> (Vec<Value>, &'stat
     let out = rows
         .iter()
         .map(|(name, ids)| {
-            let mine: Vec<&&Value> = checks.iter().filter(|c| ids.contains(&c["checkId"].as_str().unwrap_or(""))).collect();
+            // An id ending in '*' matches every check with that prefix (one per column).
+            let matches = |cid: &str| ids.iter().any(|id| id.strip_suffix('*').map_or(cid == *id, |p| cid.starts_with(p)));
+            let mine: Vec<&&Value> = checks.iter().filter(|c| matches(c["checkId"].as_str().unwrap_or(""))).collect();
             let worst = mine
                 .iter()
                 .map(|c| c["status"].as_str().unwrap_or("unsupported"))
@@ -1682,6 +1705,103 @@ fn column_code(p: &Project, d: &DesignPreview, stations: &[KeyStation], combinat
                 "convention":"N compression positive; end moments are the frame's internal My, Mz at stations 0 and 1"},
             "checks":checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()}),
     )
+}
+
+/// EC2 UK NA slab design (M10, ADR 0029) from the plate-v1 result: the
+/// element-centre Wood–Armer moments and shears are the design actions, and
+/// the per-element required steel is the reinforcement map (no averaging).
+fn slab_code(d: &DesignPreview, plate: &Value) -> Value {
+    let mut base = code_base(d);
+    base.as_object_mut().unwrap().remove("tensionAnchorageConfirmed");
+    base["family"] = json!("slab");
+    if plate["status"] != "evaluated" {
+        return merge(base, json!({"status":"unavailable","reason":"The plate analysis did not run"}));
+    }
+    let profile = Ec2UkNaProfile::default();
+    let v = &d.inputs;
+    let f = |x: &Value| x.as_f64().unwrap_or(0.);
+    let fields = &plate["fields"];
+    let (xs, ys) = (plate["mesh"]["xs"].as_array().unwrap(), plate["mesh"]["ys"].as_array().unwrap());
+    let elements: Vec<SlabElement> = fields["cells"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .enumerate()
+        .map(|(e, cell)| {
+            let (i, j) = (cell[0].as_u64().unwrap() as usize, cell[1].as_u64().unwrap() as usize);
+            SlabElement {
+                x0: f(&xs[i]),
+                x1: f(&xs[i + 1]),
+                y0: f(&ys[j]),
+                y1: f(&ys[j + 1]),
+                design: [f(&fields["bottomX"][e]), f(&fields["bottomY"][e]), f(&fields["topX"][e]), f(&fields["topY"][e])],
+                qx: f(&fields["qx"][e]),
+                qy: f(&fields["qy"][e]),
+            }
+        })
+        .collect();
+    let columns: Vec<SlabColumnSupport> = plate["columns"]
+        .as_array()
+        .map(|cs| cs.iter().map(|c| SlabColumnSupport { x: f(&c["x"]), y: f(&c["y"]), reaction: f(&c["reaction"][0]) }).collect())
+        .unwrap_or_default();
+    let opening = plate["panel"]["opening"].as_array().map(|o| [f(&o[0]), f(&o[1]), f(&o[2]), f(&o[3])]);
+    let ci = d.code_inputs.clone().unwrap_or_default();
+    let ctx = SlabContext {
+        lx: f(&plate["panel"]["lengthX"]),
+        ly: f(&plate["panel"]["lengthY"]),
+        thickness: v["thickness"],
+        cover: v["cover"],
+        fck: v["concreteStrength"],
+        fyk: v["rebarStrength"],
+        opening,
+        elements,
+        columns,
+        detailing: SlabDetailing {
+            exposure_class: ci.exposure_class.clone(),
+            cover_durability: ci.minimum_cover_durability,
+            aggregate_size: ci.aggregate_size,
+            structural_system: ci.structural_system.clone(),
+            partitions_sensitive: ci.partitions_sensitive,
+            column_size: ci.column_size,
+        },
+    };
+    let out = slab_design(&profile.ndp, &ctx);
+    let names = ["bottomX", "bottomY", "topX", "topY"];
+    let mut map = serde_json::Map::new();
+    for (k, name) in names.iter().enumerate() {
+        map.insert(name.to_string(), json!(out.required.iter().map(|r| r[k]).collect::<Vec<_>>()));
+        let prov = out.layers[k].map(|l| l.area);
+        map.insert(format!("{name}Utilisation"), json!(out.required.iter().map(|r| prov.map(|a| r[k] / a)).collect::<Vec<_>>()));
+    }
+    map.insert("units".into(), json!("m²/m"));
+    map.insert("basis".into(), json!("A_s,req per element from the element-centre Wood–Armer design moments: the design values themselves, never averaged or smoothed"));
+    merge(
+        base,
+        json!({"status":"evaluated","layers":{"bottomX":out.layers[0],"bottomY":out.layers[1],"topX":out.layers[2],"topY":out.layers[3]},
+            "reinforcementMap":map,"design":out.detail,
+            "checks":out.checks.iter().map(|c| c.to_json()).collect::<Vec<_>>()}),
+    )
+}
+
+/// The slab's uniform meshes: bars of each layer over the panel less cover;
+/// the opening is not deducted (indicative).
+fn slab_schedule(d: &DesignPreview, code: &Value) -> Value {
+    let v = &d.inputs;
+    let (lx, ly, c) = (v["length"], v["width"], v["cover"]);
+    let mass = |phi: f64, len: f64, n: f64| std::f64::consts::PI * phi * phi / 4. * len * n * STEEL_DENSITY;
+    let rows: Vec<Value> = [("B1", "Bottom X", "bottomX", true), ("B2", "Bottom Y", "bottomY", false), ("T1", "Top X", "topX", true), ("T2", "Top Y", "topY", false)]
+        .iter()
+        .filter_map(|(mark, region, key, along_x)| {
+            let l = &code["layers"][*key];
+            let (phi, s) = (l["diameter"].as_f64()?, l["spacing"].as_f64()?);
+            let (len, across) = if *along_x { (lx - 2. * c, ly - 2. * c) } else { (ly - 2. * c, lx - 2. * c) };
+            let n = (across / s).floor() + 1.;
+            Some(json!({"mark":mark,"region":region,"shape":"straight","diameter":phi,"quantity":n,"cutLength":len,
+                "massKg":mass(phi, len, n),"spacing":s,"source":"designed","status":"indicative",
+                "basis":"Uniform mesh over the panel less cover; the opening and its trimming bars are not deducted"}))
+        })
+        .collect();
+    json!(rows)
 }
 
 /// EC2 UK NA pad footing design (M11, ADR 0028) for a draft bound to a
@@ -1889,6 +2009,15 @@ fn plate_analysis(p: &Project, d: &DesignPreview) -> Result<Value> {
             "nodes": s.mesh.node_grid,
             "w": s.displacements.iter().map(|u| u[2]).collect::<Vec<_>>(),
         },
+        // ADR 0021 item 3: nodal averages of the adjacent element-centre
+        // moments, per node of `fields.nodes`; display only, never designed.
+        "smoothed": {
+            "recovery": "nodalAverage",
+            "displayOnly": true,
+            "mx": s.smoothed.iter().map(|m| m[0]).collect::<Vec<_>>(),
+            "my": s.smoothed.iter().map(|m| m[1]).collect::<Vec<_>>(),
+            "mxy": s.smoothed.iter().map(|m| m[2]).collect::<Vec<_>>(),
+        },
         "units": {"moment":"N m/m","shear":"N/m","deflection":"m","length":"m","pressure":"Pa"},
         "signs": "Moments sagging positive (bottom face in tension); w positive up; Wood–Armer values are magnitudes to resist on each face",
     }))
@@ -1935,6 +2064,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
             ));
         }
         plate = plate_analysis(p, draft)?;
+        code = slab_code(draft, &plate);
         source = json!({"kind":"plateAnalysis","mock":false,"family":"plate-v1","units":"N m/m","pressureSource":plate["load"]["source"],
             "note":"Plate analysis of the draft panel under its entered pressure; not connected to the frame model"});
     } else if input["sourceMode"] == "model" {
@@ -2052,12 +2182,14 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         beam_schedule(p, draft)
     } else if draft.kind == "padFooting" && code["status"] == "evaluated" {
         footing_schedule(draft, &code)
+    } else if draft.kind == "slab" && code["status"] == "evaluated" {
+        slab_schedule(draft, &code)
     } else {
         json!([])
     };
     // ADR 0026: an evaluated, enabled code profile replaces the unsupported
     // rows with its checks, labelled as a demonstration of the held edition.
-    let coded = if ["rcBeam", "rcColumn", "padFooting"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
+    let coded = if ["rcBeam", "rcColumn", "padFooting", "slab"].contains(&draft.kind.as_str()) { code_rows(&code) } else { None };
     let mut run = json!({"contractVersion":1,"draftId":id,"kind":draft.kind,"overall":"unsupported","mock":true,"codeProfile":null,"modelHash":p.hash(),"sourceRevision":p.revision,
         "inputHash":digest(&serde_json::to_vec(draft).unwrap()),"inputs":draft,"sourceProvenance":source,"schedule":schedule,
         "checks":checks.iter().map(|name|json!({"name":name,"status":"unsupported","utilisation":null,"reason":if *name=="Flexure"&&draft.kind=="rcBeam"{"Code profile unavailable. Section mechanics are reported separately and are not a code resistance"}else{"Required numerical family or locked code/example resources are unavailable"}})).collect::<Vec<_>>(),
@@ -2066,7 +2198,7 @@ pub fn evaluate(p: &Project, input: &Value) -> Result<Value> {
         "soilProvenance":if draft.kind=="padFooting"{json!({"source":draft.input_sources.get("bearingPressure").unwrap_or(&draft.input_source),"reference":draft.soil_reference,"bearingPressure":draft.inputs["bearingPressure"],"computedByWorkbench":false})}else{Value::Null},
         "sectionMechanics":if draft.kind=="rcBeam"{section_mechanics(draft,&demand)}else{Value::Null},
         "flexuralDemand":if draft.kind=="rcBeam"{demand}else{Value::Null},
-        "codeProfilePreview":if ["rcBeam","rcColumn","padFooting"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
+        "codeProfilePreview":if ["rcBeam","rcColumn","padFooting","slab"].contains(&draft.kind.as_str()){code.clone()}else{Value::Null},
         "plateAnalysis":plate,
         "columnMechanics":if draft.kind=="rcColumn"{column_mechanics(draft,stations.as_deref())}else{Value::Null},
         "limitations":["MOCK WORKFLOW — no code-compliance claim","Dimensions are draft inputs; frame geometry/stiffness is unchanged","Illustrations are not construction details; quantities/fit/anchorage and cut lengths are unverified"]});

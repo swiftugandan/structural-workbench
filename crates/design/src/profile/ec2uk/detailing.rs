@@ -345,11 +345,12 @@ pub fn crack_control(rc: &RcBeamContext, compression: RcFace) -> CheckOutcome {
 }
 
 /// Table NA.5 K values.
-fn k_factor(system: &str) -> Option<f64> {
+pub(crate) fn k_factor(system: &str) -> Option<f64> {
     Some(match system {
         "simplySupported" => 1.0,
         "endSpan" => 1.3,
         "interiorSpan" => 1.5,
+        "flatSlab" => 1.2,
         "cantilever" => 0.4,
         _ => return None,
     })

@@ -355,18 +355,18 @@
     },
     {
       "capabilityId": "slab-plate-analysis",
-      "scopeKey": "M10 numerical family / plate-v1 / flat rectangular slab panel with one opening / Q4 membrane + MITC4",
+      "scopeKey": "M10 / plate-v1 slab panel + ec2-uk-na slab design (demonstration)",
       "implementationStatus": "partial",
-      "verificationStatus": "numerical-family-gate-pass",
+      "verificationStatus": "parent-gate-pass",
       "comparisonStatus": "UNKNOWN",
-      "resourceBlockers": [
-        "M08-concrete-resources"
-      ],
+      "resourceBlockers": [],
       "limitations": [
-        "Flat rectangular panels with at most one rectangular opening, uniform downward pressure, linear elastic isotropic material, free/simple (hard)/clamped edges; general and curved shells remain excluded",
-        "Not connected to the frame model: no frame–slab coupling, column point supports, cracking or long-term effects",
-        "Unsmoothed element-centre actions are the design values; smoothed values are display only; the convergence indicator is not a proof and stays high at re-entrant opening corners",
-        "Wood–Armer moments are moments to resist, not reinforcement; reinforcement areas, punching, detailing and deflection limits need the slab code profile (M08 resources) and are UNSUPPORTED; M10 is not accepted"
+        "EC2 slab design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 not reconciled; not a certified design (ADR 0029)",
+        "Flat rectangular panels with at most one rectangular opening, uniform downward pressure, linear elastic isotropic material, free/simple/clamped edges and column supports; general and curved shells remain excluded",
+        "Design actions are the unsmoothed element-centre Wood–Armer moments and shears; the A_s,req map is the per-element design value, never averaged",
+        "Uniform meshes per layer; one-way shear; span/depth (7.4.2); punching at internal columns only (edge, corner and near-opening columns unsupported)",
+        "No frame–slab coupling beyond column loads, cracking, long-term or crack-width calculation",
+        "Not a claim of commercial PROKON parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/formulations/plate.md",
@@ -374,7 +374,11 @@
         "fixtures/plate/plate-oracle.json",
         "crates/plate/tests/plate_v1.rs",
         "evidence/M10/plate/m10-plate-acceptance.json",
-        "evidence/M10/plate/ACCEPTANCE.md"
+        "evidence/M10/plate/ACCEPTANCE.md",
+        "docs/adr/0029-ec2-slab-design-from-plate-actions.md",
+        "docs/code-profiles/ec2-uk-na/dossier-slab.md",
+        "fixtures/design/ec2-uk-na/jrc-punching-b2.published.json",
+        "evidence/M10/full/gate-M10.json"
       ]
     },
     {
@@ -407,7 +411,7 @@
     },
     {
       "capabilityId": "concrete-code",
-      "scopeKey": "M08 / M11 / M12 / ec2-uk-na / rectangular RC beams, columns and pad footings: EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009), demonstration",
+      "scopeKey": "M08 / M10 / M11 / M12 / ec2-uk-na / rectangular RC beams, columns, slabs and pad footings: EN 1992-1-1:2004 incl. AC:2008/AC:2010, UK NA incl. Amd 1 (2009), demonstration",
       "implementationStatus": "partial",
       "verificationStatus": "parent-gate-pass",
       "comparisonStatus": "UNKNOWN",

@@ -108,6 +108,10 @@ export const plateFields = [
   ["topX", "Top X (Wood–Armer)", "design"],
   ["topY", "Top Y (Wood–Armer)", "design"],
   ["w", "Deflection w", "deflection"],
+  ["asBottomX", "A_s,req bottom X", "steel", "bottomX"],
+  ["asBottomY", "A_s,req bottom Y", "steel", "bottomY"],
+  ["asTopX", "A_s,req top X", "steel", "topX"],
+  ["asTopY", "A_s,req top Y", "steel", "topY"],
 ];
 
 // Diverging blue–white–red for signed fields, white–amber–red for magnitudes.
@@ -133,7 +137,7 @@ function colour(v, lo, hi, signed) {
 
 /** Element-centre contour of one field over the panel, with edge conditions,
  * the opening and the governing element marked. */
-export function plateContour(pa, key) {
+export function plateContour(pa, key, recovery = "elementCentre") {
   const f = pa.fields,
     xs = pa.mesh.xs,
     ys = pa.mesh.ys,
@@ -148,30 +152,58 @@ export function plateContour(pa, key) {
   const X = (x) => ox + s * x,
     Y = (y) => oy - s * y;
   const nodal = key === "w";
-  let values, cells;
-  if (nodal) {
-    // Cell colour from the mean of its corner deflections (display only).
-    const at = new Map(f.nodes.map((g, n) => [g.join(","), f.w[n]]));
-    cells = f.cells;
-    values = cells.map(
-      ([i, j]) =>
-        (at.get(`${i},${j}`) +
-          at.get(`${i + 1},${j}`) +
-          at.get(`${i + 1},${j + 1}`) +
-          at.get(`${i},${j + 1}`)) /
-        4,
-    );
+  // ADR 0021 item 3: the nodal-average moments are display only; every other
+  // field, and every design value, is the element-centre one.
+  const smoothed = recovery === "nodalAverage" ? pa.smoothed?.[key] : null;
+  const cells = f.cells;
+  // Each tile: [x0, x1, y0, y1, value, marker x, marker y].
+  let tiles;
+  if (nodal || smoothed) {
+    const source = smoothed || f.w;
+    const at = new Map(f.nodes.map((g, n) => [g.join(","), source[n]]));
+    const v = (i, j) => at.get(`${i},${j}`);
+    tiles = nodal
+      ? // Cell colour from the mean of its corner deflections (display only).
+        cells.map(([i, j]) => [
+          xs[i],
+          xs[i + 1],
+          ys[j],
+          ys[j + 1],
+          (v(i, j) + v(i + 1, j) + v(i + 1, j + 1) + v(i, j + 1)) / 4,
+          (xs[i] + xs[i + 1]) / 2,
+          (ys[j] + ys[j + 1]) / 2,
+        ])
+      : // Each cell quarter takes its corner node's averaged value.
+        cells.flatMap(([i, j]) => {
+          const mx = (xs[i] + xs[i + 1]) / 2,
+            my = (ys[j] + ys[j + 1]) / 2;
+          return [
+            [xs[i], mx, ys[j], my, v(i, j), xs[i], ys[j]],
+            [mx, xs[i + 1], ys[j], my, v(i + 1, j), xs[i + 1], ys[j]],
+            [mx, xs[i + 1], my, ys[j + 1], v(i + 1, j + 1), xs[i + 1], ys[j + 1]],
+            [xs[i], mx, my, ys[j + 1], v(i, j + 1), xs[i], ys[j + 1]],
+          ];
+        });
   } else {
-    cells = f.cells;
-    values = f[key];
+    tiles = cells.map(([i, j], e) => [
+      xs[i],
+      xs[i + 1],
+      ys[j],
+      ys[j + 1],
+      f[key][e],
+      (xs[i] + xs[i + 1]) / 2,
+      (ys[j] + ys[j + 1]) / 2,
+    ]);
   }
+  const values = tiles.map((t) => t[4]);
+  const kind = plateFields.find((f) => f[0] === key)?.[2];
   const lo = Math.min(...values),
     hi = Math.max(...values),
-    signed = !["bottomX", "bottomY", "topX", "topY"].includes(key);
-  const rects = cells
+    signed = !["design", "steel"].includes(kind);
+  const rects = tiles
     .map(
-      ([i, j], e) =>
-        `<rect x="${X(xs[i]).toFixed(2)}" y="${Y(ys[j + 1]).toFixed(2)}" width="${(s * (xs[i + 1] - xs[i])).toFixed(2)}" height="${(s * (ys[j + 1] - ys[j])).toFixed(2)}" fill="${colour(values[e], lo, hi, signed)}"/>`,
+      ([x0, x1, y0, y1, value]) =>
+        `<rect x="${X(x0).toFixed(2)}" y="${Y(y1).toFixed(2)}" width="${(s * (x1 - x0)).toFixed(2)}" height="${(s * (y1 - y0)).toFixed(2)}" fill="${colour(value, lo, hi, signed)}"/>`,
     )
     .join("");
   const edgeLine = (k) => {
@@ -198,13 +230,12 @@ export function plateContour(pa, key) {
     (best, v, e) => (Math.abs(v) > Math.abs(values[best]) ? e : best),
     0,
   );
-  const [pi, pj] = cells[peak];
-  const px = X((xs[pi] + xs[pi + 1]) / 2),
-    py = Y((ys[pj] + ys[pj + 1]) / 2);
-  const unit = nodal ? "mm" : "kN·m/m",
-    scale = nodal ? 1000 : 0.001;
+  const px = X(tiles[peak][5]),
+    py = Y(tiles[peak][6]);
+  const unit = nodal ? "mm" : kind === "steel" ? "mm²/m" : "kN·m/m",
+    scale = nodal ? 1000 : kind === "steel" ? 1e6 : 0.001;
   const legend = `<g font-size="11" fill="#142b44"><text x="${pad}" y="${H - 8}">min ${pretty(lo * scale, 2)} ${unit}</text><text x="${W - pad}" y="${H - 8}" text-anchor="end">max ${pretty(hi * scale, 2)} ${unit}</text></g>`;
-  return `<svg class="plate-contour" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(key)} contour over the slab panel" data-testid="plate-contour" data-field="${esc(key)}" data-cells="${cells.length}"><g shape-rendering="crispEdges">${rects}</g>${opening}${[0, 1, 2, 3].map(edgeLine).join("")}<circle cx="${px}" cy="${py}" r="5" fill="none" stroke="#142b44" stroke-width="2"/>${(pa.columns || []).map((c) => `<rect x="${X(c.x) - 5}" y="${Y(c.y) - 5}" width="10" height="10" fill="#142b44" data-testid="plate-column-marker"/>`).join("")}<text x="${X(0)}" y="${Y(0) + 16}" font-size="11" fill="#53667c">0,0</text><text x="${X(lx)}" y="${Y(0) + 16}" font-size="11" fill="#53667c" text-anchor="end">x = ${pretty(lx, 2)} m</text><text x="${X(0) - 6}" y="${Y(ly) + 4}" font-size="11" fill="#53667c" text-anchor="end">y</text>${legend}</svg>`;
+  return `<svg class="plate-contour" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(key)} contour over the slab panel" data-testid="plate-contour" data-field="${esc(key)}" data-cells="${cells.length}" data-recovery="${smoothed ? "nodalAverage" : nodal ? "nodal" : "elementCentre"}"><g shape-rendering="crispEdges">${rects}</g>${opening}${[0, 1, 2, 3].map(edgeLine).join("")}<circle cx="${px}" cy="${py}" r="5" fill="none" stroke="#142b44" stroke-width="2"/>${(pa.columns || []).map((c) => `<rect x="${X(c.x) - 5}" y="${Y(c.y) - 5}" width="10" height="10" fill="#142b44" data-testid="plate-column-marker"/>`).join("")}<text x="${X(0)}" y="${Y(0) + 16}" font-size="11" fill="#53667c">0,0</text><text x="${X(lx)}" y="${Y(0) + 16}" font-size="11" fill="#53667c" text-anchor="end">x = ${pretty(lx, 2)} m</text><text x="${X(0) - 6}" y="${Y(ly) + 4}" font-size="11" fill="#53667c" text-anchor="end">y</text>${legend}</svg>`;
 }
 
 const kNm = (v) => `${pretty(v / 1000, 2)} kN·m/m`;
@@ -229,7 +260,11 @@ function columnsTable(pa, context) {
 }
 
 /** The "Plate actions" pane of a slab run. */
-export function platePane(run, field, context) {
+export function platePane(run, field, context, recovery = "elementCentre") {
+  // A_s,req maps are the run's per-element design values (ADR 0029).
+  const map = run?.codeProfilePreview?.reinforcementMap;
+  const steel = plateFields.find((f) => f[0] === field && f[2] === "steel");
+  if (steel && !map) field = "bottomX";
   const pa = run?.plateAnalysis;
   if (!pa)
     return '<p data-testid="plate-status">Run the preview with the plate analysis source.</p>';
@@ -259,5 +294,26 @@ export function platePane(run, field, context) {
         return `<h4>Clamped-edge line moments</h4><table><thead><tr><th>Edge</th><th>Most hogging</th></tr></thead><tbody>${byEdge}</tbody></table><p class="design-note">From the support reactions over each node's tributary edge length.</p>`;
       })()
     : "";
-  return `<div class="plate-pane" data-testid="plate-pane"><div class="plate-map"><div class="design-view-switch" role="group" aria-label="Plate result field">${plateFields.map(([k, label]) => `<button data-plate-field="${k}" aria-pressed="${field === k}">${esc(label)}</button>`).join("")}</div>${plateContour(pa, field)}<p class="design-note">Element-centre values (unsmoothed), sagging positive. Wood–Armer values are moments to resist on each face, not reinforcement. Heavy edge: clamped · dashed: simple · thin: free.</p></div><div class="plate-tables"><h4>Solution <span class="design-tag">MECHANICS · plate-v1</span></h4><table><tbody><tr><td>Mesh</td><td data-testid="plate-elements">${m.elements} elements · ${m.nodes} nodes · largest aspect ${pretty(m.maxAspect, 2)}</td></tr><tr><td>Pressure</td><td>${pretty(pa.load.pressure / 1000, 3)} kPa down</td></tr><tr><td>Equilibrium</td><td data-testid="plate-balance" data-si="${e.relativeImbalance}">reactions ${pretty(e.reactions / 1000, 3)} kN vs load ${pretty(e.applied / 1000, 3)} kN (${e.relativeImbalance.toExponential(1)})</td></tr><tr><td>Max deflection</td><td>${pretty(x.maxDeflection * 1000, 3)} mm</td></tr><tr><td>mx range</td><td>${kNm(x.minMx)} … ${kNm(x.maxMx)}</td></tr><tr><td>my range</td><td>${kNm(x.minMy)} … ${kNm(x.maxMy)}</td></tr><tr><td>Mesh convergence</td><td data-testid="plate-convergence" data-within="${c.withinLimit}">${pretty(c.change * 100, 1)} % change from a ${pretty(c.coarseMeshSize * 1000, 0)} mm mesh · ${c.withinLimit ? "within" : "exceeds"} ${pretty(c.indicatorLimit * 100, 0)} %</td></tr></tbody></table><p class="design-note">${esc(c.note)}</p>${m.warnings.map((w) => `<p class="notice-small" data-testid="plate-warning">${esc(w.code)} · ${esc(w.message)}</p>`).join("")}<h4>Governing design moments</h4><table><thead><tr><th>Face</th><th>Wood–Armer</th><th>At</th></tr></thead><tbody>${governing}</tbody></table>${clamped}${columnsTable(pa, context)}<p class="design-note">Reinforcement areas, punching and deflection limits need a slab code profile and remain UNSUPPORTED.</p></div></div>`;
+  // Smoothing is offered for the raw moments only (ADR 0021 item 3).
+  const smoothable = ["mx", "my", "mxy"].includes(field) && pa.smoothed;
+  const recoverySwitch = smoothable
+    ? `<div class="design-view-switch" role="group" aria-label="Moment recovery">${[
+        ["elementCentre", "Element centre (design values)"],
+        ["nodalAverage", "Nodal average (display only)"],
+      ]
+        .map(
+          ([k, label]) =>
+            `<button data-plate-recovery="${k}" aria-pressed="${recovery === k}">${label}</button>`,
+        )
+        .join("")}</div>`
+    : "";
+  return `<div class="plate-pane" data-testid="plate-pane"><div class="plate-map"><div class="design-view-switch" role="group" aria-label="Plate result field">${plateFields
+    .filter((f) => f[2] !== "steel" || map)
+    .map(
+      ([k, label]) =>
+        `<button data-plate-field="${k}" aria-pressed="${field === k}">${esc(label)}</button>`,
+    )
+    .join(
+      "",
+    )}</div>${recoverySwitch}${plateContour(steel && map ? { ...pa, fields: { ...pa.fields, [field]: map[steel[3]] } } : pa, field, smoothable ? recovery : "elementCentre")}<p class="design-note">${smoothable && recovery === "nodalAverage" ? "Nodal averages of the adjacent element-centre moments: display only, never used for design." : "Element-centre values (unsmoothed)."} Sagging positive. Wood–Armer values are moments to resist on each face; the A<sub>s,req</sub> maps are the EC2 design values per element, never averaged. Heavy edge: clamped · dashed: simple · thin: free.</p></div><div class="plate-tables"><h4>Solution <span class="design-tag">MECHANICS · plate-v1</span></h4><table><tbody><tr><td>Mesh</td><td data-testid="plate-elements">${m.elements} elements · ${m.nodes} nodes · largest aspect ${pretty(m.maxAspect, 2)}</td></tr><tr><td>Pressure</td><td>${pretty(pa.load.pressure / 1000, 3)} kPa down</td></tr><tr><td>Equilibrium</td><td data-testid="plate-balance" data-si="${e.relativeImbalance}">reactions ${pretty(e.reactions / 1000, 3)} kN vs load ${pretty(e.applied / 1000, 3)} kN (${e.relativeImbalance.toExponential(1)})</td></tr><tr><td>Max deflection</td><td>${pretty(x.maxDeflection * 1000, 3)} mm</td></tr><tr><td>mx range</td><td>${kNm(x.minMx)} … ${kNm(x.maxMx)}</td></tr><tr><td>my range</td><td>${kNm(x.minMy)} … ${kNm(x.maxMy)}</td></tr><tr><td>Mesh convergence</td><td data-testid="plate-convergence" data-within="${c.withinLimit}">${pretty(c.change * 100, 1)} % change from a ${pretty(c.coarseMeshSize * 1000, 0)} mm mesh · ${c.withinLimit ? "within" : "exceeds"} ${pretty(c.indicatorLimit * 100, 0)} %</td></tr></tbody></table><p class="design-note">${esc(c.note)}</p>${m.warnings.map((w) => `<p class="notice-small" data-testid="plate-warning">${esc(w.code)} · ${esc(w.message)}</p>`).join("")}<h4>Governing design moments</h4><table><thead><tr><th>Face</th><th>Wood–Armer</th><th>At</th></tr></thead><tbody>${governing}</tbody></table>${clamped}${columnsTable(pa, context)}<p class="design-note">${map ? "Reinforcement, shear, punching and span/depth are in the EC2 checks tab (demonstration)." : "Run the plate analysis to design the reinforcement."}</p></div></div>`;
 }

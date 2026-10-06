@@ -37,11 +37,13 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     await expect(page.locator("#preview-run")).toBeEnabled();
     await expect(page.locator("#model-nav [data-preview]")).toHaveCount(1);
     await runPreview(page);
+    // Synthetic beam and footing actions give no code result; the slab is
+    // designed from its own plate analysis (ADR 0029).
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-      "UNSUPPORTED",
+      kind === "slab" ? "INDETERMINATE" : "UNSUPPORTED",
     );
     await expect(page.locator("#design-preview-scene")).toContainText(
-      "MOCK WORKFLOW",
+      kind === "slab" ? "DEMONSTRATION" : "MOCK WORKFLOW",
     );
     if (kind === "slab") {
       // The panel's own plate analysis is the default source (ADR 0021).
@@ -82,7 +84,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     // ground contact: FAIL, never a pressure (ADR 0028).
     if (kind === "rcBeam") expect(settled).not.toBe("UNSUPPORTED");
     else if (kind === "padFooting") expect(settled).toBe("FAIL");
-    else expect(settled).toBe("UNSUPPORTED");
+    else expect(settled).toBe("INDETERMINATE");
     const key = kind === "rcBeam" ? "depth" : "thickness";
     await page.locator(`#preview-${key}`).fill("650 mm");
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(

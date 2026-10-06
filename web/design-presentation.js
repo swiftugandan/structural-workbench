@@ -109,8 +109,8 @@ ${choice("code-partitions", "Supports sensitive partitions", yesNo(ci.partitions
     d.kind === "rcBeam"
       ? `<label class="design-field"><span>Quasi-permanent case / combination</span><select id="code-qp">${opt("", "— choose —", ci.quasiPermanentCombinationId || "")}${combos.map(([v, l]) => opt(v, l, ci.quasiPermanentCombinationId)).join("")}</select></label>`
       : "";
-  const pair = (id, label, v) =>
-    `<label class="design-field"><span>${label}</span><span class="design-pair"><input id="${id}-1" value="${num(v?.[0])}" placeholder="k1" autocomplete="off" inputmode="decimal"><input id="${id}-2" value="${num(v?.[1])}" placeholder="k2" autocomplete="off" inputmode="decimal"></span></label>`;
+  const pair = (id, label, v, hints = ["k1", "k2"]) =>
+    `<label class="design-field"><span>${label}</span><span class="design-pair"><input id="${id}-1" value="${num(v?.[0])}" placeholder="${hints[0]}" autocomplete="off"><input id="${id}-2" value="${num(v?.[1])}" placeholder="${hints[1]}" autocomplete="off"></span></label>`;
   const column =
     d.kind === "rcColumn"
       ? `${choice("code-braced", "Braced against sway", yesNo(ci.braced))}
@@ -119,6 +119,15 @@ ${pair("code-kz", "End restraint k1, k2 · bending about z", ci.restraintZ)}
 <label class="design-field"><span>Effective creep ratio φ<sub>ef</sub></span><input id="code-creep" value="${num(ci.effectiveCreepRatio)}" placeholder="e.g. 1.5" autocomplete="off" inputmode="decimal"></label>
 <small>k = (θ/M)(EI/l): 0 for a rigid end (0.1 is used as the minimum), 1000 for a pin. 5.8.3.2(3).</small>`
       : "";
+  const slab =
+    d.kind === "slab"
+      ? `${pair(
+          "code-colsize",
+          "Column size c<sub>x</sub>, c<sub>y</sub> (punching)",
+          ci.columnSize?.map((v) => `${pretty(v * 1000)} mm`),
+          ["e.g. 400 mm", "e.g. 400 mm"],
+        )}`
+      : "";
   const footing =
     d.kind === "padFooting"
       ? `${choice("code-blinding", "Cast on blinding (else against ground)", yesNo(ci.castOnBlinding))}
@@ -126,7 +135,7 @@ ${pair("code-kz", "End restraint k1, k2 · bending about z", ci.restraintZ)}
 <small>The allowable bearing input is compared with this case or combination, plus the base and overburden.</small>`
       : "";
   return `<fieldset class="design-code-inputs" data-testid="code-inputs"><legend>EC2 code inputs</legend>
-${shared}${bySpan}${qp}${column}${footing}
+${shared}${bySpan}${qp}${column}${slab}${footing}
 <small>Your values from BS 8500 and the brief. A check that needs a value you have not entered stays INDETERMINATE; nothing is assumed.</small></fieldset>`;
 }
 export function previewInspector({
@@ -188,14 +197,14 @@ export function previewInspector({
         : d.kind === "slab"
           ? ["meshSize"]
           : ["bearingPressure", "embedment", "soilUnitWeight"];
-  return `<div class="design-object-title"><div><small>SELECTED ${designNames[d.kind].toUpperCase()}</small><h2>${esc(previewIdentity(ctx.project, d).text)}<span class="design-tag">${["rcBeam", "rcColumn", "padFooting"].includes(d.kind) ? "EC2 UK · demonstration" : "Mock workflow"}</span></h2></div>${chooser}</div>
+  return `<div class="design-object-title"><div><small>SELECTED ${designNames[d.kind].toUpperCase()}</small><h2>${esc(previewIdentity(ctx.project, d).text)}<span class="design-tag">${["rcBeam", "rcColumn", "padFooting", "slab"].includes(d.kind) ? "EC2 UK · demonstration" : "Mock workflow"}</span></h2></div>${chooser}</div>
  <p class="design-note">Draft geometry is independent of analysis stiffness. The binding identifies the source of actions.</p>
  <form id="preview-form"><section class="design-section"><h3>1. Geometry and section</h3><div class="design-section-sketch"><svg viewBox="0 0 300 230" aria-label="Section sketch">${sketch}</svg><div>${fieldRows(d, t, geometry)}</div></div></section>
  <section class="design-section"><h3>2. Materials</h3>${fieldRows(d, t, ["concreteStrength", "rebarStrength"])}<small class="source-key">S · synthetic fixture &nbsp; U · user input. Strength inputs are not a code profile.</small>${mechanicsSection(d, t, mechanicsLaw)}</section>
  <section class="design-section"><h3>3. ${d.kind === "rcBeam" || d.kind === "rcColumn" ? "Reinforcement preferences" : d.kind === "slab" ? "Mesh settings" : "Soil parameters"}</h3>${fieldRows(d, t, special)}${d.kind === "rcBeam" ? `<label class="design-check full"><input type="checkbox" id="preview-anchorage" ${d.tensionAnchorageConfirmed ? "checked" : ""}> I confirm the tension steel extends at least l<sub>bd</sub> + d beyond the checked sections</label><small>Your confirmation, never assumed. Unconfirmed, EC2 shear ignores this steel (ρ<sub>l</sub> = 0) and anchorage stays INDETERMINATE.</small>` : ""}${codeInputsSection(d, ctx)}${d.kind === "padFooting" ? `<label class="design-field full"><span>Geotechnical reference</span><textarea id="preview-soil" maxlength="512">${esc(d.soilReference)}</textarea></label><small>Bearing pressure is externally supplied, never calculated here.</small>` : ""}${d.kind === "slab" ? `<small>Target cell size of the structured plate mesh.</small>${plateHtml}` : ""}</section>
  <section class="design-section"><h3>4. Model binding</h3>${d.kind !== "slab" ? `<label class="design-field"><span>${d.kind === "padFooting" ? "Support" : "Member"}</span><select id="preview-target"><option value="">No model binding</option>${ctx.project[d.kind === "padFooting" ? "supports" : "members"].map((e) => `<option value="${e.id}" ${d.targetId === e.id ? "selected" : ""}>${esc(entityLabel(ctx.project, e.id))}</option>`).join("")}</select></label>` : "<p>The panel is analysed on its own under its entered pressure · frame forces never substitute for plate results.</p>"}<div class="design-form-actions"><button id="preview-save">Save inputs</button><button type="button" id="preview-cancel">Cancel edits</button></div></section></form>
- <section class="design-section"><h3>5. Design actions and readiness</h3><label class="design-field"><span>Action source</span><select id="preview-source">${d.kind === "slab" ? '<option value="plate">Plate analysis of this panel</option>' : ""}<option value="synthetic">Synthetic fixture · MOCK</option>${d.kind !== "slab" ? '<option value="model">Current model case / combination</option>' : ""}</select></label>${d.kind === "slab" ? `<label class="design-field"><span>Reinforcement layer</span><select id="preview-face">${["Top X", "Top Y", "Bottom X", "Bottom Y"].map((f) => `<option ${f === face ? "selected" : ""}>${f}</option>`).join("")}</select></label>` : ""}<div class="readiness-grid"><span>✓ Draft geometry recorded</span><span>${["rcBeam", "rcColumn", "padFooting"].includes(d.kind) ? "✓ EC2 UK profile · demonstration" : "△ Code profile unavailable"}</span><span>△ Reinforcement unverified</span><span>△ ${d.kind === "padFooting" ? "Contact indeterminate" : ["rcBeam", "rcColumn"].includes(d.kind) ? "Resistance on model actions only" : "Resistance unsupported"}</span></div><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run workflow preview</button>${["rcBeam", "rcColumn"].includes(d.kind) ? '<button type="button" id="preview-propose" class="secondary">Propose reinforcement</button>' : ""}</section>
- <p class="design-note">${["rcBeam", "rcColumn", "padFooting"].includes(d.kind) ? "EC2 UK DEMONSTRATION · EN 1992-1-1:2004+AC:2010 with UK NA (2009); A1:2014 / NA+A2:2014 not reconciled; not a certified design. Draft dimensions do not change frame stiffness." : "MOCK WORKFLOW · No code-compliance claim. Draft dimensions do not change frame stiffness."}</p>${create}<button id="preview-delete" class="design-delete">Delete this draft</button><p id="preview-error" role="alert"></p>`;
+ <section class="design-section"><h3>5. Design actions and readiness</h3><label class="design-field"><span>Action source</span><select id="preview-source">${d.kind === "slab" ? '<option value="plate">Plate analysis of this panel</option>' : ""}<option value="synthetic">Synthetic fixture · MOCK</option>${d.kind !== "slab" ? '<option value="model">Current model case / combination</option>' : ""}</select></label>${d.kind === "slab" ? `<label class="design-field"><span>Reinforcement layer</span><select id="preview-face">${["Top X", "Top Y", "Bottom X", "Bottom Y"].map((f) => `<option ${f === face ? "selected" : ""}>${f}</option>`).join("")}</select></label>` : ""}<div class="readiness-grid"><span>✓ Draft geometry recorded</span><span>${["rcBeam", "rcColumn", "padFooting", "slab"].includes(d.kind) ? "✓ EC2 UK profile · demonstration" : "△ Code profile unavailable"}</span><span>△ Reinforcement unverified</span><span>△ ${d.kind === "padFooting" ? "Contact indeterminate" : ["rcBeam", "rcColumn"].includes(d.kind) ? "Resistance on model actions only" : "Resistance unsupported"}</span></div><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run workflow preview</button>${["rcBeam", "rcColumn"].includes(d.kind) ? '<button type="button" id="preview-propose" class="secondary">Propose reinforcement</button>' : ""}</section>
+ <p class="design-note">${["rcBeam", "rcColumn", "padFooting", "slab"].includes(d.kind) ? "EC2 UK DEMONSTRATION · EN 1992-1-1:2004+AC:2010 with UK NA (2009); A1:2014 / NA+A2:2014 not reconciled; not a certified design. Draft dimensions do not change frame stiffness." : "MOCK WORKFLOW · No code-compliance claim. Draft dimensions do not change frame stiffness."}</p>${create}<button id="preview-delete" class="design-delete">Delete this draft</button><p id="preview-error" role="alert"></p>`;
 }
 export function provenanceTable(run) {
   return `<dl class="design-provenance-grid">${Object.entries({
@@ -360,6 +369,43 @@ function contactDrawing(run, d) {
   return `<svg class="section-drawing" viewBox="0 0 300 230" data-testid="footing-contact"><polygon points="${base.map(pt).join(" ")}" fill="none" stroke="#796f58"/><polygon points="${k.contactPolygon.map(pt).join(" ")}" fill="#e4dfd4" stroke="#516b82"/>${base.map((c, i) => label(i, c)).join("")}<text x="150" y="226" text-anchor="middle" font-size="10">${esc(k.state)} contact · plan, X right, Y up</text></svg><p class="design-note">Rigid base on tensionless ground under the column actions alone; tension is never treated as contact.</p>`;
 }
 
+/** EC2 slab (ADR 0029): the designed meshes and every check. */
+export function ec2SlabPane(run) {
+  const cp = run?.codeProfilePreview;
+  const banner = cp?.profileEnabled
+    ? `<p class="design-note" data-testid="ec2-banner"><b>DEMONSTRATION</b> · ${esc(cp.edition)} · ${esc((cp.unreconciledAmendments || []).join(", "))} not reconciled · ${esc(cp.certification)}.</p>`
+    : "";
+  if (!cp)
+    return `<h4>EC2 checks</h4>${banner}<p>Run the plate analysis to evaluate.</p>`;
+  if (cp.status !== "evaluated")
+    return `<h4>EC2 checks</h4>${banner}<p data-testid="ec2-status">Unavailable · ${esc(cp.reason || "")}</p>`;
+  const units = {
+    N: [1e-3, "kN"],
+    "N m": [1e-3, "kN·m"],
+    m2: [1e6, "mm²/m"],
+    MPa: [1, "MPa"],
+    "-": [1, ""],
+  };
+  const val = (v, u) => {
+    if (v == null) return "—";
+    const [k, unit] = units[u] || [1, u];
+    return `${pretty(v * k, 3)}${unit ? ` ${unit}` : ""}`;
+  };
+  const layers = ["bottomX", "bottomY", "topX", "topY"]
+    .map((k) => {
+      const l = cp.layers[k];
+      return `<tr data-testid="slab-layer" data-layer="${k}"><th scope="row">${k}</th><td>${l ? `Ø${pretty(l.diameter * 1000)} at ${pretty(l.spacing * 1000)} mm` : "Not required"}</td><td>${l ? `${pretty(l.area * 1e6, 4)} mm²/m` : "—"}</td><td>${l ? `${pretty(l.effectiveDepth * 1000, 3)} mm` : "—"}</td></tr>`;
+    })
+    .join("");
+  const rows = cp.checks
+    .map(
+      (c) =>
+        `<tr data-testid="ec2-check" data-check-id="${esc(c.checkId)}"><td>${esc(c.checkId.replace(/^ec2\./, ""))}</td><td>${esc(c.clause)}</td><td><span class="status-text ${esc(c.status)}">${esc(c.status.toUpperCase())}</span></td><td>${val(c.demand, c.units)}</td><td>${val(c.resistance, c.units)}</td><td>${c.utilisation == null ? "—" : pretty(c.utilisation, 3)}</td><td>${esc(c.message)}</td></tr>`,
+    )
+    .join("");
+  return `<h4>EC2 slab · ${esc(cp.ndp)}</h4>${banner}<table><thead><tr><th>Layer</th><th>Mesh</th><th>A<sub>s,prov</sub></th><th>d</th></tr></thead><tbody>${layers}</tbody></table><p class="design-note">${esc(cp.reinforcementMap.basis)}.</p><table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody>${rows}</tbody></table><ul class="design-note">${cp.limitations.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`;
+}
+
 /** EC2 pad footing (ADR 0028): contact, the designed bars and every check. */
 export function ec2FootingPane(run) {
   const cp = run?.codeProfilePreview;
@@ -447,7 +493,9 @@ export function previewPane({ run, state, d, pane, checkIndex, sketch }) {
       ? ec2ColumnPane(run)
       : d.kind === "padFooting"
         ? ec2FootingPane(run)
-        : ec2Pane(run);
+        : d.kind === "slab"
+          ? ec2SlabPane(run)
+          : ec2Pane(run);
   if (pane === "reinforcement")
     return `<div class="reinforcement-layout"><article><h4>${d.kind === "rcBeam" ? "Longitudinal reinforcement layout" : "Reinforcement plan"} <small>· illustration only</small></h4>${d.kind === "rcBeam" ? beamElevation(d) : `<svg class="design-drawing" viewBox="0 0 300 230">${sketch}</svg>`}<p class="design-note">Preference illustration · not a verified arrangement or construction drawing.</p></article><article><h4>${d.kind === "rcBeam" ? "Cross-section" : "Geometry and layers"}</h4><svg class="section-drawing" viewBox="0 0 300 230">${sketch}</svg><p>Cover ${pretty(d.inputs.cover * 1000)} mm · fit, spacing and anchorage unverified.</p></article></div>`;
   if (pane === "schedule") {
@@ -458,7 +506,7 @@ export function previewPane({ run, state, d, pane, checkIndex, sketch }) {
       rows.every((r) => r.massKg != null) && rows.length
         ? rows.reduce((a, r) => a + r.massKg, 0)
         : null;
-    return `<h4>Bar schedule · indicative</h4><table><thead><tr><th>Mark</th><th>Region</th><th>Shape</th><th>Bar</th><th>Qty</th><th>Cut length</th><th>Mass</th><th>Basis</th></tr></thead><tbody>${rows.map((r) => `<tr data-testid="schedule-row" data-mark="${esc(r.mark)}"><td>${esc(r.mark)}</td><td>${esc(r.region)}</td><td>${esc(r.shape || "")}</td><td>Ø${pretty(r.diameter * 1000)} mm</td><td>${r.quantity ?? "—"}</td><td>${len(r.cutLength)}</td><td>${kg(r.massKg)}</td><td>${esc(r.basis || "")}</td></tr>`).join("")}</tbody>${total == null ? "" : `<tfoot><tr><td colspan="6">Total</td><td data-testid="schedule-total">${kg(total)}</td><td></td></tr></tfoot>`}</table><p class="design-note">${rows.length ? "INDICATIVE — straight bars over the bound member with no curtailment or laps; BS 8666 shape codes are not held. Not a fabrication schedule." : "A schedule is unavailable for this design object."}</p>`;
+    return `<h4>Bar schedule · indicative</h4><table><thead><tr><th>Mark</th><th>Region</th><th>Shape</th><th>Bar</th><th>Qty</th><th>Cut length</th><th>Mass</th><th>Basis</th></tr></thead><tbody>${rows.map((r) => `<tr data-testid="schedule-row" data-mark="${esc(r.mark)}"><td>${esc(r.mark)}</td><td>${esc(r.region)}</td><td>${esc(r.shape || "")}</td><td>Ø${pretty(r.diameter * 1000)} mm</td><td>${r.quantity ?? "—"}</td><td>${len(r.cutLength)}</td><td>${kg(r.massKg)}</td><td>${esc(r.basis || "")}</td></tr>`).join("")}</tbody>${total == null ? "" : `<tfoot><tr><td colspan="6">Total</td><td data-testid="schedule-total">${kg(total)}</td><td></td></tr></tfoot>`}</table><p class="design-note">${rows.length ? "INDICATIVE — designed straight bars with no curtailment or laps; BS 8666 shape codes are not held. Not a fabrication schedule." : "A schedule is unavailable for this design object."}</p>`;
   }
   if (pane === "soil")
     return `<div class="reinforcement-layout"><article><h4>Soil / contact</h4>${contactDrawing(run, d) || `<svg class="section-drawing" viewBox="0 0 300 230">${sketch}</svg><p class="design-note">Contact INDETERMINATE · run on model actions to solve the ground contact.</p>`}</article><article><h4>External soil inputs</h4><dl class="design-provenance-grid"><dt>Allowable bearing input</dt><dd>${pretty(d.inputs.bearingPressure / 1000)} kPa</dd><dt>Origin</dt><dd>${esc(sourceLabel(d.inputSources?.bearingPressure || d.inputSource))}</dd><dt>Reference</dt><dd>${esc(d.soilReference)}</dd><dt>Workbench soil capacity</dt><dd>Not calculated</dd>${(() => {

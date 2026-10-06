@@ -1,0 +1,58 @@
+{
+  "taskId": "M10-parent",
+  "milestone": "M10",
+  "sourceHash": "b53cf45b187bb6d0cd21a32600d11636e0103201c323a084eed3921c20e211d7",
+  "buildHash": "c881053200de3a1c8fdb1f96de0829627b8775c25abeabfbecb2810aaa01afe8",
+  "lockHashes": {
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
+    "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
+    "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
+    "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
+  },
+  "artifactHashes": {
+    "playwright-results.json": "212d9f482eb191b3ad8eb209563a44b5e88e4c4f34026b8ed67a18908e94011a",
+    "slab-ec2.png": "629758d11e81e1bc4ad45e13ad0f15cde3b27512e75deeaa622e93a51940e6c9",
+    "slab-as-bottom-x.png": "b3462e46d6410ec59938950b10e0e68f795c075c1ecae2475ae06c9ba3c98194",
+    "slab-ec2-run.json": "d7fd256c2b2ecef731a8d930a4beb6f915af75c38124570fd9f311be4fe6b06b",
+    "opening-mx.svg": "feceb5a8c2bdd66883a5346e74b7e31ab7dca1b46704fa67b4d226605f5c094f"
+  },
+  "runner": {
+    "platform": "darwin",
+    "arch": "x64",
+    "release": "23.6.0",
+    "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
+    "memory": 34359738368
+  },
+  "observedAt": "2026-10-06T00:23:12.004Z",
+  "status": "PASS",
+  "testCount": 5,
+  "testIds": [
+    "M06 capability ledger: View capabilities shows UNKNOWN parity and exclusions",
+    "Slab plate analysis reproduces the opening oracle, shows contours and persists",
+    "Slab plate refusals keep the project and explain the reason",
+    "Slab on model columns: derive the columns, solve and apply the column loads to the frame",
+    "Slab EC2 design: reinforcement map, span/depth, report and persistence"
+  ],
+  "command": [
+    "npx",
+    "playwright",
+    "test",
+    "tests/e2e/slab-plate.spec.js",
+    "tests/e2e/capability-ledger.spec.js"
+  ],
+  "stats": {
+    "startTime": "2026-10-06T00:22:27.054Z",
+    "duration": 44922.398,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifacts": [
+    "playwright-results.json",
+    "slab-ec2.png",
+    "slab-as-bottom-x.png",
+    "slab-ec2-run.json",
+    "opening-mx.svg"
+  ]
+}

@@ -295,16 +295,26 @@ function plateRunsHtml(runs, e) {
         )
         .join("");
       const x = pa.extremes;
+      const cp = run.codeProfilePreview;
+      const mesh = (l) =>
+        l
+          ? `Ø${(l.diameter * 1000).toPrecision(3)} at ${(l.spacing * 1000).toPrecision(3)} mm · ${siCell(l.area, 1e-6, "mm²/m")} · d ${siCell(l.effectiveDepth, 1e-3, "mm")}`
+          : "not required";
+      const ec2 =
+        cp?.status === "evaluated"
+          ? `<h4>EC2 slab design · ${e(cp.profileId)}</h4><p class="banner" data-testid="report-ec2-banner">DEMONSTRATION. ${e(cp.edition)}. ${e((cp.unreconciledAmendments || []).join(", "))} not reconciled. ${e(cp.certification)}.</p><table><thead><tr><th>Layer</th><th>Mesh</th></tr></thead><tbody>${["bottomX", "bottomY", "topX", "topY"].map((k) => `<tr data-testid="report-slab-layer" data-layer="${k}"><th scope="row">${k}</th><td>${mesh(cp.layers[k])}</td></tr>`).join("")}</tbody></table><p>${e(cp.reinforcementMap.basis)}.</p><table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Note</th></tr></thead><tbody>${cp.checks.map((c) => `<tr data-testid="report-ec2-check" data-check-id="${e(c.checkId)}"><th scope="row">${e(c.checkId)}</th><td>${e(c.clause)}</td><td>${e(c.status.toUpperCase())}</td><td data-si="${c.demand ?? ""}">${c.demand == null ? "—" : c.demand.toPrecision(6)} ${e(c.units)}</td><td data-si="${c.resistance ?? ""}">${c.resistance == null ? "—" : c.resistance.toPrecision(6)} ${e(c.units)}</td><td>${e(c.message)}</td></tr>`).join("")}</tbody></table>`
+          : "";
       return `<section data-testid="report-plate-preview" data-draft-id="${e(run.draftId)}"><h3>Slab draft ${e(run.draftId)} · ${pa.panel.lengthX} m × ${pa.panel.lengthY} m × ${pa.panel.thickness} m</h3>
-<p>Overall <strong>${e(String(run.overall).toUpperCase())}</strong> · code profile unavailable · edges (x = 0, x = Lx, y = 0, y = Ly) ${e(pa.panel.edges.join(", "))} · opening ${pa.panel.opening ? e(pa.panel.opening.join(", ")) + " m" : "none"} · pressure ${siCell(pa.load.pressure, 1e3, "kPa")} (${e(pa.load.source)})</p>
+<p>Overall <strong data-testid="report-slab-overall">${e(String(run.overall).toUpperCase())}</strong> · code profile ${run.codeProfile ? `${e(run.codeProfile.id)} · DEMONSTRATION` : "unavailable"} · edges (x = 0, x = Lx, y = 0, y = Ly) ${e(pa.panel.edges.join(", "))} · opening ${pa.panel.opening ? e(pa.panel.opening.join(", ")) + " m" : "none"} · pressure ${siCell(pa.load.pressure, 1e3, "kPa")} (${e(pa.load.source)})</p>
 <p>Preview run ${e(run.previewRunId)} · input ${e(run.inputHash)} · model ${e(run.modelHash)} · ${e(pa.family)}</p>
 <table><tbody><tr><th scope="row">Mesh</th><td>${pa.mesh.elements} elements · ${pa.mesh.nodes} nodes · aspect ≤ ${pa.mesh.maxAspect.toPrecision(3)}${pa.mesh.warnings.map((w) => ` · ${e(w.code)}`).join("")}</td></tr><tr><th scope="row">Equilibrium</th><td data-testid="report-plate-balance" data-si="${pa.equilibrium.relativeImbalance}">reactions ${siCell(pa.equilibrium.reactions, 1e3, "kN")} vs load ${siCell(pa.equilibrium.applied, 1e3, "kN")}</td></tr><tr><th scope="row">Max deflection</th><td>${siCell(x.maxDeflection, 1e-3, "mm")}</td></tr><tr><th scope="row">mx, my range</th><td>${siCell(x.minMx, 1e3, "kN·m/m")} … ${siCell(x.maxMx, 1e3, "kN·m/m")}; ${siCell(x.minMy, 1e3, "kN·m/m")} … ${siCell(x.maxMy, 1e3, "kN·m/m")}</td></tr><tr><th scope="row">Convergence indicator</th><td>${(pa.convergence.change * 100).toPrecision(3)} % from a ${pa.convergence.coarseMeshSize} m mesh · ${pa.convergence.withinLimit ? "within" : "exceeds"} ${pa.convergence.indicatorLimit * 100} %</td></tr></tbody></table>
 <h4>Governing Wood–Armer design moments (element centres)</h4><table><thead><tr><th>Face</th><th>Moment to resist</th><th>At</th></tr></thead><tbody>${dm}</tbody></table>
-<p>${e(pa.convergence.note)} ${e(pa.signs)}. Reinforcement, punching and deflection limits are UNSUPPORTED.</p>
+<p>${e(pa.convergence.note)} ${e(pa.signs)}.</p>
+${ec2}
 <details><summary>Complete preview run record</summary><pre>${e(JSON.stringify(run, null, 2))}</pre></details></section>`;
     })
     .join("");
-  return `<section data-testid="report-plate-previews"><h2>Slab plate analysis (preview)</h2><p class="banner">MECHANICS ONLY. plate-v1 actions of the draft panel under its entered pressure, not connected to the frame model (ADR 0021). Wood–Armer values are moments to resist, not reinforcement; overall design remains UNSUPPORTED.</p>${body}</section>`;
+  return `<section data-testid="report-plate-previews"><h2>Slab analysis and design (EC2 UK, demonstration)</h2><p class="banner">plate-v1 actions of the draft panel under its entered pressure, not connected to the frame model (ADR 0021). The EC2 design takes the element-centre Wood–Armer moments as the design values (ADR 0029).</p>${body}</section>`;
 }
 
 /** Current stability-v1 run (elastic buckling or second order), SI values. */

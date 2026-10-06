@@ -79,6 +79,20 @@ test("Slab plate analysis reproduces the opening oracle, shows contours and pers
     );
   }
   await page.locator('[data-plate-field="mx"]').click();
+  // Smoothing is a display option on the raw moments only (ADR 0021 item 3).
+  const contour = page.locator("[data-testid=plate-contour]");
+  await expect(contour).toHaveAttribute("data-recovery", "elementCentre");
+  await page.locator('[data-plate-recovery="nodalAverage"]').click();
+  await expect(contour).toHaveAttribute("data-recovery", "nodalAverage");
+  await expect(page.locator("[data-testid=plate-pane]")).toContainText(
+    "display only, never used for design",
+  );
+  await page.locator('[data-plate-field="topX"]').click();
+  await expect(page.locator("[data-plate-recovery]")).toHaveCount(0);
+  await expect(contour).toHaveAttribute("data-recovery", "elementCentre");
+  await page.locator('[data-plate-field="mx"]').click();
+  await page.locator('[data-plate-recovery="elementCentre"]').click();
+  await expect(contour).toHaveAttribute("data-recovery", "elementCentre");
   await mkdir(dir, { recursive: true });
   await page.screenshot({ path: `${dir}/opening-mx.png` });
   await writeFile(
@@ -96,8 +110,9 @@ test("Slab plate analysis reproduces the opening oracle, shows contours and pers
     kind: "plateAnalysis",
     mock: false,
   });
-  expect(r.overall).toBe("unsupported");
-  expect(r.checks.every((c) => c.status === "unsupported")).toBe(true);
+  // The EC2 slab design (ADR 0029) waits for the structural system.
+  expect(r.overall).toBe("indeterminate");
+  expect(r.codeProfile.id).toBe("ec2-uk-na");
   const at = (list, key) => list.findIndex((g) => g.join(",") === key);
   const tol = oracle.tolerance;
   for (const [key, want] of Object.entries(oracle.nodeW)) {
@@ -361,5 +376,83 @@ test("Slab on model columns: derive the columns, solve and apply the column load
     Math.abs(loads.reduce((a, l) => a - l.values[2], 0) - total),
   ).toBeLessThanOrEqual(1e-8 * total);
   expect(saved.designPreviews[0].plate.placement).toEqual([0, 0, 3]);
+  expect(errors).toEqual([]);
+});
+
+test("Slab EC2 design: reinforcement map, span/depth, report and persistence", async ({
+  page,
+}) => {
+  // ADR 0029: the default 6 × 5 × 0.225 m simply supported panel with its
+  // opening, 10 kPa. The A_s,req map is the per-element design value.
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await openSlab(page, "slab-ec2");
+  await page.locator("#code-exposure").selectOption("XC1");
+  await page.locator("#code-cover").fill("15 mm");
+  await page.locator("#code-aggregate").fill("20 mm");
+  await page.locator("#code-system").selectOption("simplySupported");
+  await page.locator("#code-partitions").selectOption("no");
+  await page.locator("#preview-save").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  await run(page);
+  await expect(page.locator("[data-testid=preview-state]")).toHaveText("PASS");
+  await page.locator('[data-preview-pane="ec2"]').click();
+  await expect(page.locator("[data-testid=ec2-banner]")).toContainText(
+    "not a certified design",
+  );
+  await expect(
+    page.locator('[data-testid=slab-layer][data-layer="bottomX"]'),
+  ).toContainText("Ø");
+  await mkdir(dir, { recursive: true });
+  await page.screenshot({ path: `${dir}/slab-ec2.png`, fullPage: true });
+  // The map: A_s,req per element, the same values as the run record.
+  await page.locator('[data-preview-pane="actions"]').click();
+  await page.locator('[data-plate-field="asBottomX"]').click();
+  await expect(page.locator("[data-testid=plate-contour]")).toHaveAttribute(
+    "data-field",
+    "asBottomX",
+  );
+  await page
+    .locator("[data-testid=plate-contour]")
+    .screenshot({ path: `${dir}/slab-as-bottom-x.png` });
+  const r = await record(page);
+  await writeFile(`${dir}/slab-ec2-run.json`, JSON.stringify(r, null, 2));
+  const cp = r.codeProfilePreview;
+  expect(cp.reinforcementMap.bottomX.length).toBe(
+    r.plateAnalysis.mesh.elements,
+  );
+  expect(
+    Math.max(...cp.reinforcementMap.bottomXUtilisation),
+  ).toBeLessThanOrEqual(1 + 1e-12);
+  expect(r.schedule.map((x) => x.mark)).toContain("B1");
+  // Report: the calculation record needs a current frame result.
+  await page.locator("#analyse").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  const report = page.waitForEvent("download");
+  await menuCommand(page, "File", "Export calculation report");
+  const html = await readFile(await (await report).path(), "utf8");
+  const doc = await page.context().newPage();
+  await doc.setContent(html);
+  await expect(doc.locator("[data-testid=report-ec2-banner]")).toContainText(
+    "DEMONSTRATION",
+  );
+  await expect(
+    doc.locator('[data-testid=report-slab-layer][data-layer="bottomX"]'),
+  ).toContainText("Ø");
+  await expect(
+    doc.locator(
+      '[data-testid=report-ec2-check][data-check-id="ec2.slab.deflection"]',
+    ),
+  ).toContainText("PASS");
+  await doc.close();
+  // Persistence.
+  const p = page.waitForEvent("download");
+  await menuCommand(page, "File", "Download project");
+  const saved = JSON.parse(await readFile(await (await p).path(), "utf8"));
+  expect(saved.schemaVersion).toBe(CURRENT_SCHEMA);
+  expect(saved.designPreviews[0].codeInputs).toMatchObject({
+    structuralSystem: "simplySupported",
+    partitionsSensitive: false,
+  });
   expect(errors).toEqual([]);
 });

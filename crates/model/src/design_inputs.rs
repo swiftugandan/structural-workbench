@@ -81,6 +81,9 @@ pub struct CodeInputs {
     /// bearing pressure.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub bearing_combination_id: Option<String>,
+    /// slab: column dimensions c_x × c_y (m) for punching at every column support.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub column_size: Option<[f64; 2]>,
 }
 
 impl CodeInputs {
@@ -98,7 +101,8 @@ impl CodeInputs {
                     || self.restraint_y.is_some()
                     || self.restraint_z.is_some()
                     || self.effective_creep_ratio.is_some()))
-            || (kind != "padFooting" && (self.cast_on_blinding.is_some() || self.bearing_combination_id.is_some()));
+            || (kind != "padFooting" && (self.cast_on_blinding.is_some() || self.bearing_combination_id.is_some()))
+            || (kind != "slab" && self.column_size.is_some());
         if misplaced {
             return Err(err("INVALID_SCHEMA", format!("Code input not applicable to a {kind} draft")));
         }
@@ -106,6 +110,9 @@ impl CodeInputs {
             if !(k.is_finite() && (0.0..=1000.0).contains(k)) {
                 return Err(err("INVALID_SCHEMA", "End restraint flexibility k must lie in [0, 1000]"));
             }
+        }
+        if self.column_size.is_some_and(|c| c.iter().any(|x| !(x.is_finite() && *x > 0. && *x <= 3.))) {
+            return Err(err("INVALID_SCHEMA", "Column dimensions must lie in (0, 3] m"));
         }
         if self.effective_creep_ratio.is_some_and(|c| !(c.is_finite() && (0.0..=10.0).contains(&c))) {
             return Err(err("INVALID_SCHEMA", "Effective creep ratio must lie in [0, 10]"));

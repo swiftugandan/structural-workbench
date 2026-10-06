@@ -33,8 +33,10 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     expect(before.equals(after)).toBe(false);
     await page.locator("[data-object-display=both]").click();
     await page.locator("#preview-run").click();
+    // Slabs default to the plate source and are designed (ADR 0029); the
+    // synthetic beam and footing actions give no code result.
     await expect(page.locator("[data-testid=preview-state]")).toHaveText(
-      "UNSUPPORTED",
+      kind === "slab" ? "INDETERMINATE" : "UNSUPPORTED",
     );
     await expect(
       page.locator("#concrete-inspector .design-section"),
@@ -44,14 +46,14 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     );
     await page.locator("[data-preview-pane=details]").click();
     await expect(page.locator(".calculation-layout")).toContainText(
-      "UNSUPPORTED",
+      kind === "slab" ? "ec2-uk-na" : "UNSUPPORTED",
     );
     await page.locator('[data-preview-check="1"]').click();
     await expect(page.locator(".calculation-layout article")).toContainText(
       kind === "rcBeam"
         ? "Shear"
         : kind === "slab"
-          ? "Bottom X/Y reinforcement"
+          ? "Top X/Y reinforcement"
           : "Bearing",
     );
     await page.locator("[data-preview-pane=reinforcement]").click();
@@ -65,7 +67,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
     await page.screenshot({ path: `${dir}/${kind}-reinforcement.png` });
     await page.locator("[data-preview-pane=schedule]").click();
     await expect(page.locator(".design-pane")).toContainText(
-      kind === "rcBeam" ? "Not a fabrication schedule" : "unavailable",
+      kind === "padFooting" ? "unavailable" : "Not a fabrication schedule",
     );
     if (kind === "padFooting") {
       await page.locator("[data-preview-pane=soil]").click();

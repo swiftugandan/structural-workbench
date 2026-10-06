@@ -1,0 +1,17 @@
+{
+  "milestone": "M10",
+  "status": "PASS",
+  "sourceHash": "b53cf45b187bb6d0cd21a32600d11636e0103201c323a084eed3921c20e211d7",
+  "buildHash": "c881053200de3a1c8fdb1f96de0829627b8775c25abeabfbecb2810aaa01afe8",
+  "required": [
+    "build",
+    "plate-kernel",
+    "slab-native",
+    "slab-model",
+    "slab-protocol",
+    "m10-browser",
+    "m10-acceptance"
+  ],
+  "issues": [],
+  "observedAt": "2026-10-06T00:23:12.487Z"
+}

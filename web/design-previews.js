@@ -51,13 +51,15 @@ function readCodeInputs() {
     const v = value(id);
     return v == null ? null : v === "yes";
   };
-  const pair = (id) => {
+  // Two-value inputs: both or neither. Restraints are numbers; lengths keep
+  // their units for Rust to parse.
+  const pair = (id, label = "k1 and k2", numeric = true) => {
     const a = value(`${id}-1`),
       b = value(`${id}-2`);
     if (a == null && b == null) return null;
     if (a == null || b == null)
-      throw new Error("Enter both k1 and k2, or leave both blank");
-    return [Number(a), Number(b)];
+      throw new Error(`Enter both ${label}, or leave both blank`);
+    return numeric ? [Number(a), Number(b)] : [a, b];
   };
   const out = {
     exposureClass: value("code-exposure"),
@@ -70,6 +72,8 @@ function readCodeInputs() {
   }
   if (document.getElementById("code-qp"))
     out.quasiPermanentCombinationId = value("code-qp");
+  if (document.getElementById("code-colsize-1"))
+    out.columnSize = pair("code-colsize", "column dimensions", false);
   if (document.getElementById("code-blinding")) {
     out.castOnBlinding = yesNo("code-blinding");
     out.bearingCombinationId = value("code-bearing");
@@ -134,6 +138,7 @@ export function concreteWorkspace({
     generation = 0,
     face = "Top X",
     plateField = "mx",
+    plateRecovery = "elementCentre",
     // A refused run's reason, kept across the re-render that follows it.
     runError = null,
     sourceMode = "synthetic",
@@ -220,12 +225,17 @@ export function concreteWorkspace({
   function paneHtml(run, state, d) {
     if (d.kind === "slab" && pane === "actions")
       if (run?.plateAnalysis?.status === "evaluated")
-        return platePane(run, plateField, {
-          loadCases: (getContext().project?.loadCases || []).map((c) => ({
-            id: c.id,
-            label: `${c.id} · ${c.name}`,
-          })),
-        });
+        return platePane(
+          run,
+          plateField,
+          {
+            loadCases: (getContext().project?.loadCases || []).map((c) => ({
+              id: c.id,
+              label: `${c.id} · ${c.name}`,
+            })),
+          },
+          plateRecovery,
+        );
     if (d.kind === "rcColumn" && pane === "mechanics") return columnPane(run);
     return previewPane({
       run,
@@ -269,6 +279,7 @@ export function concreteWorkspace({
             ["ec2", "EC2 checks"],
           ]
         : []),
+      ...(d.kind === "slab" ? [["ec2", "EC2 checks"]] : []),
     ];
     host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
@@ -315,6 +326,11 @@ export function concreteWorkspace({
     for (const b of host.querySelectorAll("[data-plate-field]"))
       b.onclick = () => {
         plateField = b.dataset.plateField;
+        results(host);
+      };
+    for (const b of host.querySelectorAll("[data-plate-recovery]"))
+      b.onclick = () => {
+        plateRecovery = b.dataset.plateRecovery;
         results(host);
       };
     for (const b of host.querySelectorAll("[data-preview-check]"))

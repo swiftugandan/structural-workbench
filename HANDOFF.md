@@ -1,3 +1,14 @@
+## Latest: M10 slab panel accepted (EC2 UK demonstration)
+
+- **Design actions.** `ec2uk/slab.rs` (ADR 0029, `dossier-slab.md`) designs from the plate-v1 element-centre Wood–Armer moments and shears. The per-element A_s,req map is the design value itself, never averaged.
+- **Checks.** Least-area uniform mesh per layer (Ø10–25 at 75–400 mm) covering the largest element demand and A_s,min; one-way shear with the weaker face's ρ_l; span/depth (7.4.2, K = 1.2 for flat slabs); punching at internal columns from the plate reaction, with (6.52) reinforcement up to 2 v_Rd,c (UK NA); cover.
+- **Unsupported, never estimated:** edge, corner and near-opening columns, and columns in uplift.
+- **Display smoothing.** mx, my and mxy can be shown as nodal averages, labelled display only; design fields and steel maps stay element-centre.
+- **Verification.** JRC89037 3.2.2.3 punching reconciles (two discrepancies documented); hand checks for mesh choice, span/depth and shear.
+- **Fixed in review:** the (7.17) factor omitted 500/f_yk; uplift columns were punched with |V|.
+- **Gate:** `PORT=4183 node tools/run-m10-parent.mjs` → evidence/M10/full, 11/11 PASS on b53cf45b.
+- **Port note:** an unrelated local server may hold 127.0.0.1:4173; Playwright, `serve.mjs` and `numerical.mjs` now honour `PORT`.
+
 ## Latest: M11 pad footing accepted (EC2 UK demonstration)
 
 - **Contact.** `workbench-design::footing` (ADR 0028, `docs/formulations/footing.md`) models a rigid base on tensionless ground.
