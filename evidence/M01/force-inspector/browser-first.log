@@ -38,19 +38,19 @@ Running 4 tests using 1 worker
       19 |   await page.locator("#member-force-component").selectOption("shearZ");
       20 |   await expect(page.locator("#member-force-readout")).toContainText("-10 kN");
       21 |   await page.locator("#units").selectOption("SI");
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/force-inspector.spec.js:18:55
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/force-inspector.spec.js:18:55
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/test-failed-1.png
+    ../../../../../../tmp/gusset-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/error-context.md
+    Error Context: ../../../../../../tmp/gusset-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/error-context.md
 
     attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip
+    ../../../../../../tmp/gusset-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip
     Usage:
 
-        npx playwright show-trace ../../../../../../tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip
+        npx playwright show-trace ../../../../../../tmp/gusset-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 

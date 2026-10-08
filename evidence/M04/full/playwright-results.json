@@ -2,7 +2,7 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/reliability.spec.js",
       "tests/e2e/recovery.spec.js",
@@ -13,8 +13,8 @@
       "--grep-invert",
       "cancel terminates|dual Workers: edit during blocked|model Worker crash"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -30,7 +30,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -38,7 +38,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [
           "**/live-visual.spec.js"
         ],
@@ -111,7 +111,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m04-record-M04-record--0540c-t-matches-displayed-results/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-m04-record-M04-record--0540c-t-matches-displayed-results/trace.zip"
                     }
                   ]
                 }
@@ -159,7 +159,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-migrations-M04-migrati-88fe6-inal-unknown-schema-refused/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-migrations-M04-migrati-88fe6-inal-unknown-schema-refused/trace.zip"
                     }
                   ]
                 }
@@ -214,7 +214,7 @@
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-offline-cache-M04-offl-d6975-pens-offline-from-IndexedDB/trace.zip"
+                          "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-offline-cache-M04-offl-d6975-pens-offline-from-IndexedDB/trace.zip"
                         }
                       ]
                     }
@@ -254,7 +254,7 @@
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-offline-cache-M04-offl-c0dfc-iting-build-update-is-ready/trace.zip"
+                          "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-offline-cache-M04-offl-c0dfc-iting-build-update-is-ready/trace.zip"
                         }
                       ]
                     }
@@ -304,7 +304,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-recovery-M04-recovery--173c1-ion-refuse-while-form-dirty/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-recovery-M04-recovery--173c1-ion-refuse-while-form-dirty/trace.zip"
                     }
                   ]
                 }
@@ -359,7 +359,7 @@
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-reliability-M04-reliab-14628-s-verified-history-revision/trace.zip"
+                          "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-reliability-M04-reliab-14628-s-verified-history-revision/trace.zip"
                         }
                       ]
                     }
@@ -399,7 +399,7 @@
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/trace.zip"
+                          "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/trace.zip"
                         }
                       ]
                     }
@@ -449,7 +449,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-storage-quo-f9d35-licit-and-downloads-survive/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-storage-quo-f9d35-licit-and-downloads-survive/trace.zip"
                     }
                   ]
                 }
@@ -489,7 +489,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-single-writer-lock-protects-the-second-tab/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-single-writer-lock-protects-the-second-tab/trace.zip"
                     }
                   ]
                 }
@@ -529,7 +529,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-GPU-device--576cb-rs-model-and-current-result/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-GPU-device--576cb-rs-model-and-current-result/trace.zip"
                     }
                   ]
                 }
@@ -569,7 +569,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-unknown-eng-2c513--fields-rejected-atomically/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-unknown-eng-2c513--fields-rejected-atomically/trace.zip"
                     }
                   ]
                 }

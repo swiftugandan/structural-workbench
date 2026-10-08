@@ -1,4 +1,4 @@
-   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/wasm-api)
     Finished `test` profile [unoptimized + debuginfo] target(s) in 2.31s
      Running unittests src/lib.rs (target/debug/deps/workbench_assembly-81cd25464be33af2)
 

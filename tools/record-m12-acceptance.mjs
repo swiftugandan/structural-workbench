@@ -205,7 +205,7 @@ if (!ok) issues.push(`${provenance.id}: oracle hash or failures`);
 rows.push(provenance);
 
 const limitations =
-  "ec2-uk-na column checks are a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular columns of constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and creep ratio; the node-to-node length as the clear height; one perimeter link. Circular sections, the nominal stiffness method, global second order (5.8.3.3), walls, laps and fck > 50 MPa are unsupported. Commercial PROKON parity remains UNKNOWN.";
+  "ec2-uk-na column checks are a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular columns of constant section and axial force; nominal curvature (5.8.8) with the engineer's end restraints and creep ratio; the node-to-node length as the clear height; one perimeter link. Circular sections, the nominal stiffness method, global second order (5.8.3.3), walls, laps and fck > 50 MPa are unsupported. Commercial-solver parity remains UNKNOWN.";
 
 await record("m12-acceptance", {
   status: issues.length ? "FAIL" : "PASS",

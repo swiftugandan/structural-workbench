@@ -1,5 +1,5 @@
 ---
-name: prokon-collab
+name: gusset-collab
 description: >
   Multi-agent roles, ownership boundaries and integration for Structural Workbench.
   Use when multiple agents are authorised, or when sequentially playing coordinator/implementer/verifier/integrator alone.
@@ -39,4 +39,4 @@ Multi-agent execution is a delivery option, not a prerequisite or evidence of co
 
 ## Summary discipline
 
-A summary says exactly what was implemented, what was tested, which platforms ran and what remains blocked. Do not say full PROKON clone, certified, production engineering approved or numerically equivalent unless the corresponding evidence exists.
+A summary says exactly what was implemented, what was tested, which platforms ran and what remains blocked. Do not say full commercial-suite clone, certified, production engineering approved or numerically equivalent unless the corresponding evidence exists.

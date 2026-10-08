@@ -2,15 +2,15 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/portal.spec.js",
       "tests/e2e/shear-diagrams.spec.js",
       "tests/visual",
-      "--output=/tmp/prokon-effects-test-results"
+      "--output=/tmp/gusset-effects-test-results"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -26,7 +26,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/tmp/prokon-effects-test-results",
+        "outputDir": "/tmp/gusset-effects-test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -34,7 +34,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.js"
@@ -105,7 +105,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/trace.zip"
                     }
                   ]
                 }
@@ -145,7 +145,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/e2e-portal-M01-drawing-Esc-90ddc-ct-controls-do-not-overflow/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/e2e-portal-M01-drawing-Esc-90ddc-ct-controls-do-not-overflow/trace.zip"
                     }
                   ]
                 }
@@ -193,7 +193,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
                     }
                   ]
                 }
@@ -233,7 +233,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
                     }
                   ]
                 }
@@ -281,7 +281,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
                     }
                   ]
                 }
@@ -329,7 +329,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
                     }
                   ]
                 }
@@ -369,7 +369,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
                     }
                   ]
                 }
@@ -409,7 +409,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-effects-test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
+                      "path": "/tmp/gusset-effects-test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
                     }
                   ]
                 }

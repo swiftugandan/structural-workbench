@@ -2,14 +2,14 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/section-calculator.spec.js",
       "tests/e2e/variants.spec.js",
       "tests/e2e/portal-templates.spec.js"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -25,7 +25,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -33,7 +33,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [
           "**/live-visual.spec.js"
         ],
@@ -106,7 +106,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-portal-templates-M05-p-0543c-s-and-reuse-on-a-new-portal/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-portal-templates-M05-p-0543c-s-and-reuse-on-a-new-portal/trace.zip"
                     }
                   ]
                 }
@@ -154,7 +154,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-section-calculator-M05-82ee8-ion-and-clears-stale-result/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-section-calculator-M05-82ee8-ion-and-clears-stale-result/trace.zip"
                     }
                   ]
                 }
@@ -202,7 +202,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-variants-M05-variants--cb94b-ins-both-hashes-and-reports/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-variants-M05-variants--cb94b-ins-both-hashes-and-reports/trace.zip"
                     }
                   ]
                 }

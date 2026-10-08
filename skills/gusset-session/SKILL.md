@@ -1,5 +1,5 @@
 ---
-name: prokon-session
+name: gusset-session
 description: >
   Reconstruct delivery state and resume work for Structural Workbench.
   Use at session start, after context handoff, or when choosing the next milestone task.
@@ -9,7 +9,7 @@ description: >
 
 ## First entry reading
 
-Read `AGENTS.md`, then `delivery/state.json` (`activeMilestone`, `activeTask`, `nextAction`, `acceptedMilestones`). Load `skills/prokon-task-loop` before execution work. Inspect schema, relevant fixtures, roadmap and resource register only as the active task requires. Later sessions: review changes and sections affected by the current task.
+Read `AGENTS.md`, then `delivery/state.json` (`activeMilestone`, `activeTask`, `nextAction`, `acceptedMilestones`). Load `skills/gusset-task-loop` before execution work. Inspect schema, relevant fixtures, roadmap and resource register only as the active task requires. Later sessions: review changes and sections affected by the current task.
 
 **Do not** start from M00 when `acceptedMilestones` already includes analysis/design parents — trust `nextAction`. The M00 example below is only for an empty `delivery/state.json`.
 

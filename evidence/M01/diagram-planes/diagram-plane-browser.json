@@ -38,7 +38,7 @@
     "tests/e2e/shear-diagrams.spec.js",
     "tests/e2e/orientation.spec.js",
     "tests/visual",
-    "--output=/tmp/prokon-plane-test-results"
+    "--output=/tmp/gusset-plane-test-results"
   ],
   "artifacts": [
     "browser.log",

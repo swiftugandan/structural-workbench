@@ -29,7 +29,7 @@
   ],
   "command": [
     "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-    "/Users/p.munaawa/Documents/projects/labs/prokon/tools/build.mjs"
+    "/Users/p.munaawa/Documents/projects/labs/gusset/tools/build.mjs"
   ],
   "outputFiles": {
     "app.js": "9792ba9b040a9611bffc560f4bc76c5348b4e3e3b239cd73e7b5507165150d37",

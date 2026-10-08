@@ -11,13 +11,13 @@ This file does not change the numerical contract, grant external permissions or 
 | When | Load |
 | --- | --- |
 | Every session | `AGENTS.md` |
-| Session start / handoff | `skills/prokon-session` |
-| Implementing or repairing a task | `skills/prokon-task-loop` |
-| Solver / element / design-check work | `skills/prokon-numerical` |
-| Tests, milestone acceptance, release | `skills/prokon-evidence` |
-| Missing standards, GPU, oracles | `skills/prokon-resources` |
-| Multi-agent or role separation | `skills/prokon-collab` |
+| Session start / handoff | `skills/gusset-session` |
+| Implementing or repairing a task | `skills/gusset-task-loop` |
+| Solver / element / design-check work | `skills/gusset-numerical` |
+| Tests, milestone acceptance, release | `skills/gusset-evidence` |
+| Missing standards, GPU, oracles | `skills/gusset-resources` |
+| Multi-agent or role separation | `skills/gusset-collab` |
 
 ## Begin now
 
-Reconstruct current repository state per `skills/prokon-session` and `delivery/state.json`. Execute the active task (today typically M07-E after accepted M00–M07). Only if no implementation / empty state exists, start from `agent-tasks/M00.md`. Do not stop at another plan when implementation is authorised.
+Reconstruct current repository state per `skills/gusset-session` and `delivery/state.json`. Execute the active task (today typically M07-E after accepted M00–M07). Only if no implementation / empty state exists, start from `agent-tasks/M00.md`. Do not stop at another plan when implementation is authorised.

@@ -172,7 +172,7 @@ if (provenance.status !== "PASS")
 rows.push(provenance);
 
 const limitations =
-  "stability-v1 is flexural only (no torsional, flexural-torsional or lateral-torsional modes), small rotations about the undeformed geometry, proportional loading and one real case or combination; My/Mz end releases are hinge DOFs. A critical factor is never a member resistance or code verdict. Commercial PROKON parity remains UNKNOWN.";
+  "stability-v1 is flexural only (no torsional, flexural-torsional or lateral-torsional modes), small rotations about the undeformed geometry, proportional loading and one real case or combination; My/Mz end releases are hinge DOFs. A critical factor is never a member resistance or code verdict. Commercial-solver parity remains UNKNOWN.";
 
 await record("m09-acceptance", {
   status: issues.length ? "FAIL" : "PASS",

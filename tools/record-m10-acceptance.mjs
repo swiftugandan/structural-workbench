@@ -192,7 +192,7 @@ if (!ok) issues.push(`${provenance.id}: plate oracle hash`);
 rows.push(provenance);
 
 const limitations =
-  "ec2-uk-na slab design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Flat rectangular plate-v1 panels (one opening, uniform pressure, column supports); uniform meshes per layer; punching at internal columns only; no crack-width calculation, curtailment, trimming bars or frame–slab coupling beyond column loads. Commercial PROKON parity remains UNKNOWN.";
+  "ec2-uk-na slab design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Flat rectangular plate-v1 panels (one opening, uniform pressure, column supports); uniform meshes per layer; punching at internal columns only; no crack-width calculation, curtailment, trimming bars or frame–slab coupling beyond column loads. Commercial-solver parity remains UNKNOWN.";
 
 await record("m10-acceptance", {
   status: issues.length ? "FAIL" : "PASS",

@@ -2,9 +2,9 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
-      "--config=/tmp/prokon-layout.config.mjs",
+      "--config=/tmp/gusset-layout.config.mjs",
       "tests/e2e/cad.spec.js",
       "tests/e2e/dimensions.spec.js",
       "tests/e2e/application-menu.spec.js",
@@ -13,8 +13,8 @@
       "tests/e2e/robustness.spec.js",
       "tests/accessibility"
     ],
-    "configFile": "/tmp/prokon-layout.config.mjs",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/tmp/gusset-layout.config.mjs",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -30,7 +30,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -38,7 +38,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.js"
@@ -71,7 +71,7 @@
     "workers": 1,
     "webServer": {
       "command": "PORT=4175 npm run preview",
-      "cwd": "/Users/p.munaawa/Documents/projects/labs/prokon",
+      "cwd": "/Users/p.munaawa/Documents/projects/labs/gusset",
       "url": "http://127.0.0.1:4175",
       "reuseExistingServer": true
     }
@@ -110,7 +110,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
                     }
                   ]
                 }
@@ -158,7 +158,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-application-menu-Appli-1cf12-igation-and-disabled-states/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-application-menu-Appli-1cf12-igation-and-disabled-states/trace.zip"
                     }
                   ]
                 }
@@ -198,7 +198,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-application-menu-Short-30795-ode-and-use-actual-analysis/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-application-menu-Short-30795-ode-and-use-actual-analysis/trace.zip"
                     }
                   ]
                 }
@@ -246,7 +246,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-pointer-dr-8389c-ossing-and-explicit-connect/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-cad-M01-CAD-pointer-dr-8389c-ossing-and-explicit-connect/trace.zip"
                     }
                   ]
                 }
@@ -286,7 +286,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-multi-sele-b69f2-easure-and-scoped-shortcuts/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-cad-M01-CAD-multi-sele-b69f2-easure-and-scoped-shortcuts/trace.zip"
                     }
                   ]
                 }
@@ -326,7 +326,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-working-pl-f0c31-ction-and-camera-invariance/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-cad-M01-CAD-working-pl-f0c31-ction-and-camera-invariance/trace.zip"
                     }
                   ]
                 }
@@ -374,7 +374,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-dimensions-Canvas-dime-8a7d7-and-toggle-without-mutation/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-dimensions-Canvas-dime-8a7d7-and-toggle-without-mutation/trace.zip"
                     }
                   ]
                 }
@@ -422,7 +422,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-layout-panels-Layout-c-63952--restore-drafts-and-results/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-layout-panels-Layout-c-63952--restore-drafts-and-results/trace.zip"
                     }
                   ]
                 }
@@ -470,7 +470,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-storage-quo-f9d35-licit-and-downloads-survive/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-storage-quo-f9d35-licit-and-downloads-survive/trace.zip"
                     }
                   ]
                 }
@@ -510,7 +510,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-single-writer-lock-protects-the-second-tab/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-single-writer-lock-protects-the-second-tab/trace.zip"
                     }
                   ]
                 }
@@ -550,7 +550,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-GPU-device--576cb-rs-model-and-current-result/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-GPU-device--576cb-rs-model-and-current-result/trace.zip"
                     }
                   ]
                 }
@@ -590,7 +590,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-unknown-eng-2c513--fields-rejected-atomically/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-unknown-eng-2c513--fields-rejected-atomically/trace.zip"
                     }
                   ]
                 }
@@ -630,7 +630,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/trace.zip"
                     }
                   ]
                 }
@@ -678,7 +678,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
                     }
                   ]
                 }
@@ -718,7 +718,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
                     }
                   ]
                 }

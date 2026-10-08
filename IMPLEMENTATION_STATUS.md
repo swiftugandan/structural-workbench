@@ -86,7 +86,7 @@ Reports exclude any code-compliance or professional-approval claim.
 OpenSees environment. `resources.required.json` remains the original source of
 truth for unacquired standards, authoritative design examples, advanced benchmarks
 and a licensed commercial comparison corpus. Neither standards compliance nor
-numerical equivalence to PROKON has been established.
+numerical equivalence to a commercial solver has been established.
 
 The required Windows/Linux real-GPU runner is not available in this macOS session.
 It must run the same pinned build and retain adapter/browser/driver information.

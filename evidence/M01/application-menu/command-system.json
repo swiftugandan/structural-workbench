@@ -23,7 +23,7 @@
     "npx",
     "playwright",
     "test",
-    "--config=/tmp/prokon-layout.config.mjs",
+    "--config=/tmp/gusset-layout.config.mjs",
     "tests/e2e/application-menu.spec.js",
     "tests/e2e/layout-panels.spec.js",
     "tests/e2e/workspace-ux.spec.js",

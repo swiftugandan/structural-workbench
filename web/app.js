@@ -602,7 +602,7 @@ const scope = async () => {
   } catch (e) {
     modal(
       "Capabilities & assumptions",
-      `<p>Unable to load the capability ledger (${esc(e.message)}).</p><p class="notice-small" data-testid="parity-unknown">Numerical parity with commercial solvers is UNKNOWN. Excluded domains include shells, solids, plasticity, second-order response, code-certified member sizing, connections and DWG/native PROKON formats.</p>`,
+      `<p>Unable to load the capability ledger (${esc(e.message)}).</p><p class="notice-small" data-testid="parity-unknown">Numerical parity with commercial solvers is UNKNOWN. Excluded domains include shells, solids, plasticity, second-order response, code-certified member sizing, connections and DWG/proprietary commercial formats.</p>`,
     );
   }
 };

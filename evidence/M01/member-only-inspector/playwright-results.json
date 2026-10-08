@@ -2,13 +2,13 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/force-inspector.spec.js",
-      "--output=/tmp/prokon-member-only-tests"
+      "--output=/tmp/gusset-member-only-tests"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -24,7 +24,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/tmp/prokon-member-only-tests",
+        "outputDir": "/tmp/gusset-member-only-tests",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -32,7 +32,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.js"
@@ -103,7 +103,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-member-only-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip"
+                      "path": "/tmp/gusset-member-only-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip"
                     }
                   ]
                 }

@@ -139,7 +139,7 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/wasm-api)
     Finished `test` profile [unoptimized + debuginfo] target(s) in 1.82s
      Running unittests src/lib.rs (target/debug/deps/workbench_assembly-81cd25464be33af2)
      Running tests/analytical.rs (target/debug/deps/analytical-1644d477af80bc87)

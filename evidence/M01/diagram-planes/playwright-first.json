@@ -2,14 +2,14 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/shear-diagrams.spec.js",
       "tests/e2e/orientation.spec.js",
       "tests/visual"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -25,7 +25,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -33,7 +33,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.js"
@@ -95,18 +95,18 @@
                   "status": "failed",
                   "duration": 6797,
                   "error": {
-                    "message": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'",
-                    "stack": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'"
+                    "message": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'",
+                    "stack": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'"
                   },
                   "errors": [
                     {
-                      "message": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'"
+                      "message": "Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'"
                     },
                     {
-                      "message": "Error: browserContext._wrapApiCall: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611.trace'"
+                      "message": "Error: browserContext._wrapApiCall: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611.trace'"
                     },
                     {
-                      "message": "Error: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/58b4ffb2c6a8dac1c7ce4d2e9e7af0a0.zip'"
+                      "message": "Error: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/58b4ffb2c6a8dac1c7ce4d2e9e7af0a0.zip'"
                     }
                   ],
                   "stdout": [],
@@ -118,7 +118,7 @@
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/test-failed-1.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/test-failed-1.png"
                     }
                   ]
                 }
@@ -166,7 +166,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
                     }
                   ]
                 }
@@ -206,7 +206,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
                     }
                   ]
                 }
@@ -254,7 +254,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
                     }
                   ]
                 }
@@ -302,7 +302,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
                     }
                   ]
                 }
@@ -342,7 +342,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
                     }
                   ]
                 }
@@ -382,7 +382,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
                     }
                   ]
                 }

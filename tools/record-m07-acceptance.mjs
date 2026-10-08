@@ -64,7 +64,7 @@ await record("m07-acceptance", {
   issues,
   criteria: rows,
   limitations:
-    "M07 packages AISC 360-22 LRFD S2 only. LTB (Lb>0), HSS/torsion/non-prismatic remain unsupported. Commercial PROKON parity remains UNKNOWN.",
+    "M07 packages AISC 360-22 LRFD S2 only. LTB (Lb>0), HSS/torsion/non-prismatic remain unsupported. Commercial-solver parity remains UNKNOWN.",
 });
 
 const md = `# M07 acceptance record
@@ -83,7 +83,7 @@ ${rows
   )
   .join("\n")}
 
-Limitations: M07 packages AISC 360-22 LRFD S2 only. LTB (Lb>0), HSS/torsion/non-prismatic remain unsupported. Commercial PROKON parity remains UNKNOWN.
+Limitations: M07 packages AISC 360-22 LRFD S2 only. LTB (Lb>0), HSS/torsion/non-prismatic remain unsupported. Commercial-solver parity remains UNKNOWN.
 `;
 await writeFile(`${dir}/ACCEPTANCE.md`, md);
 console.log(md);

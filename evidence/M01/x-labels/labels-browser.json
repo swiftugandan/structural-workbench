@@ -28,7 +28,7 @@
     "playwright",
     "test",
     "tests/e2e/result-picker.spec.js",
-    "--output=/tmp/prokon-x-label-test-results"
+    "--output=/tmp/gusset-x-label-test-results"
   ],
   "artifacts": [
     "browser.log",

@@ -20,7 +20,7 @@ test("capabilities.json publishes UNKNOWN parity and SPEC exclusions", async () 
     "torsional and lateral-torsional instability",
     "response spectrum, time-history and harmonic analysis",
     "code-certified member sizing",
-    "DWG/native PROKON formats",
+    "DWG/proprietary commercial formats",
   ]) {
     assert.ok(
       ledger.excludedDomains.includes(domain),

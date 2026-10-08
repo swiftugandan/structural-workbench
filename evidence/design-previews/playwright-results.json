@@ -2,15 +2,15 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/design-previews.spec.js",
       "tests/e2e/native-steel-design.spec.js",
       "tests/e2e/steel-check.spec.js",
       "tests/e2e/capability-ledger.spec.js"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -26,7 +26,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -34,7 +34,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [
           "**/live-visual.spec.js"
         ],
@@ -107,7 +107,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-capability-ledger-M06--d2c92-KNOWN-parity-and-exclusions/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-capability-ledger-M06--d2c92-KNOWN-parity-and-exclusions/trace.zip"
                     }
                   ]
                 }
@@ -155,7 +155,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-7a78f-undo-persistence-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-Concre-7a78f-undo-persistence-and-export/trace.zip"
                     }
                   ]
                 }
@@ -195,7 +195,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-8cf41-undo-persistence-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-Concre-8cf41-undo-persistence-and-export/trace.zip"
                     }
                   ]
                 }
@@ -235,7 +235,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-c7057-undo-persistence-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-Concre-c7057-undo-persistence-and-export/trace.zip"
                     }
                   ]
                 }
@@ -288,7 +288,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/trace.zip"
                     }
                   ]
                 }
@@ -328,7 +328,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/trace.zip"
                     }
                   ]
                 }
@@ -376,7 +376,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-steel-check-standalone-f02a9-asses-via-evaluateDesign-UI/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-steel-check-standalone-f02a9-asses-via-evaluateDesign-UI/trace.zip"
                     }
                   ]
                 }
@@ -416,7 +416,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-steel-check-complete-m-f9235-x-≥3-pass-and-≥3-fail-seeds/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-steel-check-complete-m-f9235-x-≥3-pass-and-≥3-fail-seeds/trace.zip"
                     }
                   ]
                 }
@@ -456,7 +456,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-steel-check-steel-chec-06e66-usable-in-a-narrow-viewport/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-steel-check-steel-chec-06e66-usable-in-a-narrow-viewport/trace.zip"
                     }
                   ]
                 }
@@ -496,7 +496,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-steel-check-standalone-6570a-l-seed-reports-overall-fail/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-steel-check-standalone-6570a-l-seed-reports-overall-fail/trace.zip"
                     }
                   ]
                 }
@@ -536,7 +536,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-steel-check-model-deri-136b1-ulation-report-clause-trail/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-steel-check-model-deri-136b1-ulation-report-clause-trail/trace.zip"
                     }
                   ]
                 }

@@ -2,15 +2,15 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/pad-footing.spec.js",
       "tests/e2e/design-previews.spec.js",
       "tests/e2e/design-fidelity.spec.js",
       "tests/e2e/capability-ledger.spec.js"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -26,7 +26,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -34,7 +34,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [
           "**/live-visual.spec.js"
         ],
@@ -107,7 +107,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-capability-ledger-M06--d2c92-KNOWN-parity-and-exclusions/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-capability-ledger-M06--d2c92-KNOWN-parity-and-exclusions/trace.zip"
                     }
                   ]
                 }
@@ -155,7 +155,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Mockup-d2c7c--source-and-preserved-model/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-fidelity-Mockup-d2c7c--source-and-preserved-model/trace.zip"
                     }
                   ]
                 }
@@ -195,7 +195,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Mockup-37491--source-and-preserved-model/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-fidelity-Mockup-37491--source-and-preserved-model/trace.zip"
                     }
                   ]
                 }
@@ -235,7 +235,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Mockup-f5702--source-and-preserved-model/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-fidelity-Mockup-f5702--source-and-preserved-model/trace.zip"
                     }
                   ]
                 }
@@ -275,7 +275,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-fidelity-Steel--569ad-ulation-tree-and-provenance/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-fidelity-Steel--569ad-ulation-tree-and-provenance/trace.zip"
                     }
                   ]
                 }
@@ -323,7 +323,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-7a78f-undo-persistence-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-Concre-7a78f-undo-persistence-and-export/trace.zip"
                     }
                   ]
                 }
@@ -363,7 +363,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-8cf41-undo-persistence-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-Concre-8cf41-undo-persistence-and-export/trace.zip"
                     }
                   ]
                 }
@@ -403,7 +403,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-Concre-c7057-undo-persistence-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-Concre-c7057-undo-persistence-and-export/trace.zip"
                     }
                   ]
                 }
@@ -443,7 +443,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-0ef1b-ance-fit-failure-and-reopen/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-RC-bea-0ef1b-ance-fit-failure-and-reopen/trace.zip"
                     }
                   ]
                 }
@@ -483,7 +483,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-71e88-acities-top-face-points-up-/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-RC-bea-71e88-acities-top-face-points-up-/trace.zip"
                     }
                   ]
                 }
@@ -523,7 +523,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-a6c60-ities-top-face-points-DOWN-/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-RC-bea-a6c60-ities-top-face-points-DOWN-/trace.zip"
                     }
                   ]
                 }
@@ -563,7 +563,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-design-previews-RC-bea-24111-s-explicit-anchorage-report/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-design-previews-RC-bea-24111-s-explicit-anchorage-report/trace.zip"
                     }
                   ]
                 }
@@ -611,7 +611,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-pad-footing-Pad-footin-5263e-dule-report-and-persistence/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-pad-footing-Pad-footin-5263e-dule-report-and-persistence/trace.zip"
                     }
                   ]
                 }

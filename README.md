@@ -1,7 +1,7 @@
-# Structural Workbench
+# Gusset
 
-Structural Workbench is an open-source browser application for modelling and
-exploring structural frames. It combines a Rust/WebAssembly engineering kernel,
+Gusset is an open-source structural workbench: a browser application for
+modelling and exploring structural frames. It combines a Rust/WebAssembly engineering kernel,
 a WebGPU CAD viewport, and plain HTML, JavaScript, and CSS. The independent
 product roadmap is inspired by established structural analysis workbenches.
 
@@ -10,7 +10,7 @@ product roadmap is inspired by established structural analysis workbenches.
 
 This repository now includes a working implementation alongside the original
 specification and acceptance fixtures. See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md)
-for implemented scope and remaining gates. No commercial PROKON equivalence or
+for implemented scope and remaining gates. No commercial-solver equivalence or
 code-design compliance is claimed.
 
 ## Run the preview

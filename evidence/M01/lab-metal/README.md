@@ -19,7 +19,7 @@ Windows/Linux runner or a restored CUA policy service. Contract change:
 
 - Reference-class 33 ms orbit performance equivalence
 - Full parent M00/M01 milestone acceptance (still requires `ux-acceptance` and remaining verifier families as applicable)
-- Commercial PROKON parity
+- Commercial-solver parity
 
 Reproduce with `WORKBENCH_EVIDENCE_DIR=evidence/M01/lab-metal`,
 `WORKBENCH_TASK_ID=M01-UNBLOCK`, `WORKBENCH_MILESTONE=M01`, then

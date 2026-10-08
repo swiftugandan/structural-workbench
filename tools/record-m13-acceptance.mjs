@@ -186,7 +186,7 @@ rows.push({
 if (!ok) issues.push("M13-ORACLE-PROVENANCE: oracle or catalogue hash");
 
 const limitations =
-  "aisc-360-22-lrfd single-plate connections are a demonstration of ANSI/AISC 360-22 with the Manual equations reproduced in the held Design Examples v16; not a certified design. Uncoped W beams to a column flange, column web or girder web; one or two bolt lines in standard holes, bearing-type, snug-tight; LRFD. The general (extended-configuration) method is applied to every geometry because Manual Table 10-9 is not held, so some conventional connections fail here. Moment through the end, compression, minor-axis actions, torsion, coped beams, slotted holes, slip-critical bolts and other connection families are unsupported. Commercial PROKON parity remains UNKNOWN.";
+  "aisc-360-22-lrfd single-plate connections are a demonstration of ANSI/AISC 360-22 with the Manual equations reproduced in the held Design Examples v16; not a certified design. Uncoped W beams to a column flange, column web or girder web; one or two bolt lines in standard holes, bearing-type, snug-tight; LRFD. The general (extended-configuration) method is applied to every geometry because Manual Table 10-9 is not held, so some conventional connections fail here. Moment through the end, compression, minor-axis actions, torsion, coped beams, slotted holes, slip-critical bolts and other connection families are unsupported. Commercial-solver parity remains UNKNOWN.";
 
 await record("m13-acceptance", {
   status: issues.length ? "FAIL" : "PASS",

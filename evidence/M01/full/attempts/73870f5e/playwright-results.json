@@ -2,11 +2,11 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -22,7 +22,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -30,7 +30,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.js"
@@ -101,7 +101,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
                     }
                   ]
                 }
@@ -149,7 +149,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-pointer-dr-8389c-ossing-and-explicit-connect/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-cad-M01-CAD-pointer-dr-8389c-ossing-and-explicit-connect/trace.zip"
                     }
                   ]
                 }
@@ -189,7 +189,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-multi-sele-b69f2-easure-and-scoped-shortcuts/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-cad-M01-CAD-multi-sele-b69f2-easure-and-scoped-shortcuts/trace.zip"
                     }
                   ]
                 }
@@ -229,7 +229,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-cad-M01-CAD-working-pl-f0c31-ction-and-camera-invariance/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-cad-M01-CAD-working-pl-f0c31-ction-and-camera-invariance/trace.zip"
                     }
                   ]
                 }
@@ -269,9 +269,9 @@
                   "duration": 9497,
                   "error": {
                     "message": "Error: Control is not reachable with Tab: locator('#analyse')",
-                    "stack": "Error: Control is not reachable with Tab: locator('#analyse')\n    at reach (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:9:9)\n    at activate (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:12:3)\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:60:3",
+                    "stack": "Error: Control is not reachable with Tab: locator('#analyse')\n    at reach (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:9:9)\n    at activate (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:12:3)\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:60:3",
                     "location": {
-                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js",
+                      "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js",
                       "column": 9,
                       "line": 9
                     },
@@ -280,11 +280,11 @@
                   "errors": [
                     {
                       "location": {
-                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js",
+                        "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js",
                         "column": 9,
                         "line": 9
                       },
-                      "message": "Error: Control is not reachable with Tab: locator('#analyse')\n\n   7 |     await page.keyboard.press(\"Tab\");\n   8 |   }\n>  9 |   throw Error(\"Control is not reachable with Tab: \" + target);\n     |         ^\n  10 | }\n  11 | async function activate(page, target) {\n  12 |   await reach(page, target);\n    at reach (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:9:9)\n    at activate (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:12:3)\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:60:3"
+                      "message": "Error: Control is not reachable with Tab: locator('#analyse')\n\n   7 |     await page.keyboard.press(\"Tab\");\n   8 |   }\n>  9 |   throw Error(\"Control is not reachable with Tab: \" + target);\n     |         ^\n  10 | }\n  11 | async function activate(page, target) {\n  12 |   await reach(page, target);\n    at reach (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:9:9)\n    at activate (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:12:3)\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:60:3"
                     }
                   ],
                   "stdout": [],
@@ -296,21 +296,21 @@
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/test-failed-1.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/test-failed-1.png"
                     },
                     {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/error-context.md"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/error-context.md"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/trace.zip"
                     }
                   ],
                   "errorLocation": {
-                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js",
+                    "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js",
                     "column": 9,
                     "line": 9
                   }
@@ -359,7 +359,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/trace.zip"
                     }
                   ]
                 }
@@ -399,7 +399,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-portal-M01-drawing-Esc-90ddc-ct-controls-do-not-overflow/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-portal-M01-drawing-Esc-90ddc-ct-controls-do-not-overflow/trace.zip"
                     }
                   ]
                 }
@@ -447,7 +447,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-storage-quo-f9d35-licit-and-downloads-survive/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-storage-quo-f9d35-licit-and-downloads-survive/trace.zip"
                     }
                   ]
                 }
@@ -487,7 +487,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-single-writer-lock-protects-the-second-tab/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-single-writer-lock-protects-the-second-tab/trace.zip"
                     }
                   ]
                 }
@@ -527,7 +527,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-GPU-device--576cb-rs-model-and-current-result/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-GPU-device--576cb-rs-model-and-current-result/trace.zip"
                     }
                   ]
                 }
@@ -567,7 +567,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-unknown-eng-2c513--fields-rejected-atomically/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-unknown-eng-2c513--fields-rejected-atomically/trace.zip"
                     }
                   ]
                 }
@@ -607,7 +607,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/trace.zip"
                     }
                   ]
                 }
@@ -655,7 +655,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen/trace.zip"
                     }
                   ]
                 }
@@ -695,7 +695,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-topology-M01-topology--2ceef-ge-are-previewed-and-atomic/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-topology-M01-topology--2ceef-ge-are-previewed-and-atomic/trace.zip"
                     }
                   ]
                 }
@@ -735,9 +735,9 @@
                   "duration": 6833,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#result-status')\nExpected substring: \u001b[32m\"Stale\"\u001b[39m\nReceived string:    \u001b[31m\"Unapplied changes\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#result-status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-status')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"result-status\" class=\"badge stale\">Unapplied changes</span>\u001b[22m\n\u001b[2m       - unexpected value \"Unapplied changes\"\u001b[22m\n",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#result-status')\nExpected substring: \u001b[32m\"Stale\"\u001b[39m\nReceived string:    \u001b[31m\"Unapplied changes\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#result-status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-status')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"result-status\" class=\"badge stale\">Unapplied changes</span>\u001b[22m\n\u001b[2m       - unexpected value \"Unapplied changes\"\u001b[22m\n\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:29:48",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#result-status')\nExpected substring: \u001b[32m\"Stale\"\u001b[39m\nReceived string:    \u001b[31m\"Unapplied changes\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#result-status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-status')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"result-status\" class=\"badge stale\">Unapplied changes</span>\u001b[22m\n\u001b[2m       - unexpected value \"Unapplied changes\"\u001b[22m\n\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:29:48",
                     "location": {
-                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js",
+                      "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js",
                       "column": 48,
                       "line": 29
                     },
@@ -746,11 +746,11 @@
                   "errors": [
                     {
                       "location": {
-                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js",
+                        "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js",
                         "column": 48,
                         "line": 29
                       },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#result-status')\nExpected substring: \u001b[32m\"Stale\"\u001b[39m\nReceived string:    \u001b[31m\"Unapplied changes\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#result-status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-status')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"result-status\" class=\"badge stale\">Unapplied changes</span>\u001b[22m\n\u001b[2m       - unexpected value \"Unapplied changes\"\u001b[22m\n\n\n  27 |     .getByRole(\"button\", { name: \"Apply changes\", exact: true })\n  28 |     .click();\n> 29 |   await expect(page.locator(\"#result-status\")).toContainText(\"Stale\");\n     |                                                ^\n  30 |   await expect(page.locator(\"#export-report\")).toBeDisabled();\n  31 |   await solve(page);\n  32 |   await page\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:29:48"
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#result-status')\nExpected substring: \u001b[32m\"Stale\"\u001b[39m\nReceived string:    \u001b[31m\"Unapplied changes\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#result-status') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-status')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"result-status\" class=\"badge stale\">Unapplied changes</span>\u001b[22m\n\u001b[2m       - unexpected value \"Unapplied changes\"\u001b[22m\n\n\n  27 |     .getByRole(\"button\", { name: \"Apply changes\", exact: true })\n  28 |     .click();\n> 29 |   await expect(page.locator(\"#result-status\")).toContainText(\"Stale\");\n     |                                                ^\n  30 |   await expect(page.locator(\"#export-report\")).toBeDisabled();\n  31 |   await solve(page);\n  32 |   await page\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:29:48"
                     }
                   ],
                   "stdout": [],
@@ -762,21 +762,21 @@
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/test-failed-1.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/test-failed-1.png"
                     },
                     {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/error-context.md"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/error-context.md"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/trace.zip"
                     }
                   ],
                   "errorLocation": {
-                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js",
+                    "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js",
                     "column": 48,
                     "line": 29
                   }
@@ -817,7 +817,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-GPU-unavailable-retains-analysis-and-exports/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-GPU-unavailable-retains-analysis-and-exports/trace.zip"
                     }
                   ]
                 }
@@ -857,7 +857,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-invalid-impo-8a426-s-current-model-and-results/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-invalid-impo-8a426-s-current-model-and-results/trace.zip"
                     }
                   ]
                 }
@@ -897,11 +897,11 @@
                     },
                     {
                       "location": {
-                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js",
+                        "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js",
                         "column": 31,
                         "line": 155
                       },
-                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#undo')\u001b[22m\n\u001b[2m    - locator resolved to <button disabled id=\"undo\" title=\"Undo engineering edit\">↶ Undo</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    84 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  153 |     .click();\n  154 |   await expect(page.locator(\"#span\")).toHaveValue(\"4.25\");\n> 155 |   await page.locator(\"#undo\").click();\n      |                               ^\n  156 |   await expect(page.locator(\"#span\")).toHaveValue(\"3\");\n  157 |   await expect(page.locator(\"#hash-status\")).toHaveText(hash);\n  158 |   await page.locator(\"#redo\").click();\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:155:31"
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#undo')\u001b[22m\n\u001b[2m    - locator resolved to <button disabled id=\"undo\" title=\"Undo engineering edit\">↶ Undo</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    84 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  153 |     .click();\n  154 |   await expect(page.locator(\"#span\")).toHaveValue(\"4.25\");\n> 155 |   await page.locator(\"#undo\").click();\n      |                               ^\n  156 |   await expect(page.locator(\"#span\")).toHaveValue(\"3\");\n  157 |   await expect(page.locator(\"#hash-status\")).toHaveText(hash);\n  158 |   await page.locator(\"#redo\").click();\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:155:31"
                     }
                   ],
                   "stdout": [],
@@ -913,17 +913,17 @@
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/test-failed-1.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/test-failed-1.png"
                     },
                     {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/error-context.md"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/error-context.md"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/trace.zip"
                     }
                   ]
                 }
@@ -963,7 +963,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-narrow-scree-f12b7--tables-and-portable-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-narrow-scree-f12b7--tables-and-portable-export/trace.zip"
                     }
                   ]
                 }
@@ -995,9 +995,9 @@
                   "duration": 6336,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#span')\nExpected: \u001b[32m\"4\"\u001b[39m\nReceived: \u001b[31m\"4\u001b[7m000 mm\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" locator('#span') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#span')\u001b[22m\n\u001b[2m    2 × locator resolved to <input disabled id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m      - unexpected value \"4000 mm\"\u001b[22m\n\u001b[2m    11 × locator resolved to <input id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m       - unexpected value \"4000 mm\"\u001b[22m\n",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#span')\nExpected: \u001b[32m\"4\"\u001b[39m\nReceived: \u001b[31m\"4\u001b[7m000 mm\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" locator('#span') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#span')\u001b[22m\n\u001b[2m    2 × locator resolved to <input disabled id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m      - unexpected value \"4000 mm\"\u001b[22m\n\u001b[2m    11 × locator resolved to <input id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m       - unexpected value \"4000 mm\"\u001b[22m\n\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:187:39",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#span')\nExpected: \u001b[32m\"4\"\u001b[39m\nReceived: \u001b[31m\"4\u001b[7m000 mm\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" locator('#span') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#span')\u001b[22m\n\u001b[2m    2 × locator resolved to <input disabled id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m      - unexpected value \"4000 mm\"\u001b[22m\n\u001b[2m    11 × locator resolved to <input id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m       - unexpected value \"4000 mm\"\u001b[22m\n\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:187:39",
                     "location": {
-                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js",
+                      "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js",
                       "column": 39,
                       "line": 187
                     },
@@ -1006,11 +1006,11 @@
                   "errors": [
                     {
                       "location": {
-                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js",
+                        "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js",
                         "column": 39,
                         "line": 187
                       },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#span')\nExpected: \u001b[32m\"4\"\u001b[39m\nReceived: \u001b[31m\"4\u001b[7m000 mm\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" locator('#span') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#span')\u001b[22m\n\u001b[2m    2 × locator resolved to <input disabled id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m      - unexpected value \"4000 mm\"\u001b[22m\n\u001b[2m    11 × locator resolved to <input id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m       - unexpected value \"4000 mm\"\u001b[22m\n\n\n  185 |     .getByRole(\"button\", { name: \"Apply changes\", exact: true })\n  186 |     .click();\n> 187 |   await expect(page.locator(\"#span\")).toHaveValue(\"4\");\n      |                                       ^\n  188 |   await expect(page.locator(\"#elasticity\")).toHaveValue(\"210\");\n  189 |   await expect(page.locator(\"#tip-load\")).toHaveValue(\"-12\");\n  190 |   await solve(page);\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:187:39"
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#span')\nExpected: \u001b[32m\"4\"\u001b[39m\nReceived: \u001b[31m\"4\u001b[7m000 mm\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" locator('#span') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#span')\u001b[22m\n\u001b[2m    2 × locator resolved to <input disabled id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m      - unexpected value \"4000 mm\"\u001b[22m\n\u001b[2m    11 × locator resolved to <input id=\"span\" value=\"3\" name=\"span\" type=\"text\" required=\"\" min=\"0.000001\" inputmode=\"decimal\"/>\u001b[22m\n\u001b[2m       - unexpected value \"4000 mm\"\u001b[22m\n\n\n  185 |     .getByRole(\"button\", { name: \"Apply changes\", exact: true })\n  186 |     .click();\n> 187 |   await expect(page.locator(\"#span\")).toHaveValue(\"4\");\n      |                                       ^\n  188 |   await expect(page.locator(\"#elasticity\")).toHaveValue(\"210\");\n  189 |   await expect(page.locator(\"#tip-load\")).toHaveValue(\"-12\");\n  190 |   await solve(page);\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:187:39"
                     }
                   ],
                   "stdout": [],
@@ -1022,21 +1022,21 @@
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/test-failed-1.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/test-failed-1.png"
                     },
                     {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/error-context.md"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/error-context.md"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/trace.zip"
                     }
                   ],
                   "errorLocation": {
-                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js",
+                    "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js",
                     "column": 39,
                     "line": 187
                   }
@@ -1085,7 +1085,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip"
                     }
                   ]
                 }
@@ -1133,7 +1133,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-local-warm-sta-32a69-d-cantilever-solve-baseline/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/performance-local-warm-sta-32a69-d-cantilever-solve-baseline/trace.zip"
                     }
                   ]
                 }
@@ -1173,9 +1173,9 @@
                   "duration": 10835,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2000\u001b[39m\nReceived:    \u001b[31m2003\u001b[39m",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2000\u001b[39m\nReceived:    \u001b[31m2003\u001b[39m\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/startup.spec.js:70:29",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2000\u001b[39m\nReceived:    \u001b[31m2003\u001b[39m\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/startup.spec.js:70:29",
                     "location": {
-                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/startup.spec.js",
+                      "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/startup.spec.js",
                       "column": 29,
                       "line": 70
                     },
@@ -1184,11 +1184,11 @@
                   "errors": [
                     {
                       "location": {
-                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/startup.spec.js",
+                        "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/startup.spec.js",
                         "column": 29,
                         "line": 70
                       },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2000\u001b[39m\nReceived:    \u001b[31m2003\u001b[39m\n\n  68 |     browser: browser.version(),\n  69 |   });\n> 70 |   expect(Math.max(...warm)).toBeLessThanOrEqual(2000);\n     |                             ^\n  71 |   expect(coldMs).toBeLessThanOrEqual(5000);\n  72 |   expect(compressedBytes).toBeLessThanOrEqual(8 * 1024 * 1024);\n  73 |   await context.close();\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/startup.spec.js:70:29"
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2000\u001b[39m\nReceived:    \u001b[31m2003\u001b[39m\n\n  68 |     browser: browser.version(),\n  69 |   });\n> 70 |   expect(Math.max(...warm)).toBeLessThanOrEqual(2000);\n     |                             ^\n  71 |   expect(coldMs).toBeLessThanOrEqual(5000);\n  72 |   expect(compressedBytes).toBeLessThanOrEqual(8 * 1024 * 1024);\n  73 |   await context.close();\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/startup.spec.js:70:29"
                     }
                   ],
                   "stdout": [],
@@ -1200,26 +1200,26 @@
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/test-failed-1.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/test-failed-1.png"
                     },
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/test-failed-2.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/test-failed-2.png"
                     },
                     {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/error-context.md"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/error-context.md"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/trace.zip"
                     }
                   ],
                   "errorLocation": {
-                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/startup.spec.js",
+                    "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/startup.spec.js",
                     "column": 29,
                     "line": 70
                   }
@@ -1268,7 +1268,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-graphics-GPU-ID-att-78a9a-e-preserve-engineering-hash/trace.zip"
                     }
                   ]
                 }
@@ -1316,7 +1316,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-m01-graphics-M01-gr-64700-warning-resize-and-clipping/trace.zip"
                     }
                   ]
                 }
@@ -1356,7 +1356,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-m01-graphics-M01-gr-47520-warning-resize-and-clipping/trace.zip"
                     }
                   ]
                 }
@@ -1396,7 +1396,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/trace.zip"
                     }
                   ]
                 }

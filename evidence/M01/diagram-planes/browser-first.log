@@ -20,11 +20,11 @@ Running 7 tests using 1 worker
 
   1) tests/e2e/orientation.spec.js:2:1 › 3D exposes Y direction and reference grid; orbit updates compass without model changes 
 
-    Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'
+    Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1.network' -> '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611-recording1-pwnetcopy-1.network'
 
-    Error: browserContext._wrapApiCall: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611.trace'
+    Error: browserContext._wrapApiCall: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/traces/a8f9b65917a3a9a1ec34-799dd7ee6aa446dfc611.trace'
 
-    Error: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/prokon/test-results/.playwright-artifacts-0/58b4ffb2c6a8dac1c7ce4d2e9e7af0a0.zip'
+    Error: ENOENT: no such file or directory, open '/Users/p.munaawa/Documents/projects/labs/gusset/test-results/.playwright-artifacts-0/58b4ffb2c6a8dac1c7ce4d2e9e7af0a0.zip'
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/test-failed-1.png

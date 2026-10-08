@@ -566,7 +566,7 @@
         "regression_results",
         "capability_ledger"
       ],
-      "acceptanceDefinition": "exchange-v1 accepted (evidence/M21/full): IFC4 IfcStructuralAnalysisModel and ASCII DXF wireframe import and export on one Rust core from the browser and the CLI; conversion review with explicit decisions and SHA-bound mapping manifests (no defaults); GUID-preserving semantic round trips; units and orientation fixtures; import and export loss ledgers; IfcOpenShell- and ezdxf-authored reference corpus with exports validated by both tools. Native Revit or other authoring-tool adapters remain separately scoped; browser-only exchange is not Prodesk-equivalent."
+      "acceptanceDefinition": "exchange-v1 accepted (evidence/M21/full): IFC4 IfcStructuralAnalysisModel and ASCII DXF wireframe import and export on one Rust core from the browser and the CLI; conversion review with explicit decisions and SHA-bound mapping manifests (no defaults); GUID-preserving semantic round trips; units and orientation fixtures; import and export loss ledgers; IfcOpenShell- and ezdxf-authored reference corpus with exports validated by both tools. Native Revit or other authoring-tool adapters remain separately scoped; browser-only exchange is not equivalent to a commercial BIM-exchange tool."
     },
     {
       "id": "M22",
@@ -614,7 +614,7 @@
       ],
       "release": "parity-roadmap",
       "resourceGates": [
-        "R-PROKON-LICENSED-CORPUS",
+        "R-COMMERCIAL-LICENSED-CORPUS",
         "R-FULL-INVENTORY"
       ],
       "seedBenchmarks": [],

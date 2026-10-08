@@ -1,7 +1,7 @@
-   Compiling workbench-model v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/model)
-   Compiling workbench-frame v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/frame)
-   Compiling workbench-solver v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/solver)
-   Compiling workbench-design v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/design)
+   Compiling workbench-model v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/model)
+   Compiling workbench-frame v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/frame)
+   Compiling workbench-solver v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/solver)
+   Compiling workbench-design v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/design)
 warning: unused import: `verify_lock_and_manifest`
   --> crates/design/src/profile/aisc36022/mod.rs:20:46
    |
@@ -42,12 +42,12 @@ warning: constant `KIP_FT_TO_NM` is never used
 7 | pub const KIP_FT_TO_NM: f64 = KIP_TO_N * FT_TO_M;
   |           ^^^^^^^^^^^^
 
-   Compiling workbench-exchange v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/exchange)
-   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
+   Compiling workbench-exchange v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/exchange)
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/assembly)
 warning: `workbench-design` (lib) generated 6 warnings (run `cargo fix --lib -p workbench-design` to apply 1 suggestion)
 warning: `workbench-design` (lib test) generated 1 warning (1 duplicate)
-   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
-   Compiling workbench-cli v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/cli)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/wasm-api)
+   Compiling workbench-cli v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/cli)
     Finished `test` profile [unoptimized + debuginfo] target(s) in 10.47s
      Running unittests src/lib.rs (target/debug/deps/workbench_assembly-a021c2c3e3ab3321)
 

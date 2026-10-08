@@ -25,7 +25,7 @@ test("M06 capability ledger: View capabilities shows UNKNOWN parity and exclusio
     expect.arrayContaining([
       "shells",
       "plasticity",
-      "DWG/native PROKON formats",
+      "DWG/proprietary commercial formats",
     ]),
   );
 
@@ -54,7 +54,7 @@ test("M06 capability ledger: View capabilities shows UNKNOWN parity and exclusio
     "shells",
   );
   await expect(page.locator("[data-testid='excluded-domains']")).toContainText(
-    "DWG/native PROKON formats",
+    "DWG/proprietary commercial formats",
   );
   await expect(
     page.locator('[data-capability-id="elastic-stress-screen"]'),

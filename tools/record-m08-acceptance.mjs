@@ -249,7 +249,7 @@ if (!ok) issues.push(`${provenance.id}: oracle hash or reconciliation`);
 rows.push(provenance);
 
 const limitations =
-  "ec2-uk-na is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); EN 1992-1-1:2004/A1:2014 and UK NA + A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular RC beams with vertical links at the governing key stations of one bound case or combination. Redistribution, direct crack-width and deflection calculation, stress limits, torsion, axial force, flanged sections, laps, curtailment and fck > 50 MPa are unsupported. The schedule is indicative (no BS 8666 shape codes). No UK-specific published beam example is held; UK NDP values are checked by the oracle and closed forms. Commercial PROKON parity remains UNKNOWN.";
+  "ec2-uk-na is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); EN 1992-1-1:2004/A1:2014 and UK NA + A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular RC beams with vertical links at the governing key stations of one bound case or combination. Redistribution, direct crack-width and deflection calculation, stress limits, torsion, axial force, flanged sections, laps, curtailment and fck > 50 MPa are unsupported. The schedule is indicative (no BS 8666 shape codes). No UK-specific published beam example is held; UK NDP values are checked by the oracle and closed forms. Commercial-solver parity remains UNKNOWN.";
 
 await record("m08-acceptance", {
   status: issues.length ? "FAIL" : "PASS",

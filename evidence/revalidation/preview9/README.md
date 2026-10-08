@@ -8,4 +8,4 @@ Failures: collapsed Explorer member selectors (3), obsolete navigation/count sel
 
 The browser report and check records retain their original hashes. Fresh validation must run against the repaired source, without relabelling these records. Historical evidence overwritten by old tests was copied under diagnostics before restoration. Full local traces are diagnostic artifacts and are not required to be shipped as application assets.
 
-Full original Playwright traces preserved locally at `/tmp/prokon-preview9-diagnostics/test-results` (not a durable release artifact). Report and screenshots below remain in the repository.
+Full original Playwright traces preserved locally at `/tmp/gusset-preview9-diagnostics/test-results` (not a durable release artifact). Report and screenshots below remain in the repository.

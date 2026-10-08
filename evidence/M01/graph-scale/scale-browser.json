@@ -29,7 +29,7 @@
     "test",
     "tests/e2e/graph-scale.spec.js",
     "tests/e2e/result-picker.spec.js",
-    "--output=/tmp/prokon-graph-scale-tests"
+    "--output=/tmp/gusset-graph-scale-tests"
   ],
   "artifacts": [
     "browser.log",

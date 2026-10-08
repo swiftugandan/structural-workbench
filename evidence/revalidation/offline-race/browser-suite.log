@@ -138,7 +138,7 @@ Running 112 tests using 1 worker
       92 |     await page.locator("#reload-update").click();
       93 |     await page.waitForFunction(() => window.deploymentMarker === "B");
       94 |     await expect(page.locator("#build-status")).toHaveAttribute(
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/offline-update.spec.js:91:50
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/offline-update.spec.js:91:50
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-offline-update-A-real--cd89a-odel-and-reloads-atomically/test-failed-1.png
@@ -176,7 +176,7 @@ Running 112 tests using 1 worker
          |                                              ^
       57 | });
       58 |
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/result-picker.spec.js:56:46
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/result-picker.spec.js:56:46
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/test-failed-1.png

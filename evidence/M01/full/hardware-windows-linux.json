@@ -21,7 +21,7 @@
   "status": "PASS",
   "command": [
     "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-    "/Users/p.munaawa/Documents/projects/labs/prokon/tools/run-hardware.mjs"
+    "/Users/p.munaawa/Documents/projects/labs/gusset/tools/run-hardware.mjs"
   ],
   "testCount": 10,
   "testIds": [

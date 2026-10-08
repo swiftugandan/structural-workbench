@@ -43,8 +43,8 @@ warning: constant `KIP_FT_TO_NM` is never used
   |           ^^^^^^^^^^^^
 
 warning: `workbench-design` (lib) generated 6 warnings (run `cargo fix --lib -p workbench-design` to apply 1 suggestion)
-   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
-   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/assembly)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/wasm-api)
     Finished `release` profile [optimized] target(s) in 42.46s
 warning: unused import: `verify_lock_and_manifest`
   --> crates/design/src/profile/aisc36022/mod.rs:20:46
@@ -87,7 +87,7 @@ warning: constant `KIP_FT_TO_NM` is never used
   |           ^^^^^^^^^^^^
 
 warning: `workbench-design` (lib) generated 6 warnings (run `cargo fix --lib -p workbench-design` to apply 1 suggestion)
-   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/assembly)
-   Compiling workbench-cli v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/cli)
+   Compiling workbench-assembly v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/assembly)
+   Compiling workbench-cli v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/cli)
     Finished `release` profile [optimized] target(s) in 43.91s
 Built static app b21c6a2d188c7e43a2007b07950b004d6daf475dfd251616525f369b0d93bd5c

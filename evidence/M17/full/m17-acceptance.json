@@ -220,5 +220,5 @@
       "missing": []
     }
   ],
-  "limitations": "aisc-360-22-lrfd composite beams are a demonstration of ANSI/AISC 360-22 Chapter I with the Commentary's deflection and shrinkage models; not a certified design. Unshored simply supported W beams with headed studs under a solid slab or formed deck; positive flexure. Creep is the engineer's recorded judgement. Continuous beams, shored construction, slender webs, channel anchors, analytical slip capacity, vibration and composite columns are unsupported. Commercial PROKON parity remains UNKNOWN."
+  "limitations": "aisc-360-22-lrfd composite beams are a demonstration of ANSI/AISC 360-22 Chapter I with the Commentary's deflection and shrinkage models; not a certified design. Unshored simply supported W beams with headed studs under a solid slab or formed deck; positive flexure. Creep is the engineer's recorded judgement. Continuous beams, shored construction, slender webs, channel anchors, analytical slip capacity, vibration and composite columns are unsupported. Commercial-solver parity remains UNKNOWN."
 }

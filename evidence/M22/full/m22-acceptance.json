@@ -160,5 +160,5 @@
       "missing": []
     }
   ],
-  "limitations": "Studies are restricted declarative JSON-pointer sweeps of linear static analysis on one case or combination; no general scripting language or Python runtime. Multilingual reports are deferred. Commercial PROKON parity remains UNKNOWN."
+  "limitations": "Studies are restricted declarative JSON-pointer sweeps of linear static analysis on one case or combination; no general scripting language or Python runtime. Multilingual reports are deferred. Commercial-solver parity remains UNKNOWN."
 }

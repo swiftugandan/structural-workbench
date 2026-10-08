@@ -1,5 +1,5 @@
 ---
-name: prokon-evidence
+name: gusset-evidence
 description: >
   Tests, milestone acceptance evidence and release verification for Structural Workbench.
   Use when writing tests, collecting evidence, accepting a milestone or preparing a release.
@@ -9,7 +9,7 @@ description: >
 
 ## Tests must establish the claimed outcome
 
-`tools/check_package.py` checks the specification package and analytical arithmetic only. Its success is never evidence that application implementation, structural analysis or PROKON parity has passed.
+`tools/check_package.py` checks the specification package and analytical arithmetic only. Its success is never evidence that application implementation, structural analysis or commercial-suite parity has passed.
 
 Create the application commands required by `VALIDATION.md`. Missing scripts, zero collected tests, skipped mandatory cases, fixture parse failures, absent oracle runtimes or inaccessible required hardware fail or block the affected gate. A shell command that prints PASS is not a verifier. Report test counts and IDs so empty execution is detectable.
 

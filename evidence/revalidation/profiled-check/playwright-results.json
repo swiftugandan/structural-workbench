@@ -2,12 +2,12 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/performance-cad.spec.js"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -23,7 +23,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -31,7 +31,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [
           "**/live-visual.spec.js"
         ],
@@ -96,9 +96,9 @@
                   "duration": 79450,
                   "error": {
                     "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m111.30000001192093\u001b[39m",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m111.30000001192093\u001b[39m\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:254:27",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m111.30000001192093\u001b[39m\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/performance-cad.spec.js:254:27",
                     "location": {
-                      "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                      "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/performance-cad.spec.js",
                       "column": 27,
                       "line": 254
                     },
@@ -107,11 +107,11 @@
                   "errors": [
                     {
                       "location": {
-                        "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                        "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/performance-cad.spec.js",
                         "column": 27,
                         "line": 254
                       },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m111.30000001192093\u001b[39m\n\n  252 |         : \"Actual runner measurements; required platform identity must also pass.\",\n  253 |   });\n> 254 |   expect(metrics.editP95).toBeLessThanOrEqual(thresholds.editP95);\n      |                           ^\n  255 |   expect(metrics.pickP95).toBeLessThanOrEqual(thresholds.pickP95);\n  256 |   expect(metrics.snapP95).toBeLessThanOrEqual(thresholds.snapP95);\n  257 |   expect(importMs).toBeLessThanOrEqual(thresholds.importMs);\n    at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:254:27"
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m100\u001b[39m\nReceived:    \u001b[31m111.30000001192093\u001b[39m\n\n  252 |         : \"Actual runner measurements; required platform identity must also pass.\",\n  253 |   });\n> 254 |   expect(metrics.editP95).toBeLessThanOrEqual(thresholds.editP95);\n      |                           ^\n  255 |   expect(metrics.pickP95).toBeLessThanOrEqual(thresholds.pickP95);\n  256 |   expect(metrics.snapP95).toBeLessThanOrEqual(thresholds.snapP95);\n  257 |   expect(importMs).toBeLessThanOrEqual(thresholds.importMs);\n    at /Users/p.munaawa/Documents/projects/labs/gusset/tests/performance-cad.spec.js:254:27"
                     }
                   ],
                   "stdout": [],
@@ -123,21 +123,21 @@
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/test-failed-1.png"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/test-failed-1.png"
                     },
                     {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/error-context.md"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/error-context.md"
                     },
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/trace.zip"
                     }
                   ],
                   "errorLocation": {
-                    "file": "/Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js",
+                    "file": "/Users/p.munaawa/Documents/projects/labs/gusset/tests/performance-cad.spec.js",
                     "column": 27,
                     "line": 254
                   }

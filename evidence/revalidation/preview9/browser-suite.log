@@ -144,7 +144,7 @@ Running 111 tests using 1 worker
       144 |   await page.locator("#canvas-copy").click();
       145 |   await clickNode(page, "n2");
       146 |   await expect(page.locator("#placement-help")).toContainText("destination");
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/canvas-first.spec.js:143:44
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/canvas-first.spec.js:143:44
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-canvas-first-Canvas-fi-cf320-dency-delete-stay-on-canvas/test-failed-1.png
@@ -190,7 +190,7 @@ Running 111 tests using 1 worker
       186 |   await page.locator("#canvas-move").click();
       187 |   await clickNode(page, "n2");
       188 |   await expect(page.locator("#placement-help")).toContainText("destination");
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/canvas-first.spec.js:185:44
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/canvas-first.spec.js:185:44
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-canvas-first-Canvas-fi-4b776-ape-preserve-atomic-history/test-failed-1.png
@@ -236,7 +236,7 @@ Running 111 tests using 1 worker
       220 |   await expect(page.locator("#selection-tag")).toHaveText("m4");
       221 |   await expect(page.locator("#inspector-content")).not.toContainText(added.id);
       222 |   await expect(
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/canvas-first.spec.js:219:53
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/canvas-first.spec.js:219:53
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-canvas-first-Readable--bc71b-rsist-after-copy-and-reopen/test-failed-1.png
@@ -285,7 +285,7 @@ Running 111 tests using 1 worker
       29 |   await expect(page.locator("#message")).toContainText("CANCELLED");
       30 |   await expect(page.locator("#hash-status")).toHaveText(hash);
       31 |   await expect(page.locator("#analyse")).toBeEnabled();
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/dual-workers.spec.js:28:33
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/dual-workers.spec.js:28:33
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/test-failed-1.png
@@ -330,7 +330,7 @@ Running 111 tests using 1 worker
       126 |     "Structure",
       127 |     "Member properties",
       128 |     "Loading",
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/guided-inputs.spec.js:125:63
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/guided-inputs.spec.js:125:63
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-guided-inputs-Guided-f-0555c-it-desktop-and-phone-widths/test-failed-1.png
@@ -362,9 +362,9 @@ Running 111 tests using 1 worker
       7 |     await page.keyboard.press("Tab");
       8 |   }
       9 |   throw Error("Control is not reachable with Tab: " + target);
-        at reach (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:6:22)
-        at activate (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:12:9)
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:49:9
+        at reach (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:6:22)
+        at activate (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:12:9)
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:49:9
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/test-failed-1.png
@@ -410,7 +410,7 @@ Running 111 tests using 1 worker
       92 |   await expect(page.locator("#message")).toContainText("CANCELLED");
       93 |
       94 |   await mkdir(evidence(), { recursive: true });
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/m03-gates.spec.js:91:33
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/m03-gates.spec.js:91:33
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/test-failed-1.png
@@ -456,7 +456,7 @@ Running 111 tests using 1 worker
       125 |   await expect(page.locator("#message")).toContainText("CANCELLED");
       126 |   await expect(page.locator("#hash-status")).toHaveText(hash);
       127 |
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/m03-gates.spec.js:124:33
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/m03-gates.spec.js:124:33
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/test-failed-1.png
@@ -488,7 +488,7 @@ Running 111 tests using 1 worker
       63 |   await page.getByRole("button", { name: "Edit n3", exact: true }).click();
       64 |   await page.getByLabel("X m", { exact: true }).fill("4500 mm");
       65 |   await page.getByRole("button", { name: "Save entity", exact: true }).click();
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/portal.spec.js:62:55
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/portal.spec.js:62:55
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-portal-M01-portal-setu-0eba4-draw-reject-save-and-reopen/test-failed-1.png
@@ -529,7 +529,7 @@ Running 111 tests using 1 worker
       140 |       /persistence was not granted|download a project backup/i,
       141 |     );
       142 |     await expect(page.locator("#export-project")).toBeEnabled();
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/reliability.spec.js:139:44
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/reliability.spec.js:139:44
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-reliability-M04-reliab-7fd5f-rns-without-blocking-export/test-failed-1.png
@@ -578,7 +578,7 @@ Running 111 tests using 1 worker
       107 |   await expect(page.locator("#message")).toContainText("CANCELLED");
       108 |   await expect(page.locator("#analyse")).toBeEnabled();
       109 |   await expect(page.locator("#hash-status")).toHaveText(hash);
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/robustness.spec.js:106:33
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/robustness.spec.js:106:33
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-robustness-cancel-term-4c42a-rker-and-restores-the-model/test-failed-1.png
@@ -617,7 +617,7 @@ Running 111 tests using 1 worker
       139 |   await expect(page.locator("#message")).toContainText("stale", {
       140 |     timeout: 10000,
       141 |   });
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/robustness.spec.js:138:50
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/robustness.spec.js:138:50
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-robustness-M03-dual-Wo-6474f-r-marks-stale-solve-Current/test-failed-1.png
@@ -646,7 +646,7 @@ Running 111 tests using 1 worker
       77 |     const api = await import("/pkg/workbench_wasm_api.js");
       78 |     await api.default();
       79 |     const k = new api.Kernel();
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/performance-cad.spec.js:76:34
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/performance-cad.spec.js:76:34
 
     Error Context: test-results/performance-cad-M01-CAD-ca-fb255-rt-picking-orbit-and-export/error-context.md
 
@@ -681,7 +681,7 @@ Running 111 tests using 1 worker
       87 |     "data-last-gpu-pick",
       88 |     "m2",
       89 |   );
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/visual/m01-graphics.spec.js:86:43
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/visual/m01-graphics.spec.js:86:43
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/visual-m01-graphics-M01-gr-a3f48-ring-asynchronous-selection/test-failed-1.png

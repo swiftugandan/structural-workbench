@@ -40,7 +40,7 @@
     "tests/e2e/warehouse.spec.js",
     "tests/e2e/workspace-ux.spec.js",
     "tests/accessibility",
-    "--output=/tmp/prokon-picker-test-results"
+    "--output=/tmp/gusset-picker-test-results"
   ],
   "artifacts": [
     "browser.log",

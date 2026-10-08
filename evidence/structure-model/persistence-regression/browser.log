@@ -55,8 +55,8 @@ Running 17 tests using 1 worker
       25 |   for (const [key, value] of Object.entries({
       26 |     ky: "1",
       27 |     kz: "1",
-        at openModel (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:24:46)
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:48:3
+        at openModel (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/native-steel-design.spec.js:24:46)
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/native-steel-design.spec.js:48:3
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-native-steel-design-DW-f3207-nance-stale-undo-and-reopen/test-failed-1.png
@@ -95,8 +95,8 @@ Running 17 tests using 1 worker
       25 |   for (const [key, value] of Object.entries({
       26 |     ky: "1",
       27 |     kz: "1",
-        at openModel (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:24:46)
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/native-steel-design.spec.js:137:3
+        at openModel (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/native-steel-design.spec.js:24:46)
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/native-steel-design.spec.js:137:3
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-native-steel-design-DW-f7109-lause-LTB-stays-unsupported/test-failed-1.png

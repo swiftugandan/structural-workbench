@@ -1,5 +1,5 @@
 ---
-name: prokon-task-loop
+name: gusset-task-loop
 description: >
   Execute a Structural Workbench delivery task end to end.
   Use when implementing, repairing or verifying a milestone task.

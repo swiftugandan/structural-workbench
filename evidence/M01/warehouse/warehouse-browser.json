@@ -37,7 +37,7 @@
     "playwright",
     "test",
     "tests/e2e/warehouse.spec.js",
-    "--output=/tmp/prokon-warehouse-test-results"
+    "--output=/tmp/gusset-warehouse-test-results"
   ],
   "artifacts": [
     "browser.log",

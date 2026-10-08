@@ -191,5 +191,5 @@
       "missing": []
     }
   ],
-  "limitations": "ec2-uk-na pad footing design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular pads with a concentric column on a rigid base over linear tensionless ground; the allowable bearing pressure is the engineer's input and no ground resistance or settlement is computed (EN 1997 not held). Eccentric columns, stepped bases, uplift top steel, punching reinforcement, pile caps and combined footings are unsupported. Commercial PROKON parity remains UNKNOWN."
+  "limitations": "ec2-uk-na pad footing design is a demonstration of EN 1992-1-1:2004 incl. AC:2008/AC:2010 with the UK NA incl. Amd 1 (2009); A1:2014 and NA+A2:2014 are not held and not reconciled, and no run is a certified design. Rectangular pads with a concentric column on a rigid base over linear tensionless ground; the allowable bearing pressure is the engineer's input and no ground resistance or settlement is computed (EN 1997 not held). Eccentric columns, stepped bases, uplift top steel, punching reinforcement, pile caps and combined footings are unsupported. Commercial-solver parity remains UNKNOWN."
 }

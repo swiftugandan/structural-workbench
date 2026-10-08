@@ -8,7 +8,7 @@ Deliver the specified browser application through working vertical slices. The r
 
 The deliverable is functioning software with reproducible evidence. Plans, scaffolds, isolated libraries, screenshots, generated code volume and passing package-integrity checks do not constitute milestone completion. Each accepted milestone must provide its actual user journey, numerical behaviour, negative paths, saved project and exported outcome.
 
-M00–M06 define the analysis MVP. M07 adds separately verified steel-code design; M08 adds the concrete-beam workflow. M09–M22 expand the product, and M23 closes a finite, verified parity inventory through additional vertical slices. Do not treat M06 as full PROKON parity or an instruction to abandon later authorised work. Do not promise standards compliance, commercial equivalence or professional approval without the corresponding evidence.
+M00–M06 define the analysis MVP. M07 adds separately verified steel-code design; M08 adds the concrete-beam workflow. M09–M22 expand the product, and M23 closes a finite, verified parity inventory through additional vertical slices. Do not treat M06 as full commercial-suite parity or an instruction to abandon later authorised work. Do not promise standards compliance, commercial equivalence or professional approval without the corresponding evidence.
 
 ## Installation and instruction discovery
 
@@ -102,7 +102,7 @@ Every numerical result must reference the source model, settings and solver buil
 
 ## Tests must establish the claimed outcome
 
-The included tools/check_package.py checks the specification package and analytical arithmetic only. Its success is never evidence that application implementation, structural analysis or PROKON parity has passed.
+The included tools/check_package.py checks the specification package and analytical arithmetic only. Its success is never evidence that application implementation, structural analysis or commercial-suite parity has passed.
 
 Create the application commands required by VALIDATION.md. Missing scripts, zero collected tests, skipped mandatory cases, fixture parse failures, absent oracle runtimes or inaccessible required hardware fail or block the affected gate. A shell command that prints PASS is not a verifier. Report test counts and IDs so accidental empty execution is detectable.
 
@@ -128,7 +128,7 @@ Source changes invalidate affected evidence. Changing shared element, unit, mode
 
 Use resources.required.json to determine external dependencies. Create resources.lock.json only from actual acquisitions, recording authoritative origin, exact edition/version, content hash, rights status and validation use. Preserve inaccessible sources as unresolved, rather than filling their fields with invented values.
 
-Missing standards or independent examples block the relevant code package, not unrelated analysis work. Missing a real-GPU runner blocks that hardware gate; software-GPU correctness evidence does not become hardware performance evidence. Missing licensed PROKON outputs leaves commercial numerical equivalence UNKNOWN.
+Missing standards or independent examples block the relevant code package, not unrelated analysis work. Missing a real-GPU runner blocks that hardware gate; software-GPU correctness evidence does not become hardware performance evidence. Missing licensed commercial-suite outputs leaves commercial numerical equivalence UNKNOWN.
 
 Maintain capabilities.json with separate implementation and evidence dimensions: capability ID, scope key, implementation status, verification status, comparison status, resource blockers, limitations and evidence references. Scope keys include relevant formulation, material/section domain, code edition/amendment/annex, platform and exchange format. Do not collapse these into an unqualified supported flag.
 

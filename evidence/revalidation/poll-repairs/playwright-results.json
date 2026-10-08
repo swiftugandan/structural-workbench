@@ -2,15 +2,15 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/offline-cache.spec.js",
       "tests/e2e/offline-update.spec.js",
       "tests/e2e/result-picker.spec.js",
       "tests/e2e/large-explorer.spec.js"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -26,7 +26,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -34,7 +34,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [
           "**/live-visual.spec.js"
         ],
@@ -107,7 +107,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-large-explorer-Large-E-d6ff6-ber-on-expansion-and-search/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-large-explorer-Large-E-d6ff6-ber-on-expansion-and-search/trace.zip"
                     }
                   ]
                 }
@@ -162,7 +162,7 @@
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-offline-cache-M04-offl-d6975-pens-offline-from-IndexedDB/trace.zip"
+                          "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-offline-cache-M04-offl-d6975-pens-offline-from-IndexedDB/trace.zip"
                         }
                       ]
                     }
@@ -202,7 +202,7 @@
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-offline-cache-M04-offl-c0dfc-iting-build-update-is-ready/trace.zip"
+                          "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-offline-cache-M04-offl-c0dfc-iting-build-update-is-ready/trace.zip"
                         }
                       ]
                     }
@@ -252,7 +252,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-offline-update-A-real--cd89a-odel-and-reloads-atomically/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-offline-update-A-real--cd89a-odel-and-reloads-atomically/trace.zip"
                     }
                   ]
                 }
@@ -300,7 +300,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/trace.zip"
                     }
                   ]
                 }

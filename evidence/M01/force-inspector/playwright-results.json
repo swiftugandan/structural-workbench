@@ -2,15 +2,15 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/force-inspector.spec.js",
       "tests/e2e/workspace-ux.spec.js",
       "tests/accessibility",
-      "--output=/tmp/prokon-force-inspector-tests"
+      "--output=/tmp/gusset-force-inspector-tests"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -26,7 +26,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/tmp/prokon-force-inspector-tests",
+        "outputDir": "/tmp/gusset-force-inspector-tests",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -34,7 +34,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.js"
@@ -105,7 +105,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-force-inspector-tests/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
+                      "path": "/tmp/gusset-force-inspector-tests/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
                     }
                   ]
                 }
@@ -153,7 +153,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip"
+                      "path": "/tmp/gusset-force-inspector-tests/e2e-force-inspector-Select-6954e-ation-units-and-stale-state/trace.zip"
                     }
                   ]
                 }
@@ -201,7 +201,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-force-inspector-tests/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
+                      "path": "/tmp/gusset-force-inspector-tests/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
                     }
                   ]
                 }
@@ -241,7 +241,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-force-inspector-tests/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
+                      "path": "/tmp/gusset-force-inspector-tests/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
                     }
                   ]
                 }

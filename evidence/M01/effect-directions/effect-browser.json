@@ -38,7 +38,7 @@
     "tests/e2e/portal.spec.js",
     "tests/e2e/shear-diagrams.spec.js",
     "tests/visual",
-    "--output=/tmp/prokon-effects-test-results"
+    "--output=/tmp/gusset-effects-test-results"
   ],
   "artifacts": [
     "browser.log",

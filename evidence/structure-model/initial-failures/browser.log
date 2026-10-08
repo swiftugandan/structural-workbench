@@ -55,7 +55,7 @@ Running 15 tests using 1 worker
       80 |   expect((await exported(page)).structure).toEqual(split.structure);
       81 |   await page.locator("#explorer-expand").click();
       82 |   await page.locator(`[data-structure-id="${owner.id}"]`).click();
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/structure-model.spec.js:79:46
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/structure-model.spec.js:79:46
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-structure-model-Author-b4343-nvalid-bindings-fail-closed/test-failed-1.png
@@ -425,7 +425,7 @@ Running 15 tests using 1 worker
       68 |   await page.screenshot({
       69 |     path: `${folder}/split-preview.png`,
       70 |     fullPage: true,
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/topology.spec.js:67:27
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/topology.spec.js:67:27
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-topology-M01-topology--1ffe9-redo-oracle-save-and-reopen/test-failed-1.png

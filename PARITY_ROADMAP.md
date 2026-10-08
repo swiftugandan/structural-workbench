@@ -1,6 +1,6 @@
-# PROKON parity roadmap and capability ledger
+# Reference-suite parity roadmap and capability ledger
 
-This is the proposed target ledger, not a statement of delivered functionality. Every implementation status starts PLANNED, every measured numerical comparison starts NOT_RUN and PROKON numerical equivalence starts UNKNOWN. Baseline is the official product information inspected on 19 September 2026. Each row must acquire versioned evidence before it changes status.
+This is the proposed target ledger, not a statement of delivered functionality. Every implementation status starts PLANNED, every measured numerical comparison starts NOT_RUN and reference-suite numerical equivalence starts UNKNOWN. Baseline is the official product information inspected on 19 September 2026. Each row must acquire versioned evidence before it changes status.
 
 ## Immediate delivery priority
 
@@ -10,13 +10,13 @@ Next delivery focus is the **integrated design workspace** (ADR 0008): exclusive
 
 ## 1 Acceptance levels
 
-L0 catalogued: authoritative scope identified. L1 usable: end-to-end workflow implemented with export/reopen. L2 verified: independent numerical, domain and failure-path gates pass. L3 compared: settings-matched PROKON comparisons pass or differences are explained and bounded. L4 parity for a named scope: L1–L3 plus code/exchange/platform coverage and limitations match the explicit baseline row. No row reaches L4 merely because its UI exists.
+L0 catalogued: authoritative scope identified. L1 usable: end-to-end workflow implemented with export/reopen. L2 verified: independent numerical, domain and failure-path gates pass. L3 compared: settings-matched reference-suite comparisons pass or differences are explained and bounded. L4 parity for a named scope: L1–L3 plus code/exchange/platform coverage and limitations match the explicit baseline row. No row reaches L4 merely because its UI exists.
 
 Comparison scope key is product version, module, operation, formulation, code edition/amendment/annex, section/material range, load/restraint domain, exchange format and platform. Evidence records the exact key. A row may contain several independently accepted keys; one does not imply the rest.
 
 ## 2 Analysis and modelling
 
-The analysis baseline below is derived from the official [Sumo product page](https://prokon.com/sumo/). More detailed proposed acceptance subdivisions are our implementation plan.
+The analysis baseline below is derived from the reference suite's official analysis-module product page (S02). More detailed proposed acceptance subdivisions are our implementation plan.
 
 | Capability | First usable slice | Final evidence needed | Initial parity status |
 | --- | --- | --- | --- |
@@ -41,7 +41,7 @@ The analysis baseline below is derived from the official [Sumo product page](htt
 
 ## 3 Steel and connections
 
-Module names are grounded in the official [Steel product page](https://prokon.com/steel/). Initial implementation may share check libraries, but each user workflow has its own acceptance record.
+Module names are grounded in the reference suite's official steel product page (S03). Initial implementation may share check libraries, but each user workflow has its own acceptance record.
 
 | Module or workflow | Planned slice | Specific parity condition |
 | --- | --- | --- |
@@ -100,7 +100,7 @@ Shell invariant for all material-design modules: **top menu/status; left Model E
 
 ## 4 Concrete and detailing
 
-Module names and broad features below are grounded in the official [Concrete product page](https://prokon.com/concrete/). The roadmap subdivisions are proposed product increments. UI for each module must reuse the approved design shell (§3.1), not a separate calculator chrome.
+Module names and broad features below are grounded in the reference suite's official concrete product page (S04). The roadmap subdivisions are proposed product increments. UI for each module must reuse the approved design shell (§3.1), not a separate calculator chrome.
 
 | Module or workflow | Planned slice | Specific parity condition |
 | --- | --- | --- |
@@ -126,18 +126,18 @@ Module names and broad features below are grounded in the official [Concrete pro
 
 ## 5 Other confirmed product families and unresolved scope
 
-Family presence is confirmed by the official [product overview](https://prokon.com/). Detailed acceptance subdomains are proposed until their inventories are verified.
+Family presence is confirmed by the reference suite's official product overview (S01). Detailed acceptance subdomains are proposed until their inventories are verified.
 
 | Family | Planned slice | Scope decision and dependency |
 | --- | --- | --- |
 | Composite | M17 | One staged member workflow first; inventory remaining elements |
 | Masonry | M19 | Choose and verify reinforced/unreinforced element domain |
 | Geotechnical | M20 | Bearing/slope workflow selected after inventory; methods independently verified |
-| Probar | M16 | Browser detailing/schedules are a functional alternative; host CAD integration is separate |
-| Prodesk/Revit exchange | M21 | IFC/file workflow first; native Revit bidirectional adapter conflicts with a strictly browser-only runtime |
+| Reinforcement detailing | M16 | Browser detailing/schedules are a functional alternative; host CAD integration is separate |
+| Revit exchange | M21 | IFC/file workflow first; native Revit bidirectional adapter conflicts with a strictly browser-only runtime |
 | Timber | M23 discovery | Not confirmed in the current retrieved catalogue; do not claim absence or inclusion |
 | General utilities and legacy Frame | M23 discovery | Enumerate current/legacy modules and user demand before scheduling |
-| Native PROKON files | M23 discovery | No format specification supplied; open exchange does not imply native compatibility |
+| Native reference-suite files | M23 discovery | No format specification supplied; open exchange does not imply native compatibility |
 | DWG exchange | M21 extension | Requires a lawful reader/converter; DXF does not count as DWG parity |
 | Multilingual output | M22 extension | Stable numerical/check IDs and verified translation of report meaning |
 
@@ -151,7 +151,7 @@ For Eurocodes, an annex/default-parameter policy is part of each scope key. For 
 
 For a fixed inventory of N scope keys, report counts at L0/L1/L2/L3/L4, blocked-resource count and excluded-by-browser-only count. Do not weight an entire concrete suite as equal to one small utility. If a weighted management score is desired, freeze weights before development and show the raw counts alongside it. Missing inventory keeps suite completeness UNKNOWN.
 
-Each comparison record includes status, raw outputs, normalised outputs, conventions, tolerance, discrepancy explanation and reference version. If PROKON and the independent analytical oracle disagree, investigate both; do not imitate a suspected commercial error merely to obtain equality.
+Each comparison record includes status, raw outputs, normalised outputs, conventions, tolerance, discrepancy explanation and reference version. If the reference suite and the independent analytical oracle disagree, investigate both; do not imitate a suspected commercial error merely to obtain equality.
 
 ## 8 Changes that require explicit scope expansion
 

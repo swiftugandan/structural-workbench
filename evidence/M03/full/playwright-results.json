@@ -2,7 +2,7 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/bay-copy.spec.js",
       "tests/e2e/dual-workers.spec.js",
@@ -12,8 +12,8 @@
       "tests/e2e/m03-gates.spec.js",
       "--reporter=json"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -29,7 +29,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results",
+        "outputDir": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -37,7 +37,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [
           "**/live-visual.spec.js"
         ],
@@ -103,7 +103,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-bay-copy-M03-copy-port-3f7ab-e-and-inspect-My-Mz-torsion/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-bay-copy-M03-copy-port-3f7ab-e-and-inspect-My-Mz-torsion/trace.zip"
                     }
                   ]
                 }
@@ -151,7 +151,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-dual-workers-M03-dual--52a1d-uperseded-solve-stays-stale/trace.zip"
                     }
                   ]
                 }
@@ -199,7 +199,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-hierarchy-M03-hierarch-9d9d7-ent-and-analytical-children/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-hierarchy-M03-hierarch-9d9d7-ent-and-analytical-children/trace.zip"
                     }
                   ]
                 }
@@ -247,7 +247,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-cancel-t-80009-ms-and-editing-restored-≤1s/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-m03-gates-M03-cancel-t-80009-ms-and-editing-restored-≤1s/trace.zip"
                     }
                   ]
                 }
@@ -287,7 +287,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-m03-gates-M03-analyse--aa52b-s-UI-event-loop-gaps-≤100ms/trace.zip"
                     }
                   ]
                 }
@@ -327,7 +327,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-m03-gates-M03-GPU-loss-ffedf-alysis-preserves-model-hash/trace.zip"
                     }
                   ]
                 }
@@ -375,7 +375,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-orientation-3D-exposes-18557-mpass-without-model-changes/trace.zip"
                     }
                   ]
                 }
@@ -423,7 +423,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/Users/p.munaawa/Documents/projects/labs/prokon/test-results/e2e-section-axis-M03-secti-733aa-oll-swaps-My-Mz-end-actions/trace.zip"
+                      "path": "/Users/p.munaawa/Documents/projects/labs/gusset/test-results/e2e-section-axis-M03-secti-733aa-oll-swaps-My-Mz-end-actions/trace.zip"
                     }
                   ]
                 }

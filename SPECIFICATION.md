@@ -2,11 +2,11 @@
 
 Version 1.0 • Research baseline 19 September 2026 • Status proposed implementation contract
 
-This specification defines an independently implemented, PROKON inspired structural modelling, analysis and design workbench. Its kernel is Rust compiled to WebAssembly. Its CAD viewport uses WebGPU. Its browser interface is plain HTML, JavaScript ES modules and CSS. The implementation is intended for AI agents working with little routine human involvement.
+This specification defines an independently implemented structural modelling, analysis and design workbench, benchmarked against a commercial reference suite. Its kernel is Rust compiled to WebAssembly. Its CAD viewport uses WebGPU. Its browser interface is plain HTML, JavaScript ES modules and CSS. The implementation is intended for AI agents working with little routine human involvement.
 
-The recommended first release is a complete, local frame-analysis product: create a structure, assign properties and loads, solve it, inspect forces and deflections, compare alternatives, export a reproducible report, and reopen the project. Material design, advanced finite elements and detailing follow as independently usable vertical slices. Full PROKON parity is a long-term portfolio, not an MVP acceptance condition.
+The recommended first release is a complete, local frame-analysis product: create a structure, assign properties and loads, solve it, inspect forces and deflections, compare alternatives, export a reproducible report, and reopen the project. Material design, advanced finite elements and detailing follow as independently usable vertical slices. Full reference-suite parity is a long-term portfolio, not an MVP acceptance condition.
 
-This is a delivery specification, not a working implementation or a certification of structural calculations. Included numerical fixtures are original analytical acceptance seeds. No PROKON executable, proprietary file format, private section database, licensed standard text or observed PROKON numerical output was supplied. No numerical parity with PROKON has yet been demonstrated.
+This is a delivery specification, not a working implementation or a certification of structural calculations. Included numerical fixtures are original analytical acceptance seeds. No reference-suite executable, proprietary file format, private section database, licensed standard text or observed reference-suite numerical output was supplied. No numerical parity with the reference suite has yet been demonstrated.
 
 ## 1 How agents must use this package
 
@@ -44,7 +44,7 @@ WGSL's concrete scalar floating types are not a portable f64 structural-solver s
 
 M00 through M06 form the analysis MVP. A user can author planar and spatial frames, use nodal and member loads, combine linear cases, inspect reactions and member diagrams, compute elastic stress screens, save, recover and export a calculation record. Hard supported bounds are 5,000 nodes, 10,000 frame members, 100 cases, 500 explicit combinations and 30,000 active DOFs, subject also to the memory guard. These are acceptance targets to be demonstrated, not guarantees at this stage. Design-code MVP is M07 and is a distinct release.
 
-Excluded from the analysis MVP: shells, solids, arbitrary CAD solids, plasticity, second-order response, cable/tension-only members, soil contact, code-generated wind/seismic loads, code-certified member sizing, connections, reinforcement detailing, DWG/native PROKON formats, Revit plugins, live collaboration and mobile CAD editing. Exclusions must appear in capability metadata and import diagnostics, not disappear during conversion.
+Excluded from the analysis MVP: shells, solids, arbitrary CAD solids, plasticity, second-order response, cable/tension-only members, soil contact, code-generated wind/seismic loads, code-certified member sizing, connections, reinforcement detailing, DWG/proprietary commercial formats, Revit plugins, live collaboration and mobile CAD editing. Exclusions must appear in capability metadata and import diagnostics, not disappear during conversion.
 
 ### 2.2 Autonomy boundary
 
@@ -54,13 +54,13 @@ Automated development and verification are achievable goals. Equivalence to a co
 
 ## 3 Research findings and the parity baseline
 
-The current official product pages identify PROKON 5.3. Sumo advertises graphical modelling, automated meshing, frames with shell/solid analysis, linear and advanced static analysis, dynamic analysis, load combinations, design integration, reporting, scripting and drawing/BIM imports. This is the relevant analysis baseline, rather than the marketing label alone. [PROKON Sumo](https://prokon.com/sumo/)
+The current official product pages identify reference-suite release 5.3. Its analysis module advertises graphical modelling, automated meshing, frames with shell/solid analysis, linear and advanced static analysis, dynamic analysis, load combinations, design integration, reporting, scripting and drawing/BIM imports. This is the relevant analysis baseline, rather than the marketing label alone. (S02)
 
-The concrete product lists beams, columns, slabs, footings, pile caps, retaining walls, punching shear and crack-width tools. It also describes calculation reports, reinforcement scheduling, prestressing and long-term behaviour. [PROKON Concrete](https://prokon.com/concrete/)
+The concrete product lists beams, columns, slabs, footings, pile caps, retaining walls, punching shear and crack-width tools. It also describes calculation reports, reinforcement scheduling, prestressing and long-term behaviour. (S04)
 
-The steel product lists member and connection tools, including struts, beam columns, plate girders, crane beams, base/end plates, bolts, welds, anchors, hollow sections and splices. It supports both model-derived and standalone inputs. [PROKON Steel](https://prokon.com/steel/)
+The steel product lists member and connection tools, including struts, beam columns, plate girders, crane beams, base/end plates, bolts, welds, anchors, hollow sections and splices. It supports both model-derived and standalone inputs. (S03)
 
-The home page separately identifies composite, masonry, geotechnical, Probar detailing and Prodesk Revit exchange. These are confirmed product families; their full current module-level behaviour was not established in this research. The detailed family pages intermittently failed to load. [PROKON product overview](https://prokon.com/)
+The home page separately identifies composite, masonry, geotechnical, reinforcement detailing and Revit exchange families. These are confirmed product families; their full current module-level behaviour was not established in this research. The detailed family pages intermittently failed to load. (S01)
 
 ### 3.1 Interpretation
 
@@ -74,14 +74,14 @@ Separate five meanings of parity:
 4. Exchange fidelity: semantic data survive import/export with explicit loss accounting.
 5. Operational breadth: model size, performance, recoverability, reporting and automation meet declared targets.
 
-Do not publish a single unqualified percentage. Use a matrix of module × operation × formulation × code edition × platform × evidence. Absence of a licensed PROKON comparison corpus means numerical equivalence is UNKNOWN, even if analytical benchmarks pass.
+Do not publish a single unqualified percentage. Use a matrix of module × operation × formulation × code edition × platform × evidence. Absence of a licensed reference-suite comparison corpus means numerical equivalence is UNKNOWN, even if analytical benchmarks pass.
 
 ### 3.2 Current uncertainty register
 
 | ID | Uncertainty | Default resolution |
 | --- | --- | --- |
 | U01 | User jurisdiction and desired first material code | Ship mechanics-v1; implement proposed AISC profile only behind its resource and validation gate |
-| U02 | Exact PROKON settings and benchmark outputs | Build lawful original fixtures; later compare against a versioned licensed installation or supplied exports |
+| U02 | Exact reference-suite settings and benchmark outputs | Build lawful original fixtures; later compare against a versioned licensed installation or supplied exports |
 | U03 | Current timber/general/legacy module inventory | Record as discovery backlog; do not count as confirmed 5.3 coverage |
 | U04 | Browser/GPU hardware available to delivery agents | Software-GPU tests for correctness plus a real-GPU release lane; label unmeasured platforms |
 | U05 | Sparse library WASM compatibility and fill-in cost | Resolve in M00 using a pinned build and real sparse fixture; bounded fallback described in section 8 |
@@ -491,7 +491,7 @@ Acceptance: published method benchmarks, force/moment checks, search convergence
 
 Add schema-specific readers/writers, coordinate transforms, GUID preservation, material/section mapping and a conversion review. A user can accept conversion choices through deterministic forms; batch mode requires an explicit mapping manifest.
 
-Acceptance: semantic round trips, units/orientation fixtures, missing object loss ledger and reference corpus. Revit native round-trip behaviour requires the separately scoped adapter; browser-only file exchange is not marked Prodesk-equivalent.
+Acceptance: semantic round trips, units/orientation fixtures, missing object loss ledger and reference corpus. Revit native round-trip behaviour requires the separately scoped adapter; browser-only file exchange is not marked equivalent to a commercial BIM-exchange tool.
 
 ### M22 Automate a repeatable engineering study
 
@@ -503,11 +503,11 @@ Acceptance: deterministic replay, cancellation, resource budgets, errors tied to
 
 ### M23 Close the suite parity backlog
 
-**User outcome:** complete previously missing named module workflows from the verified PROKON inventory and inspect an evidence-backed comparison ledger.
+**User outcome:** complete previously missing named module workflows from the verified reference-suite inventory and inspect an evidence-backed comparison ledger.
 
 This is a programme milestone composed of new vertical slices, not one catch-all implementation ticket. Inventory plate girders, crane beams, hollow-section joints, remaining connection families, concrete modules, legacy utilities, timber if currently confirmed, solid elements, nonlinear materials and report/code variants. Each gets the M07-style resource, implementation and validation contract before scheduling.
 
-Acceptance: every baseline row has a status, source, exact scope and evidence; no UNKNOWN row is relabelled equivalent. Numerical comparisons use legally obtained matching commercial outputs, documented settings, independent truth and explained differences. Full parity can be declared only for a finite versioned baseline, not all future PROKON releases.
+Acceptance: every baseline row has a status, source, exact scope and evidence; no UNKNOWN row is relabelled equivalent. Numerical comparisons use legally obtained matching commercial outputs, documented settings, independent truth and explained differences. Full parity can be declared only for a finite versioned baseline, not all future reference-suite releases.
 
 ## 13 Roadmap priorities and delivery estimates
 
@@ -520,7 +520,7 @@ Acceptance: every baseline row has a status, source, exact scope and evidence; n
 | Portfolio expansion | M16–M22 | Detailing, specialist materials, geotechnics and exchange | Additional 12–24+ months; parallel domains possible |
 | Versioned suite parity | M23 and identified sub-slices | Independently evidenced catalogue coverage | Not credibly dateable before inventory and benchmark access |
 
-These are deliberately broad engineering estimates, not measurements of AI-agent speed. Coding throughput does not eliminate formulation development, test-oracle access, numerical discrepancy investigation or standards dependencies. Reforecast after M02 using accepted slices, not generated lines of code. Do not promise a complete PROKON replacement in a few sprints.
+These are deliberately broad engineering estimates, not measurements of AI-agent speed. Coding throughput does not eliminate formulation development, test-oracle access, numerical discrepancy investigation or standards dependencies. Reforecast after M02 using accepted slices, not generated lines of code. Do not promise a complete reference-suite replacement in a few sprints.
 
 M07/M08 can proceed in parallel after M06 if independent resources exist. M14 can follow M06 without waiting for connections or concrete modules. M21 can begin with DXF after M04 while IFC analytical mapping waits for relevant model types. M22's basic command replay is introduced early, with the full user-facing study workflow later.
 
@@ -553,7 +553,7 @@ Do not reduce tolerances, delete fixtures, bless changed expected results or low
 
 On a clean supported desktop browser, create a three-bay spatial frame from the portal template; assign custom/synthetic sections and physical supports; add dead, live and lateral cases, self-weight and explicit combinations; analyse; inspect a governing member's forces, actual-case envelope provenance, reactions and service deflection; compare a stiffer section variant; generate an elastic stress screen; save/export; restart offline; reopen; reproduce the numerical results and report. Then deliberately remove a stabilising restraint, obtain a meaningful instability diagnosis, restore it with undo, rerun, and export a current result. The original and modified projects remain recoverable.
 
-For analysis MVP, all steps pass without a backend, frontend framework, WebGL replacement or server solver. For design-code MVP, repeat the journey with a supported verified code package and its complete check report. For PROKON parity, add the versioned commercial comparison corpus and every relevant capability row; the MVP alone does not imply that endpoint.
+For analysis MVP, all steps pass without a backend, frontend framework, WebGL replacement or server solver. For design-code MVP, repeat the journey with a supported verified code package and its complete check report. For reference-suite parity, add the versioned commercial comparison corpus and every relevant capability row; the MVP alone does not imply that endpoint.
 
 ### Authored structure graph — schema 1.1 (2026-09-26)
 

@@ -2,17 +2,17 @@
   "config": {
     "argv": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/node_modules/.bin/playwright",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/node_modules/.bin/playwright",
       "test",
       "tests/e2e/result-picker.spec.js",
       "tests/e2e/shear-diagrams.spec.js",
       "tests/e2e/warehouse.spec.js",
       "tests/e2e/workspace-ux.spec.js",
       "tests/accessibility",
-      "--output=/tmp/prokon-picker-test-results"
+      "--output=/tmp/gusset-picker-test-results"
     ],
-    "configFile": "/Users/p.munaawa/Documents/projects/labs/prokon/playwright.config.js",
-    "rootDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+    "configFile": "/Users/p.munaawa/Documents/projects/labs/gusset/playwright.config.js",
+    "rootDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -28,7 +28,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "/tmp/prokon-picker-test-results",
+        "outputDir": "/tmp/gusset-picker-test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -36,7 +36,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/Users/p.munaawa/Documents/projects/labs/prokon/tests",
+        "testDir": "/Users/p.munaawa/Documents/projects/labs/gusset/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.spec.js"
@@ -107,7 +107,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-picker-test-results/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
+                      "path": "/tmp/gusset-picker-test-results/accessibility-a11y-landing-4a94c-ved-workspace-accessibility/trace.zip"
                     }
                   ]
                 }
@@ -155,7 +155,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-picker-test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/trace.zip"
+                      "path": "/tmp/gusset-picker-test-results/e2e-result-picker-Grouped--ece24-n-component-across-analysis/trace.zip"
                     }
                   ]
                 }
@@ -203,7 +203,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-picker-test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
+                      "path": "/tmp/gusset-picker-test-results/e2e-shear-diagrams-Canvas--c639b-ned-selection-after-solving/trace.zip"
                     }
                   ]
                 }
@@ -243,7 +243,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-picker-test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
+                      "path": "/tmp/gusset-picker-test-results/e2e-shear-diagrams-Uniform-07e9a-used-component-reports-zero/trace.zip"
                     }
                   ]
                 }
@@ -291,7 +291,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-picker-test-results/e2e-warehouse-Warehouse-ex-c59d6-l-gravity-and-lateral-loads/trace.zip"
+                      "path": "/tmp/gusset-picker-test-results/e2e-warehouse-Warehouse-ex-c59d6-l-gravity-and-lateral-loads/trace.zip"
                     }
                   ]
                 }
@@ -339,7 +339,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-picker-test-results/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
+                      "path": "/tmp/gusset-picker-test-results/e2e-workspace-ux-UX-ribbon-35cc4-drafts-preserve-model-state/trace.zip"
                     }
                   ]
                 }
@@ -379,7 +379,7 @@
                     {
                       "name": "trace",
                       "contentType": "application/zip",
-                      "path": "/tmp/prokon-picker-test-results/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
+                      "path": "/tmp/gusset-picker-test-results/e2e-workspace-ux-UX-respon-3a342-able-properties-and-results/trace.zip"
                     }
                   ]
                 }

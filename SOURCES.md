@@ -6,10 +6,10 @@ Research date 19 September 2026. Only primary vendor/project/standards-body docu
 
 | ID | Primary resource | What was established | Agent use |
 | --- | --- | --- | --- |
-| S01 | [PROKON home](https://prokon.com/) | Current 5.3 branding and product-family overview | Pin product inventory baseline |
-| S02 | [PROKON Sumo](https://prokon.com/sumo/) | Analysis/modelling capabilities, integrations, code listings and reporting | Analysis parity mapping; not solver formulation |
-| S03 | [PROKON Steel](https://prokon.com/steel/) | Member/connection modules and module-specific code options | Steel scope and exact future comparison profile |
-| S04 | [PROKON Concrete](https://prokon.com/concrete/) | Concrete modules, detailing and code options | Concrete scope and future comparison profile |
+| S01 | Reference-suite vendor home page | Current 5.3 release and product-family overview | Pin product inventory baseline |
+| S02 | Reference-suite analysis-module page | Analysis/modelling capabilities, integrations, code listings and reporting | Analysis parity mapping; not solver formulation |
+| S03 | Reference-suite steel product page | Member/connection modules and module-specific code options | Steel scope and exact future comparison profile |
+| S04 | Reference-suite concrete product page | Concrete modules, detailing and code options | Concrete scope and future comparison profile |
 | S05 | [MDN WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) | Secure context, adapter/device model and device-loss/error interfaces | Capability detection and recovery |
 | S06 | [W3C WGSL](https://www.w3.org/TR/WGSL/) | Shader types, layout and floating-point behaviour | Render buffer/shader contract |
 | S07 | [Rust wasm32 target](https://doc.rust-lang.org/rustc/platform-support/wasm32-unknown-unknown.html) | Target limitations and compilation model | Portable kernel boundary |
@@ -27,7 +27,7 @@ The complete W3C WebGPU document exceeded the retrieval size limit; use S05 for 
 
 ## 2 Partially verified product areas
 
-[Composite](https://prokon.com/composite/), [Masonry](https://prokon.com/masonry/), [Geotechnical](https://prokon.com/geotechnical/), [Probar](https://prokon.com/probar/) and [Prodesk](https://prokon.com/prodesk/) were reached as official product links, but full page contents could not be reliably reread due to fetch errors. Their family-level identity is confirmed by S01. Proposed detailed use cases in the roadmap are design choices until matched to a verified module inventory. Legacy Frame, timber, general utilities and any network-analysis product need fresh primary-source verification before inclusion in a current suite-parity denominator.
+The reference suite's composite, masonry, geotechnical, reinforcement-detailing and Revit-exchange pages were reached as official product links, but full page contents could not be reliably reread due to fetch errors. Their family-level identity is confirmed by S01. Proposed detailed use cases in the roadmap are design choices until matched to a verified module inventory. Legacy Frame, timber, general utilities and any network-analysis product need fresh primary-source verification before inclusion in a current suite-parity denominator.
 
 No standards text or detailed licensed NAFEMS benchmark corpus was acquired. Attempts to access AISC standards resources did not produce usable authoritative text in this research. Therefore M07 specifies a proposed AISC 360-22 LRFD package but supplies no invented clause-level implementation or claimed code verification. Product code lists do not substitute for the actual standard.
 
@@ -52,7 +52,7 @@ Each gate is satisfied by a local resource record containing exact identifier/ed
 | R-MASONRY-INVENTORY, R-MASONRY-CODE | Verified current module list and selected reinforced/unreinforced design standard and examples | M19 limited to inventory work |
 | R-GEOTECH-INVENTORY, R-GEOTECH-BENCHMARKS | Verified family scope, selected method source and published numerical problems | M20 limited to inventory work |
 | R-EXCHANGE-CORPUS | Exact IFC/DXF schemas, lawful reference files, mapping/loss expectations and native adapter requirements if requested | Export/import scope remains JSON/CSV |
-| R-PROKON-LICENSED-CORPUS | Lawfully available exact-version inputs/settings and numerical/report outputs | Commercial numerical parity UNKNOWN |
+| R-COMMERCIAL-LICENSED-CORPUS | Lawfully available exact-version inputs/settings and numerical/report outputs | Commercial numerical parity UNKNOWN |
 | R-FULL-INVENTORY | Finite current module/code/operation catalogue with authoritative sources | No full-suite parity percentage |
 
 These are external dependencies, not completed deliverables. Minimal human involvement is supported by explicit blocking, continuable DAG branches and release scopes; it cannot remove rights/access or independent-evidence requirements.
@@ -63,4 +63,4 @@ Record exact Rust toolchain; target features; Cargo.lock; wasm-bindgen CLI/libra
 
 ## 5 Retrieval and evidence limitations
 
-No hands-on PROKON session occurred. Product marketing is not proof of implementation details. Independent numerical fixtures included here were derived from elementary elastic theory, not copied from PROKON or from a proprietary benchmark. All performance budgets and delivery estimates are proposed targets. Advanced materials and code modules need the resource bundles above before an AI agent can responsibly claim successful final delivery.
+No hands-on reference-suite session occurred. Product marketing is not proof of implementation details. Independent numerical fixtures included here were derived from elementary elastic theory, not copied from the reference suite or from a proprietary benchmark. All performance budgets and delivery estimates are proposed targets. Advanced materials and code modules need the resource bundles above before an AI agent can responsibly claim successful final delivery.

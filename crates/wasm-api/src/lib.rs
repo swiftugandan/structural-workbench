@@ -828,7 +828,7 @@ fn excluded_domains() -> Value {
         "code-certified member sizing",
         "connections other than single-plate shear connections (M13)",
         "reinforcement detailing",
-        "DWG/native PROKON formats",
+        "DWG/proprietary commercial formats",
         "Revit plugins",
         "live collaboration",
         "mobile CAD editing"
@@ -838,7 +838,7 @@ fn excluded_domains() -> Value {
 fn domain_disclosure() -> Value {
     json!({
         "comparisonStatus": "UNKNOWN",
-        "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
+        "comparisonNote": "Numerical parity with any commercial solver is UNKNOWN unless independent licensed comparisons exist.",
         "supportedSummary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1); elastic flexural buckling factors and linearised P-Δ-δ second-order analysis of one case or combination (stability-v1); undamped modal analysis with declared mass sources and translational participation (dynamics-v1).",
         "excludedDomains": excluded_domains()
     })

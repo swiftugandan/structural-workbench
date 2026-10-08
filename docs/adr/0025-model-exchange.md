@@ -11,8 +11,8 @@ choices made through deterministic forms, an explicit mapping manifest for
 batch use, analysis of the result, and export of a loss-accounted file.
 Acceptance needs semantic round trips, units and orientation fixtures, a
 ledger of missing objects, and a reference corpus. A native Revit round trip
-needs a separately scoped adapter, and browser-only file exchange is not
-Prodesk-equivalent.
+needs a separately scoped adapter, and browser-only file exchange is not equivalent
+to a commercial BIM-exchange tool.
 
 R-EXCHANGE-CORPUS asked for exact schemas, lawful reference files and the
 expected mappings and losses. The IFC4 ADD2 TC1 EXPRESS schema and property

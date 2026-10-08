@@ -41,9 +41,9 @@ Running 27 tests using 1 worker
       10 | }
       11 | async function activate(page, target) {
       12 |   await reach(page, target);
-        at reach (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:9:9)
-        at activate (/Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:12:3)
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/keyboard.spec.js:60:3
+        at reach (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:9:9)
+        at activate (/Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:12:3)
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/keyboard.spec.js:60:3
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-keyboard-M01-keyboard--f1a60-ing-table-editing-and-solve/test-failed-1.png
@@ -82,7 +82,7 @@ Running 27 tests using 1 worker
       30 |   await expect(page.locator("#export-report")).toBeDisabled();
       31 |   await solve(page);
       32 |   await page
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:29:48
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:29:48
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-workbench-M00-tour-edi-2fd5e-t-export-reopen-instability/test-failed-1.png
@@ -128,7 +128,7 @@ Running 27 tests using 1 worker
       156 |   await expect(page.locator("#span")).toHaveValue("3");
       157 |   await expect(page.locator("#hash-status")).toHaveText(hash);
       158 |   await page.locator("#redo").click();
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:155:31
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:155:31
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-workbench-undo-restore-bfe31-sh-and-redo-re-applies-edit/test-failed-1.png
@@ -169,7 +169,7 @@ Running 27 tests using 1 worker
       188 |   await expect(page.locator("#elasticity")).toHaveValue("210");
       189 |   await expect(page.locator("#tip-load")).toHaveValue("-12");
       190 |   await solve(page);
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/e2e/workbench.spec.js:187:39
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/e2e/workbench.spec.js:187:39
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/e2e-workbench-unit-suffixe-9a56a-atible-units-preserve-model/test-failed-1.png
@@ -199,7 +199,7 @@ Running 27 tests using 1 worker
       71 |   expect(coldMs).toBeLessThanOrEqual(5000);
       72 |   expect(compressedBytes).toBeLessThanOrEqual(8 * 1024 * 1024);
       73 |   await context.close();
-        at /Users/p.munaawa/Documents/projects/labs/prokon/tests/startup.spec.js:70:29
+        at /Users/p.munaawa/Documents/projects/labs/gusset/tests/startup.spec.js:70:29
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/startup-M01-startup-cached-a0896-work-and-compressed-payload/test-failed-1.png

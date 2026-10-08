@@ -597,7 +597,7 @@ function shell(profileMeta, { hasResults, resultState, selectedMemberId }) {
       </div>
     </div>
     <details class="steel-scope"><summary>Supported scope and limitations</summary>
-      <ul>${limits}</ul><p>Not a professional certification claim. Commercial PROKON parity remains unknown.</p></details>
+      <ul>${limits}</ul><p>Not a professional certification claim. Commercial-solver parity remains unknown.</p></details>
   </div>`;
 }
 

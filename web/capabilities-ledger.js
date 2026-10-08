@@ -14,7 +14,7 @@ export const EXCLUDED_DOMAINS = [
   "code-certified member sizing",
   "connections other than single-plate shear connections (M13)",
   "reinforcement detailing",
-  "DWG/native PROKON formats",
+  "DWG/proprietary commercial formats",
   "Revit plugins",
   "live collaboration",
   "mobile CAD editing",

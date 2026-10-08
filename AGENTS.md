@@ -1,4 +1,4 @@
-# Structural Workbench — agent instructions
+# Gusset — agent instructions
 
 Harness-agnostic always-on policy. Full historical wording: `docs/agent/archive/`. Load the matching skill under `skills/` when the trigger applies. Do not change numerical contracts, fixtures or tolerances as ordinary feature work.
 
@@ -6,7 +6,7 @@ Harness-agnostic always-on policy. Full historical wording: `docs/agent/archive/
 
 Deliver the specified browser app through working vertical slices: Rust→WASM engineering kernel, WebGPU CAD viewport, plain HTML/JS ES modules/CSS. Success is functioning software with reproducible evidence — not plans, scaffolds, code volume or package-integrity checks alone.
 
-M00–M06 = analysis MVP. M07 = bounded steel check (accepted); M07-E→F→G = integrated steel workspace (ADR 0008; S/LTB deferred). M08 concrete beam. M09–M22 expand. M23 finite verified parity inventory. Do not treat M06 as full PROKON parity. Do not claim standards compliance or commercial equivalence without evidence.
+M00–M06 = analysis MVP. M07 = bounded steel check (accepted); M07-E→F→G = integrated steel workspace (ADR 0008; S/LTB deferred). M08 concrete beam. M09–M22 expand. M23 finite verified parity inventory. Do not treat M06 as full commercial-suite parity. Do not claim standards compliance or commercial equivalence without evidence.
 
 ## Sources of truth (priority)
 
@@ -43,7 +43,7 @@ Make reversible implementation decisions and continue without routine approval. 
 
 ## Session start
 
-1. Read this file. Load `skills/prokon-session` and reconstruct from `delivery/state.json`.
+1. Read this file. Load `skills/gusset-session` and reconstruct from `delivery/state.json`.
 2. Pick the earliest dependency-ready unaccepted milestone and its smallest complete task.
 3. Load task/numerical/evidence/resource skills as the work requires.
 4. If no implementation exists, execute `SPEC_ROOT/agent-tasks/M00.md`.

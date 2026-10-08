@@ -2,7 +2,7 @@
   "version": 1,
   "releaseStatus": "analysis-mvp-accepted",
   "comparisonStatus": "UNKNOWN",
-  "comparisonNote": "Numerical parity with commercial PROKON (or any other commercial solver) is UNKNOWN unless independent licensed comparisons exist.",
+  "comparisonNote": "Numerical parity with any commercial solver is UNKNOWN unless independent licensed comparisons exist.",
   "supportedDomain": {
     "summary": "Linear, small-displacement 3D Euler–Bernoulli prismatic frames with isotropic materials, SI engineering storage, nodal and member loads, explicit combinations, elastic fibre stress screening (mechanics-v1). Elastic flexural buckling factors and linearised P-Δ-δ second-order analysis of one case or combination (stability-v1).",
     "analysisTypes": [
@@ -35,7 +35,7 @@
     "code-certified member sizing",
     "connections other than single-plate shear connections (M13)",
     "reinforcement detailing",
-    "DWG/native PROKON formats",
+    "DWG/proprietary commercial formats",
     "Revit plugins",
     "live collaboration",
     "mobile CAD editing"
@@ -285,7 +285,7 @@
         "DXF is geometry: every analysis property comes from explicit per-layer decisions; DXF export is R12 with $INSUNITS",
         "Nothing undefined is assumed: unassigned units, elastic or unset conditions, unknown combination purposes and skipped content are decisions; batch imports need a mapping manifest",
         "Support settlements, design data, mass sources, response spectra and results are not exported to IFC (listed in the export ledger)",
-        "Browser-only file exchange; no native Revit, Tekla or analysis-program adapter and no Prodesk equivalence"
+        "Browser-only file exchange; no native Revit, Tekla or analysis-program adapter and no commercial BIM-exchange equivalence"
       ],
       "evidenceReferences": [
         "docs/formulations/exchange.md",
@@ -340,7 +340,7 @@
         "S3 flexure: flange local buckling of noncompact flanges (F3-1) and lateral-torsional buckling (F2.2) with user Lb and Cb, fixtures F.1-2B, F.1-3B, F.3B; Cb is user input or derived by F1-1 per unbraced segment, with bracing points along a member giving each segment its own Lb and Cb (Cb = 1 at a free cantilever end)",
         "Serviceability: a user deflection criterion L/n under one service case or combination (chord or absolute basis), reported separately from strength; not an AISC 360 requirement (ADR 0020)",
         "Slender flanges (F3-2), noncompact/slender webs (F4/F5), HSS, torsion, weak-axis flexure and non-prismatic members return unsupported; H1 is formula-checked with published φ capacities",
-        "Not a claim of commercial PROKON parity or professional code certification"
+        "Not a claim of commercial-solver parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/adr/0007-pluggable-design-profiles.md",
@@ -366,7 +366,7 @@
         "Design actions are the unsmoothed element-centre Wood–Armer moments and shears; the A_s,req map is the per-element design value, never averaged",
         "Uniform meshes per layer; one-way shear; span/depth (7.4.2); punching at internal columns only (edge, corner and near-opening columns unsupported)",
         "No frame–slab coupling beyond column loads, cracking, long-term or crack-width calculation",
-        "Not a claim of commercial PROKON parity or professional code certification"
+        "Not a claim of commercial-solver parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/formulations/plate.md",
@@ -394,7 +394,7 @@
         "Slenderness by (5.15)/(5.16) from the engineer's end restraints; imperfections (5.2), nominal curvature (5.8.8) and minimum eccentricity (6.1(4)), the imperfection in one direction at a time",
         "Shear with σ_cp, 9.5.2/9.5.3 detailing, cover and spacing; least-steel reinforcement proposal",
         "Circular sections, nominal stiffness method, global second order (5.8.3.3), walls, laps and fck > 50 MPa are unsupported",
-        "Not a claim of commercial PROKON parity or professional code certification"
+        "Not a claim of commercial-solver parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/formulations/rc-column.md",
@@ -422,7 +422,7 @@
         "Exposure, c_min,dur (BS 8500), aggregate, structural system, partitions and the quasi-permanent combination are the engineer's inputs; a check lacking one is INDETERMINATE, and anchorage passes only on the engineer's confirmation",
         "Reinforcement proposal: least steel mass per metre over discrete bars and links for which no check fails; schedule of straight bars and closed links is indicative, not a fabrication schedule (no BS 8666 shape codes, curtailment or laps)",
         "Redistribution (5.5), direct crack-width and deflection calculation (7.3.4, 7.4.3), torsion, axial force, flanged sections and fck > 50 MPa are unsupported",
-        "Not a claim of commercial PROKON parity or professional code certification"
+        "Not a claim of commercial-solver parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/adr/0026-edition-labelled-demonstration-profiles.md",
@@ -448,7 +448,7 @@
         "Allowable bearing pressure is the engineer's input; no ground resistance or settlement is computed (EN 1997 not held)",
         "Bottom bars sized for face bending, the 9.8.2.2 tie force and A_s,min with straight anchorage; one-way shear, punching (6.4.4(2)) and the face check",
         "Eccentric columns, stepped or sloped bases, uplift top steel, punching reinforcement, pile caps and combined footings are unsupported",
-        "Not a claim of commercial PROKON parity or professional code certification"
+        "Not a claim of commercial-solver parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/adr/0028-pad-footing-contact-and-ec2-design.md",
@@ -471,7 +471,7 @@
         "General (extended-configuration) method for every geometry: the conventional configuration of Manual Table 10-9 is not held, so some connections the Manual's conventional rules accept fail here (bolt-group eccentricity e = a, plate ductility t ≤ t_max)",
         "Simple connections only: a moment carried through the end, axial compression, minor-axis actions and torsion are unsupported; coped beams, slotted or oversized holes, slip-critical bolts and other connection families are not implemented",
         "Bolt group by the instantaneous centre (Crawford–Kulak), verified against the C values quoted in the held examples; bolt lengths are the fabricator's",
-        "Not a claim of commercial PROKON parity or professional code certification"
+        "Not a claim of commercial-solver parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/adr/0030-single-plate-shear-connection.md",
@@ -495,7 +495,7 @@
         "Stages from the engineer's cases or combinations: construction on the steel alone (Chapter F), composite on the plastic section at the maximum moment and at concentrated loads",
         "Deflections by stage (wet on I_s net of camber, live on I_LB, long-term sustained plus shrinkage); creep is the engineer's recorded judgement, never assumed",
         "Continuous beams, shored construction, slender webs, channel anchors, analytical slip capacity, vibration and composite columns are unsupported",
-        "Not a claim of commercial PROKON parity or professional code certification"
+        "Not a claim of commercial-solver parity or professional code certification"
       ],
       "evidenceReferences": [
         "docs/adr/0031-composite-beam-stages.md",

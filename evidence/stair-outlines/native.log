@@ -39,7 +39,7 @@ warning: constant `KIP_FT_TO_NM` is never used
   |           ^^^^^^^^^^^^
 
 warning: `workbench-design` (lib) generated 6 warnings (run `cargo fix --lib -p workbench-design` to apply 1 suggestion)
-   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/prokon/crates/wasm-api)
+   Compiling workbench-wasm-api v0.1.0 (/Users/p.munaawa/Documents/projects/labs/gusset/crates/wasm-api)
 warning: `workbench-design` (lib test) generated 1 warning (1 duplicate)
     Finished `test` profile [unoptimized + debuginfo] target(s) in 2.74s
      Running unittests src/lib.rs (target/debug/deps/workbench_assembly-a021c2c3e3ab3321)

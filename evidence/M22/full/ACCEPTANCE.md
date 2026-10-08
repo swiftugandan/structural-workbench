@@ -16,4 +16,4 @@ Status: **PASS**
 | M22-GUARDS | No script bypasses validation or unsupported-capability guards | failure_path | PASS | Solver overrides, schema/identity/metadata targets, unsupported analysis settings and releases, dangling references, unknown study fields and no-op variants are refused through the same validation as manual edits. |
 | M22-EXPORT | Comparative report with every model/result hash | exported_outcome | PASS | The downloaded HTML report lists each variant's steps, observed value, ratio, model, result and settings hashes, and embeds the study document verbatim with its replay identity. |
 
-Limitations: Studies are restricted declarative JSON-pointer sweeps of linear static analysis on one case or combination; no general scripting language or Python runtime. Multilingual reports are deferred. Commercial PROKON parity remains UNKNOWN.
+Limitations: Studies are restricted declarative JSON-pointer sweeps of linear static analysis on one case or combination; no general scripting language or Python runtime. Multilingual reports are deferred. Commercial-solver parity remains UNKNOWN.

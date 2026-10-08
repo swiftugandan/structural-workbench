@@ -1,5 +1,5 @@
 ---
-name: prokon-numerical
+name: gusset-numerical
 description: >
   Numerical truth, formulation dossiers and independent oracles for Structural Workbench.
   Use before implementing or changing any solver, element, load, recovery or design-check family.

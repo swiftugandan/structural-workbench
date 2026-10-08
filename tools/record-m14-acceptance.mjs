@@ -190,7 +190,7 @@ if (provenance.status !== "PASS")
 rows.push(provenance);
 
 const limitations =
-  "dynamics-v1 is undamped free vibration of the elastic Euler–Bernoulli model about its unstressed geometry with declared mass, translational participation only, no rotary inertia, no member end releases and no rigid-body modes. Frequencies are not a floor-vibration or code serviceability verdict; response spectra, time history and harmonic response are M15. Commercial PROKON parity remains UNKNOWN.";
+  "dynamics-v1 is undamped free vibration of the elastic Euler–Bernoulli model about its unstressed geometry with declared mass, translational participation only, no rotary inertia, no member end releases and no rigid-body modes. Frequencies are not a floor-vibration or code serviceability verdict; response spectra, time history and harmonic response are M15. Commercial-solver parity remains UNKNOWN.";
 
 await record("m14-acceptance", {
   status: issues.length ? "FAIL" : "PASS",

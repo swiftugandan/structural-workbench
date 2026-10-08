@@ -1,10 +1,10 @@
 {
   "taskId": "M06-B",
   "milestone": "M06",
-  "sourceHash": "4d1a3b540238d675059117b4568f0861525d91c1dc8d347fe4f85b47a190d85f",
-  "buildHash": "fc317f75c87f9354fd54fafb11dc34db54b0634af30c622e9a4ca7f40642ddcb",
+  "sourceHash": "f6a49955b13b7058e1102499a1925edb8b87b20df884b6cbb48943ca2a5e993b",
+  "buildHash": "d343dbd504a6814817e59be9ded08726a4b252d906f86c1a8b45dfe1b03787ea",
   "lockHashes": {
-    "Cargo.lock": "983c1010a32196e71c767bba6173dbe2423b8a604751d280327438ef0d507ab9",
+    "Cargo.lock": "c63f27dc42acf181ae0f8763a3fd53c7f50e939f99b90acdd40544c7bf38858a",
     "package-lock.json": "6941de425287e41df0244a6e6455fe3ae7dbbeb0db92d21fbd51d5b79a45b218",
     "rust-toolchain.toml": "2777f1755b464a25c9c29d9f87b1456c48fc395d9db368947fa640ad4a479079",
     "fixtures/benchmarks.json": "d2a6d67d74100ebaa3998eed5d3eda071761b84d9b86be5d327c9e405d6dee84"
@@ -17,10 +17,10 @@
     "cpu": "Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz",
     "memory": 34359738368
   },
-  "observedAt": "2026-09-23T13:23:33.202Z",
+  "observedAt": "2026-10-08T18:57:54.750Z",
   "status": "PASS",
   "pageErrors": [],
   "comparisonStatus": "UNKNOWN",
-  "excludedCount": 15,
-  "capabilityCount": 11
+  "excludedCount": 17,
+  "capabilityCount": 23
 }

@@ -116,7 +116,7 @@ const criteria = [
 
 const { rows, issues } = await evaluateCriteria(dir, build, criteria);
 const limitations =
-  "Studies are restricted declarative JSON-pointer sweeps of linear static analysis on one case or combination; no general scripting language or Python runtime. Multilingual reports are deferred. Commercial PROKON parity remains UNKNOWN.";
+  "Studies are restricted declarative JSON-pointer sweeps of linear static analysis on one case or combination; no general scripting language or Python runtime. Multilingual reports are deferred. Commercial-solver parity remains UNKNOWN.";
 await record("m22-acceptance", {
   status: issues.length ? "FAIL" : "PASS",
   testCount: rows.length,

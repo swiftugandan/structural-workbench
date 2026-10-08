@@ -63,5 +63,5 @@
       "missing": []
     }
   ],
-  "limitations": "M07 packages AISC 360-22 LRFD S2 only. LTB (Lb>0), HSS/torsion/non-prismatic remain unsupported. Commercial PROKON parity remains UNKNOWN."
+  "limitations": "M07 packages AISC 360-22 LRFD S2 only. LTB (Lb>0), HSS/torsion/non-prismatic remain unsupported. Commercial-solver parity remains UNKNOWN."
 }

@@ -79,7 +79,7 @@
      "testCount": 33,
      "command": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs"
+      "/Users/p.munaawa/Documents/projects/labs/gusset/tools/numerical.mjs"
      ],
      "evidencePath": "evidence/M00/current/numerical.json"
     },
@@ -89,7 +89,7 @@
      "testCount": 33,
      "command": [
       "/Users/p.munaawa/.nvm/versions/node/v22.14.0/bin/node",
-      "/Users/p.munaawa/Documents/projects/labs/prokon/tools/numerical.mjs",
+      "/Users/p.munaawa/Documents/projects/labs/gusset/tools/numerical.mjs",
       "--wasm"
      ],
      "evidencePath": "evidence/M00/current/wasm.json"
@@ -4678,7 +4678,7 @@
     "nodeUnitSecurity": "54/54",
     "sameSourceGates": "M07 parent and LTB, M09, M14, M22 parents, M10-PLATE, M12-COLUMN, M15-RESPONSE all PASS"
    },
-   "acceptanceMeaning": "Browser-only file exchange; no native Revit or authoring-tool adapter; not Prodesk-equivalent. IFC2X3/IFC4X3, physical-only IFC, surfaces, curved/varying members and eccentric connections are refused or skipped by explicit decision.",
+   "acceptanceMeaning": "Browser-only file exchange; no native Revit or authoring-tool adapter; not equivalent to a commercial BIM-exchange tool. IFC2X3/IFC4X3, physical-only IFC, surfaces, curved/varying members and eccentric connections are refused or skipped by explicit decision.",
    "nextAction": "None; optional follow-ups: IFC2X3/IFC4X3 readers, member splitting at interior connections, UNUSED_DOF exclusion in the solver"
   },
   "M08-parent": {

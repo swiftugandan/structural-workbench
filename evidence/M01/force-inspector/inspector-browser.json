@@ -38,7 +38,7 @@
     "tests/e2e/force-inspector.spec.js",
     "tests/e2e/workspace-ux.spec.js",
     "tests/accessibility",
-    "--output=/tmp/prokon-force-inspector-tests"
+    "--output=/tmp/gusset-force-inspector-tests"
   ],
   "artifacts": [
     "browser.log",

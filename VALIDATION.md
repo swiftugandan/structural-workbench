@@ -4,7 +4,7 @@ This document is normative for the implementation agents. It defines evidence re
 
 ## 1 Evidence hierarchy and independence
 
-Use three independent forms of evidence: analytical closed-form solutions with documented assumptions; a separate trusted solver implementation with equivalent settings; and, for claimed PROKON numerical parity, versioned outputs from a legally available PROKON installation. Agreement with another program alone is not proof of correctness. Never use the candidate solver to generate its own expected values.
+Use three independent forms of evidence: analytical closed-form solutions with documented assumptions; a separate trusted solver implementation with equivalent settings; and, for claimed reference-suite numerical parity, versioned outputs from a legally available reference-suite installation. Agreement with another program alone is not proof of correctness. Never use the candidate solver to generate its own expected values.
 
 OpenSees elasticBeamColumn is a suitable independent frame oracle, provided E, G, A, Iy, Iz, J, axes, loads, releases, transformations and restraint treatment are matched. Its use here is a validation recommendation, not an endorsement of unrestricted equivalence. The oracle runs in CI/native tooling and is not a browser runtime dependency. [OpenSees elastic beam-column element](https://opensees.github.io/OpenSeesDocumentation/user/manual/model/elements/elasticBeamColumn.html)
 
@@ -75,7 +75,7 @@ Before M01 acceptance, create an OpenSees portal fixture with two columns, one b
 
 Each case stores input model, converter version, original external-solver input, solver name/version, raw output, mapping/sign conventions, expected values, tolerance and provenance. Oracle tooling must fail if its runtime is unavailable; a missing oracle is not a passing test. Pin its environment after the M00 spike. If external-tool licensing or installation blocks a lane, produce a blocked resource record and do not claim the related numerical gate is complete.
 
-For later PROKON comparisons record exact product/module/version, units, element formulation, release and restraint conventions, meshing, code edition and annex, analysis options, combination rules and screenshots/reports where permitted. Differences caused by assumptions need a reconciled fixture, not a looser tolerance. Do not redistribute proprietary example files unless their licence permits it.
+For later reference-suite comparisons record exact product/module/version, units, element formulation, release and restraint conventions, meshing, code edition and annex, analysis options, combination rules and screenshots/reports where permitted. Differences caused by assumptions need a reconciled fixture, not a looser tolerance. Do not redistribute proprietary example files unless their licence permits it.
 
 ## 6 Browser journeys
 

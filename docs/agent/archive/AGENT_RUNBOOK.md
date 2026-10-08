@@ -55,7 +55,7 @@ Protect numerical fixture baselines through a verification gate. Keep contracts 
 
 The release integrator checks dist hashes against tested artifacts, confirms no dirty source tree, reproduces the clean build, runs accumulated milestone gates and emits release-manifest.json plus capabilities.json. Keep the previous working release available. An automatically staged preview can be replaced only after the candidate passes its gates and the environment permits deployment.
 
-A summary says exactly what was implemented, what was tested, which platforms ran and what remains blocked. Do not say full PROKON clone, certified, production engineering approved or numerically equivalent unless the corresponding evidence actually exists.
+A summary says exactly what was implemented, what was tested, which platforms ran and what remains blocked. Do not say full commercial-suite clone, certified, production engineering approved or numerically equivalent unless the corresponding evidence actually exists.
 
 ## 8 Milestone closure template
 

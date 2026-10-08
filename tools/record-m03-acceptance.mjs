@@ -169,7 +169,7 @@ ${evaluated
 
 - OpenSees numerical parity is claimed only for S01/S02/B07 (ADR 0006). R01/B09 use native analytical cross-checks.
 - 5k-node median solve evidence remains native CLI; WASM evidence covers MEMORY_LIMIT refusal, not the full 5k factorisation in-browser.
-- Commercial PROKON parity is not claimed.
+- Commercial-solver parity is not claimed.
 `;
 
 await writeFile(`${dir}/ACCEPTANCE.md`, checklist);

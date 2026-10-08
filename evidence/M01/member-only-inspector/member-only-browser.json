@@ -28,7 +28,7 @@
     "playwright",
     "test",
     "tests/e2e/force-inspector.spec.js",
-    "--output=/tmp/prokon-member-only-tests"
+    "--output=/tmp/gusset-member-only-tests"
   ],
   "artifacts": [
     "browser.log",
