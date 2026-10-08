@@ -1,0 +1,19 @@
+workspace-wide: 3 differences
+  #build-status box: [291.5,878.5,97,12] → [291.5,878.5,102.5,12]
+  #offline-status box: [413.5,878.5,31,12] → [419,878.5,31,12]
+  #workspace>footer>span:5 box: [469.5,884.5,770.5,0] → [474.5,884.5,765.5,0]
+analysed-wide: 3 differences
+  #build-status box: [291.5,878.5,97,12] → [291.5,878.5,102.5,12]
+  #offline-status box: [413.5,878.5,31,12] → [419,878.5,31,12]
+  #workspace>footer>span:5 box: [469.5,884.5,770.5,0] → [474.5,884.5,765.5,0]
+design-wide: 3 differences
+  #build-status box: [281.5,880.5,97,12] → [281.5,880.5,102.5,12]
+  #offline-status box: [403.5,880.5,31,12] → [409,880.5,31,12]
+  #workspace>footer>span:5 box: [459.5,886.5,820.5,0] → [464.5,886.5,815,0]
+design-ec2-wide: 3 differences
+  #build-status box: [281.5,880.5,97,12] → [281.5,880.5,102.5,12]
+  #offline-status box: [403.5,880.5,31,12] → [409,880.5,31,12]
+  #workspace>footer>span:5 box: [459.5,886.5,820.5,0] → [464.5,886.5,815,0]
+workspace-phone: 1 differences
+  #build-status box: [255.5,786.5,97,12] → [255.5,786.5,102.5,12]
+13 differences; 7280 colour shifts within ΔE 4.01

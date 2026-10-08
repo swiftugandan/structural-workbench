@@ -1,0 +1,151 @@
+/* canvas-tools — feature rules, imported into the features layer in original
+ * cascade order (ADR 0033). */
+/* Canvas-first tools keep modelling on the work surface. */
+#canvas-tool-options {
+  min-height: 96px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--color-surface-selected);
+  border-bottom: 1px solid var(--slate-87);
+}
+#canvas-tool-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-lg);
+  margin: 0;
+}
+#canvas-tool-options input {
+  width: 80px;
+}
+#canvas-tool-options select {
+  max-width: 180px;
+}
+#placement-help {
+  flex: 1 1 230px;
+  line-height: 1.5;
+}
+.assignment-label {
+  pointer-events: auto;
+  font: 12px system-ui;
+  min-height: 24px;
+  padding: 3px 6px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--amber-32);
+  cursor: pointer;
+}
+.assignment-label.selected {
+  outline: 2px solid var(--color-accent);
+  background: var(--color-surface-accent);
+}
+#direct-properties fieldset {
+  border: 0;
+  padding: 0;
+  margin: 18px 0;
+}
+#direct-properties legend {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+#direct-properties input[type="checkbox"] {
+  width: auto;
+  display: block;
+}
+#modal.command-dock {
+  position: fixed;
+  left: auto;
+  right: 0;
+  bottom: 32px;
+  margin: 0;
+  width: 340px;
+  max-width: 100%;
+  max-height: none;
+  height: auto;
+  border: 0;
+  border-left: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: -5px 0 20px color-mix(in srgb, var(--slate-17) 8.2%, transparent);
+  padding: 0;
+  overflow: auto;
+}
+.command-dock .dialog-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+.command-dock #modal-content {
+  padding: 16px;
+}
+.command-dock .entity-form {
+  grid-template-columns: minmax(0, 1fr);
+}
+.command-dock .entity-form .full {
+  grid-column: 1;
+}
+.command-dock input,
+.command-dock select,
+.command-dock textarea {
+  max-width: 100%;
+}
+@media (min-width: 901px) {
+  .command-dock-open .work-grid {
+    grid-template-columns: 200px minmax(0, 1fr) 340px;
+  }
+  .command-dock-open .inspector {
+    visibility: hidden;
+  }
+}
+@media (max-width: 900px) {
+  #modal.command-dock {
+    top: auto !important;
+    height: 52dvh;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+/* Placement gestures reach the canvas even underneath assignment badges. */
+#workspace:has(#draw-toggle[aria-pressed="true"]) .assignment-label,
+#workspace:has([data-canvas-tool][aria-pressed="true"]) .assignment-label {
+  pointer-events: none;
+}
+
+.dimension-label {
+  color: var(--slate-36);
+  background: var(--color-page);
+  border-radius: var(--radius-2xs);
+  padding: 2px 6px;
+  font-size: var(--text-base);
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+.action-legend {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--slate-97) 94.9%, transparent);
+  color: var(--slate-29);
+  font-size: var(--text-sm);
+  pointer-events: none;
+}
+.result-value-label {
+  font-size: var(--text-sm);
+  background: var(--color-surface);
+  color: var(--slate-29);
+  border: 1px solid var(--color-border);
+  pointer-events: none;
+  white-space: nowrap;
+}

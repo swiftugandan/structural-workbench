@@ -1,0 +1,166 @@
+/*
+ * Design tokens (ADR 0033). Three tiers:
+ *  - palette: every colour the interface uses, named by family and CIE L*
+ *    lightness. Near-duplicates (CIEDE2000 ≤ 4) were merged into the most
+ *    used member when the palette was derived from the legacy stylesheet.
+ *  - roles: what a colour is for. New and shell CSS uses roles only.
+ *  - scales: type, radius, spacing, elevation, layering and shell sizes.
+ * styles.css declares the cascade layers and imports every sheet.
+ */
+:root {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  color: var(--color-text);
+  background: var(--color-page);
+  font-size: 14px;
+
+  /* ---- palette ---- */
+  /* white */
+  --white: #ffffff;
+  /* slate */
+  --slate-97: #f5f7fa;
+  --slate-96: #edf4ff;
+  --slate-96-2: #eaf6ef;
+  --slate-95: #eaf1ff;
+  --slate-90: #dce3eb;
+  --slate-87: #c9dcf7;
+  --slate-85: #c2d8e5;
+  --slate-83: #c6d0dd;
+  --slate-79: #afc5e7;
+  --slate-77: #b0c0d4;
+  --slate-53: #748091;
+  --slate-47: #5f7186;
+  --slate-42: #53667c;
+  --slate-36: #44576c;
+  --slate-29: #33465a;
+  --slate-21: #1d334b;
+  --slate-17: #142b44;
+  /* blue */
+  --blue-75: #9bb9ec;
+  --blue-68: #83aada;
+  --blue-64: #7d9cca;
+  --blue-51: #517da6;
+  --blue-49: #176cf2;
+  --blue-42: #225dc7;
+  --blue-38: #315b8f;
+  --blue-34: #174e9f;
+  --blue-33: #255274;
+  --blue-27: #1d3f6e;
+  /* teal */
+  --teal-50: #088585;
+  /* green */
+  --green-79: #a9cabc;
+  --green-42: #247044;
+  --green-34: #235b40;
+  /* amber */
+  --amber-98: #fff8e9;
+  --amber-95: #fff0d2;
+  --amber-87: #edd9b1;
+  --amber-85: #e9d398;
+  --amber-74: #ecaa3e;
+  --amber-70: #d3a249;
+  --amber-58: #c47a0a;
+  --amber-57: #b67d20;
+  --amber-51: #997326;
+  --amber-50: #a46b16;
+  --amber-46: #91651e;
+  --amber-40: #86541c;
+  --amber-39: #77551c;
+  --amber-33: #734116;
+  --amber-32: #694124;
+  /* red */
+  --red-94: #ffe9e4;
+  --red-78: #e7b6b1;
+  --red-43: #a04f34;
+  --red-40: #b42318;
+  --red-39: #9d3e2c;
+  --red-39-2: #9b3b39;
+  --red-27: #7a1d14;
+  /* purple */
+  --purple-37: #733da8;
+
+  /* ---- roles ---- */
+  --color-page: var(--slate-97);
+  --color-surface: var(--white);
+  --color-surface-accent: var(--slate-95);
+  --color-surface-selected: var(--slate-96);
+  --color-text: var(--slate-21);
+  --color-text-muted: var(--slate-42);
+  --color-text-inverse: var(--white);
+  --color-border: var(--slate-90);
+  --color-border-strong: var(--slate-83);
+  --color-border-hover: var(--slate-77);
+  --color-border-accent: var(--slate-79);
+  --color-accent: var(--blue-42);
+  --color-accent-strong: var(--blue-34);
+  --color-chrome: var(--slate-17);
+  --color-focus: var(--amber-74);
+  --color-pass: var(--green-42);
+  --color-pass-surface: var(--slate-96-2);
+  --color-fail: var(--red-39);
+  --color-danger: var(--red-40);
+  --color-warn: var(--amber-40);
+  --color-warn-surface: var(--amber-98);
+
+  /* ---- type ---- */
+  --text-2xs: 9px;
+  --text-xs: 10px;
+  --text-sm: 11px;
+  --text-base: 12px;
+  --text-md: 13px;
+  --text-lg: 14px;
+  --text-xl: 15px;
+  --text-2xl: 16px;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- radius ---- */
+  --radius-2xs: 2px;
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 6px;
+  --radius-xl: 7px;
+  --radius-2xl: 8px;
+  --radius-3xl: 10px;
+  --radius-pill: 999px;
+
+  /* ---- spacing (4 px grid) ---- */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 12px;
+  --space-6: 16px;
+  --space-7: 20px;
+  --space-8: 24px;
+
+  /* ---- elevation ---- */
+  --shadow-1: 0 1px 2px color-mix(in srgb, var(--color-chrome) 12%, transparent);
+  --shadow-2: 0 4px 12px
+    color-mix(in srgb, var(--color-chrome) 16%, transparent);
+  --shadow-3: 0 12px 32px
+    color-mix(in srgb, var(--color-chrome) 22%, transparent);
+
+  /* ---- layering ---- */
+  --z-canvas-overlay: 5;
+  --z-splitter: 20;
+  --z-popover: 60;
+  --z-menu: 80;
+  --z-toast: 90;
+
+  /* ---- shell ---- */
+  --shell-control-height: 32px;
+  --shell-ribbon-height: 40px;
+  --shell-tab-height: 34px;
+  --shell-explorer-width: 240px;
+  --shell-inspector-width: 340px;
+  --shell-dock-height: clamp(200px, 30vh, 420px);
+  --shell-splitter: 6px;
+}

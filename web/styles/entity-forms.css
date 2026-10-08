@@ -1,0 +1,349 @@
+/* entity-forms — feature rules, imported into the features layer in original
+ * cascade order (ADR 0033). */
+/* Guided model inputs: explanations sit beside diagrams, units beside values. */
+.entity-guide {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.85fr) 1fr;
+  gap: 20px;
+  align-items: center;
+  background: var(--color-page);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  padding: 18px;
+  margin-bottom: 8px;
+}
+.input-diagram {
+  display: block;
+  width: 100%;
+  max-height: 155px;
+  color: var(--blue-38);
+}
+.guide-eyebrow {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--blue-27);
+}
+.entity-guide p {
+  font-size: var(--text-md);
+  margin: 8px 0 0;
+  line-height: 1.6;
+}
+.guided-group {
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  min-width: 0;
+}
+.guided-group legend {
+  font-weight: 650;
+  padding: 0 6px;
+  font-size: var(--text-lg);
+}
+.entity-form label small {
+  display: block;
+  font-size: var(--text-base);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+.field-unit {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+.guided-advanced {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: 14px;
+  min-width: 0;
+}
+.guided-advanced summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--text-md);
+}
+.guided-advanced[open] > .entity-form {
+  margin-top: 16px;
+}
+.support-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.support-choices button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: normal;
+  padding: 14px;
+  gap: 7px;
+  text-align: left;
+  min-width: 0;
+}
+.support-choices button[aria-pressed="true"] {
+  border: 2px solid var(--color-accent);
+  background: var(--color-surface-accent);
+  padding: 13px;
+}
+.support-choices small {
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+.support-icon {
+  font-size: 26px;
+  color: var(--blue-38);
+}
+.combination-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+#direct-properties {
+  grid-template-columns: 1fr;
+}
+#direct-properties .entity-guide {
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 12px;
+}
+#direct-properties .support-choices {
+  grid-template-columns: 1fr;
+}
+#direct-properties .support-icon {
+  display: none;
+}
+#direct-properties .guided-group,
+#direct-properties .guided-advanced {
+  padding: 10px;
+}
+#direct-properties .property-actions {
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .entity-guide {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 14px;
+  }
+  .support-choices {
+    grid-template-columns: 1fr;
+  }
+  .combination-row {
+    grid-template-columns: 1fr;
+  }
+  .guided-group {
+    padding: 12px;
+  }
+  .dialog-actions {
+    flex-wrap: wrap;
+  }
+}
+.command-dock .entity-guide {
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 12px;
+}
+.command-dock .support-choices {
+  grid-template-columns: 1fr;
+}
+.command-dock .support-choices button {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 4px 10px;
+}
+.command-dock .support-choices .support-icon {
+  grid-row: 1 / 3;
+}
+.command-dock .support-choices small {
+  grid-column: 2;
+}
+
+#model-nav .nav-icon .command-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+.project-symbol .command-icon {
+  width: 24px;
+  height: 24px;
+}
+.support-icon svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+.command-dock .entity-guide .input-diagram {
+  max-height: 110px;
+}
+
+.template-library {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: 12px;
+  min-width: 0;
+}
+.template-library summary {
+  font-size: var(--text-lg);
+  font-weight: 650;
+  cursor: pointer;
+}
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.calculator-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0;
+}
+.calculator-grid .check,
+.calculator-grid [data-rect-j-field] {
+  grid-column: 1 / -1;
+}
+.section-calculator summary {
+  font-size: var(--text-lg);
+  font-weight: 650;
+  cursor: pointer;
+}
+.variant-compare table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-variant-numeric: tabular-nums;
+}
+.variant-compare th,
+.variant-compare td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+.portal-template-heading {
+  display: block;
+  font-size: var(--text-lg);
+  font-weight: 650;
+  margin: 0 0 8px;
+}
+.template-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 8px;
+  text-align: center;
+  min-width: 0;
+  white-space: normal;
+  border: 1px solid var(--color-border);
+  background: white;
+  border-radius: var(--radius-xl);
+}
+.template-card strong {
+  font-size: var(--text-base);
+  line-height: 1.35;
+}
+.template-card small {
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+.template-card[aria-pressed="true"] {
+  border: 2px solid var(--color-accent);
+  background: var(--color-surface-selected);
+  padding: 9px 7px;
+}
+.template-diagram {
+  display: block;
+  width: 100%;
+  max-height: 110px;
+  color: var(--blue-38);
+}
+.template-card .template-diagram {
+  height: 64px;
+}
+.template-size {
+  display: block;
+  margin-top: 12px;
+}
+.template-reference {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px;
+  background: var(--color-page);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  text-align: center;
+}
+.template-reference strong {
+  font-size: var(--text-lg);
+}
+.template-reference small {
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+.template-reference a {
+  font-size: var(--text-base);
+  color: var(--color-accent);
+}
+
+.inspector-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  flex-wrap: wrap;
+}
+.inspector-tabs [aria-pressed="true"] {
+  background: var(--color-surface-selected);
+  color: var(--color-accent-strong);
+}
+#force-inspector {
+  padding: 16px;
+  overflow: auto;
+  min-width: 0;
+}
+#force-inspector svg {
+  width: 100%;
+  max-width: 360px;
+  display: block;
+}
+#force-inspector svg text {
+  fill: var(--slate-29);
+  stroke: none;
+  font-size: var(--text-sm);
+}
+#force-inspector select,
+#force-inspector input {
+  width: 100%;
+  min-width: 0;
+}
+#force-inspector section {
+  border-top: 1px solid var(--color-border);
+  padding-top: 10px;
+}
+.force-values {
+  width: 100%;
+  font-size: var(--text-base);
+}
+.force-values td {
+  text-align: right;
+  white-space: nowrap;
+}
+#force-inspector output {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+#deformation-scale,
+#diagram-scale {
+  width: 76px;
+  min-width: 0;
+  padding: 5px;
+}

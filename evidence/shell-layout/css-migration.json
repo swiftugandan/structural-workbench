@@ -1,0 +1,21 @@
+{
+  "check": "css-migration-computed-styles",
+  "status": "PASS",
+  "method": "tools/style-snapshot.mjs: computed style and box of every rendered element in 7 app states, before (commit 63e7cc8) and after the stylesheet migration alone; colours compared by CIEDE2000",
+  "determinism": "four repeated recordings of one build: 0 differences",
+  "states": {
+    "landing-wide": 73,
+    "workspace-wide": 581,
+    "analysed-wide": 617,
+    "design-wide": 888,
+    "design-ec2-wide": 893,
+    "landing-phone": 62,
+    "workspace-phone": 252
+  },
+  "nonColourDifferences": 13,
+  "nonColourDifferencesCause": "#build-status shows the build id, whose text width differs between builds, and moves the two status items after it",
+  "colourShiftsWithinDeltaE": 4.01,
+  "paletteThreshold": 4.0,
+  "palette": 55,
+  "diff": "evidence/shell-layout/css-migration-diff.txt"
+}
