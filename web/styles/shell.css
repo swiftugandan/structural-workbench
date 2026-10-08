@@ -278,21 +278,6 @@ body:has(#workspace:not([hidden])) {
     min-height: 120px;
   }
 }
-@media (min-width: 901px) and (max-width: 1280px) {
-  :root {
-    --shell-explorer-width: 190px;
-    --shell-inspector-width: 290px;
-  }
-  .viewport-toolbar .inline-label select {
-    max-width: 112px;
-  }
-}
-@media (min-width: 1600px) {
-  :root {
-    --shell-explorer-width: 260px;
-    --shell-inspector-width: 380px;
-  }
-}
 .model-panel,
 .canvas-panel,
 .inspector,
@@ -412,6 +397,11 @@ body:has(#workspace:not([hidden])) {
   }
   .viewport-toolbar .segmented button {
     padding: 4px 6px;
+  }
+}
+@media (min-width: 901px) and (max-width: 1280px) {
+  .viewport-toolbar .inline-label select {
+    max-width: 112px;
   }
 }
 /* Below the medium width the row may wrap; it never clips. */
