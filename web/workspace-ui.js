@@ -3,6 +3,10 @@ import { structuralIcon } from "./structural-icons.js";
 import { icon as lucideIcon } from "./icons.js";
 import { entityLabel } from "./entity-labels.js";
 import { escape as esc } from "./reports/report.js";
+import { disclosure } from "./ui/disclosure.js";
+import { enhanceTabStrip } from "./ui/tab-strip.js";
+import { fitToolbar } from "./ui/toolbar-fit.js";
+import { splitter } from "./ui/splitter.js";
 const $ = (s) => document.querySelector(s);
 const iconNames = {
   select: "mouse-pointer-2",
@@ -25,11 +29,20 @@ const iconNames = {
   settings: "sliders-horizontal",
   orbit: "orbit",
   axes: "axis-3d",
+  info: "info",
 };
 export const icon = (name) =>
   ["node", "member", "support", "load", "frame"].includes(name)
     ? structuralIcon(name)
     : lucideIcon(iconNames[name] || name);
+/** Puts each `[data-icon]` button's icon before its label (once). */
+export function hydrateIcons(root) {
+  for (const el of root.querySelectorAll("[data-icon]")) {
+    if (el.querySelector(":scope > svg")) continue;
+    el.insertAdjacentHTML("afterbegin", icon(el.dataset.icon));
+    if (!el.title) el.title = el.textContent.trim();
+  }
+}
 export function workspaceUI({
   viewport,
   getProject,
@@ -69,113 +82,82 @@ export function workspaceUI({
     attributeFilter: ["hidden"],
   });
   syncHeader();
-  const ribbon = document.createElement("section");
-  ribbon.className = "command-ribbon";
-  ribbon.setAttribute("aria-label", "Modelling commands");
-  ribbon.innerHTML = '<div class="ribbon-content" id="ribbon-content"></div>';
-  $(".projectbar").after(ribbon);
-  const groups = [
-    [
-      "Model",
-      "Create",
-      [
-        ["draw-toggle", "member", "Draw member"],
-        ["add-node-tool", "node", "Node"],
-        ["add-support-tool", "support", "Support"],
-        ["add-load-tool", "load", "Load"],
-      ],
-    ],
-    [
-      "Modify",
-      "Selection",
-      [
-        ["select-tool", "select", "Select"],
-        ["cad-tools", "edit", "Edit selection"],
-        ["topology", "split", "Topology"],
-        ["measure-tool", "measure", "Measure"],
-      ],
-    ],
-  ];
-  for (const [category, label, commands] of groups) {
-    const group = document.createElement("div");
-    group.className = "ribbon-group";
-    group.dataset.category = category;
-    const row = document.createElement("div");
-    row.className = "ribbon-commands";
-    for (const [id, img, text] of commands) {
-      const b = $("#" + id);
-      b.innerHTML = icon(img) + `<span>${text}</span>`;
-      b.title = text;
-      row.append(b);
+  // The shell is declared in app.html (ADR 0033); this module adds behaviour.
+  const ribbon = $(".command-ribbon");
+  hydrateIcons(document.querySelector("#workspace"));
+  $("#concrete-previews").onclick = () =>
+    $("[data-inspector-tab=concrete]").click();
+  disclosure($("#view-scope"));
+  disclosure($("#view-options"));
+  enhanceTabStrip($(".results-tabs .tab-scroll"), "result views");
+  enhanceTabStrip($(".inspector-tabs .tab-scroll"), "selection views");
+  // Lowest priority last: these groups drop their labels first.
+  const groups = (...labels) =>
+    labels.map((l) => ribbon.querySelector(`.ribbon-group[aria-label="${l}"]`));
+  fitToolbar(
+    $("#ribbon-content"),
+    groups("Create", "Design", "Selection", "Inspect", "Canvas edits"),
+  );
+  // Panel sizes are a per-viewer preference, kept apart from visibility.
+  const sizesKey = "workbench-layout-sizes-v1";
+  let sizes = {};
+  try {
+    sizes = JSON.parse(localStorage.getItem(sizesKey)) || {};
+  } catch {
+    /* Sizes are optional. */
+  }
+  const remember = (key) => (px) => {
+    if (px == null) delete sizes[key];
+    else sizes[key] = px;
+    try {
+      localStorage.setItem(sizesKey, JSON.stringify(sizes));
+    } catch {
+      /* Continue without persistence. */
     }
-    group.append(row);
-    const caption = document.createElement("span");
-    caption.className = "ribbon-caption";
-    caption.textContent = label;
-    group.append(caption);
-    $("#ribbon-content").append(group);
-  }
-  const navigation = document.createElement("div");
-  navigation.className = "canvas-navigation";
-  navigation.setAttribute("role", "group");
-  navigation.setAttribute("aria-label", "Canvas navigation and overlays");
-  for (const [id, img, text] of [
-    ["pan-tool", "move", "Pan"],
-    ["orbit-tool", "orbit", "Orbit"],
-    ["axes-toggle", "axes", "Local axes"],
-    ["dimensions-toggle", "measure", "Dimensions"],
-    ["fit", "fit", "Fit"],
-  ]) {
-    const button = $("#" + id);
-    button.innerHTML = icon(img) + `<span>${text}</span>`;
-    button.title = text;
-    navigation.append(button);
-  }
-  $(".viewport-toolbar .segmented").after(navigation);
-  const resultGroup = document.createElement("div");
-  resultGroup.className = "ribbon-group";
-  resultGroup.dataset.category = "Results";
-  resultGroup.innerHTML =
-    '<div class="ribbon-commands"><button id="show-results">' +
-    icon("view") +
-    '<span>Results table</span></button><button id="selection-actions">' +
-    icon("settings") +
-    '<span>Actions</span></button></div><span class="ribbon-caption">Inspect</span>';
-  $("#ribbon-content").append(resultGroup);
-  const designGroup = document.createElement("div");
-  designGroup.className = "ribbon-group";
-  designGroup.dataset.category = "Design";
-  const designCommands = document.createElement("div");
-  designCommands.className = "ribbon-commands";
-  const steelCheck = $("#steel-check");
-  const modelSteel = $("#model-steel-design");
-  modelSteel.hidden = false;
-  modelSteel.innerHTML = icon("settings") + "<span>Member steel design</span>";
-  designCommands.append(modelSteel);
-  const concrete = document.createElement("button");
-  concrete.id = "concrete-previews";
-  concrete.innerHTML = icon("settings") + "<span>Concrete previews</span>";
-  concrete.onclick = () => $("[data-inspector-tab=concrete]").click();
-  designCommands.append(concrete);
-  steelCheck.hidden = false;
-  steelCheck.innerHTML = icon("settings") + "<span>Reference checks</span>";
-  steelCheck.title = "Check a steel member with the enabled AISC profile";
-  designCommands.append(steelCheck);
-  designGroup.append(designCommands);
-  const designCaption = document.createElement("span");
-  designCaption.className = "ribbon-caption";
-  designCaption.textContent = "Design";
-  designGroup.append(designCaption);
-  $("#ribbon-content").append(designGroup);
-  for (const [id, img, text] of [
-    ["undo", "undo", "Undo"],
-    ["redo", "redo", "Redo"],
-    ["export-project", "save", "Project"],
-    ["export-report", "save", "Report"],
-    ["analyse", "play", "Analyse"],
-    ["export-csv", "save", "CSV"],
+  };
+  const grid = $(".work-grid");
+  for (const [name, panel, edge, property, min, max, label] of [
+    [
+      "explorer",
+      ".model-panel",
+      "right",
+      "--explorer-w",
+      160,
+      520,
+      "Model explorer width",
+    ],
+    [
+      "inspector",
+      ".inspector",
+      "left",
+      "--inspector-w",
+      260,
+      640,
+      "Inspector width",
+    ],
+    [
+      "dock",
+      ".results-panel",
+      "top",
+      "--dock-h",
+      120,
+      900,
+      "Results panel height",
+    ],
   ])
-    $("#" + id).innerHTML = icon(img) + `<span>${text}</span>`;
+    splitter({
+      panel: $(panel),
+      edge,
+      target: document.documentElement,
+      property,
+      min,
+      max,
+      initial: typeof sizes[name] === "number" ? sizes[name] : null,
+      label,
+      name,
+      host: grid,
+      onChange: remember(name),
+    });
   const panels = document.createElement("nav");
   panels.className = "workspace-panels";
   panels.setAttribute("aria-label", "Workspace panels");
@@ -300,15 +282,18 @@ export function workspaceUI({
   $("#results-content").setAttribute("aria-label", "Analysis results");
   const collapse = document.createElement("button");
   collapse.id = "toggle-results";
-  collapse.textContent = "Collapse results";
+  collapse.setAttribute("aria-label", "Collapse results");
+  collapse.title = "Collapse results";
   collapse.setAttribute("aria-expanded", "true");
   collapse.setAttribute("aria-controls", "results-content");
-  $(".results-tabs").append(collapse);
+  $(".results-trailing").append(collapse);
   collapse.onclick = () => {
     const hidden = !$("#results-content").hidden;
     $("#results-content").hidden = hidden;
     collapse.setAttribute("aria-expanded", String(!hidden));
-    collapse.textContent = hidden ? "Expand results" : "Collapse results";
+    const label = hidden ? "Expand results" : "Collapse results";
+    collapse.setAttribute("aria-label", label);
+    collapse.title = label;
     $(".work-grid").classList.toggle("results-collapsed", hidden);
   };
   $("#show-results").addEventListener("click", () => {

@@ -1,0 +1,876 @@
+/*
+ * Workbench shell (ADR 0033): the one definition of the workspace frame —
+ * project bar, ribbon, panel grid, splitters, canvas toolbar, tab strips,
+ * dock and status bar. Imported into the `shell` layer, so it wins over any
+ * feature selector for the properties it sets. Uses role tokens only.
+ *
+ * Breakpoints: compact ≤ 900 px (single panel, legacy feature rules),
+ * medium ≤ 1280 px, wide ≥ 1600 px.
+ */
+
+/* ---------- frame ---------- */
+body:has(#workspace:not([hidden])) {
+  font-size: var(--text-base);
+}
+@media (min-width: 901px) {
+  #workspace:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    min-height: 560px;
+  }
+  #workspace > :not(.work-grid) {
+    flex-shrink: 0;
+  }
+}
+
+/* ---------- project bar ---------- */
+.projectbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: var(--space-4);
+  height: auto;
+  min-height: 44px;
+  padding: 3px 10px;
+  background: var(--color-chrome-raised);
+  color: var(--color-text-on-chrome);
+  border-bottom: 0;
+}
+.projectbar button,
+.projectbar #project-name {
+  color: var(--color-text-on-chrome);
+}
+.projectbar .project-identity {
+  display: flex;
+  align-items: center;
+  flex: 1 1 120px;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.projectbar .project-identity #project-name {
+  width: 100%;
+  max-width: 340px;
+  min-width: 80px;
+  height: 30px;
+  padding: 2px 6px;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  background: transparent;
+  border: 1px solid transparent;
+  text-overflow: ellipsis;
+}
+.projectbar .project-identity #project-name:hover,
+.projectbar .project-identity #project-name:focus {
+  border-color: var(--color-border-on-chrome);
+}
+.projectbar #save-status,
+.projectbar .saved-state {
+  color: var(--color-text-on-chrome-muted);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.projectbar .project-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-2);
+  margin-left: auto;
+  width: auto;
+}
+.projectbar .project-actions > button:not(.primary) {
+  background: transparent;
+  border-color: transparent;
+}
+.projectbar .project-actions > button:not(.primary):hover {
+  background: var(--color-chrome-hover);
+}
+.projectbar .project-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  padding: 6px 8px;
+}
+.projectbar .project-actions button .command-icon {
+  width: 16px;
+  height: 16px;
+}
+.projectbar .application-menubar button {
+  font-size: var(--text-base);
+}
+
+/* ---------- ribbon: one density everywhere ---------- */
+.command-ribbon {
+  min-height: var(--shell-ribbon-height);
+  padding: 3px 8px;
+  background: var(--color-page);
+  border-bottom: 1px solid var(--color-border-strong);
+}
+.ribbon-content {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 34px;
+  padding: 2px 4px;
+  overflow: hidden;
+}
+.ribbon-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0;
+  padding: 0 var(--space-3) 0 0;
+  border-right: 1px solid var(--color-border);
+}
+.ribbon-group:last-child {
+  border-right: 0;
+}
+.ribbon-caption {
+  display: none;
+}
+.ribbon-commands {
+  display: flex;
+  gap: var(--space-1);
+}
+.ribbon-commands button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 30px;
+  padding: 4px 7px;
+  font-size: var(--text-sm);
+  border: 1px solid transparent;
+  background: transparent;
+}
+.ribbon-commands button:hover {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+.ribbon-commands [aria-pressed="true"] {
+  background: var(--color-surface-accent);
+  color: var(--color-accent-strong);
+  border-color: var(--color-border-accent);
+}
+.ribbon-commands button svg {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  flex: none;
+}
+/* Under width pressure a group keeps icons; labels stay for AT and tooltips. */
+.ribbon-group.icons-only .ribbon-commands button > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.ribbon-group.icons-only .ribbon-commands button {
+  padding: 4px 6px;
+}
+/* Visually hidden labels are absolutely positioned: keep them inside the
+ * control, so a scrolling ancestor still clips them. */
+.ribbon-commands button,
+.canvas-navigation button,
+.viewport-toolbar .inline-label {
+  position: relative;
+}
+
+/* ---------- message banner ---------- */
+#message:not([hidden]) {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: 7px 12px 7px 16px;
+  font-size: var(--text-base);
+}
+#message-text {
+  flex: 1;
+  white-space: pre-line;
+}
+#dismiss-message {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+#dismiss-message::before {
+  content: "×";
+  font-size: var(--text-2xl);
+  line-height: 1;
+}
+
+/* ---------- panel grid ---------- */
+@media (min-width: 901px) {
+  /* --explorer-w, --inspector-w and --dock-h are a viewer's sizes, set on
+   * the root by the splitters; the shell tokens are the defaults. */
+  .work-grid {
+    display: grid;
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    grid-template-columns:
+      var(--explorer-w, var(--shell-explorer-width))
+      minmax(0, 1fr)
+      var(--inspector-w, var(--shell-inspector-width));
+    grid-template-rows: minmax(0, 1fr) var(--dock-h, var(--shell-dock-height));
+  }
+  .work-grid .model-panel {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+  .work-grid .canvas-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+  }
+  .work-grid .inspector {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .work-grid .results-panel {
+    grid-column: 2 / 4;
+    grid-row: 2;
+    min-height: 0;
+    max-height: none;
+  }
+  .work-grid.hide-model {
+    grid-template-columns:
+      0px minmax(0, 1fr)
+      var(--inspector-w, var(--shell-inspector-width));
+  }
+  .work-grid.hide-properties {
+    grid-template-columns:
+      var(--explorer-w, var(--shell-explorer-width))
+      minmax(0, 1fr) 0px;
+  }
+  .work-grid.hide-model.hide-properties {
+    grid-template-columns: 0px minmax(0, 1fr) 0px;
+  }
+  .work-grid.hide-model .model-panel,
+  .work-grid.hide-properties .inspector,
+  .work-grid.hide-results .results-panel {
+    display: none;
+  }
+  .work-grid.results-collapsed {
+    grid-template-rows: minmax(0, 1fr) calc(var(--shell-tab-height) + 4px);
+  }
+  .work-grid.hide-results {
+    grid-template-rows: minmax(0, 1fr);
+  }
+  /* The model steel review is a table first: give it room by default. */
+  .work-grid:has(.steel-overview):not(.results-collapsed):not(.hide-results) {
+    grid-template-rows: minmax(0, 1fr) var(
+        --dock-h,
+        max(var(--shell-dock-height), 46vh)
+      );
+  }
+  .work-grid .canvas-wrap {
+    min-height: 120px;
+  }
+}
+@media (min-width: 901px) and (max-width: 1280px) {
+  :root {
+    --shell-explorer-width: 190px;
+    --shell-inspector-width: 290px;
+  }
+  .viewport-toolbar .inline-label select {
+    max-width: 112px;
+  }
+}
+@media (min-width: 1600px) {
+  :root {
+    --shell-explorer-width: 260px;
+    --shell-inspector-width: 380px;
+  }
+}
+.model-panel,
+.canvas-panel,
+.inspector,
+.results-panel {
+  position: relative;
+  min-width: 0;
+}
+.panel-title {
+  min-height: 34px;
+  height: 34px;
+  padding: 8px 12px;
+  font-size: var(--text-base);
+  background: var(--color-page);
+}
+
+/* ---------- splitters: grid items on the track edges ---------- */
+.splitter {
+  position: relative;
+  z-index: var(--z-splitter);
+  background: transparent;
+  touch-action: none;
+}
+.splitter-explorer,
+.splitter-inspector {
+  width: var(--shell-splitter);
+  cursor: col-resize;
+}
+.splitter-explorer {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  justify-self: end;
+}
+.splitter-inspector {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: start;
+}
+.splitter-dock {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  align-self: start;
+  height: var(--shell-splitter);
+  cursor: row-resize;
+}
+.splitter:hover,
+.splitter.dragging,
+.splitter:focus-visible {
+  background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  outline: none;
+}
+.work-grid.hide-model > .splitter-explorer,
+.work-grid.hide-properties > .splitter-inspector,
+.work-grid.hide-results > .splitter-dock,
+.work-grid.results-collapsed > .splitter-dock {
+  display: none;
+}
+@media (max-width: 900px) {
+  .splitter {
+    display: none;
+  }
+}
+
+/* ---------- canvas toolbar: one row ---------- */
+.viewport-toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-3);
+  height: auto;
+  min-height: 40px;
+  padding: 5px 9px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+.viewport-toolbar button,
+.viewport-toolbar select,
+.viewport-toolbar summary {
+  min-height: 28px;
+  padding: 4px 7px;
+  font-size: var(--text-sm);
+}
+.viewport-toolbar label,
+.viewport-toolbar .inline-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.viewport-toolbar .inline-label > span {
+  color: var(--color-text-muted);
+}
+.viewport-toolbar .inline-label select {
+  max-width: 150px;
+  padding: 4px;
+  font-size: var(--text-sm);
+}
+.viewport-toolbar input[type="number"] {
+  width: 64px;
+}
+.viewport-toolbar .spacer {
+  flex: 1;
+}
+/* Narrower canvases keep every control: labels give way first. */
+@media (max-width: 1440px) {
+  .viewport-toolbar .inline-label > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+@media (max-width: 1366px) {
+  .viewport-toolbar .inline-label select {
+    max-width: 124px;
+  }
+  .viewport-toolbar .segmented button {
+    padding: 4px 6px;
+  }
+}
+/* Below the medium width the row may wrap; it never clips. */
+@media (max-width: 1180px) and (min-width: 901px) {
+  .viewport-toolbar {
+    flex-wrap: wrap;
+  }
+}
+.view-options {
+  position: relative;
+}
+.view-options > summary {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+.view-options > summary::-webkit-details-marker {
+  display: none;
+}
+.view-options > summary::after {
+  content: "▾";
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+.view-options[open] > summary {
+  background: var(--color-surface-accent);
+  border-color: var(--color-border-accent);
+}
+.view-scope[data-filtered] > summary {
+  color: var(--color-accent-strong);
+  border-color: var(--color-border-accent);
+}
+#view-scope-badge:not(:empty) {
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  font-size: var(--text-xs);
+}
+/* Closed <details> content still takes part in layout in Chrome. */
+.view-options:not([open]) > .view-options-content {
+  display: none;
+}
+.view-options-content {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: var(--z-popover);
+  min-width: 240px;
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+}
+.model-view-scope label {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+}
+.view-scope-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+#view-scope-status {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- floating canvas navigation ---------- */
+.canvas-navigation {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: var(--z-canvas-overlay);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+}
+.canvas-navigation button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+}
+.canvas-navigation button > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.canvas-navigation [aria-pressed="true"] {
+  background: var(--color-surface-accent);
+  color: var(--color-accent-strong);
+  border-color: var(--color-border-accent);
+}
+.canvas-navigation .command-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- tab strips ---------- */
+.tab-strip {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+}
+.tab-scroll {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.tab-scroll::-webkit-scrollbar {
+  display: none;
+}
+.tab-strip[data-overflowing]:not([data-at-start]) .tab-scroll {
+  mask-image: linear-gradient(to right, transparent, #000 24px);
+}
+.tab-strip[data-overflowing]:not([data-at-end]) .tab-scroll {
+  mask-image: linear-gradient(to left, transparent, #000 24px);
+}
+.tab-strip[data-overflowing]:not([data-at-start]):not([data-at-end])
+  .tab-scroll {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent
+  );
+}
+.tab-step,
+.tab-more {
+  flex: none;
+  width: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+.tab-step:hover,
+.tab-more:hover {
+  color: var(--color-accent);
+  background: var(--color-surface-accent);
+}
+.tab-step,
+.tab-more {
+  display: none;
+}
+.tab-strip[data-overflowing] .tab-more,
+.tab-strip[data-overflowing]:not([data-at-start]) .tab-step-prev,
+.tab-strip[data-overflowing]:not([data-at-end]) .tab-step-next {
+  display: block;
+}
+.tab-scroll > button {
+  flex: none;
+  white-space: nowrap;
+}
+
+/* Inspector tabs. */
+.inspector-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0;
+  padding: 0 4px;
+  background: var(--color-page);
+  border-bottom: 1px solid var(--color-border);
+}
+.inspector-tabs .tab-scroll > button {
+  min-height: 32px;
+  padding: 9px 7px;
+  font-size: var(--text-sm);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.inspector-tabs .tab-scroll > button[aria-pressed="true"] {
+  color: var(--color-accent);
+  box-shadow: inset 0 -2px var(--color-accent-indicator);
+}
+.inspector #concrete-inspector,
+.inspector #steel-design-inspector {
+  padding: 0;
+}
+.inspector .primary {
+  width: auto;
+  min-width: 135px;
+}
+#preview-error:empty,
+#design-message:empty {
+  display: none;
+}
+
+/* Results dock. */
+.results-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-strong);
+  overflow: hidden;
+}
+.results-tabs {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: var(--space-3);
+  height: var(--shell-tab-height);
+  min-height: var(--shell-tab-height);
+  padding: 0 7px;
+  border-bottom: 1px solid var(--color-border);
+  overflow: visible;
+}
+.results-tabs .tab-scroll > button {
+  height: 100%;
+  padding: 0 9px;
+  font-size: var(--text-sm);
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.results-tabs .tab-scroll > button.active {
+  color: var(--color-accent);
+  box-shadow: inset 0 -2px var(--color-accent-indicator);
+  font-weight: var(--weight-semibold);
+  border-bottom: 0;
+}
+.results-trailing {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--space-3);
+}
+.results-trailing button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 8px;
+  font-size: var(--text-sm);
+}
+#toggle-results {
+  width: 28px;
+  padding: 4px;
+  justify-content: center;
+}
+#toggle-results::before {
+  content: "▾";
+}
+#toggle-results[aria-expanded="false"]::before {
+  content: "▴";
+}
+.results-trailing .command-icon {
+  width: 14px;
+  height: 14px;
+}
+#results-content {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 0;
+}
+/* Design-object result panes are the dock's second level. */
+.design-result-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-3);
+  min-height: var(--shell-tab-height);
+  padding: 0 7px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-page);
+}
+.design-result-tabs .tab-scroll > button {
+  padding: 0 9px;
+  font-size: var(--text-sm);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.design-result-tabs .tab-scroll > button[aria-pressed="true"] {
+  color: var(--color-accent);
+  box-shadow: inset 0 -2px var(--color-accent-indicator);
+}
+.design-result-trailing {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--space-3);
+}
+.design-result-trailing button {
+  padding: 4px 8px;
+  font-size: var(--text-sm);
+}
+
+/* Model explorer density. */
+.model-panel {
+  font-size: var(--text-base);
+}
+#model-nav button {
+  font-size: var(--text-base);
+  min-height: 30px;
+  padding: 5px 9px;
+}
+.nav-section-title {
+  font-size: var(--text-xs);
+  margin: 13px 8px 6px;
+}
+
+/* ---------- status bar ---------- */
+.statusbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-7);
+  height: 28px;
+  min-height: 28px;
+  padding: 0 12px;
+  background: var(--color-chrome-raised);
+  color: var(--color-text-on-chrome-muted);
+  border-top: 0;
+  font-size: var(--text-xs);
+}
+.statusbar select {
+  color: var(--color-text-on-chrome-muted);
+  background: transparent;
+  font-size: var(--text-xs);
+  border: 0;
+}
+.statusbar button {
+  color: var(--color-text-on-chrome);
+  font-size: var(--text-xs);
+}
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  background: transparent;
+}
+.status-chip[data-tone="warn"] {
+  color: var(--color-warn-on-chrome);
+}
+.status-chip[data-tone="fail"] {
+  color: var(--color-fail-on-chrome);
+}
+.status-chip::before {
+  content: "●";
+  font-size: 8px;
+}
+
+/* ---------- menus ---------- */
+.popup-menu {
+  position: fixed;
+  z-index: var(--z-menu);
+  display: grid;
+  min-width: 200px;
+  max-height: 60vh;
+  overflow: auto;
+  padding: var(--space-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+}
+.popup-menu button {
+  justify-content: flex-start;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 6px 10px;
+  font-size: var(--text-base);
+}
+.popup-menu button:hover,
+.popup-menu button:focus-visible {
+  background: var(--color-surface-accent);
+}
+.popup-menu [aria-checked="true"] {
+  color: var(--color-accent-strong);
+  font-weight: var(--weight-semibold);
+}
+.popup-menu [aria-checked]::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+}
+.popup-menu [aria-checked="true"]::before {
+  content: "✓";
+}
+
+/* ---------- compact (≤ 900 px): one panel at a time, rows may wrap ---------- */
+@media (max-width: 900px) {
+  .projectbar {
+    flex-wrap: wrap;
+    padding: 6px 10px;
+  }
+  .projectbar .project-actions {
+    flex-wrap: wrap;
+    margin-left: 0;
+  }
+  .ribbon-content {
+    overflow-x: auto;
+  }
+  .viewport-toolbar {
+    flex-wrap: wrap;
+  }
+  .viewport-toolbar .spacer {
+    display: none;
+  }
+  .view-options-content {
+    left: 0;
+    right: auto;
+    max-width: calc(100vw - 24px);
+  }
+  .results-tabs {
+    height: auto;
+    flex-wrap: wrap;
+  }
+  .statusbar {
+    flex-wrap: wrap;
+    height: auto;
+    gap: var(--space-4);
+    padding: 6px 10px;
+  }
+}
+
+/* ---------- command dock ---------- */
+/* Non-modal entity forms dock over the inspector, at its current width. */
+#modal.command-dock {
+  z-index: var(--z-popover);
+  width: var(--inspector-w, var(--shell-inspector-width));
+}
+@media (max-width: 900px) {
+  #modal.command-dock {
+    width: 100%;
+  }
+}

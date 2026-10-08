@@ -48,53 +48,22 @@ export function modelVisibility({ viewport, getProject, canChange, onChange }) {
   const $ = (s) => document.querySelector(s);
   const state = { storey: "", layer: "", isolated: null, hidden: new Set() };
   let projectId;
-  const bar = document.createElement("div");
-  bar.className = "model-view-scope";
-  bar.innerHTML = `<label>Storey <select id="view-storey" aria-label="Visible storey"></select></label><label>Layer <select id="view-layer" aria-label="Visible layer"></select></label><button id="isolate-selection">Isolate selection</button><button id="hide-selection">Hide selection</button><button id="fit-selection">Fit selection</button><button id="show-all-model">Show all</button><span id="view-scope-status" role="status"></span>`;
-  $(".viewport-toolbar").after(bar);
-  const menus = document.createElement("details");
-  menus.id = "view-options";
-  menus.className = "view-options";
-  menus.innerHTML =
-    '<summary>Display & annotations</summary><div class="view-options-content"></div>';
-  $(".viewport-toolbar").append(menus);
-  document.addEventListener("click", (e) => {
-    if (!menus.contains(e.target)) menus.open = false;
-  });
-  menus.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      menus.open = false;
-      menus.querySelector("summary").focus();
-    }
-  });
-  for (const id of [
-    "model-loads",
-    "model-crossings",
-    "support-labels",
-    "member-labels",
-    "axes-toggle",
-    "dimensions-toggle",
-  ])
-    menus.lastElementChild.append($("#" + id));
-  const nodeToggle = document.createElement("button");
-  nodeToggle.id = "model-nodes";
-  nodeToggle.textContent = "Analytical nodes: Auto";
-  nodeToggle.onclick = () => {
+  // The controls are declared in app.html (ADR 0033): the Visibility and
+  // Overlays disclosures of the canvas toolbar.
+  $("#model-nodes").onclick = () => {
     viewport.showNodes =
       viewport.showNodes === undefined
         ? false
         : viewport.showNodes === false
           ? true
           : undefined;
-    nodeToggle.textContent = `Analytical nodes: ${viewport.showNodes === undefined ? "Auto" : viewport.showNodes ? "Show" : "Hide"}`;
+    $("#model-nodes").textContent =
+      `Analytical nodes: ${viewport.showNodes === undefined ? "Auto" : viewport.showNodes ? "Show" : "Hide"}`;
     viewport.visibilityRevision = (viewport.visibilityRevision || 0) + 1;
     viewport.draw();
   };
-  menus.lastElementChild.append(nodeToggle);
   // A side elevation is essential for return stairs; the renderer already supports it.
-  const side = document.createElement("button");
-  side.id = "view-side";
-  side.textContent = "Side";
+  const side = $("#view-side");
   side.onclick = () => {
     viewport.mode = "side";
     for (const b of document.querySelectorAll(
@@ -104,7 +73,6 @@ export function modelVisibility({ viewport, getProject, canChange, onChange }) {
     $("#view-subtitle").textContent = "Global YZ · metres";
     viewport.fit();
   };
-  $("#view-elevation").after(side);
   function apply(fit = true, notify = true) {
     const project = getProject();
     if (!project) return;
@@ -112,8 +80,17 @@ export function modelVisibility({ viewport, getProject, canChange, onChange }) {
     viewport.fitIds = null;
     viewport.hovered = null;
     viewport.crossingData = null;
+    const shown = project.members.filter((m) =>
+      viewport.visibleIds.has(m.id),
+    ).length;
     $("#view-scope-status").textContent =
-      `${project.members.filter((m) => viewport.visibleIds.has(m.id)).length} / ${project.members.length} members visible${state.isolated ? " · isolated" : ""}${state.hidden.size ? " · hidden selection" : ""}`;
+      `${shown} / ${project.members.length} members visible${state.isolated ? " · isolated" : ""}${state.hidden.size ? " · hidden selection" : ""}`;
+    // The toolbar shows when the view is filtered without opening the panel.
+    const filtered = shown < project.members.length;
+    $("#view-scope-badge").textContent = filtered
+      ? `${shown}/${project.members.length}`
+      : "";
+    $("#view-scope").toggleAttribute("data-filtered", filtered);
     $("#view-scope-status").title =
       "View filter only; analysis always uses the complete model.";
     viewport.visibilityRevision = (viewport.visibilityRevision || 0) + 1;

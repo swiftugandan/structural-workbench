@@ -93,9 +93,6 @@
   max-width: 100%;
 }
 @media (min-width: 901px) {
-  .command-dock-open .work-grid {
-    grid-template-columns: 200px minmax(0, 1fr) 340px;
-  }
   .command-dock-open .inspector {
     visibility: hidden;
   }

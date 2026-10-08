@@ -8,6 +8,7 @@ import { designKind } from "./design/registry.js";
 import { designInspector } from "./design/inspector.js";
 import { designPane } from "./design/panes.js";
 import { scheduleCsv } from "./design/kinds/shared.js";
+import { enhanceTabStrip } from "./ui/tab-strip.js";
 const $ = (s) => document.querySelector(s);
 // Attach the displayed unit only to bare numbers; Rust parses all quantities.
 function fieldInput(value, unit) {
@@ -214,7 +215,11 @@ export function concreteWorkspace({
     }
     const kind = designKind(d.kind);
     if (!kind.panes.some((p) => p.id === pane)) pane = "summary";
-    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Design result views">${kind.panes.map(({ id, label }) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
+    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs"><div class="tab-scroll" role="group" aria-label="Design result views">${kind.panes.map(({ id, label }) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}</div><div class="design-result-trailing">${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div></div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
+    enhanceTabStrip(
+      host.querySelector(".design-result-tabs .tab-scroll"),
+      "design result views",
+    );
     for (const b of host.querySelectorAll("[data-preview-pane]"))
       b.onclick = async () => {
         pane = b.dataset.previewPane;

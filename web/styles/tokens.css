@@ -24,7 +24,6 @@
   /* slate */
   --slate-97: #f5f7fa;
   --slate-96: #edf4ff;
-  --slate-96-2: #eaf6ef;
   --slate-95: #eaf1ff;
   --slate-90: #dce3eb;
   --slate-87: #c9dcf7;
@@ -53,6 +52,7 @@
   /* teal */
   --teal-50: #088585;
   /* green */
+  --green-96: #eaf6ef;
   --green-79: #a9cabc;
   --green-42: #247044;
   --green-34: #235b40;
@@ -100,11 +100,20 @@
   --color-chrome: var(--slate-17);
   --color-focus: var(--amber-74);
   --color-pass: var(--green-42);
-  --color-pass-surface: var(--slate-96-2);
+  --color-pass-surface: var(--green-96);
   --color-fail: var(--red-39);
   --color-danger: var(--red-40);
   --color-warn: var(--amber-40);
   --color-warn-surface: var(--amber-98);
+
+  --color-chrome-raised: var(--slate-21);
+  --color-chrome-hover: color-mix(in srgb, var(--white) 10%, transparent);
+  --color-text-on-chrome: var(--slate-97);
+  --color-text-on-chrome-muted: var(--slate-85);
+  --color-border-on-chrome: color-mix(in srgb, var(--white) 30%, transparent);
+  --color-accent-indicator: var(--blue-49);
+  --color-warn-on-chrome: var(--amber-85);
+  --color-fail-on-chrome: var(--red-78);
 
   /* ---- type ---- */
   --text-2xs: 9px;

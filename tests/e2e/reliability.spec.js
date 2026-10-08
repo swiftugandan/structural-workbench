@@ -139,8 +139,11 @@ test.describe("M04 reliability matrix", () => {
     });
     await page.goto("/");
     await page.locator("#new-project").click();
-    await expect(page.locator("#message")).toContainText(
-      /persistence was not granted|download a project backup/i,
+    // The warning is a status-bar indicator that offers the backup (ADR 0033).
+    await expect(page.locator("#storage-status")).toBeVisible();
+    await expect(page.locator("#storage-status")).toHaveAttribute(
+      "title",
+      /persistence was not granted.*download a project backup/i,
     );
     await expect(page.locator("#export-project")).toBeEnabled();
     await expect(page.locator("#save-status")).toHaveText("Saved locally", {

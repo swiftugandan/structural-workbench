@@ -38,6 +38,8 @@ import {
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
 import { reportSections } from "./design/registry.js";
+import { createStore } from "./core/store.js";
+import { statusBar } from "./app/status-bar.js";
 import { initOffline, afterSaved } from "./offline.js";
 import {
   loadCapabilitiesLedger,
@@ -60,6 +62,8 @@ const label = (id) => entityLabel(project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
 /** Linear-static result for diagrams; envelopes never enter the force pipeline. */
+/** Session state the shell reflects (ADR 0033); grows as app.js decomposes. */
+const session = createStore({ storage: "unknown" });
 const diagramResult = () =>
   result && result.analysisType !== "envelope" ? result : null;
 let project,
@@ -328,9 +332,11 @@ const modelTools = modeling({
   canEdit: () => !!project && !busy && !readOnly && !formDirty,
 });
 function message(text) {
-  $("#message").textContent = text;
+  $("#message-text").textContent = text;
   $("#message").hidden = !text;
 }
+$("#dismiss-message").onclick = () => message("");
+statusBar({ session, exportProject: () => $("#export-project").click() });
 const topologyTools = topology({
   getProject: () => project,
   command,
@@ -635,16 +641,7 @@ async function persist() {
     sessionStorage.setItem("wb-persist-warned", "1");
     try {
       const durable = await navigator.storage.persist();
-      if (!durable) {
-        message(
-          [
-            $("#message").textContent,
-            "Browser persistence was not granted. Local snapshots may be evicted; download a project backup.",
-          ]
-            .filter(Boolean)
-            .join(" "),
-        );
-      }
+      session.set({ storage: durable ? "persistent" : "bestEffort" });
     } catch {
       /* continue without durable persistence */
     }
@@ -658,6 +655,7 @@ async function persist() {
     }
   } catch (e) {
     $("#save-status").textContent = "Save failed";
+    session.set({ storage: "failed" });
     message(
       "STORAGE_QUOTA: Local save failed. Download your project to preserve it. " +
         e.message,
@@ -1296,10 +1294,6 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
     $("#steel-design-inspector").hidden = kind !== "steel";
     $("#concrete-inspector").hidden = kind !== "concrete";
     $("#design-preview-scene").hidden = kind !== "concrete";
-    document.body.classList.toggle(
-      "design-workspace",
-      ["steel", "concrete"].includes(kind),
-    );
     if (kind !== "concrete") {
       concrete.hide();
       if (selectionContext?.kind === "preview") selectionContext = null;

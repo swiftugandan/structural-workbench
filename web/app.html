@@ -159,22 +159,144 @@
           /><span id="save-status" hidden>Not saved</span>
         </div>
         <div class="project-actions">
-          <button id="undo" title="Undo engineering edit">↶ Undo</button
-          ><button id="redo" title="Redo engineering edit">↷ Redo</button
-          ><button id="export-project">↓ Project</button
+          <button id="undo" title="Undo engineering edit" data-icon="undo">
+            <span>Undo</span></button
+          ><button id="redo" title="Redo engineering edit" data-icon="redo">
+            <span>Redo</span></button
+          ><button
+            id="export-project"
+            title="Download the project file"
+            data-icon="save"
+          >
+            <span>Project</span></button
           ><button id="duplicate-variant" type="button" hidden>
             Duplicate as variant</button
           ><button id="compare-variants" type="button" hidden>
             Compare with baseline</button
           ><button id="recover-revision" type="button" hidden>
             Recover revision</button
-          ><button id="export-report">↓ Report</button
+          ><button
+            id="export-report"
+            title="Download the calculation report"
+            data-icon="save"
+          >
+            <span>Report</span></button
           ><select id="result-case" aria-label="Analysis case"></select
-          ><button id="analyse" class="primary">▶ Analyse</button
+          ><button id="analyse" class="primary" data-icon="play">
+            <span>Analyse</span></button
           ><button id="cancel" hidden>Cancel analysis</button>
         </div>
       </div>
-      <div id="message" role="status" aria-live="polite" hidden></div>
+      <section class="command-ribbon" aria-label="Modelling commands">
+        <div class="ribbon-content" id="ribbon-content">
+          <div
+            class="ribbon-group"
+            data-category="Model"
+            role="group"
+            aria-label="Create"
+          >
+            <div class="ribbon-commands">
+              <button id="draw-toggle" aria-pressed="false" data-icon="member">
+                <span>Draw member</span></button
+              ><button id="add-node-tool" data-icon="node">
+                <span>Node</span></button
+              ><button id="add-support-tool" data-icon="support">
+                <span>Support</span></button
+              ><button id="add-load-tool" data-icon="load">
+                <span>Load</span></button
+              ><button id="copy-bay" data-icon="copy">
+                <span>Copy bay</span>
+              </button>
+            </div>
+            <span class="ribbon-caption">Create</span>
+          </div>
+          <div
+            class="ribbon-group"
+            data-category="Modify"
+            role="group"
+            aria-label="Selection"
+          >
+            <div class="ribbon-commands">
+              <button id="select-tool" aria-pressed="true" data-icon="select">
+                <span>Select</span></button
+              ><button id="cad-tools" data-icon="edit">
+                <span>Edit selection</span></button
+              ><button id="topology" data-icon="split">
+                <span>Topology</span></button
+              ><button id="measure-tool" data-icon="measure">
+                <span>Measure</span>
+              </button>
+            </div>
+            <span class="ribbon-caption">Selection</span>
+          </div>
+          <div
+            class="ribbon-group"
+            data-category="Modify"
+            role="group"
+            aria-label="Canvas edits"
+          >
+            <div class="ribbon-commands" id="direct-commands"></div>
+            <span class="ribbon-caption">Canvas edits</span>
+          </div>
+          <div
+            class="ribbon-group"
+            data-category="Results"
+            role="group"
+            aria-label="Inspect"
+          >
+            <div class="ribbon-commands">
+              <button id="show-results" data-icon="view">
+                <span>Results table</span></button
+              ><button id="selection-actions" data-icon="settings">
+                <span>Actions</span></button
+              ><button id="model-assumptions" data-icon="info">
+                <span>Assumptions</span>
+              </button>
+            </div>
+            <span class="ribbon-caption">Inspect</span>
+          </div>
+          <div
+            class="ribbon-group"
+            data-category="Design"
+            role="group"
+            aria-label="Design"
+          >
+            <div class="ribbon-commands">
+              <button
+                id="model-steel-design"
+                type="button"
+                data-icon="settings"
+              >
+                <span>Member steel design</span></button
+              ><button
+                id="concrete-previews"
+                type="button"
+                data-icon="settings"
+              >
+                <span>Design objects</span></button
+              ><button
+                id="steel-check"
+                type="button"
+                data-testid="steel-check-open"
+                title="Check a steel member with the enabled AISC profile"
+                data-icon="settings"
+              >
+                <span>Reference checks</span>
+              </button>
+            </div>
+            <span class="ribbon-caption">Design</span>
+          </div>
+        </div>
+      </section>
+      <div id="message" role="status" aria-live="polite" hidden>
+        <span id="message-text"></span
+        ><button
+          type="button"
+          id="dismiss-message"
+          aria-label="Dismiss message"
+          title="Dismiss"
+        ></button>
+      </div>
       <div id="update-banner" role="status" aria-live="polite" hidden>
         <span
           >A new application build is ready. Reload after save so JS and WASM
@@ -226,14 +348,18 @@
           </div>
         </aside>
         <section class="canvas-panel" aria-label="Structural viewport">
-          <div class="viewport-toolbar">
-            <div class="segmented">
+          <div
+            class="viewport-toolbar"
+            role="toolbar"
+            aria-label="View and display"
+          >
+            <div class="segmented" role="group" aria-label="View direction">
               <button id="view-plan">Plan</button
               ><button id="view-elevation" class="active">Elevation</button
+              ><button id="view-side">Side</button
               ><button id="view-3d">3D</button>
             </div>
             <div class="model-display" role="group" aria-label="Model display">
-              <span>Display</span>
               <button
                 id="model-lines"
                 aria-pressed="true"
@@ -249,57 +375,8 @@
                 Solid
               </button>
             </div>
-            <button id="model-loads" aria-pressed="true">Loads</button
-            ><button id="model-crossings" aria-pressed="true">Crossings</button>
-            <button
-              id="support-labels"
-              aria-pressed="true"
-              title="Show or hide support labels"
-            >
-              Support labels
-            </button>
-            <select
-              id="member-labels"
-              aria-label="Member labels"
-              title="Member label visibility"
-            >
-              <option value="auto">Member labels: Auto</option>
-              <option value="show">Member labels: Show all</option>
-              <option value="hide">Member labels: Hide</option>
-            </select>
-            <button id="model-assumptions">Assumptions</button>
-            <button id="draw-toggle" aria-pressed="false">
-              ＋ Draw member
-            </button>
-            <button id="select-tool" aria-pressed="true">Select</button
-            ><button id="pan-tool" aria-pressed="false">Pan</button
-            ><button id="orbit-tool" aria-pressed="false">Orbit</button
-            ><button id="add-node-tool">Node</button
-            ><button id="add-support-tool">Support</button
-            ><button id="add-load-tool">Load</button>
-            <button id="cad-tools">Edit selection</button
-            ><button id="copy-bay">Copy bay</button
-            ><button id="measure-tool">Measure</button>
-            <button
-              id="dimensions-toggle"
-              aria-pressed="true"
-              title="Show member lengths"
-            >
-              Dimensions
-            </button>
-            <button id="axes-toggle" aria-pressed="false">Local axes</button>
-            <button id="topology">Topology</button>
-            <button id="fit">⊡ Fit</button
-            ><button
-              id="reset-viewport"
-              hidden
-              title="Recreate GPU viewport resources"
-            >
-              ↻ GPU
-            </button>
-            <div class="spacer"></div>
             <label class="inline-label"
-              >Results
+              ><span>Results</span>
               <select id="result-family" aria-label="Result family">
                 <option value="shape">Model &amp; deformation</option>
                 <option value="forces">Member forces</option>
@@ -307,14 +384,14 @@
               </select>
             </label>
             <label class="inline-label"
-              >Component
+              ><span>Component</span>
               <select id="display-result" aria-label="Result component">
                 <option value="model">Model</option>
                 <option value="deformed">Deformation</option>
               </select>
             </label>
             <label id="deformation-scale-control" class="inline-label" hidden
-              >Displacement ×
+              ><span>Displacement ×</span>
               <input
                 id="deformation-scale"
                 aria-label="Deformation scale"
@@ -327,7 +404,7 @@
               />
             </label>
             <label id="diagram-scale-control" class="inline-label" hidden
-              >Diagram ×
+              ><span>Diagram ×</span>
               <input
                 id="diagram-scale"
                 aria-label="Diagram scale"
@@ -339,6 +416,72 @@
                 title="Multiplier of the automatic diagram size; values remain unchanged"
               />
             </label>
+            <div class="spacer"></div>
+            <details id="view-scope" class="view-options view-scope">
+              <summary>Visibility <span id="view-scope-badge"></span></summary>
+              <div class="view-options-content model-view-scope">
+                <label
+                  >Storey
+                  <select
+                    id="view-storey"
+                    aria-label="Visible storey"
+                  ></select></label
+                ><label
+                  >Layer
+                  <select id="view-layer" aria-label="Visible layer"></select
+                ></label>
+                <div class="view-scope-actions">
+                  <button id="isolate-selection">Isolate selection</button
+                  ><button id="hide-selection">Hide selection</button
+                  ><button id="fit-selection">Fit selection</button
+                  ><button id="show-all-model">Show all</button>
+                </div>
+                <span id="view-scope-status" role="status"></span>
+              </div>
+            </details>
+            <details id="view-options" class="view-options">
+              <summary title="Loads, labels, axes, dimensions and nodes">
+                Overlays
+              </summary>
+              <div class="view-options-content">
+                <button id="model-loads" aria-pressed="true">Loads</button
+                ><button id="model-crossings" aria-pressed="true">
+                  Crossings</button
+                ><button
+                  id="support-labels"
+                  aria-pressed="true"
+                  title="Show or hide support labels"
+                >
+                  Support labels
+                </button>
+                <select
+                  id="member-labels"
+                  aria-label="Member labels"
+                  title="Member label visibility"
+                >
+                  <option value="auto">Member labels: Auto</option>
+                  <option value="show">Member labels: Show all</option>
+                  <option value="hide">Member labels: Hide</option>
+                </select>
+                <button id="axes-toggle" aria-pressed="false" data-icon="axes">
+                  <span>Local axes</span></button
+                ><button
+                  id="dimensions-toggle"
+                  aria-pressed="true"
+                  title="Show member lengths"
+                  data-icon="measure"
+                >
+                  <span>Dimensions</span></button
+                ><button id="model-nodes">Analytical nodes: Auto</button>
+              </div>
+            </details>
+            <button
+              id="reset-viewport"
+              hidden
+              title="Recreate GPU viewport resources"
+            >
+              ↻ GPU
+            </button>
           </div>
           <div id="drawing-panel" hidden>
             <div class="plane-controls">
@@ -409,8 +552,8 @@
                 ><i class="legend-line blue"></i>Deformed ×
                 <output id="deformation-factor">10</output></span
               ><span id="overlay-legend" hidden
-                ><i class="legend-line violet"></i><output></output></span
-              >
+                ><i class="legend-line violet"></i><output></output
+              ></span>
             </div>
             <div
               id="action-legend"
@@ -419,6 +562,30 @@
               hidden
             ></div>
             <div class="axis-widget"></div>
+            <div
+              class="canvas-navigation"
+              role="toolbar"
+              aria-label="Canvas navigation"
+              aria-orientation="vertical"
+            >
+              <button
+                id="pan-tool"
+                aria-pressed="false"
+                data-icon="move"
+                title="Pan"
+              >
+                <span>Pan</span></button
+              ><button
+                id="orbit-tool"
+                aria-pressed="false"
+                data-icon="orbit"
+                title="Orbit"
+              >
+                <span>Orbit</span></button
+              ><button id="fit" data-icon="fit" title="Fit">
+                <span>Fit</span>
+              </button>
+            </div>
             <span id="reference-plane" class="reference-plane" hidden></span>
             <span id="gpu-status">Initialising WebGPU…</span>
           </div>
@@ -438,18 +605,17 @@
             role="group"
             aria-label="Selection details"
           >
-            <button data-inspector-tab="properties" aria-pressed="true">
-              Properties
-            </button>
-            <button data-inspector-tab="forces" aria-pressed="false">
-              Member results
-            </button>
-            <button data-inspector-tab="concrete" aria-pressed="false">
-              Concrete previews
-            </button>
-            <button data-inspector-tab="steel" aria-pressed="false">
-              Steel design
-            </button>
+            <div class="tab-scroll">
+              <button data-inspector-tab="properties" aria-pressed="true">
+                Properties</button
+              ><button data-inspector-tab="forces" aria-pressed="false">
+                Results</button
+              ><button data-inspector-tab="concrete" aria-pressed="false">
+                Design objects</button
+              ><button data-inspector-tab="steel" aria-pressed="false">
+                Member design
+              </button>
+            </div>
           </div>
           <div id="inspector-content"></div>
           <div id="force-inspector" hidden></div>
@@ -458,24 +624,31 @@
         </aside>
         <section class="results-panel">
           <div class="results-tabs">
-            <button data-tab="displacements" class="active">
-              Displacements</button
-            ><button data-tab="reactions">Reactions</button
-            ><button data-tab="section-forces">Member forces</button
-            ><button data-tab="forces">End actions</button
-            ><button data-tab="stress" data-testid="tab-stress">
-              Elastic stress</button
-            ><button data-tab="equilibrium">Equilibrium</button
-            ><button data-tab="stability" data-testid="tab-stability">Stability</button
-            ><button data-tab="modal" data-testid="tab-modal">Modal</button
-            ><button data-tab="response" data-testid="tab-response">Response</button
-            ><button data-tab="study" data-testid="tab-study">Study</button>
-            <button data-tab="design-preview">Design preview</button>
-            <button data-tab="steel-design">Steel design</button>
-            <button data-tab="steel-overview">Model steel review</button>
-            <div class="spacer"></div>
-            <span id="result-status" class="badge">Not analysed</span
-            ><button id="export-csv">↓ CSV</button>
+            <div class="tab-scroll" role="group" aria-label="Result views">
+              <button data-tab="displacements" class="active">
+                Displacements</button
+              ><button data-tab="reactions">Reactions</button
+              ><button data-tab="section-forces">Member forces</button
+              ><button data-tab="forces">End actions</button
+              ><button data-tab="stress" data-testid="tab-stress">
+                Elastic stress</button
+              ><button data-tab="equilibrium">Equilibrium</button
+              ><button data-tab="stability" data-testid="tab-stability">
+                Stability</button
+              ><button data-tab="modal" data-testid="tab-modal">Modal</button
+              ><button data-tab="response" data-testid="tab-response">
+                Response</button
+              ><button data-tab="study" data-testid="tab-study">Study</button
+              ><button data-tab="design-preview">Design object</button
+              ><button data-tab="steel-design">Member design</button
+              ><button data-tab="steel-overview">Model steel review</button>
+            </div>
+            <div class="results-trailing">
+              <span id="result-status" class="badge">Not analysed</span
+              ><button id="export-csv" data-icon="save">
+                <span>CSV</span>
+              </button>
+            </div>
           </div>
           <div id="results-content">
             <div class="empty-results">
@@ -494,7 +667,14 @@
           </select></span
         ><span id="kernel-status">Kernel starting…</span
         ><span id="build-status">Build…</span
-        ><span id="offline-status">Online</span><span class="spacer"></span
+        ><span id="offline-status">Online</span
+        ><button
+          id="storage-status"
+          type="button"
+          class="status-chip"
+          hidden
+        ></button
+        ><span class="spacer"></span
         ><button id="footer-scope" type="button" class="text-button">
           Analysis &amp; design scope
         </button>
@@ -522,17 +702,6 @@
       hidden
       data-testid="study-file"
     />
-    <button id="model-steel-design" type="button" hidden>
-      Member steel design
-    </button>
-    <button
-      id="steel-check"
-      type="button"
-      hidden
-      data-testid="steel-check-open"
-    >
-      Steel member check
-    </button>
     <dialog id="modal">
       <div class="dialog-header">
         <h2 id="modal-title"></h2>

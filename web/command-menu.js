@@ -249,7 +249,7 @@ export function commandMenu({
           },
         },
         {
-          label: "Concrete previews",
+          label: "Design objects",
           action: () => {
             panel("properties");
             $('[data-inspector-tab="concrete"]').click();

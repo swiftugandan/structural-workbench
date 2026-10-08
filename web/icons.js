@@ -1,6 +1,7 @@
 // Lucide 1.47.0, ISC license. Vendored SVG subset from lucide-static.
 // Original license: web/licenses/lucide.txt.
 const shapes = {
+  info: '<circle cx="12" cy="12" r="10" />\n  <path d="M12 16v-4" />\n  <path d="M12 8h.01" />',
   "mouse-pointer-2":
     '<path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z" />',
   "move-up-right": '<path d="M13 5H19V11" />\n  <path d="M19 5L5 19" />',

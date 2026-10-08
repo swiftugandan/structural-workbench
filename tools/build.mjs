@@ -1,4 +1,23 @@
 import { mkdir, readFile, writeFile, cp, rm, readdir } from "node:fs/promises";
+
+/** Inlines `@import url("…") [layer(name)];` rules, keeping layer order. */
+async function bundleStyles(entry) {
+  const base = entry.slice(0, entry.lastIndexOf("/") + 1);
+  const text = await readFile(entry, "utf8");
+  const out = [];
+  for (const line of text.split("\n")) {
+    const m = line.match(/^@import url\("\.\/([^"]+)"\)(?: layer\(([\w-]+)\))?;$/);
+    if (!m) {
+      out.push(line);
+      continue;
+    }
+    const body = await readFile(base + m[1], "utf8");
+    if (/^\s*@import/m.test(body))
+      throw new Error(`nested @import in ${m[1]} is not bundled`);
+    out.push(m[2] ? `@layer ${m[2]} {\n${body}}\n` : body);
+  }
+  return out.join("\n");
+}
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { build } from "esbuild";
@@ -77,6 +96,10 @@ if (process.argv[1]?.endsWith("/build.mjs")) {
     { stdio: "inherit" },
   );
   await cp("web", "dist", { recursive: true });
+  // The stylesheet is authored as an @import index (ADR 0033); ship it as one
+  // file, each import inlined inside the cascade layer it was imported into.
+  await writeFile("dist/styles.css", await bundleStyles("web/styles.css"));
+  await rm("dist/styles", { recursive: true, force: true });
   // Browsers update workers by script bytes, not build.json. Bind every worker
   // to its source snapshot before hashing output files (no hash recursion).
   await writeFile(

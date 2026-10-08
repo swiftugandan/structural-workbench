@@ -115,15 +115,20 @@ registry line.
   in view. A "More" list jumps to any tab without moving it. Nothing is
   clipped or unreachable at 1280 px or wider. Below 900 px the existing
   single-panel mode applies.
-- **One canvas toolbar row**: view, navigation, display, result family and
-  component and scale, then *Visibility* (storey, layer, isolate, hide, fit,
-  show all) and *Display & annotations* as popovers. Copy bay moves to the
-  ribbon's Create group and Assumptions to Inspect.
+- **One canvas toolbar row**: view, display, result family and component
+  and scale, then *Visibility* (storey, layer, isolate, hide, fit, show all;
+  its summary shows the filtered count) and *Display & annotations*. Both are
+  `<details>` disclosures, one open at a time, closed by Escape or a click
+  outside. Pan, orbit and fit float on the canvas as a navigation bar, as in
+  CAD tools. Copy bay moves to the ribbon's Create group and Assumptions to
+  Inspect.
 - **Resizable regions**: splitters between explorer, canvas and inspector,
   and between canvas and dock. They work by pointer, and by keyboard as
   `role="separator"` with arrow keys, Home/End and double-click to reset.
-  Sizes persist per viewer (`workbench-layout-v2`, which migrates v1). The
-  default dock height is `clamp(200px, 30vh, 420px)`.
+  Sizes persist per viewer (`workbench-layout-sizes-v1`, apart from the
+  panel visibility in `workbench-layout-v1`). Until a viewer resizes, the
+  stylesheet defaults apply, and they differ by breakpoint. The default dock
+  height is `clamp(200px, 30vh, 420px)`.
 - **At most two navigation levels in the dock**: dock tabs, plus, for the
   active design object only, its panes, labelled with the object's name.
 - **Status bar** gains a storage indicator in place of the banner. It opens a
@@ -141,9 +146,19 @@ registry line.
   `--border-*`, `--accent-*`, `--status-*`), spacing, radius, type scale,
   elevation, z-index and shell dimensions. The other files reference only
   tokens.
-- Cascade layers `@layer base, features, shell;`: the shell is authoritative
-  for its regions, whatever a feature selector's specificity. Feature files
-  keep the original rule order, so their behaviour is preserved.
+- `styles.css` (a required path in SPECIFICATION.md) is the entry. It
+  declares `@layer features, shell;` and imports the tokens unlayered, the
+  feature sheets `layer(features)` in the original rule order (each is a
+  contiguous range of the legacy sheet, so the cascade is unchanged), and
+  `shell.css` `layer(shell)`. The shell is therefore authoritative for its
+  regions, whatever a feature selector's specificity.
+- The palette was derived from the legacy sheet by CIEDE2000 clustering. It
+  merges colours within ΔE 4 into the most used member, keeps brand, status
+  and focus colours exact, and leaves 55 colours. `tools/style-snapshot.mjs`
+  records computed styles in fixed app states and compares builds, with
+  colours compared by ΔE.
+- The `body.design-workspace` skin, a compact second shell applied only
+  while a design tab was open, is removed. Its look is now the only shell.
 - Breakpoints: compact ≤ 900 px (single panel), medium ≤ 1280 px,
   wide ≥ 1600 px, and phone ≤ 600 px for the landing page only.
 - Shell selectors are defined once, in `styles/shell.css`.

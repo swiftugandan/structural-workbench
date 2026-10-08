@@ -17,7 +17,7 @@ test("Header is aligned and Design menu opens the existing design workflows", as
   await expect(page.locator("#steel-design-inspector")).toBeVisible();
   await menuCommand(page, "Design", "Model steel review");
   await expect(page.locator('[data-testid="steel-overview"]')).toBeVisible();
-  await menuCommand(page, "Design", "Concrete previews");
+  await menuCommand(page, "Design", "Design objects");
   await expect(page.locator("#concrete-inspector")).toBeVisible();
   await menuCommand(page, "Design", "Reference checks…");
   await expect(page.locator("dialog[open]")).toBeVisible();

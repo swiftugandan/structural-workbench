@@ -52,12 +52,7 @@ export function canvasTools({
     ["split", "Split", "split"],
     ["measure", "Measure", "measure"],
   ];
-  const group = document.createElement("div");
-  group.className = "ribbon-group";
-  group.dataset.category = "Modify";
-  group.innerHTML =
-    '<div class="ribbon-commands" id="direct-commands"></div><span class="ribbon-caption">Canvas edits</span>';
-  $("#ribbon-content").append(group);
+  // The "Canvas edits" ribbon group is declared in app.html (ADR 0033).
   for (const [name, label, img] of tools) {
     let b = $(
       {
@@ -71,6 +66,7 @@ export function canvasTools({
       b = document.createElement("button");
       b.id = "canvas-" + name;
       b.innerHTML = icon(img) + `<span>${label}</span>`;
+      b.title = label;
       $("#direct-commands").append(b);
     }
     b.setAttribute("aria-pressed", "false");

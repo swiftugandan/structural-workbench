@@ -58,8 +58,7 @@
   font-size: var(--text-xs);
   color: var(--color-text-muted);
 }
-#model-nav button,
-.design-workspace #model-nav button {
+#model-nav button {
   min-height: 26px;
   padding: 4px;
   gap: 4px;
@@ -96,13 +95,8 @@
   margin: 10px;
   color: var(--color-text-muted);
 }
-.design-workspace .project-summary {
+.project-summary {
   padding: 9px 12px;
-}
-@media (min-width: 1101px) {
-  .design-workspace .work-grid {
-    grid-template-columns: 245px minmax(0, 1fr) 410px;
-  }
 }
 
 #model-nav .entity {
@@ -239,15 +233,6 @@
   background: var(--color-surface-accent);
   color: var(--color-accent);
   border-color: var(--color-border-accent);
-}
-@media (min-width: 1101px) {
-  .design-workspace .work-grid {
-    grid-template-columns: 240px minmax(0, 1fr) 340px;
-    grid-template-rows: minmax(0, 1fr) 240px;
-  }
-  .design-workspace .work-grid.results-collapsed {
-    grid-template-rows: minmax(0, 1fr) 38px;
-  }
 }
 
 .steel-overview {

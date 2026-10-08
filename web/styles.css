@@ -15,3 +15,4 @@
 @import url("./styles/design.css") layer(features);
 @import url("./styles/explorer.css") layer(features);
 @import url("./styles/results.css") layer(features);
+@import url("./styles/shell.css") layer(shell);

@@ -4,6 +4,13 @@ import { menuCommand } from "../menu-helpers.js";
 import { evidenceDir } from "../../tools/evidence.mjs";
 const dir = evidenceDir("evidence/model-visibility");
 
+/** The storey, layer and isolate controls live in the toolbar's Visibility
+ * disclosure (ADR 0033); a click elsewhere closes it. */
+async function openVisibility(page) {
+  if (!(await page.locator("#view-scope").evaluate((d) => d.open)))
+    await page.locator("#view-scope > summary").click();
+}
+
 test("Inspect one storey's return stairs in plan, side and 3D without changing engineering data", async ({
   page,
 }) => {
@@ -20,7 +27,9 @@ test("Inspect one storey's return stairs in plan, side and 3D without changing e
     timeout: 60000,
   });
   const hash = await page.locator("#hash-status").textContent();
+  await openVisibility(page);
   await page.locator("#view-storey").selectOption("level1");
+  await openVisibility(page);
   await page.locator("#view-layer").selectOption("layerstair");
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-visible-members",
@@ -41,11 +50,13 @@ test("Inspect one storey's return stairs in plan, side and 3D without changing e
     await page.screenshot({ path: `${dir}/stair-${view}.png` });
   }
   await expect(page.locator("#hash-status")).toHaveText(hash);
+  await openVisibility(page);
   await page.locator("#view-layer").selectOption("layerlanding");
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-visible-members",
     "4",
   );
+  await openVisibility(page);
   await page.locator("#view-layer").selectOption("");
   await page.locator("#explorer-expand").click();
   await page
@@ -54,21 +65,25 @@ test("Inspect one storey's return stairs in plan, side and 3D without changing e
     )
     .first()
     .click();
+  await openVisibility(page);
   await page.locator("#isolate-selection").click();
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-visible-members",
     "1",
   );
+  await openVisibility(page);
   await page.locator("#hide-selection").click();
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-visible-members",
     "0",
   );
+  await openVisibility(page);
   await page.locator("#show-all-model").click();
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-visible-members",
     "642",
   );
+  await openVisibility(page);
   await page.locator("#fit-selection").click();
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-visible-members",
@@ -96,6 +111,7 @@ test("Hidden members cannot be picked and view changes preserve current results"
   await page.locator("#import-file").setInputFiles("fixtures/models/B02.json");
   await page.locator("#analyse").click();
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  await openVisibility(page);
   await page.locator("#hide-selection").click();
   await expect(page.locator("#viewport")).toHaveAttribute(
     "data-visible-members",
@@ -111,6 +127,7 @@ test("Hidden members cannot be picked and view changes preserve current results"
     "",
   );
   await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  await openVisibility(page);
   await page.locator("#show-all-model").click();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height * 0.53);
   await expect(page.locator("#viewport")).toHaveAttribute(
