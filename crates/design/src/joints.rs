@@ -24,7 +24,9 @@ const FLOOR: f64 = 0.020;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointBeam {
+    /// The draft's id and the analytical member it is bound to.
     pub id: String,
+    pub member: String,
     /// Unit vector along the beam, away from the joint.
     pub axis: [f64; 3],
     /// Unit vectors of the beam's local y (across the width) and z (to the top face).
@@ -43,6 +45,7 @@ pub struct JointBeam {
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointColumn {
     pub id: String,
+    pub member: String,
     /// Unit vector along the column.
     pub axis: [f64; 3],
     /// Unit vectors of the column's local y (width) and z (depth).
@@ -153,10 +156,10 @@ pub fn check(j: &Joint) -> Value {
                         checked += 1;
                         let need = (phi + c.diameter) / 2.0 + clear_minimum(phi, c.diameter, dg);
                         if dist < need - 1e-9 {
-                            clashes.push(json!({"kind": "beamColumn", "beam": b.id, "column": c.id, "face": face, "beamBar": k + 1,
-                                "columnBar": m + 1, "distance": dist, "required": need, "shortfall": need - dist,
-                                "message": format!("{} {face} bar {} passes {:.1} mm from column {} bar {}: {:.1} mm needed (8.2(2))",
-                                    b.id, k + 1, dist * 1e3, c.id, m + 1, need * 1e3)}));
+                            clashes.push(json!({"kind": "beamColumn", "clause": "8.2(2)",
+                                "beam": b.id, "beamMember": b.member, "column": c.id, "columnMember": c.member,
+                                "face": face, "beamBar": k + 1, "columnBar": m + 1,
+                                "distance": dist, "required": need, "shortfall": need - dist}));
                         }
                     }
                 }
@@ -183,10 +186,11 @@ pub fn check(j: &Joint) -> Value {
                 }
                 let need = (pa + pb) / 2.0;
                 if closest < need - 1e-9 {
-                    clashes.push(json!({"kind": "beamBeam", "beam": a.id, "other": b.id, "face": face, "distance": closest,
-                        "required": need, "shortfall": need - closest,
-                        "message": format!("{} and {} {face} bars cross {:.1} mm apart: move one layer by {:.1} mm",
-                            a.id, b.id, closest * 1e3, (need - closest) * 1e3)}));
+                    clashes.push(
+                        json!({"kind": "beamBeam", "beam": a.id, "beamMember": a.member,
+                        "other": b.id, "otherMember": b.member, "face": face,
+                        "distance": closest, "required": need, "shortfall": need - closest}),
+                    );
                 }
             }
         }
@@ -210,6 +214,7 @@ mod tests {
     fn beam(id: &str, axis: [f64; 3], lateral: [f64; 3], depth: f64) -> JointBeam {
         JointBeam {
             id: id.into(),
+            member: format!("m-{id}"),
             axis,
             lateral,
             up: [0.0, 0.0, 1.0],
@@ -226,6 +231,7 @@ mod tests {
     fn column(bars: Vec<[f64; 2]>) -> JointColumn {
         JointColumn {
             id: "C".into(),
+            member: "m-C".into(),
             axis: [0.0, 0.0, 1.0],
             y: [1.0, 0.0, 0.0],
             z: [0.0, 1.0, 0.0],

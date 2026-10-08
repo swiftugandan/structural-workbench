@@ -1039,6 +1039,7 @@ pub fn joints(p: &Project) -> Result<Value> {
                 let bars: Vec<[f64; 2]> = column_bars(v).iter().map(|b| [b.y, b.z]).collect();
                 joint.column = Some(JointColumn {
                     id: d.id.clone(),
+                    member: m.id.clone(),
                     axis: r[0],
                     y: r[1],
                     z: r[2],
@@ -1049,6 +1050,7 @@ pub fn joints(p: &Project) -> Result<Value> {
             } else {
                 joint.beams.push(JointBeam {
                     id: d.id.clone(),
+                    member: m.id.clone(),
                     axis: r[0].map(|x| x * sign),
                     lateral: r[1],
                     up: r[2],

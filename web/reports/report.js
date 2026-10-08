@@ -1,14 +1,9 @@
 import { entityLabel } from "../entity-labels.js";
 import { reportExcludedSection } from "../capabilities-ledger.js";
 import { connectionDrawing } from "../connection-drawing.js";
-export const escape = (s) =>
-  String(s).replace(
-    /[&<>"']/g,
-    (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
-        c
-      ],
-  );
+/** Kept for the string-template modules; new code uses core/html.js. */
+import { escapeHtml as escape } from "../core/html.js";
+export { escape };
 export function download(name, content, type = "application/json") {
   const url = URL.createObjectURL(new Blob([content], { type }));
   const a = document.createElement("a");
@@ -151,7 +146,7 @@ ${run.source === "modelNative" ? `<p>${e(run.stabilityBasis)}. Serviceability: N
  * mechanics beside the bound member's governing model moments, with
  * cracked-section service stresses. Never a code check; values in SI are
  * also carried exactly in data-si attributes and the embedded run record. */
-function concretePreviewsHtml(project, previewRuns, e) {
+export function concretePreviewsHtml(project, previewRuns, e) {
   if (!previewRuns?.length) return "";
   const si = (v, scale, unit) =>
     typeof v === "number"
@@ -224,7 +219,7 @@ const siCell = (v, scale, unit) =>
 
 /** RC column section mechanics runs (ADR 0022): biaxial M_Rd(N_Ed, θ) and a
  * mechanics utilisation at each key station. Never a code check. */
-function columnRunsHtml(project, runs, e) {
+export function columnRunsHtml(project, runs, e) {
   if (!runs?.length) return "";
   const body = runs
     .map((run) => {
@@ -284,7 +279,7 @@ ${ec2}
 
 /** Slab plate analyses (plate-v1, ADR 0021): solution quality, extremes,
  * Wood–Armer design moments and clamped-edge moments. Mechanics only. */
-function plateRunsHtml(runs, e) {
+export function plateRunsHtml(runs, e) {
   if (!runs?.length) return "";
   const body = runs
     .map((run) => {
@@ -342,7 +337,7 @@ function stabilityHtml(project, run, e) {
 }
 
 /** EC2 pad footings (ADR 0028): contact, bearing, designed bars and checks. */
-function footingRunsHtml(project, runs, e) {
+export function footingRunsHtml(project, runs, e) {
   if (!runs?.length) return "";
   const units = {
     N: [1e3, "kN"],
@@ -383,7 +378,7 @@ ${k ? `<p>Ground contact under the column actions: ${e(k.state)}, ${val(k.contac
 
 /** Single-plate connection designs (M13, ADR 0030): every limit state, the
  * dimensioned elevation and the bill of materials of each run. */
-function connectionRunsHtml(project, runs, e) {
+export function connectionRunsHtml(project, runs, e) {
   if (!runs?.length) return "";
   const units = {
     N: [1e3, "kN"],
@@ -416,7 +411,7 @@ ${connectionDrawing(cp)}
 }
 
 /** Composite beams (M17, ADR 0031): stages, every check and the deflections. */
-function compositeRunsHtml(project, runs, e) {
+export function compositeRunsHtml(project, runs, e) {
   if (!runs?.length) return "";
   const units = {
     N: [1e3, "kN"],
@@ -452,26 +447,13 @@ function compositeRunsHtml(project, runs, e) {
 export function report(
   project,
   result,
-  {
-    designRuns,
-    previewRuns,
-    columnRuns,
-    footingRuns,
-    plateRuns,
-    connectionRuns,
-    compositeRuns,
-    stabilityRun,
-  } = {},
+  // Design-object sections arrive rendered by the design registry (ADR 0033).
+  { designRuns, designObjectsHtml = "", stabilityRun } = {},
 ) {
   const e = escape;
   const designSection =
     designRunsHtml(designRuns, e) +
-    concretePreviewsHtml(project, previewRuns, e) +
-    columnRunsHtml(project, columnRuns, e) +
-    footingRunsHtml(project, footingRuns, e) +
-    connectionRunsHtml(project, connectionRuns, e) +
-    compositeRunsHtml(project, compositeRuns, e) +
-    plateRunsHtml(plateRuns, e) +
+    designObjectsHtml +
     stabilityHtml(project, stabilityRun, e);
   if (result.analysisType === "envelope") {
     const ids = (result.caseOrCombinationIds || []).join(", ");

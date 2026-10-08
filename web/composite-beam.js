@@ -3,8 +3,7 @@
  * stage deflections. Values are Rust's; this module formats and draws. */
 import { escape as esc } from "./reports/report.js";
 import { entityLabel } from "./entity-labels.js";
-import { designNames, fieldRows, pretty } from "./design-presentation.js";
-import { previewIdentity } from "./selection-context.js";
+import { fieldRows, pretty } from "./design-presentation.js";
 
 const mm = (v) => `${pretty(v * 1000, 1)} mm`;
 const kNm = (v) => `${pretty(v / 1000, 1)} kN·m`;
@@ -49,16 +48,13 @@ export function compositeSketch(d) {
   return `<rect x="20" y="${top}" width="${w}" height="${s * (t - hr)}" fill="#c9d1d9"/>${ribs}<rect x="${150 - 30}" y="${top + s * t}" width="60" height="6" fill="#516b82"/><rect x="147" y="${top + s * t + 6}" width="6" height="60" fill="#516b82"/><text x="150" y="226" text-anchor="middle">Schematic of the inputs · run for the section</text>`;
 }
 
-export function compositeInspector({ d, templates, ds, active, ctx }) {
+export function compositeInspector({ d, templates, ctx }) {
   const t = templates.find((t) => t.kind === d.kind),
     c = d.composite || {},
     p = ctx.project;
   const cases = caseOptions(p);
-  const chooser = `<select id="preview-active" aria-label="Active design object">${ds.map((item) => `<option value="${esc(item.id)}" ${item.id === active ? "selected" : ""}>${esc(previewIdentity(p, item).text)}</option>`).join("")}</select>`;
-  const create = `<details class="design-create"><summary>＋ Create a design object</summary><div class="design-inline"><select id="preview-kind" aria-label="New draft type">${templates.map((t) => `<option value="${t.kind}">${t.name}</option>`).join("")}</select><button id="preview-create">Create draft</button></div></details>`;
   const yesNo = (v) => (v === true ? "yes" : v === false ? "no" : "");
-  return `<div class="design-object-title"><div><small>SELECTED ${designNames[d.kind].toUpperCase()}</small><h2>${esc(previewIdentity(p, d).text)}<span class="design-tag">AISC 360-22 LRFD · demonstration</span></h2></div>${chooser}</div>
- <p class="design-note">An unshored, simply supported W beam with headed studs. The construction stage is checked on the steel alone and the composite stage on the plastic section, each from the stage's own case or combination.</p>
+  return `<p class="design-note">An unshored, simply supported W beam with headed studs. The construction stage is checked on the steel alone and the composite stage on the plastic section, each from the stage's own case or combination.</p>
  <form id="preview-form"><section class="design-section"><h3>1. Beam and slab</h3><div class="design-section-sketch"><svg viewBox="0 0 300 230" aria-label="Composite section schematic">${compositeSketch(d)}</svg><div>
  <label class="design-field"><span>Beam</span><select id="preview-target"><option value="">No model binding</option>${p.members.map((m) => `<option value="${esc(m.id)}" ${d.targetId === m.id ? "selected" : ""}>${esc(entityLabel(p, m.id))}${m.steelDesign ? ` · ${esc(m.steelDesign.sectionRef.split(":").pop())}` : ""}</option>`).join("")}</select></label>
  ${select("comp-deck", "Deck", t.composite.decks, c.deck || "perpendicular")}
@@ -91,8 +87,8 @@ export function compositeInspector({ d, templates, ds, active, ctx }) {
  )}
  <small>Your values and judgements, never assumed: missing ones leave their checks INDETERMINATE.</small>
  <div class="design-form-actions"><button id="preview-save">Save inputs</button><button type="button" id="preview-cancel">Cancel edits</button></div></section></form>
- <section class="design-section"><h3>6. Run</h3><label class="design-field"><span>Action source</span><select id="preview-source"><option value="synthetic">Synthetic fixture · MOCK</option><option value="model">Model stage cases</option></select></label><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run composite check</button></section>
- <p class="design-note">AISC 360-22 LRFD DEMONSTRATION · Chapter I with the Commentary's deflection and shrinkage models; not a certified design.</p>${create}<button id="preview-delete" class="design-delete">Delete this draft</button><p id="preview-error" role="alert"></p>`;
+ <section class="design-section"><h3>6. Run</h3><label class="design-field"><span>Action source</span><select id="preview-source"><option value="synthetic">Synthetic actions · illustration</option><option value="model">Model stage cases</option></select></label><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run composite check</button></section>
+ <p class="design-note">AISC 360-22 LRFD DEMONSTRATION · Chapter I with the Commentary's deflection and shrinkage models; not a certified design.</p>`;
 }
 
 /** The composite block of SetDesignPreview. */

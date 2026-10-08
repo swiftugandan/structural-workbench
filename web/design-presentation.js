@@ -1,16 +1,7 @@
-import { previewIdentity } from "./selection-context.js";
 import { entityLabel } from "./entity-labels.js";
 /** Presentation helpers shared by the model-native design workspaces. */
 import { escape as esc } from "./reports/report.js";
-export const designNames = {
-  rcBeam: "RC beam",
-  rcColumn: "RC column",
-  slab: "Slab",
-  padFooting: "Pad footing",
-  singlePlate: "Steel connection",
-  compositeBeam: "Composite beam",
-};
-const sourceLabel = (s) =>
+export const sourceLabel = (s) =>
   ({
     syntheticFixture: "Synthetic fixture",
     user: "User input",
@@ -54,8 +45,7 @@ export function mechanicsRows(d, template, law) {
     .join("");
 }
 export function mechanicsSection(d, template, law) {
-  if (!["rcBeam", "rcColumn"].includes(d.kind) || !template.mechanics)
-    return "";
+  if (!template.mechanics) return "";
   return `<fieldset class="design-subsection" id="preview-mechanics"><legend>Section mechanics law</legend><p class="design-note">Explicit mechanics inputs. These are not code values and never produce a design PASS.</p><label class="design-field"><span>Concrete law</span><select id="preview-mech-law">${template.mechanics.laws.map((l) => `<option value="${l.id}" ${l.id === law ? "selected" : ""}>${esc(l.label)}</option>`).join("")}</select></label><div id="preview-mech-fields">${mechanicsRows(d, template, law)}</div></fieldset>`;
 }
 const EXPOSURE = [
@@ -77,9 +67,10 @@ const SYSTEMS = [
   ["interiorSpan", "Interior span"],
   ["cantilever", "Cantilever"],
 ];
-/** EC2 code inputs (schema 1.8.0, ADR 0026/0027), the fields that apply to
- * the draft kind. Every value is the engineer's; nothing is preselected. */
-export function codeInputsSection(d, ctx) {
+/** EC2 code inputs (schema 1.8.0, ADR 0026/0027): the shared fields plus the
+ * groups the kind's descriptor asks for (`flags`, ADR 0033). Every value is
+ * the engineer's; nothing is preselected. */
+export function codeInputsSection(d, ctx, flags = {}) {
   const ci = d.codeInputs || {};
   const mm = (v) => (v == null ? "" : `${pretty(v * 1000)} mm`);
   const opt = (value, label, current) =>
@@ -101,112 +92,41 @@ export function codeInputsSection(d, ctx) {
   const shared = `<label class="design-field"><span>Exposure class</span><select id="code-exposure">${opt("", "— choose —", ci.exposureClass || "")}${EXPOSURE.map((x) => opt(x, x, ci.exposureClass)).join("")}</select></label>
 <label class="design-field"><span>c<sub>min,dur</sub> (BS 8500)</span><input id="code-cover" value="${mm(ci.minimumCoverDurability)}" placeholder="e.g. 15 mm" autocomplete="off"></label>
 <label class="design-field"><span>Max aggregate size</span><input id="code-aggregate" value="${mm(ci.aggregateSize)}" placeholder="e.g. 20 mm" autocomplete="off"></label>`;
-  const systems =
-    d.kind === "slab" ? [...SYSTEMS, ["flatSlab", "Flat slab"]] : SYSTEMS;
-  const bySpan = ["rcBeam", "slab"].includes(d.kind)
+  const systems = flags.flatSlab
+    ? [...SYSTEMS, ["flatSlab", "Flat slab"]]
+    : SYSTEMS;
+  const bySpan = flags.bySpan
     ? `<label class="design-field"><span>Structural system</span><select id="code-system">${opt("", "— choose —", ci.structuralSystem || "")}${systems.map(([v, l]) => opt(v, l, ci.structuralSystem)).join("")}</select></label>
 ${choice("code-partitions", "Supports sensitive partitions", yesNo(ci.partitionsSensitive))}`
     : "";
-  const qp =
-    d.kind === "rcBeam"
-      ? `<label class="design-field"><span>Quasi-permanent case / combination</span><select id="code-qp">${opt("", "— choose —", ci.quasiPermanentCombinationId || "")}${combos.map(([v, l]) => opt(v, l, ci.quasiPermanentCombinationId)).join("")}</select></label>`
-      : "";
+  const qp = flags.quasiPermanent
+    ? `<label class="design-field"><span>Quasi-permanent case / combination</span><select id="code-qp">${opt("", "— choose —", ci.quasiPermanentCombinationId || "")}${combos.map(([v, l]) => opt(v, l, ci.quasiPermanentCombinationId)).join("")}</select></label>`
+    : "";
   const pair = (id, label, v, hints = ["k1", "k2"]) =>
     `<label class="design-field"><span>${label}</span><span class="design-pair"><input id="${id}-1" value="${num(v?.[0])}" placeholder="${hints[0]}" autocomplete="off"><input id="${id}-2" value="${num(v?.[1])}" placeholder="${hints[1]}" autocomplete="off"></span></label>`;
-  const column =
-    d.kind === "rcColumn"
-      ? `${choice("code-braced", "Braced against sway", yesNo(ci.braced))}
+  const column = flags.column
+    ? `${choice("code-braced", "Braced against sway", yesNo(ci.braced))}
 ${pair("code-ky", "End restraint k1, k2 · bending about y", ci.restraintY)}
 ${pair("code-kz", "End restraint k1, k2 · bending about z", ci.restraintZ)}
 <label class="design-field"><span>Effective creep ratio φ<sub>ef</sub></span><input id="code-creep" value="${num(ci.effectiveCreepRatio)}" placeholder="e.g. 1.5" autocomplete="off" inputmode="decimal"></label>
 <small>k = (θ/M)(EI/l): 0 for a rigid end (0.1 is used as the minimum), 1000 for a pin. 5.8.3.2(3).</small>`
-      : "";
-  const slab =
-    d.kind === "slab"
-      ? `${pair(
-          "code-colsize",
-          "Column size c<sub>x</sub>, c<sub>y</sub> (punching)",
-          ci.columnSize?.map((v) => `${pretty(v * 1000)} mm`),
-          ["e.g. 400 mm", "e.g. 400 mm"],
-        )}`
-      : "";
-  const footing =
-    d.kind === "padFooting"
-      ? `${choice("code-blinding", "Cast on blinding (else against ground)", yesNo(ci.castOnBlinding))}
+    : "";
+  const slab = flags.columnSize
+    ? `${pair(
+        "code-colsize",
+        "Column size c<sub>x</sub>, c<sub>y</sub> (punching)",
+        ci.columnSize?.map((v) => `${pretty(v * 1000)} mm`),
+        ["e.g. 400 mm", "e.g. 400 mm"],
+      )}`
+    : "";
+  const footing = flags.footing
+    ? `${choice("code-blinding", "Cast on blinding (else against ground)", yesNo(ci.castOnBlinding))}
 <label class="design-field"><span>Bearing case / combination</span><select id="code-bearing">${opt("", "— choose —", ci.bearingCombinationId || "")}${combos.map(([v, l]) => opt(v, l, ci.bearingCombinationId)).join("")}</select></label>
 <small>The allowable bearing input is compared with this case or combination, plus the base and overburden.</small>`
-      : "";
+    : "";
   return `<fieldset class="design-code-inputs" data-testid="code-inputs"><legend>EC2 code inputs</legend>
 ${shared}${bySpan}${qp}${column}${slab}${footing}
 <small>Your values from BS 8500 and the brief. A check that needs a value you have not entered stays INDETERMINATE; nothing is assumed.</small></fieldset>`;
-}
-export function previewInspector({
-  d,
-  templates,
-  ds,
-  active,
-  ctx,
-  face,
-  sketch,
-  mechanicsLaw,
-  plateHtml = "",
-}) {
-  const create = `<details class="design-create" ${!d ? "open" : ""}><summary>＋ Create a design object</summary><div class="design-inline"><select id="preview-kind" aria-label="New draft type">${templates.map((t) => `<option value="${t.kind}">${t.name}</option>`).join("")}</select><button id="preview-create">Create draft</button></div></details>`;
-  const chooser = `<select id="preview-active" aria-label="Active design object"><option value="" ${!d ? "selected" : ""}>Select a design draft</option>${ds.map((item) => `<option value="${esc(item.id)}" ${item.id === active ? "selected" : ""}>${esc(previewIdentity(ctx.project, item).text)}</option>`).join("")}</select>`;
-  if (!d)
-    return `<div class="design-object-title"><small>CONCRETE WORKFLOWS</small><h2>Select a design object</h2>${chooser}<p>Create a beam, slab or pad footing draft to open its design workspace.</p></div>${create}<p class="design-note">Mock workflows. Concrete design checks are not yet available.</p><p id="preview-error" role="alert"></p>`;
-  const t = templates.find((t) => t.kind === d.kind),
-    v = d.inputs;
-  const geometry =
-    d.kind === "rcBeam" || d.kind === "rcColumn"
-      ? ["width", "depth", "cover"]
-      : d.kind === "slab"
-        ? [
-            "length",
-            "width",
-            "thickness",
-            "cover",
-            "openingLength",
-            "openingWidth",
-          ]
-        : [
-            "length",
-            "width",
-            "thickness",
-            "columnWidth",
-            "columnDepth",
-            "cover",
-          ];
-  const special =
-    d.kind === "rcColumn"
-      ? [
-          "barDiameter",
-          "barsAlongWidth",
-          "barsAlongDepth",
-          "linkDiameter",
-          "linkSpacing",
-        ]
-      : d.kind === "rcBeam"
-        ? [
-            "topBarCount",
-            "topBarDiameter",
-            "bottomBarCount",
-            "bottomBarDiameter",
-            "linkDiameter",
-            "linkSpacing",
-            "linkLegs",
-          ]
-        : d.kind === "slab"
-          ? ["meshSize"]
-          : ["bearingPressure", "embedment", "soilUnitWeight"];
-  return `<div class="design-object-title"><div><small>SELECTED ${designNames[d.kind].toUpperCase()}</small><h2>${esc(previewIdentity(ctx.project, d).text)}<span class="design-tag">${["rcBeam", "rcColumn", "padFooting", "slab"].includes(d.kind) ? "EC2 UK · demonstration" : "Mock workflow"}</span></h2></div>${chooser}</div>
- <p class="design-note">Draft geometry is independent of analysis stiffness. The binding identifies the source of actions.</p>
- <form id="preview-form"><section class="design-section"><h3>1. Geometry and section</h3><div class="design-section-sketch"><svg viewBox="0 0 300 230" aria-label="Section sketch">${sketch}</svg><div>${fieldRows(d, t, geometry)}</div></div></section>
- <section class="design-section"><h3>2. Materials</h3>${fieldRows(d, t, ["concreteStrength", "rebarStrength"])}<small class="source-key">S · synthetic fixture &nbsp; U · user input. Strength inputs are not a code profile.</small>${mechanicsSection(d, t, mechanicsLaw)}</section>
- <section class="design-section"><h3>3. ${d.kind === "rcBeam" || d.kind === "rcColumn" ? "Reinforcement preferences" : d.kind === "slab" ? "Mesh settings" : "Soil parameters"}</h3>${fieldRows(d, t, special)}${d.kind === "rcBeam" ? `<label class="design-check full"><input type="checkbox" id="preview-anchorage" ${d.tensionAnchorageConfirmed ? "checked" : ""}> I confirm the tension steel extends at least l<sub>bd</sub> + d beyond the checked sections</label><small>Your confirmation, never assumed. Unconfirmed, EC2 shear ignores this steel (ρ<sub>l</sub> = 0) and anchorage stays INDETERMINATE.</small>` : ""}${codeInputsSection(d, ctx)}${d.kind === "padFooting" ? `<label class="design-field full"><span>Geotechnical reference</span><textarea id="preview-soil" maxlength="512">${esc(d.soilReference)}</textarea></label><small>Bearing pressure is externally supplied, never calculated here.</small>` : ""}${d.kind === "slab" ? `<small>Target cell size of the structured plate mesh.</small>${plateHtml}` : ""}</section>
- <section class="design-section"><h3>4. Model binding</h3>${d.kind !== "slab" ? `<label class="design-field"><span>${d.kind === "padFooting" ? "Support" : "Member"}</span><select id="preview-target"><option value="">No model binding</option>${ctx.project[d.kind === "padFooting" ? "supports" : "members"].map((e) => `<option value="${e.id}" ${d.targetId === e.id ? "selected" : ""}>${esc(entityLabel(ctx.project, e.id))}</option>`).join("")}</select></label>` : "<p>The panel is analysed on its own under its entered pressure · frame forces never substitute for plate results.</p>"}<div class="design-form-actions"><button id="preview-save">Save inputs</button><button type="button" id="preview-cancel">Cancel edits</button></div></section></form>
- <section class="design-section"><h3>5. Design actions and readiness</h3><label class="design-field"><span>Action source</span><select id="preview-source">${d.kind === "slab" ? '<option value="plate">Plate analysis of this panel</option>' : ""}<option value="synthetic">Synthetic fixture · MOCK</option>${d.kind !== "slab" ? '<option value="model">Current model case / combination</option>' : ""}</select></label>${d.kind === "slab" ? `<label class="design-field"><span>Reinforcement layer</span><select id="preview-face">${["Top X", "Top Y", "Bottom X", "Bottom Y"].map((f) => `<option ${f === face ? "selected" : ""}>${f}</option>`).join("")}</select></label>` : ""}<div class="readiness-grid"><span>✓ Draft geometry recorded</span><span>${["rcBeam", "rcColumn", "padFooting", "slab"].includes(d.kind) ? "✓ EC2 UK profile · demonstration" : "△ Code profile unavailable"}</span><span>△ Reinforcement unverified</span><span>△ ${d.kind === "padFooting" ? "Contact indeterminate" : ["rcBeam", "rcColumn"].includes(d.kind) ? "Resistance on model actions only" : "Resistance unsupported"}</span></div><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run workflow preview</button>${["rcBeam", "rcColumn"].includes(d.kind) ? '<button type="button" id="preview-propose" class="secondary">Propose reinforcement</button>' : ""}</section>
- <p class="design-note">${["rcBeam", "rcColumn", "padFooting", "slab"].includes(d.kind) ? "EC2 UK DEMONSTRATION · EN 1992-1-1:2004+AC:2010 with UK NA (2009); A1:2014 / NA+A2:2014 not reconciled; not a certified design. Draft dimensions do not change frame stiffness." : "MOCK WORKFLOW · No code-compliance claim. Draft dimensions do not change frame stiffness."}</p>${create}<button id="preview-delete" class="design-delete">Delete this draft</button><p id="preview-error" role="alert"></p>`;
 }
 export function provenanceTable(run) {
   return `<dl class="design-provenance-grid">${Object.entries({
@@ -343,16 +263,16 @@ export function proposalPanel(proposal) {
   const open = proposal.checks.filter((c) => c.status !== "pass");
   return `<article class="design-proposal" data-testid="proposal"><h4>Reinforcement proposal · least steel</h4><dl class="design-provenance-grid"><dt>Top</dt><dd data-testid="proposal-top">${v.topBarCount} Ø${mm(v.topBarDiameter)}</dd><dt>Bottom</dt><dd data-testid="proposal-bottom">${v.bottomBarCount} Ø${mm(v.bottomBarDiameter)}</dd><dt>Links</dt><dd data-testid="proposal-links">Ø${mm(v.linkDiameter)} @ ${mm(v.linkSpacing)} mm</dd><dt>Steel</dt><dd>${pretty(proposal.massPerMetre, 3)} kg/m</dd><dt>Status</dt><dd><span class="status-text ${esc(proposal.overall)}" data-testid="proposal-overall">${esc(statusLabel(proposal.overall))}</span></dd></dl>${open.length ? `<p class="design-note">Still open: ${open.map((c) => `${esc(c.name)} ${esc(statusLabel(c.status))}`).join(" · ")}.</p>` : ""}<small>${proposal.candidatesEvaluated} arrangements evaluated: Ø10–32 bars, 2–8 per face, Ø8–12 links at 75–300 mm; width, depth, cover, legs, materials and code inputs as drafted. ${esc(proposal.basis.acceptance)}.</small><button type="button" id="preview-apply-proposal">Apply proposal to the draft</button></article>`;
 }
-const statusLabel = (s) =>
+export const statusLabel = (s) =>
   s === "notApplicable" ? "N/A" : String(s).toUpperCase();
-const utilisationOf = (checks) => {
+export const utilisationOf = (checks) => {
   const u = checks
     .map((c) => c.utilisation)
     .filter((v) => typeof v === "number");
   return u.length ? pretty(Math.max(...u), 3) : "—";
 };
 /** Plan of the base with the solved ULS contact polygon and corner pressures. */
-function contactDrawing(run, d) {
+export function contactDrawing(run, d) {
   const k = run?.codeProfilePreview?.design?.uls?.contact;
   if (!k) return "";
   const { length: L, width: B } = d.inputs;
@@ -483,59 +403,4 @@ export function ec2ColumnPane(run) {
     )
     .join("");
   return `<h4>EC2 column checks · ${esc(cp.ndp)}</h4>${banner}<p class="source-key">N<sub>Ed</sub> ${val(cp.actions.nEd, "N")} (compression) · end My ${cp.actions.myEnds.map((m) => val(m, "N m")).join(" / ")} · end Mz ${cp.actions.mzEnds.map((m) => val(m, "N m")).join(" / ")} · ${esc(cp.combinationId)}${cp.transverseLoad ? " · loads along the member (r<sub>m</sub> = 1)" : ""}</p>${axes ? `<table><thead><tr><th>Direction</th><th>l<sub>0</sub></th><th>λ</th><th>λ<sub>lim</sub></th><th>Slender</th><th>e<sub>i</sub></th><th>e<sub>0</sub></th><th>e<sub>2</sub></th><th>M<sub>Ed</sub></th></tr></thead><tbody>${axes}</tbody></table>` : ""}<table><thead><tr><th>Check</th><th>Clause</th><th>Status</th><th>Demand</th><th>Resistance / limit</th><th>Util.</th><th>Note</th></tr></thead><tbody>${rows}</tbody></table><ul class="design-note">${cp.limitations.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`;
-}
-export function previewPane({ run, state, d, pane, checkIndex, sketch }) {
-  const checks = run?.checks || [],
-    source = run?.sourceProvenance;
-  const summary = `<div class="design-summary-grid"><article class="design-verdict ${state.toLowerCase()}"><div class="verdict-symbol">${state === "STALE" ? "◷" : state === "PASS" ? "✓" : state === "FAIL" ? "✕" : "△"}</div><div><small>OVERALL DESIGN</small><strong data-testid="preview-state">${state}</strong><p>${designNames[d.kind]}</p><span>Utilisation <b data-testid="preview-utilisation">${utilisationOf(checks)}</b></span><small>${run?.codeProfile ? `${esc(run.codeProfile.edition)} · DEMONSTRATION` : "No verified resistance"}</small></div></article><div class="design-check-matrix"><table><thead><tr><th>Check</th><th>Status</th><th>Util.</th></tr></thead><tbody>${checks.map((c, i) => `<tr data-testid="preview-check-row" data-check="${esc(c.name)}"><td><button class="check-link" data-preview-check="${i}">${esc(c.name)}</button></td><td><span class="status-text ${esc(c.status)}">${esc(statusLabel(c.status))}</span></td><td>${c.utilisation == null ? "—" : pretty(c.utilisation, 3)}</td></tr>`).join("")}</tbody></table>${!run ? "<p>Run a preview to record actions and unavailable checks.</p>" : ""}</div><aside class="design-notes"><h4>Design basis</h4><p class="design-note" data-testid="design-basis">${run?.codeProfile ? `DEMONSTRATION — ${esc(run.codeProfile.id === "aisc-360-22-lrfd" ? `${run.codeProfile.standard} ` : "")}${esc(run.codeProfile.edition)}; ${(run.codeProfile.unreconciledAmendments || []).length ? `${esc(run.codeProfile.unreconciledAmendments.join(", "))} not reconciled; ` : ""}${esc(run.codeProfile.certification)}.` : "MOCK WORKFLOW — no code-compliance claim."}</p><p>Actions: <b>${source?.mock ? "SYNTHETIC FIXTURE" : source?.kind === "plateAnalysis" ? "Plate analysis (plate-v1)" : source ? "Actual model analysis" : "Not captured"}</b></p><p>Code profile: ${run?.codeProfile ? esc(run.codeProfile.id) : "unavailable"}</p>${d.kind === "padFooting" ? `<p>Contact: <b data-testid="footing-contact-state">${esc(String(run?.contactState || "indeterminate").toUpperCase())}</b></p><p>Soil bearing input: ${esc(run?.soilProvenance?.source || d.inputSources?.bearingPressure || d.inputSource)}; never computed by Workbench.</p>` : ""}</aside>${proposalPanel(run?.reinforcementProposal)}</div>`;
-  if (pane === "summary") return summary;
-  if (pane === "mechanics") return mechanicsPane(run);
-  if (pane === "ec2")
-    return d.kind === "rcColumn"
-      ? ec2ColumnPane(run)
-      : d.kind === "padFooting"
-        ? ec2FootingPane(run)
-        : d.kind === "slab"
-          ? ec2SlabPane(run)
-          : ec2Pane(run);
-  if (pane === "reinforcement")
-    return `<div class="reinforcement-layout"><article><h4>${d.kind === "rcBeam" ? "Longitudinal reinforcement layout" : "Reinforcement plan"} <small>· illustration only</small></h4>${d.kind === "rcBeam" ? beamElevation(d) : `<svg class="design-drawing" viewBox="0 0 300 230">${sketch}</svg>`}<p class="design-note">Preference illustration · not a verified arrangement or construction drawing.</p></article><article><h4>${d.kind === "rcBeam" ? "Cross-section" : "Geometry and layers"}</h4><svg class="section-drawing" viewBox="0 0 300 230">${sketch}</svg><p>Cover ${pretty(d.inputs.cover * 1000)} mm · fit, spacing and anchorage unverified.</p></article></div>`;
-  if (pane === "schedule") {
-    const len = (v) => (v == null ? "—" : `${pretty(v * 1000)} mm`);
-    const kg = (v) => (v == null ? "—" : `${pretty(v, 3)} kg`);
-    const rows = run?.schedule || [];
-    const total =
-      rows.every((r) => r.massKg != null) && rows.length
-        ? rows.reduce((a, r) => a + r.massKg, 0)
-        : null;
-    return `<h4>Bar schedule · indicative</h4><table><thead><tr><th>Mark</th><th>Region</th><th>Shape</th><th>Bar</th><th>Qty</th><th>Cut length</th><th>Mass</th><th>Basis</th></tr></thead><tbody>${rows.map((r) => `<tr data-testid="schedule-row" data-mark="${esc(r.mark)}"><td>${esc(r.mark)}</td><td>${esc(r.region)}</td><td>${esc(r.shape || "")}</td><td>Ø${pretty(r.diameter * 1000)} mm</td><td>${r.quantity ?? "—"}</td><td>${len(r.cutLength)}</td><td>${kg(r.massKg)}</td><td>${esc(r.basis || "")}</td></tr>`).join("")}</tbody>${total == null ? "" : `<tfoot><tr><td colspan="6">Total</td><td data-testid="schedule-total">${kg(total)}</td><td></td></tr></tfoot>`}</table><p class="design-note">${rows.length ? "INDICATIVE — designed straight bars with no curtailment or laps; BS 8666 shape codes are not held. Not a fabrication schedule." : "A schedule is unavailable for this design object."}</p>`;
-  }
-  if (pane === "soil")
-    return `<div class="reinforcement-layout"><article><h4>Soil / contact</h4>${contactDrawing(run, d) || `<svg class="section-drawing" viewBox="0 0 300 230">${sketch}</svg><p class="design-note">Contact INDETERMINATE · run on model actions to solve the ground contact.</p>`}</article><article><h4>External soil inputs</h4><dl class="design-provenance-grid"><dt>Allowable bearing input</dt><dd>${pretty(d.inputs.bearingPressure / 1000)} kPa</dd><dt>Origin</dt><dd>${esc(sourceLabel(d.inputSources?.bearingPressure || d.inputSource))}</dd><dt>Reference</dt><dd>${esc(d.soilReference)}</dd><dt>Workbench soil capacity</dt><dd>Not calculated</dd>${(() => {
-      const k = run?.codeProfilePreview?.design?.uls?.contact;
-      return k
-        ? `<dt>q<sub>min</sub> / q<sub>max</sub> (ULS, column only)</dt><dd data-testid="footing-qmax">${pretty(k.qMin / 1000, 4)} / ${pretty(k.qMax / 1000, 4)} kPa</dd><dt>Contact area</dt><dd>${pretty(k.contactArea, 4)} m² (${pretty(100 * k.contactFraction, 3)} %)</dd>`
-        : "<dt>q<sub>min</sub> / q<sub>max</sub></dt><dd>Unavailable</dd><dt>Contact area</dt><dd>Unavailable</dd>";
-    })()}</dl></article></div>`;
-  if (pane === "details") {
-    const c = checks[checkIndex] || checks[0];
-    return `<div class="calculation-layout"><nav aria-label="Concrete calculation checks">${checks.map((c, i) => `<button class="${i === checkIndex ? "active" : ""}" data-preview-check="${i}">△ ${esc(c.name)}</button>`).join("")}</nav><article><h3>${esc(c?.name || "Calculation details")}</h3><span class="status-text ${esc(c?.status || "unsupported")}">${esc(statusLabel(c?.status || "unsupported"))}</span><p>${esc(c?.reason || "No recorded check.")}</p><dl class="design-provenance-grid"><dt>Demand</dt><dd>${run?.codeProfile ? "Per station in the EC2 checks tab" : "See recorded upstream actions"}</dd><dt>Resistance</dt><dd>${run?.codeProfile ? "Per station in the EC2 checks tab" : "Unavailable"}</dd><dt>Clause / code profile</dt><dd>${run?.codeProfile ? `${esc(run.codeProfile.id)} · ${esc(run.codeProfile.edition)}` : "Unavailable"}</dd><dt>Utilisation</dt><dd>${c?.utilisation == null ? "—" : pretty(c.utilisation, 3)}</dd></dl>${run ? provenanceTable(run) : ""}</article></div>`;
-  }
-  return source
-    ? `<h4>Design actions · ${source.mock ? "synthetic fixture" : source.kind === "plateAnalysis" ? "plate analysis" : "actual model analysis"}</h4>${
-        source.rawPlateActions
-          ? `<table><thead><tr><th>Raw plate action</th><th>N·m/m</th></tr></thead><tbody>${Object.entries(
-              source.rawPlateActions,
-            )
-              .map(
-                ([k, v]) => `<tr><td>${esc(k)}</td><td>${pretty(v)}</td></tr>`,
-              )
-              .join(
-                "",
-              )}</tbody></table><p>Design transformation and mesh convergence unavailable.</p>`
-          : source.foundationActions
-            ? `<table><thead><tr>${["Fx", "Fy", "Fz", "Mx", "My", "Mz"].map((k) => `<th>${k}</th>`).join("")}</tr></thead><tbody><tr>${source.foundationActions.map((n, i) => `<td>${pretty(n / 1000)} ${i < 3 ? "kN" : "kN·m"}</td>`).join("")}</tr></tbody></table><p>${esc(source.axes || "")}</p>`
-            : `<p>${source.stations?.length || 0} recorded member key stations · exact data in the preview record.</p>`
-      }${provenanceTable(run)}`
-    : "<p>No actions captured yet.</p>";
 }

@@ -4,8 +4,7 @@
  * before a run is a labelled schematic of the entered inputs. */
 import { escape as esc } from "./reports/report.js";
 import { entityLabel } from "./entity-labels.js";
-import { designNames, fieldRows, pretty } from "./design-presentation.js";
-import { previewIdentity } from "./selection-context.js";
+import { fieldRows, pretty } from "./design-presentation.js";
 import { connectionDrawing } from "./connection-drawing.js";
 export { connectionDrawing };
 
@@ -61,21 +60,18 @@ export function connectionSketch(d) {
 }
 
 /** The inspector of a single-plate connection draft. */
-export function connectionInspector({ d, templates, ds, active, ctx }) {
+export function connectionInspector({ d, templates, ctx }) {
   const t = templates.find((t) => t.kind === d.kind),
     c = d.connection || {},
     p = ctx.project;
   const steelMembers = p.members.filter((m) => m.steelDesign);
-  const chooser = `<select id="preview-active" aria-label="Active design object">${ds.map((item) => `<option value="${esc(item.id)}" ${item.id === active ? "selected" : ""}>${esc(previewIdentity(p, item).text)}</option>`).join("")}</select>`;
-  const create = `<details class="design-create"><summary>＋ Create a design object</summary><div class="design-inline"><select id="preview-kind" aria-label="New draft type">${templates.map((t) => `<option value="${t.kind}">${t.name}</option>`).join("")}</select><button id="preview-create">Create draft</button></div></details>`;
   const braced =
     c.bracedAgainstRotation === true
       ? "yes"
       : c.bracedAgainstRotation === false
         ? "no"
         : "";
-  return `<div class="design-object-title"><div><small>SELECTED ${designNames[d.kind].toUpperCase()}</small><h2>${esc(previewIdentity(p, d).text)}<span class="design-tag">AISC 360-22 LRFD · demonstration</span></h2></div>${chooser}</div>
- <p class="design-note">A shop-welded single plate (fin plate) bolted to an uncoped W beam web: a simple connection. The beam's exact end actions from the current analysis are the demand.</p>
+  return `<p class="design-note">A shop-welded single plate (fin plate) bolted to an uncoped W beam web: a simple connection. The beam's exact end actions from the current analysis are the demand.</p>
  <form id="preview-form"><section class="design-section"><h3>1. Beam end and support</h3><div class="design-section-sketch"><svg viewBox="0 0 300 230" aria-label="Connection schematic">${connectionSketch(d)}</svg><div>
  <label class="design-field"><span>Beam</span><select id="preview-target"><option value="">No model binding</option>${p.members.map((m) => `<option value="${esc(m.id)}" ${d.targetId === m.id ? "selected" : ""}>${esc(entityLabel(p, m.id))}${m.steelDesign ? ` · ${esc(m.steelDesign.sectionRef.split(":").pop())}` : ""}</option>`).join("")}</select></label>
  ${select(
@@ -113,8 +109,8 @@ export function connectionInspector({ d, templates, ds, active, ctx }) {
  )}
  <small>Your confirmation, never assumed: unconfirmed, the plate interaction checks are INDETERMINATE.</small>
  <div class="design-form-actions"><button id="preview-save">Save inputs</button><button type="button" id="preview-cancel">Cancel edits</button></div></section></form>
- <section class="design-section"><h3>5. Design actions and readiness</h3><label class="design-field"><span>Action source</span><select id="preview-source"><option value="synthetic">Synthetic fixture · MOCK</option><option value="model">Current model case / combination</option></select></label><div class="readiness-grid"><span>${c.supportMemberId ? "✓" : "△"} Support chosen</span><span>✓ AISC 360-22 LRFD · demonstration</span><span>△ Moment must be released at this end</span><span>△ Bolt lengths by the fabricator</span></div><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run connection check</button></section>
- <p class="design-note">AISC 360-22 LRFD DEMONSTRATION · general (extended-configuration) method from the Specification and the Manual equations reproduced in the held Design Examples v16; not a certified design.</p>${create}<button id="preview-delete" class="design-delete">Delete this draft</button><p id="preview-error" role="alert"></p>`;
+ <section class="design-section"><h3>5. Design actions and readiness</h3><label class="design-field"><span>Action source</span><select id="preview-source"><option value="synthetic">Synthetic actions · illustration</option><option value="model">Current model case / combination</option></select></label><div class="readiness-grid"><span>${c.supportMemberId ? "✓" : "△"} Support chosen</span><span>✓ AISC 360-22 LRFD · demonstration</span><span>△ Moment must be released at this end</span><span>△ Bolt lengths by the fabricator</span></div><p id="preview-readiness" class="source-key"></p><button class="primary" id="preview-run">Run connection check</button></section>
+ <p class="design-note">AISC 360-22 LRFD DEMONSTRATION · general (extended-configuration) method from the Specification and the Manual equations reproduced in the held Design Examples v16; not a certified design.</p>`;
 }
 
 /** Keep the support choices in step with the beam and end (presentation). */

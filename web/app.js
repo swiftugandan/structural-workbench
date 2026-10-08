@@ -37,6 +37,7 @@ import {
 } from "./state/storage.js";
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
+import { reportSections } from "./design/registry.js";
 import { initOffline, afterSaved } from "./offline.js";
 import {
   loadCapabilitiesLedger,
@@ -2014,65 +2015,13 @@ $("#export-report").onclick = () => {
             run.modelHash === modelHash &&
             (run.source !== "modelNative" || run.resultId === result.resultId),
         ),
-        // Current model-sourced RC beam previews bound to this exact result.
-        previewRuns: concrete
-          .records()
-          .filter(
-            (run) =>
-              run.kind === "rcBeam" &&
-              run.modelHash === modelHash &&
-              run.sourceProvenance.kind === "modelAnalysis" &&
-              run.sourceProvenance.resultId === result.resultId,
-          ),
-        // Current model-sourced RC column previews bound to this result.
-        columnRuns: concrete
-          .records()
-          .filter(
-            (run) =>
-              run.kind === "rcColumn" &&
-              run.modelHash === modelHash &&
-              run.sourceProvenance.kind === "modelAnalysis" &&
-              run.sourceProvenance.resultId === result.resultId,
-          ),
-        // Current model-sourced pad footing designs bound to this result.
-        footingRuns: concrete
-          .records()
-          .filter(
-            (run) =>
-              run.kind === "padFooting" &&
-              run.modelHash === modelHash &&
-              run.sourceProvenance.kind === "modelAnalysis" &&
-              run.sourceProvenance.resultId === result.resultId,
-          ),
-        // Current model-sourced composite beam designs (ADR 0031).
-        compositeRuns: concrete
-          .records()
-          .filter(
-            (run) =>
-              run.kind === "compositeBeam" &&
-              run.modelHash === modelHash &&
-              run.sourceProvenance.kind === "modelAnalysis" &&
-              run.sourceProvenance.resultId === result.resultId,
-          ),
-        // Current model-sourced steel connection designs (ADR 0030).
-        connectionRuns: concrete
-          .records()
-          .filter(
-            (run) =>
-              run.kind === "singlePlate" &&
-              run.modelHash === modelHash &&
-              run.sourceProvenance.kind === "modelAnalysis" &&
-              run.sourceProvenance.resultId === result.resultId,
-          ),
-        // Slab plate analyses of the current model's drafts (ADR 0021).
-        plateRuns: concrete
-          .records()
-          .filter(
-            (run) =>
-              run.kind === "slab" &&
-              run.modelHash === modelHash &&
-              run.plateAnalysis?.status === "evaluated",
-          ),
+        // Every design object's current run, per its kind's report rule.
+        designObjectsHtml: reportSections(
+          portable(),
+          concrete.records(),
+          { modelHash, result },
+          esc,
+        ),
         // A stability run of the current model, whichever case it analysed.
         stabilityRun: stability.current(modelHash),
       }),

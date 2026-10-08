@@ -1,4 +1,5 @@
 import { previewIdentity } from "./selection-context.js";
+import { CATALOGUE, kindInfo } from "./design/catalogue.js";
 import { renderMemberNav } from "./hierarchy.js";
 const nameOrder = new Intl.Collator(undefined, { numeric: true });
 
@@ -151,7 +152,7 @@ export function renderExplorer(
       items
         .map(
           (d) =>
-            `<button class="explorer-leaf" data-preview="${esc(d.id)}" ${selectionContext?.kind === "preview" && selectionContext.id === d.id ? 'aria-current="true"' : ""}><span aria-hidden="true">▱</span><span>${esc(previewIdentity(project, d).text)}</span><small>Mock · ${esc(d.id.slice(-6))}</small></button>`,
+            `<button class="explorer-leaf" data-preview="${esc(d.id)}" ${selectionContext?.kind === "preview" && selectionContext.id === d.id ? 'aria-current="true"' : ""}><span aria-hidden="true">▱</span><span>${esc(previewIdentity(project, d).text)}</span><small>${esc(kindInfo(d.kind).profile.short)} · ${esc(d.id.slice(-6))}</small></button>`,
         )
         .join(""),
       items.length,
@@ -179,13 +180,8 @@ export function renderExplorer(
         group("supports", "Supports", project.members.length < 50) +
         branch(
           "drafts",
-          "Design objects · mock",
-          drafts("rcBeam", "RC beams") +
-            drafts("rcColumn", "RC columns") +
-            drafts("slab", "Slabs") +
-            drafts("padFooting", "Foundations") +
-            drafts("singlePlate", "Steel connections") +
-            drafts("compositeBeam", "Composite beams"),
+          "Design objects",
+          CATALOGUE.map((k) => drafts(k.kind, k.group)).join(""),
         ),
     ) +
     branch(

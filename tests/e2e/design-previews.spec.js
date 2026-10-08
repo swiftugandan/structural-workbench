@@ -43,7 +43,7 @@ for (const kind of ["rcBeam", "slab", "padFooting"])
       kind === "slab" ? "INDETERMINATE" : "UNSUPPORTED",
     );
     await expect(page.locator("#design-preview-scene")).toContainText(
-      kind === "slab" ? "DEMONSTRATION" : "MOCK WORKFLOW",
+      kind === "slab" ? "DEMONSTRATION" : "SYNTHETIC ACTIONS",
     );
     if (kind === "slab") {
       // The panel's own plate analysis is the default source (ADR 0021).

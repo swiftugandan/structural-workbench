@@ -1,54 +1,13 @@
 import { previewIdentity } from "./selection-context.js";
-import {
-  mechanicsRows,
-  previewInspector,
-  previewPane,
-} from "./design-presentation.js";
-/** Workflow illustrations only. Validation, units and action provenance belong to Rust. */
+import { mechanicsRows } from "./design-presentation.js";
+/** Workflow orchestration only. Validation, units and action provenance belong to Rust. */
 import { escape as esc } from "./reports/report.js";
-import {
-  addColumnRow,
-  plateArgs,
-  plateSection,
-  platePane,
-} from "./slab-plate.js";
-import { columnPane, columnSketch } from "./rc-column.js";
-import { jointsPane } from "./rc-joints.js";
-import {
-  bindConnectionInspector,
-  connectionActions,
-  connectionBill,
-  connectionChecksPane,
-  connectionDrawing,
-  connectionInspector,
-  connectionSketch,
-  readConnection,
-} from "./steel-connection.js";
-import {
-  compositeChecksPane,
-  compositeDeflections,
-  compositeInspector,
-  compositeSection,
-  compositeSketch,
-  compositeStages,
-  readComposite,
-} from "./composite-beam.js";
-const names = {
-  rcBeam: "RC beam",
-  rcColumn: "RC column",
-  slab: "Slab",
-  padFooting: "Pad footing",
-  singlePlate: "Steel connection",
-  compositeBeam: "Composite beam",
-};
-/** Steel families designed under the AISC profile. */
-const steelKinds = ["singlePlate", "compositeBeam"];
-const sourceName = (value) =>
-  ({
-    syntheticFixture: "Synthetic fixture",
-    user: "User input",
-    mixed: "Mixed sources",
-  })[value] || value;
+import { addColumnRow, plateArgs } from "./slab-plate.js";
+import { render as place } from "./core/html.js";
+import { designKind } from "./design/registry.js";
+import { designInspector } from "./design/inspector.js";
+import { designPane } from "./design/panes.js";
+import { scheduleCsv } from "./design/kinds/shared.js";
 const $ = (s) => document.querySelector(s);
 // Attach the displayed unit only to bare numbers; Rust parses all quantities.
 function fieldInput(value, unit) {
@@ -65,9 +24,9 @@ function submittedValue(input, unit) {
     ? Number(input.dataset.si)
     : fieldInput(input.value, unit);
 }
-/** The action source a draft opens with: slabs solve their own panel. */
+/** The action source a draft opens with, from its kind (slabs: own panel). */
 const defaultSource = (d) =>
-  d?.kind === "slab" ? "plate" : d?.targetId ? "model" : "synthetic";
+  d ? designKind(d.kind).defaultSource(d) : "synthetic";
 /** The code-input fields present for the draft kind; blanks are null. */
 function readCodeInputs() {
   const value = (id) => document.getElementById(id)?.value.trim() || null;
@@ -119,34 +78,6 @@ export function previewState(run, ctx) {
     ? "STALE"
     : String(run.overall || "unsupported").toUpperCase();
 }
-function illustration(d, face) {
-  const v = d.inputs;
-  if (d.kind === "singlePlate") return connectionSketch(d);
-  if (d.kind === "compositeBeam") return compositeSketch(d);
-  if (d.kind === "rcColumn") return columnSketch(d);
-  if (d.kind === "rcBeam") {
-    const w = (180 * v.width) / Math.max(v.width, v.depth),
-      h = (180 * v.depth) / Math.max(v.width, v.depth),
-      x = (300 - w) / 2,
-      y = (220 - h) / 2;
-    const row = (n, cy) =>
-      Array.from(
-        { length: n },
-        (_, i) =>
-          `<circle cx="${n === 1 ? x + w / 2 : x + 12 + ((w - 24) * i) / (n - 1)}" cy="${cy}" r="4" fill="#1167a2"/>`,
-      ).join("");
-    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#dce6ef" stroke="#516b82"/><rect x="${x + 8}" y="${y + 8}" width="${w - 16}" height="${h - 16}" rx="6" fill="none" stroke="#62798a"/>${row(v.topBarCount, y + 14)}${row(v.bottomBarCount, y + h - 14)}<text x="150" y="218" text-anchor="middle">Bar preference illustration · fit unverified</text>`;
-  }
-  const w = (230 * v.length) / Math.max(v.length, v.width),
-    h = (160 * v.width) / Math.max(v.length, v.width),
-    x = (300 - w) / 2,
-    y = (200 - h) / 2;
-  if (d.kind === "slab") {
-    const vertical = face.endsWith("Y");
-    return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#e1edf5" stroke="#516b82"/>${Array.from({ length: 11 }, (_, i) => (vertical ? `<path d="M${x + (i * w) / 10},${y}v${h}" stroke="#85a8be"/>` : `<path d="M${x},${y + (i * h) / 10}h${w}" stroke="#85a8be"/>`)).join("")}<rect x="${150 - (w * v.openingLength) / v.length / 2}" y="${100 - (h * v.openingWidth) / v.width / 2}" width="${(w * v.openingLength) / v.length}" height="${(h * v.openingWidth) / v.width}" fill="white" stroke="#c17f26"/><text x="150" y="215" text-anchor="middle">${esc(face)} · direction illustration</text>`;
-  }
-  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#e4dfd4" stroke="#796f58"/><rect x="${150 - (w * v.columnWidth) / v.length / 2}" y="${100 - (h * v.columnDepth) / v.width / 2}" width="${(w * v.columnWidth) / v.length}" height="${(h * v.columnDepth) / v.width}" fill="#8499aa"/><text x="150" y="215" text-anchor="middle">Contact INDETERMINATE · no pressure field</text>`;
-}
 export function concreteWorkspace({
   gateway,
   viewport,
@@ -165,7 +96,8 @@ export function concreteWorkspace({
     face = "Top X",
     plateField = "mx",
     plateRecovery = "elementCentre",
-    jointReport = null,
+    // Data a pane loaded on activation (the joint report), keyed by pane.
+    paneData = new Map(),
     // A refused run's reason, kept across the re-render that follows it.
     runError = null,
     sourceMode = "synthetic",
@@ -218,16 +150,20 @@ export function concreteWorkspace({
       viewport.pan = [0, 0];
     }
     document.body.classList.toggle("concrete-focus", focusObject);
-    // A connection has no draft solid: the model context shows its beam.
-    viewport.designPreview =
-      !steelKinds.includes(d.kind) &&
-      (focusObject || (["rcBeam", "rcColumn"].includes(d.kind) && d.targetId))
-        ? { draft: d, mode: displayMode, face, context: !focusObject }
-        : null;
+    const kind = designKind(d.kind),
+      run = runs.get(active);
+    viewport.designPreview = kind.solid(d, focusObject)
+      ? { draft: d, mode: displayMode, face, context: !focusObject }
+      : null;
     $("#design-geometry-labels").hidden = !viewport.designPreview;
     onSelection(d);
     const identity = previewIdentity(getContext().project, d);
-    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(identity.text)}</strong><span class="design-tag">${runs.get(active)?.codeProfile ? (steelKinds.includes(d.kind) ? "AISC 360-22 · DEMONSTRATION" : "EC2 UK · DEMONSTRATION") : "MOCK WORKFLOW"}</span><span class="status-text">${previewState(runs.get(active), getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
+    // The profile the draft runs under; a synthetic run applies none.
+    const tag =
+      run && !run.codeProfile
+        ? "SYNTHETIC ACTIONS · NO CODE CHECK"
+        : kind.profile.tag;
+    host.innerHTML = `<div class="design-scene-heading"><strong>${esc(identity.text)}</strong><span class="design-tag">${tag}</span><span class="status-text">${previewState(run, getContext())}</span></div><div class="design-view-switch" role="group" aria-label="Design object display">${[
       ["concrete", "Concrete"],
       ["reinforcement", "Reinforcement"],
       ["both", "Both"],
@@ -238,7 +174,7 @@ export function concreteWorkspace({
       )
       .join(
         "",
-      )}<button id="preview-focus" aria-pressed="${focusObject}">${focusObject ? "Show model context" : "Focus design object"}</button></div><small>${d.kind === "slab" ? esc(face) + " · illustrative grid, not FE mesh" : d.kind === "padFooting" ? "Contact INDETERMINATE · no pressure field" : d.kind === "singlePlate" ? "Dimensioned elevation in the Drawing view" : d.kind === "compositeBeam" ? "Section and stage diagrams in the result views" : "Illustrative reinforcement · fit and anchorage unverified"}</small>`;
+      )}<button id="preview-focus" aria-pressed="${focusObject}">${focusObject ? "Show model context" : "Focus design object"}</button></div><small>${esc(kind.caption(d, { face }))}</small>`;
     for (const b of host.querySelectorAll("[data-object-display]"))
       b.onclick = () => {
         displayMode = b.dataset.objectDisplay;
@@ -250,47 +186,21 @@ export function concreteWorkspace({
     };
     viewport.draw();
   }
-  /** Kind-specific panes, else the shared preview panes. */
+  /** The active pane: the kind's own, else the shared one (ADR 0033). */
   function paneHtml(run, state, d) {
-    if (d.kind === "slab" && pane === "actions")
-      if (run?.plateAnalysis?.status === "evaluated")
-        return platePane(
-          run,
-          plateField,
-          {
-            loadCases: (getContext().project?.loadCases || []).map((c) => ({
-              id: c.id,
-              label: `${c.id} · ${c.name}`,
-            })),
-          },
-          plateRecovery,
-        );
-    if (d.kind === "rcColumn" && pane === "mechanics") return columnPane(run);
-    if (pane === "joints")
-      return jointsPane(jointReport, d, getContext().project);
-    if (d.kind === "compositeBeam") {
-      if (pane === "section")
-        return `<h4>Composite section at the governing station</h4>${compositeSection(run?.codeProfilePreview)}`;
-      if (pane === "actions")
-        return `<h4>Stage moment diagrams</h4>${compositeStages(run?.codeProfilePreview)}`;
-      if (pane === "checks") return compositeChecksPane(run);
-      if (pane === "deflections") return compositeDeflections(run);
-      if (pane === "schedule") return connectionBill(run);
-    }
-    if (d.kind === "singlePlate") {
-      if (pane === "drawing")
-        return `<h4>Connection elevation · dimensions from the run</h4>${connectionDrawing(run?.codeProfilePreview)}`;
-      if (pane === "checks") return connectionChecksPane(run);
-      if (pane === "schedule") return connectionBill(run);
-      if (pane === "actions") return connectionActions(run);
-    }
-    return previewPane({
+    const kind = designKind(d.kind),
+      project = getContext().project;
+    return designPane(pane, {
       run,
       state,
       d,
-      pane,
+      kind,
+      project,
       checkIndex,
-      sketch: illustration(d, face),
+      plateField,
+      plateRecovery,
+      data: paneData.get(pane),
+      sketch: kind.sketch(d, { face }),
     });
   }
   function results(host) {
@@ -302,68 +212,19 @@ export function concreteWorkspace({
         '<div class="empty-results"><strong>No concrete design object selected</strong><p>Create or select a draft in the Selection Inspector.</p></div>';
       return;
     }
-    const panes =
-      d.kind === "compositeBeam"
-        ? [
-            ["summary", "Design summary"],
-            ["actions", "Stages"],
-            ["checks", "AISC checks"],
-            ["section", "Section"],
-            ["deflections", "Deflections"],
-            ["schedule", "Bill of materials"],
-            ["details", "Calculation details"],
-          ]
-        : d.kind === "singlePlate"
-          ? [
-              ["summary", "Design summary"],
-              ["actions", "End actions"],
-              ["checks", "AISC checks"],
-              ["drawing", "Drawing"],
-              ["schedule", "Bill of materials"],
-              ["details", "Calculation details"],
-            ]
-          : [
-              ["summary", "Design summary"],
-              [
-                "actions",
-                d.kind === "slab" ? "Plate actions" : "Design actions",
-              ],
-              ["details", "Calculation details"],
-              ["reinforcement", "Reinforcement"],
-              ...(d.kind === "rcBeam"
-                ? [
-                    ["mechanics", "Section mechanics"],
-                    ["ec2", "EC2 checks"],
-                  ]
-                : []),
-              ...(d.kind === "rcColumn"
-                ? [
-                    ["mechanics", "Section mechanics"],
-                    ["ec2", "EC2 checks"],
-                  ]
-                : []),
-              ...(["rcBeam", "rcColumn"].includes(d.kind)
-                ? [["joints", "Joints"]]
-                : []),
-              ["schedule", "Schedule"],
-              ...(d.kind === "padFooting"
-                ? [
-                    ["soil", "Soil / contact"],
-                    ["ec2", "EC2 checks"],
-                  ]
-                : []),
-              ...(d.kind === "slab" ? [["ec2", "EC2 checks"]] : []),
-            ];
-    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Concrete result views">${panes.map(([id, label]) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
+    const kind = designKind(d.kind);
+    if (!kind.panes.some((p) => p.id === pane)) pane = "summary";
+    host.innerHTML = `<section data-testid="preview-result" class="design-result-workspace"><div class="design-result-tabs" role="group" aria-label="Design result views">${kind.panes.map(({ id, label }) => `<button data-preview-pane="${id}" aria-pressed="${pane === id}">${label}</button>`).join("")}<span class="spacer"></span>${run?.schedule.length ? '<button id="preview-schedule">Schedule CSV ↓</button>' : ""}${run ? '<button id="preview-record">Record ↓</button>' : ""}</div>${state === "STALE" ? '<p class="notice-small" data-testid="preview-stale">Stale results — these values belong to the previous draft inputs or model. Run the preview again.</p>' : ""}<div class="design-pane">${paneHtml(run, state, d)}</div></section>`;
     for (const b of host.querySelectorAll("[data-preview-pane]"))
       b.onclick = async () => {
         pane = b.dataset.previewPane;
-        if (pane === "joints") {
-          // The joint report belongs to the current model: refetch it.
-          jointReport = null;
+        const load = kind.panes.find((p) => p.id === pane)?.load;
+        if (load) {
+          // Loaded data belongs to the current model: fetch it afresh.
+          paneData.delete(pane);
           results(host);
           try {
-            jointReport = await gateway.send("detailJoints", {});
+            paneData.set(pane, await load(gateway));
           } catch (e) {
             onError(e.message);
           }
@@ -429,47 +290,11 @@ export function concreteWorkspace({
           JSON.stringify({ ...run, currentState: state }, null, 2),
           "application/json",
         );
-      if ($("#preview-schedule") && steelKinds.includes(d.kind))
+      if ($("#preview-schedule"))
         $("#preview-schedule").onclick = () =>
           download(
-            `${d.kind === "compositeBeam" ? "composite" : "connection"}-bill-of-materials.csv`,
-            "previewRunId,currentState,item,description,quantity,mass_kg\n" +
-              run.schedule
-                .map((r) =>
-                  [
-                    run.previewRunId,
-                    state,
-                    r.item,
-                    `"${String(r.description).replaceAll('"', '""')}"`,
-                    r.quantity,
-                    r.massKg ?? "",
-                  ].join(","),
-                )
-                .join("\n"),
-            "text/csv",
-          );
-      else if ($("#preview-schedule"))
-        $("#preview-schedule").onclick = () =>
-          download(
-            "indicative-schedule.csv",
-            "previewRunId,currentState,mark,region,shape,diameter_m,quantity,cutLength_m,mass_kg,source,status\n" +
-              run.schedule
-                .map((r) =>
-                  [
-                    run.previewRunId,
-                    state,
-                    r.mark,
-                    r.region,
-                    `"${r.shape || ""}"`,
-                    r.diameter,
-                    r.quantity ?? "",
-                    r.cutLength ?? "",
-                    r.massKg ?? "",
-                    r.source,
-                    r.status,
-                  ].join(","),
-                )
-                .join("\n"),
+            kind.schedule.file(),
+            scheduleCsv(kind.schedule, run, state),
             "text/csv",
           );
     }
@@ -493,24 +318,20 @@ export function concreteWorkspace({
         t = templates.find((t) => t.kind === d?.kind);
       if (!getContext().dirty)
         mechanicsLaw = d?.mechanics?.law || t?.mechanics?.defaultLaw;
-      host.innerHTML =
-        d?.kind === "singlePlate"
-          ? connectionInspector({ d, templates, ds, active, ctx })
-          : d?.kind === "compositeBeam"
-            ? compositeInspector({ d, templates, ds, active, ctx })
-            : previewInspector({
-                mechanicsLaw,
-                d,
-                templates,
-                ds,
-                active,
-                ctx,
-                face,
-                sketch: d ? illustration(d, face) : "",
-                plateHtml: d ? plateSection(d, t) : "",
-              });
-      if (d?.kind === "singlePlate")
-        bindConnectionInspector(host, ctx.project, d);
+      const kind = d && designKind(d.kind);
+      place(
+        host,
+        designInspector({
+          d,
+          templates,
+          ds,
+          active,
+          ctx,
+          view: { face },
+          mechanicsLaw,
+        }),
+      );
+      kind?.inspector.bind?.(host, ctx.project, d);
       if (runError && runError.draft === active)
         $("#preview-error").textContent = runError.message;
       const fail = (e) => {
@@ -540,8 +361,11 @@ export function concreteWorkspace({
           void render().then(showResults);
         };
       if (d) {
-        $("#preview-source").value =
-          d.kind === "slab" && sourceMode === "model" ? "plate" : sourceMode;
+        // A mode the kind does not offer falls back to its default.
+        const offered = [...$("#preview-source").options].map((o) => o.value);
+        $("#preview-source").value = offered.includes(sourceMode)
+          ? sourceMode
+          : defaultSource(d);
         const readiness = () => {
           const c = getContext(),
             model = $("#preview-source").value === "model",
@@ -558,21 +382,7 @@ export function concreteWorkspace({
               $("#preview-source").value !== "model";
           $("#preview-readiness").textContent = !ready
             ? "Bind a target, save, then analyse a single current case/combination."
-            : $("#preview-source").value === "plate"
-              ? "Plate analysis available · code checks remain UNSUPPORTED"
-              : d.kind === "compositeBeam"
-                ? $("#preview-source").value === "model"
-                  ? "AISC 360-22 Chapter I checks run on the stage cases (demonstration)"
-                  : "Synthetic actions · composite checks need the model stage cases"
-                : d.kind === "singlePlate"
-                  ? $("#preview-source").value === "model"
-                    ? "AISC 360-22 checks run on the beam's end actions (demonstration)"
-                    : "Synthetic actions · connection checks need model actions"
-                  : ["rcBeam", "rcColumn", "padFooting"].includes(d.kind)
-                    ? $("#preview-source").value === "model"
-                      ? "Workflow available · EC2 checks run on the model actions (demonstration)"
-                      : "Synthetic actions · EC2 checks need model actions"
-                    : "Workflow available · every design check remains UNSUPPORTED";
+            : kind.readiness($("#preview-source").value);
         };
         $("#preview-source").onchange = () => {
           sourceMode = $("#preview-source").value;
@@ -602,17 +412,9 @@ export function concreteWorkspace({
               id: d.id,
               inputs,
               targetId: $("#preview-target")?.value,
-              soilReference: $("#preview-soil")?.value ?? d.soilReference,
-              ...(d.kind === "rcBeam" && {
-                tensionAnchorageConfirmed: $("#preview-anchorage").checked,
-              }),
+              soilReference: d.soilReference,
               ...($("#code-exposure") && { codeInputs: readCodeInputs() }),
-              ...(d.kind === "singlePlate" && {
-                connection: readConnection(host),
-              }),
-              ...(d.kind === "compositeBeam" && {
-                composite: readComposite(host),
-              }),
+              ...kind.read?.(host, d),
               ...(plate && { plate }),
               ...(t.mechanics && {
                 mechanics: {

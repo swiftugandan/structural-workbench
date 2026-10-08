@@ -1,24 +1,18 @@
 import { entityLabel } from "./entity-labels.js";
+import { kindInfo } from "./design/catalogue.js";
 
 // Presentation identity only. Saved bindings and geometry remain Rust-owned.
 export function previewIdentity(project, draft) {
   const binding = project.structure?.designObjects.find(
     (x) => x.previewId === draft.id,
   );
-  const kind = {
-    rcBeam: "RC beam",
-    rcColumn: "RC column",
-    slab: "Slab",
-    padFooting: "Pad footing",
-    singlePlate: "Steel connection",
-    compositeBeam: "Composite beam",
-  }[draft.kind];
+  const info = kindInfo(draft.kind);
   const target = draft.targetId ? entityLabel(project, draft.targetId) : null;
-  const name = binding?.name || `${kind} ${draft.id}`;
+  const name = binding?.name || `${info.name} ${draft.id}`;
   return {
     name,
     target,
-    text: `${name}${target ? ` · ${draft.kind === "padFooting" ? "support" : draft.kind === "singlePlate" ? `beam ${draft.connection?.end === "start" ? "start" : "end"} of` : "member"} ${target}` : " · unbound draft"}`,
+    text: `${name}${target ? ` · ${info.target(draft)} ${target}` : " · unbound draft"}`,
   };
 }
 
