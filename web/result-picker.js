@@ -13,11 +13,24 @@ export const resultFamilies = {
     ["momentZ", "Mz · Bending about z"],
     ["torsion", "T / Mx · Torsion about local x"],
   ],
+  heatmap: [
+    ["heatAxial", "|N| · Axial"],
+    ["heatShearY", "|Vy| · Shear y"],
+    ["heatShearZ", "|Vz| · Shear z"],
+    ["heatMoment", "|My| · Bending about y"],
+    ["heatMomentZ", "|Mz| · Bending about z"],
+    ["heatTorsion", "|T| · Torsion"],
+  ],
 };
 export function bindResultPicker(onChange) {
   const family = document.querySelector("#result-family");
   const component = document.querySelector("#display-result");
-  const remembered = { shape: "model", forces: "axial", moments: "moment" };
+  const remembered = {
+    shape: "model",
+    forces: "axial",
+    moments: "moment",
+    heatmap: "heatMoment",
+  };
   const sync = (value) => {
     const key =
       Object.keys(resultFamilies).find((k) =>

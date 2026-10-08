@@ -13,6 +13,13 @@ import {
   actionProjection,
   deformationProjection,
 } from "./action-diagrams.js";
+import {
+  heatComponent,
+  heatColour,
+  heatLevel,
+  heatGradientCss,
+  peakSample,
+} from "./heatmap.js";
 import { dimensionLayout, dimensionText } from "./dimensions.js";
 import { supportSymbol } from "./support-symbols.js";
 import { entityLabel } from "../entity-labels.js";
@@ -487,6 +494,24 @@ export class Viewport {
         s = [b[0] - ox, b[1] - oy, b[2]];
       triangle(p, q, r, color);
       triangle(q, s, r, color);
+    };
+    // A line whose colour runs from ca at a to cb at b.
+    const band = (a, b, width, ca, cb) => {
+      const dx = b[0] - a[0],
+        dy = b[1] - a[1],
+        len = Math.hypot(dx, dy) || 1,
+        ox = ((-dy / len) * width) / 2,
+        oy = ((dx / len) * width) / 2;
+      const p = [a[0] + ox, a[1] + oy, a[2]],
+        q = [a[0] - ox, a[1] - oy, a[2]],
+        r = [b[0] + ox, b[1] + oy, b[2]],
+        s = [b[0] - ox, b[1] - oy, b[2]];
+      put(p, ca);
+      put(q, ca);
+      put(r, cb);
+      put(q, ca);
+      put(s, cb);
+      put(r, cb);
     };
     const dot = (p, size, color) => {
       triangle(
@@ -1055,6 +1080,7 @@ export class Viewport {
         );
     }
     const component = actionComponents[this.resultView];
+    const heat = heatComponent(this.resultView);
     document.querySelector("#deformation-scale-control").hidden =
       this.resultView !== "deformed";
     document.querySelector("#diagram-scale-control").hidden =
@@ -1063,10 +1089,13 @@ export class Viewport {
       this.scale,
     );
     const actionLegend = document.querySelector("#action-legend");
-    actionLegend.hidden = !component;
-    document.querySelector(".view-legend").hidden = Boolean(component);
+    actionLegend.hidden = !component && !heat;
+    document.querySelector(".view-legend").hidden = Boolean(component || heat);
     delete actionLegend.dataset.component;
     delete actionLegend.dataset.peak;
+    delete actionLegend.dataset.heatmap;
+    actionLegend.classList.toggle("heat-legend", Boolean(heat));
+    this.canvas.dataset.heatmap = "";
     const current =
       this.result &&
       this.result.analysisType !== "envelope" &&
@@ -1141,6 +1170,104 @@ export class Viewport {
           }
         }
       }
+    } else if (heat) {
+      const engineering = this.project.displayUnits === "engineeringMetric";
+      actionLegend.dataset.heatmap = heat.name;
+      if (!current) {
+        actionLegend.textContent = this.result
+          ? `|${heat.name}| heatmap · Stale results — analyse again`
+          : `|${heat.name}| heatmap · Analyse to display`;
+      } else {
+        const peak = diagramPeak(this.result, heat);
+        actionLegend.dataset.component = heat.name;
+        actionLegend.dataset.peak = String(peak);
+        const title = document.createElement("span");
+        title.textContent = `|${heat.name}| heatmap · ${heat.title} · magnitude, sign not shown`;
+        const scale = document.createElement("span");
+        scale.className = "heat-scale";
+        const lo = document.createElement("span");
+        lo.textContent = actionText(0, heat, engineering, false);
+        const bar = document.createElement("i");
+        bar.className = "heat-bar";
+        bar.style.background = heatGradientCss();
+        const hi = document.createElement("span");
+        hi.textContent = peak
+          ? actionText(peak, heat, engineering, false)
+          : "All values zero";
+        scale.append(lo, bar, hi);
+        actionLegend.replaceChildren(title, scale);
+        const coloured = [];
+        const order = new Map(
+          this.project.members.map((m, i) => [m.id, i + 1]),
+        );
+        for (const member of this.result.members) {
+          if (!this.isVisible(member.id)) continue;
+          if (!member.samples?.length) continue;
+          // The band picks as its member, like the member line beneath it.
+          entityIndex = order.get(member.id) ?? 0;
+          const base = member.samples.map((s) => this.projectPoint(s.position));
+          const levels = member.samples.map((s) =>
+            heatLevel(s.actions[heat.index], peak),
+          );
+          // Per-vertex colours: the GPU interpolates between samples.
+          for (let i = 1; i < base.length; i++)
+            band(
+              base[i - 1],
+              base[i],
+              7,
+              heatColour(levels[i - 1]),
+              heatColour(levels[i]),
+            );
+          if (this.selection.has(member.id))
+            line(base[0], base[base.length - 1], 1.5, blue);
+          // Label the member's own peak magnitude (signed) at its sample.
+          const at = peakSample(member.samples, heat.index);
+          const keyed = (member.keyStations || []).filter(
+            (k) =>
+              k.kind === "end" ||
+              k.kind === "discontinuity" ||
+              (k.kind === "extremum" && k.components?.includes(heat.name)),
+          );
+          const keyPeak = keyed.reduce(
+            (best, k) =>
+              !best ||
+              Math.abs(k.actions[heat.index]) >
+                Math.abs(best.actions[heat.index])
+                ? k
+                : best,
+            null,
+          );
+          const value =
+            keyPeak &&
+            Math.abs(keyPeak.actions[heat.index]) >=
+              Math.abs(member.samples[at].actions[heat.index])
+              ? keyPeak.actions[heat.index]
+              : member.samples[at].actions[heat.index];
+          coloured.push([member.id, value]);
+          if (
+            peak &&
+            (this.result.members.length <= 20 || this.selection.has(member.id))
+          ) {
+            const text = `${entityLabel(this.project, member.id)} ${heat.name} ${actionText(value, heat, engineering)}`;
+            const el = label(
+              text,
+              [base[at][0], base[at][1] - 20],
+              "result-value-label",
+            );
+            if (el) {
+              el.dataset.resultMember = member.id;
+              el.dataset.resultComponent = heat.name;
+              el.dataset.resultValue = String(value);
+              el.dataset.heatLevel = String(heatLevel(value, peak));
+              el.title = `${text} · ${(heatLevel(value, peak) * 100).toFixed(0)} % of model peak`;
+            }
+          }
+        }
+        entityIndex = 0;
+        this.canvas.dataset.heatmap = JSON.stringify(
+          Object.fromEntries(coloured),
+        );
+      }
     } else if (current && this.resultView === "deformed") {
       for (const member of this.result.members) {
         if (!this.isVisible(member.id)) continue;
@@ -1161,7 +1288,7 @@ export class Viewport {
     // - a second-order response is drawn at the deformation scale, so it
     //   overlays the first-order shape of the same case one to one.
     const overlay =
-      !component && this.overlay?.modelHash === this.currentModelHash
+      !component && !heat && this.overlay?.modelHash === this.currentModelHash
         ? this.overlay
         : null;
     delete this.canvas.dataset.modeShape;
