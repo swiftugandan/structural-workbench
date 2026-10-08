@@ -97,23 +97,24 @@ export function resultsDock({
         viewport.selection.size === 1
           ? memberDesignRuns.get(state.selected)
           : null;
-      const state = designState(
+      const designStatus = designState(
         run,
         state.modelHash,
         state.result,
         state.formDirty || state.failed,
       );
-      $("#results-content").innerHTML = designResultsHtml(run, state);
+      $("#results-content").innerHTML = designResultsHtml(run, designStatus);
       $("#export-csv").disabled = true;
       if (run) {
         bindSteelResultViews($("#results-content"), run);
         $("#design-download").onclick = () =>
           download(
             `design-${run.memberId}.json`,
-            JSON.stringify({ ...run, currentState: state }, null, 2),
+            JSON.stringify({ ...run, currentState: designStatus }, null, 2),
             "application/json",
           );
-        $("#design-why").disabled = state === "stale" || !run.governingAction;
+        $("#design-why").disabled =
+          designStatus === "stale" || !run.governingAction;
         $("#design-why").onclick = () => {
           selectEntities([run.memberId]);
           viewport.designMarker = {

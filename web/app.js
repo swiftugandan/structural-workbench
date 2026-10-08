@@ -144,9 +144,9 @@ const overview = steelOverview({
     legend.replaceChildren();
     if (data) {
       legend.append(`Design · ${data.caseId} · `);
-      for (const [state, palette] of Object.entries(designStatusPalette)) {
+      for (const [status, palette] of Object.entries(designStatusPalette)) {
         const count = Object.values(data.states).filter(
-          (x) => x === state,
+          (x) => x === status,
         ).length;
         if (!count) continue;
         const span = document.createElement("span");
