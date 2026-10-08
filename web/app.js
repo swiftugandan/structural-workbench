@@ -6,6 +6,7 @@ import { renderStructureEditor } from "./structure-workspace.js";
 import { renderForceInspector } from "./force-inspector.js";
 import { bindResultPicker } from "./result-picker.js";
 import { actionComponents } from "./render/action-diagrams.js";
+import { heatComponent } from "./render/heatmap.js";
 import { bindTemplates } from "./model-templates.js";
 import { structuralIcon } from "./structural-icons.js";
 import {
@@ -1037,7 +1038,10 @@ $("#analyse").onclick = async () => {
       syncResultPicker("model");
       $("#deformation-legend").hidden = true;
     } else {
-      if (!actionComponents[viewport.resultView])
+      if (
+        !actionComponents[viewport.resultView] &&
+        !heatComponent(viewport.resultView)
+      )
         viewport.resultView = "deformed";
       syncResultPicker(viewport.resultView);
       $("#deformation-legend").hidden = viewport.resultView !== "deformed";

@@ -138,6 +138,28 @@
   font-size: var(--text-sm);
   pointer-events: none;
 }
+.action-legend.heat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px 16px;
+}
+.action-legend.heat-legend[hidden] {
+  display: none;
+}
+.heat-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.heat-bar {
+  display: inline-block;
+  width: 140px;
+  height: 10px;
+  border-radius: 2px;
+}
 .result-value-label {
   font-size: var(--text-sm);
   background: var(--color-surface);
