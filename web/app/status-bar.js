@@ -19,7 +19,7 @@ const STORAGE = {
   },
 };
 
-export function statusBar({ session, exportProject }) {
+export function statusBar({ store, exportProject }) {
   const chip = document.querySelector("#storage-status");
   chip.onclick = () =>
     popupMenu(
@@ -27,7 +27,7 @@ export function statusBar({ session, exportProject }) {
       [{ label: "Download a project backup", run: exportProject }],
       "Storage",
     );
-  session.subscribe(["storage"], ({ storage }) => {
+  store.subscribe(["storage"], ({ storage }) => {
     const s = STORAGE[storage];
     chip.hidden = !s;
     if (!s) return;

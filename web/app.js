@@ -38,7 +38,7 @@ import {
 import { Viewport } from "./render/viewport.js";
 import { download, report, csv, escape as esc } from "./reports/report.js";
 import { reportSections } from "./design/registry.js";
-import { createStore } from "./core/store.js";
+import { createAppState, locked } from "./app/state.js";
 import { statusBar } from "./app/status-bar.js";
 import { initOffline, afterSaved } from "./offline.js";
 import {
@@ -58,34 +58,49 @@ import { modalWorkspace, describeSource } from "./modal.js";
 import { responseWorkspace } from "./response.js";
 import { studyWorkspace } from "./study.js";
 import { exchangeWorkspace } from "./exchange.js";
-const label = (id) => entityLabel(project, id);
+import { resultsDock } from "./app/results-dock.js";
+import { inspectorPanel } from "./app/inspector-panel.js";
+import { entityEditor } from "./app/entity-editor.js";
+import { explorerPanel } from "./app/explorer-panel.js";
+import { projectSession } from "./app/project-session.js";
+const label = (id) => entityLabel(state.project, id);
 const $ = (s) => document.querySelector(s),
   gateway = new Gateway();
+/** Session state (ADR 0033): one observable store; see app/state.js. */
+const { store, state } = createAppState();
+const { entityList, editEntity } = entityEditor({
+  $,
+  bindEntityFields,
+  bindSectionCalculator,
+  bindTemplates,
+  command,
+  describeSource,
+  entityFields,
+  entityGuides,
+  esc,
+  gateway,
+  guideDiagram,
+  label,
+  lineageSummary,
+  message,
+  modal,
+  readEntityFields,
+  setModalContent,
+  state,
+});
+
 /** Linear-static result for diagrams; envelopes never enter the force pipeline. */
-/** Session state the shell reflects (ADR 0033); grows as app.js decomposes. */
-const session = createStore({ storage: "unknown" });
 const diagramResult = () =>
-  result && result.analysisType !== "envelope" ? result : null;
-let project,
-  modelHash,
-  viewControls,
-  result,
-  selected = "m1",
-  selectionContext = null,
-  tab = "displacements",
-  busy = false,
-  analysing = false,
-  failed = false,
-  formDirty = false,
-  leaseRelease,
-  leaseId,
-  readOnly = false,
-  saveQueue = Promise.resolve(),
-  lastDesignRun = null;
+  state.result && state.result.analysisType !== "envelope"
+    ? state.result
+    : null;
+// Module-private bookkeeping, not session state.
+let viewControls;
+
 const viewport = new Viewport($("#viewport"), async (query) => {
   try {
     const cameraKey = JSON.stringify(query.camera),
-      revision = project.revision,
+      revision = state.project.revision,
       visibilityRevision = viewport.visibilityRevision;
     const v = await gateway.send("queryGeometry", {
       kind: "screenPick",
@@ -98,7 +113,7 @@ const viewport = new Viewport($("#viewport"), async (query) => {
     });
     $("#viewport").dataset.lastCpuPick = v.entityId || "";
     if (
-      project.revision === revision &&
+      state.project.revision === revision &&
       visibilityRevision === viewport.visibilityRevision &&
       JSON.stringify(viewport.camera()) === cameraKey
     )
@@ -113,14 +128,14 @@ const overview = steelOverview({
   command,
   download,
   context: () => ({
-    project,
-    modelHash,
-    result,
-    dirty: formDirty,
-    failed,
-    memberId: selected,
-    active: tab === "steel-overview",
-    locked: busy || analysing || readOnly,
+    project: state.project,
+    modelHash: state.modelHash,
+    result: state.result,
+    dirty: state.formDirty,
+    failed: state.failed,
+    memberId: state.selected,
+    active: state.tab === "steel-overview",
+    locked: locked(state),
   }),
   onOverlay: (data) => {
     viewport.designStatuses = data?.states || null;
@@ -153,7 +168,7 @@ const overview = steelOverview({
   },
   onError: message,
   onSelect: (id) => {
-    if (formDirty) return message("Apply or cancel changes first.");
+    if (state.formDirty) return message("Apply or cancel changes first.");
     selectEntities([id]);
     $("[data-inspector-tab=steel]").click();
     $("[data-tab=steel-design]").click();
@@ -167,20 +182,20 @@ const nativeSteel = steelDesignWorkspace({
   gateway,
   command,
   getContext: () => ({
-    project,
-    modelHash,
-    result,
-    memberId: viewport.selection.size === 1 ? selected : null,
-    run: memberDesignRuns.get(selected) || null,
-    dirty: formDirty,
-    failed,
-    locked: busy || readOnly || analysing,
+    project: state.project,
+    modelHash: state.modelHash,
+    result: state.result,
+    memberId: viewport.selection.size === 1 ? state.selected : null,
+    run: memberDesignRuns.get(state.selected) || null,
+    dirty: state.formDirty,
+    failed: state.failed,
+    locked: locked(state),
   }),
   onDirty: (dirty = true) => {
-    formDirty = dirty;
+    state.formDirty = dirty;
     viewport.designMarker = null;
     viewport.draw();
-    setBusy(busy);
+    setBusy(state.busy);
     renderResults();
   },
   onRunning: (value) => {
@@ -189,7 +204,7 @@ const nativeSteel = steelDesignWorkspace({
   },
   onError: message,
   onRun: (run) => {
-    lastDesignRun = run;
+    state.lastDesignRun = run;
     memberDesignRuns.set(run.memberId, run);
     renderResults();
   },
@@ -204,16 +219,16 @@ const concrete = concreteWorkspace({
   onSelection: (draft) => {
     const target = draft.targetId || null;
     if (
-      selectionContext?.kind === "preview" &&
-      selectionContext.id === draft.id &&
-      selected === target &&
+      state.selectionContext?.kind === "preview" &&
+      state.selectionContext.id === draft.id &&
+      state.selected === target &&
       viewport.selection.size === (target ? 1 : 0) &&
       (!target || viewport.selection.has(target))
     )
       return;
-    selectionContext = { kind: "preview", id: draft.id };
+    state.selectionContext = { kind: "preview", id: draft.id };
     viewport.selection = new Set(target ? [target] : []);
-    selected = target;
+    state.selected = target;
     viewport.selected = target;
     renderNav();
     renderSelectionStatus();
@@ -222,17 +237,17 @@ const concrete = concreteWorkspace({
   gateway,
   command,
   getContext: () => ({
-    project,
-    selected,
-    modelHash,
-    result,
-    dirty: formDirty,
-    locked: busy || readOnly || analysing,
-    failed,
+    project: state.project,
+    selected: state.selected,
+    modelHash: state.modelHash,
+    result: state.result,
+    dirty: state.formDirty,
+    locked: locked(state),
+    failed: state.failed,
   }),
   onDirty: (v) => {
-    formDirty = v;
-    setBusy(busy);
+    state.formDirty = v;
+    setBusy(state.busy);
     renderResults();
   },
   onError: message,
@@ -256,13 +271,13 @@ const stability = stabilityWorkspace({
     setBusy(v);
   },
   getContext: () => {
-    const eng = project?.displayUnits === "engineeringMetric";
+    const eng = state.project?.displayUnits === "engineeringMetric";
     return {
-      modelHash,
+      modelHash: state.modelHash,
       caseId: $("#result-case").value,
       casePayload: analysisPayload(),
-      dirty: formDirty,
-      locked: busy || readOnly || analysing || !project,
+      dirty: state.formDirty,
+      locked: locked(state) || !state.project,
       label: (id) => label(id),
       length: (v) => `${format(eng ? v * 1000 : v)} ${eng ? "mm" : "m"}`,
       moment: (v) => `${format(eng ? v / 1000 : v)} ${eng ? "kN·m" : "N·m"}`,
@@ -279,17 +294,17 @@ const modalView = modalWorkspace({
     setBusy(v);
   },
   onEditSources: () => {
-    if (formDirty)
+    if (state.formDirty)
       return message(
         "Apply or cancel property changes before editing mass sources.",
       );
     entityList("massSources");
   },
   getContext: () => ({
-    project,
-    modelHash,
-    dirty: formDirty,
-    locked: busy || readOnly || analysing || !project,
+    project: state.project,
+    modelHash: state.modelHash,
+    dirty: state.formDirty,
+    locked: locked(state) || !state.project,
     label: (id) => label(id),
   }),
 });
@@ -303,10 +318,10 @@ const responseView = responseWorkspace({
     setBusy(v);
   },
   getContext: () => ({
-    project,
-    modelHash,
-    dirty: formDirty,
-    locked: busy || readOnly || analysing || !project,
+    project: state.project,
+    modelHash: state.modelHash,
+    dirty: state.formDirty,
+    locked: locked(state) || !state.project,
     label: (id) => label(id),
   }),
 });
@@ -319,80 +334,132 @@ const studies = studyWorkspace({
     setBusy(v);
   },
   show: () => $("[data-tab=study]").click(),
-  getContext: () => ({ project, modelHash, label: (id) => label(id) }),
+  getContext: () => ({
+    project: state.project,
+    modelHash: state.modelHash,
+    label: (id) => label(id),
+  }),
 });
+const { renderResults, format } = resultsDock({
+  $,
+  bindSteelResultViews,
+  concrete,
+  designResultsHtml,
+  designState,
+  download,
+  esc,
+  label,
+  memberDesignRuns,
+  modalView,
+  overview,
+  responseView,
+  selectEntities,
+  stability,
+  state,
+  studies,
+  viewport,
+});
+
 const modelTools = modeling({
-  getProject: () => project,
-  open,
+  getProject: () => state.project,
+  open: (...args) => open(...args),
   command,
   gateway,
   viewport,
   modal,
   message,
-  canEdit: () => !!project && !busy && !readOnly && !formDirty,
+  canEdit: () =>
+    !!state.project && !state.busy && !state.readOnly && !state.formDirty,
 });
+const { showRecent, claimLease, persist, recoverRevision, open, example } =
+  projectSession({
+    $,
+    afterSaved,
+    download,
+    esc,
+    gateway,
+    listRevisions,
+    loadRevision,
+    memberDesignRuns,
+    message,
+    modal,
+    modelTools,
+    overview,
+    portable,
+    recent,
+    refresh,
+    resolveRecoverableProject,
+    retainOriginal,
+    save,
+    setBusy,
+    state,
+    viewport,
+  });
+
 function message(text) {
   $("#message-text").textContent = text;
   $("#message").hidden = !text;
 }
 $("#dismiss-message").onclick = () => message("");
-statusBar({ session, exportProject: () => $("#export-project").click() });
+statusBar({ store, exportProject: () => $("#export-project").click() });
 const topologyTools = topology({
-  getProject: () => project,
+  getProject: () => state.project,
   command,
   gateway,
   viewport,
   modal,
   message,
-  canEdit: () => !!project && !busy && !readOnly && !formDirty,
+  canEdit: () =>
+    !!state.project && !state.busy && !state.readOnly && !state.formDirty,
 });
 function selectEntities(ids, toggle = false) {
-  if (formDirty) {
+  if (state.formDirty) {
     message("Apply or cancel property changes before changing selection.");
     return;
   }
   const available = new Set(
     [
-      ...project.nodes,
-      ...project.members,
-      ...project.supports,
-      ...project.loads,
+      ...state.project.nodes,
+      ...state.project.members,
+      ...state.project.supports,
+      ...state.project.loads,
     ].map((x) => x.id),
   );
-  selectionContext = null;
+  state.selectionContext = null;
   if (!toggle) viewport.selection.clear();
   for (const id of ids)
     if (available.has(id)) {
       if (toggle && viewport.selection.has(id)) viewport.selection.delete(id);
       else viewport.selection.add(id);
     }
-  selected = [...viewport.selection].at(-1) || null;
-  if (!$("#concrete-inspector").hidden) concrete.followSelection(selected);
+  state.selected = [...viewport.selection].at(-1) || null;
+  if (!$("#concrete-inspector").hidden)
+    concrete.followSelection(state.selected);
   renderInspector();
   renderNav();
-  viewport.update(project, diagramResult(), selected);
+  viewport.update(state.project, diagramResult(), state.selected);
   renderSelectionStatus();
   renderResults();
 }
 function renderSelectionStatus() {
   if (
-    selectionContext?.kind === "preview" &&
+    state.selectionContext?.kind === "preview" &&
     !$("#concrete-inspector").hidden
   ) {
-    const draft = project.designPreviews.find(
-      (d) => d.id === selectionContext.id,
+    const draft = state.project.designPreviews.find(
+      (d) => d.id === state.selectionContext.id,
     );
     if (draft) {
-      const text = previewIdentity(project, draft).text;
+      const text = previewIdentity(state.project, draft).text;
       $("#selection-tag").textContent = text;
       $("#selected-status").textContent = `${text} · design draft selected`;
       return;
     }
   }
-  if (selectionContext?.kind === "structure") {
-    const entity = project.structure[selectionContext.collection]?.find(
-      (x) => x.id === selectionContext.id,
-    );
+  if (state.selectionContext?.kind === "structure") {
+    const entity = state.project.structure[
+      state.selectionContext.collection
+    ]?.find((x) => x.id === state.selectionContext.id);
     if (entity) {
       $("#selection-tag").textContent = entity.name;
       $("#selected-status").textContent =
@@ -404,8 +471,10 @@ function renderSelectionStatus() {
     $("#selected-status").textContent = "No entities selected";
   else if (viewport.selection.size === 1) {
     const only = [...viewport.selection][0];
-    const member = project.members.find((m) => m.id === only);
-    const lineage = member ? lineageSummary(project, member, label) : null;
+    const member = state.project.members.find((m) => m.id === only);
+    const lineage = member
+      ? lineageSummary(state.project, member, label)
+      : null;
     $("#selected-status").textContent = lineage
       ? `Analytical ${label(member.id)} · physical ${lineage.physicalLabel}${lineage.stations ? ` · ${lineage.stations}` : ""}`
       : `1 selected · ${label(only)}`;
@@ -414,13 +483,14 @@ function renderSelectionStatus() {
       `${viewport.selection.size} selected · ${[...viewport.selection].slice(0, 3).map(label).join(", ")}`;
 }
 const cadTools = cad({
-  getProject: () => project,
+  getProject: () => state.project,
   command,
   gateway,
   viewport,
   modal,
   message,
-  canEdit: () => !!project && !busy && !readOnly && !formDirty,
+  canEdit: () =>
+    !!state.project && !state.busy && !state.readOnly && !state.formDirty,
   selectEntities,
 });
 /**
@@ -557,260 +627,20 @@ $("#steel-check").onclick = () =>
     },
     getAnalysisContext: () => ({
       result: diagramResult(),
-      modelHash,
+      modelHash: state.modelHash,
       selectedMemberId:
-        selected && project?.members?.some((m) => m.id === selected)
-          ? selected
-          : project?.members?.[0]?.id,
+        state.selected &&
+        state.project?.members?.some((m) => m.id === state.selected)
+          ? state.selected
+          : state.project?.members?.[0]?.id,
     }),
     onDesignRun: (run) => {
-      lastDesignRun = run;
+      state.lastDesignRun = run;
     },
   });
-async function showRecent() {
-  try {
-    const rows = await recent();
-    $("#recent-projects").replaceChildren();
-    if (!rows.length) {
-      $("#recent-projects").innerHTML =
-        "<p>No projects yet. Start a frame or open a worked example.</p>";
-      return;
-    }
-    let listed = 0;
-    for (const item of rows) {
-      const resolved = await resolveRecoverableProject(item);
-      if (!resolved) continue;
-      const b = document.createElement("button");
-      b.className = "recent-row";
-      const note = resolved.recovered
-        ? ` · recovered r${resolved.fromRevision}`
-        : "";
-      b.innerHTML = `<div><strong>${esc(resolved.project.name)}</strong><small>${resolved.project.nodes.length} nodes · ${resolved.project.members.length} members · Revision ${resolved.project.revision}${esc(note)}</small></div><small>${new Date(item.updated).toLocaleDateString()}　↗</small>`;
-      b.onclick = async () => {
-        await open(resolved.project, {
-          recoveryNote: resolved.recovered
-            ? `Latest snapshot was corrupt. Restored verified revision ${resolved.fromRevision}. Unverified bytes were not opened.`
-            : "",
-        });
-      };
-      $("#recent-projects").append(b);
-      listed += 1;
-    }
-    if (!listed) {
-      $("#recent-projects").innerHTML =
-        "<p>No verified local projects. Portable import and export remain available.</p>";
-    }
-  } catch {
-    $("#recent-projects").innerHTML =
-      "<p>Local storage unavailable. Portable import and export remain available.</p>";
-  }
-}
-async function claimLease(id) {
-  if (leaseId === id) return;
-  leaseRelease?.();
-  leaseRelease = null;
-  leaseId = id;
-  readOnly = false;
-  if (!navigator.locks) return;
-  await new Promise((resolve) => {
-    navigator.locks.request(
-      "workbench:" + id,
-      { ifAvailable: true },
-      (lock) => {
-        if (!lock) {
-          readOnly = true;
-          resolve();
-          return;
-        }
-        return new Promise((release) => {
-          leaseRelease = release;
-          resolve();
-        });
-      },
-    );
-  });
-}
-async function persist() {
-  if (!project || readOnly) return;
-  const snapshot = structuredClone(portable());
-  $("#save-status").textContent = "Saving…";
-  if (
-    navigator.storage?.persist &&
-    !sessionStorage.getItem("wb-persist-warned")
-  ) {
-    sessionStorage.setItem("wb-persist-warned", "1");
-    try {
-      const durable = await navigator.storage.persist();
-      session.set({ storage: durable ? "persistent" : "bestEffort" });
-    } catch {
-      /* continue without durable persistence */
-    }
-  }
-  saveQueue = saveQueue.catch(() => {}).then(() => save(snapshot));
-  try {
-    await saveQueue;
-    if (project?.revision === snapshot.revision) {
-      $("#save-status").textContent = "Saved locally";
-      afterSaved();
-    }
-  } catch (e) {
-    $("#save-status").textContent = "Save failed";
-    session.set({ storage: "failed" });
-    message(
-      "STORAGE_QUOTA: Local save failed. Download your project to preserve it. " +
-        e.message,
-    );
-  }
-}
-async function recoverRevision() {
-  if (!project || formDirty || readOnly) {
-    message(
-      formDirty
-        ? "Apply or discard unapplied property changes before recovering a committed revision. Recovery never claims unsaved edits were stored."
-        : "Open a writable project before recovering a revision.",
-    );
-    return;
-  }
-  let rows;
-  try {
-    rows = await listRevisions(project.id);
-  } catch (e) {
-    message("Local history unavailable. " + e.message);
-    return;
-  }
-  if (!rows.length) {
-    message(
-      "No committed local revisions yet. Edit and wait for a local save.",
-    );
-    return;
-  }
-  const current = project.revision;
-  modal(
-    "Recover committed revision",
-    `<p>These snapshots were written to this browser after a successful local save. Unapplied form edits are never stored here.</p>
-    <div class="entity-table-wrap"><table><thead><tr><th>Revision</th><th>Saved</th><th>Model</th><th></th></tr></thead><tbody>
-    ${rows
-      .map((r) => {
-        const when = r.savedAt
-          ? new Date(r.savedAt).toLocaleString()
-          : "unknown time";
-        const mark = r.revision === current ? " · current" : "";
-        return `<tr data-revision="${r.revision}"><th>r${r.revision}${mark}</th><td>${esc(when)}</td><td>${r.nodes} nodes · ${r.members} members</td><td>${r.revision === current ? "" : `<button type="button" data-recover="${r.revision}">Restore r${r.revision}</button>`}</td></tr>`;
-      })
-      .join("")}
-    </tbody></table></div>`,
-  );
-  for (const b of document.querySelectorAll("[data-recover]"))
-    b.onclick = async () => {
-      try {
-        const snapshot = await loadRevision(
-          project.id,
-          Number(b.dataset.recover),
-        );
-        await open(snapshot);
-        message(
-          `Restored committed revision ${snapshot.revision}. Unsaved edits were not claimed as saved.`,
-        );
-      } catch (e) {
-        message(e.message);
-      }
-    };
-}
+
 $("#recover-revision").onclick = () => recoverRevision();
-async function open(p, options = {}) {
-  modelTools.cancel();
-  try {
-    setBusy(true);
-    const originalUtf8 = options.originalUtf8 ?? JSON.stringify(p);
-    // An exchange import arrives as the kernel's snapshot (exchange.js).
-    const s =
-      options.snapshot ??
-      (await gateway.send("importProject", {
-        jsonUtf8: originalUtf8,
-        replaceCurrent: true,
-      }));
-    await claimLease(s.project.id);
-    project = s.project;
-    project.name = p.name ?? project.name;
-    project.displayUnits = p.displayUnits ?? project.displayUnits;
-    modelHash = s.modelHash;
-    result = null;
-    lastDesignRun = null;
-    memberDesignRuns.clear();
-    overview.reset();
-    failed = false;
-    selectionContext = null;
-    selected = project.members[0]?.id || null;
-    viewport.selection = new Set(selected ? [selected] : []);
-    $("#modal").close();
-    $("#landing").hidden = true;
-    $("#workspace").hidden = false;
-    $("#top-context").textContent = "Frame analysis";
-    const report = s.migrationReport;
-    if (report?.originalSha256) {
-      await retainOriginal({
-        id: project.id,
-        originalUtf8,
-        sha256: report.originalSha256,
-        fromSchema: report.from,
-        toSchema: report.to,
-        steps: report.steps || [],
-      });
-    }
-    let status = readOnly
-      ? "This project is open in another tab. This tab is read-only; exports and analysis remain available."
-      : "";
-    if (report?.steps?.length) {
-      status =
-        `Migrated schema ${report.from} → ${report.to}. Original file retained locally (${report.originalSha256.slice(0, 12)}…).` +
-        (status ? "\n" + status : "");
-    }
-    if (options.recoveryNote) {
-      status = options.recoveryNote + (status ? "\n" + status : "");
-    }
-    message(status);
-    refresh(s);
-    viewport.fit();
-    if (!$("#results-content").hidden) $("#toggle-results")?.click();
-    await persist();
-    if (options.recoveryNote) message(options.recoveryNote);
-  } catch (e) {
-    message(e.message);
-    if ($("#workspace").hidden)
-      modal(
-        "Unable to open project",
-        `<p>${esc(e.message)}</p><p>The current model has been preserved.</p>${
-          options.originalUtf8 && /UNSUPPORTED_SCHEMA/.test(e.message)
-            ? `<p>Unknown schema opens only as a backup. <button type="button" id="download-unsupported-original" class="primary">Download original JSON</button></p>`
-            : ""
-        }`,
-      );
-    if (options.originalUtf8 && /UNSUPPORTED_SCHEMA/.test(e.message)) {
-      const raw = options.originalUtf8;
-      queueMicrotask(() => {
-        $("#download-unsupported-original")?.addEventListener("click", () => {
-          download("unsupported-project.json", raw);
-        });
-      });
-    }
-  } finally {
-    setBusy(false);
-  }
-}
-async function example(id, name) {
-  const p = await fetch(`./examples/${id}.json`).then((r) => r.json());
-  p.id = "p" + crypto.randomUUID().replaceAll("-", "");
-  p.name = name;
-  await open(p);
-  if (["W01", "UKR01"].includes(id)) $("#view-3d").click();
-  if (id === "UKR01") {
-    if (!viewport.modelSolids) $("#model-solids").click();
-    if (viewport.showLoads !== false) $("#model-loads").click();
-    if (viewport.showCrossings !== false) $("#model-crossings").click();
-    $("#result-case").value = "SLS";
-    $("#result-case").dispatchEvent(new Event("change"));
-  }
-}
+
 $("#new-project").onclick = () => example("B02", "Untitled cantilever");
 $("#worked-examples").onclick = () => {
   const examples = [
@@ -854,7 +684,7 @@ const exchange = exchangeWorkspace({
   download,
   message,
   setBusy,
-  getProject: () => project,
+  getProject: () => state.project,
   adopt: (s) => open(s.project, { snapshot: s }),
 });
 $("#import-exchange").onclick = () => exchange.pick();
@@ -879,8 +709,8 @@ $("#import-file").onchange = async (e) => {
   }
 };
 $("#home").onclick = () => {
-  if (busy) return;
-  if (formDirty) {
+  if (state.busy) return;
+  if (state.formDirty) {
     message("Apply or cancel property changes before leaving the model.");
     return;
   }
@@ -891,7 +721,7 @@ $("#home").onclick = () => {
   showRecent();
 };
 function setBusy(value) {
-  busy = value;
+  state.busy = value;
   // Announces running commands to assistive technology; tests wait on it.
   $("#workspace").setAttribute("aria-busy", String(value));
   for (const id of [
@@ -908,95 +738,98 @@ function setBusy(value) {
   ])
     $("#" + id).disabled =
       value ||
-      (id === "analyse" && analysing) ||
-      (readOnly &&
+      (id === "analyse" && state.analysing) ||
+      (state.readOnly &&
         ["undo", "redo", "analysis-mode", "draw-toggle"].includes(id));
-  if (project) {
-    $("#undo").disabled = value || readOnly || formDirty || !project.canUndo;
-    $("#redo").disabled = value || readOnly || formDirty || !project.canRedo;
+  if (state.project) {
+    $("#undo").disabled =
+      value || state.readOnly || state.formDirty || !state.project.canUndo;
+    $("#redo").disabled =
+      value || state.readOnly || state.formDirty || !state.project.canRedo;
   }
   for (const b of document.querySelectorAll(
     "#inspector-content input,#inspector-content select,#inspector-content textarea,#inspector-content button,#modal-content form button",
   ))
-    b.disabled = value || readOnly;
-  $("#analysis-mode").disabled = value || formDirty || readOnly;
-  $("#copy-bay").disabled = value || formDirty || readOnly;
-  $("#units").disabled = value || formDirty;
-  $("#result-case").disabled = value || formDirty;
-  $("#analyse").disabled = value || analysing || formDirty;
-  $("#cancel").hidden = !analysing;
+    b.disabled = value || state.readOnly;
+  $("#analysis-mode").disabled = value || state.formDirty || state.readOnly;
+  $("#copy-bay").disabled = value || state.formDirty || state.readOnly;
+  $("#units").disabled = value || state.formDirty;
+  $("#result-case").disabled = value || state.formDirty;
+  $("#analyse").disabled = value || state.analysing || state.formDirty;
+  $("#cancel").hidden = !state.analysing;
 }
 function setAnalysing(value) {
-  analysing = value;
-  $("#analyse").disabled = value || busy || formDirty || !project;
+  state.analysing = value;
+  $("#analyse").disabled =
+    value || state.busy || state.formDirty || !state.project;
   $("#cancel").hidden = !value;
-  if (project && tab === "steel-overview") renderResults();
+  if (state.project && state.tab === "steel-overview") renderResults();
 }
 function refresh(snapshot) {
-  project.canUndo = snapshot?.canUndo ?? project.canUndo;
-  project.canRedo = snapshot?.canRedo ?? project.canRedo;
-  $("#project-name").value = project.name;
-  $("#revision").textContent = "r" + project.revision;
+  state.project.canUndo = snapshot?.canUndo ?? state.project.canUndo;
+  state.project.canRedo = snapshot?.canRedo ?? state.project.canRedo;
+  $("#project-name").value = state.project.name;
+  $("#revision").textContent = "r" + state.project.revision;
   $("#model-count").textContent =
-    `${project.nodes.length} nodes · ${project.members.length} members`;
-  $("#analysis-mode").value = project.analysisMode;
+    `${state.project.nodes.length} nodes · ${state.project.members.length} members`;
+  $("#analysis-mode").value = state.project.analysisMode;
   const previousCase = $("#result-case").value;
   $("#result-case").replaceChildren(
-    ...[...project.loadCases, ...project.combinations].map((c) => {
+    ...[...state.project.loadCases, ...state.project.combinations].map((c) => {
       const o = document.createElement("option");
       o.value = c.id;
       o.textContent = label(c.id) + " · " + c.name;
       return o;
     }),
   );
-  if (project.loadCases.length + project.combinations.length >= 2) {
+  if (state.project.loadCases.length + state.project.combinations.length >= 2) {
     const o = document.createElement("option");
     o.value = "__envelope__";
     o.textContent = "Envelope · all cases & combinations";
     $("#result-case").append(o);
   }
   $("#result-case").value = [
-    ...project.loadCases,
-    ...project.combinations,
+    ...state.project.loadCases,
+    ...state.project.combinations,
     { id: "__envelope__" },
   ].some((c) => c.id === previousCase)
     ? previousCase
-    : project.combinations[0]?.id || project.loadCases[0]?.id;
-  $("#units").value = project.displayUnits;
-  $("#view-title").textContent = project.name;
-  $("#hash-status").textContent = modelHash.slice(0, 12) + " · f64";
+    : state.project.combinations[0]?.id || state.project.loadCases[0]?.id;
+  $("#units").value = state.project.displayUnits;
+  $("#view-title").textContent = state.project.name;
+  $("#hash-status").textContent = state.modelHash.slice(0, 12) + " · f64";
   $("#kernel-status").textContent = "● Rust / WASM ready";
   viewport.selection = new Set(
     [...viewport.selection].filter(
       (id) =>
-        project.nodes.some((n) => n.id === id) ||
-        project.members.some((m) => m.id === id) ||
-        project.supports.some((s) => s.id === id) ||
-        project.loads.some((l) => l.id === id),
+        state.project.nodes.some((n) => n.id === id) ||
+        state.project.members.some((m) => m.id === id) ||
+        state.project.supports.some((s) => s.id === id) ||
+        state.project.loads.some((l) => l.id === id),
     ),
   );
-  if (selected && !viewport.selection.has(selected))
-    selected = [...viewport.selection].at(-1) || null;
+  if (state.selected && !viewport.selection.has(state.selected))
+    state.selected = [...viewport.selection].at(-1) || null;
   renderNav();
   renderInspector();
   renderResults();
   viewControls?.refresh();
-  viewport.currentModelHash = modelHash;
-  viewport.update(project, diagramResult(), selected);
+  viewport.currentModelHash = state.modelHash;
+  viewport.update(state.project, diagramResult(), state.selected);
   topologyTools.refresh();
-  setBusy(busy);
+  setBusy(state.busy);
 }
 function portable() {
-  const { canUndo, canRedo, ...p } = project;
+  const { canUndo, canRedo, ...p } = state.project;
   return p;
 }
 async function command(type, args, commandId) {
-  if (readOnly)
+  if (state.readOnly)
     throw Error("Read-only: this project is being edited in another tab");
   setBusy(true);
   try {
-    const name = project.name,
-      units = project.displayUnits;
+    const name = state.project.name,
+      units = state.project.displayUnits;
     const s = await gateway.send("applyCommand", {
       command: {
         id: commandId || "c" + crypto.randomUUID().replaceAll("-", ""),
@@ -1004,13 +837,13 @@ async function command(type, args, commandId) {
         args,
       },
     });
-    project = s.project;
-    project.name = name;
-    project.displayUnits = units;
-    modelHash = s.modelHash;
-    failed = false;
+    state.project = s.project;
+    state.project.name = name;
+    state.project.displayUnits = units;
+    state.modelHash = s.modelHash;
+    state.failed = false;
     message(
-      result && result.modelHash !== modelHash
+      state.result && state.result.modelHash !== state.modelHash
         ? "Results are stale. The engineering model changed; analyse again before exporting a report."
         : "",
     );
@@ -1025,16 +858,16 @@ for (const id of ["undo", "redo"])
   $("#" + id).onclick = async () => {
     try {
       setBusy(true);
-      const name = project.name,
-        units = project.displayUnits;
+      const name = state.project.name,
+        units = state.project.displayUnits;
       const s = await gateway.send(id);
-      project = s.project;
-      project.name = name;
-      project.displayUnits = units;
-      modelHash = s.modelHash;
-      failed = false;
+      state.project = s.project;
+      state.project.name = name;
+      state.project.displayUnits = units;
+      state.modelHash = s.modelHash;
+      state.failed = false;
       message(
-        result && result.modelHash !== modelHash
+        state.result && state.result.modelHash !== state.modelHash
           ? "Results are stale. Analyse the restored model."
           : "",
       );
@@ -1050,15 +883,15 @@ for (const id of ["undo", "redo"])
 $("#analysis-mode").onchange = () =>
   command("SetAnalysisMode", { mode: $("#analysis-mode").value }).catch((e) => {
     message(e.message);
-    $("#analysis-mode").value = project.analysisMode;
+    $("#analysis-mode").value = state.project.analysisMode;
   });
 $("#project-name").onchange = () => {
-  project.name = $("#project-name").value;
-  $("#view-title").textContent = project.name;
+  state.project.name = $("#project-name").value;
+  $("#view-title").textContent = state.project.name;
   persist();
 };
 $("#units").onchange = () => {
-  project.displayUnits = $("#units").value;
+  state.project.displayUnits = $("#units").value;
   renderResults();
   renderInspector();
   viewport.draw();
@@ -1066,144 +899,8 @@ $("#units").onchange = () => {
 };
 const explorerOpenState = new Map();
 const explorerLazyBranches = new Map();
-let explorerProjectId, explorerSelection;
-function renderNav() {
-  if (explorerProjectId !== project.id) {
-    explorerOpenState.clear();
-    explorerProjectId = project.id;
-    explorerSelection = project.members.length > 1000 ? selected : null;
-    $("#model-search").value = "";
-  }
-  // Reveal explicit selections even when their large-model branch is deferred.
-  if (project.members.length > 1000 && selected !== explorerSelection) {
-    const owner = project.structure.physicalMembers.find((m) =>
-      m.analyticalMemberIds.includes(selected),
-    );
-    if (owner)
-      for (const key of [
-        "structure",
-        "levels",
-        `storey:${owner.storeyId}`,
-        `storey:${owner.storeyId}:${owner.role}`,
-        `analytical:${owner.id}`,
-      ])
-        explorerOpenState.set(key, true);
-  }
-  const query = $("#model-search").value;
-  explorerLazyBranches.clear();
-  $("#model-nav").innerHTML = renderExplorer(project, {
-    selected,
-    label,
-    esc,
-    icon: structuralIcon,
-    openState: explorerOpenState,
-    lazyBranches: explorerLazyBranches,
-    selectionContext,
-    query,
-  });
-  if (selected !== explorerSelection) {
-    for (const leaf of $("#model-nav").querySelectorAll(
-      '[aria-current="true"]',
-    )) {
-      for (
-        let d = leaf.closest("details");
-        d;
-        d = d.parentElement.closest("details")
-      ) {
-        d.open = true;
-        explorerOpenState.set(d.dataset.branch, true);
-      }
-    }
-    explorerSelection = selected;
-  }
-  const count = filterExplorer($("#model-nav"), query);
-  $("#explorer-empty").hidden = !query || count > 0;
-  bindExplorer();
-}
-function hydrateExplorerBranch(d) {
-  if (!d.hasAttribute("data-lazy")) return false;
-  d.querySelector(":scope > .explorer-children").innerHTML =
-    explorerLazyBranches.get(d.dataset.branch) ||
-    '<p class="explorer-empty">None in this model</p>';
-  d.removeAttribute("data-lazy");
-  return true;
-}
-function selectStructureObject(collection, id) {
-  selectEntities(structureSelectionIds(project, collection, id));
-  selectionContext = { kind: "structure", collection, id };
-  $("[data-inspector-tab=properties]").click();
-  renderInspector();
-  renderNav();
-  renderSelectionStatus();
-}
-function bindExplorer() {
-  for (const d of $("#model-nav").querySelectorAll("details"))
-    d.ontoggle = () => {
-      if (!d.isConnected) return;
-      if (d.open && hydrateExplorerBranch(d)) bindExplorer();
-      if (!$("#model-search").value)
-        explorerOpenState.set(d.dataset.branch, d.open);
-    };
-  for (const b of $("#model-nav").querySelectorAll(
-    "[data-structure-id], [data-structure-add]",
-  ))
-    b.onclick = () => {
-      if (formDirty) return message("Apply or cancel changes first.");
-      selectStructureObject(
-        b.dataset.structureKey || b.dataset.structureAdd,
-        b.dataset.structureId,
-      );
-    };
-  for (const b of $("#model-nav").querySelectorAll("[data-structure-ref]"))
-    b.onclick = () => {
-      if (formDirty) return message("Apply or cancel changes first.");
-      const id = b.dataset.structureRef;
-      if (b.dataset.refKind === "support") selectEntities([id]);
-      else {
-        const collection = {
-          physicalMember: "physicalMembers",
-          designObject: "designObjects",
-          joint: "joints",
-          grid: "grids",
-        }[b.dataset.refKind];
-        if (collection) selectStructureObject(collection, id);
-      }
-    };
-  for (const b of $("#model-nav").querySelectorAll("[data-entity-id]"))
-    b.onclick = (e) => {
-      if (formDirty) return message("Apply or cancel changes first.");
-      const key = b.dataset.entityKey,
-        id = b.dataset.entityId;
-      if (["nodes", "supports", "loads"].includes(key))
-        selectEntities([id], e.shiftKey);
-      else {
-        modal("Edit " + entityGuides[key][0].toLowerCase(), "");
-        editEntity(
-          key,
-          project[key].find((x) => x.id === id),
-        );
-      }
-    };
-  for (const b of document.querySelectorAll("[data-preview]"))
-    b.onclick = () => {
-      if (formDirty) return message("Apply or cancel changes first.");
-      concrete.select(b.dataset.preview);
-      $("[data-inspector-tab=concrete]").click();
-    };
-  for (const b of document.querySelectorAll("[data-member]"))
-    b.onclick = (e) => selectEntities([b.dataset.member], e.shiftKey);
-  for (const b of document.querySelectorAll("[data-group]"))
-    b.onclick = () => {
-      if (formDirty) {
-        message(
-          "Apply or cancel property changes before editing other entities.",
-        );
-        return;
-      }
-      entityList(b.dataset.group);
-    };
-}
-$("#model-search").oninput = renderNav;
+
+$("#model-search").oninput = () => renderNav();
 $("#explorer-expand").onclick = () => {
   // Expand all includes every deferred descendant, never just the mounted rows.
   while ($("#model-nav details[data-lazy]"))
@@ -1223,68 +920,67 @@ $("#explorer-collapse").onclick = () => {
 };
 const input = (id, label, value, attrs = "") =>
   `<label>${label}<input id="${id}" name="${id}" type="text" inputmode="decimal" value="${value}" ${attrs}></label>`;
-function renderDirectProperties(key, entity) {
-  $("#selection-tag").textContent = label(entity.id);
-  $("#selected-status").textContent =
-    `${key === "supports" ? "Support" : key === "loads" ? "Load" : "Node"} ${label(entity.id)} selected`;
-  $("#inspector-content").innerHTML =
-    `<h3>${esc(entityGuides[key][0])} · ${esc(label(entity.id))}</h3><form id="direct-properties" class="entity-form">${entityFields(key, entity, project, { compact: true })}<p id="direct-error" class="error-text" role="alert"></p><div class="property-actions full"><button class="primary">Apply changes</button><button type="button" id="cancel-direct">Cancel changes</button>${key !== "nodes" ? '<button type="button" id="delete-assignment">Delete</button>' : ""}</div></form>`;
-  bindEntityFields($("#direct-properties"), key, project);
-  $("#direct-properties").oninput = () => {
-    formDirty = true;
-    setBusy(busy);
-    $("#export-report").disabled = true;
-    $("#export-csv").disabled = true;
-    $("#result-status").textContent = "Unapplied changes";
-  };
-  $("#cancel-direct").onclick = () => {
-    message("");
-    renderInspector();
-    setBusy(busy);
-    renderResults();
-  };
-  $("#direct-properties").onsubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const value = readEntityFields(e.currentTarget, key, entity, project);
-      await command(
-        key === "nodes"
-          ? "SetNodePosition"
-          : key === "supports"
-            ? "SetSupport"
-            : "SetLoad",
-        { ...value, ...(key === "nodes" ? {} : { existence: "update" }) },
-      );
-    } catch (error) {
-      $("#direct-error").textContent = error.message;
-    }
-  };
-  if ($("#delete-assignment"))
-    $("#delete-assignment").onclick = async () => {
-      if (formDirty) {
-        message("Apply or cancel changes before deleting.");
-        return;
-      }
-      try {
-        await command("DeleteEntities", { ids: [entity.id], cascade: false });
-      } catch (e) {
-        message(e.message);
-      }
-    };
-  setBusy(busy);
-}
-function renderSelectionForces() {
-  renderForceInspector({
-    project,
-    result,
-    modelHash,
-    selected,
-    count: viewport.selection.size,
-  });
-}
+const {
+  renderDirectProperties,
+  renderSelectionForces,
+  renderStructureSelection,
+  renderInspector,
+} = inspectorPanel({
+  $,
+  bindEntityFields,
+  cadTools,
+  command,
+  concrete,
+  entityFields,
+  entityGuides,
+  esc,
+  format,
+  guideDiagram,
+  input,
+  label,
+  lineageSummary,
+  message,
+  nativeSteel,
+  readEntityFields,
+  renderForceInspector,
+  renderResults,
+  renderSelectionStatus,
+  renderStructureEditor,
+  setBusy,
+  state,
+  structuralIcon,
+  viewport,
+});
+const {
+  renderNav,
+  hydrateExplorerBranch,
+  selectStructureObject,
+  bindExplorer,
+} = explorerPanel({
+  $,
+  concrete,
+  editEntity,
+  entityGuides,
+  entityList,
+  esc,
+  explorerLazyBranches,
+  explorerOpenState,
+  filterExplorer,
+  label,
+  message,
+  modal,
+  renderExplorer,
+  renderInspector,
+  renderSelectionStatus,
+  selectEntities,
+  state,
+  structuralIcon,
+  structureSelectionIds,
+});
+
 for (const button of document.querySelectorAll("[data-inspector-tab]"))
   button.onclick = () => {
-    if (formDirty) {
+    if (state.formDirty) {
       message("Apply or cancel changes before switching inspector tabs.");
       return;
     }
@@ -1296,7 +992,8 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
     $("#design-preview-scene").hidden = kind !== "concrete";
     if (kind !== "concrete") {
       concrete.hide();
-      if (selectionContext?.kind === "preview") selectionContext = null;
+      if (state.selectionContext?.kind === "preview")
+        state.selectionContext = null;
       renderSelectionStatus();
     }
     if (kind === "properties") renderInspector();
@@ -1307,466 +1004,12 @@ for (const button of document.querySelectorAll("[data-inspector-tab]"))
     if (kind === "forces") renderSelectionForces();
     if (kind === "steel") void nativeSteel.render();
   };
-function renderStructureSelection() {
-  const { collection, id } = selectionContext;
-  renderStructureEditor({
-    project,
-    collection,
-    id,
-    host: $("#inspector-content"),
-    esc,
-    command,
-    done: () => {
-      renderInspector();
-      renderSelectionStatus();
-    },
-    dirty: (value) => {
-      formDirty = value;
-    },
-  });
-  const entity = project.structure[collection].find((x) => x.id === id);
-  const openDraft = $("#open-structure-draft");
-  if (openDraft)
-    openDraft.onclick = () => {
-      if (formDirty) return message("Apply or cancel changes first.");
-      concrete.select(entity.previewId);
-      $("[data-inspector-tab=concrete]").click();
-    };
-  renderSelectionStatus();
-}
-function renderInspector() {
-  renderSelectionForces();
-  formDirty = false;
-  if (!$("#concrete-inspector").hidden) void concrete.render();
-  if (!$("#steel-design-inspector").hidden) void nativeSteel.render();
-  if (selectionContext?.kind === "structure") {
-    renderStructureSelection();
-    return;
-  }
-  if (!selected || viewport.selection.size > 1) {
-    const count = viewport.selection.size;
-    $("#selection-tag").textContent = count ? `${count} selected` : "None";
-    $("#inspector-content").innerHTML = count
-      ? `<h3>Multiple selection</h3><p>${count} entities selected. Properties may differ.</p><p>${esc([...viewport.selection].slice(0, 20).map(label).join(", "))}</p><button id="edit-multiple">Edit selection</button><p class="form-help">Move, copy or delete through a dependency preview. Individual properties are edited one entity at a time.</p>`
-      : "<h3>No selection</h3><p>Select a node or member in the canvas or model explorer to inspect its properties.</p>";
-    if (count) $("#edit-multiple").onclick = () => cadTools.open();
-    return;
-  }
-  const selectedSupport = project.supports.find((s) => s.id === selected);
-  const assignment = project.loads.find((l) => l.id === selected);
-  if (selectedSupport || assignment) {
-    renderDirectProperties(
-      selectedSupport ? "supports" : "loads",
-      selectedSupport || assignment,
-    );
-    return;
-  }
-  const node = project.nodes.find((n) => n.id === selected);
-  if (node) {
-    renderDirectProperties("nodes", node);
-    return;
-  }
-  const m = project.members.find((m) => m.id === selected);
-  if (!m) {
-    selected = null;
-    renderInspector();
-    return;
-  }
-  const sec = project.sections.find((s) => s.id === m.section),
-    mat = project.materials.find((x) => x.id === m.material),
-    start = project.nodes.find((n) => n.id === m.start),
-    end = project.nodes.find((n) => n.id === m.end),
-    load = project.loads.find((l) => l.type === "nodal" && l.node === m.end),
-    support = project.supports.find((s) => s.node === m.start);
-  const simple =
-    project.members.length === 1 &&
-    start.position.every((x) => x === 0) &&
-    end.position[1] === 0 &&
-    end.position[2] === 0;
-  const lineage = lineageSummary(project, m, label);
-  $("#selection-tag").textContent = label(m.id);
-  $("#selected-status").textContent = lineage
-    ? `Analytical ${label(m.id)} · physical ${lineage.physicalLabel}${lineage.stations ? ` · ${lineage.stations}` : ""}`
-    : `Member ${label(m.id)} selected · ${label(m.start)} → ${label(m.end)}`;
-  $("#inspector-content").innerHTML =
-    `<div class="inspector-heading"><span class="symbol">${structuralIcon("member")}</span><div><strong>Member ${esc(label(m.id))}</strong><small>${esc(label(m.start))} → ${esc(label(m.end))} · Custom section</small></div></div>${lineage ? `<div class="form-section lineage-panel" data-physical="${esc(lineage.physicalId)}"><h3>Physical lineage</h3><p>${esc(lineage.text)}</p><p class="form-help">Parent ID and station range are provenance from split/connect. They do not remesh automatically.</p></div>` : ""}<form id="member-form"><div class="form-section"><h3>Geometry</h3>${guideDiagram("members")}<div class="fields">${simple ? input("span", "Span [m]", end.position[0], 'min="0.000001" required') : `<p class="form-help full">Edit node coordinates from the model explorer.</p>`}</div></div><div class="form-section"><h3>Material · ${esc(label(mat.id))}</h3><div class="fields">${input("elasticity", "Elastic stiffness E [GPa]", mat.E / 1e9, 'min="0.000001" required')}${input("poisson", "Poisson ratio ν", mat.nu, 'min="-0.999" max="0.499" required')}${input("density", "Density [kg/m³]", mat.density, 'min="0" required')}</div></div><div class="form-section"><h3>Section · ${esc(label(sec.id))}</h3><div class="fields">${input("area", "Area [m²]", sec.A, 'min="1e-15" required')}${input("torsion", "Twisting resistance J [m⁴]", sec.J, 'min="1e-20" required')}${input("inertia-y", "Bending about y · Iy [m⁴]", sec.Iy, 'min="1e-20" required')}${input("inertia-z", "Bending about z · Iz [m⁴]", sec.Iz, 'min="1e-20" required')}</div><p class="form-help">Principal axes · ${esc(sec.provenance)}</p></div>${simple ? `<div class="form-section"><h3>Support & loading</h3><label class="check-label"><input id="fixed-support" type="checkbox" ${support ? "checked" : ""}> Fixed at ${esc(label(m.start))}</label><div class="fields" style="margin-top:14px">${load ? input("tip-load", "Vertical tip force [kN]", load.values[2] / 1000, "required") : ""}</div><p class="form-help">Negative Fz acts downward, along global −Z. Unit suffixes such as “-13000 N” are accepted.</p></div>` : ""}<div id="form-error" class="error-text" role="alert"></div><div class="property-actions"><button class="primary" type="submit">Apply changes</button><button type="button" id="discard-properties">Cancel changes</button></div><p class="form-help">Material and section edits affect every member using these definitions.</p></form>${result && result.analysisType !== "envelope" ? `<div class="probe"><small>${result.modelHash === modelHash ? "Result probe" : "Stale result probe"} · ${esc(label(m.id))} · ${esc(result.caseId)}</small><strong>${format(result.members.find((x) => x.id === m.id)?.samples?.at(-1)?.displacement?.[2] * 1000)} mm</strong><small>Global Z displacement · station 1.00 L</small></div>` : result?.analysisType === "envelope" ? `<div class="probe"><small>Envelope result · ${esc(label(m.id))}</small><p class="form-help">Open Results for per-scalar governing provenance. Envelope values are not a tip probe.</p></div>` : ""}`;
-  $("#discard-properties").onclick = () => {
-    message("");
-    renderInspector();
-    setBusy(busy);
-  };
-  $("#member-form").oninput = () => {
-    formDirty = true;
-    $("#analyse").disabled = true;
-    $("#export-report").disabled = true;
-    $("#export-csv").disabled = true;
-    $("#result-status").textContent = "Unapplied changes";
-    $("#result-status").className = "badge stale";
-    setBusy(busy);
-  };
-  $("#member-form").onsubmit = async (e) => {
-    e.preventDefault();
-    const quantity = (id, unit = "") => {
-      const text = $("#" + id).value.trim();
-      return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(text) && unit
-        ? text + " " + unit
-        : text;
-    };
-    const commands = [
-      {
-        type: "SetMaterial",
-        args: {
-          ...mat,
-          E: quantity("elasticity", "GPa"),
-          nu: quantity("poisson"),
-          density: quantity("density", "kg/m³"),
-          existence: "update",
-        },
-      },
-      {
-        type: "SetSection",
-        args: {
-          ...sec,
-          A: quantity("area", "m²"),
-          J: quantity("torsion", "m⁴"),
-          Iy: quantity("inertia-y", "m⁴"),
-          Iz: quantity("inertia-z", "m⁴"),
-          existence: "update",
-        },
-      },
-    ];
-    if (simple) {
-      commands.push({
-        type: "SetNodePosition",
-        args: { id: end.id, position: [quantity("span", "m"), 0, 0] },
-      });
-      if (load)
-        commands.push({
-          type: "SetLoad",
-          args: {
-            ...load,
-            values: load.values.map((v, i) =>
-              i === 2 ? quantity("tip-load", "kN") : v,
-            ),
-            existence: "update",
-          },
-        });
-      if ($("#fixed-support").checked && !support)
-        commands.push({
-          type: "SetSupport",
-          args: {
-            id: "s" + crypto.randomUUID().replaceAll("-", "").slice(0, 12),
-            node: m.start,
-            fixed: Array(6).fill(true),
-            prescribed: Array(6).fill(0),
-            existence: "create",
-          },
-        });
-      if (!$("#fixed-support").checked && support)
-        commands.push({
-          type: "DeleteEntities",
-          args: { ids: [support.id], cascade: false },
-        });
-    }
-    try {
-      await command("Batch", { commands });
-    } catch (e) {
-      $("#form-error").textContent = e.message;
-    }
-  };
-  setBusy(busy);
-  renderResults();
-}
-function format(n) {
-  return Number.isFinite(n)
-    ? new Intl.NumberFormat("en-GB", { maximumFractionDigits: 6 }).format(
-        Object.is(n, -0) ? 0 : n,
-      )
-    : "—";
-}
-function renderResults() {
-  overview.syncOverlay();
-  const current = result && result.modelHash === modelHash && !formDirty;
-  $("#result-status").textContent = failed
-    ? "Analysis failed"
-    : result
-      ? current
-        ? "✓ Current"
-        : "⚠ Stale results"
-      : "Not analysed";
-  $("#result-status").className =
-    "badge " +
-    (failed ? "failed" : result ? (current ? "current" : "stale") : "");
-  $("#export-report").disabled = !current || failed;
-  $("#export-csv").disabled = !current || failed;
-  if (tab === "design-preview") {
-    $("#export-csv").disabled = true;
-    concrete.results($("#results-content"));
-    return;
-  }
-  if (tab === "stability") {
-    $("#export-csv").disabled = true;
-    modalView.hide();
-    stability.render($("#results-content"));
-    return;
-  }
-  if (tab === "study") {
-    $("#export-csv").disabled = true;
-    stability.hide();
-    modalView.hide();
-    if (studies.has()) studies.render($("#results-content"));
-    else
-      $("#results-content").innerHTML =
-        '<p class="notice-small" data-testid="study-empty">No study has run. Load a declarative study document with Analysis › Run study…; it runs on a copy of the open project.</p>';
-    return;
-  }
-  if (tab === "modal") {
-    $("#export-csv").disabled = true;
-    stability.hide();
-    modalView.render($("#results-content"));
-    return;
-  }
-  if (tab === "response") {
-    $("#export-csv").disabled = true;
-    stability.hide();
-    modalView.hide();
-    responseView.render($("#results-content"));
-    return;
-  }
-  if (tab === "steel-overview") {
-    $("#export-csv").disabled = true;
-    overview.render($("#results-content"));
-    return;
-  }
-  if (tab === "steel-design") {
-    const run =
-      viewport.selection.size === 1 ? memberDesignRuns.get(selected) : null;
-    const state = designState(run, modelHash, result, formDirty || failed);
-    $("#results-content").innerHTML = designResultsHtml(run, state);
-    $("#export-csv").disabled = true;
-    if (run) {
-      bindSteelResultViews($("#results-content"), run);
-      $("#design-download").onclick = () =>
-        download(
-          `design-${run.memberId}.json`,
-          JSON.stringify({ ...run, currentState: state }, null, 2),
-          "application/json",
-        );
-      $("#design-why").disabled = state === "stale" || !run.governingAction;
-      $("#design-why").onclick = () => {
-        selectEntities([run.memberId]);
-        viewport.designMarker = {
-          ...run.governingAction,
-          memberId: run.memberId,
-          modelHash: run.modelHash,
-        };
-        viewport.draw();
-      };
-    }
-    return;
-  }
-  if (!result) {
-    $("#results-content").innerHTML =
-      `<div class="empty-results"><span>${failed ? "!" : "⌁"}</span><strong>${failed ? "No numerical result" : "Your results start here"}</strong><p>${failed ? "Resolve the diagnostic above, then analyse again." : "Review your model, then run an analysis."}</p></div>`;
-    return;
-  }
-  if (result.analysisType === "envelope") {
-    const eng = project.displayUnits === "engineeringMetric",
-      u = eng ? 1000 : 1,
-      f = eng ? 0.001 : 1;
-    const scale = (component, value) => {
-      if (["ux", "uy", "uz"].includes(component)) return value * u;
-      if (["rx", "ry", "rz"].includes(component)) return value;
-      return value * f;
-    };
-    const unit = (component) => {
-      if (["ux", "uy", "uz"].includes(component)) return eng ? "mm" : "m";
-      if (["rx", "ry", "rz"].includes(component)) return "rad";
-      if (["mx", "my", "mz", "T", "My", "Mz"].includes(component))
-        return eng ? "kN·m" : "N·m";
-      return eng ? "kN" : "N";
-    };
-    const row = (entity, component, extreme, kind) => {
-      const where =
-        extreme.station != null
-          ? ` · x/L=${Number(extreme.station.toPrecision(6))}${extreme.side ? ` ${extreme.side}` : ""}`
-          : extreme.nodeId
-            ? ` · node ${label(extreme.nodeId)}`
-            : extreme.supportId
-              ? ` · support ${label(extreme.supportId)}`
-              : "";
-      return [
-        entity,
-        component,
-        kind,
-        format(scale(component, extreme.value)),
-        unit(component),
-        label(extreme.caseOrCombinationId) + where,
-      ];
-    };
-    const rows = [];
-    for (const m of result.members || []) {
-      for (const a of m.actions || []) {
-        rows.push(row(label(m.id), a.component, a.max, "max"));
-        rows.push(row(label(m.id), a.component, a.min, "min"));
-      }
-      for (const d of m.displacements || []) {
-        rows.push(row(label(m.id), d.component, d.max, "max"));
-        rows.push(row(label(m.id), d.component, d.min, "min"));
-      }
-    }
-    for (const n of result.nodes || []) {
-      for (const d of n.displacements || []) {
-        if (Math.abs(d.max.value) < 1e-15 && Math.abs(d.min.value) < 1e-15)
-          continue;
-        rows.push(row(label(n.id), d.component, d.max, "max"));
-        rows.push(row(label(n.id), d.component, d.min, "min"));
-      }
-    }
-    for (const s of result.supports || []) {
-      for (const r of s.reactions || []) {
-        rows.push(row(label(s.id), r.component, r.max, "max"));
-        rows.push(row(label(s.id), r.component, r.min, "min"));
-      }
-    }
-    const ids = (result.caseOrCombinationIds || []).map(label).join(", ");
-    $("#results-content").innerHTML =
-      `<p class="notice-small">Envelope over ${esc(ids)}. Each row is an independent scalar extreme with governing case/combination — not a simultaneous force set.</p>` +
-      (result.diagnostics || [])
-        .map(
-          (d) =>
-            `<p class="notice-small" role="status">${esc(d.code || "")}: ${esc(d.message || "")}</p>`,
-        )
-        .join("") +
-      `<table><thead><tr>${[
-        "Entity",
-        "Component",
-        "Extreme",
-        "Value",
-        "Unit",
-        "Governing",
-      ]
-        .map((h) => `<th scope="col">${h}</th>`)
-        .join("")}</tr></thead><tbody>${rows
-        .map(
-          (r) =>
-            `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`,
-        )
-        .join("")}</tbody></table>`;
-    return;
-  }
-  const eng = project.displayUnits === "engineeringMetric",
-    u = eng ? 1000 : 1,
-    f = eng ? 0.001 : 1;
-  let heads, rows;
-  if (tab === "displacements") {
-    heads = [
-      "Node",
-      `ux [${eng ? "mm" : "m"}]`,
-      `uy [${eng ? "mm" : "m"}]`,
-      `uz [${eng ? "mm" : "m"}]`,
-      "rx [rad]",
-      "ry [rad]",
-      "rz [rad]",
-    ];
-    rows = result.nodeIds.map((id, i) => [
-      label(id),
-      ...Array.from(result.nodeDisplacements.slice(i * 6, i * 6 + 6), (v, j) =>
-        format(v * (j < 3 ? u : 1)),
-      ),
-    ]);
-  }
-  if (tab === "reactions") {
-    heads = [
-      "Support",
-      ...["Fx", "Fy", "Fz"].map((k) => `${k} [${eng ? "kN" : "N"}]`),
-      ...["Mx", "My", "Mz"].map((k) => `${k} [${eng ? "kN m" : "N m"}]`),
-    ];
-    rows = result.reactionSupportIds.map((id, i) => [
-      label(id),
-      ...Array.from(result.reactions.slice(i * 6, i * 6 + 6), (v) =>
-        format(v * f),
-      ),
-    ]);
-  }
-  if (tab === "section-forces") {
-    heads = [
-      "Member",
-      "Position [%]",
-      ...[
-        "Axial N",
-        "Shear Vy",
-        "Shear Vz",
-        "Torsion T",
-        "Moment My",
-        "Moment Mz",
-      ].map((name, i) => `${name} [${eng ? "kN" : "N"}${i > 2 ? " m" : ""}]`),
-    ];
-    rows = result.members.flatMap((m) =>
-      m.samples.map((sample) => [
-        label(m.id),
-        format(sample.station * 100),
-        ...sample.actions.map((value) => format(value * f)),
-      ]),
-    );
-  }
-  if (tab === "forces") {
-    heads = [
-      "Member",
-      "End",
-      ...["Fx", "Fy", "Fz", "Mx", "My", "Mz"].map(
-        (k, i) => `${k} [${eng ? "kN" : "N"}${i > 2 ? " m" : ""}]`,
-      ),
-    ];
-    rows = result.members.flatMap((m) =>
-      [0, 1].map((i) => [
-        label(m.id),
-        i ? "j" : "i",
-        ...m.endActions.slice(i * 6, i * 6 + 6).map((v) => format(v * f)),
-      ]),
-    );
-  }
-  if (tab === "equilibrium") {
-    const c = result.numericalChecks;
-    $("#results-content").innerHTML =
-      `<div class="equilibrium"><div><strong>✓ Global force balance</strong><small>${c.globalBalance
-        .slice(0, 3)
-        .map((x) => x.toExponential(2))
-        .join(
-          ", ",
-        )} N</small></div><div><strong>✓ Global moment balance</strong><small>${c.globalBalance
-        .slice(3)
-        .map((x) => x.toExponential(2))
-        .join(
-          ", ",
-        )} N m</small></div><div><strong>Scaled residual</strong><small>${c.scaledResidual.toExponential(4)} · min pivot ${c.minScaledPivot.toExponential(4)}</small></div></div>`;
-    return;
-  }
-  if (tab === "stress") {
-    const eng = project.displayUnits === "engineeringMetric";
-    const scale = eng ? 1e-6 : 1;
-    const unit = eng ? "MPa" : "Pa";
-    heads = ["Member", "Station", `σ max [${unit}]`, `σ min [${unit}]`];
-    rows = (result.members || [])
-      .filter((m) => m.stressScreen)
-      .map((m) => [
-        label(m.id),
-        format(m.stressScreen.station * 100) + "%",
-        format(m.stressScreen.maxPa * scale),
-        format(m.stressScreen.minPa * scale),
-      ]);
-    $("#results-content").innerHTML =
-      `<p class="notice-small" data-testid="stress-disclaimer">Elastic longitudinal fibre stress only (mechanics-v1). Not a member stability or building-code check.</p>${current ? "" : '<p class="notice-small">Stale results — these values belong to the previous model.</p>'}<table><thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`).join("")}</tbody></table>`;
-    return;
-  }
-  $("#results-content").innerHTML =
-    `${tab === "section-forces" ? '<p class="notice-small">Local member axes · signed section forces, matching the diagrams. Position: 0% at start (i), 100% at end (j).</p>' : tab === "forces" ? '<p class="notice-small">Local nodal actions applied to the member ends. Their signs differ from section forces.</p>' : ""}${current ? "" : '<p class="notice-small">Stale results — these values belong to the previous model.</p>'}<table><thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((v, i) => `<${i ? "td" : "th"}${i ? "" : ' scope="row"'}>${esc(v)}</${i ? "td" : "th"}>`).join("")}</tr>`).join("")}</tbody></table>`;
-}
+
 for (const b of document.querySelectorAll("[data-tab]"))
   b.onclick = () => {
-    tab = b.dataset.tab;
-    if (tab !== "stability") stability.hide();
-    if (tab !== "modal") modalView.hide();
+    state.tab = b.dataset.tab;
+    if (state.tab !== "stability") stability.hide();
+    if (state.tab !== "modal") modalView.hide();
     if ($("#results-content").hidden) $("#toggle-results")?.click();
     document
       .querySelectorAll("[data-tab]")
@@ -1774,22 +1017,22 @@ for (const b of document.querySelectorAll("[data-tab]"))
     renderResults();
   };
 $("#analyse").onclick = async () => {
-  if (!project || analysing) return;
+  if (!state.project || state.analysing) return;
   try {
     setAnalysing(true);
     message("Analysing the current model…");
     const response = await gateway.send("analyse", analysisPayload());
-    result = response;
+    state.result = response;
     if ($("#results-content").hidden) $("#toggle-results")?.click();
-    failed = false;
-    if (result.modelHash !== modelHash) {
+    state.failed = false;
+    if (state.result.modelHash !== state.modelHash) {
       message(
         "Analysis finished for an earlier model revision. Results are stale; analyse again for current results.",
       );
     } else {
       message("");
     }
-    if (result.analysisType === "envelope") {
+    if (state.result.analysisType === "envelope") {
       viewport.resultView = "model";
       syncResultPicker("model");
       $("#deformation-legend").hidden = true;
@@ -1801,15 +1044,15 @@ $("#analyse").onclick = async () => {
     }
     renderResults();
     renderInspector();
-    viewport.update(project, diagramResult(), selected);
+    viewport.update(state.project, diagramResult(), state.selected);
   } catch (e) {
     if (!/CANCELLED|TIMEOUT/.test(e.message)) {
-      result = null;
-      failed = true;
+      state.result = null;
+      state.failed = true;
       renderSelectionForces();
       renderResults();
       if (!$("#steel-design-inspector").hidden) void nativeSteel.render();
-      viewport.update(project, null, selected);
+      viewport.update(state.project, null, state.selected);
     }
     message(e.message);
   } finally {
@@ -1827,7 +1070,7 @@ gateway.onCrash = async () => {
   if (restoringModelWorker) return;
   restoringModelWorker = true;
   message("Model Worker stopped. Restoring the last confirmed model.");
-  const p = project && portable();
+  const p = state.project && portable();
   gateway.respawnModel("Worker stopped");
   try {
     if (p) {
@@ -1835,13 +1078,13 @@ gateway.onCrash = async () => {
         jsonUtf8: JSON.stringify(p),
         replaceCurrent: false,
       });
-      project = s.project;
-      project.name = p.name;
-      project.displayUnits = p.displayUnits;
-      modelHash = s.modelHash;
-      result = null;
-      lastDesignRun = null;
-      failed = false;
+      state.project = s.project;
+      state.project.name = p.name;
+      state.project.displayUnits = p.displayUnits;
+      state.modelHash = s.modelHash;
+      state.result = null;
+      state.lastDesignRun = null;
+      state.failed = false;
       refresh(s);
       message(
         "Model Worker stopped. Restored the last confirmed in-memory model. Download a backup if saves may have failed.",
@@ -1865,20 +1108,20 @@ gateway.onTimeout = () => {
   setAnalysing(false);
 };
 $("#export-project").onclick = () =>
-  download(project.id + ".json", JSON.stringify(portable(), null, 2));
+  download(state.project.id + ".json", JSON.stringify(portable(), null, 2));
 
 function analysisPayload() {
-  const chosen = $("#result-case").value || project.loadCases[0]?.id;
+  const chosen = $("#result-case").value || state.project.loadCases[0]?.id;
   const envelopeAll = chosen === "__envelope__";
   return {
     caseIds: envelopeAll
-      ? project.loadCases.map((c) => c.id)
-      : project.loadCases.some((c) => c.id === chosen)
+      ? state.project.loadCases.map((c) => c.id)
+      : state.project.loadCases.some((c) => c.id === chosen)
         ? [chosen]
         : [],
     combinationIds: envelopeAll
-      ? project.combinations.map((c) => c.id)
-      : project.combinations.some((c) => c.id === chosen)
+      ? state.project.combinations.map((c) => c.id)
+      : state.project.combinations.some((c) => c.id === chosen)
         ? [chosen]
         : [],
   };
@@ -1895,9 +1138,9 @@ function captureBaselineFrom(snapshot) {
 }
 
 $("#duplicate-variant").onclick = async () => {
-  if (!project || formDirty) {
+  if (!state.project || state.formDirty) {
     message(
-      formDirty
+      state.formDirty
         ? "Apply or cancel property changes before duplicating."
         : "Open a project first.",
     );
@@ -1920,9 +1163,9 @@ $("#duplicate-variant").onclick = async () => {
 };
 
 $("#compare-variants").onclick = async () => {
-  if (!project || formDirty) {
+  if (!state.project || state.formDirty) {
     message(
-      formDirty
+      state.formDirty
         ? "Apply or cancel property changes before comparing."
         : "Open a project first.",
     );
@@ -1958,12 +1201,12 @@ $("#compare-variants").onclick = async () => {
       variant: { project: snap.project, modelHash: snap.modelHash },
       variantResult,
     });
-    result = variantResult;
-    failed = false;
-    modelHash = snap.modelHash;
+    state.result = variantResult;
+    state.failed = false;
+    state.modelHash = snap.modelHash;
     renderResults();
     renderInspector();
-    viewport.update(project, diagramResult(), selected);
+    viewport.update(state.project, diagramResult(), state.selected);
     const fmt = (v) =>
       v == null || !Number.isFinite(v)
         ? "—"
@@ -1995,39 +1238,45 @@ $("#compare-variants").onclick = async () => {
 };
 
 $("#export-report").onclick = () => {
-  if (result && result.modelHash === modelHash && !failed)
+  if (
+    state.result &&
+    state.result.modelHash === state.modelHash &&
+    !state.failed
+  )
     download(
-      project.id + "-report.html",
-      report(portable(), result, {
+      state.project.id + "-report.html",
+      report(portable(), state.result, {
         designRuns: [
           ...memberDesignRuns.values(),
-          ...(lastDesignRun && lastDesignRun.source !== "modelNative"
-            ? [lastDesignRun]
+          ...(state.lastDesignRun &&
+          state.lastDesignRun.source !== "modelNative"
+            ? [state.lastDesignRun]
             : []),
         ].filter(
           (run) =>
-            run.modelHash === modelHash &&
-            (run.source !== "modelNative" || run.resultId === result.resultId),
+            run.modelHash === state.modelHash &&
+            (run.source !== "modelNative" ||
+              run.resultId === state.result.resultId),
         ),
         // Every design object's current run, per its kind's report rule.
         designObjectsHtml: reportSections(
           portable(),
           concrete.records(),
-          { modelHash, result },
+          { modelHash: state.modelHash, result: state.result },
           esc,
         ),
         // A stability run of the current model, whichever case it analysed.
-        stabilityRun: stability.current(modelHash),
+        stabilityRun: stability.current(state.modelHash),
       }),
       "text/html",
     );
 };
 
-window.__studyReady = () => !!project && !analysing && !busy;
+window.__studyReady = () => !!state.project && !state.analysing && !state.busy;
 $("#study-file").onchange = async () => {
   const file = $("#study-file").files?.[0];
   $("#study-file").value = "";
-  if (!file || !project) return;
+  if (!file || !state.project) return;
   let study;
   try {
     study = JSON.parse(await file.text());
@@ -2040,16 +1289,24 @@ $("#study-file").onchange = async () => {
 };
 
 $("#export-csv").onclick = () => {
-  if (result && result.modelHash === modelHash && !failed)
-    download(project.id + "-results.csv", csv(result, project), "text/csv");
+  if (
+    state.result &&
+    state.result.modelHash === state.modelHash &&
+    !state.failed
+  )
+    download(
+      state.project.id + "-results.csv",
+      csv(state.result, state.project),
+      "text/csv",
+    );
 };
 $("#result-case").onchange = () => {
-  result = null;
-  lastDesignRun = null;
-  failed = false;
+  state.result = null;
+  state.lastDesignRun = null;
+  state.failed = false;
   renderResults();
   renderInspector();
-  viewport.update(project, null, selected);
+  viewport.update(state.project, null, state.selected);
   message("Selected analysis case changed. Analyse to calculate this case.");
 };
 const syncResultPicker = bindResultPicker((value) => {
@@ -2105,290 +1362,15 @@ for (const [id, key] of [
   ["add-load-tool", "loads"],
 ])
   $("#" + id).onclick = () => {
-    if (!project || busy || readOnly) return;
+    if (!state.project || state.busy || state.readOnly) return;
     modal("Add " + key, "");
     editEntity(key, null);
   };
-function entityList(key) {
-  const title = {
-    nodes: "Nodes",
-    members: "Members",
-    materials: "Materials",
-    sections: "Sections",
-    supports: "Supports",
-    loadCases: "Load cases",
-    loads: "Loads",
-    combinations: "Combinations",
-    massSources: "Mass sources",
-  }[key];
-  modal(
-    title,
-    `<div class="entity-guide">${guideDiagram(key)}<div><span class="guide-eyebrow">${esc(entityGuides[key][1])}</span><p>${esc(entityGuides[key][2])}</p></div></div><div class="entity-table-wrap"><table><thead><tr><th>Label</th><th>Description</th><th>Action</th></tr></thead><tbody>${(
-      project[key] ?? []
-    )
-      .map((v) => {
-        const lineage =
-          key === "members" ? lineageSummary(project, v, label) : null;
-        const description =
-          lineage?.text ||
-          (key === "massSources" ? describeSource(v, label) : "") ||
-          v.name ||
-          label(v.node) ||
-          v.type ||
-          (v.start
-            ? `${label(v.start)} → ${label(v.end)}`
-            : v.position?.join(", ") || "");
-        return `<tr${lineage ? ` data-physical="${esc(lineage.physicalId)}"` : ""}><th>${esc(label(v.id))}</th><td>${esc(description)}</td><td><button data-edit="${esc(v.id)}">Edit ${esc(label(v.id))}</button></td></tr>`;
-      })
-      .join(
-        "",
-      )}</tbody></table></div><button class="primary add-button" id="add-entity">＋ Add ${entityGuides[key][0].toLowerCase()}</button>`,
-  );
-  for (const b of document.querySelectorAll("[data-edit]"))
-    b.onclick = () =>
-      editEntity(
-        key,
-        (project[key] ?? []).find((x) => x.id === b.dataset.edit),
-      );
-  $("#add-entity").onclick = () => editEntity(key, null);
-}
-function editEntity(key, old, draft) {
-  const id =
-    old?.id || key[0] + crypto.randomUUID().replaceAll("-", "").slice(0, 8);
-  const defaults = {
-    nodes: { id, position: [0, 0, 0] },
-    members: {
-      id,
-      start: project.nodes[0]?.id,
-      end: project.nodes.at(-1)?.id,
-      material: project.materials[0]?.id,
-      section: project.sections[0]?.id,
-      localY: [0, 1, 0],
-      releaseStart: { my: false, mz: false },
-      releaseEnd: { my: false, mz: false },
-    },
-    materials: {
-      E: 200e9,
-      nu: 0.3,
-      density: 7850,
-      ...project.materials[0],
-      id,
-      name: "Custom material",
-    },
-    sections: {
-      A: 0.01,
-      Iy: 1e-5,
-      Iz: 2e-5,
-      J: 2e-5,
-      cy: 0.1,
-      cz: 0.2,
-      provenance: "Custom properties — verify before analysis",
-      ...project.sections[0],
-      id,
-      name: "Custom section",
-    },
-    supports: {
-      id,
-      node:
-        project.nodes.find((n) => n.id === selected)?.id ||
-        project.nodes[0]?.id,
-      fixed: [true, true, true, true, true, true],
-      prescribed: [0, 0, 0, 0, 0, 0],
-    },
-    loadCases: { id, name: "New case", category: "other" },
-    loads: {
-      id,
-      case: project.loadCases[0]?.id,
-      type: "nodal",
-      node:
-        project.nodes.find((n) => n.id === selected)?.id ||
-        project.nodes.at(-1)?.id,
-      values: [0, 0, -10000, 0, 0, 0],
-    },
-    combinations: {
-      id,
-      name: "New combination",
-      purpose: "analysis",
-      terms: [{ case: project.loadCases[0]?.id, factor: 1 }],
-    },
-    massSources: (project.massSources ?? []).some((m) => m.kind === "selfMass")
-      ? {
-          id,
-          kind: "nodalMass",
-          node:
-            project.nodes.find((n) => n.id === selected)?.id ||
-            project.nodes.at(-1)?.id,
-          mass: 1000,
-        }
-      : { id, kind: "selfMass", factor: 1 },
-  };
-  const entity = structuredClone(draft || old || defaults[key]);
-  const needs =
-    key === "members"
-      ? [
-          ["nodes", 2, "two points"],
-          ["materials", 1, "a material"],
-          ["sections", 1, "a section"],
-        ]
-      : key === "loads"
-        ? [
-            ["nodes", 1, "a point"],
-            ["loadCases", 1, "a load case"],
-          ]
-        : key === "supports"
-          ? [["nodes", 1, "a point"]]
-          : key === "combinations"
-            ? [["loadCases", 1, "a load case"]]
-            : [];
-  const missing = needs.filter(
-    ([collection, count]) => project[collection].length < count,
-  );
-  $("#modal-title").textContent =
-    (old ? "Edit " : "Add ") + entityGuides[key][0].toLowerCase();
-  if (missing.length) {
-    setModalContent(
-      `<p>First add ${missing.map((x) => x[2]).join(" and ")}. Then return here to add this ${entityGuides[key][0].toLowerCase()}.</p><button id="setup-required" class="primary">Add ${missing[0][2]}</button>`,
-    );
-    $("#setup-required").onclick = () => editEntity(missing[0][0], null);
-    return;
-  }
-  setModalContent(
-    `<form id="entity-form" class="entity-form">${entityFields(key, entity, project)}<div class="error-text" id="entity-error" role="alert"></div><div class="dialog-actions">${old ? '<button type="button" class="danger" id="delete-entity">Delete entity</button>' : ""}<button class="primary" type="submit">Save entity</button></div></form>`,
-  );
-  bindEntityFields($("#entity-form"), key, project);
-  if (key === "sections") {
-    bindSectionCalculator(
-      $("#entity-form"),
-      async ({ width, depth, customJ }) =>
-        gateway.send("computeSection", {
-          shape: "solidRectangle",
-          width,
-          depth,
-          customJ,
-        }),
-    );
-  }
-  bindTemplates($("#entity-form"), key, entity, project, (next) =>
-    editEntity(key, old, next),
-  );
-  const massKind = $("#entity-form [name=kind]");
-  if (key === "massSources" && massKind)
-    massKind.onchange = () => {
-      const next = { id: entity.id, kind: massKind.value };
-      if (next.kind === "selfMass") next.factor = 1;
-      if (next.kind === "loadCase")
-        Object.assign(next, { case: project.loadCases[0]?.id, factor: 1 });
-      if (next.kind === "nodalMass")
-        Object.assign(next, {
-          node:
-            project.nodes.find((n) => n.id === selected)?.id ||
-            project.nodes.at(-1)?.id,
-          mass: 1000,
-        });
-      editEntity(key, old, next);
-    };
-  const loadType = $("#entity-form [name=type]");
-  if (key === "loads" && loadType)
-    loadType.onchange = () => {
-      const form = $("#entity-form");
-      const next = {
-        id: entity.id,
-        case: form.elements.namedItem("case").value,
-        type: loadType.value,
-      };
-      if (next.type === "nodal")
-        Object.assign(next, {
-          node: project.nodes.at(-1)?.id,
-          values: [0, 0, -10000, 0, 0, 0],
-        });
-      if (next.type === "uniform")
-        Object.assign(next, {
-          member: project.members[0]?.id,
-          axes: "global",
-          forcePerLength: [0, 0, -1000],
-        });
-      if (next.type === "point")
-        Object.assign(next, {
-          member: project.members[0]?.id,
-          axes: "global",
-          station: 0.5,
-          values: [0, 0, -10000, 0, 0, 0],
-        });
-      if (next.type === "selfWeight")
-        Object.assign(next, {
-          members: project.members.map((m) => m.id),
-          factor: 1,
-        });
-      if (!project.members.length && next.type !== "nodal") {
-        loadType.value = entity.type;
-        $("#entity-error").textContent =
-          "Add a member before applying a member load.";
-        return;
-      }
-      editEntity(key, old, next);
-    };
-  $("#entity-form").onsubmit = async (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (form.dataset.saving) return;
-    form.dataset.saving = "true";
-    try {
-      const value = readEntityFields(form, key, entity, project);
-      const type = {
-        nodes: old ? "SetNodePosition" : "AddNode",
-        members: "AddMember",
-        materials: "SetMaterial",
-        sections: "SetSection",
-        supports: "SetSupport",
-        loadCases: "SetLoadCase",
-        loads: "SetLoad",
-        combinations: "SetCombination",
-        massSources: "SetMassSource",
-      }[key];
-      if (key === "members" && old) {
-        await command("Batch", {
-          commands: [
-            { type: "DeleteEntities", args: { ids: [old.id], cascade: false } },
-            { type: "AddMember", args: value },
-          ],
-        });
-      } else
-        await command(
-          type,
-          key === "nodes"
-            ? value
-            : { ...value, existence: old ? "update" : "create" },
-        );
-      if (form.isConnected && $("#modal").open) entityList(key);
-    } catch (e) {
-      if (form.isConnected && $("#modal").open)
-        $("#entity-error").textContent = e.message;
-      else message(e.message);
-    } finally {
-      delete form.dataset.saving;
-    }
-  };
-  if (old)
-    $("#delete-entity").onclick = async () => {
-      const form = $("#entity-form");
-      if (form.dataset.saving) return;
-      form.dataset.saving = "true";
-      try {
-        await command("DeleteEntities", { ids: [old.id], cascade: false });
-        if (form.isConnected && $("#modal").open) entityList(key);
-      } catch (e) {
-        if (form.isConnected && $("#modal").open)
-          $("#entity-error").textContent = e.message;
-        else message(e.message);
-      } finally {
-        delete form.dataset.saving;
-      }
-    };
-}
+
 window.addEventListener("keydown", (e) => {
   if (
     e.defaultPrevented ||
-    !project ||
+    !state.project ||
     $("#workspace").hidden ||
     $("#modal").open ||
     ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)
@@ -2403,16 +1385,16 @@ let directTools;
 const workspace = workspaceUI({
   viewport,
   gateway,
-  getProject: () => project,
+  getProject: () => state.project,
   selectEntities,
-  canAct: () => !busy && !readOnly,
+  canAct: () => !state.busy && !state.readOnly,
   editSelection: (type) =>
     directTools.activate(
       { MoveNodes: "move", CopySelection: "copy", DeleteGeometry: "delete" }[
         type
       ],
     ),
-  hasDraft: () => formDirty,
+  hasDraft: () => state.formDirty,
   finishTools: () => {
     modelTools.cancel();
     directTools?.finish();
@@ -2422,18 +1404,19 @@ const workspace = workspaceUI({
 directTools = canvasTools({
   viewport,
   gateway,
-  getProject: () => project,
+  getProject: () => state.project,
   command,
   selectEntities,
   cancelDrawing: () => modelTools.cancel(),
-  canEdit: () => !!project && !busy && !readOnly && !formDirty,
+  canEdit: () =>
+    !!state.project && !state.busy && !state.readOnly && !state.formDirty,
   message,
   inspect: () => {
     $("#modal").close();
     workspace.panel("properties");
   },
   deleteAssignment: async (id) => {
-    if (!busy && !readOnly && !formDirty)
+    if (!state.busy && !state.readOnly && !state.formDirty)
       try {
         await command("DeleteEntities", { ids: [id], cascade: false });
       } catch (e) {
@@ -2466,7 +1449,7 @@ $("#model-lines").onclick = () => setModelDisplay(false);
 $("#model-assumptions").onclick = () =>
   modal(
     "Model assumptions",
-    `<p>${esc(project.metadata.description || "No assumptions recorded.")}</p><p>Solid shapes show assigned dimensions. Concrete resistance and ground contact require separate verified design checks.</p>`,
+    `<p>${esc(state.project.metadata.description || "No assumptions recorded.")}</p><p>Solid shapes show assigned dimensions. Concrete resistance and ground contact require separate verified design checks.</p>`,
   );
 
 $("#model-loads").onclick = () => {
@@ -2500,13 +1483,13 @@ $("#member-labels").onchange = (event) => {
 
 viewControls = modelVisibility({
   viewport,
-  getProject: () => project,
+  getProject: () => state.project,
   canChange: () => {
-    if (formDirty) {
+    if (state.formDirty) {
       message("Apply or cancel edits before changing the view.");
       return false;
     }
-    return !!project;
+    return !!state.project;
   },
   onChange: () => {
     modelTools.cancel();

@@ -5038,6 +5038,25 @@
     "evidence/M16/joints"
    ],
    "nextAction": "M16 parent: persistent bar sets with shapes and a schedule, revision propagation to the joint report, drawings"
+  },
+  "UI-ARCH": {
+   "id": "UI-ARCH",
+   "useCase": "Professional workspace shell and front-end architecture (ADR 0033): design-kind registry, tokenised layered styles, declarative shell with splitters and tab strips, app.js decomposition",
+   "dependencies": [],
+   "status": "ACCEPTED",
+   "scope": "Presentation and code structure only; no engineering behaviour or acceptance meaning changed",
+   "requiredCommands": [
+    "node --test tests/*.test.mjs",
+    "npx playwright test"
+   ],
+   "actualOutcomes": [
+    "Full browser suite on the shell build; load-sensitive budgets (startup, CAD capacity) A/B-checked against the previous build",
+    "CSS migration verified by computed-style snapshots: colours within CIEDE2000 4.01, no other change",
+    "Startup A/B under the same load: within 5-7 % of the previous build after bundling the stylesheet"
+   ],
+   "evidencePaths": [
+    "evidence/shell-layout"
+   ]
   }
  },
  "blockers": [

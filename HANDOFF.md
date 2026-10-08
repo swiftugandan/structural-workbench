@@ -1,3 +1,11 @@
+## Latest: UI architecture and shell (ADR 0033)
+
+- **Design kinds are plug-ins** (`web/design/`): a catalogue entry plus a behaviour descriptor per kind; previews, inspector, panes, schedules, report sections and the explorer read the registry. A new kind is one file and one registry line.
+- **Styles**: `web/styles.css` is the entry (required path) importing `styles/tokens.css` (55-colour CIEDE2000 palette, role tokens, scales) and ten feature sheets into `@layer features`, plus `styles/shell.css` in `@layer shell`. The build inlines the imports into one file. `tools/style-snapshot.mjs record|diff` compares computed styles between builds.
+- **Shell**: declared once in `app.html`: one-density ribbon with label collapse, one-row canvas toolbar (Visibility and Overlays disclosures), floating canvas navigation, splitters with keyboard support and per-viewer sizes, scrolling tab strips with a More menu, status-bar storage indicator, dismissible messages. `tests/e2e/shell-layout.spec.js` guards fit and reachability.
+- **app.js decomposition**: session state in `web/app/state.js` (an observable store; unknown keys throw). Results dock, inspector, explorer, entity editor and project session are separate factories in `web/app/`. `app.js` is the composition root (about 1,500 lines, from 2,573).
+- Joint clash reports carry member ids; the page writes the advice with labels.
+
 ## Latest: M16-JOINTS — bar clashes at RC joints (sub-slice, ADR 0032)
 
 - `workbench_design::joints`: bound rcBeam/rcColumn drafts are placed on their member centrelines; beam vs column bars need the 8.2(2) clear distance (k1 = 1, k2 = 5 mm), crossing beam rows may touch but not intersect. Missing aggregate size → indeterminate, never clear.

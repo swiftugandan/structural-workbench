@@ -183,6 +183,25 @@ Each step lands with the full browser suite green. Specs change only where
 an interaction changed, such as a control moving into a popover, through
 shared helpers, never by weakening an assertion.
 
+## Outcome of the decomposition (step 5)
+
+- `app/state.js` holds the session state (project, model hash, result,
+  selection, tab, busy/analysing/failed, form dirtiness, read-only, last
+  design run, storage). A scope-aware codemod rewrote 475 references from
+  module variables to `state.x`; unknown keys throw. `locked(state)`
+  replaces six copies of the same expression.
+- An AST extraction tool moved function groups verbatim into factories
+  whose parameters are exactly the bindings they use. It refuses a shared
+  mutable `let` and any load-time use before the factory call:
+  `app/results-dock.js`, `app/inspector-panel.js`,
+  `app/explorer-panel.js`, `app/entity-editor.js` and
+  `app/project-session.js`, which keeps its lease and save queue private.
+- `app.js` went from 2,573 to about 1,500 lines. It remains the
+  composition root: module wiring, the command bus, `refresh`
+  orchestration, selection, busy state and the remaining top-level
+  control bindings. Dialog plumbing stays there because a top-level
+  listener shares its opener state.
+
 ## Consequences
 
 - A new design kind is one descriptor and one registry line. Reports,
