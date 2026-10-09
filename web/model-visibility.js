@@ -77,6 +77,9 @@ export function modelVisibility({ viewport, getProject, canChange, onChange }) {
     const project = getProject();
     if (!project) return;
     viewport.visibleIds = visibleEntities(project, state);
+    // A storey, layer or isolation scope narrows the model; hiding a
+    // selection does not (slab panels follow this, ADR 0035).
+    viewport.scoped = Boolean(state.storey || state.layer || state.isolated);
     viewport.fitIds = null;
     viewport.hovered = null;
     viewport.crossingData = null;

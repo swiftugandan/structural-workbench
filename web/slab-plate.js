@@ -28,7 +28,27 @@ export function plateSection(d, template) {
         `<label class="design-field"><span>${esc(label)}</span><select name="plate-edge-${i}" id="preview-plate-edge-${i}">${t.edgeConditions.map((c) => `<option value="${c}" ${edges[i] === c ? "selected" : ""}>${c[0].toUpperCase() + c.slice(1)}</option>`).join("")}</select>${sourceMark(src("edges"))}</label>`,
     )
     .join("");
-  return `<fieldset class="design-subsection" id="preview-plate"><legend>Plate analysis (plate-v1)</legend>${plate ? "" : '<p class="design-note" data-testid="plate-not-configured">Not configured · saving records these inputs.</p>'}<p class="design-note">Uniform pressure on the panel; edges, material and columns are your inputs or come from the frame model.</p>${edgeRows}<label class="design-check full"><input type="checkbox" id="preview-plate-opening" ${include ? "checked" : ""}> Cut the opening from the panel ${sourceMark(src("includeOpening"))}</label>${rows}${plate ? columnsSection(plate) : ""}</fieldset>`;
+  return `<fieldset class="design-subsection" id="preview-plate"><legend>Plate analysis (plate-v1)</legend>${plate ? "" : '<p class="design-note" data-testid="plate-not-configured">Not configured · saving records these inputs.</p>'}<p class="design-note">Uniform pressure on the panel; edges, material and columns are your inputs or come from the frame model.</p>${edgeRows}<label class="design-check full"><input type="checkbox" id="preview-plate-opening" ${include ? "checked" : ""}> Cut the opening from the panel ${sourceMark(src("includeOpening"))}</label>${rows}${placementSection(plate?.placement)}${plate ? columnsSection(plate) : ""}</fieldset>`;
+}
+
+/** Where the panel sits in the model (ADR 0035). Saved with the draft; the
+ * model views draw a placed slab, and its columns are found at this level. */
+function placementSection(placement) {
+  const placed = Boolean(placement);
+  const [x, y, z] = placement || [0, 0, 0];
+  const field = (axis, value, label) =>
+    `<label class="design-field"><span>${label}</span><span class="design-field-control"><input id="slab-placement-${axis}" value="${value}" inputmode="decimal"${placed ? "" : " disabled"}><span class="unit">m</span></span></label>`;
+  return `<div class="slab-placement" id="slab-placement" data-placed="${placed}"><h4>Placement in the model</h4><label class="design-check full"><input type="checkbox" id="slab-placed" ${placed ? "checked" : ""}> Place in the model</label>${field("x", x, "Corner X")}${field("y", y, "Corner Y")}${field("z", z, "Support level Z")}<small data-testid="slab-placement-status">${placed ? `Placed: corner (${x}, ${y}) m at support level z = ${z} m, panel axes along global X and Y. Columns are found at this level, and the solid view draws the slab resting on the members there.` : "Not placed: analysed on its own and not drawn in the model views."}</small></div>`;
+}
+
+/** Enables the corner fields with the placement checkbox. */
+export function bindPlacement(host) {
+  const box = host.querySelector("#slab-placed");
+  if (!box) return;
+  box.onchange = () => {
+    for (const a of ["x", "y", "z"])
+      host.querySelector(`#slab-placement-${a}`).disabled = !box.checked;
+  };
 }
 
 const COLUMN_KINDS = ["pinned", "fixed", "spring"];
@@ -44,8 +64,8 @@ function columnRow(c, i) {
 
 function columnsSection(plate) {
   const columns = plate.columns || [];
-  const o = plate.placement || [0, 0, 0];
-  return `<div class="slab-columns" id="slab-columns"><h4>Columns (${columns.length})</h4>${columns.map(columnRow).join("")}<button type="button" id="slab-add-column">Add column</button><div class="slab-derive"><span>Panel corner in the model</span><label>X <input id="slab-origin-x" value="${o[0]}" inputmode="decimal"></label><label>Y <input id="slab-origin-y" value="${o[1]}" inputmode="decimal"></label><label>Z <input id="slab-origin-z" value="${o[2]}" inputmode="decimal"></label><button type="button" id="slab-derive-columns">Take columns from the model</button></div><small>Model columns are springs: kz = ΣEA/L and krx, kry = Σ4EI/L (3EI/L when the far end rotates freely). The panel axes follow global X and Y.</small></div>`;
+  const placed = Boolean(plate.placement);
+  return `<div class="slab-columns" id="slab-columns"><h4>Columns (${columns.length})</h4>${columns.map(columnRow).join("")}<button type="button" id="slab-add-column">Add column</button><div class="slab-derive"><button type="button" id="slab-derive-columns"${placed ? "" : ' disabled title="Place the slab in the model first"'}>Take columns from the model</button>${placed ? "" : "<span>Place the slab in the model first.</span>"}</div><small>Model columns meeting the support level inside the panel become springs: kz = ΣEA/L and krx, kry = Σ4EI/L (3EI/L when the far end rotates freely).</small></div>`;
 }
 
 /** Adds an empty user column row to the form (not saved until Save). */
@@ -68,11 +88,17 @@ export function addColumnRow(host) {
 export function plateArgs(host, d, template, submitted) {
   const t = template?.plate;
   if (d.kind !== "slab" || !t) return undefined;
+  const placed = host.querySelector("#slab-placed")?.checked;
   return {
     edges: t.edgeLabels.map(
       (_, i) => host.querySelector(`[name="plate-edge-${i}"]`).value,
     ),
     includeOpening: host.querySelector("#preview-plate-opening").checked,
+    placement: placed
+      ? ["x", "y", "z"].map((a) =>
+          Number(host.querySelector(`#slab-placement-${a}`).value),
+        )
+      : null,
     ...(host.querySelector("#slab-columns") && {
       columns: [...host.querySelectorAll("[data-column-row]")].map((row) => {
         const i = row.dataset.columnRow;
@@ -180,7 +206,15 @@ export function plateContour(pa, key, recovery = "elementCentre") {
           return [
             [xs[i], mx, ys[j], my, v(i, j), xs[i], ys[j]],
             [mx, xs[i + 1], ys[j], my, v(i + 1, j), xs[i + 1], ys[j]],
-            [mx, xs[i + 1], my, ys[j + 1], v(i + 1, j + 1), xs[i + 1], ys[j + 1]],
+            [
+              mx,
+              xs[i + 1],
+              my,
+              ys[j + 1],
+              v(i + 1, j + 1),
+              xs[i + 1],
+              ys[j + 1],
+            ],
             [xs[i], mx, my, ys[j + 1], v(i, j + 1), xs[i], ys[j + 1]],
           ];
         });

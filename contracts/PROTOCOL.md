@@ -72,6 +72,18 @@ Overall status is fail if any applicable mandatory check fails; otherwise unsupp
 `queryGeometry` additionally accepts `axes` with `{}` and `topologyPreview` with
 `{command: CommandV1}`. Axes returns members with ID, f64 midpoint `origin`, length
 and the three right-handed unit vectors used by the Rust frame formulation.
+Axes also returns `slabs` (ADR 0035): per slab draft its `id`, `length`, `width`,
+`thickness`, `opening` (`[x0, x1, y0, y1]` in panel coordinates or null),
+`openingBasis` (`analysed` from the plate inputs, `illustrative` without them),
+`placement` (panel corner at the support level), the world support-level
+`corners` and `openingCorners` (counter-clockwise from the panel corner, null
+until placed), the drawn `soffit` level and the `bearingMemberIds` it rests on,
+the `columnNodeIds` of its model columns and its plate `pressure` (Pa or null).
+`screenPick` accepts `surfaces: "analytical" | "physical"`; with it, a point
+that misses every node and member and lies inside a placed, non-excluded slab
+outside its opening — on the support plane, or on the drawn soffit or top
+face — returns `{entityId: <draft id>, kind: "designObject"}`. Without it the
+result is unchanged; any other value is INVALID_SCHEMA.
 Topology preview applies the exact command to a disposable candidate and validates
 it, returning `{project, viewRevision}` without changing revision/hash/history.
 Commit uses the same command ID/arguments and the preview's model revision. Editing

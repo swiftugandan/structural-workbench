@@ -13,6 +13,7 @@ export function sceneGeometry(
   mode = "both",
   face = "Top X",
   frames = [],
+  slabs = [],
 ) {
   const faces = [],
     edges = [],
@@ -165,24 +166,38 @@ export function sceneGeometry(
       t = v.thickness,
       base = [-l / 2, -w / 2, 0];
     if (draft.kind === "slab") {
-      const ox = v.openingLength,
-        oy = v.openingWidth;
-      box(base, [(l - ox) / 2, w, t]);
-      box([ox / 2, -w / 2, 0], [(l - ox) / 2, w, t]);
-      box([-ox / 2, -w / 2, 0], [ox, (w - oy) / 2, t]);
-      box([-ox / 2, oy / 2, 0], [ox, (w - oy) / 2, t]);
+      // The Rust panel (ADR 0035): the opening sits where the plate solve
+      // cuts it, or nowhere. Until the geometry query answers, no opening.
+      const opening = slabs.find((s) => s.id === draft.id)?.opening;
+      const [ox0, ox1, oy0, oy1] = opening
+        ? [
+            opening[0] - l / 2,
+            opening[1] - l / 2,
+            opening[2] - w / 2,
+            opening[3] - w / 2,
+          ]
+        : [0, 0, 0, 0];
+      for (const [x0, x1, y0, y1] of opening
+        ? [
+            [-l / 2, ox0, -w / 2, w / 2],
+            [ox1, l / 2, -w / 2, w / 2],
+            [ox0, ox1, -w / 2, oy0],
+            [ox0, ox1, oy1, w / 2],
+          ]
+        : [[-l / 2, l / 2, -w / 2, w / 2]])
+        if (x1 > x0 && y1 > y0) box([x0, y0, 0], [x1 - x0, y1 - y0, t]);
       const step = Math.max(v.meshSize, Math.max(l, w) / 35),
         z = t + 0.006;
       for (let x = -l / 2; x <= l / 2; x += step) {
-        if (Math.abs(x) < ox / 2) {
-          bar([x, -w / 2, z], [x, -oy / 2, z]);
-          bar([x, oy / 2, z], [x, w / 2, z]);
+        if (opening && x > ox0 && x < ox1) {
+          bar([x, -w / 2, z], [x, oy0, z]);
+          bar([x, oy1, z], [x, w / 2, z]);
         } else bar([x, -w / 2, z], [x, w / 2, z]);
       }
       for (let y = -w / 2; y <= w / 2; y += step) {
-        if (Math.abs(y) < oy / 2) {
-          bar([-l / 2, y, z], [-ox / 2, y, z]);
-          bar([ox / 2, y, z], [l / 2, y, z]);
+        if (opening && y > oy0 && y < oy1) {
+          bar([-l / 2, y, z], [ox0, y, z]);
+          bar([ox1, y, z], [l / 2, y, z]);
         } else bar([-l / 2, y, z], [l / 2, y, z]);
       }
       labels.push({

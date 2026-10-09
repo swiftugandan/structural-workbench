@@ -9,6 +9,7 @@ export function topology({
   modal,
   message,
   canEdit,
+  onGeometry = () => {},
 }) {
   const describe = (key, x, project) => {
     if (key === "nodes") return `Position [${x.position.join(", ")}] m`;
@@ -211,6 +212,7 @@ export function topology({
         });
         if (getProject() !== p) return;
         viewport.localAxes = data.members;
+        viewport.slabs = data.slabs;
         viewport.axesProject = p;
         const near = data.nearCoincidentNodes || [];
         $("#near-node-status").textContent = near.length
@@ -220,6 +222,7 @@ export function topology({
               .join("; ")}. Review Merge nodes explicitly.`
           : "";
         viewport.draw();
+        onGeometry();
       } catch (e) {
         if (getProject() === p) message(e.message);
       }

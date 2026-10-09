@@ -335,9 +335,11 @@ test("Slab on model columns: derive the columns, solve and apply the column load
   for (const i of [0, 1, 2, 3])
     await page.locator(`#preview-plate-edge-${i}`).selectOption("free");
   await page.locator("#preview-plate-opening").uncheck();
+  // The slab's placement is saved with its inputs (ADR 0035).
+  await page.locator("#slab-placed").check();
+  await page.locator("#slab-placement-z").fill("3");
   await page.locator("#preview-save").click();
   await expect(page.locator("#preview-run")).toBeEnabled();
-  await page.locator("#slab-origin-z").fill("3");
   await page.locator("#slab-derive-columns").click();
   await expect(
     page.locator('[data-testid=slab-column][data-source="model"]'),

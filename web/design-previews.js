@@ -113,8 +113,13 @@ export function concreteWorkspace({
   const runs = new Map();
   const draft = () =>
     getContext().project?.designPreviews?.find((d) => d.id === active);
+  // The Rust outline of a slab draft (ADR 0035), once this revision's
+  // geometry query has answered.
+  const panelOf = (d) => viewport.slabPanels().find((s) => s.id === d?.id);
   function hide() {
     viewport.designPreview = null;
+    viewport.activeDesignObjectId = null;
+    document.body.classList.remove("design-object-open");
     document.querySelector("#design-geometry-labels").hidden = true;
     document.body.classList.remove("concrete-focus");
     if (savedCamera) {
@@ -151,6 +156,8 @@ export function concreteWorkspace({
       viewport.pan = [0, 0];
     }
     document.body.classList.toggle("concrete-focus", focusObject);
+    document.body.classList.add("design-object-open");
+    viewport.activeDesignObjectId = d.id;
     const kind = designKind(d.kind),
       run = runs.get(active);
     viewport.designPreview = kind.solid(d, focusObject)
@@ -175,7 +182,7 @@ export function concreteWorkspace({
       )
       .join(
         "",
-      )}<button id="preview-focus" aria-pressed="${focusObject}">${focusObject ? "Show model context" : "Focus design object"}</button></div><small>${esc(kind.caption(d, { face }))}</small>`;
+      )}<button id="preview-focus" aria-pressed="${focusObject}">${focusObject ? "Show model context" : "Focus design object"}</button></div><small id="design-scene-caption">${esc(kind.caption(d, { face, panel: panelOf(d), context: !focusObject }))}</small>`;
     for (const b of host.querySelectorAll("[data-object-display]"))
       b.onclick = () => {
         displayMode = b.dataset.objectDisplay;
@@ -201,7 +208,7 @@ export function concreteWorkspace({
       plateField,
       plateRecovery,
       data: paneData.get(pane),
-      sketch: kind.sketch(d, { face }),
+      sketch: kind.sketch(d, { face, panel: panelOf(d) }),
     });
   }
   function results(host) {
@@ -332,7 +339,7 @@ export function concreteWorkspace({
           ds,
           active,
           ctx,
-          view: { face },
+          view: { face, panel: panelOf(d) },
           mechanicsLaw,
         }),
       );
@@ -484,11 +491,10 @@ export function concreteWorkspace({
                 ),
               );
             try {
+              // Columns meet the slab at its saved placement (ADR 0035).
               await command("DeriveSlabColumns", {
                 id: d.id,
-                origin: ["x", "y", "z"].map((a) =>
-                  Number($(`#slab-origin-${a}`).value),
-                ),
+                origin: d.plate.placement,
               });
               await render();
             } catch (e) {
@@ -550,6 +556,26 @@ export function concreteWorkspace({
       active = id;
       pane = "summary";
       sourceMode = defaultSource(draft());
+    },
+    /** Rust geometry for the current revision arrived: redraw what shows
+     * the slab outline (the sketch and the scene caption). */
+    geometryChanged: () => {
+      const d = draft(),
+        host = $("#design-preview-scene");
+      if (!d || host.hidden) return;
+      const kind = designKind(d.kind),
+        panel = panelOf(d),
+        sketch = document.querySelector(
+          "#concrete-inspector .design-section-sketch svg",
+        );
+      if (sketch) sketch.innerHTML = String(kind.sketch(d, { face, panel }));
+      const caption = $("#design-scene-caption");
+      if (caption)
+        caption.textContent = kind.caption(d, {
+          face,
+          panel,
+          context: !focusObject,
+        });
     },
     followSelection: (id) => {
       projectId = getContext().project?.id;

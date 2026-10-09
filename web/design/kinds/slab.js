@@ -2,11 +2,13 @@
 import { html, raw } from "../../core/html.js";
 import { ec2SlabPane } from "../../design-presentation.js";
 import { plateRunsHtml } from "../../reports/report.js";
-import { platePane, plateSection } from "../../slab-plate.js";
+import { bindPlacement, platePane, plateSection } from "../../slab-plate.js";
 import { concreteSchedule } from "./shared.js";
 
-/** Plan of the panel with the chosen layer's direction, 300 × 230. */
-function sketch(d, { face }) {
+/** Plan of the panel with the chosen layer's direction, 300 × 230. The
+ * opening is the Rust panel's (ADR 0035): where the plate solve cuts it, and
+ * absent until this revision's geometry has arrived. */
+function sketch(d, { face, panel }) {
   const v = d.inputs;
   const w = (230 * v.length) / Math.max(v.length, v.width),
     h = (160 * v.width) / Math.max(v.length, v.width),
@@ -18,7 +20,28 @@ function sketch(d, { face }) {
       ? html`<path d="M${x + (i * w) / 10},${y}v${h}" stroke="#85a8be"/>`
       : html`<path d="M${x},${y + (i * h) / 10}h${w}" stroke="#85a8be"/>`,
   );
-  return html`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#e1edf5" stroke="#516b82"/>${lines}<rect x="${150 - (w * v.openingLength) / v.length / 2}" y="${100 - (h * v.openingWidth) / v.width / 2}" width="${(w * v.openingLength) / v.length}" height="${(h * v.openingWidth) / v.width}" fill="white" stroke="#c17f26"/><text x="150" y="215" text-anchor="middle">${face} · direction illustration</text>`;
+  // Panel y runs up the page, as in plan.
+  const o = panel?.opening;
+  const opening = o
+    ? html`<rect data-testid="slab-sketch-opening" x="${x + (o[0] / panel.length) * w}" y="${y + h - (o[3] / panel.width) * h}" width="${((o[1] - o[0]) / panel.length) * w}" height="${((o[3] - o[2]) / panel.width) * h}" fill="white" stroke="#c17f26"/>`
+    : "";
+  return html`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#e1edf5" stroke="#516b82"/>${lines}${opening}<text x="150" y="215" text-anchor="middle">${face} · direction illustration</text>`;
+}
+
+/** Scene caption; with model context, where the slab sits in the model. */
+function caption(d, { face, panel, context }) {
+  const base = `${face} · illustrative grid, not FE mesh`;
+  if (!context || !panel) return base;
+  if (!panel.placement)
+    return `${base} · Not placed in the model · set its placement in the plate inputs`;
+  const m = (v) => `${Number(v.toFixed(6))} m`;
+  const level = panel.placement[2],
+    bearers = panel.bearingMemberIds.length;
+  return `${base} · support level z = ${m(level)} · ${
+    bearers
+      ? `soffit on ${bearers} member${bearers === 1 ? "" : "s"} at z = ${m(panel.soffit)}`
+      : "soffit at the support level"
+  }`;
 }
 
 export default {
@@ -33,7 +56,7 @@ export default {
       ? "EC2 slab design runs on this panel's plate analysis (demonstration)"
       : "Synthetic actions · EC2 slab design needs the plate analysis",
   solid: (d, focus) => focus,
-  caption: (d, { face }) => `${face} · illustrative grid, not FE mesh`,
+  caption,
   sketch,
   inspector: {
     geometry: [
@@ -47,6 +70,7 @@ export default {
     special: { title: "Mesh settings", keys: ["meshSize"] },
     code: { bySpan: true, flatSlab: true, columnSize: true },
     plate: (d, template) => raw(plateSection(d, template)),
+    bind: (host) => bindPlacement(host),
     face: true,
     checklist: ["Resistance from the plate analysis"],
   },

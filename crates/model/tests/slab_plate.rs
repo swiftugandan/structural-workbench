@@ -145,3 +145,50 @@ fn a_1_4_project_migrates_by_version_only() {
         "INVALID_SCHEMA"
     );
 }
+
+/// ADR 0035: one outline rule for the plate solve and the model views.
+#[test]
+fn slab_panel_is_the_analysed_outline() {
+    use workbench_model::OpeningBasis;
+    let panel = |p: &Value| {
+        Project::parse(&p.to_string()).unwrap().design_previews[0]
+            .slab_panel()
+            .unwrap()
+    };
+    // No plate inputs: the draft's centred preview opening, not analysed.
+    let bare = panel(&slab(None));
+    assert_eq!(bare.opening, Some([2.5, 3.5, 2.0, 3.0]));
+    assert_eq!(bare.opening_basis, OpeningBasis::Illustrative);
+    assert_eq!(bare.placement, None);
+    assert_eq!(bare.world_corners(), None);
+    // Plate inputs: the opening sits at the entered corner.
+    let mut p = plate();
+    p["inputs"]["openingX"] = json!(1.0);
+    p["inputs"]["openingY"] = json!(0.5);
+    p["placement"] = json!([10.0, 20.0, 3.0]);
+    let placed = panel(&slab(Some(p.clone())));
+    assert_eq!(placed.opening, Some([1.0, 2.0, 0.5, 1.5]));
+    assert_eq!(placed.opening_basis, OpeningBasis::Analysed);
+    let (outline, opening) = placed.world_corners().unwrap();
+    assert_eq!(
+        outline,
+        [
+            [10., 20., 3.],
+            [16., 20., 3.],
+            [16., 25., 3.],
+            [10., 25., 3.]
+        ]
+    );
+    assert_eq!(
+        opening,
+        Some([
+            [11., 20.5, 3.],
+            [12., 20.5, 3.],
+            [12., 21.5, 3.],
+            [11., 21.5, 3.]
+        ])
+    );
+    // Leaving the opening out of the analysis leaves it out of the drawing.
+    p["includeOpening"] = json!(false);
+    assert_eq!(panel(&slab(Some(p))).opening, None);
+}

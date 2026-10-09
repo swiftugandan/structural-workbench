@@ -450,10 +450,13 @@ fn slab_model(
         )
     })?;
     let v = &d.inputs;
-    let opening = plate.include_opening.then(|| {
-        let (x0, y0) = (plate.inputs["openingX"], plate.inputs["openingY"]);
-        [x0, x0 + v["openingLength"], y0, y0 + v["openingWidth"]]
-    });
+    // The same outline and opening the model views draw (ADR 0035).
+    let outline = d.slab_panel().ok_or_else(|| {
+        err(
+            "INVALID_SCHEMA",
+            "Plate analysis applies only to slab drafts",
+        )
+    })?;
     let edges = plate.edges.each_ref().map(|e| match e.as_str() {
         "free" => Edge::Free,
         "simple" => Edge::Simple,
@@ -477,9 +480,9 @@ fn slab_model(
         })
         .collect();
     let panel = Panel {
-        lx: v["length"],
-        ly: v["width"],
-        opening,
+        lx: outline.length,
+        ly: outline.width,
+        opening: outline.opening,
         edges,
         target: v["meshSize"],
         points,
@@ -487,7 +490,7 @@ fn slab_model(
     let material = PlateMaterial {
         e: plate.inputs["elasticModulus"],
         nu: plate.inputs["poissonRatio"],
-        t: v["thickness"],
+        t: outline.thickness,
     };
     Ok((panel, material, plate.inputs["pressure"]))
 }
@@ -527,12 +530,7 @@ fn derive_slab_columns(v: &mut Value, a: &Value) -> Result<()> {
     let project: Project = serde_json::from_value(v.clone())
         .map_err(|e| err("INVALID_SCHEMA", e.to_string()))?;
     let position = |id: &str| project.nodes.iter().find(|n| n.id == id).map(|n| n.position);
-    let extent = project
-        .nodes
-        .iter()
-        .flat_map(|n| n.position)
-        .fold(1f64, |m, x| m.max(x.abs()));
-    let tol = 1e-6 * extent.max(lx).max(ly);
+    let tol = crate::slab_view::level_tolerance(&project, lx, ly);
     let mut columns = vec![];
     let mut skewed = vec![];
     for node in &project.nodes {

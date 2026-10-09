@@ -2,6 +2,7 @@ mod analysis_request;
 mod cad;
 mod design_workspace;
 mod preview_workspace;
+mod slab_view;
 mod snap;
 mod structure_workspace;
 mod topology;
@@ -381,8 +382,15 @@ impl Kernel {
                             }
                         }
                     }
+                    // Slab panels as Rust draws them (ADR 0035): the browser
+                    // only extrudes and shades these outlines.
+                    let slabs: Vec<Value> = p
+                        .design_previews
+                        .iter()
+                        .filter_map(|d| slab_view::slab_json(p, d))
+                        .collect();
                     return Ok(
-                        json!({"members":members,"nearCoincidentNodes":near,"viewRevision":payload["viewRevision"]}),
+                        json!({"members":members,"slabs":slabs,"nearCoincidentNodes":near,"viewRevision":payload["viewRevision"]}),
                     );
                 }
                 if payload["kind"] == "topologyPreview" {

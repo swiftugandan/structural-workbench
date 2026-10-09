@@ -538,7 +538,85 @@ impl SectionMechanicsInputs {
     }
 }
 
+/// Where a slab's opening comes from (ADR 0035).
+#[derive(Clone, Copy, Debug, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub enum OpeningBasis {
+    /// The plate analysis cuts this opening (or has none).
+    Analysed,
+    /// No plate inputs yet: the draft's centred preview opening.
+    Illustrative,
+}
+
+/// A slab draft's panel outline in panel coordinates (x along global X,
+/// y along global Y, from the panel corner), its thickness, its opening and
+/// its placement in the model. The one rule the plate solve and the model
+/// views share (ADR 0035).
+#[derive(Clone, Debug, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct SlabPanel {
+    pub length: f64,
+    pub width: f64,
+    pub thickness: f64,
+    /// `[x0, x1, y0, y1]` in panel coordinates.
+    pub opening: Option<[f64; 4]>,
+    pub opening_basis: OpeningBasis,
+    /// The panel corner in the model; z is the mid-surface.
+    pub placement: Option<[f64; 3]>,
+}
+
+impl SlabPanel {
+    /// Mid-surface corners in model coordinates, counter-clockwise from the
+    /// panel corner, of the outline and of the opening. None until placed.
+    pub fn world_corners(&self) -> Option<([[f64; 3]; 4], Option<[[f64; 3]; 4]>)> {
+        let [px, py, pz] = self.placement?;
+        let ring = |x0: f64, x1: f64, y0: f64, y1: f64| {
+            [[x0, y0], [x1, y0], [x1, y1], [x0, y1]].map(|[x, y]| [px + x, py + y, pz])
+        };
+        Some((
+            ring(0., self.length, 0., self.width),
+            self.opening.map(|[x0, x1, y0, y1]| ring(x0, x1, y0, y1)),
+        ))
+    }
+}
+
 impl DesignPreview {
+    /// The panel of a slab draft; None for every other kind.
+    pub fn slab_panel(&self) -> Option<SlabPanel> {
+        if self.kind != "slab" {
+            return None;
+        }
+        let v = &self.inputs;
+        let (length, width) = (v["length"], v["width"]);
+        let (ox, oy) = (v["openingLength"], v["openingWidth"]);
+        let (opening, opening_basis) = match &self.plate {
+            Some(plate) => (
+                plate.include_opening.then(|| {
+                    let (x0, y0) = (plate.inputs["openingX"], plate.inputs["openingY"]);
+                    [x0, x0 + ox, y0, y0 + oy]
+                }),
+                OpeningBasis::Analysed,
+            ),
+            None => (
+                Some([
+                    (length - ox) / 2.,
+                    (length + ox) / 2.,
+                    (width - oy) / 2.,
+                    (width + oy) / 2.,
+                ]),
+                OpeningBasis::Illustrative,
+            ),
+        };
+        Some(SlabPanel {
+            length,
+            width,
+            thickness: v["thickness"],
+            opening,
+            opening_basis,
+            placement: self.plate.as_ref().and_then(|p| p.placement),
+        })
+    }
+
     /// Drafts bound to an analytical member (rather than a support).
     pub fn binds_member(&self) -> bool {
         matches!(self.kind.as_str(), "rcBeam" | "rcColumn" | "singlePlate" | "compositeBeam")

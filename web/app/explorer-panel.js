@@ -5,7 +5,6 @@
  */
 export function explorerPanel({
   $,
-  concrete,
   editEntity,
   entityGuides,
   entityList,
@@ -16,6 +15,7 @@ export function explorerPanel({
   label,
   message,
   modal,
+  openDesignObject,
   renderExplorer,
   renderInspector,
   renderSelectionStatus,
@@ -149,11 +149,7 @@ export function explorerPanel({
         }
       };
     for (const b of document.querySelectorAll("[data-preview]"))
-      b.onclick = () => {
-        if (state.formDirty) return message("Apply or cancel changes first.");
-        concrete.select(b.dataset.preview);
-        $("[data-inspector-tab=concrete]").click();
-      };
+      b.onclick = () => openDesignObject(b.dataset.preview);
     for (const b of document.querySelectorAll("[data-member]"))
       b.onclick = (e) => selectEntities([b.dataset.member], e.shiftKey);
     for (const b of document.querySelectorAll("[data-group]"))

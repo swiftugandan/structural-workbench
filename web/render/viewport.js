@@ -20,6 +20,7 @@ import {
   heatLevel,
   heatGradientCss,
 } from "./heatmap.js";
+import { pressureGlyph, slabMesh, slabVisible } from "./slab-panels.js";
 import { dimensionLayout, dimensionText } from "./dimensions.js";
 import { supportSymbol } from "./support-symbols.js";
 import { entityLabel } from "../entity-labels.js";
@@ -70,46 +71,53 @@ export class Viewport {
         alphaMode: "opaque",
       });
       const module = this.device.createShaderModule({ code: shader });
-      this.pipeline = this.device.createRenderPipeline({
-        layout: "auto",
-        vertex: {
-          module,
-          entryPoint: "vs",
-          buffers: [
-            {
-              arrayStride: 32,
-              attributes: [
-                { shaderLocation: 0, offset: 0, format: "float32x3" },
-                { shaderLocation: 1, offset: 12, format: "float32x4" },
-                { shaderLocation: 2, offset: 28, format: "float32" },
-              ],
-            },
-          ],
-        },
-        fragment: {
-          module,
-          entryPoint: "fs",
-          targets: [
-            {
-              format: this.format,
-              blend: {
-                color: {
-                  srcFactor: "src-alpha",
-                  dstFactor: "one-minus-src-alpha",
-                },
-                alpha: { srcFactor: "one", dstFactor: "one-minus-src-alpha" },
+      // One shader and vertex layout, two passes (ADR 0035): opaque geometry
+      // writes depth and entity ids; translucent surfaces (slab panels) are
+      // drawn after it without writing either, so they never hide or
+      // re-identify the frame behind them.
+      const pipeline = (translucent) =>
+        this.device.createRenderPipeline({
+          layout: "auto",
+          vertex: {
+            module,
+            entryPoint: "vs",
+            buffers: [
+              {
+                arrayStride: 32,
+                attributes: [
+                  { shaderLocation: 0, offset: 0, format: "float32x3" },
+                  { shaderLocation: 1, offset: 12, format: "float32x4" },
+                  { shaderLocation: 2, offset: 28, format: "float32" },
+                ],
               },
-            },
-            { format: "r32uint" },
-          ],
-        },
-        primitive: { topology: "triangle-list" },
-        depthStencil: {
-          format: "depth24plus",
-          depthWriteEnabled: true,
-          depthCompare: "less-equal",
-        },
-      });
+            ],
+          },
+          fragment: {
+            module,
+            entryPoint: "fs",
+            targets: [
+              {
+                format: this.format,
+                blend: {
+                  color: {
+                    srcFactor: "src-alpha",
+                    dstFactor: "one-minus-src-alpha",
+                  },
+                  alpha: { srcFactor: "one", dstFactor: "one-minus-src-alpha" },
+                },
+              },
+              { format: "r32uint", writeMask: translucent ? 0 : 0xf },
+            ],
+          },
+          primitive: { topology: "triangle-list" },
+          depthStencil: {
+            format: "depth24plus",
+            depthWriteEnabled: !translucent,
+            depthCompare: "less-equal",
+          },
+        });
+      this.pipeline = pipeline(false);
+      this.translucentPipeline = pipeline(true);
       this.device.lost.then((info) => {
         this.ready = false;
         this.notice("GPU device lost. Your model and results are preserved.");
@@ -149,13 +157,29 @@ export class Viewport {
   nodesVisible() {
     return this.showNodes ?? !(this.modelSolids || this.solidDesign);
   }
+  /** Rust slab panels of the drawn revision (ADR 0035), or none while the
+   * geometry query for this revision is pending. */
+  slabPanels() {
+    return this.axesProject === this.project ? this.slabs || [] : [];
+  }
+  /** Placed slabs the model views draw, pick and fit. */
+  visibleSlabs() {
+    const rule = {
+      enabled: this.showSlabs !== false,
+      scoped: Boolean(this.scoped),
+      isVisible: (id) => this.isVisible(id),
+    };
+    return this.slabPanels().filter((s) => slabVisible(s, rule));
+  }
   excludedIds() {
     if (!this.project) return [];
+    const shown = new Set(this.visibleSlabs().map((s) => s.id));
     return [
       ...this.project.members.filter((m) => !this.isVisible(m.id)),
       ...this.project.nodes.filter(
         (n) => !this.isVisible(n.id) || !this.nodesVisible(),
       ),
+      ...this.slabPanels().filter((s) => !shown.has(s.id)),
     ].map((x) => x.id);
   }
   fit() {
@@ -367,6 +391,7 @@ export class Viewport {
           this.designPreview.mode,
           this.designPreview.face,
           this.axesProject === this.project ? this.localAxes || [] : [],
+          this.slabPanels(),
         )
       : null;
     const scopeMembers = this.project.members.filter((m) =>
@@ -424,6 +449,12 @@ export class Viewport {
         )
           fitBounds.push(...sceneGeometry(d, this.project, "concrete").bounds);
       }
+    // Placed, visible slabs frame the camera as members do (ADR 0035).
+    if (!this.fitIds)
+      for (const slab of this.visibleSlabs())
+        for (const f of slabMesh(slab, this.modelSolids || this.solidDesign)
+          .faces)
+          fitBounds.push(...f.points);
     const fitNodes =
       designScene && !this.designPreview.context
         ? designScene.bounds.map((position) => ({ position }))
@@ -469,6 +500,8 @@ export class Viewport {
     );
     let entityIndex = 0;
     const vertices = [];
+    // Translucent quads, drawn back to front after the opaque pass.
+    const glassFaces = [];
     const put = (p, c) =>
       vertices.push(
         (p[0] / w) * 2 - 1,
@@ -1359,9 +1392,89 @@ export class Viewport {
         );
       }
     }
+    // Slab panels in place (ADR 0035). Faces go to the translucent pass;
+    // edges stay opaque, a hair behind coincident member lines.
+    const solidSlabs = this.modelSolids || this.solidDesign;
+    const drawnSlabs = [];
+    entityIndex = 0;
+    for (const slab of this.visibleSlabs()) {
+      const mesh = slabMesh(slab, solidSlabs);
+      const active = slab.id === this.activeDesignObjectId;
+      const fill = active
+        ? [0.16, 0.4, 0.8, solidSlabs ? 0.42 : 0.22]
+        : solidSlabs
+          ? [0.69, 0.73, 0.76, 0.55]
+          : [0.55, 0.62, 0.7, 0.14];
+      for (const f of mesh.faces)
+        glassFaces.push({
+          p: f.points.map((q) => this.projectPoint(q)),
+          color: fill.map((v, i) => (i === 3 ? v : v * f.shade)),
+        });
+      const behind = (q) => {
+        const r = this.projectPoint(q);
+        return [r[0], r[1], r[2] + 0.0005];
+      };
+      for (const [a, b] of mesh.edges)
+        line(
+          behind(a),
+          behind(b),
+          active ? 2 : 1,
+          active ? blue : [0.37, 0.47, 0.58, 1],
+        );
+      // The slab's plate pressure (a saved input), shown with the loads but
+      // labelled as what it is: the plate analysis's load, not the frame's.
+      const glyph =
+        this.showLoads === false ? null : pressureGlyph(slab, solidSlabs);
+      if (glyph) {
+        const tone = [0.78, 0.35, 0.19, 0.8];
+        for (const tip of glyph.tips) {
+          const p = this.projectPoint(tip),
+            up = this.projectPoint([tip[0], tip[1], tip[2] + 1]),
+            dx = up[0] - p[0],
+            dy = up[1] - p[1],
+            length = Math.hypot(dx, dy);
+          // Looking straight down the load: a dot, as for a nodal force.
+          if (length < 0.001) {
+            dot([p[0], p[1], 0.3], 2.5, tone);
+            continue;
+          }
+          const ux = dx / length,
+            uy = dy / length,
+            head = [p[0] + ux * 3, p[1] + uy * 3, 0.3];
+          line([p[0] + ux * 26, p[1] + uy * 26, 0.3], head, 1.5, tone);
+          for (const sign of [-1, 1])
+            line(
+              head,
+              [
+                head[0] + ux * 7 + sign * uy * 3.5,
+                head[1] + uy * 7 - sign * ux * 3.5,
+                0.3,
+              ],
+              1.5,
+              tone,
+            );
+        }
+        const c = this.projectPoint(glyph.label);
+        label(
+          `${(slab.pressure / 1000).toLocaleString()} kPa · slab plate pressure, not a frame load`,
+          [c[0], c[1] - 34],
+          "load-label",
+        );
+      }
+      drawnSlabs.push({
+        id: slab.id,
+        style: solidSlabs ? "solid" : "lines",
+        active,
+        loaded: Boolean(glyph),
+      });
+    }
     if (designScene) {
       // Dedicated object focus uses the existing WebGPU pipeline and camera.
-      if (!this.designPreview.context) vertices.length = 0;
+      if (!this.designPreview.context) {
+        vertices.length = 0;
+        glassFaces.length = 0;
+        drawnSlabs.length = 0;
+      }
       entityIndex = 0;
       drawScene(designScene, (p) => this.projectPoint(p), triangle, line);
       const host = document.querySelector("#design-geometry-labels");
@@ -1373,6 +1486,19 @@ export class Viewport {
           })
           .join("");
     }
+    // What the model views show of the slabs, for tests and diagnostics.
+    this.canvas.dataset.slabs = JSON.stringify(drawnSlabs);
+    const opaqueVertices = vertices.length / 8;
+    entityIndex = 0;
+    glassFaces
+      .sort(
+        (a, b) =>
+          b.p.reduce((t, q) => t + q[2], 0) - a.p.reduce((t, q) => t + q[2], 0),
+      )
+      .forEach((f) => {
+        triangle(f.p[0], f.p[1], f.p[2], f.color);
+        triangle(f.p[0], f.p[2], f.p[3], f.color);
+      });
     const data = new Float32Array(vertices);
     this.buffer?.destroy();
     this.buffer = this.device.createBuffer({
@@ -1405,7 +1531,11 @@ export class Viewport {
       });
     pass.setPipeline(this.pipeline);
     pass.setVertexBuffer(0, this.buffer);
-    pass.draw(vertices.length / 8);
+    pass.draw(opaqueVertices);
+    if (vertices.length / 8 > opaqueVertices) {
+      pass.setPipeline(this.translucentPipeline);
+      pass.draw(vertices.length / 8 - opaqueVertices, 1, opaqueVertices);
+    }
     pass.end();
     this.device.queue.submit([encoder.finish()]);
   }

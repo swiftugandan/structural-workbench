@@ -381,6 +381,17 @@
   width: 100%;
   min-width: 0;
 }
+/* A checkbox and its words sit on one line, box first. */
+#concrete-inspector .design-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+#concrete-inspector .design-check input {
+  width: auto;
+  margin: 0;
+}
 #concrete-inspector button {
   margin: 5px 4px 5px 0;
 }
@@ -916,6 +927,11 @@
 .concrete-focus .view-legend,
 .concrete-focus #action-legend,
 .concrete-focus #reference-plane {
+  display: none !important;
+}
+/* The object heading takes the caption's place, in focus and with model
+   context alike (ADR 0035). */
+.design-object-open .view-caption {
   display: none !important;
 }
 @media (max-width: 1100px) {

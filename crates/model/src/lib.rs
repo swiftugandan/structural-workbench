@@ -13,7 +13,7 @@ pub use design_inputs::{
     DesignPreview, DesignSource, DesignValue, EXPOSURE_CLASSES, MAX_BRACING_POINTS, MAX_SLAB_COLUMNS,
     CodeInputs, STRUCTURAL_SYSTEMS,
     MECHANICS_COMMON_KEYS, SLAB_EDGE_CONDITIONS, SLAB_PLATE_KEYS, SectionMechanicsInputs,
-    SlabColumn, SlabPlateInputs, SteelDesign, SteelServiceability, SinglePlateInputs, STEEL_BOLT_DESIGNATIONS, CompositeInputs,
+    OpeningBasis, SlabColumn, SlabPanel, SlabPlateInputs, SteelDesign, SteelServiceability, SinglePlateInputs, STEEL_BOLT_DESIGNATIONS, CompositeInputs,
 };
 pub use migrate::{
     CURRENT_SCHEMA, LEGACY_SCHEMA_0_9, MigrationReport, SCHEMA_1_1, SCHEMA_1_2, SCHEMA_1_3,

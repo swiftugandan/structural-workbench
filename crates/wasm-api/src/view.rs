@@ -14,6 +14,8 @@ pub fn excluded_ids(q: &Value) -> Result<BTreeSet<String>> {
 }
 use workbench_model::{Project, Result, err};
 type Point = [f64; 3];
+/// A projected slab outline and its opening.
+type Rings = ([Point; 4], Option<[Point; 4]>);
 #[derive(Clone)]
 struct Box2 {
     lo: [f64; 2],
@@ -86,11 +88,33 @@ impl Tree {
         }
     }
 }
+/// Depth at a screen point inside a projected rectangle, or None outside it.
+/// A parallel projection maps the rectangle c0 c1 c2 c3 to a parallelogram,
+/// so the point is c0 + u (c1 − c0) + v (c3 − c0) with 0 ≤ u, v ≤ 1.
+fn parallelogram_depth(c: &[Point; 4], point: [f64; 2]) -> Option<f64> {
+    let (a, b) = (
+        [c[1][0] - c[0][0], c[1][1] - c[0][1]],
+        [c[3][0] - c[0][0], c[3][1] - c[0][1]],
+    );
+    let det = a[0] * b[1] - a[1] * b[0];
+    // Edge-on: the panel has no area on screen.
+    if det.abs() <= 1e-9 * (a[0].hypot(a[1]) * b[0].hypot(b[1])).max(1e-300) {
+        return None;
+    }
+    let (px, py) = (point[0] - c[0][0], point[1] - c[0][1]);
+    let u = (px * b[1] - py * b[0]) / det;
+    let v = (a[0] * py - a[1] * px) / det;
+    ((0.0..=1.0).contains(&u) && (0.0..=1.0).contains(&v))
+        .then(|| c[0][2] + u * (c[1][2] - c[0][2]) + v * (c[3][2] - c[0][2]))
+}
 pub struct Index {
     pub key: String,
     nodes: Vec<(String, Point)>,
     members: Vec<(String, String, String, Point, Point)>,
     world_members: Vec<(Point, Point)>,
+    /// Placed slab panels, projected: id, then (outline, opening) at the
+    /// support level (analytical) and at the drawn soffit and top (physical).
+    slabs: Vec<(String, Rings, [Rings; 2])>,
     intersection_tolerance: f64,
     screen_tolerance: f64,
     tree: Tree,
@@ -165,11 +189,30 @@ impl Index {
             .collect();
         let boxes: Vec<_> = members.iter().map(|m| Box2::segment(m.3, m.4)).collect();
         let tree = Tree::build(&boxes, (0..boxes.len()).collect());
+        let slabs = p
+            .design_previews
+            .iter()
+            .filter_map(|d| {
+                let panel = d.slab_panel()?;
+                let (outline, opening) = panel.world_corners()?;
+                let soffit = crate::slab_view::bearing(p, &panel)?.soffit;
+                let at = |z: f64| -> Rings {
+                    let lift = |q: Point| project([q[0], q[1], z]);
+                    (outline.map(lift), opening.map(|o| o.map(lift)))
+                };
+                Some((
+                    d.id.clone(),
+                    at(outline[0][2]),
+                    [at(soffit), at(soffit + panel.thickness)],
+                ))
+            })
+            .collect();
         Ok(Self {
             key,
             nodes,
             members,
             world_members,
+            slabs,
             intersection_tolerance: p.analysis_settings.merge_tolerance,
             screen_tolerance: p.analysis_settings.merge_tolerance * factor,
             tree,
@@ -221,6 +264,42 @@ impl Index {
                 hits.push((1, a[2] + t * (b[2] - a[2]), d, id));
             }
         }
+        // Surfaces are opt-in and lose to every node and member (ADR 0035):
+        // "analytical" tests the support plane, "physical" the drawn faces.
+        let physical = match &q["surfaces"] {
+            Value::Null => None,
+            Value::String(m) if m == "analytical" => Some(false),
+            Value::String(m) if m == "physical" => Some(true),
+            _ => {
+                return Err(err(
+                    "INVALID_SCHEMA",
+                    "surfaces must be \"analytical\" or \"physical\"",
+                ));
+            }
+        };
+        if let Some(physical) = physical {
+            for (id, analytical, faces) in &self.slabs {
+                if excluded.contains(id) {
+                    continue;
+                }
+                let tested = if physical {
+                    &faces[..]
+                } else {
+                    std::slice::from_ref(analytical)
+                };
+                let depth = tested
+                    .iter()
+                    .filter_map(|(outline, opening)| {
+                        let depth = parallelogram_depth(outline, point)?;
+                        (!opening.is_some_and(|o| parallelogram_depth(&o, point).is_some()))
+                            .then_some(depth)
+                    })
+                    .min_by(f64::total_cmp);
+                if let Some(depth) = depth {
+                    hits.push((2, depth, 0., id));
+                }
+            }
+        }
         hits.sort_by(|a, b| {
             a.0.cmp(&b.0)
                 .then_with(|| a.1.total_cmp(&b.1))
@@ -228,7 +307,7 @@ impl Index {
                 .then_with(|| a.3.cmp(b.3))
         });
         Ok(
-            json!({"entityId":hits.first().map(|x|x.3),"kind":hits.first().map(|x|if x.0==0 {"node"} else {"member"})}),
+            json!({"entityId":hits.first().map(|x|x.3),"kind":hits.first().map(|x|match x.0 {0=>"node",1=>"member",_=>"designObject"})}),
         )
     }
     pub fn select(&self, q: &Value) -> Result<Value> {

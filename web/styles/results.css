@@ -140,8 +140,16 @@
   align-items: center;
   margin: 8px 0;
 }
-.slab-derive input {
-  width: 64px;
+.slab-derive span {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.slab-placement {
+  margin: 8px 0;
+}
+.slab-placement small {
+  display: block;
+  color: var(--color-text-muted);
 }
 
 /* Model exchange (exchange-v1): conversion review and ledgers. */

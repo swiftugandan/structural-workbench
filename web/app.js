@@ -109,16 +109,23 @@ const viewport = new Viewport($("#viewport"), async (query) => {
         camera: query.camera,
         point: query.point,
         excludedIds: viewport.excludedIds(),
+        // Canvas selection alone picks slab surfaces, as drawn (ADR 0035).
+        surfaces:
+          viewport.modelSolids || viewport.solidDesign
+            ? "physical"
+            : "analytical",
       },
       viewRevision: query.viewRevision,
     });
     $("#viewport").dataset.lastCpuPick = v.entityId || "";
     if (
-      state.project.revision === revision &&
-      visibilityRevision === viewport.visibilityRevision &&
-      JSON.stringify(viewport.camera()) === cameraKey
+      state.project.revision !== revision ||
+      visibilityRevision !== viewport.visibilityRevision ||
+      JSON.stringify(viewport.camera()) !== cameraKey
     )
-      selectEntities(v.entityId ? [v.entityId] : [], query.toggle);
+      return;
+    if (v.kind === "designObject") openDesignObject(v.entityId);
+    else selectEntities(v.entityId ? [v.entityId] : [], query.toggle);
   } catch (e) {
     message(e.message);
   }
@@ -412,7 +419,16 @@ const topologyTools = topology({
   message,
   canEdit: () =>
     !!state.project && !state.busy && !state.readOnly && !state.formDirty,
+  // Rust display geometry of this revision arrived (slab outlines, ADR 0035).
+  onGeometry: () => concrete.geometryChanged(),
 });
+/** Opens a design object in the Design objects tab: the explorer entry and a
+ * click on its surface in the canvas (ADR 0035). */
+function openDesignObject(id) {
+  if (state.formDirty) return message("Apply or cancel changes first.");
+  concrete.select(id);
+  $("[data-inspector-tab=concrete]").click();
+}
 function selectEntities(ids, toggle = false) {
   if (state.formDirty) {
     message("Apply or cancel property changes before changing selection.");
@@ -959,7 +975,6 @@ const {
   bindExplorer,
 } = explorerPanel({
   $,
-  concrete,
   editEntity,
   entityGuides,
   entityList,
@@ -970,6 +985,7 @@ const {
   label,
   message,
   modal,
+  openDesignObject,
   renderExplorer,
   renderInspector,
   renderSelectionStatus,
@@ -1459,6 +1475,13 @@ $("#model-assumptions").onclick = () =>
 $("#model-loads").onclick = () => {
   viewport.showLoads = viewport.showLoads === false;
   $("#model-loads").setAttribute("aria-pressed", String(viewport.showLoads));
+  viewport.draw();
+};
+$("#model-slabs").onclick = () => {
+  viewport.showSlabs = viewport.showSlabs === false;
+  $("#model-slabs").setAttribute("aria-pressed", String(viewport.showSlabs));
+  // A pick already in flight must not land on a slab that was just hidden.
+  viewport.visibilityRevision = (viewport.visibilityRevision || 0) + 1;
   viewport.draw();
 };
 $("#model-crossings").onclick = () => {
