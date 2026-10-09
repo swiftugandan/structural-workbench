@@ -561,14 +561,16 @@ export function concreteWorkspace({
      * the slab outline (the sketch and the scene caption). */
     geometryChanged: () => {
       const d = draft(),
-        host = $("#design-preview-scene");
-      if (!d || host.hidden) return;
+        host = $("#design-preview-scene"),
+        panel = panelOf(d);
+      // Only a slab's drawings depend on the Rust geometry.
+      if (!d || host.hidden || !panel) return;
       const kind = designKind(d.kind),
-        panel = panelOf(d),
         sketch = document.querySelector(
           "#concrete-inspector .design-section-sketch svg",
         );
-      if (sketch) sketch.innerHTML = String(kind.sketch(d, { face, panel }));
+      if (sketch)
+        sketch.innerHTML = String(kind.sketch(d, { face, panel }) ?? "");
       const caption = $("#design-scene-caption");
       if (caption)
         caption.textContent = kind.caption(d, {
