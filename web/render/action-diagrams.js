@@ -51,25 +51,61 @@ export const actionComponents = {
     unit: "N·m",
   },
 };
+// Rust key stations that carry a component's value: member ends,
+// discontinuities and the extrema Rust found for that component.
+export function keyedStations(keyStations, component) {
+  return (keyStations || []).filter(
+    (k) =>
+      k.kind === "end" ||
+      k.kind === "discontinuity" ||
+      (k.kind === "extremum" && k.components?.includes(component.name)),
+  );
+}
+/** Index of the sample nearest a station (fraction of L). */
+export function nearestSample(samples, station) {
+  let best = 0,
+    bestD = Infinity;
+  samples.forEach((s, i) => {
+    const d = Math.abs(s.station - station);
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  });
+  return best;
+}
+/** One member's largest |action|, signed, and the sample it is drawn at.
+ * Key stations win over the sample grid when Rust supplied them, exactly as
+ * in diagramPeak, so the member carrying the model peak reaches it. */
+export function memberPeak(member, component) {
+  const index = component.index;
+  if (member.keyStations?.length) {
+    let best = null;
+    for (const k of keyedStations(member.keyStations, component))
+      if (!best || Math.abs(k.actions[index]) > Math.abs(best.actions[index]))
+        best = k;
+    return best
+      ? {
+          value: best.actions[index],
+          sample: nearestSample(member.samples, best.station),
+        }
+      : null;
+  }
+  if (!member.samples?.length) return null;
+  let sample = 0;
+  member.samples.forEach((s, i) => {
+    if (
+      Math.abs(s.actions[index]) >
+      Math.abs(member.samples[sample].actions[index])
+    )
+      sample = i;
+  });
+  return { value: member.samples[sample].actions[index], sample };
+}
 export function diagramPeak(result, component) {
   let max = 0;
-  const name = component.name;
-  for (const member of result.members) {
-    const keys = member.keyStations;
-    if (keys?.length) {
-      for (const s of keys) {
-        if (
-          s.kind === "end" ||
-          s.kind === "discontinuity" ||
-          (s.kind === "extremum" && s.components?.includes(name))
-        )
-          max = Math.max(max, Math.abs(s.actions[component.index]));
-      }
-    } else {
-      for (const sample of member.samples)
-        max = Math.max(max, Math.abs(sample.actions[component.index]));
-    }
-  }
+  for (const member of result.members)
+    max = Math.max(max, Math.abs(memberPeak(member, component)?.value ?? 0));
   return max;
 }
 export function actionText(
@@ -102,25 +138,7 @@ export function actionProjection(
     const offset = peak ? (s.actions[component.index] / peak) * amplitude : 0;
     return projectPoint(s.position.map((v, j) => v + direction[j] * offset));
   });
-  const nearestSample = (station) => {
-    let best = 0,
-      bestD = Infinity;
-    samples.forEach((s, i) => {
-      const d = Math.abs(s.station - station);
-      if (d < bestD) {
-        bestD = d;
-        best = i;
-      }
-    });
-    return best;
-  };
-  const name = component.name;
-  const keyed = (keyStations || []).filter(
-    (k) =>
-      k.kind === "end" ||
-      k.kind === "discontinuity" ||
-      (k.kind === "extremum" && k.components?.includes(name)),
-  );
+  const keyed = keyedStations(keyStations, component);
   let marks;
   let markValues;
   if (keyed.length) {
@@ -134,9 +152,12 @@ export function actionProjection(
     const pick =
       Math.abs(hi.actions[component.index] - lo.actions[component.index]) <=
       peak * 1e-10
-        ? [keyed.find((k) => k.kind === "extremum") || keyed[Math.floor(keyed.length / 2)]]
+        ? [
+            keyed.find((k) => k.kind === "extremum") ||
+              keyed[Math.floor(keyed.length / 2)],
+          ]
         : [...new Set([lo, hi, ...ends])];
-    marks = pick.map((k) => nearestSample(k.station));
+    marks = pick.map((k) => nearestSample(samples, k.station));
     markValues = pick.map((k) => k.actions[component.index]);
   } else {
     let lo = 0,

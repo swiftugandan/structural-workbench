@@ -55,15 +55,3 @@ export function heatGradientCss() {
     .map((c, i) => `${c} ${((i / (heatStops.length - 1)) * 100).toFixed(0)}%`)
     .join(", ")})`;
 }
-
-/** Index of the sample with the largest |action| on one member. */
-export function peakSample(samples, index) {
-  let best = 0;
-  for (let i = 1; i < samples.length; i++)
-    if (
-      Math.abs(samples[i].actions[index]) >
-      Math.abs(samples[best].actions[index])
-    )
-      best = i;
-  return best;
-}

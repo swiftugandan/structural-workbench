@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { actionComponents } from "../web/render/action-diagrams.js";
+import {
+  actionComponents,
+  diagramPeak,
+  memberPeak,
+} from "../web/render/action-diagrams.js";
 import {
   heatStops,
   heatViews,
@@ -8,7 +12,6 @@ import {
   heatColour,
   heatLevel,
   heatGradientCss,
-  peakSample,
 } from "../web/render/heatmap.js";
 import { resultFamilies } from "../web/result-picker.js";
 
@@ -78,8 +81,46 @@ test("The legend gradient lists every stop in order", () => {
   assert.ok(css.includes(`${heatStops.at(-1)} 100%`));
 });
 
-test("Peak sample is the largest magnitude, whatever its sign", () => {
-  const samples = [3, -9, 4, 8].map((v) => ({ actions: [0, 0, 0, 0, v, 0] }));
-  assert.equal(peakSample(samples, 4), 1);
-  assert.equal(peakSample([{ actions: [0, 0, 0, 0, 0, 0] }], 4), 0);
+test("A member's peak is its largest |action|, signed, at its own sample", () => {
+  const samples = [3, -9, 4, 8].map((v, i) => ({
+    station: i / 3,
+    actions: [0, 0, 0, 0, v, 0],
+  }));
+  assert.deepEqual(memberPeak({ samples }, actionComponents.moment), {
+    value: -9,
+    sample: 1,
+  });
+});
+
+test("A key-station peak is labelled at the sample nearest its station", () => {
+  // Rust found the extremum between samples, larger than any sample and
+  // away from the largest sample: value and position must agree.
+  const member = {
+    samples: [0, 0.25, 0.5, 0.75, 1].map((station, i) => ({
+      station,
+      actions: [0, 0, 0, 0, [0, 9, 1, 5, 0][i], 0],
+    })),
+    keyStations: [
+      { kind: "end", station: 0, actions: [0, 0, 0, 0, 0, 0] },
+      {
+        kind: "extremum",
+        station: 0.7,
+        components: ["My"],
+        actions: [0, 0, 0, 0, -12, 0],
+      },
+      // An extremum for another component is not a My peak.
+      {
+        kind: "extremum",
+        station: 0.3,
+        components: ["Mz"],
+        actions: [0, 0, 0, 0, 99, 0],
+      },
+      { kind: "end", station: 1, actions: [0, 0, 0, 0, 0, 0] },
+    ],
+  };
+  const top = memberPeak(member, actionComponents.moment);
+  assert.deepEqual(top, { value: -12, sample: 3 });
+  // The peak member reaches the model peak exactly: level 1.
+  const peak = diagramPeak({ members: [member] }, actionComponents.moment);
+  assert.equal(heatLevel(top.value, peak), 1);
 });
