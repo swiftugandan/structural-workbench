@@ -1205,7 +1205,12 @@ export class Viewport {
           if (!member.samples?.length) continue;
           // The band picks as its member, like the member line beneath it.
           entityIndex = order.get(member.id) ?? 0;
-          const base = member.samples.map((s) => this.projectPoint(s.position));
+          // Nudge toward the camera, as dot() does, so the band wins the
+          // depth test over the member and selection lines it covers.
+          const base = member.samples.map((s) => {
+            const q = this.projectPoint(s.position);
+            return [q[0], q[1], (q[2] ?? 0.5) - 0.0015];
+          });
           const levels = member.samples.map((s) =>
             heatLevel(s.actions[heat.index], peak),
           );
@@ -1218,8 +1223,8 @@ export class Viewport {
               heatColour(levels[i - 1]),
               heatColour(levels[i]),
             );
-          if (this.selection.has(member.id))
-            line(base[0], base[base.length - 1], 1.5, blue);
+          // Selection stays visible as the member pass's 12 px halo, which
+          // frames this 7 px band without hiding its colours.
           // Label the member's own peak magnitude (signed) at its sample.
           const at = peakSample(member.samples, heat.index);
           const keyed = (member.keyStations || []).filter(
