@@ -11,6 +11,7 @@ import {
   diagramPeak,
   actionText,
   actionProjection,
+  memberPeak,
   deformationProjection,
 } from "./action-diagrams.js";
 import {
@@ -18,7 +19,6 @@ import {
   heatColour,
   heatLevel,
   heatGradientCss,
-  peakSample,
 } from "./heatmap.js";
 import { dimensionLayout, dimensionText } from "./dimensions.js";
 import { supportSymbol } from "./support-symbols.js";
@@ -482,19 +482,6 @@ export class Viewport {
       put(b, color);
       put(c, color);
     };
-    const line = (a, b, width, color) => {
-      const dx = b[0] - a[0],
-        dy = b[1] - a[1],
-        len = Math.hypot(dx, dy) || 1,
-        ox = ((-dy / len) * width) / 2,
-        oy = ((dx / len) * width) / 2;
-      const p = [a[0] + ox, a[1] + oy, a[2]],
-        q = [a[0] - ox, a[1] - oy, a[2]],
-        r = [b[0] + ox, b[1] + oy, b[2]],
-        s = [b[0] - ox, b[1] - oy, b[2]];
-      triangle(p, q, r, color);
-      triangle(q, s, r, color);
-    };
     // A line whose colour runs from ca at a to cb at b.
     const band = (a, b, width, ca, cb) => {
       const dx = b[0] - a[0],
@@ -513,6 +500,7 @@ export class Viewport {
       put(s, cb);
       put(r, cb);
     };
+    const line = (a, b, width, color) => band(a, b, width, color, color);
     const dot = (p, size, color) => {
       triangle(
         [p[0] - size, p[1] - size, p[2] - 0.001],
@@ -1205,8 +1193,8 @@ export class Viewport {
           if (!member.samples?.length) continue;
           // The band picks as its member, like the member line beneath it.
           entityIndex = order.get(member.id) ?? 0;
-          // Nudge toward the camera, as dot() does, so the band wins the
-          // depth test over the member and selection lines it covers.
+          // Nudge toward the camera, like dot(), so the band wins the depth
+          // test over the member and selection lines it covers.
           const base = member.samples.map((s) => {
             const q = this.projectPoint(s.position);
             return [q[0], q[1], (q[2] ?? 0.5) - 0.0015];
@@ -1225,29 +1213,11 @@ export class Viewport {
             );
           // Selection stays visible as the member pass's 12 px halo, which
           // frames this 7 px band without hiding its colours.
-          // Label the member's own peak magnitude (signed) at its sample.
-          const at = peakSample(member.samples, heat.index);
-          const keyed = (member.keyStations || []).filter(
-            (k) =>
-              k.kind === "end" ||
-              k.kind === "discontinuity" ||
-              (k.kind === "extremum" && k.components?.includes(heat.name)),
-          );
-          const keyPeak = keyed.reduce(
-            (best, k) =>
-              !best ||
-              Math.abs(k.actions[heat.index]) >
-                Math.abs(best.actions[heat.index])
-                ? k
-                : best,
-            null,
-          );
-          const value =
-            keyPeak &&
-            Math.abs(keyPeak.actions[heat.index]) >=
-              Math.abs(member.samples[at].actions[heat.index])
-              ? keyPeak.actions[heat.index]
-              : member.samples[at].actions[heat.index];
+          // Label the member's own peak (signed) where it occurs: the same
+          // key-station rule as the model peak, so its level reaches 1.
+          const top = memberPeak(member, heat);
+          if (!top) continue;
+          const { value, sample: at } = top;
           coloured.push([member.id, value]);
           if (
             peak &&
