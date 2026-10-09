@@ -264,7 +264,9 @@ export function projectSession({
     p.id = "p" + crypto.randomUUID().replaceAll("-", "");
     p.name = name;
     await open(p);
-    if (["W01", "UKR01"].includes(id)) $("#view-3d").click();
+    if (["W01", "UKR01", "SL01"].includes(id)) $("#view-3d").click();
+    // The slab is seen resting on its beams in the solid view (ADR 0035).
+    if (id === "SL01" && !viewport.modelSolids) $("#model-solids").click();
     if (id === "UKR01") {
       if (!viewport.modelSolids) $("#model-solids").click();
       if (viewport.showLoads !== false) $("#model-loads").click();

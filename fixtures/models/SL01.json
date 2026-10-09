@@ -1,0 +1,1578 @@
+{
+  "analysisMode": "spatial",
+  "analysisSettings": {
+    "formulation": "eulerBernoulli3D",
+    "memoryLimitMiB": 512,
+    "mergeTolerance": 0.000001,
+    "timeoutMs": 30000,
+    "type": "linearStatic"
+  },
+  "combinations": [],
+  "designPreviews": [
+    {
+      "id": "dpe3ec990677d86b8f",
+      "inputSource": "mixed",
+      "inputSources": {
+        "concreteStrength": "syntheticFixture",
+        "cover": "syntheticFixture",
+        "length": "user",
+        "meshSize": "user",
+        "openingLength": "syntheticFixture",
+        "openingWidth": "syntheticFixture",
+        "rebarStrength": "syntheticFixture",
+        "thickness": "user",
+        "width": "user"
+      },
+      "inputs": {
+        "concreteStrength": 30000000,
+        "cover": 0.03,
+        "length": 8,
+        "meshSize": 0.25,
+        "openingLength": 1,
+        "openingWidth": 1,
+        "rebarStrength": 500000000,
+        "thickness": 0.25,
+        "width": 6
+      },
+      "kind": "slab",
+      "plate": {
+        "columns": [
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C00"
+            ],
+            "nodeId": "T00",
+            "source": "model",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C01"
+            ],
+            "nodeId": "T01",
+            "source": "model",
+            "x": 0,
+            "y": 3
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C02"
+            ],
+            "nodeId": "T02",
+            "source": "model",
+            "x": 0,
+            "y": 6
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C10"
+            ],
+            "nodeId": "T10",
+            "source": "model",
+            "x": 4,
+            "y": 0
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C11"
+            ],
+            "nodeId": "T11",
+            "source": "model",
+            "x": 4,
+            "y": 3
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C12"
+            ],
+            "nodeId": "T12",
+            "source": "model",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C20"
+            ],
+            "nodeId": "T20",
+            "source": "model",
+            "x": 8,
+            "y": 0
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C21"
+            ],
+            "nodeId": "T21",
+            "source": "model",
+            "x": 8,
+            "y": 3
+          },
+          {
+            "kind": "spring",
+            "krx": 29700000,
+            "kry": 29700000,
+            "kz": 990000000,
+            "memberIds": [
+              "C22"
+            ],
+            "nodeId": "T22",
+            "source": "model",
+            "x": 8,
+            "y": 6
+          }
+        ],
+        "edges": [
+          "free",
+          "free",
+          "free",
+          "free"
+        ],
+        "includeOpening": true,
+        "inputSources": {
+          "edges": "user",
+          "elasticModulus": "user",
+          "includeOpening": "syntheticFixture",
+          "openingX": "user",
+          "openingY": "user",
+          "poissonRatio": "syntheticFixture",
+          "pressure": "user"
+        },
+        "inputs": {
+          "elasticModulus": 33000000000,
+          "openingX": 1.5,
+          "openingY": 1,
+          "poissonRatio": 0.2,
+          "pressure": 7500
+        },
+        "placement": [
+          0,
+          0,
+          3
+        ]
+      },
+      "soilReference": ""
+    }
+  ],
+  "displayUnits": "engineeringMetric",
+  "gravity": [
+    0,
+    0,
+    -9.80665
+  ],
+  "id": "SL01",
+  "loadCases": [
+    {
+      "category": "dead",
+      "id": "SL",
+      "name": "Slab reactions"
+    }
+  ],
+  "loads": [
+    {
+      "case": "SL",
+      "id": "slf653a30fx1b98de9a9a99",
+      "node": "T01",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -39707.790487722705,
+        -119.66405591487964,
+        6096.472896046314,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fx24d9b674fe53",
+      "node": "T02",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -16512.794202201265,
+        2412.7972787086214,
+        3561.0183919231317,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fx64214504f904",
+      "node": "T21",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -41480.43760948815,
+        -3.592383745386018,
+        -6189.914089423818,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fx691802e8547e",
+      "node": "T11",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -120329.99056290214,
+        -67.64655822373217,
+        57.11228084432198,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fx8fd4b56e4d77",
+      "node": "T12",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -44305.146282081434,
+        5110.984012798306,
+        20.609078573727608,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fxa1902af50e97",
+      "node": "T22",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -16567.70804981809,
+        2425.4820877794723,
+        -3588.093157080004,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fxaa6fa6f11e1c",
+      "node": "T20",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -16571.166344608137,
+        -2420.7579556364753,
+        -3584.406178038699,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fxe2434091498b",
+      "node": "T00",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -14629.534014749328,
+        -2237.475723130342,
+        3414.1055493267945,
+        0
+      ]
+    },
+    {
+      "case": "SL",
+      "id": "slf653a30fxf7ef0de37031",
+      "node": "T10",
+      "type": "nodal",
+      "values": [
+        0,
+        0,
+        -42395.432446447,
+        -4981.579517693212,
+        136.32203080985232,
+        0
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "E": 33000000000,
+      "density": 0,
+      "id": "c30",
+      "name": "Concrete C30/37",
+      "nu": 0.2
+    }
+  ],
+  "members": [
+    {
+      "end": "T01",
+      "id": "B00-01",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T00"
+    },
+    {
+      "end": "T10",
+      "id": "B00-10",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T00"
+    },
+    {
+      "end": "T02",
+      "id": "B01-02",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T01"
+    },
+    {
+      "end": "T11",
+      "id": "B01-11",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T01"
+    },
+    {
+      "end": "T12",
+      "id": "B02-12",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T02"
+    },
+    {
+      "end": "T11",
+      "id": "B10-11",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T10"
+    },
+    {
+      "end": "T20",
+      "id": "B10-20",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T10"
+    },
+    {
+      "end": "T12",
+      "id": "B11-12",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T11"
+    },
+    {
+      "end": "T21",
+      "id": "B11-21",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T11"
+    },
+    {
+      "end": "T22",
+      "id": "B12-22",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T12"
+    },
+    {
+      "end": "T21",
+      "id": "B20-21",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T20"
+    },
+    {
+      "end": "T22",
+      "id": "B21-22",
+      "localY": [
+        0,
+        0,
+        1
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "beam",
+      "start": "T21"
+    },
+    {
+      "end": "T00",
+      "id": "C00",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F00"
+    },
+    {
+      "end": "T01",
+      "id": "C01",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F01"
+    },
+    {
+      "end": "T02",
+      "id": "C02",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F02"
+    },
+    {
+      "end": "T10",
+      "id": "C10",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F10"
+    },
+    {
+      "end": "T11",
+      "id": "C11",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F11"
+    },
+    {
+      "end": "T12",
+      "id": "C12",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F12"
+    },
+    {
+      "end": "T20",
+      "id": "C20",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F20"
+    },
+    {
+      "end": "T21",
+      "id": "C21",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F21"
+    },
+    {
+      "end": "T22",
+      "id": "C22",
+      "localY": [
+        1,
+        0,
+        0
+      ],
+      "material": "c30",
+      "releaseEnd": {
+        "my": false,
+        "mz": false
+      },
+      "releaseStart": {
+        "my": false,
+        "mz": false
+      },
+      "section": "col",
+      "start": "F22"
+    }
+  ],
+  "metadata": {
+    "createdBy": "Structural Workbench",
+    "description": "8 × 6 m flat slab with an opening on nine columns and downstand beams; its plate analysis's column loads applied to the frame (ADR 0021, ADR 0035)",
+    "entityLabels": {
+      "B00-01": "m11",
+      "B00-10": "m10",
+      "B01-02": "m16",
+      "B01-11": "m15",
+      "B02-12": "m20",
+      "B10-11": "m13",
+      "B10-20": "m12",
+      "B11-12": "m18",
+      "B11-21": "m17",
+      "B12-22": "m21",
+      "B20-21": "m14",
+      "B21-22": "m19",
+      "C00": "m1",
+      "C01": "m4",
+      "C02": "m7",
+      "C10": "m2",
+      "C11": "m5",
+      "C12": "m8",
+      "C20": "m3",
+      "C21": "m6",
+      "C22": "m9",
+      "F00": "n1",
+      "F01": "n7",
+      "F02": "n13",
+      "F10": "n3",
+      "F11": "n9",
+      "F12": "n15",
+      "F20": "n5",
+      "F21": "n11",
+      "F22": "n17",
+      "S00": "s1",
+      "S01": "s4",
+      "S02": "s7",
+      "S10": "s2",
+      "S11": "s5",
+      "S12": "s8",
+      "S20": "s3",
+      "S21": "s6",
+      "S22": "s9",
+      "SL": "lc1",
+      "T00": "n2",
+      "T01": "n8",
+      "T02": "n14",
+      "T10": "n4",
+      "T11": "n10",
+      "T12": "n16",
+      "T20": "n6",
+      "T21": "n12",
+      "T22": "n18",
+      "beam": "sec2",
+      "c30": "mat1",
+      "col": "sec1",
+      "slf653a30fx1b98de9a9a99": "l2",
+      "slf653a30fx24d9b674fe53": "l3",
+      "slf653a30fx64214504f904": "l8",
+      "slf653a30fx691802e8547e": "l5",
+      "slf653a30fx8fd4b56e4d77": "l6",
+      "slf653a30fxa1902af50e97": "l9",
+      "slf653a30fxaa6fa6f11e1c": "l7",
+      "slf653a30fxe2434091498b": "l1",
+      "slf653a30fxf7ef0de37031": "l4"
+    }
+  },
+  "name": "Flat slab on a two-bay frame",
+  "nodes": [
+    {
+      "id": "F00",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "F01",
+      "position": [
+        0,
+        3,
+        0
+      ]
+    },
+    {
+      "id": "F02",
+      "position": [
+        0,
+        6,
+        0
+      ]
+    },
+    {
+      "id": "F10",
+      "position": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "F11",
+      "position": [
+        4,
+        3,
+        0
+      ]
+    },
+    {
+      "id": "F12",
+      "position": [
+        4,
+        6,
+        0
+      ]
+    },
+    {
+      "id": "F20",
+      "position": [
+        8,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "F21",
+      "position": [
+        8,
+        3,
+        0
+      ]
+    },
+    {
+      "id": "F22",
+      "position": [
+        8,
+        6,
+        0
+      ]
+    },
+    {
+      "id": "T00",
+      "position": [
+        0,
+        0,
+        3
+      ]
+    },
+    {
+      "id": "T01",
+      "position": [
+        0,
+        3,
+        3
+      ]
+    },
+    {
+      "id": "T02",
+      "position": [
+        0,
+        6,
+        3
+      ]
+    },
+    {
+      "id": "T10",
+      "position": [
+        4,
+        0,
+        3
+      ]
+    },
+    {
+      "id": "T11",
+      "position": [
+        4,
+        3,
+        3
+      ]
+    },
+    {
+      "id": "T12",
+      "position": [
+        4,
+        6,
+        3
+      ]
+    },
+    {
+      "id": "T20",
+      "position": [
+        8,
+        0,
+        3
+      ]
+    },
+    {
+      "id": "T21",
+      "position": [
+        8,
+        3,
+        3
+      ]
+    },
+    {
+      "id": "T22",
+      "position": [
+        8,
+        6,
+        3
+      ]
+    }
+  ],
+  "revision": 0,
+  "schemaVersion": "1.10.0",
+  "sections": [
+    {
+      "A": 0.15,
+      "Iy": 0.001125,
+      "Iz": 0.003125,
+      "J": 0.00282,
+      "cy": 0.25,
+      "cz": 0.15,
+      "id": "beam",
+      "name": "Beam 300 × 500",
+      "provenance": "Rectangle 300 wide × 500 deep; Saint-Venant J ≈ 0.208 b³h"
+    },
+    {
+      "A": 0.09,
+      "Iy": 0.000675,
+      "Iz": 0.000675,
+      "J": 0.00114,
+      "cy": 0.15,
+      "cz": 0.15,
+      "id": "col",
+      "name": "Column 300 × 300",
+      "provenance": "Rectangle 300 × 300 mm; Saint-Venant J = 0.141 a⁴"
+    }
+  ],
+  "structure": {
+    "designObjects": [
+      {
+        "analysisStatus": "unverified",
+        "id": "dof653a30fb99ccef473aa",
+        "kind": "slab",
+        "name": "Slab",
+        "physicalMemberId": null,
+        "previewId": "dpe3ec990677d86b8f",
+        "storeyId": null,
+        "supportId": null
+      }
+    ],
+    "grids": [],
+    "groups": [],
+    "joints": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt093b2595e22ee35c34f1",
+        "name": "Joint F20",
+        "nodeId": "F20",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt19afa9bbfaee3c72addc",
+        "name": "Joint F00",
+        "nodeId": "F00",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt1b98de9a9a99960d3a9f",
+        "name": "Joint T01",
+        "nodeId": "T01",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt24d9b674fe53ddd089e9",
+        "name": "Joint T02",
+        "nodeId": "T02",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt4a522b482a62ef105412",
+        "name": "Joint F22",
+        "nodeId": "F22",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt64214504f904e4e8c3a6",
+        "name": "Joint T21",
+        "nodeId": "T21",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt691802e8547e838d715e",
+        "name": "Joint T11",
+        "nodeId": "T11",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt8fd4b56e4d77f9e976a4",
+        "name": "Joint T12",
+        "nodeId": "T12",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jt990adc105cbd3f8859e8",
+        "name": "Joint F21",
+        "nodeId": "F21",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jta1902af50e975c3a2bb5",
+        "name": "Joint T22",
+        "nodeId": "T22",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtaa6fa6f11e1c0f051d22",
+        "name": "Joint T20",
+        "nodeId": "T20",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jte2434091498b2745e1ed",
+        "name": "Joint T00",
+        "nodeId": "T00",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jte26fb6fa7b9fa285b15b",
+        "name": "Joint F11",
+        "nodeId": "F11",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jte3df0d3c1eac97d9103b",
+        "name": "Joint F12",
+        "nodeId": "F12",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtee6415f5fbbe51a00d76",
+        "name": "Joint F02",
+        "nodeId": "F02",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtf47c886e1e7e1f6cd0fa",
+        "name": "Joint F01",
+        "nodeId": "F01",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtf7ef0de37031bc151f00",
+        "name": "Joint T10",
+        "nodeId": "T10",
+        "storeyId": null
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "jtfd6991f3e34a6f39c0b5",
+        "name": "Joint F10",
+        "nodeId": "F10",
+        "storeyId": null
+      }
+    ],
+    "layers": [],
+    "physicalMembers": [
+      {
+        "analyticalMemberIds": [
+          "C22"
+        ],
+        "id": "pm0ee73df9932df156b0c8",
+        "name": "C22",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C01"
+        ],
+        "id": "pm132bfbedb1681a286706",
+        "name": "C01",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C11"
+        ],
+        "id": "pm22b5894e02a73bb5dee8",
+        "name": "C11",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B12-22"
+        ],
+        "id": "pm2cd407297fcf78867fa2",
+        "name": "B12-22",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C02"
+        ],
+        "id": "pm371e0b6ba48a5ff47606",
+        "name": "C02",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B10-20"
+        ],
+        "id": "pm453fab75e7b993b6a061",
+        "name": "B10-20",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B10-11"
+        ],
+        "id": "pm4b508cc81db0d118abde",
+        "name": "B10-11",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B02-12"
+        ],
+        "id": "pm51eb81e9bc48d4078375",
+        "name": "B02-12",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C00"
+        ],
+        "id": "pm55803e3d4436c23f1f7e",
+        "name": "C00",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B01-11"
+        ],
+        "id": "pm7988d4dcee95efeaf79c",
+        "name": "B01-11",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B11-21"
+        ],
+        "id": "pm7e7fa78018dbf4fc66be",
+        "name": "B11-21",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B20-21"
+        ],
+        "id": "pm8f60e5010301e7d8647a",
+        "name": "B20-21",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C10"
+        ],
+        "id": "pm908d72900e2475921b58",
+        "name": "C10",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C21"
+        ],
+        "id": "pmabb23d0d25cdc46d225e",
+        "name": "C21",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C20"
+        ],
+        "id": "pmc9c1dd0d52c99ca43beb",
+        "name": "C20",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B00-10"
+        ],
+        "id": "pmcbf4238f007a8674db29",
+        "name": "B00-10",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B21-22"
+        ],
+        "id": "pme33774ec3b33ccd2d3be",
+        "name": "B21-22",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B00-01"
+        ],
+        "id": "pmede4c72e9fc21fd0a65e",
+        "name": "B00-01",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B01-02"
+        ],
+        "id": "pmf7483263736556e0fb55",
+        "name": "B01-02",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "C12"
+        ],
+        "id": "pmfa70213c8aaf9d8fdd6d",
+        "name": "C12",
+        "role": "unassigned",
+        "storeyId": null
+      },
+      {
+        "analyticalMemberIds": [
+          "B11-12"
+        ],
+        "id": "pmfc92250d754e1279f86d",
+        "name": "B11-12",
+        "role": "unassigned",
+        "storeyId": null
+      }
+    ],
+    "storeys": [],
+    "supportDetails": [
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd374be0c21f2f0824260d",
+        "name": "Support S00",
+        "supportId": "S00"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd3d16e90141e88e7233af",
+        "name": "Support S10",
+        "supportId": "S10"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd4a1bcaec718f10edcd25",
+        "name": "Support S11",
+        "supportId": "S11"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd56757a56803c52130775",
+        "name": "Support S21",
+        "supportId": "S21"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sd7e830ff5e5fac9a79ce3",
+        "name": "Support S20",
+        "supportId": "S20"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdac7438e86cb85ebd90f4",
+        "name": "Support S01",
+        "supportId": "S01"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdb42bb4596754322b06b4",
+        "name": "Support S22",
+        "supportId": "S22"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdbbe97d17449c6e005ff7",
+        "name": "Support S02",
+        "supportId": "S02"
+      },
+      {
+        "detailStatus": "notDesigned",
+        "id": "sdd30b6fedc77faaf5199d",
+        "name": "Support S12",
+        "supportId": "S12"
+      }
+    ]
+  },
+  "supports": [
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S00",
+      "node": "F00",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S01",
+      "node": "F01",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S02",
+      "node": "F02",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S10",
+      "node": "F10",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S11",
+      "node": "F11",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S12",
+      "node": "F12",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S20",
+      "node": "F20",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S21",
+      "node": "F21",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fixed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "id": "S22",
+      "node": "F22",
+      "prescribed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

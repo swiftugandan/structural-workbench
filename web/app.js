@@ -671,6 +671,11 @@ $("#worked-examples").onclick = () => {
       "3D warehouse frame",
       "12 × 18 m · 3 bays · pitched roof · gravity + lateral loads",
     ],
+    [
+      "SL01",
+      "Flat slab on a two-bay frame",
+      "8 × 6 m · 250 mm slab with opening on 9 columns · plate analysis + column loads",
+    ],
     ["B02", "Cantilever", "3 m · tip force · bending about local y"],
     ["B01", "Axial extension", "2 m · axial force"],
     ["B03", "Saint Venant torsion", "2 m · applied torque"],

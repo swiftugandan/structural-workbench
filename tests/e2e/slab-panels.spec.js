@@ -325,3 +325,62 @@ test("A slab on beams is placed without columns, undoably, and says where it is"
   await expect.poll(() => slabs(page)).toEqual([]);
   expect(errors).toEqual([]);
 });
+
+test("The SL01 worked example opens with its slab on the beams, ready to analyse", async ({
+  page,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/");
+  await expect(page.locator("#gpu-status")).toContainText("WEBGPU", {
+    timeout: 30000,
+  });
+  await page.locator("#worked-examples").click();
+  await page.locator("[data-example=SL01]").click();
+  await expect(page.locator("#kernel-status")).toContainText("ready");
+  await expect(page.locator("#model-count")).toHaveText(
+    "18 nodes · 21 members",
+  );
+  // Opened in 3D, solid: the slab rests on its beams with its pressure shown.
+  await expect(page.locator("#view-3d")).toHaveClass(/active/);
+  await expect(page.locator("#model-solids")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect
+    .poll(() => slabs(page))
+    .toEqual([
+      { id: expect.any(String), style: "solid", active: false, loaded: true },
+    ]);
+
+  // The slab's column loads are in "Slab reactions": the frame analyses at once.
+  await page.locator("#analyse").click();
+  await expect(page.locator("#result-status")).toHaveText("✓ Current");
+  await page.locator("#result-family").selectOption("forces");
+  await page.locator("#display-result").selectOption("axial");
+  // The interior column carries the most: about a third of the 352.5 kN.
+  const peak = Number(
+    await page.locator("#action-legend").getAttribute("data-peak"),
+  );
+  expect(peak).toBeGreaterThan(100e3);
+  expect(peak).toBeLessThan(352.5e3);
+
+  // Its own plate analysis solves and balances the 352.5 kN.
+  await page.locator("[data-inspector-tab=concrete]").click();
+  await expect(page.locator("#preview-run")).toBeEnabled();
+  await page.locator("#preview-run").click();
+  await expect(page.locator("#workspace")).not.toHaveAttribute(
+    "aria-busy",
+    "true",
+  );
+  await page.locator('[data-preview-pane="actions"]').click();
+  await expect(page.locator("[data-testid=plate-elements]")).toContainText(
+    "752 elements",
+  );
+  expect(
+    Number(
+      await page.locator("[data-testid=plate-balance]").getAttribute("data-si"),
+    ),
+  ).toBeLessThanOrEqual(1e-9);
+  expect(errors).toEqual([]);
+});
